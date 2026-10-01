@@ -5,6 +5,7 @@ import { STYLE } from '../measure/sizes.js';
 import { centerBaseline, renderRich, roundCoord as r } from '../text.js';
 import { tokens, values } from '../tokens.js';
 import { curveOf, timeAt } from '../easing.js';
+import { presentSlots, slotMiddle } from './slots.js';
 import { formatChange, formatNumber, makeScale } from './scale.js';
 
 const SPACE = values.space;
@@ -23,8 +24,8 @@ const PAD = SPACE['14'];
 const CAP = SIZE['chart-cap'];
 const RANGE = SIZE['chart-range'];
 const ARROW_MIN = SIZE['chart-arrow-min'];
-// 값 글자가 막대 끝 바깥에 들어갈 자리
-const VALUE_W = SPACE['30'] + SPACE['18'];
+// 내용이 닿는 오른쪽 끝. 왼쪽 여백(PAD)과 같은 여백을 오른쪽에도 둔다.
+const RIGHT = WIDTH - PAD;
 // 히트맵 칸 색. 값 0은 핵심 1 옅게, 최댓값은 핵심 1 진하게이고 그 사이는 sRGB 보간이다(문서 스킬 색표).
 // 칸 색은 CSS(.chart-heat의 color-mix)가 변수로 계산해 다크 모드 값을 따라간다. 여기 hex는 color-mix를 모르는 뷰어용 대체 색(라이트)이다.
 const HEAT_LOW = values.color['heat-low'];
@@ -65,6 +66,34 @@ function heatColor(strength) {
   return mixHex(HEAT_LOW, HEAT_HIGH, strength);
 }
 
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = 요소 수
+// basis: estimate
+/**
+ * 값 축 길이. 값 v의 요소는 start + 비율(v) × 길이 + extra까지 닿는다(extra는 값 글자, 점 반지름 같은 고정 폭).
+ * 모든 요소가 right 안에 들어가는 가장 긴 길이를 돌려줘, 가장 멀리 닿는 요소가 right에 맞는다. 그래서 왼쪽 여백과 오른쪽 여백이 같다.
+ * @param items { value, extra }[]. 비율이 0인 요소는 길이와 상관없어 건너뛴다
+ */
+function fitLength(unit, start, items, right = RIGHT) {
+  return Math.min(...items.map(({ value, extra }) => (unit.at(value) > 0 ? (right - start - extra) / unit.at(value) : Infinity)));
+}
+
+// cost: time O(t), heap O(t), stack O(1)
+// vars: t = 눈금 수
+// basis: estimate
+// 값 축 눈금 글자는 눈금 가운데에 놓여 양쪽으로 절반씩 나온다.
+function tickReach(unit) {
+  return unit.ticks.map((value) => ({ value, extra: measure(formatNumber(value), TEXT['11'], 'num') / 2 }));
+}
+
+// cost: time O(r), heap O(r), stack O(1)
+// vars: r = 기준선 수
+// basis: estimate
+// 기준선 라벨은 기준선 오른쪽에서 시작한다.
+function ruleReach(rules) {
+  return rules.map((rule) => ({ value: rule.value, extra: SPACE['2'] + measure(rule.label, TEXT['11']) }));
+}
+
 function labelFit(name, line) {
   return { text: name, width: measure(name, TEXT['13']), room: LABEL_ROOM, line, what: 'item name' };
 }
@@ -103,16 +132,22 @@ function drawHeader(figure) {
 function drawBars(figure, top) {
   const { chart } = figure;
   const plotX = labelColumn(chart.rows.map((row) => row.label)) + PAD;
-  const plotW = WIDTH - plotX - VALUE_W;
   const all = chart.rows.flatMap((row) => chart.series.flatMap((s) => [row.values[s.id], row.values[`${s.id}.high`]])).filter((v) => typeof v === 'number');
-  const scale = makeScale('linear', 0, Math.max(...all, ...chart.rules.map((x) => x.value)), plotX, plotW);
+  const max = Math.max(...all, ...chart.rules.map((x) => x.value));
+  const unit = makeScale('linear', 0, max, 0, 1);
+  // 값 글자가 가장 멀리 닿는 막대 끝에서 오른쪽 여백이 왼쪽 여백(PAD)과 같아지게 값 축 길이를 정한다.
+  const reaches = chart.rows.flatMap((row) => chart.series.flatMap((s, i) => (typeof row.values[s.id] === 'number' ? [{ value: Math.max(row.values[s.id], row.values[`${s.id}.high`] ?? 0), extra: SPACE['3'] + measure(formatNumber(row.values[s.id]), TEXT['11'], i === 0 ? 'numSemibold' : 'num') }] : [])));
+  const plotW = fitLength(unit, plotX, [...reaches, ...tickReach(unit), ...ruleReach(chart.rules)]);
+  const scale = makeScale('linear', 0, max, plotX, plotW);
   const parts = [];
   const valueTexts = [];
   let y = top;
   chart.rows.forEach((row, k) => {
     const groupH = chart.series.length * BAR + (chart.series.length - 1) * SPACE['2'];
-    // 이름은 계열이 모두 보일 때 막대 묶음 가운데에 둔다. 계열을 하나씩 드러내는 동안은 시간표의 labelShift만큼 옮겨 보이는 막대에 맞춘다(timeline.js).
-    parts.push(`<g class="cr-${k}"><text x="${PAD}" y="${r(centerBaseline(y + groupH / 2, TEXT['13']))}" class="chart-label shift">${renderRich(row.label)}</text></g>`);
+    // 이름은 값이 있는 막대 묶음의 세로 가운데에 둔다. 값이 없는 계열 슬롯(비교 없음 글)은 묶음에 넣지 않아 이름이 막대와 나란하다.
+    // 계열을 하나씩 드러내는 동안은 시간표의 labelShifts만큼 옮겨 보이는 막대에 맞춘다(timeline.js).
+    const middle = BAR / 2 + slotMiddle(presentSlots(row, chart.series));
+    parts.push(`<g class="cr-${k}"><text x="${PAD}" y="${r(centerBaseline(y + middle, TEXT['13']))}" class="chart-label shift">${renderRich(row.label)}</text></g>`);
     chart.series.forEach((s, i) => {
       const by = y + i * (BAR + SPACE['2']);
       const cy = by + BAR / 2;
@@ -144,6 +179,23 @@ function pointInterval(d, at) {
   return `<path d="${d}" class="chart-interval dot" data-at="${at}"/>`;
 }
 
+// cost: time O(r), heap O(r), stack O(1)
+// vars: r = 행 수
+// basis: estimate
+// 덤벨 행마다 오른쪽 끝에 닿는 요소. 값 글자는 두 점과 두 범위 바깥 끝 옆에 놓이고, 그 오른쪽에 바뀐 비율 글자가 오른쪽 끝에 붙는다. 값 글자와 비율 글자 사이는 한 칸 띄운다.
+function dumbbellReach(chart, unit) {
+  const [first, second] = chart.series;
+  return chart.rows.flatMap((row) => {
+    const [before, after] = [row.values[first.id], row.values[second.id]];
+    const change = formatChange(before, after);
+    const isAfterRight = unit.at(after) >= unit.at(before);
+    const rightText = measure(formatNumber(isAfterRight ? after : before), TEXT['11'], isAfterRight ? 'numSemibold' : 'num');
+    const tail = SPACE['3'] + rightText + (change ? SPACE['6'] + measure(change, TEXT['12'], 'numSemibold') : 0);
+    const bounds = [first, second].flatMap((s) => [`${s.id}.low`, `${s.id}.high`].map((key) => row.values[key]).filter((v) => v !== undefined));
+    return [...[before, after].map((value) => ({ value, extra: DOT + tail })), ...bounds.map((value) => ({ value, extra: tail }))];
+  });
+}
+
 // cost: time O(r + t), heap O(out), stack O(1)
 // vars: r = 행 수, t = 눈금 수, out = 만든 SVG 글자 수
 // basis: estimate
@@ -154,9 +206,10 @@ function drawDumbbells(figure, top) {
   const { chart } = figure;
   const [first, second] = chart.series;
   const plotX = labelColumn(chart.rows.map((row) => row.label)) + PAD;
-  const plotW = WIDTH - plotX - VALUE_W;
   const all = chart.rows.flatMap((row) => [first, second].flatMap((s) => [row.values[s.id], row.values[`${s.id}.low`], row.values[`${s.id}.high`]])).filter((v) => typeof v === 'number');
   const ruled = [...all, ...chart.rules.map((x) => x.value)];
+  const unit = makeScale(chart.scale, Math.min(...ruled), Math.max(...ruled), 0, 1);
+  const plotW = fitLength(unit, plotX, [...dumbbellReach(chart, unit), ...tickReach(unit), ...ruleReach(chart.rules)]);
   const scale = makeScale(chart.scale, Math.min(...ruled), Math.max(...ruled), plotX, plotW);
   const parts = [];
   chart.rows.forEach((row, k) => {
@@ -203,9 +256,11 @@ function drawDumbbells(figure, top) {
 function drawBoxes(figure, top) {
   const { chart } = figure;
   const plotX = labelColumn(chart.rows.map((row) => row.label)) + PAD;
-  const plotW = WIDTH - plotX - VALUE_W;
   const all = chart.rows.flatMap((row) => [row.values.min, row.values.max]);
   const ruled = [...all, ...chart.rules.map((x) => x.value)];
+  const unit = makeScale(chart.scale, Math.min(...ruled), Math.max(...ruled), 0, 1);
+  const medians = chart.rows.map((row) => ({ value: row.values.max, extra: SPACE['3'] + measure(formatNumber(row.values.median), TEXT['11'], 'num') }));
+  const plotW = fitLength(unit, plotX, [...medians, ...tickReach(unit), ...ruleReach(chart.rules)]);
   const scale = makeScale(chart.scale, Math.min(...ruled), Math.max(...ruled), plotX, plotW);
   const parts = chart.rows.map((row, k) => {
     const cy = top + k * ROW + ROW / 2;
@@ -231,34 +286,56 @@ function drawBoxes(figure, top) {
 // 산점도: 같은 크기 점, 이름 글자, link 화살표. 계열이 있으면 계열 색이다. 신뢰구간은 받지 않는다.
 function drawScatter(figure, top) {
   const { chart } = figure;
-  const { sx, sy, frame, top: plotTop } = plotFrame(figure, top, chart.rows.map((p) => p.values.x), chart.rows.map((p) => p.values.y));
+  const { sx, sy, frame, top: plotTop, right } = plotFrame(figure, top, chart.rows.map((p) => p.values.x), chart.rows.map((p) => p.values.y));
   const seriesIndex = (p) => Math.max(0, chart.series.findIndex((s) => s.id === p.values.series));
   const parts = [frame];
   const at = new Map(chart.rows.map((p) => [p.label, { x: sx.at(p.values.x), y: sy.at(p.values.y), p }]));
+  // 점 이름은 점 오른쪽에 두고, 그림 오른쪽 끝을 넘으면 점 왼쪽으로 옮긴다. 화살촉이 이름을 피하게 하려고 이름 글자 상자를 먼저 구한다.
+  const offset = DOT + SPACE['3'];
+  const names = chart.rows.map((p) => {
+    const { x, y } = at.get(p.label);
+    const nameW = measure(p.label, TEXT['12']);
+    const toLeft = x + offset + nameW > right;
+    const width = measure(p.label, TEXT['11']);
+    return { p, nameW, toLeft, box: { x0: toLeft ? x - offset - width : x + offset, x1: toLeft ? x - offset : x + offset + width, y0: y - TEXT['11'] / 2, y1: y + TEXT['11'] / 2 } };
+  });
   for (const link of chart.links) {
     const [a, b] = [at.get(link.from), at.get(link.to)];
     const ka = chart.rows.indexOf(a.p);
-    // 두 점의 테두리에서 끊는다. 화살촉이 끝 점에 가려 방향이 안 보이는 일을 막기 위해서다.
-    const gap = DOT + SPACE['2'];
     const length = Math.hypot(b.x - a.x, b.y - a.y) || 1;
     const [ux, uy] = [(b.x - a.x) / length, (b.y - a.y) / length];
-    const [x1, y1, x2, y2] = [a.x + ux * gap, a.y + uy * gap, b.x - ux * gap, b.y - uy * gap];
+    // 두 점의 테두리에서 끊는다. 화살촉이 끝 점에 가려 방향이 안 보이는 일을 막기 위해서다.
+    // 끝은 화살촉이 어느 점의 이름 글자 상자와도 겹치지 않을 때까지 시작 점 쪽으로 더 당긴다.
+    const gap = DOT + SPACE['2'];
+    let tip = gap;
+    while (tip < length / 2 && names.some(({ box }) => arrowheadHits(b, ux, uy, tip, box))) tip += 1;
+    const [x1, y1, x2, y2] = [a.x + ux * gap, a.y + uy * gap, b.x - ux * tip, b.y - uy * tip];
     parts.push(`<g class="cr-${ka}"><g class="cs-${seriesIndex(b.p)}"><line x1="${r(x1)}" y1="${r(y1)}" x2="${r(x2)}" y2="${r(y2)}" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>`);
   }
   const fits = [];
-  chart.rows.forEach((p, k) => {
+  names.forEach(({ p, nameW, toLeft }, k) => {
     const { x, y } = at.get(p.label);
     const i = seriesIndex(p);
-    // 점 이름은 점 오른쪽에 두고, 그림 오른쪽 끝을 넘으면 점 왼쪽으로 옮긴다.
-    const nameW = measure(p.label, TEXT['12']);
-    const offset = DOT + SPACE['3'];
-    const toLeft = x + offset + nameW > WIDTH - PAD;
-    fits.push({ text: p.label, width: nameW, room: Math.max(WIDTH - PAD - x, x - PAD) - offset, line: p.line, what: 'point name' });
+    fits.push({ text: p.label, width: nameW, room: Math.max(right - x, x - PAD) - offset, line: p.line, what: 'point name' });
     const name = `<text x="${r(toLeft ? x - offset : x + offset)}" y="${r(centerBaseline(y, TEXT['11']))}" class="chart-name late${toLeft ? ' end' : ''}">${renderRich(p.label)}</text>`;
     parts.push(`<g class="cr-${k}"><g class="cs-${i}"><circle cx="${r(x)}" cy="${r(y)}" r="${DOT}" fill="${chart.series.length ? SERIES_COLOR[i] : SERIES_COLOR[0]}" class="pop"/>${name}</g></g>`);
   });
   parts.push(drawRules(chart.rules, sy, sx.at(sx.ticks[0]), sx.at(sx.ticks.at(-1)), 'y'));
   return { svg: parts.join('\n'), bottom: plotTop + SIZE['chart-plot-h'] + TEXT['11'] * 2 + SPACE['12'], rowKeys: chart.rows.map((p) => p.label), fits };
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 화살표가 끝 점 b에서 끝 거리 tip만큼 떨어져 끝날 때 화살촉(끝에서 시작 쪽으로 뻗은 삼각형)이 글자 상자 box와 겹치는가. (ux, uy)는 시작 점에서 끝 점으로 향하는 단위 방향이다.
+// 화살촉은 선 굵기 곱 토큰 크기라 선 굵기가 두꺼우면 크다. 삼각형의 세 꼭짓점과 가운데를 상자에 간격 `space.2`를 더해 본다.
+function arrowheadHits(b, ux, uy, tip, box) {
+  const length = values.size.marker * values.border.strong;
+  const [tx, ty] = [b.x - ux * tip, b.y - uy * tip];
+  const [bx, by] = [tx - ux * length, ty - uy * length];
+  const [px, py] = [-uy * length * 0.4, ux * length * 0.4];
+  const points = [[tx, ty], [bx + px, by + py], [bx - px, by - py], [bx, by], [(tx + bx) / 2, (ty + by) / 2]];
+  const pad = SPACE['2'];
+  return points.some(([x, y]) => x >= box.x0 - pad && x <= box.x1 + pad && y >= box.y0 - pad && y <= box.y1 + pad);
 }
 
 // cost: time O(p·s·STEPS + t), heap O(out), stack O(1)
@@ -345,9 +422,8 @@ function drawHeatmap(figure, top) {
   const rows = [...new Set(chart.rows.map((c) => c.row))];
   const cols = [...new Set(chart.rows.map((c) => c.col))];
   const plotX = labelColumn(rows) + PAD;
-  // 칸 너비는 가장 긴 열 이름에 맞추되 남은 폭을 열 수로 나눈 값을 넘지 않는다. 칸 높이는 토큰 그대로다.
-  const widestCol = Math.max(...cols.map((c) => measure(c, TEXT['11'], 'num'))) + SPACE['4'];
-  const cellW = Math.min(Math.max(SIZE['chart-cell'], widestCol), (WIDTH - plotX - PAD) / cols.length);
+  // 칸 너비는 이름 칸 오른쪽에서 내용의 오른쪽 끝까지 남은 폭을 열 수로 나눈 값이다. 상한 없이 채워 다른 차트처럼 960 폭을 채우고 좌우 여백이 같다. 칸 높이는 토큰 그대로다.
+  const cellW = (RIGHT - plotX + SPACE['1']) / cols.length;
   const cellH = SIZE['chart-cell'];
   const max = Math.max(...chart.rows.map((c) => c.values.value));
   const parts = cols.map((c, j) => `<text x="${r(plotX + j * cellW + cellW / 2)}" y="${r(top + TEXT['11'])}" class="chart-tick">${renderRich(c)}</text>`);
@@ -374,24 +450,30 @@ function drawHeatmap(figure, top) {
 function plotFrame(figure, top, xs, ys) {
   const { chart } = figure;
   const left = PAD + SIZE['chart-axis'];
-  const plotW = WIDTH - left - PAD - SPACE['30'];
   const plotH = SIZE['chart-plot-h'];
   // 세로축 제목은 그림 영역 위 한 줄에 둔다. 맨 위 눈금 글자와 겹치지 않게 그만큼 내린다.
   const titleH = chart.y ? values.size.text['11'] + SPACE['8'] : 0;
   top += titleH;
   const xKind = figure.chartType === 'scatter' ? chart.scale : 'linear';
   // 선 차트 가로축은 값 축이 아니라 0에서 시작하지 않는다(docs/design/charts.md 값 축 표).
-  const sx = makeScale(xKind, Math.min(...xs), Math.max(...xs), left, plotW, { fromZero: figure.chartType === 'scatter' });
+  const xOptions = { fromZero: figure.chartType === 'scatter' };
   // 기준선은 세로 값 축에 긋는다. 기준선이 그림 밖에 그려지지 않게 값 범위에 넣는다.
   const ruledYs = [...ys, ...chart.rules.map((x) => x.value)];
   const yScale = makeScale(chart.scale, Math.min(...ruledYs), Math.max(...ruledYs), 0, plotH);
   const sy = { ...yScale, at: (v) => top + plotH - (yScale.at(v) - 0) };
+  // 내용의 왼쪽 끝은 제목, 범례, 세로축 제목이 있으면 PAD, 없으면 세로축 눈금 글자의 왼쪽 끝이다. 오른쪽 끝은 그만큼 남긴다.
+  const tickW = Math.max(...yScale.ticks.map((t) => measure(formatNumber(t), TEXT['11'], 'num')));
+  const hasHeader = Boolean(figure.title || figure.subtitle || chart.series.length || chart.y);
+  const right = WIDTH - Math.min(hasHeader ? PAD : Infinity, left - SPACE['3'] - tickW);
+  const unitX = makeScale(xKind, Math.min(...xs), Math.max(...xs), 0, 1, xOptions);
+  const plotW = fitLength(unitX, left, [...tickReach(unitX), ...xs.map((value) => ({ value, extra: DOT }))], right);
+  const sx = makeScale(xKind, Math.min(...xs), Math.max(...xs), left, plotW, xOptions);
   const parts = [];
   for (const t of sy.ticks) parts.push(`<line x1="${left}" x2="${r(left + plotW)}" y1="${r(sy.at(t))}" y2="${r(sy.at(t))}" class="chart-grid"/><text x="${r(left - SPACE['3'])}" y="${r(centerBaseline(sy.at(t), TEXT['11']))}" class="chart-tick end">${formatNumber(t)}</text>`);
   for (const t of sx.ticks) parts.push(`<text x="${r(sx.at(t))}" y="${r(top + plotH + TEXT['11'] + SPACE['3'])}" class="chart-tick">${formatNumber(t)}</text>`);
   if (chart.x) parts.push(`<text x="${r(left + plotW)}" y="${r(top + plotH + TEXT['11'] * 2 + SPACE['8'])}" class="chart-unit">${renderRich(chart.x)}</text>`);
   if (chart.y) parts.push(`<text x="${PAD}" y="${r(top - titleH + values.size.text['11'])}" class="chart-unit start">${renderRich(chart.y)}</text>`);
-  return { sx, sy, frame: parts.join(''), top };
+  return { sx, sy, frame: parts.join(''), top, right };
 }
 
 // cost: time O(t), heap O(out), stack O(1)

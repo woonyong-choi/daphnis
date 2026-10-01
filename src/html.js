@@ -210,7 +210,7 @@ function chartContent(result, glyphs) {
     cardsBefore: {},
     cardsAt: {},
     caption: seg.caption,
-    labelShift: seg.labelShift,
+    labelShifts: seg.labelShifts,
     series: seg.series.map((id) => ids.indexOf(id)),
     growing: seg.growing.map((id) => ids.indexOf(id)),
     lights: seg.lights.map((key) => chart.rowKeys.indexOf(key)),

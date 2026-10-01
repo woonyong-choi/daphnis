@@ -258,11 +258,20 @@ function createAnimator({ segs, total, growMs }) {
         css.push(`@keyframes p${s}-${Math.round(at * 1000)} { 0%,${from} { opacity: 0; ${ease} } ${to},100% { opacity: 1 } }\n.fl .cs-${s} .dot[data-at="${at}"] { animation: p${s}-${Math.round(at * 1000)} ${duration} infinite; }`);
       }
     });
-    // 행 이름의 세로 옮김은 시간표가 박자마다 정해 둔 값을 그대로 건다. 모든 박자가 0이면 만들지 않는다.
-    if (segs.some((g) => g.labelShift)) {
-      const frames = segs.map((g) => `${percent(g.t0)},${percent(Math.max(g.t0, g.t1 - EPSILON_MS))} { transform: translateY(${g.labelShift}px) }`).join(' ');
-      css.push(`@keyframes ls { ${frames} }\n.fl .chart-label.shift { animation: ls ${duration} infinite step-end; }`);
-    }
+    // 행 이름의 세로 옮김은 시간표가 행마다 박자마다 정해 둔 값을 그대로 건다. 모든 박자가 0이면 만들지 않고, 옮김이 같은 행은 keyframes를 나눠 쓴다.
+    const shiftNames = new Map();
+    drawn.rowKeys.forEach((_, k) => {
+      const shifts = segs.map((g) => g.labelShifts[k] ?? 0);
+      if (!shifts.some(Boolean)) return;
+      const key = shifts.join(',');
+      if (!shiftNames.has(key)) {
+        const name = `ls${shiftNames.size}`;
+        shiftNames.set(key, name);
+        const frames = segs.map((g, i) => `${percent(g.t0)},${percent(Math.max(g.t0, g.t1 - EPSILON_MS))} { transform: translateY(${shifts[i]}px) }`).join(' ');
+        css.push(`@keyframes ${name} { ${frames} }`);
+      }
+      css.push(`.fl .cr-${k} .chart-label.shift { animation: ${shiftNames.get(key)} ${duration} infinite step-end; }`);
+    });
     drawn.rowKeys.forEach((key, k) => {
       const dim = windows(segs.map((g) => g.lights.length > 0 && !g.lights.includes(key)), `opacity: ${values.opacity.dim}`, 'opacity: 1', `r${k}`);
       css.push(`.fl .cr-${k} { animation: ${dim} ${duration} infinite step-end; }`);

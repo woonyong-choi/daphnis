@@ -701,13 +701,13 @@
 <text x="28" y="63" class="chart-sub">예시 데이터. 작업당 평균, 화살표는 기억 없음에서 기억 붙임</text>
 <g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-series-1)"/><text x="46" y="85" class="chart-legend">기억 없음</text></g>
 <g class="cs-1"><rect x="111.535" y="77" width="12" height="12" rx="4" fill="var(--color-series-2)"/><text x="129.535" y="85" class="chart-legend">기억 붙임</text></g>
-<line x1="76" x2="872" y1="396" y2="396" class="chart-grid"/><text x="70" y="400" class="chart-tick end">0</text><line x1="76" x2="872" y1="309.3" y2="309.3" class="chart-grid"/><text x="70" y="313.3" class="chart-tick end">0.5</text><line x1="76" x2="872" y1="222.7" y2="222.7" class="chart-grid"/><text x="70" y="226.6" class="chart-tick end">1</text><line x1="76" x2="872" y1="136" y2="136" class="chart-grid"/><text x="70" y="140" class="chart-tick end">1.5</text><text x="76" y="413" class="chart-tick">0</text><text x="341.3" y="413" class="chart-tick">0.5</text><text x="606.7" y="413" class="chart-tick">1</text><text x="872" y="413" class="chart-tick">1.5</text><text x="872" y="434" class="chart-unit">작업당 비용(달러)</text><text x="28" y="120" class="chart-unit start">작업당 수정 횟수(회)</text>
-<g class="cr-0"><g class="cs-1"><line x1="519.3" y1="168.2" x2="274.8" y2="310" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
-<g class="cr-2"><g class="cs-1"><line x1="704.2" y1="190.8" x2="509.1" y2="254.5" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
-<g class="cr-0"><g class="cs-0"><circle cx="527.1" cy="163.7" r="5" fill="var(--color-series-1)" class="pop"/><text x="538.1" y="167.7" class="chart-name late">A 없음</text></g></g>
-<g class="cr-1"><g class="cs-1"><circle cx="267" cy="314.5" r="5" fill="var(--color-series-2)" class="pop"/><text x="278" y="318.5" class="chart-name late">A 붙음</text></g></g>
-<g class="cr-2"><g class="cs-0"><circle cx="712.8" cy="188" r="5" fill="var(--color-series-1)" class="pop"/><text x="723.8" y="192" class="chart-name late">B 없음</text></g></g>
-<g class="cr-3"><g class="cs-1"><circle cx="500.5" cy="257.3" r="5" fill="var(--color-series-2)" class="pop"/><text x="511.5" y="261.3" class="chart-name late">B 붙음</text></g></g>
+<line x1="76" x2="923.4" y1="396" y2="396" class="chart-grid"/><text x="70" y="400" class="chart-tick end">0</text><line x1="76" x2="923.4" y1="309.3" y2="309.3" class="chart-grid"/><text x="70" y="313.3" class="chart-tick end">0.5</text><line x1="76" x2="923.4" y1="222.7" y2="222.7" class="chart-grid"/><text x="70" y="226.6" class="chart-tick end">1</text><line x1="76" x2="923.4" y1="136" y2="136" class="chart-grid"/><text x="70" y="140" class="chart-tick end">1.5</text><text x="76" y="413" class="chart-tick">0</text><text x="358.5" y="413" class="chart-tick">0.5</text><text x="640.9" y="413" class="chart-tick">1</text><text x="923.4" y="413" class="chart-tick">1.5</text><text x="923.4" y="434" class="chart-unit">작업당 비용(달러)</text><text x="28" y="120" class="chart-unit start">작업당 수정 횟수(회)</text>
+<g class="cr-0"><g class="cs-1"><line x1="548.3" y1="168" x2="296.9" y2="305" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
+<g class="cr-2"><g class="cs-1"><line x1="745.3" y1="190.6" x2="560.4" y2="247.4" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
+<g class="cr-0"><g class="cs-0"><circle cx="556.2" cy="163.7" r="5" fill="var(--color-series-1)" class="pop"/><text x="567.2" y="167.7" class="chart-name late">A 없음</text></g></g>
+<g class="cr-1"><g class="cs-1"><circle cx="279.4" cy="314.5" r="5" fill="var(--color-series-2)" class="pop"/><text x="290.4" y="318.5" class="chart-name late">A 붙음</text></g></g>
+<g class="cr-2"><g class="cs-0"><circle cx="753.9" cy="188" r="5" fill="var(--color-series-1)" class="pop"/><text x="764.9" y="192" class="chart-name late">B 없음</text></g></g>
+<g class="cr-3"><g class="cs-1"><circle cx="527.9" cy="257.3" r="5" fill="var(--color-series-2)" class="pop"/><text x="538.9" y="261.3" class="chart-name late">B 붙음</text></g></g>
 
 </g>
 <text x="480" y="488" opacity="0" class="steplabel a6">기억 없음</text>

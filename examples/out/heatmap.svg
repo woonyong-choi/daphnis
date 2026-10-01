@@ -701,21 +701,21 @@
 <g transform="translate(0 0)">
 <text x="28" y="43" class="chart-title">판단 교차표</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 행은 정답, 열은 판단</text>
-<g class="cs-0"><text x="190.3" y="96" class="chart-tick">Codex</text>
-<text x="234.8" y="96" class="chart-tick">Claude</text>
-<text x="279.3" y="96" class="chart-tick">둘 다</text>
+<g class="cs-0"><text x="295.7" y="96" class="chart-tick">Codex</text>
+<text x="551" y="96" class="chart-tick">Claude</text>
+<text x="806.3" y="96" class="chart-tick">둘 다</text>
 <text x="28" y="128.7" class="chart-label">Codex</text>
 <text x="28" y="168.7" class="chart-label">Claude</text>
 <text x="28" y="208.7" class="chart-label">둘 다</text>
-<g class="cr-0"><rect x="168" y="104" width="42.5" height="38" rx="4" class="chart-heat" style="--s:1" fill="#1d4f91"/><text x="190.3" y="128" class="chart-cell on">182</text></g>
-<g class="cr-1"><rect x="212.5" y="104" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.077" fill="#a7c1e3"/><text x="234.8" y="128" class="chart-cell">14</text></g>
-<g class="cr-2"><rect x="257.1" y="104" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.022" fill="#b0c8e8"/><text x="279.3" y="128" class="chart-cell">4</text></g>
-<g class="cr-3"><rect x="168" y="144" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.049" fill="#acc5e6"/><text x="190.3" y="168" class="chart-cell">9</text></g>
-<g class="cr-4"><rect x="212.5" y="144" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.94" fill="#265696"/><text x="234.8" y="168" class="chart-cell on">171</text></g>
-<g class="cr-5"><rect x="257.1" y="144" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.033" fill="#aec7e7"/><text x="279.3" y="168" class="chart-cell">6</text></g>
-<g class="cr-6"><rect x="168" y="184" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.016" fill="#b1c9e9"/><text x="190.3" y="208" class="chart-cell">3</text></g>
-<g class="cr-7"><rect x="212.5" y="184" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.027" fill="#afc8e8"/><text x="234.8" y="208" class="chart-cell">5</text></g>
-<g class="cr-8"><rect x="257.1" y="184" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.582" fill="#5c83b6"/><text x="279.3" y="208" class="chart-cell">106</text></g></g>
+<g class="cr-0"><rect x="168" y="104" width="253.3" height="38" rx="4" class="chart-heat" style="--s:1" fill="#1d4f91"/><text x="295.7" y="128" class="chart-cell on">182</text></g>
+<g class="cr-1"><rect x="423.3" y="104" width="253.3" height="38" rx="4" class="chart-heat" style="--s:0.077" fill="#a7c1e3"/><text x="551" y="128" class="chart-cell">14</text></g>
+<g class="cr-2"><rect x="678.7" y="104" width="253.3" height="38" rx="4" class="chart-heat" style="--s:0.022" fill="#b0c8e8"/><text x="806.3" y="128" class="chart-cell">4</text></g>
+<g class="cr-3"><rect x="168" y="144" width="253.3" height="38" rx="4" class="chart-heat" style="--s:0.049" fill="#acc5e6"/><text x="295.7" y="168" class="chart-cell">9</text></g>
+<g class="cr-4"><rect x="423.3" y="144" width="253.3" height="38" rx="4" class="chart-heat" style="--s:0.94" fill="#265696"/><text x="551" y="168" class="chart-cell on">171</text></g>
+<g class="cr-5"><rect x="678.7" y="144" width="253.3" height="38" rx="4" class="chart-heat" style="--s:0.033" fill="#aec7e7"/><text x="806.3" y="168" class="chart-cell">6</text></g>
+<g class="cr-6"><rect x="168" y="184" width="253.3" height="38" rx="4" class="chart-heat" style="--s:0.016" fill="#b1c9e9"/><text x="295.7" y="208" class="chart-cell">3</text></g>
+<g class="cr-7"><rect x="423.3" y="184" width="253.3" height="38" rx="4" class="chart-heat" style="--s:0.027" fill="#afc8e8"/><text x="551" y="208" class="chart-cell">5</text></g>
+<g class="cr-8"><rect x="678.7" y="184" width="253.3" height="38" rx="4" class="chart-heat" style="--s:0.582" fill="#5c83b6"/><text x="806.3" y="208" class="chart-cell">106</text></g></g>
 </g>
 <text x="480" y="270" opacity="0" class="steplabel a10">읽기</text>
 <g opacity="0" class="a11"><text x="480" y="296" class="caption">대각선이 맞힌 수다</text></g>

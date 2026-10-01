@@ -296,7 +296,7 @@ test('drawChart_line_chart_draw_class_gets_dash_so_the_line_grows_with_the_band'
 const STEPPED_BAR = 'chart bar\nx "정확도(%)"\nseries a "A"\nseries b "B"\nrow "r" a=5 b=3\nstep "하나" "첫째"\n  reveal b\nstep "둘" "둘째"\n  reveal a';
 
 test('buildTimeline_bar_label_shift_follows_visible_bars_and_is_zero_when_all_shown', async () => {
-  const shifts = (await buildFigure(STEPPED_BAR)).timeline.segs.map((seg) => seg.labelShift);
+  const shifts = (await buildFigure(STEPPED_BAR)).timeline.segs.map((seg) => seg.labelShifts[0]);
 
   assert.ok(shifts[0] > 0, `only the second bar is visible: ${shifts}`);
   assert.equal(shifts.at(-1), 0);
@@ -305,7 +305,7 @@ test('buildTimeline_bar_label_shift_follows_visible_bars_and_is_zero_when_all_sh
 test('buildTimeline_label_shift_is_zero_for_single_series_and_other_kinds', async () => {
   const single = await buildFigure('chart bar\nx "정확도(%)"\nseries a "A"\nrow "r" a=5\nstep "s" "c"\n  reveal a');
 
-  assert.deepEqual(single.timeline.segs.map((seg) => seg.labelShift), [0]);
+  assert.deepEqual(single.timeline.segs.map((seg) => seg.labelShifts), [[]]);
 });
 
 test('toSvg_static_chart_shows_every_series_and_has_no_motion', async () => {
@@ -323,8 +323,8 @@ test('toSvg_animated_chart_moves_row_label_with_the_timeline_shift', async () =>
   const { toSvg } = await import('../src/svg.js');
   const svg = await toSvg(await buildFigure(STEPPED_BAR));
 
-  assert.match(svg, /@keyframes ls \{[^}]*translateY\([\d.]+px\)/);
-  assert.match(svg, /\.fl \.chart-label\.shift \{ animation: ls /);
+  assert.match(svg, /@keyframes ls0 \{[^}]*translateY\([\d.]+px\)/);
+  assert.match(svg, /\.fl \.cr-0 \.chart-label\.shift \{ animation: ls0 /);
 });
 
 // cost: time O(build), heap O(m), stack O(1)
@@ -375,4 +375,28 @@ test('tokens_light_bg_is_visibly_gray_and_group_is_slightly_darker', async () =>
   assert.ok(light(tokens.color.group) < light(tokens.color.bg));
   assert.ok(light(tokens.color.bg) - light(tokens.color.group) <= 24, tokens.color.group);
   assert.equal(tokens.color.node, '#ffffff');
+});
+
+const MISSING_BAR = 'chart bar\nx "정확도(%)"\nseries a "A"\nseries b "B"\nrow "r" a=5 b=3\nrow "m" a=4 b=-\nstep "하나" "첫째"\n  reveal b\nstep "둘" "둘째"\n  reveal a';
+
+test('buildTimeline_bar_label_shift_ignores_the_missing_note_slot_and_follows_it_only_when_alone', async () => {
+  const shifts = (await buildFigure(MISSING_BAR)).timeline.segs.map((seg) => seg.labelShifts);
+
+  // r 행은 모든 계열이 값이 있어 기존처럼 둘째 막대 가운데로 갔다가 0으로 돌아온다.
+  assert.ok(shifts[0][0] > 0);
+  assert.equal(shifts.at(-1)[0], 0);
+  // m 행의 둘째 계열은 값이 없다. 이름은 첫째 막대 가운데에 있고, 안내 글만 보이는 단계에서만 그 글 슬롯으로 내려간다.
+  assert.ok(shifts[0][1] > 0);
+  assert.equal(shifts.at(-1)[1], 0);
+});
+
+test('drawChart_bar_label_of_a_row_with_a_missing_series_is_centered_on_its_only_bar', async () => {
+  const body = await bodyOf(MISSING_BAR);
+  const bars = [...body.matchAll(/<rect x="[\d.]+" y="([\d.]+)" width="[\d.]+" height="12"[^>]*class="grow"/g)].map((m) => Number(m[1]) + 6);
+  const labels = [...body.matchAll(/<text x="28" y="([\d.]+)" class="chart-label shift">/g)].map((m) => Number(m[1]) - 13 * 0.36);
+
+  assert.equal(bars.length, 3);
+  // r 행은 두 막대 가운데(첫 막대 가운데 + 8), m 행은 하나뿐인 막대 가운데
+  assert.ok(Math.abs(labels[0] - (bars[0] + 8)) < 0.2, `${labels[0]} ${bars[0]}`);
+  assert.ok(Math.abs(labels[1] - bars[2]) < 0.2, `${labels[1]} ${bars[2]}`);
 });

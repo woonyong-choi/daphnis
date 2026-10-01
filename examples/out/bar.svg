@@ -673,8 +673,12 @@
 .fl .cs-1 .wipe, .fl .cs-1.wipe { animation: w1 8.175s infinite; }
 @keyframes f1 { 0%,5.505% { opacity: 0; animation-timing-function: var(--easing-reveal) } 11.009%,100% { opacity: 1 } }
 .fl .cs-1 .late, .fl .cs-1 .pop, .fl .cs-1.pop { animation: f1 8.175s infinite; }
-@keyframes ls { 0%,45.442% { transform: translateY(8px) } 45.443%,71.864% { transform: translateY(0px) } 71.865%,99.999% { transform: translateY(0px) } }
-.fl .chart-label.shift { animation: ls 8.175s infinite step-end; }
+@keyframes ls0 { 0%,45.442% { transform: translateY(8px) } 45.443%,71.864% { transform: translateY(0px) } 71.865%,99.999% { transform: translateY(0px) } }
+.fl .cr-0 .chart-label.shift { animation: ls0 8.175s infinite step-end; }
+.fl .cr-1 .chart-label.shift { animation: ls0 8.175s infinite step-end; }
+@keyframes ls1 { 0%,45.442% { transform: translateY(16px) } 45.443%,71.864% { transform: translateY(0px) } 71.865%,99.999% { transform: translateY(0px) } }
+.fl .cr-2 .chart-label.shift { animation: ls1 8.175s infinite step-end; }
+.fl .cr-3 .chart-label.shift { animation: ls0 8.175s infinite step-end; }
 @keyframes a2 { 0%,45.442% { opacity: 1 } 45.443%,71.864% { opacity: 1 } 71.865%,99.999% { opacity: 0.3 } }
 .fl .a2 { animation: a2 8.175s infinite step-end; }
 .fl .cr-0 { animation: a2 8.175s infinite step-end; }
@@ -704,26 +708,26 @@
 <g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-series-1)"/><text x="46" y="85" class="chart-legend">기억 붙임</text></g>
 <g class="cs-1"><rect x="111.535" y="77" width="12" height="12" rx="4" fill="var(--color-series-2)"/><text x="129.535" y="85" class="chart-legend">기억 없음</text></g>
 <g class="cr-0"><text x="28" y="127.7" class="chart-label shift">단일 세션 사실</text></g>
-<g class="cr-0"><g class="cs-0"><rect x="168" y="109" width="636.1" height="12" rx="4" fill="var(--color-series-1)" class="grow"/><line x1="786.7" x2="818.8" y1="115" y2="115" class="chart-ci late"/></g></g>
-<g class="cr-0"><g class="cs-1"><rect x="168" y="125" width="419" height="12" rx="4" fill="var(--color-series-2)" class="grow"/><line x1="556.4" x2="616.2" y1="131" y2="131" class="chart-ci late"/></g></g>
+<g class="cr-0"><g class="cs-0"><rect x="168" y="109" width="688.5" height="12" rx="4" fill="var(--color-series-1)" class="grow"/><line x1="837.7" x2="872.3" y1="115" y2="115" class="chart-ci late"/></g></g>
+<g class="cr-0"><g class="cs-1"><rect x="168" y="125" width="453.5" height="12" rx="4" fill="var(--color-series-2)" class="grow"/><line x1="588.3" x2="653.1" y1="131" y2="131" class="chart-ci late"/></g></g>
 <g class="cr-1"><text x="28" y="177.7" class="chart-label shift">여러 세션 종합</text></g>
-<g class="cr-1"><g class="cs-0"><rect x="168" y="159" width="554.7" height="12" rx="4" fill="var(--color-series-1)" class="grow"/><line x1="697" x2="745.7" y1="165" y2="165" class="chart-ci late"/></g></g>
-<g class="cr-1"><g class="cs-1"><rect x="168" y="175" width="306.9" height="12" rx="4" fill="var(--color-series-2)" class="grow"/><line x1="444.3" x2="506.3" y1="181" y2="181" class="chart-ci late"/></g></g>
-<g class="cr-2"><text x="28" y="227.7" class="chart-label shift">시간 추론</text></g>
-<g class="cr-2"><g class="cs-0"><rect x="168" y="209" width="591.6" height="12" rx="4" fill="var(--color-series-1)" class="grow"/><line x1="735.9" x2="780.5" y1="215" y2="215" class="chart-ci late"/></g></g>
+<g class="cr-1"><g class="cs-0"><rect x="168" y="159" width="600.4" height="12" rx="4" fill="var(--color-series-1)" class="grow"/><line x1="740.5" x2="793.2" y1="165" y2="165" class="chart-ci late"/></g></g>
+<g class="cr-1"><g class="cs-1"><rect x="168" y="175" width="332.2" height="12" rx="4" fill="var(--color-series-2)" class="grow"/><line x1="467.1" x2="534.1" y1="181" y2="181" class="chart-ci late"/></g></g>
+<g class="cr-2"><text x="28" y="219.7" class="chart-label shift">시간 추론</text></g>
+<g class="cr-2"><g class="cs-0"><rect x="168" y="209" width="640.3" height="12" rx="4" fill="var(--color-series-1)" class="grow"/><line x1="782.7" x2="830.9" y1="215" y2="215" class="chart-ci late"/></g></g>
 <g class="cr-2"><g class="cs-1"><text x="168" y="235" class="chart-missing">비교 없음</text></g></g>
 <g class="cr-3"><text x="28" y="277.7" class="chart-label shift">지식 갱신</text></g>
-<g class="cr-3"><g class="cs-0"><rect x="168" y="259" width="616" height="12" rx="4" fill="var(--color-series-1)" class="grow"/><line x1="762.4" x2="802.1" y1="265" y2="265" class="chart-ci late"/></g></g>
-<g class="cr-3"><g class="cs-1"><rect x="168" y="275" width="489.3" height="12" rx="4" fill="var(--color-series-2)" class="grow"/><line x1="628.1" x2="684.4" y1="281" y2="281" class="chart-ci late"/></g></g>
-<line x1="724.8" x2="724.8" y1="103" y2="287" class="chart-rule"/><text x="728.8" y="101" class="chart-rule-label">채택 기준</text>
-<g class="cr-0"><g class="cs-0"><text x="824.8" y="119" class="chart-value ours late">91.4</text></g></g>
-<g class="cr-0"><g class="cs-1"><text x="622.2" y="135" class="chart-value late">60.2</text></g></g>
-<g class="cr-1"><g class="cs-0"><text x="751.7" y="169" class="chart-value ours late">79.7</text></g></g>
-<g class="cr-1"><g class="cs-1"><text x="512.3" y="185" class="chart-value late">44.1</text></g></g>
-<g class="cr-2"><g class="cs-0"><text x="786.5" y="219" class="chart-value ours late">85</text></g></g>
-<g class="cr-3"><g class="cs-0"><text x="808.1" y="269" class="chart-value ours late">88.5</text></g></g>
-<g class="cr-3"><g class="cs-1"><text x="690.4" y="285" class="chart-value late">70.3</text></g></g>
-<line x1="168" x2="864" y1="295" y2="295" class="chart-axis"/><text x="168" y="312" class="chart-tick">0</text><text x="307.2" y="312" class="chart-tick">20</text><text x="446.4" y="312" class="chart-tick">40</text><text x="585.6" y="312" class="chart-tick">60</text><text x="724.8" y="312" class="chart-tick">80</text><text x="864" y="312" class="chart-tick">100</text><text x="864" y="329" class="chart-unit">정확도(%)</text>
+<g class="cr-3"><g class="cs-0"><rect x="168" y="259" width="666.7" height="12" rx="4" fill="var(--color-series-1)" class="grow"/><line x1="811.3" x2="854.3" y1="265" y2="265" class="chart-ci late"/></g></g>
+<g class="cr-3"><g class="cs-1"><rect x="168" y="275" width="529.6" height="12" rx="4" fill="var(--color-series-2)" class="grow"/><line x1="665.9" x2="726.9" y1="281" y2="281" class="chart-ci late"/></g></g>
+<line x1="770.6" x2="770.6" y1="103" y2="287" class="chart-rule"/><text x="774.6" y="101" class="chart-rule-label">채택 기준</text>
+<g class="cr-0"><g class="cs-0"><text x="878.3" y="119" class="chart-value ours late">91.4</text></g></g>
+<g class="cr-0"><g class="cs-1"><text x="659.1" y="135" class="chart-value late">60.2</text></g></g>
+<g class="cr-1"><g class="cs-0"><text x="799.2" y="169" class="chart-value ours late">79.7</text></g></g>
+<g class="cr-1"><g class="cs-1"><text x="540.1" y="185" class="chart-value late">44.1</text></g></g>
+<g class="cr-2"><g class="cs-0"><text x="836.9" y="219" class="chart-value ours late">85</text></g></g>
+<g class="cr-3"><g class="cs-0"><text x="860.3" y="269" class="chart-value ours late">88.5</text></g></g>
+<g class="cr-3"><g class="cs-1"><text x="732.9" y="285" class="chart-value late">70.3</text></g></g>
+<line x1="168" x2="921.3" y1="295" y2="295" class="chart-axis"/><text x="168" y="312" class="chart-tick">0</text><text x="318.7" y="312" class="chart-tick">20</text><text x="469.3" y="312" class="chart-tick">40</text><text x="620" y="312" class="chart-tick">60</text><text x="770.6" y="312" class="chart-tick">80</text><text x="921.3" y="312" class="chart-tick">100</text><text x="921.3" y="329" class="chart-unit">정확도(%)</text>
 </g>
 <text x="480" y="381" opacity="0" class="steplabel a6">기억 없음</text>
 <text x="480" y="381" opacity="0" class="steplabel a7">기억 붙임</text>

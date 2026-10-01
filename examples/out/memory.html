@@ -1081,6 +1081,7 @@ function figurePlay(root, data) {
   const paths = data.edgeEnds.map((_, j) => svg.querySelector(`#p-${j}`));
   const columns = [...svg.querySelectorAll('.fl-col')];
   const seriesEls = Array.from({ length: data.seriesCount }, (_, i) => [...svg.querySelectorAll(`.cs-${i}`)]);
+  const labelEls = [...svg.querySelectorAll('.chart-label.shift')];
   const rowEls = Array.from({ length: data.rowCount }, (_, k) => [...svg.querySelectorAll(`.cr-${k}`)]);
   const { segs, metrics } = data;
   const stepSegs = data.steps.map((_, si) => segs.filter((s) => s.si === si));
@@ -1237,7 +1238,7 @@ function figurePlay(root, data) {
         }
       }
     });
-    svg.style.setProperty('--label-shift', `${seg.labelShift}px`);
+    labelEls.forEach((el, k) => el.style.setProperty('--label-shift', `${seg.labelShifts[k] ?? 0}px`));
     rowEls.forEach((els, k) => els.forEach((el) => el.classList.toggle('dim', seg.lights.length > 0 && !seg.lights.includes(k))));
   }
 
