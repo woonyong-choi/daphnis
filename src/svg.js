@@ -1,4 +1,5 @@
 // 스크립트 없이 움직이는 SVG와 멈춘 SVG. 시간표의 박자 상태를 CSS keyframes와 SMIL로 옮긴다(docs/design/playback.md).
+import { fitCanvas } from './canvas.js';
 import { chartText } from './chart/draw.js';
 import { CHIP_GAP, placeChip, sampleRoute, sizeChip } from './chip.js';
 import { curveOf, keySpline, timeAt } from './easing.js';
@@ -36,12 +37,13 @@ export async function toSvg(result, { isStatic = false, name = '' } = {}) {
   const glyphs = createGlyphSet();
   const animator = isStatic || !timeline.segs.length ? staticAnimator() : createAnimator(timeline);
   const content = result.chart ? drawChartBody(result, animator, glyphs, isStatic) : drawFigureBody(result, animator, glyphs);
-  const width = Math.max(content.width, values.size['figure-min']);
+  const { viewWidth: width, shownWidth, scale } = fitCanvas(content.width, 0);
   const captions = isStatic ? { svg: '', height: 0 } : drawCaptions(timeline, animator, width, content.height, glyphs);
   const height = content.height + captions.height;
+  const shownHeight = height * scale;
   const fonts = await embedFonts(glyphs.used);
   const title = figure.title ?? name;
-  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="fl${content.className}" width="${r(width)}" height="${r(height)}" viewBox="0 0 ${r(width)} ${r(height)}" role="img">
+  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="fl${content.className}" width="${r(shownWidth)}" height="${r(shownHeight)}" viewBox="0 0 ${r(width)} ${r(height)}" role="img">
 <title>${escapeXml(title)}</title>
 <style>${fonts}
 ${STYLES.tokens}${STYLES.figure}${STYLES.animated}${result.chart ? STYLES.chart + chartMotionCss(timeline.growMs, result.chart.dotAts) : ''}

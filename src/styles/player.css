@@ -14,7 +14,7 @@ html.embedded body {
 
 .fl-figure {
   position: relative;
-  max-width: var(--size-figure-max);
+  max-width: calc(var(--size-figure-canvas) + var(--space-12) + var(--border-thin) * 2);
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
@@ -254,17 +254,6 @@ html.embedded .fl-canvas svg {
   .fl .fl-edge.quiet {
     transition: none;
   }
-}
-
-/* 차트 쪽은 틀을 차트 너비에 맞춘다. */
-.fl-figure.fl-chart-page {
-  width: fit-content;
-  margin-inline: auto;
-}
-
-/* 목록 쪽 카드 안에서는 차트 틀도 카드 너비를 채워 그림 판 양옆이 비지 않게 한다. */
-html.embedded .fl-figure.fl-chart-page {
-  width: auto;
 }
 
 .fl .fl-group.on .fl-stroke {

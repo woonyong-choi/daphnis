@@ -115,17 +115,16 @@
   --size-node-max: 210px;
   --size-node-min-h: 46px;
   --size-store-cap: 12px;
-  --size-figure-min: 640px;
+  --size-figure-canvas: 960px;
   --size-hop-ref: 300px;
   --size-chip-max: 210px;
   --size-caption-max: 720px;
-  --size-figure-max: 1400px;
-  --size-gallery-column: 760px;
+  --size-gallery-column: 1000px;
   --size-gallery-frame: 820px;
   --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
-  --size-chart-width: 640px;
+  --size-chart-width: var(--size-figure-canvas);
   --size-chart-label: 140px;
   --size-chart-label-max: 240px;
   --size-chart-bar: 12px;
@@ -216,6 +215,8 @@
   --easing-move: cubic-bezier(0.455, 0.03, 0.515, 0.955);
   --easing-reveal: cubic-bezier(0, 0, 0.58, 1);
   --scale-zoom-max: 6;
+  --scale-fold-aspect: 1.6;
+  --scale-fold-step: 0.75;
   --scale-zoom-step: 1.25;
 }
 @media (prefers-color-scheme: dark) {
@@ -278,7 +279,7 @@ html.embedded body {
 
 .fl-figure {
   position: relative;
-  max-width: var(--size-figure-max);
+  max-width: calc(var(--size-figure-canvas) + var(--space-12) + var(--border-thin) * 2);
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
@@ -518,17 +519,6 @@ html.embedded .fl-canvas svg {
   .fl .fl-edge.quiet {
     transition: none;
   }
-}
-
-/* 차트 쪽은 틀을 차트 너비에 맞춘다. */
-.fl-figure.fl-chart-page {
-  width: fit-content;
-  margin-inline: auto;
-}
-
-/* 목록 쪽 카드 안에서는 차트 틀도 카드 너비를 채워 그림 판 양옆이 비지 않게 한다. */
-html.embedded .fl-figure.fl-chart-page {
-  width: auto;
 }
 
 .fl .fl-group.on .fl-stroke {
@@ -918,21 +908,21 @@ html.embedded .fl-figure.fl-chart-page {
 .fl .play .dot[data-at="0.16"] { animation-delay: 144ms; }
 .fl.chart-loop .dot[data-at="0.16"] { animation: chart-dot-loop-1 7000ms infinite both; }
 @keyframes chart-dot-loop-1 { 0%, 2.06% { opacity: 0; animation-timing-function: var(--easing-reveal); } 4.91%, 100% { opacity: 1; } }
-.fl .play .dot[data-at="0.163"] { animation-delay: 147ms; }
-.fl.chart-loop .dot[data-at="0.163"] { animation: chart-dot-loop-2 7000ms infinite both; }
-@keyframes chart-dot-loop-2 { 0%, 2.1% { opacity: 0; animation-timing-function: var(--easing-reveal); } 4.95%, 100% { opacity: 1; } }
+.fl .play .dot[data-at="0.161"] { animation-delay: 145ms; }
+.fl.chart-loop .dot[data-at="0.161"] { animation: chart-dot-loop-2 7000ms infinite both; }
+@keyframes chart-dot-loop-2 { 0%, 2.07% { opacity: 0; animation-timing-function: var(--easing-reveal); } 4.93%, 100% { opacity: 1; } }
 .fl .play .dot[data-at="0.342"] { animation-delay: 308ms; }
 .fl.chart-loop .dot[data-at="0.342"] { animation: chart-dot-loop-3 7000ms infinite both; }
 @keyframes chart-dot-loop-3 { 0%, 4.4% { opacity: 0; animation-timing-function: var(--easing-reveal); } 7.25%, 100% { opacity: 1; } }
-.fl .play .dot[data-at="0.352"] { animation-delay: 317ms; }
-.fl.chart-loop .dot[data-at="0.352"] { animation: chart-dot-loop-4 7000ms infinite both; }
-@keyframes chart-dot-loop-4 { 0%, 4.53% { opacity: 0; animation-timing-function: var(--easing-reveal); } 7.38%, 100% { opacity: 1; } }
+.fl .play .dot[data-at="0.346"] { animation-delay: 311ms; }
+.fl.chart-loop .dot[data-at="0.346"] { animation: chart-dot-loop-4 7000ms infinite both; }
+@keyframes chart-dot-loop-4 { 0%, 4.45% { opacity: 0; animation-timing-function: var(--easing-reveal); } 7.31%, 100% { opacity: 1; } }
 .fl .play .dot[data-at="0.563"] { animation-delay: 507ms; }
 .fl.chart-loop .dot[data-at="0.563"] { animation: chart-dot-loop-5 7000ms infinite both; }
 @keyframes chart-dot-loop-5 { 0%, 7.24% { opacity: 0; animation-timing-function: var(--easing-reveal); } 10.1%, 100% { opacity: 1; } }
-.fl .play .dot[data-at="0.574"] { animation-delay: 517ms; }
-.fl.chart-loop .dot[data-at="0.574"] { animation: chart-dot-loop-6 7000ms infinite both; }
-@keyframes chart-dot-loop-6 { 0%, 7.38% { opacity: 0; animation-timing-function: var(--easing-reveal); } 10.24%, 100% { opacity: 1; } }
+.fl .play .dot[data-at="0.567"] { animation-delay: 510ms; }
+.fl.chart-loop .dot[data-at="0.567"] { animation: chart-dot-loop-6 7000ms infinite both; }
+@keyframes chart-dot-loop-6 { 0%, 7.29% { opacity: 0; animation-timing-function: var(--easing-reveal); } 10.15%, 100% { opacity: 1; } }
 .fl .play .dot[data-at="1"] { animation-delay: 900ms; }
 .fl.chart-loop .dot[data-at="1"] { animation: chart-dot-loop-7 7000ms infinite both; }
 @keyframes chart-dot-loop-7 { 0%, 12.86% { opacity: 0; animation-timing-function: var(--easing-reveal); } 15.71%, 100% { opacity: 1; } }
@@ -957,26 +947,26 @@ html.embedded .fl-figure.fl-chart-page {
 <body>
 <figure class="fl-figure fl-chart-page" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="640" height="470" style="aspect-ratio: 640 / 470" viewBox="0 0 640 470" role="img"><title>주차별 재시도 비율</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><text x="28" y="43" class="chart-title">주차별 재시도 비율</text>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="470" style="aspect-ratio: 960 / 470" viewBox="0 0 960 470" role="img"><title>주차별 재시도 비율</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><text x="28" y="43" class="chart-title">주차별 재시도 비율</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 띠는 신뢰구간, 점선은 목표 5%</text>
 <g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-series-1)"/><text x="46" y="85" class="chart-legend">새 판단기</text></g>
 <g class="cs-1"><rect x="108.49609375" y="77" width="12" height="12" rx="4" fill="var(--color-series-2)"/><text x="126.49609375" y="85" class="chart-legend">기존 판단기</text></g>
-<line x1="76" x2="552" y1="396" y2="396" class="chart-grid"/><text x="70" y="400" class="chart-tick end">0</text><line x1="76" x2="552" y1="309.3" y2="309.3" class="chart-grid"/><text x="70" y="313.3" class="chart-tick end">5</text><line x1="76" x2="552" y1="222.7" y2="222.7" class="chart-grid"/><text x="70" y="226.6" class="chart-tick end">10</text><line x1="76" x2="552" y1="136" y2="136" class="chart-grid"/><text x="70" y="140" class="chart-tick end">15</text><text x="76" y="413" class="chart-tick">1</text><text x="195" y="413" class="chart-tick">2</text><text x="314" y="413" class="chart-tick">3</text><text x="433" y="413" class="chart-tick">4</text><text x="552" y="413" class="chart-tick">5</text><text x="552" y="434" class="chart-unit">주차</text><text x="28" y="120" class="chart-unit start">재시도 비율(%)</text>
-<g class="cs-0"><path d="M 76 151.6 L 195 201.9 L 314 250.4 L 433 285.1 L 552 297.2 L 552 333.6 L 433 324.9 L 314 293.7 L 195 248.7 L 76 207.1 Z" fill="var(--color-series-1)" class="chart-band wipe"/></g>
-<g class="cs-1"><path d="M 76 158.5 L 195 165.5 L 314 160.3 L 433 155.1 L 552 165.5 L 552 215.7 L 433 208.8 L 314 217.5 L 195 219.2 L 76 212.3 Z" fill="var(--color-series-2)" class="chart-band wipe"/></g>
-<g class="cs-0"><path d="M 76 181.1 L 195 226.1 L 314 272.9 L 433 305.9 L 552 316.3" fill="none" stroke="var(--color-series-1)" stroke-width="2.5" pathLength="1" class="draw"/></g>
-<g class="cs-1"><path d="M 76 186.3 L 195 193.2 L 314 189.7 L 433 182.8 L 552 191.5" fill="none" stroke="var(--color-series-2)" stroke-width="2.5" pathLength="1" class="draw"/></g>
+<line x1="76" x2="872" y1="396" y2="396" class="chart-grid"/><text x="70" y="400" class="chart-tick end">0</text><line x1="76" x2="872" y1="309.3" y2="309.3" class="chart-grid"/><text x="70" y="313.3" class="chart-tick end">5</text><line x1="76" x2="872" y1="222.7" y2="222.7" class="chart-grid"/><text x="70" y="226.6" class="chart-tick end">10</text><line x1="76" x2="872" y1="136" y2="136" class="chart-grid"/><text x="70" y="140" class="chart-tick end">15</text><text x="76" y="413" class="chart-tick">1</text><text x="275" y="413" class="chart-tick">2</text><text x="474" y="413" class="chart-tick">3</text><text x="673" y="413" class="chart-tick">4</text><text x="872" y="413" class="chart-tick">5</text><text x="872" y="434" class="chart-unit">주차</text><text x="28" y="120" class="chart-unit start">재시도 비율(%)</text>
+<g class="cs-0"><path d="M 76 151.6 L 275 201.9 L 474 250.4 L 673 285.1 L 872 297.2 L 872 333.6 L 673 324.9 L 474 293.7 L 275 248.7 L 76 207.1 Z" fill="var(--color-series-1)" class="chart-band wipe"/></g>
+<g class="cs-1"><path d="M 76 158.5 L 275 165.5 L 474 160.3 L 673 155.1 L 872 165.5 L 872 215.7 L 673 208.8 L 474 217.5 L 275 219.2 L 76 212.3 Z" fill="var(--color-series-2)" class="chart-band wipe"/></g>
+<g class="cs-0"><path d="M 76 181.1 L 275 226.1 L 474 272.9 L 673 305.9 L 872 316.3" fill="none" stroke="var(--color-series-1)" stroke-width="2.5" pathLength="1" class="draw"/></g>
+<g class="cs-1"><path d="M 76 186.3 L 275 193.2 L 474 189.7 L 673 182.8 L 872 191.5" fill="none" stroke="var(--color-series-2)" stroke-width="2.5" pathLength="1" class="draw"/></g>
 <g class="cr-0"><g class="cs-0"><circle cx="76" cy="181.1" r="5" fill="var(--color-series-1)" class="dot" data-at="0"/></g></g>
 <g class="cr-0"><g class="cs-1"><circle cx="76" cy="186.3" r="5" fill="var(--color-series-2)" class="dot" data-at="0"/></g></g>
-<g class="cr-1"><g class="cs-0"><circle cx="195" cy="226.1" r="5" fill="var(--color-series-1)" class="dot" data-at="0.163"/></g></g>
-<g class="cr-1"><g class="cs-1"><circle cx="195" cy="193.2" r="5" fill="var(--color-series-2)" class="dot" data-at="0.16"/></g></g>
-<g class="cr-2"><g class="cs-0"><circle cx="314" cy="272.9" r="5" fill="var(--color-series-1)" class="dot" data-at="0.352"/></g></g>
-<g class="cr-2"><g class="cs-1"><circle cx="314" cy="189.7" r="5" fill="var(--color-series-2)" class="dot" data-at="0.342"/></g></g>
-<g class="cr-3"><g class="cs-0"><circle cx="433" cy="305.9" r="5" fill="var(--color-series-1)" class="dot" data-at="0.574"/></g></g>
-<g class="cr-3"><g class="cs-1"><circle cx="433" cy="182.8" r="5" fill="var(--color-series-2)" class="dot" data-at="0.563"/></g></g>
-<g class="cr-4"><g class="cs-0"><circle cx="552" cy="316.3" r="5" fill="var(--color-series-1)" class="dot" data-at="1"/></g></g>
-<g class="cr-4"><g class="cs-1"><circle cx="552" cy="191.5" r="5" fill="var(--color-series-2)" class="dot" data-at="1"/></g></g>
-<line x1="76" x2="552" y1="309.3" y2="309.3" class="chart-rule"/><text x="552" y="305.3" class="chart-rule-label end">목표</text><g class="fl-packets"></g></svg></div>
+<g class="cr-1"><g class="cs-0"><circle cx="275" cy="226.1" r="5" fill="var(--color-series-1)" class="dot" data-at="0.161"/></g></g>
+<g class="cr-1"><g class="cs-1"><circle cx="275" cy="193.2" r="5" fill="var(--color-series-2)" class="dot" data-at="0.16"/></g></g>
+<g class="cr-2"><g class="cs-0"><circle cx="474" cy="272.9" r="5" fill="var(--color-series-1)" class="dot" data-at="0.346"/></g></g>
+<g class="cr-2"><g class="cs-1"><circle cx="474" cy="189.7" r="5" fill="var(--color-series-2)" class="dot" data-at="0.342"/></g></g>
+<g class="cr-3"><g class="cs-0"><circle cx="673" cy="305.9" r="5" fill="var(--color-series-1)" class="dot" data-at="0.567"/></g></g>
+<g class="cr-3"><g class="cs-1"><circle cx="673" cy="182.8" r="5" fill="var(--color-series-2)" class="dot" data-at="0.563"/></g></g>
+<g class="cr-4"><g class="cs-0"><circle cx="872" cy="316.3" r="5" fill="var(--color-series-1)" class="dot" data-at="1"/></g></g>
+<g class="cr-4"><g class="cs-1"><circle cx="872" cy="191.5" r="5" fill="var(--color-series-2)" class="dot" data-at="1"/></g></g>
+<line x1="76" x2="872" y1="309.3" y2="309.3" class="chart-rule"/><text x="872" y="305.3" class="chart-rule-label end">목표</text><g class="fl-packets"></g></svg></div>
 <figcaption class="fl-foot">
 <div class="fl-bar"><button type="button" class="fl-round fl-pause"></button><div class="fl-tabs" role="tablist"></div><button type="button" class="fl-round fl-rate" aria-label="배속">1×</button></div>
 <p class="fl-caption" aria-live="polite"></p>

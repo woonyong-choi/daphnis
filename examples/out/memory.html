@@ -115,17 +115,16 @@
   --size-node-max: 210px;
   --size-node-min-h: 46px;
   --size-store-cap: 12px;
-  --size-figure-min: 640px;
+  --size-figure-canvas: 960px;
   --size-hop-ref: 300px;
   --size-chip-max: 210px;
   --size-caption-max: 720px;
-  --size-figure-max: 1400px;
-  --size-gallery-column: 760px;
+  --size-gallery-column: 1000px;
   --size-gallery-frame: 820px;
   --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
-  --size-chart-width: 640px;
+  --size-chart-width: var(--size-figure-canvas);
   --size-chart-label: 140px;
   --size-chart-label-max: 240px;
   --size-chart-bar: 12px;
@@ -216,6 +215,8 @@
   --easing-move: cubic-bezier(0.455, 0.03, 0.515, 0.955);
   --easing-reveal: cubic-bezier(0, 0, 0.58, 1);
   --scale-zoom-max: 6;
+  --scale-fold-aspect: 1.6;
+  --scale-fold-step: 0.75;
   --scale-zoom-step: 1.25;
 }
 @media (prefers-color-scheme: dark) {
@@ -278,7 +279,7 @@ html.embedded body {
 
 .fl-figure {
   position: relative;
-  max-width: var(--size-figure-max);
+  max-width: calc(var(--size-figure-canvas) + var(--space-12) + var(--border-thin) * 2);
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
@@ -518,17 +519,6 @@ html.embedded .fl-canvas svg {
   .fl .fl-edge.quiet {
     transition: none;
   }
-}
-
-/* 차트 쪽은 틀을 차트 너비에 맞춘다. */
-.fl-figure.fl-chart-page {
-  width: fit-content;
-  margin-inline: auto;
-}
-
-/* 목록 쪽 카드 안에서는 차트 틀도 카드 너비를 채워 그림 판 양옆이 비지 않게 한다. */
-html.embedded .fl-figure.fl-chart-page {
-  width: auto;
 }
 
 .fl .fl-group.on .fl-stroke {
@@ -914,7 +904,7 @@ html.embedded .fl-figure.fl-chart-page {
 <body>
 <figure class="fl-figure" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="725" height="773" style="aspect-ratio: 725 / 773" viewBox="0 0 725 773" role="img"><title>대화에서 기억 그래프 키우기</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><g id="g-0" class="fl-group" data-id="memory"><rect x="237" y="31.3" width="224" height="665" rx="14" class="frame-box fl-stroke "/><text x="255" y="49.3" class="frame">기억 엔진</text></g>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="773" style="aspect-ratio: 960 / 773" viewBox="-117.5 0 960 773" role="img"><title>대화에서 기억 그래프 키우기</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><g id="g-0" class="fl-group" data-id="memory"><rect x="237" y="31.3" width="224" height="665" rx="14" class="frame-box fl-stroke "/><text x="255" y="49.3" class="frame">기억 엔진</text></g>
 <g id="n-0" class="fl-node" data-id="extract"><rect x="261" y="131.3" width="176" height="128" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="349" y="157.4" class="label">추출기</text><text x="349" y="173.2" class="sub">LLM</text><rect x="271" y="188.3" width="156" height="61" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card "/><text x="279" y="205.3" class="row muted fl-empty ">—</text><g id="n-0-c0" opacity="0" class="fl-layer "><rect x="279" y="195.3" width="43.1" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="300.6" y="205.6" class="tag" fill="var(--color-tag-blue)">PERSON</text><text x="279" y="220.3" class="row">민지</text><rect x="279" y="229.3" width="26.8" height="14" rx="4" fill="var(--color-tag-purple)" fill-opacity="0.15"/><text x="292.4" y="239.6" class="tag" fill="var(--color-tag-purple)">ORG</text><text x="310.8" y="239.3" class="row">토스<tspan class="muted"> · 3월</tspan></text></g><g id="n-0-c1" opacity="0" class="fl-layer "><rect x="279" y="195.3" width="43.1" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="300.6" y="205.6" class="tag" fill="var(--color-tag-blue)">PERSON</text><text x="279" y="220.3" class="row">김민지 = 민지</text></g></g>
 <g id="n-1" class="fl-node" data-id="resolve"><rect x="261" y="319.3" width="176" height="109" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="349" y="345.4" class="label">개체 정리</text><text x="349" y="361.2" class="sub">같은 사람 합치기</text><rect x="271" y="376.3" width="156" height="42" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card "/><text x="279" y="393.3" class="row muted fl-empty ">—</text><g id="n-1-c0" opacity="0" class="fl-layer "><rect x="279" y="383.3" width="38.5" height="14" rx="4" fill="var(--color-tag-orange)" fill-opacity="0.15"/><text x="298.2" y="393.6" class="tag" fill="var(--color-tag-orange)">MERGE</text><text x="279" y="408.3" class="row">김민지 → 민지</text></g></g>
 <g id="n-2" class="fl-node" data-id="graph"><path d="M261 500.3 a 88 12 0 0 1 176 0 v 100 a 88 12 0 0 1 -176 0 z" fill="var(--color-node)" class="fl-stroke "/><path d="M261 500.3 a 88 12 0 0 0 176 0" fill="none" class="fl-stroke "/><text x="349" y="526.4" class="label">기억 그래프</text><rect x="271" y="542.3" width="156" height="48" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card "/><text x="279" y="559.3" class="row muted fl-empty ">—</text><g id="n-2-c0" opacity="0" class="fl-layer "><line x1="334.1" y1="557.3" x2="363.9" y2="557.3" stroke="var(--color-border)" stroke-width="1"/><rect x="293.9" y="548.3" width="40.1" height="18" rx="9" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1"/><text x="314" y="561.1" class="mini on">민지</text><rect x="363.9" y="548.3" width="40.1" height="18" rx="9" fill="var(--color-node)" stroke="var(--color-border)" stroke-width="1"/><text x="384" y="561.1" class="mini">토스</text></g><g id="n-2-c1" opacity="0" class="fl-layer "><line x1="322.4" y1="575.3" x2="328.9" y2="575.3" stroke="var(--color-border)" stroke-width="1"/><line x1="369.1" y1="575.3" x2="374.3" y2="575.3" stroke="var(--color-border)" stroke-width="1"/><path d="M 302.3 566.3 Q 349 530.3 395.7 566.3" fill="none" stroke="var(--color-accent)" stroke-width="1"/><rect x="282.3" y="566.3" width="40.1" height="18" rx="9" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1"/><text x="302.3" y="579.1" class="mini on">민지</text><rect x="328.9" y="566.3" width="40.1" height="18" rx="9" fill="var(--color-node)" stroke="var(--color-border)" stroke-width="1"/><text x="349" y="579.1" class="mini">토스</text><rect x="374.3" y="566.3" width="42.7" height="18" rx="9" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1"/><text x="395.7" y="579.1" class="mini on">결제팀</text></g></g>

@@ -1,5 +1,6 @@
 // 재생 화면 HTML 한 장과 목록 쪽. 스크립트, 스타일, 글꼴, 그림을 모두 안에 넣어 파일 하나로 열린다.
 import { readFileSync } from 'node:fs';
+import { fitCanvas } from './canvas.js';
 import { chartText } from './chart/draw.js';
 import { drawScene } from './draw/figure.js';
 import { curveOf } from './easing.js';
@@ -111,9 +112,11 @@ export async function toHtml(result, name) {
     for (const hop of seg.hops) for (const line of hop.data ?? []) glyphs.add(line, 'regular');
   }
   const fonts = await embedFonts(glyphs.used);
-  const { width, height } = content;
+  const { height } = content;
+  // 표시 폭은 SVG 파일과 같은 표준 캔버스 폭이다. 좁은 내용은 viewBox를 왼쪽으로 넓혀 가운데에 두고, 넓은 내용은 viewBox 그대로 표시 폭만 줄인다.
+  const { viewWidth, shownWidth, shownHeight } = fitCanvas(content.width, height);
   const svg =
-    `<svg xmlns="http://www.w3.org/2000/svg" class="fl" width="${r(width)}" height="${r(height)}" style="aspect-ratio: ${r(width)} / ${r(height)}" viewBox="0 0 ${r(width)} ${r(height)}" role="img">` +
+    `<svg xmlns="http://www.w3.org/2000/svg" class="fl" width="${r(shownWidth)}" height="${r(shownHeight)}" style="aspect-ratio: ${r(viewWidth)} / ${r(height)}" viewBox="${r((content.width - viewWidth) / 2)} 0 ${r(viewWidth)} ${r(height)}" role="img">` +
     `<title>${escapeXml(figure.title ?? name)}</title><defs>${DEFS}</defs>${content.svg}<g class="fl-packets"></g></svg>`;
   return `<!doctype html>
 <html lang="ko">

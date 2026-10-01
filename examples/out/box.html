@@ -115,17 +115,16 @@
   --size-node-max: 210px;
   --size-node-min-h: 46px;
   --size-store-cap: 12px;
-  --size-figure-min: 640px;
+  --size-figure-canvas: 960px;
   --size-hop-ref: 300px;
   --size-chip-max: 210px;
   --size-caption-max: 720px;
-  --size-figure-max: 1400px;
-  --size-gallery-column: 760px;
+  --size-gallery-column: 1000px;
   --size-gallery-frame: 820px;
   --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
-  --size-chart-width: 640px;
+  --size-chart-width: var(--size-figure-canvas);
   --size-chart-label: 140px;
   --size-chart-label-max: 240px;
   --size-chart-bar: 12px;
@@ -216,6 +215,8 @@
   --easing-move: cubic-bezier(0.455, 0.03, 0.515, 0.955);
   --easing-reveal: cubic-bezier(0, 0, 0.58, 1);
   --scale-zoom-max: 6;
+  --scale-fold-aspect: 1.6;
+  --scale-fold-step: 0.75;
   --scale-zoom-step: 1.25;
 }
 @media (prefers-color-scheme: dark) {
@@ -278,7 +279,7 @@ html.embedded body {
 
 .fl-figure {
   position: relative;
-  max-width: var(--size-figure-max);
+  max-width: calc(var(--size-figure-canvas) + var(--space-12) + var(--border-thin) * 2);
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
@@ -518,17 +519,6 @@ html.embedded .fl-canvas svg {
   .fl .fl-edge.quiet {
     transition: none;
   }
-}
-
-/* 차트 쪽은 틀을 차트 너비에 맞춘다. */
-.fl-figure.fl-chart-page {
-  width: fit-content;
-  margin-inline: auto;
-}
-
-/* 목록 쪽 카드 안에서는 차트 틀도 카드 너비를 채워 그림 판 양옆이 비지 않게 한다. */
-html.embedded .fl-figure.fl-chart-page {
-  width: auto;
 }
 
 .fl .fl-group.on .fl-stroke {
@@ -934,13 +924,13 @@ html.embedded .fl-figure.fl-chart-page {
 <body>
 <figure class="fl-figure fl-chart-page" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="640" height="281" style="aspect-ratio: 640 / 281" viewBox="0 0 640 281" role="img"><title>응답 지연 분포</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><text x="28" y="43" class="chart-title">응답 지연 분포</text>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="281" style="aspect-ratio: 960 / 281" viewBox="0 0 960 281" role="img"><title>응답 지연 분포</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><text x="28" y="43" class="chart-title">응답 지연 분포</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 요청 1,000개</text>
-<g class="cs-0"><text x="28" y="109.7" class="chart-label cr-0">캐시 적중</text><g class="cr-0"><line x1="171" x2="182.5" y1="105" y2="105" class="chart-whisker"/><rect x="172.5" y="93" width="3.3" height="24" rx="4" class="chart-box grow"/><line x1="173.5" x2="173.5" y1="93" y2="117" class="chart-median"/><text x="188.5" y="109" class="chart-value late">22</text></g>
-<text x="28" y="149.7" class="chart-label cr-1">캐시 없음</text><g class="cr-1"><line x1="198.1" x2="323.4" y1="145" y2="145" class="chart-whisker"/><rect x="213.1" y="133" width="32.6" height="24" rx="4" class="chart-box grow"/><line x1="225.7" x2="225.7" y1="133" y2="157" class="chart-median"/><text x="329.4" y="149" class="chart-value late">230</text></g>
-<text x="28" y="189.7" class="chart-label cr-2">콜드 스타트</text><g class="cr-2"><line x1="268.3" x2="518.9" y1="185" y2="185" class="chart-whisker"/><rect x="298.3" y="173" width="65.2" height="24" rx="4" class="chart-box grow"/><line x1="320.9" x2="320.9" y1="173" y2="197" class="chart-median"/><text x="524.9" y="189" class="chart-value late">610</text></g>
+<g class="cs-0"><text x="28" y="109.7" class="chart-label cr-0">캐시 적중</text><g class="cr-0"><line x1="173.6" x2="194.9" y1="105" y2="105" class="chart-whisker"/><rect x="176.4" y="93" width="6" height="24" rx="4" class="chart-box grow"/><line x1="178.2" x2="178.2" y1="93" y2="117" class="chart-median"/><text x="200.9" y="109" class="chart-value late">22</text></g>
+<text x="28" y="149.7" class="chart-label cr-1">캐시 없음</text><g class="cr-1"><line x1="223.7" x2="455.7" y1="145" y2="145" class="chart-whisker"/><rect x="251.5" y="133" width="60.3" height="24" rx="4" class="chart-box grow"/><line x1="274.7" x2="274.7" y1="133" y2="157" class="chart-median"/><text x="461.7" y="149" class="chart-value late">230</text></g>
+<text x="28" y="189.7" class="chart-label cr-2">콜드 스타트</text><g class="cr-2"><line x1="353.6" x2="817.6" y1="185" y2="185" class="chart-whisker"/><rect x="409.3" y="173" width="120.6" height="24" rx="4" class="chart-box grow"/><line x1="451" x2="451" y1="173" y2="197" class="chart-median"/><text x="823.6" y="189" class="chart-value late">610</text></g>
 
-<line x1="168" x2="544" y1="213" y2="213" class="chart-axis"/><text x="168" y="230" class="chart-tick">0</text><text x="293.3" y="230" class="chart-tick">500</text><text x="418.7" y="230" class="chart-tick">1k</text><text x="544" y="230" class="chart-tick">1.5k</text><text x="544" y="247" class="chart-unit">지연(ms)</text></g><g class="fl-packets"></g></svg></div>
+<line x1="168" x2="864" y1="213" y2="213" class="chart-axis"/><text x="168" y="230" class="chart-tick">0</text><text x="400" y="230" class="chart-tick">500</text><text x="632" y="230" class="chart-tick">1k</text><text x="864" y="230" class="chart-tick">1.5k</text><text x="864" y="247" class="chart-unit">지연(ms)</text></g><g class="fl-packets"></g></svg></div>
 <figcaption class="fl-foot">
 <div class="fl-bar"><button type="button" class="fl-round fl-pause"></button><div class="fl-tabs" role="tablist"></div><button type="button" class="fl-round fl-rate" aria-label="배속">1×</button></div>
 <p class="fl-caption" aria-live="polite"></p>

@@ -125,7 +125,7 @@ test('buildFigure_state_without_start_draws_no_start_dot_or_line', async () => {
   assert.equal(without.scene.edges.filter((e) => e.isMark).length, 1);
 });
 
-const WRAP_CHAIN = `flow right\naspect 1.6\n${Array.from({ length: 16 }, (_, i) => `box n${i} "단계 ${i}"`).join('\n')}\ngroup g "묶음" {\n  box a "가"\n  box b "나"\n  a -> b\n}\n${Array.from({ length: 15 }, (_, i) => `n${i} -> n${i + 1}`).join('\n')}\nn15 -> a`;
+const WRAP_CHAIN = `flow right\naspect 1.2\n${Array.from({ length: 12 }, (_, i) => `box n${i} "단계 ${i}"`).join('\n')}\ngroup g "묶음" {\n  box a "가"\n  box b "나"\n  a -> b\n}\n${Array.from({ length: 11 }, (_, i) => `n${i} -> n${i + 1}`).join('\n')}\nn11 -> a`;
 
 test('layoutGraph_group_chain_with_aspect_wraps_and_passes_strict', async () => {
   const { scene } = await buildFigure(WRAP_CHAIN, { strict: true });
@@ -160,24 +160,3 @@ test('layoutGraph_wrap_with_group_back_edges_and_labels_keeps_edge_ends', async 
   const result = await buildFigure(source);
 
   assert.equal(result.scene.edges.length, 11);});
-
-test('toSvg_narrow_figure_plate_is_figure_min_and_content_is_centered', async () => {
-  const { values } = await import('../src/tokens.js');
-  const result = await buildFigure('flow down\nbox a "A"\nbox b "B"\na -> b');
-  const svg = await toSvg(result, { isStatic: true });
-  const min = values.size['figure-min'];
-
-  assert.equal(min, values.size['chart-width']);
-  assert.ok(result.scene.width < min);
-  assert.match(svg, new RegExp(`width="${min}" height="[0-9.]+" viewBox="0 0 ${min} `));
-  assert.match(svg, new RegExp(`<g transform="translate\\(${(min - result.scene.width) / 2} 0\\)">`));
-});
-
-test('toSvg_figure_wider_than_figure_min_keeps_its_own_width', async () => {
-  const { values } = await import('../src/tokens.js');
-  const result = await buildFigure('flow right\nbox a "A"\nbox b "B"\nbox c "C"\nbox d "D"\nbox e "E"\nbox f "F"\na -> b\nb -> c\nc -> d\nd -> e\ne -> f');
-  const svg = await toSvg(result, { isStatic: true });
-
-  assert.ok(result.scene.width > values.size['figure-min']);
-  assert.match(svg, new RegExp(`<svg [^>]*width="${Math.round(result.scene.width * 10) / 10}"`));
-});

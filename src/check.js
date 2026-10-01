@@ -330,8 +330,8 @@ function inside(box, scene) {
 function checkAspect(figure, scene, problems) {
   const ratio = scene.width / scene.height;
   if (ratio <= ASPECT_MAX && ratio >= 1 / ASPECT_MAX) return;
-  // 가로세로가 모두 문서 본문 폭 이하인 그림은 줄어들지 않고 그대로 보여 비율이 읽힘을 해치지 않는다.
-  const fitsDocument = scene.width <= values.size['figure-max'] && scene.height <= values.size['figure-max'];
+  // 가로세로가 모두 표준 캔버스 폭 이하인 그림은 줄어들지 않고 그대로 보여 비율이 읽힘을 해치지 않는다.
+  const fitsDocument = scene.width <= values.size['figure-canvas'] && scene.height <= values.size['figure-canvas'];
   if (fitsDocument) return;
   const isWide = ratio > ASPECT_MAX;
   const turn = isWide ? 'down' : 'right';
@@ -347,11 +347,11 @@ function checkAspect(figure, scene, problems) {
   problems.warn(figure.line, `[check 9] figure aspect ${ratio.toFixed(1)} is outside 1/3 to 3. ${fix}`);
 }
 
-// 10번: 문서 본문 폭으로 줄였을 때 가장 작은 글(태그 글자)이 MIN_READABLE px 이상이다.
+// 10번: 표준 캔버스 폭으로 줄였을 때 가장 작은 글(태그 글자)이 MIN_READABLE px 이상이다.
 function checkReadable(figure, scene, problems) {
-  const scale = Math.min(1, values.size['figure-max'] / scene.width);
+  const scale = Math.min(1, values.size['figure-canvas'] / scene.width);
   const smallest = values.size.text['9'] * scale;
   if (smallest >= MIN_READABLE - 0.01) return;
   const fix = figure.kind === 'sequence' ? 'Use fewer participants or shorter messages' : scene.groups.length ? 'Make the figure narrower with aspect or group directions' : 'Make the figure narrower with aspect';
-  problems.warn(figure.line, `[check 10] at document width the smallest text is ${smallest.toFixed(1)}px. ${fix}`);
+  problems.warn(figure.line, `[check 10] at canvas width the smallest text is ${smallest.toFixed(1)}px. ${fix}`);
 }

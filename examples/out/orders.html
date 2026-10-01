@@ -116,17 +116,16 @@
   --size-node-max: 210px;
   --size-node-min-h: 46px;
   --size-store-cap: 12px;
-  --size-figure-min: 640px;
+  --size-figure-canvas: 960px;
   --size-hop-ref: 300px;
   --size-chip-max: 210px;
   --size-caption-max: 720px;
-  --size-figure-max: 1400px;
-  --size-gallery-column: 760px;
+  --size-gallery-column: 1000px;
   --size-gallery-frame: 820px;
   --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
-  --size-chart-width: 640px;
+  --size-chart-width: var(--size-figure-canvas);
   --size-chart-label: 140px;
   --size-chart-label-max: 240px;
   --size-chart-bar: 12px;
@@ -217,6 +216,8 @@
   --easing-move: cubic-bezier(0.455, 0.03, 0.515, 0.955);
   --easing-reveal: cubic-bezier(0, 0, 0.58, 1);
   --scale-zoom-max: 6;
+  --scale-fold-aspect: 1.6;
+  --scale-fold-step: 0.75;
   --scale-zoom-step: 1.25;
 }
 @media (prefers-color-scheme: dark) {
@@ -279,7 +280,7 @@ html.embedded body {
 
 .fl-figure {
   position: relative;
-  max-width: var(--size-figure-max);
+  max-width: calc(var(--size-figure-canvas) + var(--space-12) + var(--border-thin) * 2);
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
@@ -519,17 +520,6 @@ html.embedded .fl-canvas svg {
   .fl .fl-edge.quiet {
     transition: none;
   }
-}
-
-/* 차트 쪽은 틀을 차트 너비에 맞춘다. */
-.fl-figure.fl-chart-page {
-  width: fit-content;
-  margin-inline: auto;
-}
-
-/* 목록 쪽 카드 안에서는 차트 틀도 카드 너비를 채워 그림 판 양옆이 비지 않게 한다. */
-html.embedded .fl-figure.fl-chart-page {
-  width: auto;
 }
 
 .fl .fl-group.on .fl-stroke {
@@ -915,7 +905,7 @@ html.embedded .fl-figure.fl-chart-page {
 <body>
 <figure class="fl-figure" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="456.8" height="186" style="aspect-ratio: 456.8 / 186" viewBox="0 0 456.8 186" role="img"><title>orders</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><g id="n-0" class="fl-node" data-id="orders"><rect x="295.7" y="54" width="133.1" height="104" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="362.3" y="72" class="label">orders</text><g class="fl-col" data-col="orders.id"><rect x="296.7" y="80" width="131.1" height="26" class="col-bg "/><line x1="295.7" x2="428.8" y1="80" y2="80" class="col-line"/><text x="313.7" y="97.1" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="410.8" y="97.1" class="cell type">bigint</text></g><g class="fl-col" data-col="orders.user_id"><rect x="296.7" y="106" width="131.1" height="26" class="col-bg "/><line x1="295.7" x2="428.8" y1="106" y2="106" class="col-line"/><text x="313.7" y="123.1" class="cell">user_id</text><text x="410.8" y="123.1" class="cell type">bigint</text></g><g class="fl-col" data-col="orders.status"><rect x="296.7" y="132" width="131.1" height="26" class="col-bg "/><line x1="295.7" x2="428.8" y1="132" y2="132" class="col-line"/><text x="313.7" y="149.1" class="cell">status</text><text x="410.8" y="149.1" class="cell type">varchar</text></g></g>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="186" style="aspect-ratio: 960 / 186" viewBox="-251.6 0 960 186" role="img"><title>orders</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><g id="n-0" class="fl-node" data-id="orders"><rect x="295.7" y="54" width="133.1" height="104" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="362.3" y="72" class="label">orders</text><g class="fl-col" data-col="orders.id"><rect x="296.7" y="80" width="131.1" height="26" class="col-bg "/><line x1="295.7" x2="428.8" y1="80" y2="80" class="col-line"/><text x="313.7" y="97.1" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="410.8" y="97.1" class="cell type">bigint</text></g><g class="fl-col" data-col="orders.user_id"><rect x="296.7" y="106" width="131.1" height="26" class="col-bg "/><line x1="295.7" x2="428.8" y1="106" y2="106" class="col-line"/><text x="313.7" y="123.1" class="cell">user_id</text><text x="410.8" y="123.1" class="cell type">bigint</text></g><g class="fl-col" data-col="orders.status"><rect x="296.7" y="132" width="131.1" height="26" class="col-bg "/><line x1="295.7" x2="428.8" y1="132" y2="132" class="col-line"/><text x="313.7" y="149.1" class="cell">status</text><text x="410.8" y="149.1" class="cell type">varchar</text></g></g>
 <g id="n-1" class="fl-node" data-id="payments"><rect x="28" y="28" width="207.7" height="104" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="131.9" y="46" class="label">payments</text><g class="fl-col" data-col="payments.id"><rect x="29" y="54" width="205.7" height="26" class="col-bg "/><line x1="28" x2="235.7" y1="54" y2="54" class="col-line"/><text x="46" y="71.1" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="217.7" y="71.1" class="cell type">bigint</text></g><g class="fl-col" data-col="payments.order_id"><rect x="29" y="80" width="205.7" height="26" class="col-bg "/><line x1="28" x2="235.7" y1="80" y2="80" class="col-line"/><text x="46" y="97.1" class="cell">order_id<tspan class="key" dx="6">FK</tspan></text><text x="217.7" y="97.1" class="cell type">bigint</text></g><g class="fl-col" data-col="payments.amount"><rect x="29" y="106" width="205.7" height="26" class="col-bg "/><line x1="28" x2="235.7" y1="106" y2="106" class="col-line"/><text x="46" y="123.1" class="cell">amount</text><text x="217.7" y="123.1" class="cell type">numeric(10, 2)</text></g></g>
 <g id="e-0" class="fl-edge"><path id="p-0" d="M 235.745166015625 93 L 295.7 93" class="fl-path " marker-end="url(#fl-arrow)"/></g><g class="fl-packets"></g></svg></div>
 <figcaption class="fl-foot">

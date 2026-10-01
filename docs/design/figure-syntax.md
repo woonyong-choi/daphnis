@@ -124,7 +124,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `title "글"` | 그림 제목. SVG `<title>`과 목록 쪽 이름 | 파일 이름 |
 | `subtitle "글"` | 그림 아래 한 줄 설명 | 없음 |
 | `speed 3s` | 점이 기준 길이 `size.hop-ref`의 선을 지나는 시간. 선 길이에 비례해 이동 시간이 정해져 모든 이동이 같은 속도로 보인다(아래 이동 시간). 차트에서는 계열이 자라는 시간([차트](charts.md)) | 토큰 `duration.hop`과 `size.hop-ref`, 차트는 `duration.reveal` |
-| `aspect 1.6` | 목표 가로세로 비율. `flow`, `state`, `data`에서만, 그룹이 있어도 된다. [배치](layout.md) | 없음 |
+| `aspect 1.6` | 목표 가로세로 비율. `flow`, `state`, `data`에서만, 그룹이 있어도 된다. [배치](layout.md) | 없음(캔버스 폭보다 넓으면 도구가 자동으로 접는다) |
 
 ### 구조 그림 선언
 

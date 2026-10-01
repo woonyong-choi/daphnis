@@ -47,6 +47,7 @@ h2 {
   text-align: center;
 }
 
+/* 모든 그림은 같은 캔버스 폭이고 본문 폭보다 넓으면 줄어든다. */
 img {
   max-width: 100%;
   height: auto;

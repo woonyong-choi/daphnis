@@ -96,17 +96,16 @@
   --size-node-max: 210px;
   --size-node-min-h: 46px;
   --size-store-cap: 12px;
-  --size-figure-min: 640px;
+  --size-figure-canvas: 960px;
   --size-hop-ref: 300px;
   --size-chip-max: 210px;
   --size-caption-max: 720px;
-  --size-figure-max: 1400px;
-  --size-gallery-column: 760px;
+  --size-gallery-column: 1000px;
   --size-gallery-frame: 820px;
   --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
-  --size-chart-width: 640px;
+  --size-chart-width: var(--size-figure-canvas);
   --size-chart-label: 140px;
   --size-chart-label-max: 240px;
   --size-chart-bar: 12px;
@@ -197,6 +196,8 @@
   --easing-move: cubic-bezier(0.455, 0.03, 0.515, 0.955);
   --easing-reveal: cubic-bezier(0, 0, 0.58, 1);
   --scale-zoom-max: 6;
+  --scale-fold-aspect: 1.6;
+  --scale-fold-step: 0.75;
   --scale-zoom-step: 1.25;
 }
 @media (prefers-color-scheme: dark) {

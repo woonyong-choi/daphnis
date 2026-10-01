@@ -119,11 +119,10 @@ export const tokens = freeze({
     "node-max": "var(--size-node-max)",
     "node-min-h": "var(--size-node-min-h)",
     "store-cap": "var(--size-store-cap)",
-    "figure-min": "var(--size-figure-min)",
+    "figure-canvas": "var(--size-figure-canvas)",
     "hop-ref": "var(--size-hop-ref)",
     "chip-max": "var(--size-chip-max)",
     "caption-max": "var(--size-caption-max)",
-    "figure-max": "var(--size-figure-max)",
     "gallery-column": "var(--size-gallery-column)",
     "gallery-frame": "var(--size-gallery-frame)",
     "document-column": "var(--size-document-column)",
@@ -244,6 +243,8 @@ export const tokens = freeze({
   },
   "scale": {
     "zoom-max": "var(--scale-zoom-max)",
+    "fold-aspect": "var(--scale-fold-aspect)",
+    "fold-step": "var(--scale-fold-step)",
     "zoom-step": "var(--scale-zoom-step)"
   }
 });
@@ -363,17 +364,16 @@ export const values = freeze({
     "node-max": 210,
     "node-min-h": 46,
     "store-cap": 12,
-    "figure-min": 640,
+    "figure-canvas": 960,
     "hop-ref": 300,
     "chip-max": 210,
     "caption-max": 720,
-    "figure-max": 1400,
-    "gallery-column": 760,
+    "gallery-column": 1000,
     "gallery-frame": 820,
     "document-column": 880,
     "player-chrome": 190,
     "embedded-chrome": 150,
-    "chart-width": 640,
+    "chart-width": 960,
     "chart-label": 140,
     "chart-label-max": 240,
     "chart-bar": 12,
@@ -488,6 +488,8 @@ export const values = freeze({
   },
   "scale": {
     "zoom-max": 6,
+    "fold-aspect": 1.6,
+    "fold-step": 0.75,
     "zoom-step": 1.25
   }
 });
