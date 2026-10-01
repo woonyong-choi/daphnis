@@ -1,4 +1,4 @@
-// 원본 하나를 장면과 시간표로 만든다. 읽기, 차트 값 읽기, 크기, 배치, 시간표, 그림 검사를 차례로 부른다(docs/architecture.md 그림 만들기).
+// 원본 하나를 장면과 시간표로 만든다. 읽기, 차트 값 읽기, 크기, 배치, 시간표(선 길이를 쓰려고 배치 뒤), 그림 검사를 차례로 부른다(docs/architecture.md 그림 만들기).
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { checkChartFigure, checkFigure } from './check.js';
@@ -34,14 +34,15 @@ export async function buildFigure(source, { baseDir = '.', strict = false, requi
   if (figure.kind === 'chart') checkSkillRules(figure, { requireData, requireCi }, problems);
   problems.throwIfAny();
   const cards = collectCards(figure);
-  const timeline = buildTimeline(figure, cards, wrapChip);
   if (figure.kind === 'chart') {
+    const timeline = buildTimeline(figure, cards, wrapChip);
     const chart = drawChart(figure);
     checkChartFigure(chart, problems);
     return finish({ figure, chart, timeline }, problems, strict);
   }
   const sizes = new Map(figure.nodes.map((n) => [n.id, sizeNode(n, cards.contents.get(n.id), figure.kind === 'sequence' ? undefined : countLines(figure, n.id))]));
   const scene = figure.kind === 'sequence' ? layoutSequence(figure, sizes) : await layoutGraph(figure, sizes);
+  const timeline = buildTimeline(figure, cards, wrapChip, scene);
   widenForChips(scene, timeline);
   // 태그 색은 원본에 처음 나온 순서로 정한다(docs/design/figure-syntax.md 카드 줄).
   scene.tagOrder = figure.steps.flatMap((s) => s.beats.flatMap((b) => b.ops.filter((o) => o.row?.tag && !o.row.tone).map((o) => o.row.tag)));

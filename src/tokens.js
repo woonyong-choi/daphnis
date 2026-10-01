@@ -123,6 +123,7 @@ export const tokens = freeze({
     "node-min-h": "var(--size-node-min-h)",
     "store-cap": "var(--size-store-cap)",
     "figure-min": "var(--size-figure-min)",
+    "hop-ref": "var(--size-hop-ref)",
     "chip-max": "var(--size-chip-max)",
     "caption-max": "var(--size-caption-max)",
     "figure-max": "var(--size-figure-max)",
@@ -231,6 +232,8 @@ export const tokens = freeze({
   "duration": {
     "fast": "var(--duration-fast)",
     "hop": "var(--duration-hop)",
+    "hop-min": "var(--duration-hop-min)",
+    "hop-max": "var(--duration-hop-max)",
     "dwell": "var(--duration-dwell)",
     "dwell-per-char": "var(--duration-dwell-per-char)",
     "dwell-max": "var(--duration-dwell-max)",
@@ -367,6 +370,7 @@ export const values = freeze({
     "node-min-h": 46,
     "store-cap": 12,
     "figure-min": 560,
+    "hop-ref": 300,
     "chip-max": 210,
     "caption-max": 720,
     "figure-max": 1400,
@@ -475,6 +479,8 @@ export const values = freeze({
   "duration": {
     "fast": 200,
     "hop": 3750,
+    "hop-min": 1500,
+    "hop-max": 7500,
     "dwell": 700,
     "dwell-per-char": 45,
     "dwell-max": 3200,
