@@ -6,8 +6,8 @@
 /* tokens.json: 생성물, 손으로 고치지 않음 */
 :root {
   --color-gray-0: #ffffff;
-  --color-gray-25: #f7f8fa;
   --color-gray-50: #eef1f5;
+  --color-gray-75: #eceff3;
   --color-gray-100: #e3e7ec;
   --color-gray-200: #d5dbe3;
   --color-gray-300: #b6c0cc;
@@ -21,6 +21,7 @@
   --color-neutral-850: #242526;
   --color-neutral-900: #1b1b1d;
   --color-neutral-950: #111214;
+  --color-blue-150: #d3e2f5;
   --color-blue-100: #e3ecf8;
   --color-blue-50: #edf3fb;
   --color-blue-400: #3396e8;
@@ -37,13 +38,13 @@
   --color-on-accent: var(--color-gray-0);
   --color-fg: var(--color-ink-900);
   --color-muted: var(--color-ink-600);
-  --color-bg: var(--color-gray-25);
+  --color-bg: var(--color-gray-75);
   --color-node: var(--color-gray-0);
   --color-surface: var(--color-gray-50);
   --color-border: var(--color-gray-300);
   --color-card-on: var(--color-blue-50);
-  --color-group: var(--color-gray-50);
-  --color-group-border: var(--color-gray-200);
+  --color-group: var(--color-gray-100);
+  --color-group-border: var(--color-gray-300);
   --color-dot: var(--color-gray-200);
   --color-frame: var(--color-gray-100);
   --color-page: var(--color-gray-0);
@@ -60,7 +61,7 @@
   --color-ink-200: #e6e5e1;
   --color-series-1: var(--color-accent);
   --color-series-2: var(--color-orange-600);
-  --color-heat-low: var(--color-blue-100);
+  --color-heat-low: var(--color-blue-150);
   --color-heat-high: var(--color-blue-800);
   --color-heat-ink: var(--color-ink-900);
   --color-heat-ink-on: var(--color-gray-0);
@@ -701,14 +702,14 @@
 <text x="28" y="168.7" class="chart-label">Claude</text>
 <text x="28" y="208.7" class="chart-label">둘 다</text>
 <g class="cr-0"><rect x="168" y="104" width="39" height="38" rx="4" class="chart-heat" style="--s:1" fill="#1d4f91"/><text x="188.5" y="128" class="chart-cell on">182</text></g>
-<g class="cr-1"><rect x="209" y="104" width="39" height="38" rx="4" class="chart-heat" style="--s:0.077" fill="#d4e0f0"/><text x="229.5" y="128" class="chart-cell">14</text></g>
-<g class="cr-2"><rect x="250" y="104" width="39" height="38" rx="4" class="chart-heat" style="--s:0.022" fill="#dfe9f6"/><text x="270.5" y="128" class="chart-cell">4</text></g>
-<g class="cr-3"><rect x="168" y="144" width="39" height="38" rx="4" class="chart-heat" style="--s:0.049" fill="#d9e4f3"/><text x="188.5" y="168" class="chart-cell">9</text></g>
-<g class="cr-4"><rect x="209" y="144" width="39" height="38" rx="4" class="chart-heat" style="--s:0.94" fill="#295897"/><text x="229.5" y="168" class="chart-cell on">171</text></g>
-<g class="cr-5"><rect x="250" y="144" width="39" height="38" rx="4" class="chart-heat" style="--s:0.033" fill="#dce7f5"/><text x="270.5" y="168" class="chart-cell">6</text></g>
-<g class="cr-6"><rect x="168" y="184" width="39" height="38" rx="4" class="chart-heat" style="--s:0.016" fill="#e0e9f6"/><text x="188.5" y="208" class="chart-cell">3</text></g>
-<g class="cr-7"><rect x="209" y="184" width="39" height="38" rx="4" class="chart-heat" style="--s:0.027" fill="#dee8f5"/><text x="229.5" y="208" class="chart-cell">5</text></g>
-<g class="cr-8"><rect x="250" y="184" width="39" height="38" rx="4" class="chart-heat" style="--s:0.582" fill="#7091bc"/><text x="270.5" y="208" class="chart-cell on">106</text></g></g>
+<g class="cr-1"><rect x="209" y="104" width="39" height="38" rx="4" class="chart-heat" style="--s:0.077" fill="#c5d7ed"/><text x="229.5" y="128" class="chart-cell">14</text></g>
+<g class="cr-2"><rect x="250" y="104" width="39" height="38" rx="4" class="chart-heat" style="--s:0.022" fill="#cfdff3"/><text x="270.5" y="128" class="chart-cell">4</text></g>
+<g class="cr-3"><rect x="168" y="144" width="39" height="38" rx="4" class="chart-heat" style="--s:0.049" fill="#cadbf0"/><text x="188.5" y="168" class="chart-cell">9</text></g>
+<g class="cr-4"><rect x="209" y="144" width="39" height="38" rx="4" class="chart-heat" style="--s:0.94" fill="#285897"/><text x="229.5" y="168" class="chart-cell on">171</text></g>
+<g class="cr-5"><rect x="250" y="144" width="39" height="38" rx="4" class="chart-heat" style="--s:0.033" fill="#cdddf2"/><text x="270.5" y="168" class="chart-cell">6</text></g>
+<g class="cr-6"><rect x="168" y="184" width="39" height="38" rx="4" class="chart-heat" style="--s:0.016" fill="#d0e0f3"/><text x="188.5" y="208" class="chart-cell">3</text></g>
+<g class="cr-7"><rect x="209" y="184" width="39" height="38" rx="4" class="chart-heat" style="--s:0.027" fill="#cedef2"/><text x="229.5" y="208" class="chart-cell">5</text></g>
+<g class="cr-8"><rect x="250" y="184" width="39" height="38" rx="4" class="chart-heat" style="--s:0.582" fill="#698cbb"/><text x="270.5" y="208" class="chart-cell on">106</text></g></g>
 </g>
 <text x="320" y="270" opacity="0" class="steplabel a10">읽기</text>
 <g opacity="0" class="a11"><text x="320" y="296" class="caption">대각선이 맞힌 수다</text></g>

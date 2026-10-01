@@ -9,8 +9,8 @@ export const tokens = freeze({
   "color": {
     "gray": {
       "0": "var(--color-gray-0)",
-      "25": "var(--color-gray-25)",
       "50": "var(--color-gray-50)",
+      "75": "var(--color-gray-75)",
       "100": "var(--color-gray-100)",
       "200": "var(--color-gray-200)",
       "300": "var(--color-gray-300)",
@@ -28,6 +28,7 @@ export const tokens = freeze({
       "950": "var(--color-neutral-950)"
     },
     "blue": {
+      "150": "var(--color-blue-150)",
       "100": "var(--color-blue-100)",
       "50": "var(--color-blue-50)",
       "400": "var(--color-blue-400)",
@@ -252,8 +253,8 @@ export const values = freeze({
   "color": {
     "gray": {
       "0": "#ffffff",
-      "25": "#f7f8fa",
       "50": "#eef1f5",
+      "75": "#eceff3",
       "100": "#e3e7ec",
       "200": "#d5dbe3",
       "300": "#b6c0cc",
@@ -271,6 +272,7 @@ export const values = freeze({
       "950": "#111214"
     },
     "blue": {
+      "150": "#d3e2f5",
       "100": "#e3ecf8",
       "50": "#edf3fb",
       "400": "#3396e8",
@@ -290,13 +292,13 @@ export const values = freeze({
     "on-accent": "#ffffff",
     "fg": "#0b0b0b",
     "muted": "#52514e",
-    "bg": "#f7f8fa",
+    "bg": "#eceff3",
     "node": "#ffffff",
     "surface": "#eef1f5",
     "border": "#b6c0cc",
     "card-on": "#edf3fb",
-    "group": "#eef1f5",
-    "group-border": "#d5dbe3",
+    "group": "#e3e7ec",
+    "group-border": "#b6c0cc",
     "dot": "#d5dbe3",
     "frame": "#e3e7ec",
     "page": "#ffffff",
@@ -319,7 +321,7 @@ export const values = freeze({
     },
     "series-1": "#2a78d6",
     "series-2": "#eb6834",
-    "heat-low": "#e3ecf8",
+    "heat-low": "#d3e2f5",
     "heat-high": "#1d4f91",
     "heat-ink": "#0b0b0b",
     "heat-ink-on": "#ffffff",

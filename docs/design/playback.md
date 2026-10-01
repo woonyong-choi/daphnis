@@ -102,12 +102,16 @@
 
 - `gallery` 명령은 HTML 결과를 iframe으로 모은 `index.html`을 쓴다.
 - iframe 높이는 그림 쪽이 알린 본문 높이에 맞추고, 카드는 줄에서 가장 긴 카드 높이로 늘이지 않는다.
+- 위쪽에 테마 단추 "시스템 / 라이트 / 다크"가 있다. 고르면 목록 쪽과 모든 iframe 그림이 그 모드로 바뀐다.
+- 시스템은 루트에 `color-scheme: light dark`를 걸어 OS 설정을 따른다. 라이트와 다크는 루트에 `color-scheme`을 그 값으로 걸어 iframe 안 문서의 `prefers-color-scheme`이 같은 값이 되게 하고(Chrome 규칙), 목록 쪽 자체 색은 토큰 CSS의 `data-theme`로 바꾼다.
+- 고른 값은 `localStorage`의 `mutoscope-theme`에 기억하고 첫 그림 전에 적용한다. 단독 재생기 HTML에는 이 단추가 없고 OS 설정만 따른다.
 
 ### 요구사항
 
 | 요구사항 | 검증 계획 |
 |---|---|
 | 박자 상태가 앞 박자와 상관없이 완전하다. | 아무 박자를 골라 시간표만으로 그린 상태와 처음부터 재생한 상태 비교 |
+| 목록 쪽 테마 단추가 목록과 iframe 그림을 함께 바꾼다. | `test/cli.test.js`의 `main_gallery_has_theme_buttons_and_applies_color_scheme_to_root`. 시스템을 다크로 둔 브라우저에서 라이트 단추를 눌러 iframe 그림 바탕이 라이트 회색으로 바뀌는지 확인 |
 | 차트 계열은 단계가 바뀌어도 남고, 탭으로 건너뛰어도 보인다. | 둘째 탭 상태의 계열 목록 확인 |
 | HTML과 움직이는 SVG의 글 상자 줄이 같다. | 두 결과의 글 상자 줄 비교 |
 | 그림 옆 경계에 가까운 선의 글 상자는 움직이는 SVG에서도 안으로 밀린다. | `test/check.test.js`의 `toSvg_moving_text_near_side_edge_is_pushed_inside` |
