@@ -166,3 +166,76 @@ test('checkChart_value_axis_without_unit_in_parentheses_is_warning', () => {
   assert.equal(warningsOf('chart line\nx "주차"\nseries a "A"\npoint x=1 a=2').length, 1);
   assert.deepEqual(warningsOf('chart heatmap\ncell "r" "c" 1'), []);
 });
+
+// cost: time O(build), heap O(m), stack O(1)
+// vars: build = 원본 하나를 만드는 비용, m = 결과 글자 수
+// basis: estimate
+async function bodyOf(source, options) {
+  return (await buildFigure(source, options)).chart.body;
+}
+
+test('drawChart_interval_is_drawn_for_dumbbell_scatter_and_line', async () => {
+  const dumbbell = await bodyOf('chart dumbbell\nseries a "A"\nseries b "B"\nrow "r" a=100 a.low=80 a.high=120 b=40 b.low=30 b.high=50');
+  const scatter = await bodyOf('chart scatter\npoint "p" x=1 y=2 y.low=1 y.high=3');
+  const line = await bodyOf('chart line\nseries a "A"\npoint x=1 a=2 a.low=1 a.high=3\npoint x=2 a=3 a.low=2 a.high=4');
+
+  assert.equal(dumbbell.match(/class="chart-range pop"/g).length, 2);
+  assert.match(scatter, /class="chart-ci soft late"/);
+  assert.match(line, /class="chart-band wipe"/);
+});
+
+test('checkChartRows_interval_order_and_pairing_are_errors_in_all_four_kinds', async () => {
+  const sources = [
+    'chart bar\nseries a "A"\nrow "r" a=5 a.low=6 a.high=7',
+    'chart dumbbell\nseries a "A"\nseries b "B"\nrow "r" a=5 a.low=6 a.high=7 b=3',
+    'chart scatter\npoint "p" x=1 y=2 y.low=3 y.high=4',
+    'chart line\nseries a "A"\npoint x=1 a=2 a.low=1',
+  ];
+  const results = await Promise.all(sources.map(buildErrors));
+
+  assert.deepEqual(results.map((errors) => errors.length), [1, 1, 1, 1], results.flat().join('\n'));
+});
+
+test('buildFigure_require_ci_covers_dumbbell_scatter_and_line', async () => {
+  const sources = ['chart dumbbell\nseries a "A"\nseries b "B"\nrow "r" a=5 b=3', 'chart scatter\npoint "p" x=1 y=2', 'chart line\nseries a "A"\npoint x=1 a=2'];
+
+  for (const source of sources) await assert.rejects(buildFigure(source, { requireCi: true }), /require-ci/, source);
+  await buildFigure('chart scatter\npoint "p" x=1 y=2 y.low=1 y.high=3', { requireCi: true });
+});
+
+test('loadChartData_interval_keys_match_inline_rows_for_scatter_line_and_dumbbell', async () => {
+  const [inlineScatter, dataScatter] = [
+    await bodyOf('chart scatter\nseries s "S" key="new_judge"\npoint "A" x=1 y=2 y.low=1.5 y.high=2.6 series=s'),
+    await bodyOf('chart scatter\nseries s "S" key="new_judge"\ndata "summary.json" at "/points"', { baseDir: FIXTURES }),
+  ];
+  const [inlineLine, dataLine] = [
+    await bodyOf('chart line\nseries s "S" key="new_judge"\npoint x=1 s=12 s.low=10 s.high=14\npoint x=2 s=8 s.low=6 s.high=9'),
+    await bodyOf('chart line\nseries s "S" key="new_judge"\ndata "summary.json" at "/weeks"', { baseDir: FIXTURES }),
+  ];
+  const [inlineDumbbell, dataDumbbell] = [
+    await bodyOf('chart dumbbell\nseries a "A" key="before"\nseries b "B" key="after"\nrow "A" a=120000 a.low=100000 a.high=140000 b=30000 b.low=25000 b.high=36000'),
+    await bodyOf('chart dumbbell\nseries a "A" key="before"\nseries b "B" key="after"\ndata "summary.json" at "/tokens"', { baseDir: FIXTURES }),
+  ];
+
+  assert.deepEqual([dataScatter, dataLine, dataDumbbell], [inlineScatter, inlineLine, inlineDumbbell]);
+});
+
+test('drawDumbbells_close_values_drop_arrow_and_keep_value_text_apart', async () => {
+  const close = await bodyOf('chart dumbbell\nscale log\nseries a "A"\nseries b "B"\nrow "r" a=8000 b=9200\nrow "s" a=100000 b=1000');
+  const [near, far] = close.split('class="chart-label cr-1"');
+  const textX = (svg, cls) => Number(new RegExp(`<text x="([\\d.]+)"[^>]*class="chart-value ${cls} late`).exec(svg)[1]);
+
+  assert.equal(near.includes('chart-arrow'), false);
+  assert.match(near, /class="chart-after pop"/);
+  assert.match(far, /chart-arrow draw/);
+  assert.ok(textX(near, 'second') > textX(near, 'first'));
+});
+
+test('drawBars_value_text_moves_right_of_rule_and_draws_after_rule', async () => {
+  const body = await bodyOf('chart bar\nseries a "A"\nrule 80 "기준"\nrow "r" a=70.3 a.low=66 a.high=74.2');
+  const rule = Number(/<line x1="([\d.]+)"[^>]*class="chart-rule"/.exec(body)[1]);
+  const text = /<text x="([\d.]+)"[^>]*class="chart-value ours late">70.3/.exec(body);
+
+  assert.ok(Number(text[1]) > rule, `${text[1]} > ${rule}`);
+  assert.ok(body.indexOf('class="chart-value') > body.indexOf('class="chart-rule"'));
+});

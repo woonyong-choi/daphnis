@@ -66,6 +66,7 @@ export const tokens = freeze({
     },
     "ink": {
       "900": "var(--color-ink-900)",
+      "800": "var(--color-ink-800)",
       "600": "var(--color-ink-600)",
       "200": "var(--color-ink-200)"
     },
@@ -73,7 +74,8 @@ export const tokens = freeze({
     "series-2": "var(--color-series-2)",
     "heat-low": "var(--color-heat-low)",
     "heat-high": "var(--color-heat-high)",
-    "grid": "var(--color-grid)"
+    "grid": "var(--color-grid)",
+    "ci": "var(--color-ci)"
   },
   "font": {
     "sans": "var(--font-sans)",
@@ -138,7 +140,10 @@ export const tokens = freeze({
     "group-title": "var(--size-group-title)",
     "chart-plot-h": "var(--size-chart-plot-h)",
     "chart-axis": "var(--size-chart-axis)",
-    "chart-cell": "var(--size-chart-cell)"
+    "chart-cell": "var(--size-chart-cell)",
+    "chart-cap": "var(--size-chart-cap)",
+    "chart-range": "var(--size-chart-range)",
+    "chart-arrow-min": "var(--size-chart-arrow-min)"
   },
   "weight": {
     "medium": "var(--weight-medium)",
@@ -196,7 +201,8 @@ export const tokens = freeze({
     "lifeline": "var(--border-lifeline)",
     "tag": "var(--border-tag)",
     "edge": "var(--border-edge)",
-    "strong": "var(--border-strong)"
+    "strong": "var(--border-strong)",
+    "halo": "var(--border-halo)"
   },
   "dash": {
     "line": "var(--dash-line)",
@@ -208,6 +214,8 @@ export const tokens = freeze({
     "halo": "var(--opacity-halo)",
     "tab-on": "var(--opacity-tab-on)",
     "dim": "var(--opacity-dim)",
+    "band": "var(--opacity-band)",
+    "range": "var(--opacity-range)",
     "heat-text": "var(--opacity-heat-text)"
   },
   "z": {
@@ -296,6 +304,7 @@ export const values = freeze({
     },
     "ink": {
       "900": "#0b0b0b",
+      "800": "#2b2a28",
       "600": "#52514e",
       "200": "#e6e5e1"
     },
@@ -303,7 +312,8 @@ export const values = freeze({
     "series-2": "#eb6834",
     "heat-low": "#edf3fb",
     "heat-high": "#1d4f91",
-    "grid": "#e6e5e1"
+    "grid": "#e6e5e1",
+    "ci": "#2b2a28"
   },
   "font": {
     "sans": "FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif",
@@ -368,7 +378,10 @@ export const values = freeze({
     "group-title": 28,
     "chart-plot-h": 260,
     "chart-axis": 48,
-    "chart-cell": 40
+    "chart-cell": 40,
+    "chart-cap": 8,
+    "chart-range": 6,
+    "chart-arrow-min": 16
   },
   "weight": {
     "medium": 500,
@@ -426,7 +439,8 @@ export const values = freeze({
     "lifeline": 1.25,
     "tag": 1.5,
     "edge": 1.75,
-    "strong": 2.5
+    "strong": 2.5,
+    "halo": 4
   },
   "dash": {
     "line": 5,
@@ -438,6 +452,8 @@ export const values = freeze({
     "halo": 0.2,
     "tab-on": 0.06,
     "dim": 0.3,
+    "band": 0.16,
+    "range": 0.32,
     "heat-text": 0.55
   },
   "z": {

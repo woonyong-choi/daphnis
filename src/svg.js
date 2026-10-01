@@ -225,12 +225,13 @@ function createAnimator({ segs, total, growMs }) {
       const reveal = segs.find((g) => g.growing.includes(id));
       css.push(`.fl .cs-${s} { animation: ${show} ${duration} infinite step-end; }`);
       if (!reveal) return;
-      // 막대와 선은 자라는 시간 내내, 점과 값 글자는 그 뒤 절반에 나타난다. HTML 재생기(chart/motion.js)와 같다.
+      // 막대와 선과 띠는 자라는 시간 내내, 점과 값 글자는 그 뒤 절반에 나타난다. HTML 재생기(chart/motion.js)와 같다.
       const [a, half, b] = [percent(reveal.t0), percent(reveal.t0 + grow / 2), percent(reveal.t0 + grow)];
       const ease = `animation-timing-function: ${tokens.easing.reveal}`;
       css.push(
         `@keyframes g${s} { 0%,${a} { transform: scaleX(0); ${ease} } ${b},100% { transform: none } }\n.fl .cs-${s} .grow, .fl .cs-${s}.grow { animation: g${s} ${duration} infinite; }\n` +
           `@keyframes d${s} { 0%,${a} { stroke-dashoffset: 1; ${ease} } ${b},100% { stroke-dashoffset: 0 } }\n.fl .cs-${s} .draw, .fl .cs-${s}.draw { animation: d${s} ${duration} infinite; }\n` +
+          `@keyframes w${s} { 0%,${a} { clip-path: inset(0 100% 0 0); ${ease} } ${b},100% { clip-path: inset(0 0 0 0) } }\n.fl .cs-${s} .wipe, .fl .cs-${s}.wipe { animation: w${s} ${duration} infinite; }\n` +
           `@keyframes f${s} { 0%,${half} { opacity: 0; ${ease} } ${b},100% { opacity: 1 } }\n.fl .cs-${s} .late, .fl .cs-${s} .pop, .fl .cs-${s}.pop { animation: f${s} ${duration} infinite; }`,
       );
     });

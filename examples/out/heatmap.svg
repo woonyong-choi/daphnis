@@ -51,6 +51,7 @@
   --color-orange-100: #fbe1d5;
   --color-orange-600: #eb6834;
   --color-ink-900: #0b0b0b;
+  --color-ink-800: #2b2a28;
   --color-ink-600: #52514e;
   --color-ink-200: #e6e5e1;
   --color-series-1: var(--color-accent);
@@ -58,6 +59,7 @@
   --color-heat-low: var(--color-blue-50);
   --color-heat-high: var(--color-blue-800);
   --color-grid: var(--color-ink-200);
+  --color-ci: var(--color-ink-800);
   --font-sans: FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
   --font-mono: FigMono, D2Coding, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -115,6 +117,9 @@
   --size-chart-plot-h: 260px;
   --size-chart-axis: 48px;
   --size-chart-cell: 40px;
+  --size-chart-cap: 8px;
+  --size-chart-range: 6px;
+  --size-chart-arrow-min: 16px;
   --weight-medium: 500;
   --weight-semibold: 600;
   --leading-normal: 1.5;
@@ -161,6 +166,7 @@
   --border-tag: 1.5px;
   --border-edge: 1.75px;
   --border-strong: 2.5px;
+  --border-halo: 4px;
   --dash-line: 5;
   --dash-gap: 4;
   --dash-card: 3;
@@ -168,6 +174,8 @@
   --opacity-halo: 0.2;
   --opacity-tab-on: 0.06;
   --opacity-dim: 0.3;
+  --opacity-band: 0.16;
+  --opacity-range: 0.32;
   --opacity-heat-text: 0.55;
   --z-raised: 2;
   --z-overlay: 10;
@@ -198,6 +206,7 @@
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
     --color-series-2: #f08a5d;
+    --color-ci: var(--color-neutral-100);
     --color-grid: var(--color-neutral-750);
   }
 }
@@ -214,6 +223,7 @@
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
   --color-series-2: #f08a5d;
+  --color-ci: var(--color-neutral-100);
   --color-grid: var(--color-neutral-750);
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
@@ -409,6 +419,13 @@
   fill: var(--color-muted);
 }
 
+.fl .chart-value {
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: var(--border-halo);
+  stroke-linejoin: round;
+}
+
 .fl .chart-tick {
   text-anchor: middle;
 }
@@ -501,10 +518,34 @@
   stroke-dasharray: var(--dash-line) var(--dash-gap);
 }
 
-.fl .chart-ci,
 .fl .chart-whisker,
 .fl .chart-median {
   stroke: var(--color-fg);
+  stroke-width: var(--border-tag);
+}
+
+.fl .chart-ci {
+  fill: none;
+  stroke: var(--color-ci);
+  stroke-width: var(--border-tag);
+}
+
+.fl .chart-ci.soft {
+  stroke: var(--color-muted);
+  stroke-width: var(--border-thin);
+}
+
+.fl .chart-band {
+  fill-opacity: var(--opacity-band);
+}
+
+.fl .chart-range {
+  stroke-linecap: round;
+  stroke-opacity: var(--opacity-range);
+}
+
+.fl .chart-after {
+  stroke: var(--color-bg);
   stroke-width: var(--border-tag);
 }
 
@@ -553,15 +594,19 @@
 
 .fl .play .grow, .fl .play.grow { animation: chart-grow 900ms var(--easing-reveal) both; }
 .fl .play .draw, .fl .play.draw { animation: chart-draw 900ms var(--easing-reveal) both; }
+.fl .play .wipe, .fl .play.wipe { animation: chart-wipe 900ms var(--easing-reveal) both; }
 .fl .play .pop, .fl .play.pop, .fl .play .late, .fl .play.late { animation: chart-fade 900ms var(--easing-reveal) both; }
 .fl.chart-loop .grow { animation: chart-grow-loop 7000ms infinite both; }
 .fl.chart-loop .draw { animation: chart-draw-loop 7000ms infinite both; }
+.fl.chart-loop .wipe { animation: chart-wipe-loop 7000ms infinite both; }
 .fl.chart-loop .pop, .fl.chart-loop .late { animation: chart-fade-loop 7000ms infinite both; }
 @keyframes chart-grow { from { transform: scaleX(0); } }
 @keyframes chart-draw { from { stroke-dashoffset: 1; } }
+@keyframes chart-wipe { from { clip-path: inset(0 100% 0 0); } }
 @keyframes chart-fade { 0%, 50% { opacity: 0; } }
 @keyframes chart-grow-loop { 0% { transform: scaleX(0); animation-timing-function: var(--easing-reveal); } 12.86%, 100% { transform: none; } }
 @keyframes chart-draw-loop { 0% { stroke-dashoffset: 1; animation-timing-function: var(--easing-reveal); } 12.86%, 100% { stroke-dashoffset: 0; } }
+@keyframes chart-wipe-loop { 0% { clip-path: inset(0 100% 0 0); animation-timing-function: var(--easing-reveal); } 12.86%, 100% { clip-path: inset(0 0 0 0); } }
 @keyframes chart-fade-loop { 0%, 6.43% { opacity: 0; animation-timing-function: var(--easing-reveal); } 12.86%, 100% { opacity: 1; } }
 
 @keyframes a0 { 0%,34.481% { opacity: 1 } 34.483%,99.998% { opacity: 1 } }
@@ -571,6 +616,8 @@
 .fl .cs-0 .grow, .fl .cs-0.grow { animation: g0 4.6s infinite; }
 @keyframes d0 { 0%,0% { stroke-dashoffset: 1; animation-timing-function: var(--easing-reveal) } 19.397%,100% { stroke-dashoffset: 0 } }
 .fl .cs-0 .draw, .fl .cs-0.draw { animation: d0 4.6s infinite; }
+@keyframes w0 { 0%,0% { clip-path: inset(0 100% 0 0); animation-timing-function: var(--easing-reveal) } 19.397%,100% { clip-path: inset(0 0 0 0) } }
+.fl .cs-0 .wipe, .fl .cs-0.wipe { animation: w0 4.6s infinite; }
 @keyframes f0 { 0%,9.698% { opacity: 0; animation-timing-function: var(--easing-reveal) } 19.397%,100% { opacity: 1 } }
 .fl .cs-0 .late, .fl .cs-0 .pop, .fl .cs-0.pop { animation: f0 4.6s infinite; }
 @keyframes a1 { 0%,34.481% { opacity: 0.3 } 34.483%,99.998% { opacity: 0.3 } }

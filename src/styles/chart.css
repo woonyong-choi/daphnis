@@ -24,6 +24,13 @@
   fill: var(--color-muted);
 }
 
+.fl .chart-value {
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: var(--border-halo);
+  stroke-linejoin: round;
+}
+
 .fl .chart-tick {
   text-anchor: middle;
 }
@@ -116,10 +123,34 @@
   stroke-dasharray: var(--dash-line) var(--dash-gap);
 }
 
-.fl .chart-ci,
 .fl .chart-whisker,
 .fl .chart-median {
   stroke: var(--color-fg);
+  stroke-width: var(--border-tag);
+}
+
+.fl .chart-ci {
+  fill: none;
+  stroke: var(--color-ci);
+  stroke-width: var(--border-tag);
+}
+
+.fl .chart-ci.soft {
+  stroke: var(--color-muted);
+  stroke-width: var(--border-thin);
+}
+
+.fl .chart-band {
+  fill-opacity: var(--opacity-band);
+}
+
+.fl .chart-range {
+  stroke-linecap: round;
+  stroke-opacity: var(--opacity-range);
+}
+
+.fl .chart-after {
+  stroke: var(--color-bg);
   stroke-width: var(--border-tag);
 }
 

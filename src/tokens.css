@@ -46,6 +46,7 @@
   --color-orange-100: #fbe1d5;
   --color-orange-600: #eb6834;
   --color-ink-900: #0b0b0b;
+  --color-ink-800: #2b2a28;
   --color-ink-600: #52514e;
   --color-ink-200: #e6e5e1;
   --color-series-1: var(--color-accent);
@@ -53,6 +54,7 @@
   --color-heat-low: var(--color-blue-50);
   --color-heat-high: var(--color-blue-800);
   --color-grid: var(--color-ink-200);
+  --color-ci: var(--color-ink-800);
   --font-sans: FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
   --font-mono: FigMono, D2Coding, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -110,6 +112,9 @@
   --size-chart-plot-h: 260px;
   --size-chart-axis: 48px;
   --size-chart-cell: 40px;
+  --size-chart-cap: 8px;
+  --size-chart-range: 6px;
+  --size-chart-arrow-min: 16px;
   --weight-medium: 500;
   --weight-semibold: 600;
   --leading-normal: 1.5;
@@ -156,6 +161,7 @@
   --border-tag: 1.5px;
   --border-edge: 1.75px;
   --border-strong: 2.5px;
+  --border-halo: 4px;
   --dash-line: 5;
   --dash-gap: 4;
   --dash-card: 3;
@@ -163,6 +169,8 @@
   --opacity-halo: 0.2;
   --opacity-tab-on: 0.06;
   --opacity-dim: 0.3;
+  --opacity-band: 0.16;
+  --opacity-range: 0.32;
   --opacity-heat-text: 0.55;
   --z-raised: 2;
   --z-overlay: 10;
@@ -193,6 +201,7 @@
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
     --color-series-2: #f08a5d;
+    --color-ci: var(--color-neutral-100);
     --color-grid: var(--color-neutral-750);
   }
 }
@@ -209,5 +218,6 @@
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
   --color-series-2: #f08a5d;
+  --color-ci: var(--color-neutral-100);
   --color-grid: var(--color-neutral-750);
 }

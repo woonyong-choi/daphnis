@@ -37,6 +37,9 @@
     "series-2": {
       "$value": "#f08a5d"
     },
+    "ci": {
+      "$value": "{color.neutral.100}"
+    },
     "grid": {
       "$value": "{color.neutral.750}"
     }

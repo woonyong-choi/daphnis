@@ -18,6 +18,9 @@ const BAR = SIZE['chart-bar'];
 const ROW = SIZE['chart-row'];
 const DOT = SIZE['chart-dot'];
 const PAD = SPACE['14'];
+const CAP = SIZE['chart-cap'];
+const RANGE = SIZE['chart-range'];
+const ARROW_MIN = SIZE['chart-arrow-min'];
 // 값 글자가 막대 끝 바깥에 들어갈 자리
 const VALUE_W = SPACE['30'] + SPACE['18'];
 // 히트맵 칸 색. 값 0은 핵심 1 옅게, 최댓값은 핵심 1 진하게이고 그 사이는 sRGB 보간이다(문서 스킬 색표).
@@ -90,7 +93,8 @@ function drawHeader(figure) {
 // cost: time O(r·s), heap O(out), stack O(1)
 // vars: r = 행 수, s = 계열 수, out = 만든 SVG 글자 수
 // basis: estimate
-// 막대: 행마다 계열 막대를 쌓고, 신뢰구간 막대기와 값 글자를 붙인다. 값이 없으면 missing 글이다.
+// 막대: 행마다 계열 막대를 쌓고, 신뢰구간 오차 막대와 값 글자를 붙인다. 값이 없으면 missing 글이다.
+// 값 글자는 기준선 위에 그려야 기준선에 가려지지 않으므로, 막대, 기준선, 값 글자 순으로 쌓는다.
 function drawBars(figure, top) {
   const { chart } = figure;
   const plotX = labelColumn(chart.rows.map((row) => row.label)) + PAD;
@@ -98,43 +102,64 @@ function drawBars(figure, top) {
   const all = chart.rows.flatMap((row) => chart.series.flatMap((s) => [row.values[s.id], row.values[`${s.id}.high`]])).filter((v) => typeof v === 'number');
   const scale = makeScale('linear', 0, Math.max(...all, ...chart.rules.map((x) => x.value)), plotX, plotW);
   const parts = [];
+  const valueTexts = [];
   let y = top;
   chart.rows.forEach((row, k) => {
     const groupH = chart.series.length * BAR + (chart.series.length - 1) * SPACE['2'];
     parts.push(`<text x="${PAD}" y="${r(centerBaseline(y + groupH / 2, TEXT['13']))}" class="chart-label cr-${k}">${escapeXml(row.label)}</text>`);
     chart.series.forEach((s, i) => {
       const by = y + i * (BAR + SPACE['2']);
+      const cy = by + BAR / 2;
       const v = row.values[s.id];
       if (v === null) {
-        parts.push(`<g class="cr-${k}"><g class="cs-${i}"><text x="${r(plotX)}" y="${r(by + BAR - SPACE['1'])}" class="chart-missing">${escapeXml(chart.missing ?? '비교 없음')}</text></g></g>`);
+        parts.push(`<g class="cr-${k}"><g class="cs-${i}"><text x="${r(plotX)}" y="${r(centerBaseline(cy, TEXT['11']))}" class="chart-missing">${escapeXml(chart.missing ?? '비교 없음')}</text></g></g>`);
         return;
       }
       const end = scale.at(v);
       const [low, high] = [row.values[`${s.id}.low`], row.values[`${s.id}.high`]];
-      const ci = low !== undefined && high !== undefined ? `<line x1="${r(scale.at(low))}" x2="${r(scale.at(high))}" y1="${r(by + BAR / 2)}" y2="${r(by + BAR / 2)}" class="chart-ci"/>` : '';
-      parts.push(
-        `<g class="cr-${k}"><g class="cs-${i}"><rect x="${r(plotX)}" y="${r(by)}" width="${r(Math.max(SPACE['1'], end - plotX))}" height="${BAR}" rx="${values.radius.sm}" fill="${SERIES_COLOR[i]}" class="grow"/>${ci}` +
-          `<text x="${r(Math.max(end, high !== undefined ? scale.at(high) : end) + SPACE['3'])}" y="${r(by + BAR - SPACE['1'])}" class="chart-value${i === 0 ? ' ours' : ''} late">${formatNumber(v)}</text></g></g>`,
-      );
+      const reach = high !== undefined ? scale.at(high) : end;
+      const ci = high !== undefined ? errorBar(`M ${r(scale.at(low))} ${r(cy - CAP / 2)} V ${r(cy + CAP / 2)} M ${r(scale.at(low))} ${r(cy)} H ${r(reach)} M ${r(reach)} ${r(cy - CAP / 2)} V ${r(cy + CAP / 2)}`, false) : '';
+      parts.push(`<g class="cr-${k}"><g class="cs-${i}"><rect x="${r(plotX)}" y="${r(by)}" width="${r(Math.max(SPACE['1'], end - plotX))}" height="${BAR}" rx="${values.radius.sm}" fill="${SERIES_COLOR[i]}" class="grow"/>${ci}</g></g>`);
+      valueTexts.push(`<g class="cr-${k}"><g class="cs-${i}"><text x="${r(valueX(formatNumber(v), Math.max(end, reach), chart.rules, scale))}" y="${r(centerBaseline(cy, TEXT['11']))}" class="chart-value${i === 0 ? ' ours' : ''} late">${formatNumber(v)}</text></g></g>`);
     });
     y += groupH + SPACE['11'];
   });
   const bottom = y - SPACE['11'];
   parts.push(drawRules(chart.rules, scale, top, bottom, 'x'));
+  parts.push(...valueTexts);
   parts.push(drawValueAxis(scale, plotX, plotW, bottom + SPACE['4'], chart.x));
   return { svg: parts.join('\n'), bottom: bottom + SPACE['4'] + TEXT['11'] * 2 + SPACE['9'], rowKeys: chart.rows.map((row) => row.label), fits: chart.rows.map((row) => labelFit(row.label, row.line)) };
+}
+
+// cost: time O(n + u), heap O(1), stack O(1)
+// vars: n = 글자 수, u = 기준선 수
+// basis: estimate
+// 막대 값 글자의 왼쪽 x. 막대 끝(신뢰구간 끝) 바깥에 두되, 기준선이 글자에 걸리면 기준선 오른쪽으로 비킨다.
+function valueX(text, reach, rules, scale) {
+  const [start, width] = [reach + SPACE['3'], measure(text, TEXT['11'], 'mono')];
+  const hit = rules.map((rule) => scale.at(rule.value)).filter((x) => x > start - SPACE['2'] && x < start + width + SPACE['2']);
+  return hit.length ? Math.max(...hit) + SPACE['3'] : start;
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 신뢰구간 오차 막대 하나. 경로 d는 구간 선과 양 끝 캡이다. 막대 위에 얹는 막대기는 진한 회색 1.5px로 막대 색과 구별하고, 흰 바탕 위의 점 오차 막대(soft)는 보조 글자 색 1px로 점과 이름보다 앞서지 않게 한다.
+function errorBar(d, soft) {
+  return `<path d="${d}" class="chart-ci${soft ? ' soft' : ''} late"/>`;
 }
 
 // cost: time O(r + t), heap O(out), stack O(1)
 // vars: r = 행 수, t = 눈금 수, out = 만든 SVG 글자 수
 // basis: estimate
-// 덤벨: 첫 계열 값(핵심 색 1 빈 점)에서 둘째 계열 값(핵심 색 2 화살촉)으로 화살표, 오른쪽에 바뀐 비율
+// 덤벨: 첫 계열 값(핵심 색 1 빈 점)에서 둘째 계열 값(핵심 색 2 화살촉)으로 화살표, 오른쪽에 바뀐 비율.
+// 신뢰구간은 점 뒤에 같은 줄로 깔리는 옅은 범위 막대기다. 값 글자는 두 범위의 바깥 끝 밖에 두어 막대기, 점, 화살표와 겹치지 않는다.
+// 두 점이 가까워 화살표를 그릴 자리가 없으면 화살표를 빼고 둘째 값을 점으로 찍는다.
 function drawDumbbells(figure, top) {
   const { chart } = figure;
   const [first, second] = chart.series;
   const plotX = labelColumn(chart.rows.map((row) => row.label)) + PAD;
   const plotW = WIDTH - plotX - VALUE_W;
-  const all = chart.rows.flatMap((row) => [row.values[first.id], row.values[second.id]]);
+  const all = chart.rows.flatMap((row) => [first, second].flatMap((s) => [row.values[s.id], row.values[`${s.id}.low`], row.values[`${s.id}.high`]])).filter((v) => typeof v === 'number');
   const ruled = [...all, ...chart.rules.map((x) => x.value)];
   const scale = makeScale(chart.scale, Math.min(...ruled), Math.max(...ruled), plotX, plotW);
   const parts = [];
@@ -142,13 +167,30 @@ function drawDumbbells(figure, top) {
     const cy = top + k * ROW + ROW / 2;
     const [before, after] = [row.values[first.id], row.values[second.id]];
     const [x1, x2] = [scale.at(before), scale.at(after)];
-    const outward = x1 >= x2 ? 1 : -1;
+    const dir = x2 >= x1 ? 1 : -1;
     const base = r(centerBaseline(cy, TEXT['11']));
+    const range = (s, i) => {
+      const [low, high] = [row.values[`${s.id}.low`], row.values[`${s.id}.high`]];
+      return low === undefined ? '' : `<line x1="${r(scale.at(low))}" x2="${r(scale.at(high))}" y1="${r(cy)}" y2="${r(cy)}" stroke="${SERIES_COLOR[i]}" stroke-width="${RANGE}" class="chart-range pop"/>`;
+    };
+    // 값 글자는 두 점과 두 범위를 모두 덮는 구간의 바깥에 둔다. 한 점의 범위가 다른 점의 글자 자리까지 뻗어도 겹치지 않게 하기 위해서다.
+    const ends = [first, second].flatMap((s, i) => {
+      const x = i ? x2 : x1;
+      return [x - DOT, x + DOT, ...[`${s.id}.low`, `${s.id}.high`].map((key) => row.values[key]).filter((v) => v !== undefined).map(scale.at)];
+    });
+    const [left, right] = [Math.min(...ends) - SPACE['3'], Math.max(...ends) + SPACE['3']];
+    const gap = Math.abs(x2 - x1) - DOT - SPACE['1'];
+    const hasArrow = gap >= ARROW_MIN;
+    const arrow = hasArrow
+      ? `<line x1="${r(x1 + dir * (DOT + SPACE['1']))}" y1="${r(cy)}" x2="${r(x2)}" y2="${r(cy)}" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-second)"/>`
+      : `<circle cx="${r(x2)}" cy="${r(cy)}" r="${DOT}" fill="${SERIES_COLOR[1]}" class="chart-after pop"/>`;
+    const [firstX, secondX] = x1 < x2 ? [left, right] : [right, left];
+    const side = (x) => (x === left ? 'end' : 'start');
     parts.push(
       `<text x="${PAD}" y="${r(centerBaseline(cy, TEXT['13']))}" class="chart-label cr-${k}">${escapeXml(row.label)}</text>` +
-        `<g class="cr-${k}"><g class="cs-0"><circle cx="${r(x1)}" cy="${r(cy)}" r="${DOT}" class="chart-before pop"/><text x="${r(x1 + outward * (DOT + SPACE['3']))}" y="${base}" class="chart-value first late ${outward > 0 ? 'start' : 'end'}">${formatNumber(before)}</text></g>` +
-        `<g class="cs-1"><line x1="${r(x1)}" y1="${r(cy)}" x2="${r(x2)}" y2="${r(cy)}" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-second)"/>` +
-        `<text x="${r(x2 - outward * (DOT + SPACE['3']))}" y="${base}" class="chart-value second late ${outward > 0 ? 'end' : 'start'}">${formatNumber(after)}</text>` +
+        `<g class="cr-${k}"><g class="cs-0">${range(first, 0)}<circle cx="${r(x1)}" cy="${r(cy)}" r="${DOT}" class="chart-before pop"/><text x="${r(firstX)}" y="${base}" class="chart-value first late ${side(firstX)}">${formatNumber(before)}</text></g>` +
+        `<g class="cs-1">${range(second, 1)}${arrow}` +
+        `<text x="${r(secondX)}" y="${base}" class="chart-value second late ${side(secondX)}">${formatNumber(after)}</text>` +
         `<text x="${WIDTH - PAD}" y="${r(centerBaseline(cy, TEXT['12']))}" class="chart-ratio late">${formatChange(before, after)}</text></g></g>`,
     );
   });
@@ -190,10 +232,10 @@ function drawBoxes(figure, top) {
 // cost: time O(p + l + t), heap O(out), stack O(1)
 // vars: p = 점 수, l = link 수, t = 눈금 수, out = 만든 SVG 글자 수
 // basis: estimate
-// 산점도: 같은 크기 점, 이름 글자, link 화살표. 계열이 있으면 계열 색이다.
+// 산점도: 같은 크기 점, 이름 글자, link 화살표. 계열이 있으면 계열 색이다. 신뢰구간은 점 뒤의 세로 오차 막대(선과 양 끝 캡)다.
 function drawScatter(figure, top) {
   const { chart } = figure;
-  const { sx, sy, frame, top: plotTop } = plotFrame(figure, top, chart.rows.map((p) => p.values.x), chart.rows.map((p) => p.values.y));
+  const { sx, sy, frame, top: plotTop } = plotFrame(figure, top, chart.rows.map((p) => p.values.x), chart.rows.flatMap((p) => [p.values.y, p.values['y.low'], p.values['y.high']]).filter((v) => v !== undefined));
   const seriesIndex = (p) => Math.max(0, chart.series.findIndex((s) => s.id === p.values.series));
   const parts = [frame];
   const at = new Map(chart.rows.map((p) => [p.label, { x: sx.at(p.values.x), y: sy.at(p.values.y), p }]));
@@ -217,7 +259,9 @@ function drawScatter(figure, top) {
     const toLeft = x + offset + nameW > WIDTH - PAD;
     fits.push({ text: p.label, width: nameW, room: Math.max(WIDTH - PAD - x, x - PAD) - offset, line: p.line, what: 'point name' });
     const name = `<text x="${r(toLeft ? x - offset : x + offset)}" y="${r(centerBaseline(y, TEXT['11']))}" class="chart-name late${toLeft ? ' end' : ''}">${escapeXml(p.label)}</text>`;
-    parts.push(`<g class="cr-${k}"><g class="cs-${i}"><circle cx="${r(x)}" cy="${r(y)}" r="${DOT}" fill="${chart.series.length ? SERIES_COLOR[i] : SERIES_COLOR[0]}" class="pop"/>${name}</g></g>`);
+    const [low, high] = [p.values['y.low'], p.values['y.high']];
+    const ci = high === undefined ? '' : errorBar(verticalInterval(x, sy.at(low), sy.at(high)), true);
+    parts.push(`<g class="cr-${k}"><g class="cs-${i}">${ci}<circle cx="${r(x)}" cy="${r(y)}" r="${DOT}" fill="${chart.series.length ? SERIES_COLOR[i] : SERIES_COLOR[0]}" class="pop"/>${name}</g></g>`);
   });
   parts.push(drawRules(chart.rules, sy, sx.at(sx.ticks[0]), sx.at(sx.ticks.at(-1)), 'y'));
   return { svg: parts.join('\n'), bottom: plotTop + SIZE['chart-plot-h'] + TEXT['11'] * 2 + SPACE['12'], rowKeys: chart.rows.map((p) => p.label), fits };
@@ -226,13 +270,18 @@ function drawScatter(figure, top) {
 // cost: time O(p·s + t), heap O(out), stack O(1)
 // vars: p = 점 수, s = 계열 수, t = 눈금 수, out = 만든 SVG 글자 수
 // basis: estimate
-// 선 차트: 계열마다 선과 점 표시. x 순서대로 잇는다.
+// 선 차트: 계열마다 선과 점 표시. x 순서대로 잇는다. 신뢰구간은 계열 색의 옅은 띠(low~high)이고 선과 점은 띠 위에 그린다.
+// 신뢰구간이 이어진 점이 하나뿐이면 띠가 면이 못 되므로 세로 오차 막대로 그린다.
 function drawLine(figure, top) {
   const { chart } = figure;
   const points = [...chart.rows].sort((a, b) => a.values.x - b.values.x);
-  const ys = points.flatMap((p) => chart.series.map((s) => p.values[s.id]));
+  const ys = points.flatMap((p) => chart.series.flatMap((s) => [p.values[s.id], p.values[`${s.id}.low`], p.values[`${s.id}.high`]])).filter((v) => v !== undefined);
   const { sx, sy, frame, top: plotTop } = plotFrame(figure, top, points.map((p) => p.values.x), ys);
   const parts = [frame];
+  chart.series.forEach((s, i) => {
+    const bands = intervalRuns(points, s.id).map((run) => (run.length > 1 ? bandPath(run, s.id, sx, sy, i) : errorBar(verticalInterval(sx.at(run[0].values.x), sy.at(run[0].values[`${s.id}.low`]), sy.at(run[0].values[`${s.id}.high`])), true)));
+    if (bands.length) parts.push(`<g class="cs-${i}">${bands.join('')}</g>`);
+  });
   chart.series.forEach((s, i) => {
     const d = points.map((p, k) => `${k ? 'L' : 'M'} ${r(sx.at(p.values.x))} ${r(sy.at(p.values[s.id]))}`).join(' ');
     parts.push(`<g class="cs-${i}"><path d="${d}" fill="none" stroke="${SERIES_COLOR[i]}" stroke-width="${values.border.strong}" pathLength="1" class="draw"/></g>`);
@@ -242,6 +291,41 @@ function drawLine(figure, top) {
   });
   parts.push(drawRules(chart.rules, sy, sx.at(sx.ticks[0]), sx.at(sx.ticks.at(-1)), 'y'));
   return { svg: parts.join('\n'), bottom: plotTop + SIZE['chart-plot-h'] + TEXT['11'] * 2 + SPACE['12'], rowKeys: chart.rows.map((p) => `x=${p.values.x}`) };
+}
+
+// cost: time O(p), heap O(p), stack O(1)
+// vars: p = 점 수
+// basis: estimate
+// x 순서 점 가운데 신뢰구간이 있는 점의 이어진 묶음들
+function intervalRuns(points, id) {
+  const runs = [];
+  let run = [];
+  for (const p of points) {
+    if (p.values[`${id}.high`] !== undefined) run.push(p);
+    else if (run.length) {
+      runs.push(run);
+      run = [];
+    }
+  }
+  if (run.length) runs.push(run);
+  return runs;
+}
+
+// cost: time O(p), heap O(p), stack O(1)
+// vars: p = 묶음의 점 수
+// basis: estimate
+// 띠: high를 왼쪽에서 오른쪽으로, low를 오른쪽에서 왼쪽으로 이은 면. 계열이 자랄 때 왼쪽부터 드러난다(wipe).
+function bandPath(run, id, sx, sy, i) {
+  const edge = (p, key) => `${r(sx.at(p.values.x))} ${r(sy.at(p.values[`${id}.${key}`]))}`;
+  const d = [...run.map((p) => edge(p, 'high')), ...[...run].reverse().map((p) => edge(p, 'low'))].map((xy, k) => `${k ? 'L' : 'M'} ${xy}`).join(' ');
+  return `<path d="${d} Z" fill="${SERIES_COLOR[i]}" class="chart-band wipe"/>`;
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 세로 신뢰구간 경로: 세로선과 양 끝 가로 캡. yLow, yHigh는 화면 좌표다.
+function verticalInterval(x, yLow, yHigh) {
+  return `M ${r(x - CAP / 2)} ${r(yLow)} H ${r(x + CAP / 2)} M ${r(x)} ${r(yLow)} V ${r(yHigh)} M ${r(x - CAP / 2)} ${r(yHigh)} H ${r(x + CAP / 2)}`;
 }
 
 // cost: time O(c), heap O(out), stack O(1)
