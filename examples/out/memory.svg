@@ -273,7 +273,6 @@
 }
 
 .fl .edgelabel {
-  font-family: var(--font-mono);
   font-size: var(--size-text-11);
   text-anchor: middle;
   fill: var(--color-muted);
@@ -287,6 +286,11 @@
 .fl .row.mono {
   font-family: var(--font-mono);
   font-size: var(--size-text-10-5);
+}
+
+/* 백틱으로 감싼 글. 코드 글꼴로 그린다. */
+.fl .code {
+  font-family: var(--font-mono);
 }
 
 .fl .muted {

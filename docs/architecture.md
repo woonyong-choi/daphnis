@@ -54,6 +54,6 @@
 | 영역 | 선택 | 고른 이유 |
 |---|---|---|
 | 층 배치와 직교 경로 | elkjs(ELK layered) | 도형 크기, 연결점, 선 라벨 크기를 받아 겹치지 않게 배치한다. [결정 기록](decisions/2026-10-01-own-syntax-and-layout.md) |
-| 글꼴 | Inter, Noto Sans KR, JetBrains Mono | 본문은 이력서와 같은 구성으로 라틴과 기호는 Inter, 한글은 Noto Sans KR이다. 고정폭은 JetBrains Mono이고 한글은 Noto Sans KR로 이어 그린다. 굵기마다 정적 파일이 있는 `@expo-google-fonts/inter`, `@expo-google-fonts/noto-sans-kr` 패키지로 받는다. 가변 글꼴이나 조각 나뉜 패키지보다 fontkit 측정과 subset-font 자르기가 한 파일에서 끝나서 고른다. 모두 SIL Open Font License라 그림에 넣을 수 있다. |
+| 글꼴 | Inter, Noto Sans KR, JetBrains Mono | 본문은 이력서와 같은 구성으로 라틴과 기호는 Inter, 한글은 Noto Sans KR이다. 차트 숫자는 Inter의 자리 폭 같은 숫자(`tnum`)다. 고정폭 JetBrains Mono는 코드(백틱 구간, 테이블 열 타입)에만 쓰고 그 안 한글은 Noto Sans KR로 이어 그린다. 굵기마다 정적 파일이 있는 `@expo-google-fonts/inter`, `@expo-google-fonts/noto-sans-kr` 패키지로 받는다. 가변 글꼴이나 조각 나뉜 패키지보다 fontkit 측정과 subset-font 자르기가 한 파일에서 끝나서 고른다. 모두 SIL Open Font License라 그림에 넣을 수 있다. |
 | 결과 형식 | SVG, HTML | SVG는 README와 설계 문서에 이미지로 들어가고, HTML은 미리보기와 목록 쪽에서 열린다. 둘 다 추가 프로그램이 필요 없다. |
 | 실행 환경 | Node.js 20 이상 | elkjs와 글꼴 처리를 브라우저 없이 돌린다. |

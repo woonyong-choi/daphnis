@@ -340,7 +340,8 @@ html.embedded .fl-canvas svg {
   min-width: var(--size-control);
   height: var(--size-control);
   padding: 0 var(--space-3-5);
-  font: var(--size-text-11) var(--font-mono);
+  font: var(--size-text-11) var(--font-sans);
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
   color: var(--color-muted);
   background: var(--color-node);
@@ -391,6 +392,11 @@ html.embedded .fl-canvas svg {
   height: var(--space-1);
   background: var(--color-accent);
   border-radius: var(--radius-xs);
+}
+
+/* 백틱으로 감싼 글. 코드 글꼴로 그린다. */
+.fl-code {
+  font-family: var(--font-mono);
 }
 
 .fl-caption {
@@ -563,7 +569,6 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .edgelabel {
-  font-family: var(--font-mono);
   font-size: var(--size-text-11);
   text-anchor: middle;
   fill: var(--color-muted);
@@ -577,6 +582,11 @@ html.embedded .fl-canvas svg {
 .fl .row.mono {
   font-family: var(--font-mono);
   font-size: var(--size-text-10-5);
+}
+
+/* 백틱으로 감싼 글. 코드 글꼴로 그린다. */
+.fl .code {
+  font-family: var(--font-mono);
 }
 
 .fl .muted {
@@ -711,7 +721,7 @@ html.embedded .fl-canvas svg {
 .fl .chart-value,
 .fl .chart-tick,
 .fl .chart-unit {
-  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   fill: var(--color-muted);
 }
@@ -764,7 +774,7 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .chart-ratio {
-  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--size-text-12);
   font-weight: var(--weight-semibold);
   text-anchor: end;
@@ -798,7 +808,7 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .chart-cell {
-  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   text-anchor: middle;
   fill: var(--color-heat-ink);
@@ -1108,6 +1118,32 @@ function figurePlay(root, data) {
     svg.classList.add('chart-loop');
   }
 
+  // cost: time O(n), heap O(n), stack O(1)
+  // vars: n = 글자 수
+  // basis: estimate
+  // 글을 백틱 기준으로 나눠 노드 목록으로 만든다. 홀수 번째 구간(백틱 안)은 makeCode가 만든 요소에 담는다.
+  function richNodes(text, makeCode) {
+    return text
+      .split('`')
+      .map((part, i) => {
+        if (!part) return null;
+        if (i % 2 === 0) return document.createTextNode(part);
+        const code = makeCode();
+        code.textContent = part;
+        return code;
+      })
+      .filter(Boolean);
+  }
+
+  // cost: time O(n), heap O(n), stack O(1)
+  // vars: n = 글자 수
+  // basis: estimate
+  function htmlCode() {
+    const code = document.createElement('code');
+    code.className = 'fl-code';
+    return code;
+  }
+
   // cost: time O(s), heap O(1), stack O(1)
   // vars: s = 박자 수
   // basis: estimate
@@ -1115,7 +1151,7 @@ function figurePlay(root, data) {
     const button = document.createElement('button');
     button.type = 'button';
     button.setAttribute('role', 'tab');
-    button.append(label, document.createElement('i'));
+    button.append(...richNodes(label, htmlCode), document.createElement('i'));
     button.addEventListener('click', () => enterSegment(segs.indexOf(stepSegs[si][0])));
     tabs.appendChild(button);
     return button;
@@ -1156,7 +1192,7 @@ function figurePlay(root, data) {
     showCards(seg.cardsBefore);
     pendingCards = Object.entries(seg.cardsAt).map(([n, at]) => ({ n: Number(n), at }));
     drawChartState(seg);
-    caption.textContent = seg.caption;
+    caption.replaceChildren(...richNodes(seg.caption, htmlCode));
     caption.hidden = !hasCaption;
     buttons.forEach((b, si) => {
       const isCurrent = si === seg.si;
@@ -1241,7 +1277,11 @@ function figurePlay(root, data) {
     const texts = lines.map((line) => {
       const t = document.createElementNS(NS, 'text');
       t.setAttribute('class', 'chip');
-      t.textContent = line;
+      t.append(...richNodes(line, () => {
+        const code = document.createElementNS(NS, 'tspan');
+        code.setAttribute('class', 'code');
+        return code;
+      }));
       chip.appendChild(t);
       return t;
     });

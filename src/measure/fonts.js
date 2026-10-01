@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import * as fontkit from 'fontkit';
 import subsetFont from 'subset-font';
+import { codeParts } from '../text.js';
 
 const require = createRequire(import.meta.url);
 
@@ -18,8 +19,16 @@ const FACES = {
   koRegular: { family: 'FigSansKo', weight: 400, file: `${NOTO}/400Regular/NotoSansKR_400Regular.ttf` },
   koMedium: { family: 'FigSansKo', weight: 500, file: `${NOTO}/500Medium/NotoSansKR_500Medium.ttf` },
   koSemibold: { family: 'FigSansKo', weight: 600, file: `${NOTO}/600SemiBold/NotoSansKR_600SemiBold.ttf` },
+  // 차트 숫자는 Inter의 tnum(자리 폭이 같은 숫자)으로 그린다. 파일과 @font-face는 base 글꼴의 것을 쓴다.
+  num: { base: 'regular', features: ['tnum'], fallback: 'koRegular' },
+  numSemibold: { base: 'semibold', features: ['tnum'], fallback: 'koSemibold' },
   mono: { family: 'FigMono', weight: 400, file: 'jetbrains-mono/fonts/webfonts/JetBrainsMono-Regular.woff2', fallback: 'regular' },
 };
+
+// 글꼴 이름이 가리키는 실제 글꼴(파일, @font-face 이름). num 계열은 base를 따른다.
+function baseOf(name) {
+  return FACES[name].base ?? name;
+}
 
 // 글꼴 파일은 처음 쓸 때 한 번 읽는다.
 const loaded = new Map();
@@ -30,7 +39,7 @@ const widths = new Map();
 // basis: estimate
 function faceOf(name) {
   if (!loaded.has(name)) {
-    const path = require.resolve(FACES[name].file);
+    const path = require.resolve(FACES[baseOf(name)].file);
     const buffer = readFileSync(path);
     loaded.set(name, { buffer, font: fontkit.create(buffer) });
   }
@@ -51,14 +60,16 @@ function faceFor(char, face) {
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 글자 수
 // basis: estimate
-/** 글을 같은 글꼴로 그려지는 구간으로 나눈다. 띄어쓰기는 첫 글꼴의 것으로 그려진다. */
+/** 글을 같은 글꼴로 그려지는 구간으로 나눈다. 백틱 코드 구간은 고정폭 글꼴, 나머지는 face다. 띄어쓰기는 구간 첫 글꼴의 것으로 그려진다. */
 function runsOf(text, face) {
   const runs = [];
-  for (const c of text) {
-    const name = faceFor(c, face);
-    if (name === undefined) throw new Error(`the font has no glyph for "${c}". Remove the character`);
-    if (runs.at(-1)?.face === name) runs[runs.length - 1].text += c;
-    else runs.push({ face: name, text: c });
+  for (const part of codeParts(text)) {
+    for (const c of part.text) {
+      const name = faceFor(c, part.code ? 'mono' : face);
+      if (name === undefined) throw new Error(`the font has no glyph for "${c}". Remove the character`);
+      if (runs.at(-1)?.face === name) runs[runs.length - 1].text += c;
+      else runs.push({ face: name, text: c });
+    }
   }
   return runs;
 }
@@ -68,7 +79,8 @@ function runsOf(text, face) {
 // basis: estimate
 /**
  * 글 한 줄의 폭(px). 같은 글꼴과 글은 한 번만 잰다. 글꼴에 없는 글자는 대체 글꼴 폭으로 재서 글꼴이 바뀌는 구간마다 더한다.
- * @param face 'regular' | 'medium' | 'semibold' | 'mono'
+ * 백틱으로 감싼 구간은 face와 상관없이 고정폭으로 잰다(표시 글자인 백틱은 폭이 없다).
+ * @param face 'regular' | 'medium' | 'semibold' | 'num' | 'numSemibold' | 'mono'
  * @throws Error 글꼴과 대체 글꼴 어디에도 없는 글자가 있을 때. 대신 그릴 글꼴의 폭을 알 수 없기 때문이다
  */
 export function measure(text, size, face = 'regular') {
@@ -77,7 +89,7 @@ export function measure(text, size, face = 'regular') {
     let total = 0;
     for (const run of runsOf(text, face)) {
       const { font } = faceOf(run.face);
-      total += font.layout(run.text).advanceWidth / font.unitsPerEm;
+      total += font.layout(run.text, FACES[run.face].features ?? []).advanceWidth / font.unitsPerEm;
     }
     widths.set(key, total);
   }
@@ -89,33 +101,62 @@ export function measure(text, size, face = 'regular') {
 // basis: estimate
 /** 글꼴과 대체 글꼴 어디에도 없는 글자. 원본 검사에서 줄 번호와 함께 알리려고 쓴다. 없으면 undefined. */
 export function findMissingGlyph(text, face = 'regular') {
-  return [...text].find((c) => faceFor(c, face) === undefined);
+  for (const part of codeParts(text)) {
+    const missing = [...part.text].find((c) => faceFor(c, part.code ? 'mono' : face) === undefined);
+    if (missing !== undefined) return missing;
+  }
+  return undefined;
+}
+
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = 글자 수
+// basis: estimate
+// 글자 목록을 백틱 표시가 든 글로 되돌린다. 이어진 코드 글자는 백틱 한 쌍으로 묶는다.
+function toMarkup(chars) {
+  let out = '';
+  let isCode = false;
+  for (const { c, code } of chars) {
+    if (code !== isCode) out += '`';
+    isCode = code;
+    out += c;
+  }
+  return isCode ? `${out}\`` : out;
 }
 
 // cost: time O(n²), heap O(n), stack O(1)
 // vars: n = 글자 수
 // basis: estimate
-/** width 안에 들어가게 띄어쓰기 자리로 줄을 나눈다. 띄어쓰기 없는 긴 낱말은 글자 단위로 나눈다. */
+/**
+ * width 안에 들어가게 띄어쓰기 자리로 줄을 나눈다. 띄어쓰기 없는 긴 낱말은 글자 단위로 나눈다.
+ * 백틱 코드 구간이 줄 사이에 걸치면 줄마다 백틱을 닫고 다시 연다. 돌려주는 줄은 짝이 맞는 백틱 표시 글이다.
+ */
 export function wrap(text, width, size, face = 'regular') {
-  const lines = [];
-  let line = '';
-  for (const word of String(text).split(' ')) {
-    const next = line ? `${line} ${word}` : word;
-    if (measure(next, size, face) <= width) {
-      line = next;
-      continue;
-    }
-    if (line) lines.push(line);
-    line = '';
-    for (const c of word) {
-      if (line && measure(line + c, size, face) > width) {
-        lines.push(line);
-        line = '';
-      }
-      line += c;
-    }
+  const chars = codeParts(text).flatMap((part) => [...part.text].map((c) => ({ c, code: part.code })));
+  const words = [{ sep: undefined, chars: [] }];
+  for (const ch of chars) {
+    if (ch.c === ' ') words.push({ sep: ch, chars: [] });
+    else words.at(-1).chars.push(ch);
   }
-  lines.push(line);
+  const lines = [];
+  let line = [];
+  const fits = (candidate) => measure(toMarkup(candidate), size, face) <= width;
+  words.forEach((word, i) => {
+    const next = i === 0 || !line.length ? [...line, ...word.chars] : [...line, word.sep, ...word.chars];
+    if (fits(next)) {
+      line = next;
+      return;
+    }
+    if (line.length) lines.push(toMarkup(line));
+    line = [];
+    for (const ch of word.chars) {
+      if (line.length && !fits([...line, ch])) {
+        lines.push(toMarkup(line));
+        line = [];
+      }
+      line.push(ch);
+    }
+  });
+  lines.push(toMarkup(line));
   return lines;
 }
 
@@ -127,7 +168,7 @@ function resolveUsed(used) {
   const resolved = new Map();
   for (const [face, chars] of used) {
     for (const c of chars) {
-      const name = faceFor(c, face) ?? face;
+      const name = baseOf(faceFor(c, face) ?? face);
       resolved.set(name, (resolved.get(name) ?? '') + c);
     }
   }
@@ -155,7 +196,7 @@ export async function embedFonts(used) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-/** 글을 쓸 때 글꼴마다 쓴 글자를 모으는 그릇. add(text, face)로 모으고 used로 꺼낸다. */
+/** 글을 쓸 때 글꼴마다 쓴 글자를 모으는 그릇. add(text, face)로 모으고 used로 꺼낸다. 백틱 코드 구간의 글자는 고정폭 글꼴 몫이다. */
 export function createGlyphSet() {
   const sets = new Map();
   return {
@@ -163,8 +204,11 @@ export function createGlyphSet() {
     // vars: n = 글자 수
     // basis: estimate
     add(text, face = 'regular') {
-      if (!sets.has(face)) sets.set(face, new Set());
-      for (const c of String(text)) sets.get(face).add(c);
+      for (const part of codeParts(text)) {
+        const name = part.code ? 'mono' : face;
+        if (!sets.has(name)) sets.set(name, new Set());
+        for (const c of part.text) sets.get(name).add(c);
+      }
     },
     // cost: time O(f·g log g), heap O(g), stack O(1)
     // vars: f = 글꼴 수, g = 글자 수

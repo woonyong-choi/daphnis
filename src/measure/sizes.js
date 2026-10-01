@@ -16,7 +16,7 @@ export const STYLE = Object.freeze({
   mono: { size: TEXT['10-5'], face: 'mono', line: LINE['15'] },
   tag: { size: TEXT['9'], face: 'semibold' },
   mark: { size: TEXT['11'], face: 'semibold' },
-  pill: { size: TEXT['11'], face: 'mono' },
+  pill: { size: TEXT['11'], face: 'regular' },
   group: { size: TEXT['11'], face: 'semibold' },
   chip: { size: TEXT['11-5'], face: 'regular', line: LINE['15'] },
   cell: { size: TEXT['11-5'], face: 'regular' },

@@ -19,7 +19,7 @@
 .fl .chart-value,
 .fl .chart-tick,
 .fl .chart-unit {
-  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   fill: var(--color-muted);
 }
@@ -72,7 +72,7 @@
 }
 
 .fl .chart-ratio {
-  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--size-text-12);
   font-weight: var(--weight-semibold);
   text-anchor: end;
@@ -106,7 +106,7 @@
 }
 
 .fl .chart-cell {
-  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   text-anchor: middle;
   fill: var(--color-heat-ink);

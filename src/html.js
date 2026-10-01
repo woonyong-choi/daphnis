@@ -1,12 +1,12 @@
 // 재생 화면 HTML 한 장과 목록 쪽. 스크립트, 스타일, 글꼴, 그림을 모두 안에 넣어 파일 하나로 열린다.
 import { readFileSync } from 'node:fs';
 import { fitCanvas } from './canvas.js';
-import { chartText } from './chart/draw.js';
+import { CHART_FACES, chartText } from './chart/draw.js';
 import { drawScene } from './draw/figure.js';
 import { curveOf } from './easing.js';
 import { createGlyphSet, embedFonts } from './measure/fonts.js';
 import { DEFS, STYLES } from './styles.js';
-import { escapeXml, roundCoord as r } from './text.js';
+import { escapeXml, plainText, renderRichHtml, roundCoord as r } from './text.js';
 import { chartMotionCss } from './chart/motion.js';
 import { chartSeriesIds, litIds } from './timeline.js';
 import { tokens, values } from './tokens.js';
@@ -117,13 +117,13 @@ export async function toHtml(result, name) {
   const { viewWidth, shownWidth, shownHeight } = fitCanvas(content.width, height);
   const svg =
     `<svg xmlns="http://www.w3.org/2000/svg" class="fl" width="${r(shownWidth)}" height="${r(shownHeight)}" style="aspect-ratio: ${r(viewWidth)} / ${r(height)}" viewBox="${r((content.width - viewWidth) / 2)} 0 ${r(viewWidth)} ${r(height)}" role="img">` +
-    `<title>${escapeXml(figure.title ?? name)}</title><defs>${DEFS}</defs>${content.svg}<g class="fl-packets"></g></svg>`;
+    `<title>${escapeXml(plainText(figure.title ?? name))}</title><defs>${DEFS}</defs>${content.svg}<g class="fl-packets"></g></svg>`;
   return `<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${escapeXml(figure.title ?? name)}</title>
+<title>${escapeXml(plainText(figure.title ?? name))}</title>
 ${EMBED_SCRIPT}
 <style>${fonts}
 ${STYLES.tokens}${STYLES.player}${STYLES.figure}${STYLES.chart}${result.chart ? chartMotionCss(timeline.growMs, result.chart.dotAts) : ''}</style>
@@ -194,7 +194,7 @@ function figureContent(result, glyphs) {
 // 차트. 계열은 번호로, light는 행 번호로 바꿔 넘긴다.
 function chartContent(result, glyphs) {
   const { figure, chart, timeline } = result;
-  for (const face of ['regular', 'mono', 'semibold']) glyphs.add(chartText(figure), face);
+  for (const face of CHART_FACES) glyphs.add(chartText(figure), face);
   const ids = chartSeriesIds(figure);
   const segs = timeline.segs.map((seg) => ({
     si: seg.si,
@@ -225,7 +225,7 @@ function chartContent(result, glyphs) {
 // 한글 제목이 제목이고 예제 이름은 작은 꼬리표다. 제목이 없으면 이름이 제목이 된다.
 function cardHead({ name, title }) {
   if (!title) return `<h2>${escapeXml(name)}</h2>`;
-  return `<h2>${escapeXml(title)}<span class="name">${escapeXml(name)}</span></h2>`;
+  return `<h2>${renderRichHtml(title)}<span class="name">${escapeXml(name)}</span></h2>`;
 }
 
 // cost: time O(f), heap O(out), stack O(1)
@@ -284,7 +284,7 @@ addEventListener('message', (e) => {
  */
 export function toDocument(figures, heading) {
   const sections = figures
-    .map((f) => `${cardHead(f)}\n<p class="figure"><img src="${escapeXml(f.href)}.svg" alt="${escapeXml(f.title || f.name)}"></p>`)
+    .map((f) => `${cardHead(f)}\n<p class="figure"><img src="${escapeXml(f.href)}.svg" alt="${escapeXml(plainText(f.title || f.name))}"></p>`)
     .join('\n');
   return `<!doctype html>
 <html lang="ko">

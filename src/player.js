@@ -63,6 +63,32 @@ function figurePlay(root, data) {
     svg.classList.add('chart-loop');
   }
 
+  // cost: time O(n), heap O(n), stack O(1)
+  // vars: n = 글자 수
+  // basis: estimate
+  // 글을 백틱 기준으로 나눠 노드 목록으로 만든다. 홀수 번째 구간(백틱 안)은 makeCode가 만든 요소에 담는다.
+  function richNodes(text, makeCode) {
+    return text
+      .split('`')
+      .map((part, i) => {
+        if (!part) return null;
+        if (i % 2 === 0) return document.createTextNode(part);
+        const code = makeCode();
+        code.textContent = part;
+        return code;
+      })
+      .filter(Boolean);
+  }
+
+  // cost: time O(n), heap O(n), stack O(1)
+  // vars: n = 글자 수
+  // basis: estimate
+  function htmlCode() {
+    const code = document.createElement('code');
+    code.className = 'fl-code';
+    return code;
+  }
+
   // cost: time O(s), heap O(1), stack O(1)
   // vars: s = 박자 수
   // basis: estimate
@@ -70,7 +96,7 @@ function figurePlay(root, data) {
     const button = document.createElement('button');
     button.type = 'button';
     button.setAttribute('role', 'tab');
-    button.append(label, document.createElement('i'));
+    button.append(...richNodes(label, htmlCode), document.createElement('i'));
     button.addEventListener('click', () => enterSegment(segs.indexOf(stepSegs[si][0])));
     tabs.appendChild(button);
     return button;
@@ -111,7 +137,7 @@ function figurePlay(root, data) {
     showCards(seg.cardsBefore);
     pendingCards = Object.entries(seg.cardsAt).map(([n, at]) => ({ n: Number(n), at }));
     drawChartState(seg);
-    caption.textContent = seg.caption;
+    caption.replaceChildren(...richNodes(seg.caption, htmlCode));
     caption.hidden = !hasCaption;
     buttons.forEach((b, si) => {
       const isCurrent = si === seg.si;
@@ -196,7 +222,11 @@ function figurePlay(root, data) {
     const texts = lines.map((line) => {
       const t = document.createElementNS(NS, 'text');
       t.setAttribute('class', 'chip');
-      t.textContent = line;
+      t.append(...richNodes(line, () => {
+        const code = document.createElementNS(NS, 'tspan');
+        code.setAttribute('class', 'code');
+        return code;
+      }));
       chip.appendChild(t);
       return t;
     });

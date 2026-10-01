@@ -192,3 +192,8 @@ test('validateFigure_rejected_name_adds_no_unknown_name_errors', () => {
 
   assert.deepEqual(errors, ['3: "Step" is not a valid name. Use lowercase letters and digits, joined by single "-", starting with a letter']);
 });
+
+test('check_unpaired_backtick_reports_line', async () => {
+  const { buildFigure } = await import('../src/build.js');
+  await assert.rejects(buildFigure('flow\nbox a "가 `x"\n', {}), /line 2.*not paired|2.*backtick/s);
+});

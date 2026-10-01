@@ -1,7 +1,7 @@
 // 여섯 종류 차트를 SVG 조각으로 그린다. 계열 요소는 class `cs-{계열 번호}`, 행 요소는 `cr-{행 번호}`를 달아 재생이 드러내기와 밝히기를 건다.
 import { measure } from '../measure/fonts.js';
 import { STYLE } from '../measure/sizes.js';
-import { centerBaseline, escapeXml, roundCoord as r } from '../text.js';
+import { centerBaseline, renderRich, roundCoord as r } from '../text.js';
 import { tokens, values } from '../tokens.js';
 import { curveOf, timeAt } from '../easing.js';
 import { formatChange, formatNumber, makeScale } from './scale.js';
@@ -75,17 +75,17 @@ function drawHeader(figure) {
   const parts = [];
   let y = PAD;
   if (figure.title) {
-    parts.push(`<text x="${PAD}" y="${r(y + TEXT['15'])}" class="chart-title">${escapeXml(figure.title)}</text>`);
+    parts.push(`<text x="${PAD}" y="${r(y + TEXT['15'])}" class="chart-title">${renderRich(figure.title)}</text>`);
     y += TEXT['15'] + SPACE['4'];
   }
   if (figure.subtitle) {
-    parts.push(`<text x="${PAD}" y="${r(y + TEXT['12'])}" class="chart-sub">${escapeXml(figure.subtitle)}</text>`);
+    parts.push(`<text x="${PAD}" y="${r(y + TEXT['12'])}" class="chart-sub">${renderRich(figure.subtitle)}</text>`);
     y += TEXT['12'] + SPACE['5'];
   }
   if (figure.chart.series.length) {
     let x = PAD;
     figure.chart.series.forEach((s, i) => {
-      parts.push(`<g class="cs-${i}"><rect x="${x}" y="${r(y + SPACE['2'])}" width="${BAR}" height="${BAR}" rx="${values.radius.sm}" fill="${SERIES_COLOR[i]}"/>` + `<text x="${x + BAR + SPACE['3']}" y="${r(y + BAR)}" class="chart-legend">${escapeXml(s.label)}</text></g>`);
+      parts.push(`<g class="cs-${i}"><rect x="${x}" y="${r(y + SPACE['2'])}" width="${BAR}" height="${BAR}" rx="${values.radius.sm}" fill="${SERIES_COLOR[i]}"/>` + `<text x="${x + BAR + SPACE['3']}" y="${r(y + BAR)}" class="chart-legend">${renderRich(s.label)}</text></g>`);
       x += BAR + SPACE['3'] + measure(s.label, TEXT['12']) + SPACE['9'];
     });
     y += BAR + SPACE['6'];
@@ -110,13 +110,13 @@ function drawBars(figure, top) {
   chart.rows.forEach((row, k) => {
     const groupH = chart.series.length * BAR + (chart.series.length - 1) * SPACE['2'];
     // 이름은 계열이 모두 보일 때 막대 묶음 가운데에 둔다. 계열을 하나씩 드러내는 동안은 시간표의 labelShift만큼 옮겨 보이는 막대에 맞춘다(timeline.js).
-    parts.push(`<g class="cr-${k}"><text x="${PAD}" y="${r(centerBaseline(y + groupH / 2, TEXT['13']))}" class="chart-label shift">${escapeXml(row.label)}</text></g>`);
+    parts.push(`<g class="cr-${k}"><text x="${PAD}" y="${r(centerBaseline(y + groupH / 2, TEXT['13']))}" class="chart-label shift">${renderRich(row.label)}</text></g>`);
     chart.series.forEach((s, i) => {
       const by = y + i * (BAR + SPACE['2']);
       const cy = by + BAR / 2;
       const v = row.values[s.id];
       if (v === null) {
-        parts.push(`<g class="cr-${k}"><g class="cs-${i}"><text x="${r(plotX)}" y="${r(centerBaseline(cy, TEXT['11']))}" class="chart-missing">${escapeXml(chart.missing ?? '비교 없음')}</text></g></g>`);
+        parts.push(`<g class="cr-${k}"><g class="cs-${i}"><text x="${r(plotX)}" y="${r(centerBaseline(cy, TEXT['11']))}" class="chart-missing">${renderRich(chart.missing ?? '비교 없음')}</text></g></g>`);
         return;
       }
       const end = scale.at(v);
@@ -181,7 +181,7 @@ function drawDumbbells(figure, top) {
     const [firstX, secondX] = x1 < x2 ? [left, right] : [right, left];
     const side = (x) => (x === left ? 'end' : 'start');
     parts.push(
-      `<text x="${PAD}" y="${r(centerBaseline(cy, TEXT['13']))}" class="chart-label cr-${k}">${escapeXml(row.label)}</text>` +
+      `<text x="${PAD}" y="${r(centerBaseline(cy, TEXT['13']))}" class="chart-label cr-${k}">${renderRich(row.label)}</text>` +
         `<g class="cr-${k}"><g class="cs-0">${range(first, 0)}<circle cx="${r(x1)}" cy="${r(cy)}" r="${DOT}" class="chart-before pop"/><text x="${r(firstX)}" y="${base}" class="chart-value first late ${side(firstX)}">${formatNumber(before)}</text></g>` +
         `<g class="cs-1">${range(second, 1)}${arrow}` +
         `<text x="${r(secondX)}" y="${base}" class="chart-value second late ${side(secondX)}">${formatNumber(after)}</text>` +
@@ -210,7 +210,7 @@ function drawBoxes(figure, top) {
     const v = row.values;
     const [a, q1, m, q3, b] = [v.min, v.q1, v.median, v.q3, v.max].map(scale.at);
     return (
-      `<text x="${PAD}" y="${r(centerBaseline(cy, TEXT['13']))}" class="chart-label cr-${k}">${escapeXml(row.label)}</text>` +
+      `<text x="${PAD}" y="${r(centerBaseline(cy, TEXT['13']))}" class="chart-label cr-${k}">${renderRich(row.label)}</text>` +
       `<g class="cr-${k}"><line x1="${r(a)}" x2="${r(b)}" y1="${r(cy)}" y2="${r(cy)}" class="chart-whisker"/>` +
       `<rect x="${r(q1)}" y="${r(cy - BAR)}" width="${r(Math.max(1, q3 - q1))}" height="${BAR * 2}" rx="${values.radius.sm}" class="chart-box grow"/>` +
       `<line x1="${r(m)}" x2="${r(m)}" y1="${r(cy - BAR)}" y2="${r(cy + BAR)}" class="chart-median"/>` +
@@ -252,7 +252,7 @@ function drawScatter(figure, top) {
     const offset = DOT + SPACE['3'];
     const toLeft = x + offset + nameW > WIDTH - PAD;
     fits.push({ text: p.label, width: nameW, room: Math.max(WIDTH - PAD - x, x - PAD) - offset, line: p.line, what: 'point name' });
-    const name = `<text x="${r(toLeft ? x - offset : x + offset)}" y="${r(centerBaseline(y, TEXT['11']))}" class="chart-name late${toLeft ? ' end' : ''}">${escapeXml(p.label)}</text>`;
+    const name = `<text x="${r(toLeft ? x - offset : x + offset)}" y="${r(centerBaseline(y, TEXT['11']))}" class="chart-name late${toLeft ? ' end' : ''}">${renderRich(p.label)}</text>`;
     parts.push(`<g class="cr-${k}"><g class="cs-${i}"><circle cx="${r(x)}" cy="${r(y)}" r="${DOT}" fill="${chart.series.length ? SERIES_COLOR[i] : SERIES_COLOR[0]}" class="pop"/>${name}</g></g>`);
   });
   parts.push(drawRules(chart.rules, sy, sx.at(sx.ticks[0]), sx.at(sx.ticks.at(-1)), 'y'));
@@ -344,13 +344,13 @@ function drawHeatmap(figure, top) {
   const cols = [...new Set(chart.rows.map((c) => c.col))];
   const plotX = labelColumn(rows) + PAD;
   // 칸 너비는 가장 긴 열 이름에 맞추되 남은 폭을 열 수로 나눈 값을 넘지 않는다. 칸 높이는 토큰 그대로다.
-  const widestCol = Math.max(...cols.map((c) => measure(c, TEXT['11'], 'mono'))) + SPACE['4'];
+  const widestCol = Math.max(...cols.map((c) => measure(c, TEXT['11'], 'num'))) + SPACE['4'];
   const cellW = Math.min(Math.max(SIZE['chart-cell'], widestCol), (WIDTH - plotX - PAD) / cols.length);
   const cellH = SIZE['chart-cell'];
   const max = Math.max(...chart.rows.map((c) => c.values.value));
-  const parts = cols.map((c, j) => `<text x="${r(plotX + j * cellW + cellW / 2)}" y="${r(top + TEXT['11'])}" class="chart-tick">${escapeXml(c)}</text>`);
+  const parts = cols.map((c, j) => `<text x="${r(plotX + j * cellW + cellW / 2)}" y="${r(top + TEXT['11'])}" class="chart-tick">${renderRich(c)}</text>`);
   const gridTop = top + TEXT['11'] + SPACE['4'];
-  rows.forEach((row, i) => parts.push(`<text x="${PAD}" y="${r(centerBaseline(gridTop + i * cellH + cellH / 2, TEXT['13']))}" class="chart-label">${escapeXml(row)}</text>`));
+  rows.forEach((row, i) => parts.push(`<text x="${PAD}" y="${r(centerBaseline(gridTop + i * cellH + cellH / 2, TEXT['13']))}" class="chart-label">${renderRich(row)}</text>`));
   chart.rows.forEach((c, k) => {
     const [x, y] = [plotX + cols.indexOf(c.col) * cellW, gridTop + rows.indexOf(c.row) * cellH];
     const strength = max ? c.values.value / max : 0;
@@ -360,7 +360,7 @@ function drawHeatmap(figure, top) {
     );
   });
   // 열 이름은 칸 너비 안에 들어가야 한다. 넘으면 옆 열 이름과 겹친다.
-  const fits = cols.map((c) => ({ text: c, width: measure(c, TEXT['11'], 'mono'), room: cellW - SPACE['1'], line: chart.rows.find((row) => row.col === c).line, what: 'column name' }));
+  const fits = cols.map((c) => ({ text: c, width: measure(c, TEXT['11'], 'num'), room: cellW - SPACE['1'], line: chart.rows.find((row) => row.col === c).line, what: 'column name' }));
   fits.push(...rows.map((row) => labelFit(row, chart.rows.find((c) => c.row === row).line)));
   return { svg: parts.join('\n'), bottom: gridTop + rows.length * cellH, rowKeys: chart.rows.map((c) => `${c.row}\u0000${c.col}`), fits };
 }
@@ -387,8 +387,8 @@ function plotFrame(figure, top, xs, ys) {
   const parts = [];
   for (const t of sy.ticks) parts.push(`<line x1="${left}" x2="${r(left + plotW)}" y1="${r(sy.at(t))}" y2="${r(sy.at(t))}" class="chart-grid"/><text x="${r(left - SPACE['3'])}" y="${r(centerBaseline(sy.at(t), TEXT['11']))}" class="chart-tick end">${formatNumber(t)}</text>`);
   for (const t of sx.ticks) parts.push(`<text x="${r(sx.at(t))}" y="${r(top + plotH + TEXT['11'] + SPACE['3'])}" class="chart-tick">${formatNumber(t)}</text>`);
-  if (chart.x) parts.push(`<text x="${r(left + plotW)}" y="${r(top + plotH + TEXT['11'] * 2 + SPACE['8'])}" class="chart-unit">${escapeXml(chart.x)}</text>`);
-  if (chart.y) parts.push(`<text x="${PAD}" y="${r(top - titleH + values.size.text['11'])}" class="chart-unit start">${escapeXml(chart.y)}</text>`);
+  if (chart.x) parts.push(`<text x="${r(left + plotW)}" y="${r(top + plotH + TEXT['11'] * 2 + SPACE['8'])}" class="chart-unit">${renderRich(chart.x)}</text>`);
+  if (chart.y) parts.push(`<text x="${PAD}" y="${r(top - titleH + values.size.text['11'])}" class="chart-unit start">${renderRich(chart.y)}</text>`);
   return { sx, sy, frame: parts.join(''), top };
 }
 
@@ -398,7 +398,7 @@ function plotFrame(figure, top, xs, ys) {
 // 값 축: 축선, 눈금 글자, 축 제목
 function drawValueAxis(scale, x, width, y, title) {
   const ticks = scale.ticks.map((t) => `<text x="${r(scale.at(t))}" y="${r(y + TEXT['11'] + SPACE['3'])}" class="chart-tick">${formatNumber(t)}</text>`).join('');
-  const label = title ? `<text x="${r(x + width)}" y="${r(y + TEXT['11'] * 2 + SPACE['6'])}" class="chart-unit">${escapeXml(title)}</text>` : '';
+  const label = title ? `<text x="${r(x + width)}" y="${r(y + TEXT['11'] * 2 + SPACE['6'])}" class="chart-unit">${renderRich(title)}</text>` : '';
   return `<line x1="${r(x)}" x2="${r(x + width)}" y1="${r(y)}" y2="${r(y)}" class="chart-axis"/>${ticks}${label}`;
 }
 
@@ -411,11 +411,14 @@ function drawRules(rules, scale, from, to, axis) {
     .map((rule) => {
       const at = scale.at(rule.value);
       return axis === 'x'
-        ? `<line x1="${r(at)}" x2="${r(at)}" y1="${r(from - SPACE['3'])}" y2="${r(to)}" class="chart-rule"/><text x="${r(at + SPACE['2'])}" y="${r(from - SPACE['4'])}" class="chart-rule-label">${escapeXml(rule.label)}</text>`
-        : `<line x1="${r(from)}" x2="${r(to)}" y1="${r(at)}" y2="${r(at)}" class="chart-rule"/><text x="${r(to)}" y="${r(at - SPACE['2'])}" class="chart-rule-label end">${escapeXml(rule.label)}</text>`;
+        ? `<line x1="${r(at)}" x2="${r(at)}" y1="${r(from - SPACE['3'])}" y2="${r(to)}" class="chart-rule"/><text x="${r(at + SPACE['2'])}" y="${r(from - SPACE['4'])}" class="chart-rule-label">${renderRich(rule.label)}</text>`
+        : `<line x1="${r(from)}" x2="${r(to)}" y1="${r(at)}" y2="${r(at)}" class="chart-rule"/><text x="${r(to)}" y="${r(at - SPACE['2'])}" class="chart-rule-label end">${renderRich(rule.label)}</text>`;
     })
     .join('');
 }
+
+/** 차트 글자가 쓰는 글꼴. 숫자는 Inter의 자리 폭 같은 숫자(num)로 그린다. */
+export const CHART_FACES = ['regular', 'semibold', 'num', 'numSemibold'];
 
 // cost: time O(r + n), heap O(n), stack O(1)
 // vars: r = 행 수, n = 글자 수

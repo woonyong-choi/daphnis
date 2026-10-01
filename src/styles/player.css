@@ -71,7 +71,8 @@ html.embedded .fl-canvas svg {
   min-width: var(--size-control);
   height: var(--size-control);
   padding: 0 var(--space-3-5);
-  font: var(--size-text-11) var(--font-mono);
+  font: var(--size-text-11) var(--font-sans);
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
   color: var(--color-muted);
   background: var(--color-node);
@@ -122,6 +123,11 @@ html.embedded .fl-canvas svg {
   height: var(--space-1);
   background: var(--color-accent);
   border-radius: var(--radius-xs);
+}
+
+/* 백틱으로 감싼 글. 코드 글꼴로 그린다. */
+.fl-code {
+  font-family: var(--font-mono);
 }
 
 .fl-caption {

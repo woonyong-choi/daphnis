@@ -7,6 +7,7 @@ import { drawChart } from './chart/draw.js';
 import { layoutGraph } from './layout/graph.js';
 import { layoutSequence } from './layout/sequence.js';
 import { findMissingGlyph, wrap } from './measure/fonts.js';
+import { hasUnpairedBacktick } from './text.js';
 import { STYLE, sizeNode } from './measure/sizes.js';
 import { INTERVAL_TYPES, checkChartLightTargets, checkChartRows } from './source/chart-rules.js';
 import { readFigure } from './source/parse.js';
@@ -191,14 +192,17 @@ function pointer(document, path) {
 // vars: n = 그림 모형의 글 글자 수, t = 글 수, d = 모형 깊이
 // basis: estimate
 // 그림 글꼴에 없는 글자를 줄 번호와 함께 알린다. 대신 그릴 글꼴의 폭을 알 수 없기 때문이다.
-// 모형의 모든 글을 본문 글꼴로, 고정폭으로 그리는 글은 고정폭 글꼴로도 본다. 글 종류를 빠뜨리지 않기 위해 모형 전체를 훑는다.
+// 모형의 모든 글을 본문 글꼴로, 테이블 열 타입은 고정폭 글꼴로도 본다. 백틱 구간은 글 안에서 고정폭으로 보고, 짝이 안 맞는 백틱은 오류다. 글 종류를 빠뜨리지 않기 위해 모형 전체를 훑는다.
 function checkGlyphs(figure, problems) {
   const texts = [];
   collectTexts(figure, figure.line ?? 1, texts);
-  const mono = [...figure.edges.map((e) => [e.label, e.line]), ...figure.nodes.flatMap((n) => (n.columns ?? []).map((c) => [c.type, c.line ?? n.line]))];
-  if (figure.kind === 'sequence') mono.push(...figure.steps.flatMap((s) => s.beats.flatMap((b) => b.hops.map((h) => [h.data, h.line]))));
+  const mono = figure.nodes.flatMap((n) => (n.columns ?? []).map((c) => [c.type, c.line ?? n.line]));
   const reported = new Set();
   for (const [text, line, face] of [...texts.map(([t, l]) => [t, l, 'regular']), ...mono.map(([t, l]) => [t, l, 'mono'])]) {
+    if (hasUnpairedBacktick(text) && !reported.has(`${line}\u0000${text}`)) {
+      reported.add(`${line}\u0000${text}`);
+      problems.error(line, `the backticks in "${text}" are not paired. Close the code span with a second backtick`);
+    }
     const missing = text ? findMissingGlyph(text, face) : undefined;
     if (missing === undefined || reported.has(`${line}\u0000${missing}`)) continue;
     reported.add(`${line}\u0000${missing}`);

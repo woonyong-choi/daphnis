@@ -1,13 +1,13 @@
 // 스크립트 없이 움직이는 SVG와 멈춘 SVG. 시간표의 박자 상태를 CSS keyframes와 SMIL로 옮긴다(docs/design/playback.md).
 import { fitCanvas } from './canvas.js';
-import { chartText } from './chart/draw.js';
+import { CHART_FACES, chartText } from './chart/draw.js';
 import { CHIP_GAP, placeChip, sampleRoute, sizeChip } from './chip.js';
 import { curveOf, keySpline, timeAt } from './easing.js';
 import { drawScene } from './draw/figure.js';
-import { createGlyphSet, embedFonts, measure } from './measure/fonts.js';
+import { createGlyphSet, embedFonts, measure, wrap } from './measure/fonts.js';
 import { STYLE } from './measure/sizes.js';
 import { DEFS, STYLES } from './styles.js';
-import { escapeXml, roundCoord as r } from './text.js';
+import { escapeXml, plainText, renderRich, roundCoord as r } from './text.js';
 import { chartMotionCss } from './chart/motion.js';
 import { chartSeriesIds, litIds } from './timeline.js';
 import { tokens, values } from './tokens.js';
@@ -44,7 +44,7 @@ export async function toSvg(result, { isStatic = false, name = '' } = {}) {
   const fonts = await embedFonts(glyphs.used);
   const title = figure.title ?? name;
   return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="fl${content.className}" width="${r(shownWidth)}" height="${r(shownHeight)}" viewBox="0 0 ${r(width)} ${r(height)}" role="img">
-<title>${escapeXml(title)}</title>
+<title>${escapeXml(plainText(title))}</title>
 <style>${fonts}
 ${STYLES.tokens}${STYLES.figure}${STYLES.animated}${result.chart ? STYLES.chart + chartMotionCss(timeline.growMs, result.chart.dotAts) : ''}
 ${animator.css.join('\n')}
@@ -70,12 +70,13 @@ function drawFigureBody(result, animator, glyphs) {
   return { svg: `${body}\n${packets.join('\n')}`, width: scene.width, height: scene.height, className: '' };
 }
 
+// cost: time O(c), heap O(c), stack O(1)
+// vars: c = 차트 글자 수
+// basis: estimate
 // 차트 본문. 시간 흐름이 없으면 되풀이 class를 단다.
 function drawChartBody(result, animator, glyphs, isStatic) {
   const { figure, chart, timeline } = result;
-  glyphs.add(chartText(figure), 'regular');
-  glyphs.add(chartText(figure), 'mono');
-  glyphs.add(chartText(figure), 'semibold');
+  for (const face of CHART_FACES) glyphs.add(chartText(figure), face);
   const isLoop = !isStatic && !timeline.segs.length;
   if (!isStatic && timeline.segs.length) animator.chart(figure, chart);
   return { svg: chart.body, width: chart.width, height: chart.height, className: isLoop ? ' chart-loop' : '' };
@@ -89,35 +90,21 @@ function drawCaptions(timeline, animator, width, top, glyphs) {
   if (!timeline.segs.length) return { svg: '', height: 0 };
   const captions = [...new Set(timeline.segs.map((s) => s.caption))].filter(Boolean);
   const wrapWidth = width - SPACE['30'];
-  const wrapped = new Map(captions.map((c) => [c, wrapLines(c, wrapWidth)]));
+  const wrapped = new Map(captions.map((c) => [c, wrap(c, wrapWidth, CAPTION.size, CAPTION.face)]));
   const lines = Math.max(1, ...[...wrapped.values()].map((l) => l.length));
   const height = captions.length ? SPACE['17'] + lines * LINE['20'] : SPACE['15'];
   const labels = timeline.steps.map((label, si) => {
     glyphs.add(label, STEP_LABEL.face);
     const cls = animator.windows(timeline.segs.map((s) => s.si === si), 'opacity: 1', 'opacity: 0', 's');
-    return `<text x="${r(width / 2)}" y="${r(top + SPACE['9'])}" opacity="0" class="steplabel ${cls}">${escapeXml(label)}</text>`;
+    return `<text x="${r(width / 2)}" y="${r(top + SPACE['9'])}" opacity="0" class="steplabel ${cls}">${renderRich(label)}</text>`;
   });
   const said = captions.map((text) => {
     glyphs.add(text, CAPTION.face);
     const cls = animator.windows(timeline.segs.map((s) => s.caption === text), 'opacity: 1', 'opacity: 0', 'y');
-    const rows = wrapped.get(text).map((line, li) => `<text x="${r(width / 2)}" y="${r(top + SPACE['22'] + li * LINE['20'])}" class="caption">${escapeXml(line)}</text>`);
+    const rows = wrapped.get(text).map((line, li) => `<text x="${r(width / 2)}" y="${r(top + SPACE['22'] + li * LINE['20'])}" class="caption">${renderRich(line)}</text>`);
     return `<g opacity="0" class="${cls}">${rows.join('')}</g>`;
   });
   return { svg: [...labels, ...said].join('\n'), height };
-}
-
-// cost: time O(w·n), heap O(n), stack O(1)
-// vars: w = 낱말 수, n = 글자 수
-// basis: estimate
-function wrapLines(text, width) {
-  const words = text.split(' ');
-  const lines = [''];
-  for (const w of words) {
-    const next = lines.at(-1) ? `${lines.at(-1)} ${w}` : w;
-    if (measure(next, CAPTION.size, CAPTION.face) <= width || !lines.at(-1)) lines[lines.length - 1] = next;
-    else lines.push(w);
-  }
-  return lines;
 }
 
 // 멈춘 SVG: 모든 선과 도형을 보이고 카드는 비운다. 움직임 class는 없다.
@@ -295,7 +282,7 @@ function drawChip(lines, glyphs) {
   const top = -h - CHIP_GAP;
   return (
     `<rect x="${r(-w / 2)}" y="${r(top)}" width="${r(w)}" height="${r(h)}" rx="${values.radius.lg}" fill="${tokens.color.accent}"/>` +
-    lines.map((line, li) => `<text x="0" y="${r(top + STYLE.chip.line * (li + 1))}" class="chip">${escapeXml(line)}</text>`).join('')
+    lines.map((line, li) => `<text x="0" y="${r(top + STYLE.chip.line * (li + 1))}" class="chip">${renderRich(line)}</text>`).join('')
   );
 }
 

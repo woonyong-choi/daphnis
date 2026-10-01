@@ -1,7 +1,7 @@
 // 구조, 상태, 데이터 관계, 순서 그림의 장면을 SVG 조각으로 그린다. 크기와 자리는 배치가 정한 그대로 쓴다.
 import { CARD, STYLE, sizePill } from '../measure/sizes.js';
 import { routePolyline } from '../route.js';
-import { centerBaseline, escapeXml, roundCoord as r } from '../text.js';
+import { centerBaseline, escapeXml, renderRich, roundCoord as r } from '../text.js';
 import { tokens, values } from '../tokens.js';
 import { cardGlyphs, createTones, drawCard } from './card.js';
 
@@ -34,7 +34,7 @@ function drawGroup(g, j, decorate, glyphs) {
   glyphs.add(g.label, 'semibold');
   return (
     `<g id="g-${j}" class="fl-group" data-id="${escapeXml(g.id)}"><rect x="${r(g.x)}" y="${r(g.y)}" width="${r(g.w)}" height="${r(g.h)}" rx="${RADIUS['2xl']}" class="frame-box fl-stroke ${decorate('group', j)}"/>` +
-    `<text x="${r(g.x + SPACE['9'])}" y="${r(centerBaseline(g.y + SIZE['group-title'] / 2, STYLE.group.size))}" class="frame">${escapeXml(g.label)}</text></g>`
+    `<text x="${r(g.x + SPACE['9'])}" y="${r(centerBaseline(g.y + SIZE['group-title'] / 2, STYLE.group.size))}" class="frame">${renderRich(g.label)}</text></g>`
   );
 }
 
@@ -110,7 +110,7 @@ function drawLabels(it) {
     .map(([cls, text, style]) => {
       const baseline = centerBaseline(top + style.line / 2, style.size);
       top += style.line;
-      return `<text x="${r(cx)}" y="${r(baseline)}" class="${cls}">${escapeXml(text)}</text>`;
+      return `<text x="${r(cx)}" y="${r(baseline)}" class="${cls}">${renderRich(text)}</text>`;
     })
     .join('');
 }
@@ -131,7 +131,7 @@ function drawTable(it, stroke, glyphs, decorate) {
   const rowH = it.rowH;
   const frame = `<rect x="${r(it.x)}" y="${r(it.y)}" width="${r(it.w)}" height="${r(it.h)}" rx="${RADIUS.xl}" fill="${tokens.color.node}" ${stroke}/>`;
   glyphs.add(it.label, 'medium');
-  const header = `<text x="${r(it.x + it.w / 2)}" y="${r(centerBaseline(it.y + rowH / 2, STYLE.label.size))}" class="label">${escapeXml(it.label)}</text>`;
+  const header = `<text x="${r(it.x + it.w / 2)}" y="${r(centerBaseline(it.y + rowH / 2, STYLE.label.size))}" class="label">${renderRich(it.label)}</text>`;
   const rows = it.columns.map((c, k) => {
     const key2 = `${it.id}.${c.name}`;
     const y = it.y + rowH * (k + 1);
@@ -161,12 +161,12 @@ function drawEdge(e, j, decorate, glyphs) {
   const quiet = e.quiet ? ` quiet ${decorate('quiet', j)}` : '';
   const open = `<g id="e-${j}" class="fl-edge${e.isMark ? ' mark' : ''}${quiet}">`;
   if (!e.label || !e.labelAt) return `${open}${path}</g>`;
-  glyphs.add(e.label, 'mono');
+  glyphs.add(e.label, STYLE.pill.face);
   const { w, h } = sizePill(e.label);
   const { x, y } = e.labelAt;
   return (
     `${open}${path}<g class="fl-pill"><rect x="${r(x - w / 2)}" y="${r(y - h / 2)}" width="${r(w)}" height="${h}" rx="${h / 2}" class="pill ${decorate('pill', j)}"/>` +
-    `<text x="${r(x)}" y="${r(centerBaseline(y, STYLE.pill.size))}" class="edgelabel ${decorate('pilltext', j)}">${escapeXml(e.label)}</text></g></g>`
+    `<text x="${r(x)}" y="${r(centerBaseline(y, STYLE.pill.size))}" class="edgelabel ${decorate('pilltext', j)}">${renderRich(e.label)}</text></g></g>`
   );
 }
 
@@ -175,6 +175,6 @@ function drawEdge(e, j, decorate, glyphs) {
 // basis: estimate
 function drawNote(note, glyphs) {
   glyphs.add(note.text, 'regular');
-  const lines = note.lines.map((l, k) => `<text x="${r(note.x + SPACE['5'])}" y="${r(note.y + SPACE['5'] + STYLE.row.size + k * STYLE.row.line)}" class="row">${escapeXml(l)}</text>`);
+  const lines = note.lines.map((l, k) => `<text x="${r(note.x + SPACE['5'])}" y="${r(note.y + SPACE['5'] + STYLE.row.size + k * STYLE.row.line)}" class="row">${renderRich(l)}</text>`);
   return `<g class="fl-note"><rect x="${r(note.x)}" y="${r(note.y)}" width="${r(note.w)}" height="${r(note.h)}" rx="${RADIUS.md}" class="note-box"/>${lines.join('')}</g>`;
 }

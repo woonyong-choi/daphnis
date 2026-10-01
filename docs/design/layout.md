@@ -49,8 +49,10 @@
 
 - 글꼴은 토큰이 정한 글꼴 파일이다. 본문은 이력서와 같게 라틴과 기호는 Inter, 한글은 Noto Sans KR이고, 고정폭은 JetBrains Mono다. 모두 SIL Open Font License라 그림 안에 넣을 수 있다. Inter와 Noto Sans KR 정적 파일(regular 400, medium 500, semibold 600)은 `@expo-google-fonts/inter`, `@expo-google-fonts/noto-sans-kr` 패키지(패키지 껍데기는 MIT, 글꼴은 OFL 1.1, 예약 글꼴 이름 없음)로 받는다. 굵기마다 정적 파일이라 측정과 자르기가 같은 파일을 쓴다. JetBrains Mono 파일은 `jetbrains-mono` npm 패키지(패키지 껍데기는 MIT, 글꼴은 JetBrains의 OFL 1.1)로 받는다.
 - 본문 글은 글자마다 Inter에 있으면 Inter, 없으면(한글) Noto Sans KR로 정하고, 글꼴이 바뀌는 구간마다 그 글꼴로 폭을 재서 더한다. 띄어쓰기는 Inter 것이다.
-- JetBrains Mono에는 한글이 없다. 고정폭 글(선 라벨, 순서 그림 메시지, 테이블 타입, 차트 눈금과 값 등) 안의 한글은 Noto Sans KR로 그린다. 글자마다 고정폭 글꼴, Inter, Noto Sans KR 순서로 처음 있는 글꼴로 정하고 위와 같이 구간별로 폭을 더한다.
+- JetBrains Mono에는 한글이 없다. 고정폭 글(테이블 타입, 백틱 구간) 안의 한글은 Noto Sans KR로 그린다. 글자마다 고정폭 글꼴, Inter, Noto Sans KR 순서로 처음 있는 글꼴로 정하고 위와 같이 구간별로 폭을 더한다.
 - 그림에는 쓴 글꼴마다 조각이 들어간다. Inter 조각은 `FigSans`, Noto Sans KR 조각은 `FigSansKo`, 고정폭 조각은 `FigMono`이고 `font-family`는 본문 `FigSans, FigSansKo, ...`, 고정폭 `FigMono, FigSans, FigSansKo, ...` 대체 사슬이다. 브라우저가 글자마다 고르는 글꼴과 잰 글꼴이 같다.
+- 차트 숫자 폭은 Inter 파일의 `tnum` 기능을 적용해 잰다(`num`, `numSemibold` 글꼴). 글꼴 조각은 `tnum` 대체 글리프를 포함해 자른다. 그래서 보는 쪽이 `tabular-nums`로 그린 폭과 잰 폭이 같다.
+- 글 안의 백틱 구간은 이름이 무엇이든 고정폭으로 잰다. 줄을 나눌 때 구간이 줄 사이에 걸치면 줄마다 구간을 닫고 다시 열어 각 줄이 짝이 맞는 글이 된다. 넘침 검사와 글꼴 없는 글자 검사도 구간별 글꼴을 따른다.
 - 글 폭은 글꼴 파일의 글자 너비 표로 잰다. 어림 비율을 쓰지 않는다.
 - 결과 SVG에는 그 그림에 쓰인 글자만 잘라 낸 글꼴을 넣는다. 보는 쪽에 글꼴이 없어도 잰 폭과 그려진 폭이 같게 하기 위해서다.
 - 글꼴 파일과 대체 글꼴 어디에도 없는 글자(그림 문자 등)는 오류다. 대신 그릴 글꼴의 폭을 알 수 없기 때문이다.
@@ -59,8 +61,9 @@
 
 | 자리 | 글꼴 |
 |---|---|
-| 본문, 제목, 문단, 탭, 단추, 단계 이름 줄, 설명, 카드 글, 차트 제목과 범례 | 본문(Inter + Noto Sans KR) |
-| 선 라벨 알약, 순서 그림 메시지, 테이블 타입, 카드 `mono` 줄, 차트 눈금, 값, 칸 숫자, 비율, 배속 표시 | 고정폭(JetBrains Mono) |
+| 일반 글 모두: 도형 이름, 부제, 그룹 제목, 카드 글, 선 라벨 알약, 순서 그림 메시지, 노트, 이동 글 상자, 단계 이름 줄과 탭, 설명, 차트 제목과 범례, 페이지 제목, 문단, 꼬리표 | 본문(영문, 숫자, 기호는 Inter, 한글은 Noto Sans KR) |
+| 차트 숫자: 눈금, 값, 바뀐 비율, 히트맵 칸 숫자, 배속 표시 | Inter에 `font-variant-numeric: tabular-nums`(자리 폭이 같은 숫자) |
+| 코드: 데이터 그림 테이블 열 타입, 카드 `mono` 줄, 모든 글 안에서 백틱으로 감싼 구간 | 고정폭(JetBrains Mono). 한글은 Noto Sans KR |
 
 - 페이지(문서 미리보기, 목록 쪽, 재생기)에는 SVG 같은 글꼴 조각이 없으므로 토큰 `font.sans` 사슬의 이름(`Inter`, `Inter Variable`, `Noto Sans KR`, `Noto Sans KR Variable`, 시스템 대체)으로 보는 쪽 글꼴을 쓴다. 페이지 글을 글꼴 조각으로 넣으면 문서 글이 바뀔 때마다 한글 조각을 다시 잘라야 해서 넣지 않는다. 글꼴이 없는 컴퓨터에서는 시스템 대체로 보이고, 그림 안 글자는 조각 덕분에 그대로다.
 - 목록 쪽과 문서 미리보기의 카드 머리는 그림 제목(`title`)이 제목이고 예제 이름은 제목 옆 작은 회색 꼬리표다. 제목이 없으면 이름이 제목이다.

@@ -91,3 +91,64 @@ test('pages_use_inter_and_noto_chain_and_name_tag', async () => {
     assert.match(page, /<h2>막대 차트<span class="name">bar<\/span><\/h2>/);
   }
 });
+
+test('measure_num_face_uses_inter_tnum_digit_width', () => {
+  const font = fontkit.create(readFileSync(require.resolve(INTER)));
+  const tabular = font.layout('1.5k', ['tnum']).advanceWidth / font.unitsPerEm;
+  assertNear(measure('1.5k', 11, 'num'), tabular * 11);
+  assert.ok(measure('111', 11, 'num') > measure('111', 11, 'regular'));
+  assertNear(measure('111', 11, 'num'), measure('000', 11, 'num'));
+});
+
+test('embedFonts_num_text_keeps_tnum_glyphs_in_inter_piece', async () => {
+  const glyphs = createGlyphSet();
+  glyphs.add('0123456789', 'num');
+  const css = await embedFonts(glyphs.used);
+  assert.equal(css.match(/@font-face/g).length, 1);
+  const piece = Buffer.from(/base64,([^)]+)\)/.exec(css)[1], 'base64');
+  const subset = fontkit.create(piece);
+  assert.ok(subset.availableFeatures.includes('tnum'));
+  assertNear(subset.layout('1', ['tnum']).advanceWidth, subset.layout('0', ['tnum']).advanceWidth);
+});
+
+test('measure_backtick_span_uses_mono_width_without_marks', () => {
+  assertNear(measure('a `ab` b', 12, 'regular'), measure('a ', 12) + widthIn('jetbrains-mono/fonts/webfonts/JetBrainsMono-Regular.woff2', 'ab', 12) + measure(' b', 12));
+  assertNear(measure('`요청`', 12, 'regular'), measure('요청', 12, 'regular'));
+});
+
+test('embedFonts_backtick_span_embeds_mono_piece_only_for_code', async () => {
+  const glyphs = createGlyphSet();
+  glyphs.add('plain `x`', 'regular');
+  const css = await embedFonts(glyphs.used);
+  assert.match(css, /font-family:FigMono/);
+  assert.match(css, /font-family:FigSans;/);
+});
+
+test('wrap_splits_backtick_span_and_pairs_marks_per_line', () => {
+  const lines = wrap('aa `bb cc dd` ee', measure('aa `bb`', 12), 12);
+  assert.ok(lines.length > 1);
+  for (const line of lines) assert.equal((line.match(/`/g) ?? []).length % 2, 0);
+  assert.equal(lines.join(' ').replaceAll('`', '').replace(/\s+/g, ' '), 'aa bb cc dd ee');
+});
+
+test('findMissingGlyph_checks_backtick_span_against_mono_chain', () => {
+  assert.equal(findMissingGlyph('`요청`'), undefined);
+  assert.equal(findMissingGlyph('a `b😀`'), '😀');
+});
+
+test('renderRich_wraps_code_and_muted_in_tspans', async () => {
+  const { renderRich } = await import('../src/text.js');
+  assert.equal(renderRich('a <b>'), 'a &lt;b&gt;');
+  assert.equal(renderRich('a `b` c'), 'a <tspan class="code">b</tspan> c');
+  assert.equal(renderRich('a `bc`', 3), 'a <tspan class="code">b</tspan><tspan class="code muted">c</tspan>');
+});
+
+test('chart_and_label_css_use_body_font_with_tabular_numbers', async () => {
+  const { readFileSync: read } = await import('node:fs');
+  const chart = read(new URL('../src/styles/chart.css', import.meta.url), 'utf8');
+  const figure = read(new URL('../src/styles/figure.css', import.meta.url), 'utf8');
+  assert.doesNotMatch(chart, /font-mono/);
+  assert.match(chart, /\.chart-value,[^}]*font-variant-numeric: tabular-nums/s);
+  assert.match(figure, /\.fl \.code \{\s*font-family: var\(--font-mono\)/);
+  assert.doesNotMatch(figure.match(/\.fl \.edgelabel \{[^}]*\}/)[0], /font-mono/);
+});

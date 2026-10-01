@@ -2,7 +2,7 @@
 import { measure } from '../measure/fonts.js';
 import { MINI_TEXT } from '../measure/minigraph.js';
 import { CARD, STYLE } from '../measure/sizes.js';
-import { centerBaseline, escapeXml, roundCoord as r } from '../text.js';
+import { centerBaseline, plainText, renderRich, roundCoord as r } from '../text.js';
 import { tokens, values } from '../tokens.js';
 
 const SPACE = values.space;
@@ -64,7 +64,7 @@ function drawRows(layout, box, toneOf) {
       if (isHeading) y += STYLE.row.line;
       const indent = !isHeading && tagW ? tagW : 0;
       const body = row.text + (row.meta !== undefined ? ` · ${row.meta}` : '');
-      const texts = row.meta !== undefined ? splitMeta(lines, body, row.text.length) : lines.map(escapeXml);
+      const texts = row.meta !== undefined ? splitMeta(lines, body, plainText(row.text).length) : lines.map((line) => renderRich(line));
       lines.forEach((_, li) => {
         parts.push(`<text x="${r(left + (li === 0 ? indent : 0))}" y="${r(y + STYLE.row.size)}" class="row${row.isMono ? ' mono' : ''}">${texts[li]}</text>`);
         y += STYLE.row.line;
@@ -83,7 +83,7 @@ function drawTag(row, x, y, toneOf) {
   const width = measureTag(tag);
   return (
     `<rect x="${r(x)}" y="${r(y + SPACE['0-5'])}" width="${r(width)}" height="${height}" rx="${RADIUS.sm}" fill="${tone}" fill-opacity="${values.opacity.tag}"/>` +
-    `<text x="${r(x + width / 2)}" y="${r(centerBaseline(y + SPACE['0-5'] + height / 2, STYLE.tag.size))}" class="tag" fill="${tone}">${escapeXml(tag)}</text>`
+    `<text x="${r(x + width / 2)}" y="${r(centerBaseline(y + SPACE['0-5'] + height / 2, STYLE.tag.size))}" class="tag" fill="${tone}">${renderRich(tag)}</text>`
   );
 }
 
@@ -92,21 +92,21 @@ function measureTag(tag) {
 }
 
 function drawMark(row, right, y) {
-  return row.mark ? `<text x="${r(right)}" y="${r(y + STYLE.row.size)}" class="mark">${escapeXml(row.mark)}</text>` : '';
+  return row.mark ? `<text x="${r(right)}" y="${r(y + STYLE.row.size)}" class="mark">${renderRich(row.mark)}</text>` : '';
 }
 
 // cost: time O(r·n), heap O(n), stack O(1)
 // vars: r = 줄 수, n = 글자 수
 // basis: estimate
-// 나눈 줄마다 원래 글(body)의 metaAt 자리부터를 흐리게 쓴다. 덧붙임 전체가 흐리다.
+// 나눈 줄마다 원래 글(body)의 metaAt 자리부터를 흐리게 쓴다. 덧붙임 전체가 흐리다. 자리는 백틱 표시를 뺀 글자 기준이다.
 function splitMeta(lines, body, metaAt) {
+  const plainBody = plainText(body);
   let cursor = 0;
   return lines.map((line) => {
-    const start = Math.max(cursor, body.indexOf(line, cursor));
-    cursor = start + line.length;
-    const cut = Math.min(line.length, Math.max(0, metaAt - start));
-    const muted = line.slice(cut);
-    return escapeXml(line.slice(0, cut)) + (muted ? `<tspan class="muted">${escapeXml(muted)}</tspan>` : '');
+    const plain = plainText(line);
+    const start = Math.max(cursor, plainBody.indexOf(plain, cursor));
+    cursor = start + plain.length;
+    return renderRich(line, Math.max(0, metaAt - start));
   });
 }
 
@@ -132,7 +132,7 @@ function drawMiniGraph(laid, x, y) {
     const stroke = n.isLit ? tokens.color.accent : tokens.color.border;
     return (
       `<rect x="${r(x + n.x)}" y="${r(y + n.y)}" width="${r(n.w)}" height="${n.h}" rx="${n.h / 2}" fill="${fill}" stroke="${stroke}" stroke-width="${values.border.thin}"/>` +
-      `<text x="${r(x + n.x + n.w / 2)}" y="${r(centerBaseline(y + n.y + n.h / 2, MINI_TEXT))}" class="mini${n.isLit ? ' on' : ''}">${escapeXml(n.name)}</text>`
+      `<text x="${r(x + n.x + n.w / 2)}" y="${r(centerBaseline(y + n.y + n.h / 2, MINI_TEXT))}" class="mini${n.isLit ? ' on' : ''}">${renderRich(n.name)}</text>`
     );
   });
   return lines.join('') + pills.join('');
