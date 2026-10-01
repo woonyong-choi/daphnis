@@ -42,7 +42,7 @@ export async function toSvg(result, { isStatic = false, name = '' } = {}) {
   return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="fl${content.className}" width="${r(width)}" height="${r(height)}" viewBox="0 0 ${r(width)} ${r(height)}" role="img">
 <title>${escapeXml(title)}</title>
 <style>${fonts}
-${STYLES.tokens}${STYLES.figure}${STYLES.animated}${result.chart ? STYLES.chart + chartMotionCss(timeline.growMs) : ''}
+${STYLES.tokens}${STYLES.figure}${STYLES.animated}${result.chart ? STYLES.chart + chartMotionCss(timeline.growMs, result.chart.dotAts) : ''}
 ${animator.css.join('\n')}
 </style>
 <defs>${DEFS}</defs>
@@ -234,6 +234,11 @@ function createAnimator({ segs, total, growMs }) {
           `@keyframes w${s} { 0%,${a} { clip-path: inset(0 100% 0 0); ${ease} } ${b},100% { clip-path: inset(0 0 0 0) } }\n.fl .cs-${s} .wipe, .fl .cs-${s}.wipe { animation: w${s} ${duration} infinite; }\n` +
           `@keyframes f${s} { 0%,${half} { opacity: 0; ${ease} } ${b},100% { opacity: 1 } }\n.fl .cs-${s} .late, .fl .cs-${s} .pop, .fl .cs-${s}.pop { animation: f${s} ${duration} infinite; }`,
       );
+      // 선 차트 점은 선이 닿는 시각(data-at × 자라는 시간)에 나타난다. 시각 계산은 chart/draw.js arrivals가 끝냈다.
+      for (const at of drawn.dotAts) {
+        const [from, to] = [percent(reveal.t0 + at * grow), percent(reveal.t0 + at * grow + values.duration.fast)];
+        css.push(`@keyframes p${s}-${Math.round(at * 1000)} { 0%,${from} { opacity: 0; ${ease} } ${to},100% { opacity: 1 } }\n.fl .cs-${s} .dot[data-at="${at}"] { animation: p${s}-${Math.round(at * 1000)} ${duration} infinite; }`);
+      }
     });
     // 행 이름의 세로 옮김은 시간표가 박자마다 정해 둔 값을 그대로 건다. 모든 박자가 0이면 만들지 않는다.
     if (segs.some((g) => g.labelShift)) {

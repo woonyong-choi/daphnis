@@ -172,7 +172,7 @@
   --border-tag: 1.5px;
   --border-edge: 1.75px;
   --border-strong: 2.5px;
-  --border-halo: 4px;
+  --border-halo: 8px;
   --dash-line: 5;
   --dash-gap: 4;
   --dash-card: 3;
@@ -863,6 +863,32 @@ html.embedded .fl-canvas svg {
   transition: opacity var(--duration-fast);
 }
 
+.fl .play .dot, .fl .play.dot { animation: chart-dot 200ms var(--easing-reveal) both; }
+@keyframes chart-dot { from { opacity: 0; } }
+.fl .play .dot[data-at="0"] { animation-delay: 0ms; }
+.fl.chart-loop .dot[data-at="0"] { animation: chart-dot-loop-0 7000ms infinite both; }
+@keyframes chart-dot-loop-0 { 0%, 0% { opacity: 0; animation-timing-function: var(--easing-reveal); } 2.86%, 100% { opacity: 1; } }
+.fl .play .dot[data-at="0.16"] { animation-delay: 144ms; }
+.fl.chart-loop .dot[data-at="0.16"] { animation: chart-dot-loop-1 7000ms infinite both; }
+@keyframes chart-dot-loop-1 { 0%, 2.06% { opacity: 0; animation-timing-function: var(--easing-reveal); } 4.91%, 100% { opacity: 1; } }
+.fl .play .dot[data-at="0.163"] { animation-delay: 147ms; }
+.fl.chart-loop .dot[data-at="0.163"] { animation: chart-dot-loop-2 7000ms infinite both; }
+@keyframes chart-dot-loop-2 { 0%, 2.1% { opacity: 0; animation-timing-function: var(--easing-reveal); } 4.95%, 100% { opacity: 1; } }
+.fl .play .dot[data-at="0.342"] { animation-delay: 308ms; }
+.fl.chart-loop .dot[data-at="0.342"] { animation: chart-dot-loop-3 7000ms infinite both; }
+@keyframes chart-dot-loop-3 { 0%, 4.4% { opacity: 0; animation-timing-function: var(--easing-reveal); } 7.25%, 100% { opacity: 1; } }
+.fl .play .dot[data-at="0.352"] { animation-delay: 317ms; }
+.fl.chart-loop .dot[data-at="0.352"] { animation: chart-dot-loop-4 7000ms infinite both; }
+@keyframes chart-dot-loop-4 { 0%, 4.53% { opacity: 0; animation-timing-function: var(--easing-reveal); } 7.38%, 100% { opacity: 1; } }
+.fl .play .dot[data-at="0.563"] { animation-delay: 507ms; }
+.fl.chart-loop .dot[data-at="0.563"] { animation: chart-dot-loop-5 7000ms infinite both; }
+@keyframes chart-dot-loop-5 { 0%, 7.24% { opacity: 0; animation-timing-function: var(--easing-reveal); } 10.1%, 100% { opacity: 1; } }
+.fl .play .dot[data-at="0.574"] { animation-delay: 517ms; }
+.fl.chart-loop .dot[data-at="0.574"] { animation: chart-dot-loop-6 7000ms infinite both; }
+@keyframes chart-dot-loop-6 { 0%, 7.38% { opacity: 0; animation-timing-function: var(--easing-reveal); } 10.24%, 100% { opacity: 1; } }
+.fl .play .dot[data-at="1"] { animation-delay: 900ms; }
+.fl.chart-loop .dot[data-at="1"] { animation: chart-dot-loop-7 7000ms infinite both; }
+@keyframes chart-dot-loop-7 { 0%, 12.86% { opacity: 0; animation-timing-function: var(--easing-reveal); } 15.71%, 100% { opacity: 1; } }
 .fl .play .grow, .fl .play.grow { animation: chart-grow 900ms var(--easing-reveal) both; }
 .fl .play .draw, .fl .play.draw { animation: chart-draw 900ms var(--easing-reveal) both; }
 .fl .play .wipe, .fl .play.wipe { animation: chart-wipe 900ms var(--easing-reveal) both; }
@@ -893,16 +919,16 @@ html.embedded .fl-canvas svg {
 <g class="cs-1"><path d="M 76 158.5 L 195 165.5 L 314 160.3 L 433 155.1 L 552 165.5 L 552 215.7 L 433 208.8 L 314 217.5 L 195 219.2 L 76 212.3 Z" fill="var(--color-series-2)" class="chart-band wipe"/></g>
 <g class="cs-0"><path d="M 76 181.1 L 195 226.1 L 314 272.9 L 433 305.9 L 552 316.3" fill="none" stroke="var(--color-series-1)" stroke-width="2.5" pathLength="1" class="draw"/></g>
 <g class="cs-1"><path d="M 76 186.3 L 195 193.2 L 314 189.7 L 433 182.8 L 552 191.5" fill="none" stroke="var(--color-series-2)" stroke-width="2.5" pathLength="1" class="draw"/></g>
-<g class="cr-0"><g class="cs-0"><circle cx="76" cy="181.1" r="5" fill="var(--color-series-1)" class="pop"/></g></g>
-<g class="cr-0"><g class="cs-1"><circle cx="76" cy="186.3" r="5" fill="var(--color-series-2)" class="pop"/></g></g>
-<g class="cr-1"><g class="cs-0"><circle cx="195" cy="226.1" r="5" fill="var(--color-series-1)" class="pop"/></g></g>
-<g class="cr-1"><g class="cs-1"><circle cx="195" cy="193.2" r="5" fill="var(--color-series-2)" class="pop"/></g></g>
-<g class="cr-2"><g class="cs-0"><circle cx="314" cy="272.9" r="5" fill="var(--color-series-1)" class="pop"/></g></g>
-<g class="cr-2"><g class="cs-1"><circle cx="314" cy="189.7" r="5" fill="var(--color-series-2)" class="pop"/></g></g>
-<g class="cr-3"><g class="cs-0"><circle cx="433" cy="305.9" r="5" fill="var(--color-series-1)" class="pop"/></g></g>
-<g class="cr-3"><g class="cs-1"><circle cx="433" cy="182.8" r="5" fill="var(--color-series-2)" class="pop"/></g></g>
-<g class="cr-4"><g class="cs-0"><circle cx="552" cy="316.3" r="5" fill="var(--color-series-1)" class="pop"/></g></g>
-<g class="cr-4"><g class="cs-1"><circle cx="552" cy="191.5" r="5" fill="var(--color-series-2)" class="pop"/></g></g>
+<g class="cr-0"><g class="cs-0"><circle cx="76" cy="181.1" r="5" fill="var(--color-series-1)" class="dot" data-at="0"/></g></g>
+<g class="cr-0"><g class="cs-1"><circle cx="76" cy="186.3" r="5" fill="var(--color-series-2)" class="dot" data-at="0"/></g></g>
+<g class="cr-1"><g class="cs-0"><circle cx="195" cy="226.1" r="5" fill="var(--color-series-1)" class="dot" data-at="0.163"/></g></g>
+<g class="cr-1"><g class="cs-1"><circle cx="195" cy="193.2" r="5" fill="var(--color-series-2)" class="dot" data-at="0.16"/></g></g>
+<g class="cr-2"><g class="cs-0"><circle cx="314" cy="272.9" r="5" fill="var(--color-series-1)" class="dot" data-at="0.352"/></g></g>
+<g class="cr-2"><g class="cs-1"><circle cx="314" cy="189.7" r="5" fill="var(--color-series-2)" class="dot" data-at="0.342"/></g></g>
+<g class="cr-3"><g class="cs-0"><circle cx="433" cy="305.9" r="5" fill="var(--color-series-1)" class="dot" data-at="0.574"/></g></g>
+<g class="cr-3"><g class="cs-1"><circle cx="433" cy="182.8" r="5" fill="var(--color-series-2)" class="dot" data-at="0.563"/></g></g>
+<g class="cr-4"><g class="cs-0"><circle cx="552" cy="316.3" r="5" fill="var(--color-series-1)" class="dot" data-at="1"/></g></g>
+<g class="cr-4"><g class="cs-1"><circle cx="552" cy="191.5" r="5" fill="var(--color-series-2)" class="dot" data-at="1"/></g></g>
 <line x1="76" x2="552" y1="309.3" y2="309.3" class="chart-rule"/><text x="552" y="305.3" class="chart-rule-label end">목표</text><g class="fl-packets"></g></svg></div>
 <figcaption class="fl-foot">
 <div class="fl-bar"><button type="button" class="fl-round fl-pause"></button><div class="fl-tabs" role="tablist"></div><button type="button" class="fl-round fl-rate" aria-label="배속">1×</button></div>

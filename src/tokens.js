@@ -436,7 +436,7 @@ export const values = freeze({
     "tag": 1.5,
     "edge": 1.75,
     "strong": 2.5,
-    "halo": 4
+    "halo": 8
   },
   "dash": {
     "line": 5,

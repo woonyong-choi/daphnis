@@ -172,7 +172,7 @@
   --border-tag: 1.5px;
   --border-edge: 1.75px;
   --border-strong: 2.5px;
-  --border-halo: 4px;
+  --border-halo: 8px;
   --dash-line: 5;
   --dash-gap: 4;
   --dash-card: 3;
@@ -863,6 +863,9 @@ html.embedded .fl-canvas svg {
   transition: opacity var(--duration-fast);
 }
 
+.fl .play .dot, .fl .play.dot { animation: chart-dot 200ms var(--easing-reveal) both; }
+@keyframes chart-dot { from { opacity: 0; } }
+
 .fl .play .grow, .fl .play.grow { animation: chart-grow 900ms var(--easing-reveal) both; }
 .fl .play .draw, .fl .play.draw { animation: chart-draw 900ms var(--easing-reveal) both; }
 .fl .play .wipe, .fl .play.wipe { animation: chart-wipe 900ms var(--easing-reveal) both; }
@@ -907,7 +910,7 @@ html.embedded .fl-canvas svg {
 <g class="cr-1"><g class="cs-1"><text x="356.7" y="185" class="chart-value late">44.1</text></g></g>
 <g class="cr-2"><g class="cs-0"><text x="504.9" y="219" class="chart-value ours late">85</text></g></g>
 <g class="cr-3"><g class="cs-0"><text x="516.5" y="269" class="chart-value ours late">88.5</text></g></g>
-<g class="cr-3"><g class="cs-1"><text x="474.8" y="285" class="chart-value late">70.3</text></g></g>
+<g class="cr-3"><g class="cs-1"><text x="453" y="285" class="chart-value late">70.3</text></g></g>
 <line x1="168" x2="544" y1="295" y2="295" class="chart-axis"/><text x="168" y="312" class="chart-tick">0</text><text x="243.2" y="312" class="chart-tick">20</text><text x="318.4" y="312" class="chart-tick">40</text><text x="393.6" y="312" class="chart-tick">60</text><text x="468.8" y="312" class="chart-tick">80</text><text x="544" y="312" class="chart-tick">100</text><text x="544" y="329" class="chart-unit">정확도(%)</text><g class="fl-packets"></g></svg></div>
 <figcaption class="fl-foot">
 <div class="fl-bar"><button type="button" class="fl-round fl-pause"></button><div class="fl-tabs" role="tablist"></div><button type="button" class="fl-round fl-rate" aria-label="배속">1×</button></div>

@@ -164,7 +164,7 @@
   --border-tag: 1.5px;
   --border-edge: 1.75px;
   --border-strong: 2.5px;
-  --border-halo: 4px;
+  --border-halo: 8px;
   --dash-line: 5;
   --dash-gap: 4;
   --dash-card: 3;

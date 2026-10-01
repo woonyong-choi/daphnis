@@ -63,7 +63,7 @@ export async function toHtml(result, name) {
 <title>${escapeXml(figure.title ?? name)}</title>
 ${EMBED_SCRIPT}
 <style>${fonts}
-${STYLES.tokens}${STYLES.player}${STYLES.figure}${STYLES.chart}${result.chart ? chartMotionCss(timeline.growMs) : ''}</style>
+${STYLES.tokens}${STYLES.player}${STYLES.figure}${STYLES.chart}${result.chart ? chartMotionCss(timeline.growMs, result.chart.dotAts) : ''}</style>
 </head>
 <body>
 <figure class="fl-figure${result.chart ? ' fl-chart-page' : ''}" tabindex="0">

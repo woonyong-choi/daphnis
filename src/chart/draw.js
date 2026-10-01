@@ -3,6 +3,7 @@ import { measure } from '../measure/fonts.js';
 import { STYLE } from '../measure/sizes.js';
 import { centerBaseline, escapeXml, roundCoord as r } from '../text.js';
 import { tokens, values } from '../tokens.js';
+import { curveOf, timeAt } from '../easing.js';
 import { formatChange, formatNumber, makeScale } from './scale.js';
 
 const SPACE = values.space;
@@ -27,13 +28,14 @@ const VALUE_W = SPACE['30'] + SPACE['18'];
 const HEAT_LOW = values.color['heat-low'];
 const HEAT_HIGH = values.color['heat-high'];
 const SERIES_COLOR = [tokens.color['series-1'], tokens.color['series-2']];
+const REVEAL = curveOf('reveal');
 
 // cost: time O(r·s + t), heap O(out), stack O(1)
 // vars: r = 행 수, s = 계열 수, t = 눈금 수, out = 만든 SVG 글자 수
 // basis: estimate
 /**
  * 차트 하나를 그린다.
- * @returns { body, width, height, rowKeys, fits }. rowKeys[k]는 행 k의 light 이름이다. fits는 칸에 들어가야 하는 글({ text, width, room, line, what })이다
+ * @returns { body, width, height, rowKeys, fits, dotAts }. rowKeys[k]는 행 k의 light 이름이다. dotAts는 선 차트 점이 나타나는 시각(자라는 시간 대비 비율, `data-at`)의 오름차순 목록이다. fits는 칸에 들어가야 하는 글({ text, width, room, line, what })이다
  */
 export function drawChart(figure) {
   const header = drawHeader(figure);
@@ -41,7 +43,7 @@ export function drawChart(figure) {
   const plot = draw(figure, header.bottom);
   // 계열이 없는 차트는 그림 전체를 계열 0으로 묶는다. 시간표가 차트 전체를 계열 하나로 보기 때문이다(timeline.js chartSeriesIds).
   const marks = figure.chart.series.length ? plot.svg : `<g class="cs-0">${plot.svg}</g>`;
-  return { body: `${header.svg}\n${marks}`, width: WIDTH, height: plot.bottom + PAD, rowKeys: plot.rowKeys, fits: plot.fits ?? [] };
+  return { body: `${header.svg}\n${marks}`, width: WIDTH, height: plot.bottom + PAD, rowKeys: plot.rowKeys, fits: plot.fits ?? [], dotAts: plot.dotAts ?? [] };
 }
 
 // cost: time O(r·n), heap O(1), stack O(1)
@@ -94,7 +96,7 @@ function drawHeader(figure) {
 // vars: r = 행 수, s = 계열 수, out = 만든 SVG 글자 수
 // basis: estimate
 // 막대: 행마다 계열 막대를 쌓고, 신뢰구간 막대기(끝 캡 없는 선)와 값 글자를 붙인다. 값이 없으면 missing 글이다.
-// 값 글자는 기준선 위에 그려야 기준선에 가려지지 않으므로, 막대, 기준선, 값 글자 순으로 쌓는다.
+// 값 글자는 기준선에 걸려도 비키지 않고 막대 끝 옆에 둔다. 기준선보다 위에 그려 글자의 바탕색 테두리(halo)가 점선을 가리므로 막대, 기준선, 값 글자 순으로 쌓는다.
 function drawBars(figure, top) {
   const { chart } = figure;
   const plotX = labelColumn(chart.rows.map((row) => row.label)) + PAD;
@@ -121,7 +123,7 @@ function drawBars(figure, top) {
       const reach = high !== undefined ? scale.at(high) : end;
       const ci = high !== undefined ? `<line x1="${r(scale.at(low))}" x2="${r(reach)}" y1="${r(cy)}" y2="${r(cy)}" class="chart-ci late"/>` : '';
       parts.push(`<g class="cr-${k}"><g class="cs-${i}"><rect x="${r(plotX)}" y="${r(by)}" width="${r(Math.max(SPACE['1'], end - plotX))}" height="${BAR}" rx="${values.radius.sm}" fill="${SERIES_COLOR[i]}" class="grow"/>${ci}</g></g>`);
-      valueTexts.push(`<g class="cr-${k}"><g class="cs-${i}"><text x="${r(valueX(formatNumber(v), Math.max(end, reach), chart.rules, scale))}" y="${r(centerBaseline(cy, TEXT['11']))}" class="chart-value${i === 0 ? ' ours' : ''} late">${formatNumber(v)}</text></g></g>`);
+      valueTexts.push(`<g class="cr-${k}"><g class="cs-${i}"><text x="${r(Math.max(end, reach) + SPACE['3'])}" y="${r(centerBaseline(cy, TEXT['11']))}" class="chart-value${i === 0 ? ' ours' : ''} late">${formatNumber(v)}</text></g></g>`);
     });
     y += groupH + SPACE['11'];
   });
@@ -132,21 +134,11 @@ function drawBars(figure, top) {
   return { svg: parts.join('\n'), bottom: bottom + SPACE['4'] + TEXT['11'] * 2 + SPACE['9'], rowKeys: chart.rows.map((row) => row.label), fits: chart.rows.map((row) => labelFit(row.label, row.line)) };
 }
 
-// cost: time O(n + u), heap O(1), stack O(1)
-// vars: n = 글자 수, u = 기준선 수
-// basis: estimate
-// 막대 값 글자의 왼쪽 x. 막대 끝(신뢰구간 끝) 바깥에 두되, 기준선이 글자에 걸리면 기준선 오른쪽으로 비킨다.
-function valueX(text, reach, rules, scale) {
-  const [start, width] = [reach + SPACE['3'], measure(text, TEXT['11'], 'mono')];
-  const hit = rules.map((rule) => scale.at(rule.value)).filter((x) => x > start - SPACE['2'] && x < start + width + SPACE['2']);
-  return hit.length ? Math.max(...hit) + SPACE['3'] : start;
-}
-
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 선 차트에서 신뢰구간이 한 점뿐일 때 쓰는 세로 오차 막대. 경로 d는 구간 선과 양 끝 캡이고, 흰 바탕 위라서 보조 글자 색 가는 선으로 점보다 앞서지 않게 한다.
-function pointInterval(d) {
-  return `<path d="${d}" class="chart-interval late"/>`;
+// 선 차트에서 신뢰구간이 한 점뿐일 때 쓰는 세로 오차 막대. 점과 같은 시각 at에 나타난다. 경로 d는 구간 선과 양 끝 캡이고, 흰 바탕 위라서 보조 글자 색 가는 선으로 점보다 앞서지 않게 한다.
+function pointInterval(d, at) {
+  return `<path d="${d}" class="chart-interval dot" data-at="${at}"/>`;
 }
 
 // cost: time O(r + t), heap O(out), stack O(1)
@@ -266,8 +258,8 @@ function drawScatter(figure, top) {
   return { svg: parts.join('\n'), bottom: plotTop + SIZE['chart-plot-h'] + TEXT['11'] * 2 + SPACE['12'], rowKeys: chart.rows.map((p) => p.label), fits };
 }
 
-// cost: time O(p·s + t), heap O(out), stack O(1)
-// vars: p = 점 수, s = 계열 수, t = 눈금 수, out = 만든 SVG 글자 수
+// cost: time O(p·s·STEPS + t), heap O(out), stack O(1)
+// vars: p = 점 수, s = 계열 수, STEPS = timeAt의 이분 탐색 횟수, t = 눈금 수, out = 만든 SVG 글자 수
 // basis: estimate
 // 선 차트: 계열마다 선과 점 표시. x 순서대로 잇는다. 신뢰구간은 계열 색의 옅은 띠(low~high)이고 선과 점은 띠 위에 그린다.
 // 신뢰구간이 이어진 점이 하나뿐이면 띠가 면이 못 되므로 세로 오차 막대로 그린다.
@@ -277,8 +269,10 @@ function drawLine(figure, top) {
   const ys = points.flatMap((p) => chart.series.flatMap((s) => [p.values[s.id], p.values[`${s.id}.low`], p.values[`${s.id}.high`]])).filter((v) => v !== undefined);
   const { sx, sy, frame, top: plotTop } = plotFrame(figure, top, points.map((p) => p.values.x), ys);
   const parts = [frame];
+  const order = new Map(points.map((p, k) => [p, k]));
+  const ats = chart.series.map((s) => arrivals(points.map((p) => [sx.at(p.values.x), sy.at(p.values[s.id])])));
   chart.series.forEach((s, i) => {
-    const bands = intervalRuns(points, s.id).map((run) => (run.length > 1 ? bandPath(run, s.id, sx, sy, i) : pointInterval(verticalInterval(sx.at(run[0].values.x), sy.at(run[0].values[`${s.id}.low`]), sy.at(run[0].values[`${s.id}.high`])), true)));
+    const bands = intervalRuns(points, s.id).map((run) => (run.length > 1 ? bandPath(run, s.id, sx, sy, i) : pointInterval(verticalInterval(sx.at(run[0].values.x), sy.at(run[0].values[`${s.id}.low`]), sy.at(run[0].values[`${s.id}.high`])), ats[i][order.get(run[0])])));
     if (bands.length) parts.push(`<g class="cs-${i}">${bands.join('')}</g>`);
   });
   chart.series.forEach((s, i) => {
@@ -286,10 +280,22 @@ function drawLine(figure, top) {
     parts.push(`<g class="cs-${i}"><path d="${d}" fill="none" stroke="${SERIES_COLOR[i]}" stroke-width="${values.border.strong}" pathLength="1" class="draw"/></g>`);
   });
   chart.rows.forEach((p, k) => {
-    for (const [i, s] of chart.series.entries()) parts.push(`<g class="cr-${k}"><g class="cs-${i}"><circle cx="${r(sx.at(p.values.x))}" cy="${r(sy.at(p.values[s.id]))}" r="${DOT}" fill="${SERIES_COLOR[i]}" class="pop"/></g></g>`);
+    for (const [i, s] of chart.series.entries()) parts.push(`<g class="cr-${k}"><g class="cs-${i}"><circle cx="${r(sx.at(p.values.x))}" cy="${r(sy.at(p.values[s.id]))}" r="${DOT}" fill="${SERIES_COLOR[i]}" class="dot" data-at="${ats[i][order.get(p)]}"/></g></g>`);
   });
   parts.push(drawRules(chart.rules, sy, sx.at(sx.ticks[0]), sx.at(sx.ticks.at(-1)), 'y'));
-  return { svg: parts.join('\n'), bottom: plotTop + SIZE['chart-plot-h'] + TEXT['11'] * 2 + SPACE['12'], rowKeys: chart.rows.map((p) => `x=${p.values.x}`) };
+  return { svg: parts.join('\n'), bottom: plotTop + SIZE['chart-plot-h'] + TEXT['11'] * 2 + SPACE['12'], rowKeys: chart.rows.map((p) => `x=${p.values.x}`), dotAts: [...new Set(ats.flat())].sort((a, b) => a - b) };
+}
+
+// cost: time O(p·STEPS), heap O(p), stack O(1)
+// vars: p = 점 수, STEPS = timeAt의 이분 탐색 횟수
+// basis: estimate
+// 선이 점마다 닿는 시각. 선은 왼쪽부터 길이 순서로 그려지고(dashoffset) 길이 비율 f에 닿는 시간 비율은 easing.reveal을 거꾸로 푼 timeAt(f)이다.
+// 값은 자라는 시간 대비 비율이고 소수 셋째 자리로 줄인다. 재생기와 움직이는 SVG가 이 값에 자라는 시간을 곱해 쓴다.
+function arrivals(xy) {
+  const lengths = [0];
+  for (let k = 1; k < xy.length; k++) lengths.push(lengths[k - 1] + Math.hypot(xy[k][0] - xy[k - 1][0], xy[k][1] - xy[k - 1][1]));
+  const total = lengths.at(-1) || 1;
+  return lengths.map((length) => Math.round(timeAt(REVEAL, length / total) * 1000) / 1000);
 }
 
 // cost: time O(p), heap O(p), stack O(1)

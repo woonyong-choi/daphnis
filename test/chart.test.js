@@ -227,13 +227,55 @@ test('drawDumbbells_close_values_drop_arrow_and_keep_value_text_apart', async ()
   assert.ok(textX(near, 'second') > textX(near, 'first'));
 });
 
-test('drawBars_value_text_moves_right_of_rule_and_draws_after_rule', async () => {
-  const body = await bodyOf('chart bar\nseries a "A"\nrule 80 "기준"\nrow "r" a=70.3 a.low=66 a.high=74.2');
-  const rule = Number(/<line x1="([\d.]+)"[^>]*class="chart-rule"/.exec(body)[1]);
-  const text = /<text x="([\d.]+)"[^>]*class="chart-value ours late">70.3/.exec(body);
+test('drawBars_value_text_stays_next_to_bar_end_and_draws_after_rule', async () => {
+  const { values } = await import('../src/tokens.js');
+  const body = await bodyOf('chart bar\nseries a "A"\nrule 80 "기준"\nrow "r" a=70.3 a.low=66 a.high=74.2\nrow "s" a=50');
+  const gap = values.space['3'];
+  const ciEnd = Number(/<line x1="[\d.]+" x2="([\d.]+)"[^>]*class="chart-ci late"/.exec(body)[1]);
+  const [, barX, barW] = /<g class="cr-1"><g class="cs-0"><rect x="([\d.]+)" y="[\d.]+" width="([\d.]+)"/.exec(body).map(Number);
+  const textX = (value) => Number(new RegExp(`<text x="([\\d.]+)"[^>]*class="chart-value ours late">${value}`).exec(body)[1]);
 
-  assert.ok(Number(text[1]) > rule, `${text[1]} > ${rule}`);
+  assert.ok(Math.abs(textX('70.3') - (ciEnd + gap)) < 0.11);
+  assert.ok(Math.abs(textX('50') - (barX + barW + gap)) < 0.11);
   assert.ok(body.indexOf('class="chart-value') > body.indexOf('class="chart-rule"'));
+});
+
+test('chartCss_value_halo_uses_the_background_color_token_that_dark_mode_overrides', async () => {
+  const { STYLES } = await import('../src/styles.js');
+
+  assert.match(STYLES.chart, /\.fl \.chart-value \{[^}]*paint-order: stroke;[^}]*stroke: var\(--color-bg\);[^}]*stroke-width: var\(--border-halo\)/);
+  assert.match(STYLES.tokens, /prefers-color-scheme: dark\) \{[\s\S]*?--color-bg:/);
+});
+
+test('drawLine_dot_appears_when_the_line_reaches_it_along_the_reveal_curve', async () => {
+  const { curveOf, timeAt } = await import('../src/easing.js');
+  const { chart } = await buildFigure('chart line\nx "주차"\ny "점수(%)"\nseries a "A"\npoint x=1 a=1\npoint x=2 a=1\npoint x=3 a=1\npoint x=4 a=1\npoint x=5 a=1');
+  const ats = [...chart.body.matchAll(/<circle [^>]*class="dot" data-at="([\d.]+)"/g)].map((m) => Number(m[1]));
+  const reach = [0, 0.25, 0.5, 0.75, 1].map((length) => Math.round(timeAt(curveOf('reveal'), length) * 1000) / 1000);
+
+  assert.deepEqual(ats, reach);
+  assert.ok(ats[2] < 0.5, 'the reveal curve is ahead of linear time at half the length');
+  assert.deepEqual(chart.dotAts, reach);
+});
+
+test('chartMotionCss_delays_each_dot_by_its_arrival_share_of_the_grow_time', async () => {
+  const { chartMotionCss } = await import('../src/chart/motion.js');
+  const css = chartMotionCss(1000, [0, 0.4]);
+
+  assert.match(css, /\.fl \.play \.dot\[data-at="0\.4"\] \{ animation-delay: 400ms; \}/);
+  assert.match(css, /\.fl\.chart-loop \.dot\[data-at="0\.4"\] \{ animation: chart-dot-loop-1 /);
+  assert.match(css, /@keyframes chart-dot-loop-1 \{ 0%, 5\.71% \{ opacity: 0;/);
+});
+
+test('toSvg_animated_line_dot_keyframes_start_at_the_arrival_time_inside_the_grow', async () => {
+  const { toSvg } = await import('../src/svg.js');
+  const svg = await toSvg(await buildFigure('chart line\nx "주차"\ny "점수(%)"\nseries a "A"\npoint x=1 a=1\npoint x=2 a=2\npoint x=3 a=1\nstep "s"\n  reveal a'));
+  const starts = [...svg.matchAll(/@keyframes p0-\d+ \{ 0%,([\d.]+)%/g)].map((m) => Number(m[1]));
+
+  assert.equal(starts.length, 3);
+  assert.deepEqual(starts, [...starts].sort((a, b) => a - b));
+  assert.ok(starts[2] > starts[0]);
+  assert.match(svg, /\.fl \.cs-0 \.dot\[data-at="1"\] \{ animation: p0-1000 /);
 });
 
 test('drawChart_scatter_rejects_interval_keys_and_draws_no_interval', async () => {
