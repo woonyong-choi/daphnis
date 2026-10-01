@@ -25,6 +25,7 @@
 }
 
 .fl .chart-value {
+  fill: var(--color-fg);
   paint-order: stroke;
   stroke: var(--color-bg);
   stroke-width: var(--border-halo);
@@ -47,18 +48,10 @@
   text-anchor: end;
 }
 
-.fl .chart-value.ours {
-  font-weight: var(--weight-semibold);
-  fill: var(--color-accent);
-}
-
-.fl .chart-value.first {
-  fill: var(--color-series-1);
-}
-
+/* 값 글자는 계열과 상관없이 글자색이다. 계열은 막대, 점, 띠 색으로만 전하고 강조 계열(ours, second)은 굵기로만 구분한다. */
+.fl .chart-value.ours,
 .fl .chart-value.second {
   font-weight: var(--weight-semibold);
-  fill: var(--color-series-2);
 }
 
 .fl .chart-name.end {
@@ -76,7 +69,7 @@
   font-size: var(--size-text-12);
   font-weight: var(--weight-semibold);
   text-anchor: end;
-  fill: var(--color-accent);
+  fill: var(--color-fg);
 }
 
 .fl .chart-sub,

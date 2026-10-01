@@ -53,7 +53,7 @@ test('main_render_draws_rounded_backdrop_without_dot_grid', () => {
 
     assert.equal(result.status, 0, result.stderr);
     for (const file of ['a.svg', 'a.html']) assert.ok(!readFileSync(join(folder, file), 'utf8').includes('fl-dots'));
-    assert.match(readFileSync(join(folder, 'a.svg'), 'utf8'), /<rect width="100%" height="100%" rx="\d+"/);
+    assert.match(readFileSync(join(folder, 'a.svg'), 'utf8'), /<rect x="[\d.]+" y="[\d.]+" width="[\d.]+" height="[\d.]+" rx="\d+" fill="var\(--color-bg\)" stroke="var\(--color-plate-border\)"/);
   });
 });
 
@@ -166,7 +166,7 @@ test('main_html_player_has_no_figure_plate_and_card_parts_share_bg_but_svg_keeps
     const svg = readFileSync(join(folder, 'b.svg'), 'utf8');
     assert.ok(!html.includes('<rect width="100%" height="100%"'));
     for (const selector of ['\\.fl-figure', '\\.fl-canvas', '\\.fl-foot', 'html\\.embedded body']) assert.match(html, new RegExp(`${selector} \\{[^}]*background: var\\(--color-bg\\);`));
-    assert.match(svg, /<rect width="100%" height="100%" rx="\d+" fill="var\(--color-bg\)"\/>/);
+    assert.match(svg, /<rect x="[\d.]+" y="[\d.]+" width="[\d.]+" height="[\d.]+" rx="\d+" fill="var\(--color-bg\)" stroke="var\(--color-plate-border\)" stroke-width="1"\/>/);
   });
 });
 

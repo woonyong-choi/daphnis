@@ -12,24 +12,25 @@
   --color-gray-50: #eef1f5;
   --color-gray-100: #e3e7ec;
   --color-gray-200: #d5dbe3;
-  --color-gray-300: #b6c0cc;
+  --color-gray-400: #9ba6b4;
   --color-gray-600: #4b5563;
   --color-gray-900: #111418;
   --color-neutral-100: #e3e3e3;
   --color-neutral-400: #9aa0a6;
+  --color-neutral-600: #55585c;
   --color-neutral-700: #3a3b3c;
-  --color-neutral-750: #34363a;
+  --color-neutral-750: #3c3e42;
   --color-neutral-800: #2c2d30;
   --color-neutral-850: #242526;
   --color-neutral-900: #1b1b1d;
   --color-neutral-950: #111214;
-  --color-blue-150: #d3e2f5;
+  --color-blue-200: #b3cbea;
   --color-blue-100: #e3ecf8;
   --color-blue-50: #edf3fb;
   --color-blue-400: #3396e8;
-  --color-blue-600: #2a78d6;
+  --color-blue-600: #266dc6;
   --color-blue-900: #1d2733;
-  --color-blue-850: #263446;
+  --color-blue-850: #2b3d54;
   --color-blue-800: #1d4f91;
   --color-tone-blue: #3b82f6;
   --color-tone-purple: #8b5cf6;
@@ -37,17 +38,19 @@
   --color-tone-orange: #f59e0b;
   --color-tone-gray: #8b949e;
   --color-accent: var(--color-blue-600);
+  --color-accent-fill: var(--color-accent);
   --color-on-accent: var(--color-gray-0);
   --color-fg: var(--color-ink-900);
   --color-muted: var(--color-ink-600);
   --color-bg: var(--color-gray-25);
   --color-node: var(--color-gray-0);
   --color-surface: var(--color-gray-50);
-  --color-border: var(--color-gray-300);
+  --color-border: var(--color-gray-400);
   --color-card-on: var(--color-blue-50);
   --color-group: var(--color-gray-40);
-  --color-group-border: var(--color-gray-300);
+  --color-group-border: var(--color-gray-400);
   --color-frame: var(--color-gray-100);
+  --color-plate-border: var(--color-gray-200);
   --color-page: var(--color-gray-0);
   --color-gallery: var(--color-gray-0);
   --color-tag-blue: var(--color-tone-blue);
@@ -56,15 +59,16 @@
   --color-tag-orange: var(--color-tone-orange);
   --color-tag-gray: var(--color-tone-gray);
   --color-orange-100: #fbe1d5;
-  --color-orange-600: #eb6834;
+  --color-orange-600: #e45f2b;
   --color-ink-900: #0b0b0b;
   --color-ink-600: #52514e;
-  --color-ink-200: #e6e5e1;
+  --color-ink-200: #c6cacf;
+  --color-ink-1000: #000000;
   --color-series-1: var(--color-accent);
   --color-series-2: var(--color-orange-600);
-  --color-heat-low: var(--color-blue-150);
+  --color-heat-low: var(--color-blue-200);
   --color-heat-high: var(--color-blue-800);
-  --color-heat-ink: var(--color-ink-900);
+  --color-heat-ink: var(--color-ink-1000);
   --color-heat-ink-on: var(--color-gray-0);
   --color-grid: var(--color-ink-200);
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
@@ -181,8 +185,7 @@
   --opacity-tab-on: 0.06;
   --opacity-dim: 0.3;
   --opacity-band: 0.22;
-  --opacity-range: 0.32;
-  --opacity-heat-text: 0.55;
+  --opacity-range: 0.38;
   --z-raised: 2;
   --z-overlay: 10;
   --duration-fast: 200ms;
@@ -204,46 +207,50 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     --color-accent: var(--color-blue-400);
+    --color-accent-fill: var(--color-blue-600);
     --color-fg: var(--color-neutral-100);
     --color-muted: var(--color-neutral-400);
     --color-bg: var(--color-neutral-900);
-    --color-node: var(--color-neutral-900);
-    --color-surface: var(--color-neutral-850);
-    --color-border: var(--color-neutral-700);
+    --color-node: var(--color-neutral-850);
+    --color-surface: var(--color-neutral-800);
+    --color-border: var(--color-neutral-600);
     --color-card-on: var(--color-blue-900);
     --color-frame: var(--color-neutral-800);
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
     --color-group: var(--color-neutral-850);
-    --color-group-border: var(--color-neutral-700);
+    --color-group-border: var(--color-neutral-600);
     --color-heat-low: var(--color-blue-850);
     --color-heat-high: var(--color-blue-600);
-    --color-heat-ink: var(--color-neutral-100);
-    --color-heat-ink-on: var(--color-neutral-100);
+    --color-heat-ink: var(--color-gray-0);
+    --color-heat-ink-on: var(--color-gray-0);
     --color-series-2: #f08a5d;
     --color-grid: var(--color-neutral-750);
+    --color-plate-border: var(--color-neutral-800);
   }
 }
 [data-theme='dark'] {
   --color-accent: var(--color-blue-400);
+  --color-accent-fill: var(--color-blue-600);
   --color-fg: var(--color-neutral-100);
   --color-muted: var(--color-neutral-400);
   --color-bg: var(--color-neutral-900);
-  --color-node: var(--color-neutral-900);
-  --color-surface: var(--color-neutral-850);
-  --color-border: var(--color-neutral-700);
+  --color-node: var(--color-neutral-850);
+  --color-surface: var(--color-neutral-800);
+  --color-border: var(--color-neutral-600);
   --color-card-on: var(--color-blue-900);
   --color-frame: var(--color-neutral-800);
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
   --color-group: var(--color-neutral-850);
-  --color-group-border: var(--color-neutral-700);
+  --color-group-border: var(--color-neutral-600);
   --color-heat-low: var(--color-blue-850);
   --color-heat-high: var(--color-blue-600);
-  --color-heat-ink: var(--color-neutral-100);
-  --color-heat-ink-on: var(--color-neutral-100);
+  --color-heat-ink: var(--color-gray-0);
+  --color-heat-ink-on: var(--color-gray-0);
   --color-series-2: #f08a5d;
   --color-grid: var(--color-neutral-750);
+  --color-plate-border: var(--color-neutral-800);
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
 .fl text {
@@ -300,6 +307,7 @@
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-tag);
   text-anchor: middle;
+  fill: var(--color-fg);
 }
 
 .fl .mark {
@@ -443,6 +451,7 @@
 }
 
 .fl .chart-value {
+  fill: var(--color-fg);
   paint-order: stroke;
   stroke: var(--color-bg);
   stroke-width: var(--border-halo);
@@ -465,18 +474,10 @@
   text-anchor: end;
 }
 
-.fl .chart-value.ours {
-  font-weight: var(--weight-semibold);
-  fill: var(--color-accent);
-}
-
-.fl .chart-value.first {
-  fill: var(--color-series-1);
-}
-
+/* 값 글자는 계열과 상관없이 글자색이다. 계열은 막대, 점, 띠 색으로만 전하고 강조 계열(ours, second)은 굵기로만 구분한다. */
+.fl .chart-value.ours,
 .fl .chart-value.second {
   font-weight: var(--weight-semibold);
-  fill: var(--color-series-2);
 }
 
 .fl .chart-name.end {
@@ -494,7 +495,7 @@
   font-size: var(--size-text-12);
   font-weight: var(--weight-semibold);
   text-anchor: end;
-  fill: var(--color-accent);
+  fill: var(--color-fg);
 }
 
 .fl .chart-sub,
@@ -676,7 +677,7 @@
 
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
-<rect width="100%" height="100%" rx="10" fill="var(--color-bg)"/>
+<rect x="0.5" y="0.5" width="959" height="469" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
 <g transform="translate(0 0)">
 <text x="28" y="43" class="chart-title">주차별 재시도 비율</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 띠는 신뢰구간, 점선은 목표 5%</text>

@@ -1,4 +1,5 @@
 // 여섯 종류 차트를 SVG 조각으로 그린다. 계열 요소는 class `cs-{계열 번호}`, 행 요소는 `cr-{행 번호}`를 달아 재생이 드러내기와 밝히기를 건다.
+import { mixHex, pickInk } from '../contrast.js';
 import { measure } from '../measure/fonts.js';
 import { STYLE } from '../measure/sizes.js';
 import { centerBaseline, renderRich, roundCoord as r } from '../text.js';
@@ -28,6 +29,9 @@ const VALUE_W = SPACE['30'] + SPACE['18'];
 // 칸 색은 CSS(.chart-heat의 color-mix)가 변수로 계산해 다크 모드 값을 따라간다. 여기 hex는 color-mix를 모르는 뷰어용 대체 색(라이트)이다.
 const HEAT_LOW = values.color['heat-low'];
 const HEAT_HIGH = values.color['heat-high'];
+// 칸 안 값 글자 후보. 칸마다 대비가 큰 쪽을 빌드 때 고른다. 다크는 두 후보가 같은 밝은 색이고 칸 색 범위가 그 글자와 4.5 이상이 되게 정했다(테스트가 모든 강도를 잰다).
+const HEAT_INK = values.color['heat-ink'];
+const HEAT_INK_ON = values.color['heat-ink-on'];
 const SERIES_COLOR = [tokens.color['series-1'], tokens.color['series-2']];
 const REVEAL = curveOf('reveal');
 
@@ -58,9 +62,7 @@ export function labelColumn(names) {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 function heatColor(strength) {
-  const channel = (hex, i) => parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16);
-  const mix = [0, 1, 2].map((i) => Math.round(channel(HEAT_LOW, i) + (channel(HEAT_HIGH, i) - channel(HEAT_LOW, i)) * strength));
-  return `#${mix.map((v) => v.toString(16).padStart(2, '0')).join('')}`;
+  return mixHex(HEAT_LOW, HEAT_HIGH, strength);
 }
 
 function labelFit(name, line) {
@@ -356,7 +358,7 @@ function drawHeatmap(figure, top) {
     const strength = max ? c.values.value / max : 0;
     parts.push(
       `<g class="cr-${k}"><rect x="${r(x)}" y="${r(y)}" width="${r(cellW - SPACE['1'])}" height="${r(cellH - SPACE['1'])}" rx="${values.radius.sm}" class="chart-heat" style="--s:${Math.round(strength * 1000) / 1000}" fill="${heatColor(strength)}"/>` +
-        `<text x="${r(x + cellW / 2)}" y="${r(centerBaseline(y + cellH / 2, TEXT['11']))}" class="chart-cell${strength > values.opacity['heat-text'] ? ' on' : ''}">${formatNumber(c.values.value)}</text></g>`,
+        `<text x="${r(x + cellW / 2)}" y="${r(centerBaseline(y + cellH / 2, TEXT['11']))}" class="chart-cell${pickInk(heatColor(strength), HEAT_INK, HEAT_INK_ON) === HEAT_INK_ON ? ' on' : ''}">${formatNumber(c.values.value)}</text></g>`,
     );
   });
   // 열 이름은 칸 너비 안에 들어가야 한다. 넘으면 옆 열 이름과 겹친다.

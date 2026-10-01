@@ -50,7 +50,7 @@ ${STYLES.tokens}${STYLES.figure}${STYLES.animated}${result.chart ? STYLES.chart 
 ${animator.css.join('\n')}
 </style>
 <defs>${DEFS}</defs>
-<rect width="100%" height="100%" rx="${values.radius.xl}" fill="${tokens.color.bg}"/>
+<rect x="${values.border.thin / 2}" y="${values.border.thin / 2}" width="${r(width - values.border.thin)}" height="${r(height - values.border.thin)}" rx="${values.radius.xl}" fill="${tokens.color.bg}" stroke="${tokens.color['plate-border']}" stroke-width="${values.border.thin}"/>
 <g transform="translate(${r((width - content.width) / 2)} 0)">
 ${content.svg}
 </g>
@@ -161,7 +161,7 @@ function createAnimator({ segs, total, growMs }) {
       case 'edge':
         return windows(lit(i), `stroke: ${tokens.color.accent}; stroke-width: ${tokens.border.strong}; marker-end: url(#fl-arrow-on)`, `stroke: ${tokens.color.muted}; stroke-width: ${tokens.border.edge}; marker-end: url(#fl-arrow)`, 'e');
       case 'pill':
-        return windows(lit(i), `fill: ${tokens.color.accent}; stroke: ${tokens.color.accent}`, `fill: ${tokens.color.bg}; stroke: ${tokens.color.border}`, 'l');
+        return windows(lit(i), `fill: ${tokens.color['accent-fill']}; stroke: ${tokens.color['accent-fill']}`, `fill: ${tokens.color.bg}; stroke: ${tokens.color.border}`, 'l');
       case 'pilltext':
         return windows(lit(i), `fill: ${tokens.color['on-accent']}`, `fill: ${tokens.color.muted}`, 'x');
       case 'quiet':
@@ -281,7 +281,7 @@ function drawChip(lines, glyphs) {
   const { w, h } = sizeChip(lines);
   const top = -h - CHIP_GAP;
   return (
-    `<rect x="${r(-w / 2)}" y="${r(top)}" width="${r(w)}" height="${r(h)}" rx="${values.radius.lg}" fill="${tokens.color.accent}"/>` +
+    `<rect x="${r(-w / 2)}" y="${r(top)}" width="${r(w)}" height="${r(h)}" rx="${values.radius.lg}" fill="${tokens.color['accent-fill']}"/>` +
     lines.map((line, li) => `<text x="0" y="${r(top + STYLE.chip.line * (li + 1))}" class="chip">${renderRich(line)}</text>`).join('')
   );
 }

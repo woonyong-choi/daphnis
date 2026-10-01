@@ -14,13 +14,14 @@ export const tokens = freeze({
       "50": "var(--color-gray-50)",
       "100": "var(--color-gray-100)",
       "200": "var(--color-gray-200)",
-      "300": "var(--color-gray-300)",
+      "400": "var(--color-gray-400)",
       "600": "var(--color-gray-600)",
       "900": "var(--color-gray-900)"
     },
     "neutral": {
       "100": "var(--color-neutral-100)",
       "400": "var(--color-neutral-400)",
+      "600": "var(--color-neutral-600)",
       "700": "var(--color-neutral-700)",
       "750": "var(--color-neutral-750)",
       "800": "var(--color-neutral-800)",
@@ -29,7 +30,7 @@ export const tokens = freeze({
       "950": "var(--color-neutral-950)"
     },
     "blue": {
-      "150": "var(--color-blue-150)",
+      "200": "var(--color-blue-200)",
       "100": "var(--color-blue-100)",
       "50": "var(--color-blue-50)",
       "400": "var(--color-blue-400)",
@@ -46,6 +47,7 @@ export const tokens = freeze({
       "gray": "var(--color-tone-gray)"
     },
     "accent": "var(--color-accent)",
+    "accent-fill": "var(--color-accent-fill)",
     "on-accent": "var(--color-on-accent)",
     "fg": "var(--color-fg)",
     "muted": "var(--color-muted)",
@@ -57,6 +59,7 @@ export const tokens = freeze({
     "group": "var(--color-group)",
     "group-border": "var(--color-group-border)",
     "frame": "var(--color-frame)",
+    "plate-border": "var(--color-plate-border)",
     "page": "var(--color-page)",
     "gallery": "var(--color-gallery)",
     "tag": {
@@ -73,7 +76,8 @@ export const tokens = freeze({
     "ink": {
       "900": "var(--color-ink-900)",
       "600": "var(--color-ink-600)",
-      "200": "var(--color-ink-200)"
+      "200": "var(--color-ink-200)",
+      "1000": "var(--color-ink-1000)"
     },
     "series-1": "var(--color-series-1)",
     "series-2": "var(--color-series-2)",
@@ -220,8 +224,7 @@ export const tokens = freeze({
     "tab-on": "var(--opacity-tab-on)",
     "dim": "var(--opacity-dim)",
     "band": "var(--opacity-band)",
-    "range": "var(--opacity-range)",
-    "heat-text": "var(--opacity-heat-text)"
+    "range": "var(--opacity-range)"
   },
   "z": {
     "raised": "var(--z-raised)",
@@ -260,28 +263,29 @@ export const values = freeze({
       "50": "#eef1f5",
       "100": "#e3e7ec",
       "200": "#d5dbe3",
-      "300": "#b6c0cc",
+      "400": "#9ba6b4",
       "600": "#4b5563",
       "900": "#111418"
     },
     "neutral": {
       "100": "#e3e3e3",
       "400": "#9aa0a6",
+      "600": "#55585c",
       "700": "#3a3b3c",
-      "750": "#34363a",
+      "750": "#3c3e42",
       "800": "#2c2d30",
       "850": "#242526",
       "900": "#1b1b1d",
       "950": "#111214"
     },
     "blue": {
-      "150": "#d3e2f5",
+      "200": "#b3cbea",
       "100": "#e3ecf8",
       "50": "#edf3fb",
       "400": "#3396e8",
-      "600": "#2a78d6",
+      "600": "#266dc6",
       "900": "#1d2733",
-      "850": "#263446",
+      "850": "#2b3d54",
       "800": "#1d4f91"
     },
     "tone": {
@@ -291,18 +295,20 @@ export const values = freeze({
       "orange": "#f59e0b",
       "gray": "#8b949e"
     },
-    "accent": "#2a78d6",
+    "accent": "#266dc6",
+    "accent-fill": "#266dc6",
     "on-accent": "#ffffff",
     "fg": "#0b0b0b",
     "muted": "#52514e",
     "bg": "#f6f7f9",
     "node": "#ffffff",
     "surface": "#eef1f5",
-    "border": "#b6c0cc",
+    "border": "#9ba6b4",
     "card-on": "#edf3fb",
     "group": "#eef0f3",
-    "group-border": "#b6c0cc",
+    "group-border": "#9ba6b4",
     "frame": "#e3e7ec",
+    "plate-border": "#d5dbe3",
     "page": "#ffffff",
     "gallery": "#ffffff",
     "tag": {
@@ -314,20 +320,21 @@ export const values = freeze({
     },
     "orange": {
       "100": "#fbe1d5",
-      "600": "#eb6834"
+      "600": "#e45f2b"
     },
     "ink": {
       "900": "#0b0b0b",
       "600": "#52514e",
-      "200": "#e6e5e1"
+      "200": "#c6cacf",
+      "1000": "#000000"
     },
-    "series-1": "#2a78d6",
-    "series-2": "#eb6834",
-    "heat-low": "#d3e2f5",
+    "series-1": "#266dc6",
+    "series-2": "#e45f2b",
+    "heat-low": "#b3cbea",
     "heat-high": "#1d4f91",
-    "heat-ink": "#0b0b0b",
+    "heat-ink": "#000000",
     "heat-ink-on": "#ffffff",
-    "grid": "#e6e5e1"
+    "grid": "#c6cacf"
   },
   "font": {
     "sans": "FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif",
@@ -466,8 +473,7 @@ export const values = freeze({
     "tab-on": 0.06,
     "dim": 0.3,
     "band": 0.22,
-    "range": 0.32,
-    "heat-text": 0.55
+    "range": 0.38
   },
   "z": {
     "raised": 2,

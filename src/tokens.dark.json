@@ -4,6 +4,9 @@
     "accent": {
       "$value": "{color.blue.400}"
     },
+    "accent-fill": {
+      "$value": "{color.blue.600}"
+    },
     "fg": {
       "$value": "{color.neutral.100}"
     },
@@ -14,13 +17,13 @@
       "$value": "{color.neutral.900}"
     },
     "node": {
-      "$value": "{color.neutral.900}"
-    },
-    "surface": {
       "$value": "{color.neutral.850}"
     },
+    "surface": {
+      "$value": "{color.neutral.800}"
+    },
     "border": {
-      "$value": "{color.neutral.700}"
+      "$value": "{color.neutral.600}"
     },
     "card-on": {
       "$value": "{color.blue.900}"
@@ -38,7 +41,7 @@
       "$value": "{color.neutral.850}"
     },
     "group-border": {
-      "$value": "{color.neutral.700}"
+      "$value": "{color.neutral.600}"
     },
     "heat-low": {
       "$value": "{color.blue.850}"
@@ -47,16 +50,19 @@
       "$value": "{color.blue.600}"
     },
     "heat-ink": {
-      "$value": "{color.neutral.100}"
+      "$value": "{color.gray.0}"
     },
     "heat-ink-on": {
-      "$value": "{color.neutral.100}"
+      "$value": "{color.gray.0}"
     },
     "series-2": {
       "$value": "#f08a5d"
     },
     "grid": {
       "$value": "{color.neutral.750}"
+    },
+    "plate-border": {
+      "$value": "{color.neutral.800}"
     }
   }
 }

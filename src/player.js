@@ -217,7 +217,7 @@ function figurePlay(root, data) {
     const chip = document.createElementNS(NS, 'g');
     const rect = document.createElementNS(NS, 'rect');
     rect.setAttribute('rx', metrics.chipRadius);
-    rect.setAttribute('fill', metrics.accent);
+    rect.setAttribute('fill', metrics.chipFill);
     chip.appendChild(rect);
     const texts = lines.map((line) => {
       const t = document.createElementNS(NS, 'text');

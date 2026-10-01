@@ -85,7 +85,7 @@ img {
 
 .theme button[aria-pressed='true'] {
   color: var(--color-on-accent);
-  background: var(--color-accent);
+  background: var(--color-accent-fill);
 }
 
 .theme button:focus-visible {

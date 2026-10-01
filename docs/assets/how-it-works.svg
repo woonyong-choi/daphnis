@@ -11,24 +11,25 @@
   --color-gray-50: #eef1f5;
   --color-gray-100: #e3e7ec;
   --color-gray-200: #d5dbe3;
-  --color-gray-300: #b6c0cc;
+  --color-gray-400: #9ba6b4;
   --color-gray-600: #4b5563;
   --color-gray-900: #111418;
   --color-neutral-100: #e3e3e3;
   --color-neutral-400: #9aa0a6;
+  --color-neutral-600: #55585c;
   --color-neutral-700: #3a3b3c;
-  --color-neutral-750: #34363a;
+  --color-neutral-750: #3c3e42;
   --color-neutral-800: #2c2d30;
   --color-neutral-850: #242526;
   --color-neutral-900: #1b1b1d;
   --color-neutral-950: #111214;
-  --color-blue-150: #d3e2f5;
+  --color-blue-200: #b3cbea;
   --color-blue-100: #e3ecf8;
   --color-blue-50: #edf3fb;
   --color-blue-400: #3396e8;
-  --color-blue-600: #2a78d6;
+  --color-blue-600: #266dc6;
   --color-blue-900: #1d2733;
-  --color-blue-850: #263446;
+  --color-blue-850: #2b3d54;
   --color-blue-800: #1d4f91;
   --color-tone-blue: #3b82f6;
   --color-tone-purple: #8b5cf6;
@@ -36,17 +37,19 @@
   --color-tone-orange: #f59e0b;
   --color-tone-gray: #8b949e;
   --color-accent: var(--color-blue-600);
+  --color-accent-fill: var(--color-accent);
   --color-on-accent: var(--color-gray-0);
   --color-fg: var(--color-ink-900);
   --color-muted: var(--color-ink-600);
   --color-bg: var(--color-gray-25);
   --color-node: var(--color-gray-0);
   --color-surface: var(--color-gray-50);
-  --color-border: var(--color-gray-300);
+  --color-border: var(--color-gray-400);
   --color-card-on: var(--color-blue-50);
   --color-group: var(--color-gray-40);
-  --color-group-border: var(--color-gray-300);
+  --color-group-border: var(--color-gray-400);
   --color-frame: var(--color-gray-100);
+  --color-plate-border: var(--color-gray-200);
   --color-page: var(--color-gray-0);
   --color-gallery: var(--color-gray-0);
   --color-tag-blue: var(--color-tone-blue);
@@ -55,15 +58,16 @@
   --color-tag-orange: var(--color-tone-orange);
   --color-tag-gray: var(--color-tone-gray);
   --color-orange-100: #fbe1d5;
-  --color-orange-600: #eb6834;
+  --color-orange-600: #e45f2b;
   --color-ink-900: #0b0b0b;
   --color-ink-600: #52514e;
-  --color-ink-200: #e6e5e1;
+  --color-ink-200: #c6cacf;
+  --color-ink-1000: #000000;
   --color-series-1: var(--color-accent);
   --color-series-2: var(--color-orange-600);
-  --color-heat-low: var(--color-blue-150);
+  --color-heat-low: var(--color-blue-200);
   --color-heat-high: var(--color-blue-800);
-  --color-heat-ink: var(--color-ink-900);
+  --color-heat-ink: var(--color-ink-1000);
   --color-heat-ink-on: var(--color-gray-0);
   --color-grid: var(--color-ink-200);
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
@@ -180,8 +184,7 @@
   --opacity-tab-on: 0.06;
   --opacity-dim: 0.3;
   --opacity-band: 0.22;
-  --opacity-range: 0.32;
-  --opacity-heat-text: 0.55;
+  --opacity-range: 0.38;
   --z-raised: 2;
   --z-overlay: 10;
   --duration-fast: 200ms;
@@ -203,46 +206,50 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     --color-accent: var(--color-blue-400);
+    --color-accent-fill: var(--color-blue-600);
     --color-fg: var(--color-neutral-100);
     --color-muted: var(--color-neutral-400);
     --color-bg: var(--color-neutral-900);
-    --color-node: var(--color-neutral-900);
-    --color-surface: var(--color-neutral-850);
-    --color-border: var(--color-neutral-700);
+    --color-node: var(--color-neutral-850);
+    --color-surface: var(--color-neutral-800);
+    --color-border: var(--color-neutral-600);
     --color-card-on: var(--color-blue-900);
     --color-frame: var(--color-neutral-800);
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
     --color-group: var(--color-neutral-850);
-    --color-group-border: var(--color-neutral-700);
+    --color-group-border: var(--color-neutral-600);
     --color-heat-low: var(--color-blue-850);
     --color-heat-high: var(--color-blue-600);
-    --color-heat-ink: var(--color-neutral-100);
-    --color-heat-ink-on: var(--color-neutral-100);
+    --color-heat-ink: var(--color-gray-0);
+    --color-heat-ink-on: var(--color-gray-0);
     --color-series-2: #f08a5d;
     --color-grid: var(--color-neutral-750);
+    --color-plate-border: var(--color-neutral-800);
   }
 }
 [data-theme='dark'] {
   --color-accent: var(--color-blue-400);
+  --color-accent-fill: var(--color-blue-600);
   --color-fg: var(--color-neutral-100);
   --color-muted: var(--color-neutral-400);
   --color-bg: var(--color-neutral-900);
-  --color-node: var(--color-neutral-900);
-  --color-surface: var(--color-neutral-850);
-  --color-border: var(--color-neutral-700);
+  --color-node: var(--color-neutral-850);
+  --color-surface: var(--color-neutral-800);
+  --color-border: var(--color-neutral-600);
   --color-card-on: var(--color-blue-900);
   --color-frame: var(--color-neutral-800);
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
   --color-group: var(--color-neutral-850);
-  --color-group-border: var(--color-neutral-700);
+  --color-group-border: var(--color-neutral-600);
   --color-heat-low: var(--color-blue-850);
   --color-heat-high: var(--color-blue-600);
-  --color-heat-ink: var(--color-neutral-100);
-  --color-heat-ink-on: var(--color-neutral-100);
+  --color-heat-ink: var(--color-gray-0);
+  --color-heat-ink-on: var(--color-gray-0);
   --color-series-2: #f08a5d;
   --color-grid: var(--color-neutral-750);
+  --color-plate-border: var(--color-neutral-800);
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
 .fl text {
@@ -299,6 +306,7 @@
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-tag);
   text-anchor: middle;
+  fill: var(--color-fg);
 }
 
 .fl .mark {
@@ -432,19 +440,19 @@
 .fl .a6 { animation: a6 13.887s infinite step-end; }
 @keyframes a7 { 0%,44.372% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 44.372%,61.834% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 61.835%,99.999% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
 .fl .a7 { animation: a7 13.887s infinite step-end; }
-@keyframes a8 { 0%,44.372% { fill: var(--color-accent); stroke: var(--color-accent) } 44.372%,61.834% { fill: var(--color-accent); stroke: var(--color-accent) } 61.835%,99.999% { fill: var(--color-accent); stroke: var(--color-accent) } }
+@keyframes a8 { 0%,44.372% { fill: var(--color-accent-fill); stroke: var(--color-accent-fill) } 44.372%,61.834% { fill: var(--color-accent-fill); stroke: var(--color-accent-fill) } 61.835%,99.999% { fill: var(--color-accent-fill); stroke: var(--color-accent-fill) } }
 .fl .a8 { animation: a8 13.887s infinite step-end; }
 @keyframes a9 { 0%,44.372% { fill: var(--color-on-accent) } 44.372%,61.834% { fill: var(--color-on-accent) } 61.835%,99.999% { fill: var(--color-on-accent) } }
 .fl .a9 { animation: a9 13.887s infinite step-end; }
 @keyframes a10 { 0%,44.372% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.372%,61.834% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 61.835%,99.999% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
 .fl .a10 { animation: a10 13.887s infinite step-end; }
-@keyframes a11 { 0%,44.372% { fill: var(--color-bg); stroke: var(--color-border) } 44.372%,61.834% { fill: var(--color-accent); stroke: var(--color-accent) } 61.835%,99.999% { fill: var(--color-accent); stroke: var(--color-accent) } }
+@keyframes a11 { 0%,44.372% { fill: var(--color-bg); stroke: var(--color-border) } 44.372%,61.834% { fill: var(--color-accent-fill); stroke: var(--color-accent-fill) } 61.835%,99.999% { fill: var(--color-accent-fill); stroke: var(--color-accent-fill) } }
 .fl .a11 { animation: a11 13.887s infinite step-end; }
 @keyframes a12 { 0%,44.372% { fill: var(--color-muted) } 44.372%,61.834% { fill: var(--color-on-accent) } 61.835%,99.999% { fill: var(--color-on-accent) } }
 .fl .a12 { animation: a12 13.887s infinite step-end; }
 @keyframes a13 { 0%,44.372% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.372%,61.834% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.835%,99.999% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
 .fl .a13 { animation: a13 13.887s infinite step-end; }
-@keyframes a14 { 0%,44.372% { fill: var(--color-bg); stroke: var(--color-border) } 44.372%,61.834% { fill: var(--color-bg); stroke: var(--color-border) } 61.835%,99.999% { fill: var(--color-accent); stroke: var(--color-accent) } }
+@keyframes a14 { 0%,44.372% { fill: var(--color-bg); stroke: var(--color-border) } 44.372%,61.834% { fill: var(--color-bg); stroke: var(--color-border) } 61.835%,99.999% { fill: var(--color-accent-fill); stroke: var(--color-accent-fill) } }
 .fl .a14 { animation: a14 13.887s infinite step-end; }
 @keyframes a15 { 0%,44.372% { fill: var(--color-muted) } 44.372%,61.834% { fill: var(--color-muted) } 61.835%,99.999% { fill: var(--color-on-accent) } }
 .fl .a15 { animation: a15 13.887s infinite step-end; }
@@ -454,19 +462,19 @@
 .fl .a17 { animation: a17 13.887s infinite step-end; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
-<rect width="100%" height="100%" rx="10" fill="var(--color-bg)"/>
+<rect x="0.5" y="0.5" width="959" height="578" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
 <g transform="translate(56.3 0)">
 <g id="g-0" class="fl-group" data-id="system"><rect x="256.3" y="35" width="224" height="462" rx="14" class="frame-box fl-stroke a0"/><text x="274.3" y="53" class="frame">Saturn</text></g>
-<g id="n-0" class="fl-node" data-id="tui"><rect x="280.3" y="135" width="176" height="94" rx="10" fill="var(--color-node)" class="fl-stroke a1"/><text x="368.3" y="161" class="label">Screen</text><rect x="290.3" y="177" width="156" height="42" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a3"/><text x="298.3" y="194" class="row muted fl-empty a4">—</text><g id="n-0-c0" opacity="0" class="fl-layer a2"><rect x="298.3" y="184" width="27.6" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="312.1" y="194.2" class="tag" fill="var(--color-tag-blue)">YOU</text><text x="330.9" y="194" class="row">why does this test</text><text x="298.3" y="209" class="row">fail?</text></g></g>
+<g id="n-0" class="fl-node" data-id="tui"><rect x="280.3" y="135" width="176" height="94" rx="10" fill="var(--color-node)" class="fl-stroke a1"/><text x="368.3" y="161" class="label">Screen</text><rect x="290.3" y="177" width="156" height="42" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a3"/><text x="298.3" y="194" class="row muted fl-empty a4">—</text><g id="n-0-c0" opacity="0" class="fl-layer a2"><rect x="298.3" y="184" width="27.6" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="312.1" y="194.2" class="tag">YOU</text><text x="330.9" y="194" class="row">why does this test</text><text x="298.3" y="209" class="row">fail?</text></g></g>
 <g id="n-1" class="fl-node" data-id="engine"><rect x="318.3" y="367" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a5"/><text x="368.3" y="395" class="label">Engine</text></g>
 <g id="n-2" class="fl-node" data-id="user"><circle cx="62.2" cy="38" r="10" fill="var(--color-node)" class="fl-stroke a1"/><path d="M34.2 86 V 64 A 28 14 0 0 1 90.2 64 V 86 Z" fill="var(--color-node)" class="fl-stroke a1"/><text x="62.2" y="106" class="label">Developer</text></g>
 <g id="n-3" class="fl-node" data-id="codex"><rect x="714.6" y="450" width="104.8" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a6" stroke-dasharray="5 4"/><text x="767" y="478" class="label">Codex CLI</text></g>
 <g id="e-0" class="fl-edge"><path id="p-0" d="M 90.16943359375 75 L 346.3 75 Q 368.3 75, 368.3 97 L 368.3 135" class="fl-path a7" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="156.3" y="65.5" width="40" height="18" rx="9" class="pill a8"/><text x="176.3" y="78.5" class="edgelabel a9">input</text></g></g>
 <g id="e-1" class="fl-edge"><path id="p-1" d="M 368.34033203125 229 L 368.3 367" class="fl-path a10" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="332.3" y="289" width="71.2" height="18" rx="9" class="pill a11"/><text x="368" y="302" class="edgelabel a12">JSON-RPC</text></g></g>
 <g id="e-2" class="fl-edge"><path id="p-2" d="M 368.34033203125 413 L 368.3 451 Q 368.3 473, 390.3 473 L 714.6 473" class="fl-path a13" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="540.3" y="463.5" width="114.3" height="18" rx="9" class="pill a14"/><text x="597.5" y="476.5" class="edgelabel a15">app-server request</text></g></g>
-<g class="p0-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><g><rect x="-32.4" y="-35" width="64.9" height="23" rx="8" fill="var(--color-accent)"/><text x="0" y="-20" class="chip">question</text></g><animate attributeName="opacity" dur="13.887s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.30439" values="1;0"/><animateMotion dur="13.887s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.30439;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
+<g class="p0-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><g><rect x="-32.4" y="-35" width="64.9" height="23" rx="8" fill="var(--color-accent-fill)"/><text x="0" y="-20" class="chip">question</text></g><animate attributeName="opacity" dur="13.887s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.30439" values="1;0"/><animateMotion dur="13.887s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.30439;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
 <g class="p1-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animate attributeName="opacity" dur="13.887s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.44372;0.56794" values="0;1;0"/><animateMotion dur="13.887s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.44372;0.56794;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
-<g class="p2-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><g><rect x="-19.9" y="-35" width="39.9" height="23" rx="8" fill="var(--color-accent)"/><text x="0" y="-20" class="chip">turn</text></g><animate attributeName="opacity" dur="13.887s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.61835;0.83438" values="0;1;0"/><animateMotion dur="13.887s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.61835;0.83438;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
+<g class="p2-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><g><rect x="-19.9" y="-35" width="39.9" height="23" rx="8" fill="var(--color-accent-fill)"/><text x="0" y="-20" class="chip">turn</text></g><animate attributeName="opacity" dur="13.887s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.61835;0.83438" values="0;1;0"/><animateMotion dur="13.887s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.61835;0.83438;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
 </g>
 <text x="480" y="543" opacity="0" class="steplabel a16">Chat</text>
 <g opacity="0" class="a17"><text x="480" y="569" class="caption">Input goes through the screen to the engine</text></g>

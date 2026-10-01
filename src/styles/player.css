@@ -3,6 +3,7 @@ body {
   margin: 0;
   padding: var(--space-12);
   font-family: var(--font-sans);
+  color: var(--color-fg);
   background: var(--color-page);
 }
 
@@ -220,8 +221,8 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-edge.on .fl-pill rect {
-  fill: var(--color-accent);
-  stroke: var(--color-accent);
+  fill: var(--color-accent-fill);
+  stroke: var(--color-accent-fill);
 }
 
 .fl .fl-edge.on .fl-pill text {

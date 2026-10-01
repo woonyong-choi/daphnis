@@ -32,24 +32,25 @@
   --color-gray-50: #eef1f5;
   --color-gray-100: #e3e7ec;
   --color-gray-200: #d5dbe3;
-  --color-gray-300: #b6c0cc;
+  --color-gray-400: #9ba6b4;
   --color-gray-600: #4b5563;
   --color-gray-900: #111418;
   --color-neutral-100: #e3e3e3;
   --color-neutral-400: #9aa0a6;
+  --color-neutral-600: #55585c;
   --color-neutral-700: #3a3b3c;
-  --color-neutral-750: #34363a;
+  --color-neutral-750: #3c3e42;
   --color-neutral-800: #2c2d30;
   --color-neutral-850: #242526;
   --color-neutral-900: #1b1b1d;
   --color-neutral-950: #111214;
-  --color-blue-150: #d3e2f5;
+  --color-blue-200: #b3cbea;
   --color-blue-100: #e3ecf8;
   --color-blue-50: #edf3fb;
   --color-blue-400: #3396e8;
-  --color-blue-600: #2a78d6;
+  --color-blue-600: #266dc6;
   --color-blue-900: #1d2733;
-  --color-blue-850: #263446;
+  --color-blue-850: #2b3d54;
   --color-blue-800: #1d4f91;
   --color-tone-blue: #3b82f6;
   --color-tone-purple: #8b5cf6;
@@ -57,17 +58,19 @@
   --color-tone-orange: #f59e0b;
   --color-tone-gray: #8b949e;
   --color-accent: var(--color-blue-600);
+  --color-accent-fill: var(--color-accent);
   --color-on-accent: var(--color-gray-0);
   --color-fg: var(--color-ink-900);
   --color-muted: var(--color-ink-600);
   --color-bg: var(--color-gray-25);
   --color-node: var(--color-gray-0);
   --color-surface: var(--color-gray-50);
-  --color-border: var(--color-gray-300);
+  --color-border: var(--color-gray-400);
   --color-card-on: var(--color-blue-50);
   --color-group: var(--color-gray-40);
-  --color-group-border: var(--color-gray-300);
+  --color-group-border: var(--color-gray-400);
   --color-frame: var(--color-gray-100);
+  --color-plate-border: var(--color-gray-200);
   --color-page: var(--color-gray-0);
   --color-gallery: var(--color-gray-0);
   --color-tag-blue: var(--color-tone-blue);
@@ -76,15 +79,16 @@
   --color-tag-orange: var(--color-tone-orange);
   --color-tag-gray: var(--color-tone-gray);
   --color-orange-100: #fbe1d5;
-  --color-orange-600: #eb6834;
+  --color-orange-600: #e45f2b;
   --color-ink-900: #0b0b0b;
   --color-ink-600: #52514e;
-  --color-ink-200: #e6e5e1;
+  --color-ink-200: #c6cacf;
+  --color-ink-1000: #000000;
   --color-series-1: var(--color-accent);
   --color-series-2: var(--color-orange-600);
-  --color-heat-low: var(--color-blue-150);
+  --color-heat-low: var(--color-blue-200);
   --color-heat-high: var(--color-blue-800);
-  --color-heat-ink: var(--color-ink-900);
+  --color-heat-ink: var(--color-ink-1000);
   --color-heat-ink-on: var(--color-gray-0);
   --color-grid: var(--color-ink-200);
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
@@ -201,8 +205,7 @@
   --opacity-tab-on: 0.06;
   --opacity-dim: 0.3;
   --opacity-band: 0.22;
-  --opacity-range: 0.32;
-  --opacity-heat-text: 0.55;
+  --opacity-range: 0.38;
   --z-raised: 2;
   --z-overlay: 10;
   --duration-fast: 200ms;
@@ -224,52 +227,57 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     --color-accent: var(--color-blue-400);
+    --color-accent-fill: var(--color-blue-600);
     --color-fg: var(--color-neutral-100);
     --color-muted: var(--color-neutral-400);
     --color-bg: var(--color-neutral-900);
-    --color-node: var(--color-neutral-900);
-    --color-surface: var(--color-neutral-850);
-    --color-border: var(--color-neutral-700);
+    --color-node: var(--color-neutral-850);
+    --color-surface: var(--color-neutral-800);
+    --color-border: var(--color-neutral-600);
     --color-card-on: var(--color-blue-900);
     --color-frame: var(--color-neutral-800);
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
     --color-group: var(--color-neutral-850);
-    --color-group-border: var(--color-neutral-700);
+    --color-group-border: var(--color-neutral-600);
     --color-heat-low: var(--color-blue-850);
     --color-heat-high: var(--color-blue-600);
-    --color-heat-ink: var(--color-neutral-100);
-    --color-heat-ink-on: var(--color-neutral-100);
+    --color-heat-ink: var(--color-gray-0);
+    --color-heat-ink-on: var(--color-gray-0);
     --color-series-2: #f08a5d;
     --color-grid: var(--color-neutral-750);
+    --color-plate-border: var(--color-neutral-800);
   }
 }
 [data-theme='dark'] {
   --color-accent: var(--color-blue-400);
+  --color-accent-fill: var(--color-blue-600);
   --color-fg: var(--color-neutral-100);
   --color-muted: var(--color-neutral-400);
   --color-bg: var(--color-neutral-900);
-  --color-node: var(--color-neutral-900);
-  --color-surface: var(--color-neutral-850);
-  --color-border: var(--color-neutral-700);
+  --color-node: var(--color-neutral-850);
+  --color-surface: var(--color-neutral-800);
+  --color-border: var(--color-neutral-600);
   --color-card-on: var(--color-blue-900);
   --color-frame: var(--color-neutral-800);
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
   --color-group: var(--color-neutral-850);
-  --color-group-border: var(--color-neutral-700);
+  --color-group-border: var(--color-neutral-600);
   --color-heat-low: var(--color-blue-850);
   --color-heat-high: var(--color-blue-600);
-  --color-heat-ink: var(--color-neutral-100);
-  --color-heat-ink-on: var(--color-neutral-100);
+  --color-heat-ink: var(--color-gray-0);
+  --color-heat-ink-on: var(--color-gray-0);
   --color-series-2: #f08a5d;
   --color-grid: var(--color-neutral-750);
+  --color-plate-border: var(--color-neutral-800);
 }
 /* 재생기 틀과 조작 막대. iframe 안(html.embedded)에서는 테두리와 바깥 여백을 뺀다. */
 body {
   margin: 0;
   padding: var(--space-12);
   font-family: var(--font-sans);
+  color: var(--color-fg);
   background: var(--color-page);
 }
 
@@ -487,8 +495,8 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-edge.on .fl-pill rect {
-  fill: var(--color-accent);
-  stroke: var(--color-accent);
+  fill: var(--color-accent-fill);
+  stroke: var(--color-accent-fill);
 }
 
 .fl .fl-edge.on .fl-pill text {
@@ -596,6 +604,7 @@ html.embedded .fl-canvas svg {
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-tag);
   text-anchor: middle;
+  fill: var(--color-fg);
 }
 
 .fl .mark {
@@ -725,6 +734,7 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .chart-value {
+  fill: var(--color-fg);
   paint-order: stroke;
   stroke: var(--color-bg);
   stroke-width: var(--border-halo);
@@ -747,18 +757,10 @@ html.embedded .fl-canvas svg {
   text-anchor: end;
 }
 
-.fl .chart-value.ours {
-  font-weight: var(--weight-semibold);
-  fill: var(--color-accent);
-}
-
-.fl .chart-value.first {
-  fill: var(--color-series-1);
-}
-
+/* 값 글자는 계열과 상관없이 글자색이다. 계열은 막대, 점, 띠 색으로만 전하고 강조 계열(ours, second)은 굵기로만 구분한다. */
+.fl .chart-value.ours,
 .fl .chart-value.second {
   font-weight: var(--weight-semibold);
-  fill: var(--color-series-2);
 }
 
 .fl .chart-name.end {
@@ -776,7 +778,7 @@ html.embedded .fl-canvas svg {
   font-size: var(--size-text-12);
   font-weight: var(--weight-semibold);
   text-anchor: end;
-  fill: var(--color-accent);
+  fill: var(--color-fg);
 }
 
 .fl .chart-sub,
@@ -945,14 +947,14 @@ html.embedded .fl-canvas svg {
 <text x="28" y="168.7" class="chart-label">Claude</text>
 <text x="28" y="208.7" class="chart-label">둘 다</text>
 <g class="cr-0"><rect x="168" y="104" width="42.5" height="38" rx="4" class="chart-heat" style="--s:1" fill="#1d4f91"/><text x="190.3" y="128" class="chart-cell on">182</text></g>
-<g class="cr-1"><rect x="212.5" y="104" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.077" fill="#c5d7ed"/><text x="234.8" y="128" class="chart-cell">14</text></g>
-<g class="cr-2"><rect x="257.1" y="104" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.022" fill="#cfdff3"/><text x="279.3" y="128" class="chart-cell">4</text></g>
-<g class="cr-3"><rect x="168" y="144" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.049" fill="#cadbf0"/><text x="190.3" y="168" class="chart-cell">9</text></g>
-<g class="cr-4"><rect x="212.5" y="144" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.94" fill="#285897"/><text x="234.8" y="168" class="chart-cell on">171</text></g>
-<g class="cr-5"><rect x="257.1" y="144" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.033" fill="#cdddf2"/><text x="279.3" y="168" class="chart-cell">6</text></g>
-<g class="cr-6"><rect x="168" y="184" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.016" fill="#d0e0f3"/><text x="190.3" y="208" class="chart-cell">3</text></g>
-<g class="cr-7"><rect x="212.5" y="184" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.027" fill="#cedef2"/><text x="234.8" y="208" class="chart-cell">5</text></g>
-<g class="cr-8"><rect x="257.1" y="184" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.582" fill="#698cbb"/><text x="279.3" y="208" class="chart-cell on">106</text></g></g><g class="fl-packets"></g></svg></div>
+<g class="cr-1"><rect x="212.5" y="104" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.077" fill="#a7c1e3"/><text x="234.8" y="128" class="chart-cell">14</text></g>
+<g class="cr-2"><rect x="257.1" y="104" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.022" fill="#b0c8e8"/><text x="279.3" y="128" class="chart-cell">4</text></g>
+<g class="cr-3"><rect x="168" y="144" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.049" fill="#acc5e6"/><text x="190.3" y="168" class="chart-cell">9</text></g>
+<g class="cr-4"><rect x="212.5" y="144" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.94" fill="#265696"/><text x="234.8" y="168" class="chart-cell on">171</text></g>
+<g class="cr-5"><rect x="257.1" y="144" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.033" fill="#aec7e7"/><text x="279.3" y="168" class="chart-cell">6</text></g>
+<g class="cr-6"><rect x="168" y="184" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.016" fill="#b1c9e9"/><text x="190.3" y="208" class="chart-cell">3</text></g>
+<g class="cr-7"><rect x="212.5" y="184" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.027" fill="#afc8e8"/><text x="234.8" y="208" class="chart-cell">5</text></g>
+<g class="cr-8"><rect x="257.1" y="184" width="42.5" height="38" rx="4" class="chart-heat" style="--s:0.582" fill="#5c83b6"/><text x="279.3" y="208" class="chart-cell">106</text></g></g><g class="fl-packets"></g></svg></div>
 <figcaption class="fl-foot">
 <div class="fl-bar"><button type="button" class="fl-round fl-pause"></button><div class="fl-tabs" role="tablist"></div><button type="button" class="fl-round fl-rate" aria-label="배속">1×</button></div>
 <p class="fl-caption" aria-live="polite"></p>
@@ -1296,7 +1298,7 @@ function figurePlay(root, data) {
     const chip = document.createElementNS(NS, 'g');
     const rect = document.createElementNS(NS, 'rect');
     rect.setAttribute('rx', metrics.chipRadius);
-    rect.setAttribute('fill', metrics.accent);
+    rect.setAttribute('fill', metrics.chipFill);
     chip.appendChild(rect);
     const texts = lines.map((line) => {
       const t = document.createElementNS(NS, 'text');
@@ -1368,7 +1370,7 @@ function figurePlay(root, data) {
   }
 }
 
-figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":1600,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"대각선이 맞힌 수다","labelShift":0,"series":[0],"growing":[0],"lights":[1]},{"si":0,"t0":1600,"t1":4640,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"Codex를 Claude로 고른 14건이 가장 많은 실수다","labelShift":0,"series":[0],"growing":[],"lights":[1]}],"steps":["읽기"],"cardCounts":[],"edgeEnds":[],"seriesCount":1,"rowCount":9,"metrics":{"accent":"var(--color-accent)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
+figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":1600,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"대각선이 맞힌 수다","labelShift":0,"series":[0],"growing":[0],"lights":[1]},{"si":0,"t0":1600,"t1":4640,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"Codex를 Claude로 고른 14건이 가장 많은 실수다","labelShift":0,"series":[0],"growing":[],"lights":[1]}],"steps":["읽기"],"cardCounts":[],"edgeEnds":[],"seriesCount":1,"rowCount":9,"metrics":{"accent":"var(--color-accent)","chipFill":"var(--color-accent-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
 </script>
 </body>
 </html>

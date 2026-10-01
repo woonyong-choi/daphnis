@@ -83,7 +83,7 @@ function drawTag(row, x, y, toneOf) {
   const width = measureTag(tag);
   return (
     `<rect x="${r(x)}" y="${r(y + SPACE['0-5'])}" width="${r(width)}" height="${height}" rx="${RADIUS.sm}" fill="${tone}" fill-opacity="${values.opacity.tag}"/>` +
-    `<text x="${r(x + width / 2)}" y="${r(centerBaseline(y + SPACE['0-5'] + height / 2, STYLE.tag.size))}" class="tag" fill="${tone}">${renderRich(tag)}</text>`
+    `<text x="${r(x + width / 2)}" y="${r(centerBaseline(y + SPACE['0-5'] + height / 2, STYLE.tag.size))}" class="tag">${renderRich(tag)}</text>`
   );
 }
 
@@ -128,8 +128,8 @@ function drawMiniGraph(laid, x, y) {
     return `<line x1="${r(x + x1)}" y1="${r(y + y1)}" x2="${r(x + x2)}" y2="${r(y + y2)}" stroke="${stroke}" stroke-width="${values.border.thin}"/>`;
   });
   const pills = laid.nodes.map((n) => {
-    const fill = n.isLit ? tokens.color.accent : tokens.color.node;
-    const stroke = n.isLit ? tokens.color.accent : tokens.color.border;
+    const fill = n.isLit ? tokens.color['accent-fill'] : tokens.color.node;
+    const stroke = n.isLit ? tokens.color['accent-fill'] : tokens.color.border;
     return (
       `<rect x="${r(x + n.x)}" y="${r(y + n.y)}" width="${r(n.w)}" height="${n.h}" rx="${n.h / 2}" fill="${fill}" stroke="${stroke}" stroke-width="${values.border.thin}"/>` +
       `<text x="${r(x + n.x + n.w / 2)}" y="${r(centerBaseline(y + n.y + n.h / 2, MINI_TEXT))}" class="mini${n.isLit ? ' on' : ''}">${renderRich(n.name)}</text>`
