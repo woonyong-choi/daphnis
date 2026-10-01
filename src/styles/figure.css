@@ -118,8 +118,8 @@
 }
 
 .fl .frame-box {
-  fill: var(--color-surface);
-  stroke: var(--color-frame);
+  fill: var(--color-group);
+  stroke: var(--color-group-border);
 }
 
 .fl .lifeline {

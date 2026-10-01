@@ -33,6 +33,7 @@ export const tokens = freeze({
       "400": "var(--color-blue-400)",
       "600": "var(--color-blue-600)",
       "900": "var(--color-blue-900)",
+      "850": "var(--color-blue-850)",
       "800": "var(--color-blue-800)"
     },
     "tone": {
@@ -51,6 +52,8 @@ export const tokens = freeze({
     "surface": "var(--color-surface)",
     "border": "var(--color-border)",
     "card-on": "var(--color-card-on)",
+    "group": "var(--color-group)",
+    "group-border": "var(--color-group-border)",
     "dot": "var(--color-dot)",
     "frame": "var(--color-frame)",
     "page": "var(--color-page)",
@@ -76,6 +79,7 @@ export const tokens = freeze({
     "heat-low": "var(--color-heat-low)",
     "heat-high": "var(--color-heat-high)",
     "heat-ink": "var(--color-heat-ink)",
+    "heat-ink-on": "var(--color-heat-ink-on)",
     "grid": "var(--color-grid)"
   },
   "font": {
@@ -272,6 +276,7 @@ export const values = freeze({
       "400": "#3396e8",
       "600": "#2a78d6",
       "900": "#1d2733",
+      "850": "#263446",
       "800": "#1d4f91"
     },
     "tone": {
@@ -290,6 +295,8 @@ export const values = freeze({
     "surface": "#eef1f5",
     "border": "#b6c0cc",
     "card-on": "#edf3fb",
+    "group": "#eef1f5",
+    "group-border": "#d5dbe3",
     "dot": "#d5dbe3",
     "frame": "#e3e7ec",
     "page": "#ffffff",
@@ -315,6 +322,7 @@ export const values = freeze({
     "heat-low": "#e3ecf8",
     "heat-high": "#1d4f91",
     "heat-ink": "#0b0b0b",
+    "heat-ink-on": "#ffffff",
     "grid": "#e6e5e1"
   },
   "font": {
@@ -454,7 +462,7 @@ export const values = freeze({
     "halo": 0.2,
     "tab-on": 0.06,
     "dim": 0.3,
-    "band": 0.16,
+    "band": 0.22,
     "range": 0.32,
     "heat-text": 0.55
   },
