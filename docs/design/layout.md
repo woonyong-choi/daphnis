@@ -47,9 +47,10 @@
 
 ### 글 재기
 
-- 글꼴은 토큰이 정한 글꼴 파일 둘이다. 본문은 Pretendard, 고정폭은 JetBrains Mono다. 둘 다 SIL Open Font License라 그림 안에 넣을 수 있다. JetBrains Mono 파일은 `jetbrains-mono` npm 패키지(패키지 껍데기는 MIT, 글꼴은 JetBrains의 OFL 1.1)로 받는다.
-- JetBrains Mono에는 한글이 없다. 고정폭 글(선 라벨, 순서 그림 메시지, 테이블 타입, 차트 눈금과 값 등) 안의 한글은 본문 글꼴(Pretendard)로 그린다. 글자마다 고정폭 글꼴에 있으면 그 글꼴, 없으면 본문 글꼴로 정하고, 글꼴이 바뀌는 구간마다 그 글꼴로 폭을 재서 더한다.
-- 그림에는 고정폭 조각과, 고정폭 글 안 한글을 위한 본문 조각이 함께 들어가고 `font-family`는 `FigMono, FigSans, ...` 대체 사슬이다. 브라우저가 글자마다 고르는 글꼴과 잰 글꼴이 같다.
+- 글꼴은 토큰이 정한 글꼴 파일이다. 본문은 이력서와 같게 라틴과 기호는 Inter, 한글은 Noto Sans KR이고, 고정폭은 JetBrains Mono다. 모두 SIL Open Font License라 그림 안에 넣을 수 있다. Inter와 Noto Sans KR 정적 파일(regular 400, medium 500, semibold 600)은 `@expo-google-fonts/inter`, `@expo-google-fonts/noto-sans-kr` 패키지(패키지 껍데기는 MIT, 글꼴은 OFL 1.1, 예약 글꼴 이름 없음)로 받는다. 굵기마다 정적 파일이라 측정과 자르기가 같은 파일을 쓴다. JetBrains Mono 파일은 `jetbrains-mono` npm 패키지(패키지 껍데기는 MIT, 글꼴은 JetBrains의 OFL 1.1)로 받는다.
+- 본문 글은 글자마다 Inter에 있으면 Inter, 없으면(한글) Noto Sans KR로 정하고, 글꼴이 바뀌는 구간마다 그 글꼴로 폭을 재서 더한다. 띄어쓰기는 Inter 것이다.
+- JetBrains Mono에는 한글이 없다. 고정폭 글(선 라벨, 순서 그림 메시지, 테이블 타입, 차트 눈금과 값 등) 안의 한글은 Noto Sans KR로 그린다. 글자마다 고정폭 글꼴, Inter, Noto Sans KR 순서로 처음 있는 글꼴로 정하고 위와 같이 구간별로 폭을 더한다.
+- 그림에는 쓴 글꼴마다 조각이 들어간다. Inter 조각은 `FigSans`, Noto Sans KR 조각은 `FigSansKo`, 고정폭 조각은 `FigMono`이고 `font-family`는 본문 `FigSans, FigSansKo, ...`, 고정폭 `FigMono, FigSans, FigSansKo, ...` 대체 사슬이다. 브라우저가 글자마다 고르는 글꼴과 잰 글꼴이 같다.
 - 글 폭은 글꼴 파일의 글자 너비 표로 잰다. 어림 비율을 쓰지 않는다.
 - 결과 SVG에는 그 그림에 쓰인 글자만 잘라 낸 글꼴을 넣는다. 보는 쪽에 글꼴이 없어도 잰 폭과 그려진 폭이 같게 하기 위해서다.
 - 글꼴 파일과 대체 글꼴 어디에도 없는 글자(그림 문자 등)는 오류다. 대신 그릴 글꼴의 폭을 알 수 없기 때문이다.

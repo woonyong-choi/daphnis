@@ -7,11 +7,17 @@ import subsetFont from 'subset-font';
 const require = createRequire(import.meta.url);
 
 // 글꼴 이름과 파일. weight는 CSS font-weight, family는 SVG 안 @font-face 이름이다.
-// fallback은 이 글꼴에 없는 글자를 대신 그리는 글꼴이다. CSS font-family 사슬(FigMono, FigSans)과 같은 순서다.
+// 본문은 라틴과 기호를 Inter(FigSans), 한글을 Noto Sans KR(FigSansKo)로 그린다. 이력서와 같은 글꼴 구성이다.
+// fallback은 이 글꼴에 없는 글자를 대신 그리는 글꼴이다. CSS font-family 사슬(FigMono, FigSans, FigSansKo)과 같은 순서다.
+const INTER = '@expo-google-fonts/inter';
+const NOTO = '@expo-google-fonts/noto-sans-kr';
 const FACES = {
-  regular: { family: 'FigSans', weight: 400, file: 'pretendard/dist/public/static/Pretendard-Regular.otf' },
-  medium: { family: 'FigSans', weight: 500, file: 'pretendard/dist/public/static/Pretendard-Medium.otf' },
-  semibold: { family: 'FigSans', weight: 600, file: 'pretendard/dist/public/static/Pretendard-SemiBold.otf' },
+  regular: { family: 'FigSans', weight: 400, file: `${INTER}/400Regular/Inter_400Regular.ttf`, fallback: 'koRegular' },
+  medium: { family: 'FigSans', weight: 500, file: `${INTER}/500Medium/Inter_500Medium.ttf`, fallback: 'koMedium' },
+  semibold: { family: 'FigSans', weight: 600, file: `${INTER}/600SemiBold/Inter_600SemiBold.ttf`, fallback: 'koSemibold' },
+  koRegular: { family: 'FigSansKo', weight: 400, file: `${NOTO}/400Regular/NotoSansKR_400Regular.ttf` },
+  koMedium: { family: 'FigSansKo', weight: 500, file: `${NOTO}/500Medium/NotoSansKR_500Medium.ttf` },
+  koSemibold: { family: 'FigSansKo', weight: 600, file: `${NOTO}/600SemiBold/NotoSansKR_600SemiBold.ttf` },
   mono: { family: 'FigMono', weight: 400, file: 'jetbrains-mono/fonts/webfonts/JetBrainsMono-Regular.woff2', fallback: 'regular' },
 };
 
@@ -116,7 +122,7 @@ export function wrap(text, width, size, face = 'regular') {
 // cost: time O(g), heap O(g), stack O(1)
 // vars: g = 쓴 글자 수
 // basis: estimate
-/** 글자마다 실제로 그려질 글꼴로 옮겨 담는다. 고정폭 글 안 한글은 본문 글꼴 몫이 된다. */
+/** 글자마다 실제로 그려질 글꼴로 옮겨 담는다. 고정폭 글 안 한글은 Noto Sans KR 몫이 된다. */
 function resolveUsed(used) {
   const resolved = new Map();
   for (const [face, chars] of used) {

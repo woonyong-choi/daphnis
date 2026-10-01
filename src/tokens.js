@@ -328,8 +328,8 @@ export const values = freeze({
     "grid": "#e6e5e1"
   },
   "font": {
-    "sans": "FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif",
-    "mono": "FigMono, FigSans, ui-monospace, SFMono-Regular, Menlo, monospace"
+    "sans": "FigSans, FigSansKo, Inter, 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif",
+    "mono": "FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace"
   },
   "size": {
     "text": {
