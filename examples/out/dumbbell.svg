@@ -45,7 +45,6 @@
   --color-card-on: var(--color-blue-50);
   --color-group: var(--color-gray-100);
   --color-group-border: var(--color-gray-300);
-  --color-dot: var(--color-gray-200);
   --color-frame: var(--color-gray-100);
   --color-page: var(--color-gray-0);
   --color-gallery: var(--color-gray-0);
@@ -91,8 +90,6 @@
   --size-halo: 10px;
   --size-marker: 5px;
   --size-marker-on: 4px;
-  --size-grid: 16px;
-  --size-grid-dot: 1px;
   --size-card: 176px;
   --size-node-min: 100px;
   --size-node-max: 210px;
@@ -188,8 +185,7 @@
   --z-overlay: 10;
   --duration-fast: 200ms;
   --duration-hop: 3750ms;
-  --duration-hop-min: 1500ms;
-  --duration-hop-max: 7500ms;
+  --duration-hop-min: 500ms;
   --duration-dwell: 700ms;
   --duration-dwell-per-char: 45ms;
   --duration-dwell-max: 3200ms;
@@ -211,7 +207,6 @@
     --color-surface: var(--color-neutral-850);
     --color-border: var(--color-neutral-700);
     --color-card-on: var(--color-blue-900);
-    --color-dot: var(--color-neutral-750);
     --color-frame: var(--color-neutral-800);
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
@@ -234,7 +229,6 @@
   --color-surface: var(--color-neutral-850);
   --color-border: var(--color-neutral-700);
   --color-card-on: var(--color-blue-900);
-  --color-dot: var(--color-neutral-750);
   --color-frame: var(--color-neutral-800);
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
@@ -693,8 +687,8 @@
 @keyframes a10 { 0%,39.456% { opacity: 0 } 39.457%,62.761% { opacity: 0 } 62.762%,71.639% { opacity: 1 } 71.64%,99.999% { opacity: 1 } }
 .fl .a10 { animation: a10 8.1s infinite step-end; }
 </style>
-<defs><pattern id="fl-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1" fill="var(--color-dot)"/></pattern><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
-<rect width="100%" height="100%" fill="var(--color-bg)"/>
+<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
+<rect width="100%" height="100%" rx="10" fill="var(--color-bg)"/>
 <g transform="translate(0 0)">
 <text x="28" y="43" class="chart-title">작업당 토큰</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 에이전트마다 작업 61개 평균</text>

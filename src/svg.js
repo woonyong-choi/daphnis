@@ -46,7 +46,7 @@ ${STYLES.tokens}${STYLES.figure}${STYLES.animated}${result.chart ? STYLES.chart 
 ${animator.css.join('\n')}
 </style>
 <defs>${DEFS}</defs>
-<rect width="100%" height="100%" fill="${tokens.color.bg}"/>${result.chart ? '' : '<rect width="100%" height="100%" fill="url(#fl-dots)"/>'}
+<rect width="100%" height="100%" rx="${values.radius.xl}" fill="${tokens.color.bg}"/>
 <g transform="translate(${r((width - content.width) / 2)} 0)">
 ${content.svg}
 </g>

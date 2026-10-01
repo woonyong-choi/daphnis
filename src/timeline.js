@@ -58,12 +58,12 @@ export function chartSeriesIds(figure) {
 // cost: time O(p), heap O(1), stack O(1)
 // vars: p = 경로 점 수
 // basis: estimate
-// 이동 시간은 선 길이에 비례한다. 기준 길이를 speed(기본 duration.hop)에 지나고, 최소와 최대 시간 안으로 자른다. 같은 속도로 보이게 하려는 것이다.
-// 최소와 최대는 speed를 기본값에서 바꾼 비율만큼 같이 늘고 줄어, 빠르게 한 그림이 최소 시간에 막히지 않는다.
+// 이동 시간은 선 길이에 비례한다. 기준 길이를 speed(기본 duration.hop)에 지나되, 아주 짧은 선만 최소 시간으로 올린다. 최대는 없다. 같은 속도로 보이게 하려는 것이다.
+// 최소는 speed를 기본값에서 바꾼 비율만큼 같이 늘고 줄어, 빠르게 한 그림이 최소 시간에 막히지 않는다.
 function hopMs(points, speed) {
   const scale = speed / DWELL.hop;
   const ms = (routeLength(points) / HOP_REF) * speed;
-  return Math.round(Math.min(DWELL['hop-max'] * scale, Math.max(DWELL['hop-min'] * scale, ms)));
+  return Math.round(Math.max(DWELL['hop-min'] * scale, ms));
 }
 
 // cost: time O(b·(h + e + k)), heap O(b·(e + k)), stack O(1)

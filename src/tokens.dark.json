@@ -25,9 +25,6 @@
     "card-on": {
       "$value": "{color.blue.900}"
     },
-    "dot": {
-      "$value": "{color.neutral.750}"
-    },
     "frame": {
       "$value": "{color.neutral.800}"
     },

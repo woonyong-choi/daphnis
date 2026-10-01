@@ -195,7 +195,7 @@ function chartContent(result, glyphs) {
     lights: seg.lights.map((key) => chart.rowKeys.indexOf(key)),
   }));
   const data = { segs, steps: timeline.steps, cardCounts: [], edgeEnds: [], seriesCount: ids.length, rowCount: chart.rowKeys.length, metrics: PLAYER_METRICS };
-  const bg = `<rect width="100%" height="100%" fill="${tokens.color.bg}"/>`;
+  const bg = `<rect width="100%" height="100%" rx="${values.radius.xl}" fill="${tokens.color.bg}"/>`;
   return { svg: bg + chart.body, width: chart.width, height: chart.height, data };
 }
 
