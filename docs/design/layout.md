@@ -92,8 +92,9 @@
 
 ### 그림 비율
 
-- `aspect`가 있고 그룹이 없는 그림은 elkjs 줄 바꿈 배치(`elk.layered.wrapping.strategy: MULTI_EDGE`, `elk.aspectRatio`)로 목표 비율에 맞춘다.
-- 그룹이 있는 그림에서 `aspect`는 오류다. 줄 바꿈 배치가 그룹과 함께 동작하지 않는다(2026-10-01 확인). 그룹 그림의 비율은 그룹의 `direction`으로 맞춘다.
+- `aspect`가 있으면 가장 바깥 층(root)만 elkjs 줄 바꿈 배치(`elk.layered.wrapping.strategy: MULTI_EDGE`, `elk.aspectRatio`)로 목표 비율에 맞춘다. 그룹은 따로 배치하는 한 덩어리 도형이라 줄 바꿈이 그룹과 함께 동작한다(2026-10-01 elkjs 0.9로 확인). 그룹 안은 줄 바꿈하지 않고 그룹의 `direction`을 따른다.
+- 줄 바꿈 선택 사항은 `multiEdge.improveWrappedEdges: false`, `additionalEdgeSpacing: 0`이다. 근거는 무작위 40개 원본(그룹 있음 80%, 되돌아오는 선과 라벨 포함) 실험이다. 기본값(`improveWrappedEdges: true`)은 선이 엉뚱한 도형으로 가는 elkjs 오류를 냈고, 끄면 오류가 없었다. `additionalEdgeSpacing: 0`은 줄 사이 되돌아오는 선의 간격을 줄여 그림 넓이를 약 10% 줄였다. `SINGLE_EDGE`는 열이 맞지만 검사 실패가 많았고, `correctionFactor` 2와 `cutting.strategy: ARD`는 비율 3을 넘는 그림을 냈고, `improveCuts: false`는 선이 더 길어졌다.
+- 줄 바꿈한 사슬은 줄이 바뀔 때마다 되돌아오는 선이 그림 폭만큼 가로지른다. 이 선은 elkjs 경로 그대로이며 더 줄일 수 없다. 갈래가 많은 그림에 `aspect`를 넣으면 선이 엉킬 수 있어, 긴 사슬에만 권한다.
 - 가로세로 비율이 3을 넘거나 1/3보다 작으면 그림 검사가 경고한다. 문서 폭에서 글자가 읽기 어렵게 작아지기 때문이다.
 - 순서 그림과 차트는 배치가 격자로 정해져 `aspect`를 쓰지 않는다.
 - 가장 넓은 이동 글 상자에 양쪽 간격(토큰 `space.6`)을 더한 폭이 그림 폭보다 크면 그림을 그 폭으로 넓히고 내용을 가운데로 옮긴다. 좁은 세로 그림에서 글 상자가 그림 밖으로 나가지 않게 하기 위해서다.

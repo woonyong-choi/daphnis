@@ -194,7 +194,7 @@ function toElk(model, figure) {
       byContainer.get(p.container).push({ id: `${index}::${k}`, sources: [p.from], targets: [p.to], labels });
     });
   }
-  const hasAspect = figure.aspect !== undefined && !figure.groups.length;
+  const hasAspect = figure.aspect !== undefined;
   // cost: time O(p), heap O(p), stack O(1)
   // vars: p = 도형의 연결점 수
   // basis: estimate
@@ -244,10 +244,25 @@ function toElk(model, figure) {
             'elk.nodeSize.constraints': 'MINIMUM_SIZE',
             'elk.nodeSize.minimum': `(${groupTitleWidth(c.label)}, ${SIZE['group-title']})`,
           }),
-      ...(c.id === 'root' && hasAspect ? { 'elk.layered.wrapping.strategy': 'MULTI_EDGE', 'elk.aspectRatio': String(figure.aspect) } : {}),
+      ...(c.id === 'root' && hasAspect ? wrapOptions(figure.aspect) : {}),
     },
   });
   return toContainer(containers.get('root'));
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 바깥 층(root)을 줄 바꿈하는 elkjs 선택 사항. 그룹은 SEPARATE_CHILDREN이라 한 덩어리 도형으로 줄 바꿈된다.
+// 고른 근거는 docs/design/layout.md 줄 바꿈 절이다.
+function wrapOptions(aspect) {
+  return {
+    'elk.layered.wrapping.strategy': 'MULTI_EDGE',
+    'elk.aspectRatio': String(aspect),
+    // 기본값(true)은 되돌아오는 선과 라벨이 함께 있으면 선이 엉뚱한 도형으로 가는 elkjs 오류를 낸다.
+    'elk.layered.wrapping.multiEdge.improveWrappedEdges': 'false',
+    // 줄 사이 되돌아오는 선의 추가 간격을 없애 그림이 덜 길어지게 한다.
+    'elk.layered.wrapping.additionalEdgeSpacing': '0',
+  };
 }
 
 function sizeOf({ w, h }) {
