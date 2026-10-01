@@ -80,3 +80,14 @@ test('embedFonts_body_text_splits_inter_and_noto_pieces', async () => {
   assert.match(css, /font-family:FigSans;font-weight:600/);
   assert.match(css, /font-family:FigSansKo;font-weight:600/);
 });
+
+test('pages_use_inter_and_noto_chain_and_name_tag', async () => {
+  const { toDocument, toGallery } = await import('../src/html.js');
+  const figures = [{ name: 'bar', title: '막대 차트', href: 'bar' }];
+  for (const page of [toDocument(figures, '예제'), toGallery(figures, '예제')]) {
+    assert.match(page, /--font-sans: [^;]*Inter[^;]*Noto Sans KR/);
+    assert.match(page, /font-family: var\(--font-sans\)/);
+    assert.doesNotMatch(page, /h2 \{[^}]*font-mono/);
+    assert.match(page, /<h2>막대 차트<span class="name">bar<\/span><\/h2>/);
+  }
+});

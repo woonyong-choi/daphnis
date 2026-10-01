@@ -219,6 +219,15 @@ function chartContent(result, glyphs) {
   return { svg: chart.body, width: chart.width, height: chart.height, data };
 }
 
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = 이름과 제목 글자 수
+// basis: estimate
+// 한글 제목이 제목이고 예제 이름은 작은 꼬리표다. 제목이 없으면 이름이 제목이 된다.
+function cardHead({ name, title }) {
+  if (!title) return `<h2>${escapeXml(name)}</h2>`;
+  return `<h2>${escapeXml(title)}<span class="name">${escapeXml(name)}</span></h2>`;
+}
+
 // cost: time O(f), heap O(out), stack O(1)
 // vars: f = 그림 수, out = 만든 HTML 글자 수
 // basis: estimate
@@ -230,7 +239,7 @@ export function toGallery(figures, heading) {
   const cards = figures
     .map(
       (f) =>
-        `<section><header><h2>${escapeXml(f.name)}</h2><p>${escapeXml(f.title)}</p><nav><a href="${escapeXml(f.href)}.html">열기</a><a href="${escapeXml(f.href)}.svg">SVG</a></nav></header>` +
+        `<section><header>${cardHead(f)}<nav><a href="${escapeXml(f.href)}.html">열기</a><a href="${escapeXml(f.href)}.svg">SVG</a></nav></header>` +
         `<iframe src="${escapeXml(f.href)}.html" loading="lazy" allowfullscreen title="${escapeXml(f.name)}"></iframe></section>`,
     )
     .join('\n');
@@ -275,7 +284,7 @@ addEventListener('message', (e) => {
  */
 export function toDocument(figures, heading) {
   const sections = figures
-    .map((f) => `<h2>${escapeXml(f.name)}</h2>\n<p>${escapeXml(f.title)}</p>\n<p class="figure"><img src="${escapeXml(f.href)}.svg" alt="${escapeXml(f.title || f.name)}"></p>`)
+    .map((f) => `${cardHead(f)}\n<p class="figure"><img src="${escapeXml(f.href)}.svg" alt="${escapeXml(f.title || f.name)}"></p>`)
     .join('\n');
   return `<!doctype html>
 <html lang="ko">

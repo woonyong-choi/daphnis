@@ -88,19 +88,18 @@ header {
 
 h2 {
   margin: 0;
-  font: var(--weight-semibold) var(--size-text-14) var(--font-mono);
+  font: var(--weight-semibold) var(--size-text-14) var(--font-sans);
 }
 
-header p {
-  grid-column: 1;
-  margin: 0;
-  font-size: var(--size-text-13);
+/* 예제 이름은 제목이 아니라 제목 옆 작은 회색 꼬리표다. */
+.name {
+  margin-left: var(--space-3);
+  font: var(--size-text-11) var(--font-sans);
   color: var(--color-muted);
 }
 
 nav {
   display: flex;
-  grid-row: 1 / 3;
   grid-column: 2;
   gap: var(--space-5);
   align-self: center;

@@ -180,3 +180,10 @@ test('toSvg_packet_chip_slide_reaches_every_key_in_the_hop_window', async () => 
     });
   }
 });
+
+test('svg_steplabel_uses_body_font_not_mono', async () => {
+  const result = await buildFigure(readFileSync(new URL('box.muto', EXAMPLES), 'utf8'), { baseDir: 'examples' });
+  const svg = await toSvg(result, { name: 'box' });
+  assert.match(svg, /\.fl \.steplabel \{[^}]*font-family: var\(--font-sans\)/);
+  assert.doesNotMatch(svg, /\.fl \.steplabel \{[^}]*(font-mono|letter-spacing)/);
+});

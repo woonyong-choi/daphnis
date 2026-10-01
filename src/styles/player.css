@@ -100,7 +100,7 @@ html.embedded .fl-canvas svg {
 .fl-tabs button {
   position: relative;
   padding: var(--space-3) var(--space-7);
-  font: var(--size-text-13) var(--font-mono);
+  font: var(--size-text-13) var(--font-sans);
   color: var(--color-muted);
   background: transparent;
   border: 0;
