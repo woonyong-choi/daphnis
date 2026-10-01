@@ -8,7 +8,7 @@
 :root {
   --color-gray-0: #ffffff;
   --color-gray-25: #f7f8fa;
-  --color-gray-50: #f5f7fa;
+  --color-gray-50: #eef1f5;
   --color-gray-100: #e3e7ec;
   --color-gray-200: #d5dbe3;
   --color-gray-300: #b6c0cc;
@@ -22,6 +22,7 @@
   --color-neutral-850: #242526;
   --color-neutral-900: #1b1b1d;
   --color-neutral-950: #111214;
+  --color-blue-100: #e3ecf8;
   --color-blue-50: #edf3fb;
   --color-blue-400: #3396e8;
   --color-blue-600: #2a78d6;
@@ -36,14 +37,15 @@
   --color-on-accent: var(--color-gray-0);
   --color-fg: var(--color-ink-900);
   --color-muted: var(--color-ink-600);
-  --color-bg: var(--color-gray-0);
+  --color-bg: var(--color-gray-25);
+  --color-node: var(--color-gray-0);
   --color-surface: var(--color-gray-50);
   --color-border: var(--color-gray-300);
   --color-card-on: var(--color-blue-50);
   --color-dot: var(--color-gray-200);
   --color-frame: var(--color-gray-100);
   --color-page: var(--color-gray-0);
-  --color-gallery: var(--color-gray-25);
+  --color-gallery: var(--color-gray-0);
   --color-tag-blue: var(--color-tone-blue);
   --color-tag-purple: var(--color-tone-purple);
   --color-tag-green: var(--color-tone-green);
@@ -56,7 +58,7 @@
   --color-ink-200: #e6e5e1;
   --color-series-1: var(--color-accent);
   --color-series-2: var(--color-orange-600);
-  --color-heat-low: var(--color-blue-50);
+  --color-heat-low: var(--color-blue-100);
   --color-heat-high: var(--color-blue-800);
   --color-grid: var(--color-ink-200);
   --font-sans: FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
@@ -197,6 +199,7 @@
     --color-fg: var(--color-neutral-100);
     --color-muted: var(--color-neutral-400);
     --color-bg: var(--color-neutral-900);
+    --color-node: var(--color-neutral-900);
     --color-surface: var(--color-neutral-850);
     --color-border: var(--color-neutral-700);
     --color-card-on: var(--color-blue-900);
@@ -204,6 +207,7 @@
     --color-frame: var(--color-neutral-800);
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
+    --color-heat-low: var(--color-blue-50);
     --color-series-2: #f08a5d;
     --color-grid: var(--color-neutral-750);
   }
@@ -213,6 +217,7 @@
   --color-fg: var(--color-neutral-100);
   --color-muted: var(--color-neutral-400);
   --color-bg: var(--color-neutral-900);
+  --color-node: var(--color-neutral-900);
   --color-surface: var(--color-neutral-850);
   --color-border: var(--color-neutral-700);
   --color-card-on: var(--color-blue-900);
@@ -220,6 +225,7 @@
   --color-frame: var(--color-neutral-800);
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
+  --color-heat-low: var(--color-blue-50);
   --color-series-2: #f08a5d;
   --color-grid: var(--color-neutral-750);
 }
@@ -409,8 +415,8 @@
 <defs><pattern id="fl-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1" fill="var(--color-dot)"/></pattern><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
 <rect width="100%" height="100%" fill="var(--color-bg)"/><rect width="100%" height="100%" fill="url(#fl-dots)"/>
 <g transform="translate(62.6 0)">
-<g id="n-0" class="fl-node" data-id="orders"><rect x="281" y="54" width="125.8" height="104" rx="10" fill="var(--color-bg)" class="fl-stroke a0"/><text x="343.9" y="72" class="label">orders</text><g class="fl-col" data-col="orders.id"><rect x="282" y="80" width="123.8" height="26" class="col-bg a1"/><line x1="281" x2="406.8" y1="80" y2="80" class="col-line"/><text x="299" y="97.1" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="388.8" y="97.1" class="cell type">bigint</text></g><g class="fl-col" data-col="orders.user_id"><rect x="282" y="106" width="123.8" height="26" class="col-bg a2"/><line x1="281" x2="406.8" y1="106" y2="106" class="col-line"/><text x="299" y="123.1" class="cell">user_id</text><text x="388.8" y="123.1" class="cell type">bigint</text></g><g class="fl-col" data-col="orders.status"><rect x="282" y="132" width="123.8" height="26" class="col-bg a2"/><line x1="281" x2="406.8" y1="132" y2="132" class="col-line"/><text x="299" y="149.1" class="cell">status</text><text x="388.8" y="149.1" class="cell type">varchar</text></g></g>
-<g id="n-1" class="fl-node" data-id="payments"><rect x="28" y="28" width="193" height="104" rx="10" fill="var(--color-bg)" class="fl-stroke a0"/><text x="124.5" y="46" class="label">payments</text><g class="fl-col" data-col="payments.id"><rect x="29" y="54" width="191" height="26" class="col-bg a2"/><line x1="28" x2="221" y1="54" y2="54" class="col-line"/><text x="46" y="71.1" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="203" y="71.1" class="cell type">bigint</text></g><g class="fl-col" data-col="payments.order_id"><rect x="29" y="80" width="191" height="26" class="col-bg a1"/><line x1="28" x2="221" y1="80" y2="80" class="col-line"/><text x="46" y="97.1" class="cell">order_id<tspan class="key" dx="6">FK</tspan></text><text x="203" y="97.1" class="cell type">bigint</text></g><g class="fl-col" data-col="payments.amount"><rect x="29" y="106" width="191" height="26" class="col-bg a2"/><line x1="28" x2="221" y1="106" y2="106" class="col-line"/><text x="46" y="123.1" class="cell">amount</text><text x="203" y="123.1" class="cell type">numeric(10, 2)</text></g></g>
+<g id="n-0" class="fl-node" data-id="orders"><rect x="281" y="54" width="125.8" height="104" rx="10" fill="var(--color-node)" class="fl-stroke a0"/><text x="343.9" y="72" class="label">orders</text><g class="fl-col" data-col="orders.id"><rect x="282" y="80" width="123.8" height="26" class="col-bg a1"/><line x1="281" x2="406.8" y1="80" y2="80" class="col-line"/><text x="299" y="97.1" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="388.8" y="97.1" class="cell type">bigint</text></g><g class="fl-col" data-col="orders.user_id"><rect x="282" y="106" width="123.8" height="26" class="col-bg a2"/><line x1="281" x2="406.8" y1="106" y2="106" class="col-line"/><text x="299" y="123.1" class="cell">user_id</text><text x="388.8" y="123.1" class="cell type">bigint</text></g><g class="fl-col" data-col="orders.status"><rect x="282" y="132" width="123.8" height="26" class="col-bg a2"/><line x1="281" x2="406.8" y1="132" y2="132" class="col-line"/><text x="299" y="149.1" class="cell">status</text><text x="388.8" y="149.1" class="cell type">varchar</text></g></g>
+<g id="n-1" class="fl-node" data-id="payments"><rect x="28" y="28" width="193" height="104" rx="10" fill="var(--color-node)" class="fl-stroke a0"/><text x="124.5" y="46" class="label">payments</text><g class="fl-col" data-col="payments.id"><rect x="29" y="54" width="191" height="26" class="col-bg a2"/><line x1="28" x2="221" y1="54" y2="54" class="col-line"/><text x="46" y="71.1" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="203" y="71.1" class="cell type">bigint</text></g><g class="fl-col" data-col="payments.order_id"><rect x="29" y="80" width="191" height="26" class="col-bg a1"/><line x1="28" x2="221" y1="80" y2="80" class="col-line"/><text x="46" y="97.1" class="cell">order_id<tspan class="key" dx="6">FK</tspan></text><text x="203" y="97.1" class="cell type">bigint</text></g><g class="fl-col" data-col="payments.amount"><rect x="29" y="106" width="191" height="26" class="col-bg a2"/><line x1="28" x2="221" y1="106" y2="106" class="col-line"/><text x="46" y="123.1" class="cell">amount</text><text x="203" y="123.1" class="cell type">numeric(10, 2)</text></g></g>
 <g id="e-0" class="fl-edge"><path id="p-0" d="M 221.045166015625 93 L 281 93" class="fl-path a3" marker-end="url(#fl-arrow)"/></g>
 <g class="p1-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><g><rect x="-44.4" y="-35" width="88.8" height="23" rx="8" fill="var(--color-accent)"/><text x="0" y="-20" class="chip">order_id 1042</text></g><animateMotion dur="10.8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.4393;0.7868;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
 </g>

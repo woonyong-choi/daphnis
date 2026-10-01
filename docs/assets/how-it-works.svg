@@ -8,7 +8,7 @@
 :root {
   --color-gray-0: #ffffff;
   --color-gray-25: #f7f8fa;
-  --color-gray-50: #f5f7fa;
+  --color-gray-50: #eef1f5;
   --color-gray-100: #e3e7ec;
   --color-gray-200: #d5dbe3;
   --color-gray-300: #b6c0cc;
@@ -22,6 +22,7 @@
   --color-neutral-850: #242526;
   --color-neutral-900: #1b1b1d;
   --color-neutral-950: #111214;
+  --color-blue-100: #e3ecf8;
   --color-blue-50: #edf3fb;
   --color-blue-400: #3396e8;
   --color-blue-600: #2a78d6;
@@ -36,14 +37,15 @@
   --color-on-accent: var(--color-gray-0);
   --color-fg: var(--color-ink-900);
   --color-muted: var(--color-ink-600);
-  --color-bg: var(--color-gray-0);
+  --color-bg: var(--color-gray-25);
+  --color-node: var(--color-gray-0);
   --color-surface: var(--color-gray-50);
   --color-border: var(--color-gray-300);
   --color-card-on: var(--color-blue-50);
   --color-dot: var(--color-gray-200);
   --color-frame: var(--color-gray-100);
   --color-page: var(--color-gray-0);
-  --color-gallery: var(--color-gray-25);
+  --color-gallery: var(--color-gray-0);
   --color-tag-blue: var(--color-tone-blue);
   --color-tag-purple: var(--color-tone-purple);
   --color-tag-green: var(--color-tone-green);
@@ -56,7 +58,7 @@
   --color-ink-200: #e6e5e1;
   --color-series-1: var(--color-accent);
   --color-series-2: var(--color-orange-600);
-  --color-heat-low: var(--color-blue-50);
+  --color-heat-low: var(--color-blue-100);
   --color-heat-high: var(--color-blue-800);
   --color-grid: var(--color-ink-200);
   --font-sans: FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
@@ -116,6 +118,9 @@
   --size-chart-plot-h: 260px;
   --size-chart-axis: 48px;
   --size-chart-cell: 40px;
+  --size-chart-cap: 8px;
+  --size-chart-range: 6px;
+  --size-chart-arrow-min: 16px;
   --weight-medium: 500;
   --weight-semibold: 600;
   --leading-normal: 1.5;
@@ -162,6 +167,7 @@
   --border-tag: 1.5px;
   --border-edge: 1.75px;
   --border-strong: 2.5px;
+  --border-halo: 8px;
   --dash-line: 5;
   --dash-gap: 4;
   --dash-card: 3;
@@ -169,6 +175,8 @@
   --opacity-halo: 0.2;
   --opacity-tab-on: 0.06;
   --opacity-dim: 0.3;
+  --opacity-band: 0.16;
+  --opacity-range: 0.32;
   --opacity-heat-text: 0.55;
   --z-raised: 2;
   --z-overlay: 10;
@@ -191,6 +199,7 @@
     --color-fg: var(--color-neutral-100);
     --color-muted: var(--color-neutral-400);
     --color-bg: var(--color-neutral-900);
+    --color-node: var(--color-neutral-900);
     --color-surface: var(--color-neutral-850);
     --color-border: var(--color-neutral-700);
     --color-card-on: var(--color-blue-900);
@@ -198,6 +207,7 @@
     --color-frame: var(--color-neutral-800);
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
+    --color-heat-low: var(--color-blue-50);
     --color-series-2: #f08a5d;
     --color-grid: var(--color-neutral-750);
   }
@@ -207,6 +217,7 @@
   --color-fg: var(--color-neutral-100);
   --color-muted: var(--color-neutral-400);
   --color-bg: var(--color-neutral-900);
+  --color-node: var(--color-neutral-900);
   --color-surface: var(--color-neutral-850);
   --color-border: var(--color-neutral-700);
   --color-card-on: var(--color-blue-900);
@@ -214,6 +225,7 @@
   --color-frame: var(--color-neutral-800);
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
+  --color-heat-low: var(--color-blue-50);
   --color-series-2: #f08a5d;
   --color-grid: var(--color-neutral-750);
 }
@@ -432,10 +444,10 @@
 <rect width="100%" height="100%" fill="var(--color-bg)"/><rect width="100%" height="100%" fill="url(#fl-dots)"/>
 <g transform="translate(0 0)">
 <g id="g-0" class="fl-group" data-id="system"><rect x="254.4" y="35" width="224" height="462" rx="14" class="frame-box fl-stroke a0"/><text x="272.4" y="53" class="frame">Saturn</text></g>
-<g id="n-0" class="fl-node" data-id="tui"><rect x="278.4" y="135" width="176" height="94" rx="10" fill="var(--color-bg)" class="fl-stroke a1"/><text x="366.4" y="161" class="label">Screen</text><rect x="288.4" y="177" width="156" height="42" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a3"/><text x="296.4" y="194" class="row muted fl-empty a4">—</text><g id="n-0-c0" opacity="0" class="fl-layer a2"><rect x="296.4" y="184" width="26.8" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="309.8" y="194.2" class="tag" fill="var(--color-tag-blue)">YOU</text><text x="328.2" y="194" class="row">why does this test</text><text x="296.4" y="209" class="row">fail?</text></g></g>
-<g id="n-1" class="fl-node" data-id="engine"><rect x="316.4" y="367" width="100" height="46" rx="10" fill="var(--color-bg)" class="fl-stroke a5"/><text x="366.4" y="395" class="label">Engine</text></g>
-<g id="n-2" class="fl-node" data-id="user"><circle cx="60.4" cy="38" r="10" fill="var(--color-bg)" class="fl-stroke a1"/><path d="M32.4 86 V 64 A 28 14 0 0 1 88.4 64 V 86 Z" fill="var(--color-bg)" class="fl-stroke a1"/><text x="60.4" y="106" class="label">Developer</text></g>
-<g id="n-3" class="fl-node" data-id="codex"><rect x="711.4" y="450" width="101.6" height="46" rx="10" fill="var(--color-bg)" class="fl-stroke a6" stroke-dasharray="5 4"/><text x="762.2" y="478" class="label">Codex CLI</text></g>
+<g id="n-0" class="fl-node" data-id="tui"><rect x="278.4" y="135" width="176" height="94" rx="10" fill="var(--color-node)" class="fl-stroke a1"/><text x="366.4" y="161" class="label">Screen</text><rect x="288.4" y="177" width="156" height="42" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a3"/><text x="296.4" y="194" class="row muted fl-empty a4">—</text><g id="n-0-c0" opacity="0" class="fl-layer a2"><rect x="296.4" y="184" width="26.8" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="309.8" y="194.2" class="tag" fill="var(--color-tag-blue)">YOU</text><text x="328.2" y="194" class="row">why does this test</text><text x="296.4" y="209" class="row">fail?</text></g></g>
+<g id="n-1" class="fl-node" data-id="engine"><rect x="316.4" y="367" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a5"/><text x="366.4" y="395" class="label">Engine</text></g>
+<g id="n-2" class="fl-node" data-id="user"><circle cx="60.4" cy="38" r="10" fill="var(--color-node)" class="fl-stroke a1"/><path d="M32.4 86 V 64 A 28 14 0 0 1 88.4 64 V 86 Z" fill="var(--color-node)" class="fl-stroke a1"/><text x="60.4" y="106" class="label">Developer</text></g>
+<g id="n-3" class="fl-node" data-id="codex"><rect x="711.4" y="450" width="101.6" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a6" stroke-dasharray="5 4"/><text x="762.2" y="478" class="label">Codex CLI</text></g>
 <g id="e-0" class="fl-edge"><path id="p-0" d="M 88.44677734375 75 L 344.4 75 Q 366.4 75, 366.4 97 L 366.4 135" class="fl-path a7" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="152.9" y="65.5" width="41.5" height="18" rx="9" class="pill a8"/><text x="173.6" y="78.5" class="edgelabel a9">input</text></g></g>
 <g id="e-1" class="fl-edge"><path id="p-1" d="M 366.3935546875 229 L 366.4 367" class="fl-path a10" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="337.4" y="289" width="58" height="18" rx="9" class="pill a11"/><text x="366.4" y="302" class="edgelabel a12">JSON-RPC</text></g></g>
 <g id="e-2" class="fl-edge"><path id="p-2" d="M 366.3935546875 413 L 366.4 451 Q 366.4 473, 388.4 473 L 711.4 473" class="fl-path a13" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="538.4" y="463.5" width="113" height="18" rx="9" class="pill a14"/><text x="594.9" y="476.5" class="edgelabel a15">app-server request</text></g></g>

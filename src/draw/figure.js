@@ -59,7 +59,7 @@ function drawItem(it, i, toneOf, decorate, glyphs) {
 function drawShape(it, stroke, glyphs, decorate) {
   const { x, y, w, h } = it;
   const cx = x + w / 2;
-  const fill = `fill="${tokens.color.bg}"`;
+  const fill = `fill="${tokens.color.node}"`;
   switch (it.shape) {
     case 'store': {
       const cap = it.marginTop;
@@ -129,7 +129,7 @@ function cardBox(it) {
 // 테이블: 머리 칸, 열마다 이름과 표시(PK, FK, UNQ), 타입. 열 줄은 밝히기 대상이다.
 function drawTable(it, stroke, glyphs, decorate) {
   const rowH = it.rowH;
-  const frame = `<rect x="${r(it.x)}" y="${r(it.y)}" width="${r(it.w)}" height="${r(it.h)}" rx="${RADIUS.xl}" fill="${tokens.color.bg}" ${stroke}/>`;
+  const frame = `<rect x="${r(it.x)}" y="${r(it.y)}" width="${r(it.w)}" height="${r(it.h)}" rx="${RADIUS.xl}" fill="${tokens.color.node}" ${stroke}/>`;
   glyphs.add(it.label, 'medium');
   const header = `<text x="${r(it.x + it.w / 2)}" y="${r(centerBaseline(it.y + rowH / 2, STYLE.label.size))}" class="label">${escapeXml(it.label)}</text>`;
   const rows = it.columns.map((c, k) => {
