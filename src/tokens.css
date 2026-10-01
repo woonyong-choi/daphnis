@@ -21,6 +21,7 @@
   --color-blue-400: #3396e8;
   --color-blue-600: #2a78d6;
   --color-blue-900: #1d2733;
+  --color-blue-850: #263446;
   --color-blue-800: #1d4f91;
   --color-tone-blue: #3b82f6;
   --color-tone-purple: #8b5cf6;
@@ -36,6 +37,8 @@
   --color-surface: var(--color-gray-50);
   --color-border: var(--color-gray-300);
   --color-card-on: var(--color-blue-50);
+  --color-group: var(--color-gray-50);
+  --color-group-border: var(--color-gray-200);
   --color-dot: var(--color-gray-200);
   --color-frame: var(--color-gray-100);
   --color-page: var(--color-gray-0);
@@ -55,6 +58,7 @@
   --color-heat-low: var(--color-blue-100);
   --color-heat-high: var(--color-blue-800);
   --color-heat-ink: var(--color-ink-900);
+  --color-heat-ink-on: var(--color-gray-0);
   --color-grid: var(--color-ink-200);
   --font-sans: FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
   --font-mono: FigMono, D2Coding, ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -170,7 +174,7 @@
   --opacity-halo: 0.2;
   --opacity-tab-on: 0.06;
   --opacity-dim: 0.3;
-  --opacity-band: 0.16;
+  --opacity-band: 0.22;
   --opacity-range: 0.32;
   --opacity-heat-text: 0.55;
   --z-raised: 2;
@@ -202,8 +206,12 @@
     --color-frame: var(--color-neutral-800);
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
-    --color-heat-low: var(--color-blue-50);
-    --color-heat-ink: var(--color-neutral-900);
+    --color-group: var(--color-neutral-850);
+    --color-group-border: var(--color-neutral-700);
+    --color-heat-low: var(--color-blue-850);
+    --color-heat-high: var(--color-blue-600);
+    --color-heat-ink: var(--color-neutral-100);
+    --color-heat-ink-on: var(--color-neutral-100);
     --color-series-2: #f08a5d;
     --color-grid: var(--color-neutral-750);
   }
@@ -221,8 +229,12 @@
   --color-frame: var(--color-neutral-800);
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
-  --color-heat-low: var(--color-blue-50);
-  --color-heat-ink: var(--color-neutral-900);
+  --color-group: var(--color-neutral-850);
+  --color-group-border: var(--color-neutral-700);
+  --color-heat-low: var(--color-blue-850);
+  --color-heat-high: var(--color-blue-600);
+  --color-heat-ink: var(--color-neutral-100);
+  --color-heat-ink-on: var(--color-neutral-100);
   --color-series-2: #f08a5d;
   --color-grid: var(--color-neutral-750);
 }

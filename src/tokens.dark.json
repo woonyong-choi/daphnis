@@ -37,11 +37,23 @@
     "gallery": {
       "$value": "{color.neutral.950}"
     },
+    "group": {
+      "$value": "{color.neutral.850}"
+    },
+    "group-border": {
+      "$value": "{color.neutral.700}"
+    },
     "heat-low": {
-      "$value": "{color.blue.50}"
+      "$value": "{color.blue.850}"
+    },
+    "heat-high": {
+      "$value": "{color.blue.600}"
     },
     "heat-ink": {
-      "$value": "{color.neutral.900}"
+      "$value": "{color.neutral.100}"
+    },
+    "heat-ink-on": {
+      "$value": "{color.neutral.100}"
     },
     "series-2": {
       "$value": "#f08a5d"

@@ -113,7 +113,7 @@
 }
 
 .fl .chart-cell.on {
-  fill: var(--color-on-accent);
+  fill: var(--color-heat-ink-on);
 }
 
 .fl .chart-axis,
@@ -160,7 +160,7 @@
 }
 
 .fl .chart-box {
-  fill: var(--color-card-on);
+  fill: var(--color-node);
   stroke: var(--color-series-1);
   stroke-width: var(--border-tag);
 }
