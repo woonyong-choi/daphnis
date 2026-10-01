@@ -101,7 +101,14 @@ function figurePlay(root, data) {
     button.setAttribute('role', 'tab');
     const fill = document.createElement('i');
     fill.className = 'fl-tab-fill';
-    button.append(...richNodes(label, htmlCode), fill);
+    const track = document.createElement('span');
+    track.className = 'fl-tab-track';
+    track.setAttribute('aria-hidden', 'true');
+    track.append(fill);
+    const text = document.createElement('span');
+    text.className = 'fl-tab-label';
+    text.append(...richNodes(label, htmlCode));
+    button.append(track, text);
     button.addEventListener('click', () => enterSegment(segs.indexOf(stepSegs[si][0])));
     tabs.appendChild(button);
     return button;
@@ -111,7 +118,7 @@ function figurePlay(root, data) {
     isPlaying = value;
     pauseButton.innerHTML = isPlaying
       ? `<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="0 0 16 16"><path d="M5 2.5v11M11 2.5v11" stroke="currentColor" stroke-width="${metrics.pauseStroke}" stroke-linecap="round"/></svg>`
-      : '<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="0 0 16 16"><path d="M4 2.5v11l9.5-5.5z" fill="currentColor"/></svg>';
+      : `<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="0 0 16 16"><path d="M4 2.5v11l9.5-5.5z" fill="currentColor"/></svg>`;
     pauseButton.setAttribute('aria-label', isPlaying ? '일시정지' : '재생');
   }
 

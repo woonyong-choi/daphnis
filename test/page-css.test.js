@@ -77,3 +77,41 @@ test('splitControls_theme_group_player_tabs_and_round_buttons_share_radius_and_h
 test('playerBody_sets_the_text_color_token_so_inherited_text_is_not_default_black', () => {
   assert.equal(declarationsOf(PLAYER, 'body').color, 'var(--color-fg)');
 });
+
+test('tabProgress_fill_lives_inside_the_pill_behind_the_label_so_nothing_sits_under_the_text', () => {
+  const track = declarationsOf(PLAYER, '.fl-tab-track');
+  const fill = declarationsOf(PLAYER, '.fl-tab-fill');
+
+  assert.equal(track.inset, '0');
+  assert.equal(declarationsOf(PLAYER, '.fl-tab-label').position, 'relative');
+  assert.equal(declarationsOf(PLAYER, '.fl-tabs button').overflow, 'hidden');
+  assert.equal(fill.bottom, undefined);
+  assert.equal(fill.position, undefined);
+  assert.equal(fill.height, '100%');
+  assert.match(fill.background, /var\(--color-accent\)/);
+});
+
+test('controlsAxis_bar_and_caption_share_one_center_axis_with_symmetric_padding', () => {
+  const foot = declarationsOf(PLAYER, '.fl-foot');
+  const bar = declarationsOf(PLAYER, '.fl-bar');
+
+  assert.equal(foot['justify-items'], 'center');
+  assert.match(foot.padding, /^var\(--space-\d+\)$/, 'one value so top and bottom are equal');
+  assert.equal(bar['grid-template-columns'], '1fr auto 1fr');
+  assert.equal(declarationsOf(PLAYER, '.fl-bar .fl-pause')['justify-self'], 'end');
+  assert.equal(declarationsOf(PLAYER, '.fl-bar .fl-rate')['justify-self'], 'start');
+  assert.equal(declarationsOf(PLAYER, '.fl-caption')['text-align'], 'center');
+});
+
+test('controlsSize_round_buttons_and_tabs_share_text_size', () => {
+  const round = declarationsOf(PLAYER, '.fl-round');
+  const tab = declarationsOf(PLAYER, '.fl-tabs button');
+
+  assert.equal(round.font.split(' ')[0], tab.font.split(' ')[0]);
+});
+
+test('playerSource_every_template_placeholder_sits_in_a_template_literal', () => {
+  const player = readFileSync(new URL('../src/player.js', import.meta.url), 'utf8');
+
+  assert.doesNotMatch(player, /'[^'\n]*\$\{[^'\n]*'/);
+});
