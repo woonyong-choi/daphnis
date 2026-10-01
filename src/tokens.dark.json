@@ -13,6 +13,9 @@
     "bg": {
       "$value": "{color.neutral.900}"
     },
+    "node": {
+      "$value": "{color.neutral.900}"
+    },
     "surface": {
       "$value": "{color.neutral.850}"
     },
@@ -33,6 +36,9 @@
     },
     "gallery": {
       "$value": "{color.neutral.950}"
+    },
+    "heat-low": {
+      "$value": "{color.blue.50}"
     },
     "series-2": {
       "$value": "#f08a5d"

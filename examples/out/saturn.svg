@@ -8,7 +8,7 @@
 :root {
   --color-gray-0: #ffffff;
   --color-gray-25: #f7f8fa;
-  --color-gray-50: #f5f7fa;
+  --color-gray-50: #eef1f5;
   --color-gray-100: #e3e7ec;
   --color-gray-200: #d5dbe3;
   --color-gray-300: #b6c0cc;
@@ -22,6 +22,7 @@
   --color-neutral-850: #242526;
   --color-neutral-900: #1b1b1d;
   --color-neutral-950: #111214;
+  --color-blue-100: #e3ecf8;
   --color-blue-50: #edf3fb;
   --color-blue-400: #3396e8;
   --color-blue-600: #2a78d6;
@@ -36,14 +37,15 @@
   --color-on-accent: var(--color-gray-0);
   --color-fg: var(--color-ink-900);
   --color-muted: var(--color-ink-600);
-  --color-bg: var(--color-gray-0);
+  --color-bg: var(--color-gray-25);
+  --color-node: var(--color-gray-0);
   --color-surface: var(--color-gray-50);
   --color-border: var(--color-gray-300);
   --color-card-on: var(--color-blue-50);
   --color-dot: var(--color-gray-200);
   --color-frame: var(--color-gray-100);
   --color-page: var(--color-gray-0);
-  --color-gallery: var(--color-gray-25);
+  --color-gallery: var(--color-gray-0);
   --color-tag-blue: var(--color-tone-blue);
   --color-tag-purple: var(--color-tone-purple);
   --color-tag-green: var(--color-tone-green);
@@ -56,7 +58,7 @@
   --color-ink-200: #e6e5e1;
   --color-series-1: var(--color-accent);
   --color-series-2: var(--color-orange-600);
-  --color-heat-low: var(--color-blue-50);
+  --color-heat-low: var(--color-blue-100);
   --color-heat-high: var(--color-blue-800);
   --color-grid: var(--color-ink-200);
   --font-sans: FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
@@ -197,6 +199,7 @@
     --color-fg: var(--color-neutral-100);
     --color-muted: var(--color-neutral-400);
     --color-bg: var(--color-neutral-900);
+    --color-node: var(--color-neutral-900);
     --color-surface: var(--color-neutral-850);
     --color-border: var(--color-neutral-700);
     --color-card-on: var(--color-blue-900);
@@ -204,6 +207,7 @@
     --color-frame: var(--color-neutral-800);
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
+    --color-heat-low: var(--color-blue-50);
     --color-series-2: #f08a5d;
     --color-grid: var(--color-neutral-750);
   }
@@ -213,6 +217,7 @@
   --color-fg: var(--color-neutral-100);
   --color-muted: var(--color-neutral-400);
   --color-bg: var(--color-neutral-900);
+  --color-node: var(--color-neutral-900);
   --color-surface: var(--color-neutral-850);
   --color-border: var(--color-neutral-700);
   --color-card-on: var(--color-blue-900);
@@ -220,6 +225,7 @@
   --color-frame: var(--color-neutral-800);
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
+  --color-heat-low: var(--color-blue-50);
   --color-series-2: #f08a5d;
   --color-grid: var(--color-neutral-750);
 }
@@ -458,12 +464,12 @@
 <rect width="100%" height="100%" fill="var(--color-bg)"/><rect width="100%" height="100%" fill="url(#fl-dots)"/>
 <g transform="translate(0 0)">
 <g id="g-0" class="fl-group" data-id="system"><rect x="240" y="28.7" width="356" height="652" rx="14" class="frame-box fl-stroke a0"/><text x="258" y="46.6" class="frame">Saturn</text></g>
-<g id="n-0" class="fl-node" data-id="cli"><rect x="264" y="172.7" width="100" height="46" rx="10" fill="var(--color-bg)" class="fl-stroke a0"/><text x="314" y="200.7" class="label">명령</text></g>
-<g id="n-1" class="fl-node" data-id="tui"><rect x="396" y="148.7" width="176" height="94" rx="10" fill="var(--color-bg)" class="fl-stroke a1"/><text x="484" y="174.7" class="label">화면</text><text x="484" y="190.5" class="sub">하나의 대화</text><rect x="406" y="205.7" width="156" height="27" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a3"/><text x="414" y="222.7" class="row muted fl-empty a4">—</text><g id="n-1-c0" opacity="0" class="fl-layer a2"><rect x="414" y="212.7" width="26.8" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="427.4" y="222.9" class="tag" fill="var(--color-tag-blue)">YOU</text><text x="445.8" y="222.7" class="row">이 테스트 왜 깨져?</text></g></g>
-<g id="n-2" class="fl-node" data-id="engine"><rect x="280.3" y="380.7" width="101.2" height="57" rx="10" fill="var(--color-bg)" class="fl-stroke a5"/><text x="330.9" y="406.7" class="label">엔진</text><text x="330.9" y="422.5" class="sub">사용자당 하나</text></g>
-<g id="n-3" class="fl-node" data-id="db"><path d="M264 587.7 a 50 12 0 0 1 100 0 v 57 a 50 12 0 0 1 -100 0 z" fill="var(--color-bg)" class="fl-stroke a6"/><path d="M264 587.7 a 50 12 0 0 0 100 0" fill="none" class="fl-stroke a6"/><text x="314" y="613.7" class="label">기록 저장소</text><text x="314" y="629.5" class="sub">sqlite</text></g>
-<g id="n-4" class="fl-node" data-id="user"><circle cx="56" cy="38" r="10" fill="var(--color-bg)" class="fl-stroke a1"/><path d="M28 86 V 64 A 28 14 0 0 1 84 64 V 86 Z" fill="var(--color-bg)" class="fl-stroke a1"/><text x="56" y="106" class="label">개발자</text></g>
-<g id="n-5" class="fl-node" data-id="codex"><rect x="812.5" y="483.7" width="101.6" height="46" rx="10" fill="var(--color-bg)" class="fl-stroke a7" stroke-dasharray="5 4"/><text x="863.3" y="511.7" class="label">Codex CLI</text></g>
+<g id="n-0" class="fl-node" data-id="cli"><rect x="264" y="172.7" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a0"/><text x="314" y="200.7" class="label">명령</text></g>
+<g id="n-1" class="fl-node" data-id="tui"><rect x="396" y="148.7" width="176" height="94" rx="10" fill="var(--color-node)" class="fl-stroke a1"/><text x="484" y="174.7" class="label">화면</text><text x="484" y="190.5" class="sub">하나의 대화</text><rect x="406" y="205.7" width="156" height="27" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a3"/><text x="414" y="222.7" class="row muted fl-empty a4">—</text><g id="n-1-c0" opacity="0" class="fl-layer a2"><rect x="414" y="212.7" width="26.8" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="427.4" y="222.9" class="tag" fill="var(--color-tag-blue)">YOU</text><text x="445.8" y="222.7" class="row">이 테스트 왜 깨져?</text></g></g>
+<g id="n-2" class="fl-node" data-id="engine"><rect x="280.3" y="380.7" width="101.2" height="57" rx="10" fill="var(--color-node)" class="fl-stroke a5"/><text x="330.9" y="406.7" class="label">엔진</text><text x="330.9" y="422.5" class="sub">사용자당 하나</text></g>
+<g id="n-3" class="fl-node" data-id="db"><path d="M264 587.7 a 50 12 0 0 1 100 0 v 57 a 50 12 0 0 1 -100 0 z" fill="var(--color-node)" class="fl-stroke a6"/><path d="M264 587.7 a 50 12 0 0 0 100 0" fill="none" class="fl-stroke a6"/><text x="314" y="613.7" class="label">기록 저장소</text><text x="314" y="629.5" class="sub">sqlite</text></g>
+<g id="n-4" class="fl-node" data-id="user"><circle cx="56" cy="38" r="10" fill="var(--color-node)" class="fl-stroke a1"/><path d="M28 86 V 64 A 28 14 0 0 1 84 64 V 86 Z" fill="var(--color-node)" class="fl-stroke a1"/><text x="56" y="106" class="label">개발자</text></g>
+<g id="n-5" class="fl-node" data-id="codex"><rect x="812.5" y="483.7" width="101.6" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a7" stroke-dasharray="5 4"/><text x="863.3" y="511.7" class="label">Codex CLI</text></g>
 <g id="e-0" class="fl-edge"><path id="p-0" d="M 84 78.66666666666666 L 292 78.7 Q 314 78.7, 314 100.7 L 314 172.7" class="fl-path a8" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="144" y="69.2" width="36" height="18" rx="9" class="pill a9"/><text x="162" y="82.1" class="edgelabel a10">명령</text></g></g>
 <g id="e-1" class="fl-edge"><path id="p-1" d="M 84 71.33333333333334 L 92 71.3 Q 100 71.3, 100 63.3 L 100 60.5 Q 100 49.7, 110.8 49.7 L 186.5 49.7 Q 196 49.7, 196 59.2 L 196 59.2 Q 196 68.7, 205.5 68.7 L 462 68.7 Q 484 68.7, 484 90.7 L 484 148.7" class="fl-path a11" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="144" y="40.2" width="36" height="18" rx="9" class="pill a12"/><text x="162" y="53.1" class="edgelabel a13">입력</text></g></g>
 <g id="e-2" class="fl-edge"><path id="p-2" d="M 314 218.66666666666666 L 314 380.7" class="fl-path a8" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="282" y="302.7" width="63.5" height="18" rx="9" class="pill a9"/><text x="313.8" y="315.6" class="edgelabel a10">엔진 시작</text></g></g>

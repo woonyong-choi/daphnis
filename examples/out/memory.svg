@@ -8,7 +8,7 @@
 :root {
   --color-gray-0: #ffffff;
   --color-gray-25: #f7f8fa;
-  --color-gray-50: #f5f7fa;
+  --color-gray-50: #eef1f5;
   --color-gray-100: #e3e7ec;
   --color-gray-200: #d5dbe3;
   --color-gray-300: #b6c0cc;
@@ -22,6 +22,7 @@
   --color-neutral-850: #242526;
   --color-neutral-900: #1b1b1d;
   --color-neutral-950: #111214;
+  --color-blue-100: #e3ecf8;
   --color-blue-50: #edf3fb;
   --color-blue-400: #3396e8;
   --color-blue-600: #2a78d6;
@@ -36,14 +37,15 @@
   --color-on-accent: var(--color-gray-0);
   --color-fg: var(--color-ink-900);
   --color-muted: var(--color-ink-600);
-  --color-bg: var(--color-gray-0);
+  --color-bg: var(--color-gray-25);
+  --color-node: var(--color-gray-0);
   --color-surface: var(--color-gray-50);
   --color-border: var(--color-gray-300);
   --color-card-on: var(--color-blue-50);
   --color-dot: var(--color-gray-200);
   --color-frame: var(--color-gray-100);
   --color-page: var(--color-gray-0);
-  --color-gallery: var(--color-gray-25);
+  --color-gallery: var(--color-gray-0);
   --color-tag-blue: var(--color-tone-blue);
   --color-tag-purple: var(--color-tone-purple);
   --color-tag-green: var(--color-tone-green);
@@ -56,7 +58,7 @@
   --color-ink-200: #e6e5e1;
   --color-series-1: var(--color-accent);
   --color-series-2: var(--color-orange-600);
-  --color-heat-low: var(--color-blue-50);
+  --color-heat-low: var(--color-blue-100);
   --color-heat-high: var(--color-blue-800);
   --color-grid: var(--color-ink-200);
   --font-sans: FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
@@ -197,6 +199,7 @@
     --color-fg: var(--color-neutral-100);
     --color-muted: var(--color-neutral-400);
     --color-bg: var(--color-neutral-900);
+    --color-node: var(--color-neutral-900);
     --color-surface: var(--color-neutral-850);
     --color-border: var(--color-neutral-700);
     --color-card-on: var(--color-blue-900);
@@ -204,6 +207,7 @@
     --color-frame: var(--color-neutral-800);
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
+    --color-heat-low: var(--color-blue-50);
     --color-series-2: #f08a5d;
     --color-grid: var(--color-neutral-750);
   }
@@ -213,6 +217,7 @@
   --color-fg: var(--color-neutral-100);
   --color-muted: var(--color-neutral-400);
   --color-bg: var(--color-neutral-900);
+  --color-node: var(--color-neutral-900);
   --color-surface: var(--color-neutral-850);
   --color-border: var(--color-neutral-700);
   --color-card-on: var(--color-blue-900);
@@ -220,6 +225,7 @@
   --color-frame: var(--color-neutral-800);
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
+  --color-heat-low: var(--color-blue-50);
   --color-series-2: #f08a5d;
   --color-grid: var(--color-neutral-750);
 }
@@ -484,11 +490,11 @@
 <rect width="100%" height="100%" fill="var(--color-bg)"/><rect width="100%" height="100%" fill="url(#fl-dots)"/>
 <g transform="translate(0 0)">
 <g id="g-0" class="fl-group" data-id="memory"><rect x="240" y="31.3" width="224" height="665" rx="14" class="frame-box fl-stroke a0"/><text x="258" y="49.3" class="frame">기억 엔진</text></g>
-<g id="n-0" class="fl-node" data-id="extract"><rect x="264" y="131.3" width="176" height="128" rx="10" fill="var(--color-bg)" class="fl-stroke a1"/><text x="352" y="157.4" class="label">추출기</text><text x="352" y="173.2" class="sub">LLM</text><rect x="274" y="188.3" width="156" height="61" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a4"/><text x="282" y="205.3" class="row muted fl-empty a5">—</text><g id="n-0-c0" opacity="0" class="fl-layer a2"><rect x="282" y="195.3" width="43.1" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="303.6" y="205.6" class="tag" fill="var(--color-tag-blue)">PERSON</text><text x="282" y="220.3" class="row">민지</text><rect x="282" y="229.3" width="26.8" height="14" rx="4" fill="var(--color-tag-purple)" fill-opacity="0.15"/><text x="295.4" y="239.6" class="tag" fill="var(--color-tag-purple)">ORG</text><text x="313.8" y="239.3" class="row">토스<tspan class="muted"> · 3월</tspan></text></g><g id="n-0-c1" opacity="0" class="fl-layer a3"><rect x="282" y="195.3" width="43.1" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="303.6" y="205.6" class="tag" fill="var(--color-tag-blue)">PERSON</text><text x="282" y="220.3" class="row">김민지 = 민지</text></g></g>
-<g id="n-1" class="fl-node" data-id="resolve"><rect x="264" y="319.3" width="176" height="109" rx="10" fill="var(--color-bg)" class="fl-stroke a6"/><text x="352" y="345.4" class="label">개체 정리</text><text x="352" y="361.2" class="sub">같은 사람 합치기</text><rect x="274" y="376.3" width="156" height="42" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a8"/><text x="282" y="393.3" class="row muted fl-empty a9">—</text><g id="n-1-c0" opacity="0" class="fl-layer a7"><rect x="282" y="383.3" width="38.5" height="14" rx="4" fill="var(--color-tag-orange)" fill-opacity="0.15"/><text x="301.2" y="393.6" class="tag" fill="var(--color-tag-orange)">MERGE</text><text x="282" y="408.3" class="row">김민지 → 민지</text></g></g>
-<g id="n-2" class="fl-node" data-id="graph"><path d="M264 500.3 a 88 12 0 0 1 176 0 v 100 a 88 12 0 0 1 -176 0 z" fill="var(--color-bg)" class="fl-stroke a10"/><path d="M264 500.3 a 88 12 0 0 0 176 0" fill="none" class="fl-stroke a10"/><text x="352" y="526.4" class="label">기억 그래프</text><rect x="274" y="542.3" width="156" height="48" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a13"/><text x="282" y="559.3" class="row muted fl-empty a14">—</text><g id="n-2-c0" opacity="0" class="fl-layer a11"><line x1="337.1" y1="557.3" x2="366.9" y2="557.3" stroke="var(--color-border)" stroke-width="1"/><rect x="296.9" y="548.3" width="40.1" height="18" rx="9" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1"/><text x="317" y="561.1" class="mini on">민지</text><rect x="366.9" y="548.3" width="40.1" height="18" rx="9" fill="var(--color-bg)" stroke="var(--color-border)" stroke-width="1"/><text x="387" y="561.1" class="mini">토스</text></g><g id="n-2-c1" opacity="0" class="fl-layer a12"><line x1="325.4" y1="575.3" x2="331.9" y2="575.3" stroke="var(--color-border)" stroke-width="1"/><line x1="372.1" y1="575.3" x2="377.3" y2="575.3" stroke="var(--color-border)" stroke-width="1"/><path d="M 305.3 566.3 Q 352 530.3 398.7 566.3" fill="none" stroke="var(--color-accent)" stroke-width="1"/><rect x="285.3" y="566.3" width="40.1" height="18" rx="9" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1"/><text x="305.3" y="579.1" class="mini on">민지</text><rect x="331.9" y="566.3" width="40.1" height="18" rx="9" fill="var(--color-bg)" stroke="var(--color-border)" stroke-width="1"/><text x="352" y="579.1" class="mini">토스</text><rect x="377.3" y="566.3" width="42.7" height="18" rx="9" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1"/><text x="398.7" y="579.1" class="mini on">결제팀</text></g></g>
-<g id="n-3" class="fl-node" data-id="user"><circle cx="56" cy="38" r="10" fill="var(--color-bg)" class="fl-stroke a15"/><path d="M28 86 V 64 A 28 14 0 0 1 84 64 V 86 Z" fill="var(--color-bg)" class="fl-stroke a15"/><text x="56" y="106" class="label">사용자</text></g>
-<g id="n-4" class="fl-node" data-id="answer"><rect x="524" y="636" width="176" height="109" rx="10" fill="var(--color-bg)" class="fl-stroke a16"/><text x="612" y="662" class="label">답변</text><text x="612" y="677.8" class="sub">질의 시점</text><rect x="534" y="693" width="156" height="42" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a18"/><text x="542" y="710" class="row muted fl-empty a19">—</text><g id="n-4-c0" opacity="0" class="fl-layer a17"><rect x="542" y="700" width="45.8" height="14" rx="4" fill="var(--color-tag-green)" fill-opacity="0.15"/><text x="564.9" y="710.2" class="tag" fill="var(--color-tag-green)">ANSWER</text><text x="682" y="710" class="mark">✓</text><text x="542" y="725" class="row">토스 결제팀</text></g></g>
+<g id="n-0" class="fl-node" data-id="extract"><rect x="264" y="131.3" width="176" height="128" rx="10" fill="var(--color-node)" class="fl-stroke a1"/><text x="352" y="157.4" class="label">추출기</text><text x="352" y="173.2" class="sub">LLM</text><rect x="274" y="188.3" width="156" height="61" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a4"/><text x="282" y="205.3" class="row muted fl-empty a5">—</text><g id="n-0-c0" opacity="0" class="fl-layer a2"><rect x="282" y="195.3" width="43.1" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="303.6" y="205.6" class="tag" fill="var(--color-tag-blue)">PERSON</text><text x="282" y="220.3" class="row">민지</text><rect x="282" y="229.3" width="26.8" height="14" rx="4" fill="var(--color-tag-purple)" fill-opacity="0.15"/><text x="295.4" y="239.6" class="tag" fill="var(--color-tag-purple)">ORG</text><text x="313.8" y="239.3" class="row">토스<tspan class="muted"> · 3월</tspan></text></g><g id="n-0-c1" opacity="0" class="fl-layer a3"><rect x="282" y="195.3" width="43.1" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="303.6" y="205.6" class="tag" fill="var(--color-tag-blue)">PERSON</text><text x="282" y="220.3" class="row">김민지 = 민지</text></g></g>
+<g id="n-1" class="fl-node" data-id="resolve"><rect x="264" y="319.3" width="176" height="109" rx="10" fill="var(--color-node)" class="fl-stroke a6"/><text x="352" y="345.4" class="label">개체 정리</text><text x="352" y="361.2" class="sub">같은 사람 합치기</text><rect x="274" y="376.3" width="156" height="42" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a8"/><text x="282" y="393.3" class="row muted fl-empty a9">—</text><g id="n-1-c0" opacity="0" class="fl-layer a7"><rect x="282" y="383.3" width="38.5" height="14" rx="4" fill="var(--color-tag-orange)" fill-opacity="0.15"/><text x="301.2" y="393.6" class="tag" fill="var(--color-tag-orange)">MERGE</text><text x="282" y="408.3" class="row">김민지 → 민지</text></g></g>
+<g id="n-2" class="fl-node" data-id="graph"><path d="M264 500.3 a 88 12 0 0 1 176 0 v 100 a 88 12 0 0 1 -176 0 z" fill="var(--color-node)" class="fl-stroke a10"/><path d="M264 500.3 a 88 12 0 0 0 176 0" fill="none" class="fl-stroke a10"/><text x="352" y="526.4" class="label">기억 그래프</text><rect x="274" y="542.3" width="156" height="48" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a13"/><text x="282" y="559.3" class="row muted fl-empty a14">—</text><g id="n-2-c0" opacity="0" class="fl-layer a11"><line x1="337.1" y1="557.3" x2="366.9" y2="557.3" stroke="var(--color-border)" stroke-width="1"/><rect x="296.9" y="548.3" width="40.1" height="18" rx="9" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1"/><text x="317" y="561.1" class="mini on">민지</text><rect x="366.9" y="548.3" width="40.1" height="18" rx="9" fill="var(--color-node)" stroke="var(--color-border)" stroke-width="1"/><text x="387" y="561.1" class="mini">토스</text></g><g id="n-2-c1" opacity="0" class="fl-layer a12"><line x1="325.4" y1="575.3" x2="331.9" y2="575.3" stroke="var(--color-border)" stroke-width="1"/><line x1="372.1" y1="575.3" x2="377.3" y2="575.3" stroke="var(--color-border)" stroke-width="1"/><path d="M 305.3 566.3 Q 352 530.3 398.7 566.3" fill="none" stroke="var(--color-accent)" stroke-width="1"/><rect x="285.3" y="566.3" width="40.1" height="18" rx="9" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1"/><text x="305.3" y="579.1" class="mini on">민지</text><rect x="331.9" y="566.3" width="40.1" height="18" rx="9" fill="var(--color-node)" stroke="var(--color-border)" stroke-width="1"/><text x="352" y="579.1" class="mini">토스</text><rect x="377.3" y="566.3" width="42.7" height="18" rx="9" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1"/><text x="398.7" y="579.1" class="mini on">결제팀</text></g></g>
+<g id="n-3" class="fl-node" data-id="user"><circle cx="56" cy="38" r="10" fill="var(--color-node)" class="fl-stroke a15"/><path d="M28 86 V 64 A 28 14 0 0 1 84 64 V 86 Z" fill="var(--color-node)" class="fl-stroke a15"/><text x="56" y="106" class="label">사용자</text></g>
+<g id="n-4" class="fl-node" data-id="answer"><rect x="524" y="636" width="176" height="109" rx="10" fill="var(--color-node)" class="fl-stroke a16"/><text x="612" y="662" class="label">답변</text><text x="612" y="677.8" class="sub">질의 시점</text><rect x="534" y="693" width="156" height="42" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card a18"/><text x="542" y="710" class="row muted fl-empty a19">—</text><g id="n-4-c0" opacity="0" class="fl-layer a17"><rect x="542" y="700" width="45.8" height="14" rx="4" fill="var(--color-tag-green)" fill-opacity="0.15"/><text x="564.9" y="710.2" class="tag" fill="var(--color-tag-green)">ANSWER</text><text x="682" y="710" class="mark">✓</text><text x="542" y="725" class="row">토스 결제팀</text></g></g>
 <g id="e-0" class="fl-edge"><path id="p-0" d="M 84 71.33333333333334 L 330 71.3 Q 352 71.3, 352 93.3 L 352 131.3" class="fl-path a20" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="144" y="61.8" width="36" height="18" rx="9" class="pill a21"/><text x="162" y="74.8" class="edgelabel a22">대화</text></g></g>
 <g id="e-1" class="fl-edge"><path id="p-1" d="M 352 259.3333333333333 L 352 319.3" class="fl-path a23" marker-end="url(#fl-arrow)"/></g>
 <g id="e-2" class="fl-edge"><path id="p-2" d="M 352 428.3333333333333 L 352 488.3" class="fl-path a24" marker-end="url(#fl-arrow)"/></g>
