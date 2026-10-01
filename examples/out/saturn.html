@@ -111,6 +111,7 @@
   --size-line-20: 20px;
   --size-line-22: 22px;
   --size-control: 30px;
+  --size-control-inner: 22px;
   --size-pill: 18px;
   --size-tag: 14px;
   --size-icon: 12px;
@@ -127,9 +128,9 @@
   --size-hop-ref: 300px;
   --size-chip-max: 210px;
   --size-caption-max: 720px;
-  --size-gallery-column: 1000px;
+  --size-gallery-column: var(--size-figure-canvas);
   --size-gallery-frame: 820px;
-  --size-document-column: 880px;
+  --size-document-column: var(--size-figure-canvas);
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
   --size-chart-width: var(--size-figure-canvas);
@@ -275,9 +276,11 @@
   --color-plate-border: var(--color-neutral-800);
 }
 /* 재생기 틀과 조작 막대. iframe 안(html.embedded)에서는 테두리와 바깥 여백을 뺀다. */
+/* 그림 표시 폭 규칙: 문서 미리보기, 목록 카드, 재생기가 같다. 컨테이너 폭은 화면 폭에서 좌우 바깥 여백(space-16)을 뺀 값이고,
+   그림 폭은 min(표준 캔버스 폭, 컨테이너 폭)이다. 컨테이너 안쪽에는 좌우 여백과 레이아웃을 차지하는 테두리를 두지 않아 세 곳의 그림 폭이 같다. */
 body {
   margin: 0;
-  padding: var(--space-12);
+  padding: var(--space-12) var(--space-16);
   font-family: var(--font-sans);
   color: var(--color-fg);
   background: var(--color-page);
@@ -291,24 +294,24 @@ html.embedded body {
 
 .fl-figure {
   position: relative;
-  max-width: calc(var(--size-figure-canvas) + var(--space-12) + var(--border-thin) * 2);
+  max-width: var(--size-figure-canvas);
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
   background: var(--color-bg);
-  border: var(--border-thin) solid var(--color-frame);
   border-radius: var(--radius-2xl);
+  box-shadow: 0 0 0 var(--border-thin) var(--color-frame);
 }
 
 html.embedded .fl-figure {
   max-width: none;
-  border: 0;
   border-radius: 0;
+  box-shadow: none;
 }
 
 /* 카드 전체가 그림 판 한 덩어리다. 제목 줄, 그림 영역, 조작 줄이 모두 color.bg 한 톤이라 숫자 둘레 halo와 선 라벨 알약도 그대로 맞는다. */
 .fl-canvas {
-  padding: var(--space-6);
+  padding: var(--space-6) 0;
   background: var(--color-bg);
   overflow: auto;
 }
@@ -364,25 +367,31 @@ html.embedded .fl-canvas svg {
   outline-offset: var(--space-1);
 }
 
+/* 분할 조작(재생기 탭, 목록 쪽 테마 묶음)과 둥근 단추는 한 모양이다. 바깥 높이 control, 안쪽 단추 높이 control-inner, 반지름 full. */
 .fl-tabs {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-1);
+  box-sizing: border-box;
   justify-content: center;
+  min-height: var(--size-control);
   padding: var(--space-1-5);
   background: var(--color-node);
   border: var(--border-thin) solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-full);
 }
 
 .fl-tabs button {
   position: relative;
-  padding: var(--space-3) var(--space-7);
+  display: grid;
+  place-items: center;
+  min-height: var(--size-control-inner);
+  padding: 0 var(--space-7);
   font: var(--size-text-13) var(--font-sans);
   color: var(--color-muted);
   background: transparent;
   border: 0;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
   cursor: pointer;
 }
 

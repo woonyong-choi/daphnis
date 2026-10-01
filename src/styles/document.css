@@ -67,6 +67,8 @@ img {
 
 .theme {
   display: flex;
+  box-sizing: border-box;
+  min-height: var(--size-control);
   padding: var(--space-1-5);
   background: var(--color-bg);
   border: var(--border-thin) solid var(--color-frame);
@@ -74,7 +76,8 @@ img {
 }
 
 .theme button {
-  padding: var(--space-2) var(--space-6);
+  min-height: var(--size-control-inner);
+  padding: 0 var(--space-6);
   font: var(--size-text-13) var(--font-sans);
   color: var(--color-muted);
   cursor: pointer;

@@ -112,6 +112,7 @@ export const tokens = freeze({
       "22": "var(--size-line-22)"
     },
     "control": "var(--size-control)",
+    "control-inner": "var(--size-control-inner)",
     "pill": "var(--size-pill)",
     "tag": "var(--size-tag)",
     "icon": "var(--size-icon)",
@@ -361,6 +362,7 @@ export const values = freeze({
       "22": 22
     },
     "control": 30,
+    "control-inner": 22,
     "pill": 18,
     "tag": 14,
     "icon": 12,
@@ -377,9 +379,9 @@ export const values = freeze({
     "hop-ref": 300,
     "chip-max": 210,
     "caption-max": 720,
-    "gallery-column": 1000,
+    "gallery-column": 960,
     "gallery-frame": 820,
-    "document-column": 880,
+    "document-column": 960,
     "player-chrome": 190,
     "embedded-chrome": 150,
     "chart-width": 960,

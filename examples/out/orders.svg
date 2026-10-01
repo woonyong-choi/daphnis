@@ -91,6 +91,7 @@
   --size-line-20: 20px;
   --size-line-22: 22px;
   --size-control: 30px;
+  --size-control-inner: 22px;
   --size-pill: 18px;
   --size-tag: 14px;
   --size-icon: 12px;
@@ -107,9 +108,9 @@
   --size-hop-ref: 300px;
   --size-chip-max: 210px;
   --size-caption-max: 720px;
-  --size-gallery-column: 1000px;
+  --size-gallery-column: var(--size-figure-canvas);
   --size-gallery-frame: 820px;
-  --size-document-column: 880px;
+  --size-document-column: var(--size-figure-canvas);
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
   --size-chart-width: var(--size-figure-canvas);
