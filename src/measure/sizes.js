@@ -13,14 +13,14 @@ export const STYLE = Object.freeze({
   label: { size: TEXT['14'], face: 'medium', line: LINE['18'] },
   sub: { size: TEXT['12'], face: 'regular', line: LINE['15'] },
   row: { size: TEXT['11'], face: 'regular', line: LINE['15'] },
-  mono: { size: TEXT['10-5'], face: 'mono', line: LINE['15'] },
+  mono: { size: TEXT['11'], face: 'mono', line: LINE['15'] },
   tag: { size: TEXT['9'], face: 'semibold' },
   mark: { size: TEXT['11'], face: 'semibold' },
   pill: { size: TEXT['11'], face: 'regular' },
   group: { size: TEXT['11'], face: 'semibold' },
-  chip: { size: TEXT['11-5'], face: 'regular', line: LINE['15'] },
-  cell: { size: TEXT['11-5'], face: 'regular' },
-  type: { size: TEXT['10-5'], face: 'mono' },
+  chip: { size: TEXT['12'], face: 'regular', line: LINE['15'] },
+  cell: { size: TEXT['12'], face: 'regular' },
+  type: { size: TEXT['11'], face: 'mono' },
 });
 
 /** 카드 안쪽 간격 */

@@ -141,9 +141,9 @@ html.embedded .fl-canvas svg {
 
 .fl-caption {
   max-width: var(--size-caption-max);
-  min-height: calc(var(--size-text-14-5) * var(--leading-normal));
+  min-height: calc(var(--size-text-14) * var(--leading-normal));
   margin: 0;
-  font-size: var(--size-text-14-5);
+  font-size: var(--size-text-14);
   line-height: var(--leading-normal);
   text-align: center;
   color: var(--color-muted);

@@ -26,6 +26,7 @@ h1 {
 .top p {
   grid-column: 1;
   margin: 0;
+  font-size: var(--size-text-15);
   color: var(--color-muted);
 }
 
@@ -92,7 +93,7 @@ header {
 
 h2 {
   margin: 0;
-  font: var(--weight-semibold) var(--size-text-14) var(--font-sans);
+  font: var(--weight-semibold) var(--size-text-15) var(--font-sans);
 }
 
 /* 백틱으로 감싼 글은 코드 글꼴로 그린다. */

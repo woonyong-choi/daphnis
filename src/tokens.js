@@ -94,14 +94,10 @@ export const tokens = freeze({
   "size": {
     "text": {
       "9": "var(--size-text-9)",
-      "10-5": "var(--size-text-10-5)",
       "11": "var(--size-text-11)",
-      "11-5": "var(--size-text-11-5)",
       "12": "var(--size-text-12)",
       "13": "var(--size-text-13)",
-      "13-5": "var(--size-text-13-5)",
       "14": "var(--size-text-14)",
-      "14-5": "var(--size-text-14-5)",
       "15": "var(--size-text-15)",
       "22": "var(--size-text-22)"
     },
@@ -344,14 +340,10 @@ export const values = freeze({
   "size": {
     "text": {
       "9": 9,
-      "10-5": 10.5,
       "11": 11,
-      "11-5": 11.5,
       "12": 12,
       "13": 13,
-      "13-5": 13.5,
       "14": 14,
-      "14-5": 14.5,
       "15": 15,
       "22": 22
     },

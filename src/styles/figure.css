@@ -36,7 +36,7 @@
 
 .fl .row.mono {
   font-family: var(--font-mono);
-  font-size: var(--size-text-10-5);
+  font-size: var(--size-text-11);
 }
 
 /* 백틱으로 감싼 글. 코드 글꼴로 그린다. */
@@ -69,7 +69,7 @@
 }
 
 .fl .mini {
-  font-size: var(--size-text-10-5);
+  font-size: var(--size-text-11);
   text-anchor: middle;
   fill: var(--color-fg);
 }
@@ -79,7 +79,7 @@
 }
 
 .fl .chip {
-  font-size: var(--size-text-11-5);
+  font-size: var(--size-text-12);
   text-anchor: middle;
   fill: var(--color-on-accent);
 }
@@ -95,13 +95,13 @@
 }
 
 .fl .cell {
-  font-size: var(--size-text-11-5);
+  font-size: var(--size-text-12);
   fill: var(--color-fg);
 }
 
 .fl .cell.type {
   font-family: var(--font-mono);
-  font-size: var(--size-text-10-5);
+  font-size: var(--size-text-11);
   text-anchor: end;
   fill: var(--color-muted);
 }

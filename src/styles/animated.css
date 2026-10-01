@@ -8,7 +8,7 @@
 }
 
 .fl .caption {
-  font-size: var(--size-text-13-5);
+  font-size: var(--size-text-14);
   text-anchor: middle;
   fill: var(--color-muted);
 }

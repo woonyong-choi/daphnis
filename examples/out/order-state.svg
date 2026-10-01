@@ -76,14 +76,10 @@
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
-  --size-text-10-5: 10.5px;
   --size-text-11: 11px;
-  --size-text-11-5: 11.5px;
   --size-text-12: 12px;
   --size-text-13: 13px;
-  --size-text-13-5: 13.5px;
   --size-text-14: 14px;
-  --size-text-14-5: 14.5px;
   --size-text-15: 15px;
   --size-text-22: 22px;
   --size-line-15: 15px;
@@ -293,7 +289,7 @@
 
 .fl .row.mono {
   font-family: var(--font-mono);
-  font-size: var(--size-text-10-5);
+  font-size: var(--size-text-11);
 }
 
 /* 백틱으로 감싼 글. 코드 글꼴로 그린다. */
@@ -326,7 +322,7 @@
 }
 
 .fl .mini {
-  font-size: var(--size-text-10-5);
+  font-size: var(--size-text-11);
   text-anchor: middle;
   fill: var(--color-fg);
 }
@@ -336,7 +332,7 @@
 }
 
 .fl .chip {
-  font-size: var(--size-text-11-5);
+  font-size: var(--size-text-12);
   text-anchor: middle;
   fill: var(--color-on-accent);
 }
@@ -352,13 +348,13 @@
 }
 
 .fl .cell {
-  font-size: var(--size-text-11-5);
+  font-size: var(--size-text-12);
   fill: var(--color-fg);
 }
 
 .fl .cell.type {
   font-family: var(--font-mono);
-  font-size: var(--size-text-10-5);
+  font-size: var(--size-text-11);
   text-anchor: end;
   fill: var(--color-muted);
 }
@@ -423,7 +419,7 @@
 }
 
 .fl .caption {
-  font-size: var(--size-text-13-5);
+  font-size: var(--size-text-14);
   text-anchor: middle;
   fill: var(--color-muted);
 }
@@ -492,11 +488,11 @@
 <g id="e-5" class="fl-edge"><path id="p-5" d="M 133.74 332 L 133.7 404 Q 133.7 426, 155.7 426 L 172.7 426 Q 194.7 426, 194.7 448 L 194.7 470" class="fl-path a12" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="104.7" y="392" width="57.6" height="18" rx="9" class="pill a13"/><text x="133.5" y="405" class="edgelabel a14">고객 취소</text></g></g>
 <g id="e-6" class="fl-edge mark"><path id="p-6" d="M 78 700 L 78 760" class="fl-path a12" marker-end="url(#fl-arrow)"/></g>
 <g id="e-7" class="fl-edge mark"><path id="p-7" d="M 211.4066666666667 516 L 211.4 576" class="fl-path a12" marker-end="url(#fl-arrow)"/></g>
-<g class="p0-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><g><rect x="-33.4" y="-35" width="66.7" height="23" rx="8" fill="var(--color-accent-fill)"/><text x="0" y="-20" class="chip">39,000원</text><animateTransform attributeName="transform" type="translate" dur="20.461s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.00565;0.00807;0.00987;0.01135;0.01266;0.01384;0.01494;0.016;0.01702;0.01803;0.01904;0.02008;0.02116;0.0223;0.02353;0.02489;0.02646;0.02837;0.03095;0.03666;1" values="0 47;0 47;0 47;0 47;0 47;0 47;0 47;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0"/></g><animate attributeName="opacity" dur="20.461s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.03666" values="1;0"/><animateMotion dur="20.461s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.03666;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
+<g class="p0-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><g><rect x="-34.4" y="-35" width="68.8" height="23" rx="8" fill="var(--color-accent-fill)"/><text x="0" y="-20" class="chip">39,000원</text><animateTransform attributeName="transform" type="translate" dur="20.461s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.00565;0.00807;0.00987;0.01135;0.01266;0.01384;0.01494;0.016;0.01702;0.01803;0.01904;0.02008;0.02116;0.0223;0.02353;0.02489;0.02646;0.02837;0.03095;0.03666;1" values="0 47;0 47;0 47;0 47;0 47;0 47;0 47;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0"/></g><animate attributeName="opacity" dur="20.461s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.03666" values="1;0"/><animateMotion dur="20.461s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.03666;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
 <g class="p1-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animate attributeName="opacity" dur="20.461s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.22946;0.36122" values="0;1;0"/><animateMotion dur="20.461s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.22946;0.36122;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
 <g class="p2-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animate attributeName="opacity" dur="20.461s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.39544;0.49343" values="0;1;0"/><animateMotion dur="20.461s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.39544;0.49343;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
 <g class="p3-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animate attributeName="opacity" dur="20.461s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.60584;0.64249" values="0;1;0"/><animateMotion dur="20.461s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.60584;0.64249;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
-<g class="p4-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><g><rect x="-19.6" y="-35" width="39.2" height="23" rx="8" fill="var(--color-accent-fill)"/><text x="0" y="-20" class="chip">환불</text><animateTransform attributeName="transform" type="translate" dur="20.461s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.69088;0.7212;0.73418;0.74383;0.75181;0.7588;0.76515;0.77108;0.77672;0.78221;0.78763;0.79308;0.79864;0.80441;0.81053;0.81714;0.82447;0.8329;0.84314;0.85697;0.88759;1" values="0 47;0 47;0 47;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0"/></g><animate attributeName="opacity" dur="20.461s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.69088;0.88759" values="0;1;0"/><animateMotion dur="20.461s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.69088;0.88759;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-4" xlink:href="#p-4"/></animateMotion></g>
+<g class="p4-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><g><rect x="-20" y="-35" width="40.1" height="23" rx="8" fill="var(--color-accent-fill)"/><text x="0" y="-20" class="chip">환불</text><animateTransform attributeName="transform" type="translate" dur="20.461s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.69088;0.7212;0.73418;0.74383;0.75181;0.7588;0.76515;0.77108;0.77672;0.78221;0.78763;0.79308;0.79864;0.80441;0.81053;0.81714;0.82447;0.8329;0.84314;0.85697;0.88759;1" values="0 47;0 47;0 47;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0"/></g><animate attributeName="opacity" dur="20.461s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.69088;0.88759" values="0;1;0"/><animateMotion dur="20.461s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.69088;0.88759;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-4" xlink:href="#p-4"/></animateMotion></g>
 </g>
 <text x="480" y="820" opacity="0" class="steplabel a18">정상 주문</text>
 <text x="480" y="820" opacity="0" class="steplabel a19">취소</text>

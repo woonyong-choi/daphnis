@@ -14,7 +14,7 @@ import { tokens, values } from './tokens.js';
 
 const SPACE = values.space;
 const LINE = values.size.line;
-const CAPTION = { size: values.size.text['13-5'], face: 'regular' };
+const CAPTION = { size: values.size.text['14'], face: 'regular' };
 const STEP_LABEL = { size: values.size.text['13'], face: 'semibold' };
 // 켜짐 구간 끝을 다음 구간 시작보다 이만큼(ms) 앞당긴다. 같은 퍼센트에 두 값이 겹치지 않게 하기 위해서다.
 const EPSILON_MS = 0.1;

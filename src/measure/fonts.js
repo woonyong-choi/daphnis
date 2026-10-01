@@ -30,6 +30,9 @@ function baseOf(name) {
   return FACES[name].base ?? name;
 }
 
+// 한글 굵기마다 짝이 되는 Inter 굵기
+const KOREAN_PAIR = { koRegular: 'regular', koMedium: 'medium', koSemibold: 'semibold' };
+
 // 글꼴 파일은 처음 쓸 때 한 번 읽는다.
 const loaded = new Map();
 const widths = new Map();
@@ -171,6 +174,11 @@ function resolveUsed(used) {
       const name = baseOf(faceFor(c, face) ?? face);
       resolved.set(name, (resolved.get(name) ?? '') + c);
     }
+  }
+  // 띄어쓰기는 Inter의 것으로 그려지므로(글꼴 우선순위 첫 글꼴), 한글 조각이 든 굵기마다 같은 굵기 Inter 조각에 공백을 항상 넣는다. 한글만 있는 글의 공백이 조각에 없어 보는 쪽 시스템 글꼴로 그려지는 일을 막는다.
+  for (const name of [...resolved.keys()]) {
+    const latin = KOREAN_PAIR[name] ?? name;
+    if (latin !== 'mono') resolved.set(latin, `${resolved.get(latin) ?? ''} `);
   }
   return new Map([...resolved].map(([name, chars]) => [name, [...new Set(chars)].sort().join('')]));
 }

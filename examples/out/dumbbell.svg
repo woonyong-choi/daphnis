@@ -74,14 +74,10 @@
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
-  --size-text-10-5: 10.5px;
   --size-text-11: 11px;
-  --size-text-11-5: 11.5px;
   --size-text-12: 12px;
   --size-text-13: 13px;
-  --size-text-13-5: 13.5px;
   --size-text-14: 14px;
-  --size-text-14-5: 14.5px;
   --size-text-15: 15px;
   --size-text-22: 22px;
   --size-line-15: 15px;
@@ -291,7 +287,7 @@
 
 .fl .row.mono {
   font-family: var(--font-mono);
-  font-size: var(--size-text-10-5);
+  font-size: var(--size-text-11);
 }
 
 /* 백틱으로 감싼 글. 코드 글꼴로 그린다. */
@@ -324,7 +320,7 @@
 }
 
 .fl .mini {
-  font-size: var(--size-text-10-5);
+  font-size: var(--size-text-11);
   text-anchor: middle;
   fill: var(--color-fg);
 }
@@ -334,7 +330,7 @@
 }
 
 .fl .chip {
-  font-size: var(--size-text-11-5);
+  font-size: var(--size-text-12);
   text-anchor: middle;
   fill: var(--color-on-accent);
 }
@@ -350,13 +346,13 @@
 }
 
 .fl .cell {
-  font-size: var(--size-text-11-5);
+  font-size: var(--size-text-12);
   fill: var(--color-fg);
 }
 
 .fl .cell.type {
   font-family: var(--font-mono);
-  font-size: var(--size-text-10-5);
+  font-size: var(--size-text-11);
   text-anchor: end;
   fill: var(--color-muted);
 }
@@ -421,7 +417,7 @@
 }
 
 .fl .caption {
-  font-size: var(--size-text-13-5);
+  font-size: var(--size-text-14);
   text-anchor: middle;
   fill: var(--color-muted);
 }

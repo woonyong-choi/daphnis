@@ -63,7 +63,8 @@ test('embedFonts_mono_text_with_hangul_embeds_both_faces', async () => {
   const css = await embedFonts(glyphs.used);
   assert.match(css, /font-family:FigMono/);
   assert.match(css, /font-family:FigSansKo/);
-  assert.doesNotMatch(css, /font-family:FigSans[^K]/);
+  // 한글 조각이 있으면 같은 굵기 Inter 조각에 공백이 항상 들어간다(글자는 공백뿐).
+  assert.equal([...css.matchAll(/font-family:FigSans;/g)].length, 1);
   assert.equal(css, await embedFonts(glyphs.used));
 });
 
@@ -151,4 +152,19 @@ test('chart_and_label_css_use_body_font_with_tabular_numbers', async () => {
   assert.match(chart, /\.chart-value,[^}]*font-variant-numeric: tabular-nums/s);
   assert.match(figure, /\.fl \.code \{\s*font-family: var\(--font-mono\)/);
   assert.doesNotMatch(figure.match(/\.fl \.edgelabel \{[^}]*\}/)[0], /font-mono/);
+});
+
+test('embedFonts_hangul_only_text_still_embeds_a_space_glyph_in_the_same_weight_of_inter', async () => {
+  const glyphs = createGlyphSet();
+  glyphs.add('배송 중', 'medium');
+  glyphs.add('기억 그래프', 'semibold');
+
+  const css = await embedFonts(glyphs.used);
+  const faces = [...css.matchAll(/font-family:(\w+);font-weight:(\d+);src:url\(data:font\/woff2;base64,([^)]+)\)/g)].map((m) => ({ family: m[1], weight: Number(m[2]), font: fontkit.create(Buffer.from(m[3], 'base64')) }));
+
+  for (const weight of [500, 600]) {
+    const inter = faces.find((f) => f.family === 'FigSans' && f.weight === weight);
+    assert.ok(inter, `FigSans ${weight}`);
+    assert.ok(inter.font.hasGlyphForCodePoint(0x20), `FigSans ${weight} has U+0020`);
+  }
 });
