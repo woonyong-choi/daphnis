@@ -19,6 +19,8 @@ const STEP_LABEL = { size: values.size.text['13'], face: 'mono' };
 const EPSILON_MS = 0.1;
 // 점이 선을 지나는 곡선. HTML 재생기와 같다
 const MOVE = curveOf('move');
+const MOVE_SPLINE = keySpline(MOVE);
+const LINEAR = '0 0 1 1';
 
 // cost: time O(g·b + b·h + out), heap O(out), stack O(1), io 1
 // vars: g = 켜고 끄는 요소 수, b = 박자 수, h = 박자의 이동 수, out = 만든 SVG 글자 수
@@ -125,9 +127,12 @@ function staticAnimator() {
 // basis: estimate
 // 박자별 상태를 CSS keyframes class로 바꾼다. 같은 켜짐 순서는 class 하나를 나눠 쓴다.
 function createAnimator({ segs, total, growMs }) {
-  const duration = `${r(total / 1000)}s`;
+  // 한 바퀴 길이는 시간표 total 그대로(1ms 단위). 0.1초로 반올림하면 퍼센트와 keyTimes가 어긋난 채 반복된다.
+  const duration = `${Math.round(total) / 1000}s`;
   const css = [];
   const names = new Map();
+  // SMIL keyTimes. 한 바퀴를 0에서 1로 본 비율이고, 같은 값끼리 같은 시각이어야 해서 모든 점 요소가 이 함수 하나를 쓴다.
+  const keyTime = (ms) => Math.round((ms / total) * 100000) / 100000;
   const percent = (ms) => `${Math.round((ms / total) * 100000) / 1000}%`;
 
   // cost: time O(b), heap O(b), stack O(1)
@@ -183,19 +188,43 @@ function createAnimator({ segs, total, growMs }) {
     }
   }
 
+  // cost: time O(1), heap O(1), stack O(1)
+  // basis: estimate
   // 점 하나가 한 박자 동안 선을 건너고, 실어 보내는 글은 점 위의 상자로 따라간다.
+  // 점의 보임과 이동과 글 상자 밀어 넣기는 모두 SMIL이라 한 시계로 돈다. 보임을 CSS에 두면 시계 둘이 따로 반복해, 한 바퀴가 돌아올 때 점이 끝 지점에 잠깐 보였다가 시작 지점으로 뛴다.
   function packet(seg, hop, name, { glyphs, scene }) {
-    const end = seg.t0 + hop.ms;
-    css.push(
-      `@keyframes ${name} { 0%,${percent(seg.t0)} { opacity: 0 } ${percent(seg.t0 + EPSILON_MS)},${percent(end - EPSILON_MS)} { opacity: 1 } ${percent(end)},100% { opacity: 0 } }\n` +
-        `.fl .${name} { animation: ${name} ${duration} infinite step-end; }`,
-    );
-    const keyTimes = `0;${round4(seg.t0 / total)};${round4(end / total)};1`;
+    const [from, to] = [keyTime(seg.t0), keyTime(seg.t0 + hop.ms)];
     const chip = hop.data ? drawChip(hop.data, glyphs) + pushChip(seg, hop, scene) : '';
     return (
       `<g class="${name}" opacity="0"><circle r="${values.size.halo}" fill="${tokens.color.accent}" opacity="${values.opacity.halo}"/><circle r="${values.size.packet}" fill="${tokens.color.accent}"/>${chip ? `<g>${chip}</g>` : ''}` +
-      `<animateMotion dur="${duration}" repeatCount="indefinite" calcMode="spline" keyTimes="${keyTimes}" keySplines="0 0 1 1;${keySpline(MOVE)};0 0 1 1" keyPoints="${hop.isBack ? '1;1;0;0' : '0;0;1;1'}">` +
-      `<mpath href="#p-${hop.edge}" xlink:href="#p-${hop.edge}"/></animateMotion></g>`
+      showWindow(from, to) +
+      moveMotion(from, to, hop) +
+      `</g>`
+    );
+  }
+
+  // cost: time O(1), heap O(1), stack O(1)
+  // basis: estimate
+  // 보임 창. 이산 값이라 구간 끝에서 바로 바뀌고, 시작과 끝이 0이나 1이면 겹치는 keyTime을 만들지 않는다.
+  function showWindow(from, to) {
+    const keys = [[0, 0], [from, 1], [to, 0]].filter(([at], i, all) => i === 0 || at > all[i - 1][0]);
+    if (from === 0) keys.splice(0, 1, [0, 1]);
+    return `<animate attributeName="opacity" dur="${duration}" repeatCount="indefinite" calcMode="discrete" keyTimes="${keys.map(([at]) => at).join(';')}" values="${keys.map(([, on]) => on).join(';')}"/>`;
+  }
+
+  // cost: time O(1), heap O(1), stack O(1)
+  // basis: estimate
+  // 선을 따라 이동. 이동 전과 후에는 선의 시작과 끝에 머물고, 이동 구간만 이동 곡선을 쓴다. keyTimes는 늘어나기만 한다.
+  function moveMotion(from, to, hop) {
+    const [start, end] = hop.isBack ? [1, 0] : [0, 1];
+    const keys = [[0, start, LINEAR], [from, start, MOVE_SPLINE], [to, end, LINEAR], [1, end]].filter(([at], i, all) => i === 0 || at > all[i - 1][0]);
+    // 앞 키가 같은 시각이라 지워졌으면 이동 구간의 곡선이 첫 키로 옮겨 가야 한다.
+    if (from === 0) keys[0][2] = MOVE_SPLINE;
+    const last = keys.length - 1;
+    const splines = keys.slice(0, last).map(([, , spline]) => spline);
+    return (
+      `<animateMotion dur="${duration}" repeatCount="indefinite" calcMode="spline" keyTimes="${keys.map(([at]) => at).join(';')}" keySplines="${splines.join(';')}" keyPoints="${keys.map(([, point]) => point).join(';')}">` +
+      `<mpath href="#p-${hop.edge}" xlink:href="#p-${hop.edge}"/></animateMotion>`
     );
   }
 
@@ -208,10 +237,10 @@ function createAnimator({ segs, total, growMs }) {
     const samples = sampleRoute(scene.edges[hop.edge].points).map(({ fraction, point }) => ({ fraction: hop.isBack ? 1 - fraction : fraction, ...placeChip(point, size, scene.width) }));
     if (hop.isBack) samples.reverse();
     if (samples.every((p) => p.dx === 0 && p.dy === 0)) return '';
-    const at = (fraction) => round4((seg.t0 + timeAt(MOVE, fraction) * hop.ms) / total);
-    const times = [0, ...samples.map((p) => at(p.fraction)), 1];
-    const moves = [samples[0], ...samples, samples.at(-1)].map((p) => `${r(p.dx)} ${r(p.dy)}`);
-    return `<animateTransform attributeName="transform" type="translate" dur="${duration}" repeatCount="indefinite" calcMode="linear" keyTimes="${times.join(';')}" values="${moves.join(';')}"/>`;
+    const at = (f) => keyTime(seg.t0 + timeAt(MOVE, f) * hop.ms);
+    const keys = [[0, samples[0]], ...samples.map((p) => [at(p.fraction), p]), [1, samples.at(-1)]].filter(([time], i, all) => i === 0 || time > all[i - 1][0]);
+    const moves = keys.map(([, p]) => `${r(p.dx)} ${r(p.dy)}`);
+    return `<animateTransform attributeName="transform" type="translate" dur="${duration}" repeatCount="indefinite" calcMode="linear" keyTimes="${keys.map(([time]) => time).join(';')}" values="${moves.join(';')}"/>`;
   }
 
   // cost: time O(s·b + r·b), heap O(b), stack O(1)
@@ -268,6 +297,4 @@ function drawChip(lines, glyphs) {
   );
 }
 
-function round4(value) {
-  return Math.round(value * 10000) / 10000;
-}
+

@@ -411,69 +411,57 @@
 }
 
 @keyframes a0 { 0%,17.922% { stroke: var(--color-accent) } 17.923%,29.966% { stroke: var(--color-accent) } 29.966%,48.118% { stroke: var(--color-accent) } 48.118%,61.612% { stroke: var(--color-border) } 61.612%,73.656% { stroke: var(--color-border) } 73.656%,100% { stroke: var(--color-border) } }
-.fl .a0 { animation: a0 26.2s infinite step-end; }
+.fl .a0 { animation: a0 26.196s infinite step-end; }
 @keyframes a1 { 0%,17.922% { stroke: var(--color-accent) } 17.923%,29.966% { stroke: var(--color-accent) } 29.966%,48.118% { stroke: var(--color-accent) } 48.118%,61.612% { stroke: var(--color-accent) } 61.612%,73.656% { stroke: var(--color-accent) } 73.656%,100% { stroke: var(--color-accent) } }
-.fl .a1 { animation: a1 26.2s infinite step-end; }
+.fl .a1 { animation: a1 26.196s infinite step-end; }
 @keyframes a2 { 0%,17.922% { stroke: var(--color-border) } 17.923%,29.966% { stroke: var(--color-accent) } 29.966%,48.118% { stroke: var(--color-accent) } 48.118%,61.612% { stroke: var(--color-accent) } 61.612%,73.656% { stroke: var(--color-accent) } 73.656%,100% { stroke: var(--color-accent) } }
-.fl .a2 { animation: a2 26.2s infinite step-end; }
+.fl .a2 { animation: a2 26.196s infinite step-end; }
 @keyframes a3 { 0%,17.922% { stroke: var(--color-border) } 17.923%,29.966% { stroke: var(--color-border) } 29.966%,48.118% { stroke: var(--color-border) } 48.118%,61.612% { stroke: var(--color-border) } 61.612%,73.656% { stroke: var(--color-border) } 73.656%,100% { stroke: var(--color-accent) } }
-.fl .a3 { animation: a3 26.2s infinite step-end; }
+.fl .a3 { animation: a3 26.196s infinite step-end; }
 @keyframes a4 { 0%,17.922% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 17.923%,29.966% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 29.966%,48.118% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 48.118%,61.612% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.612%,73.656% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 73.656%,100% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
-.fl .a4 { animation: a4 26.2s infinite step-end; }
+.fl .a4 { animation: a4 26.196s infinite step-end; }
 @keyframes a5 { 0%,17.922% { fill: var(--color-accent); stroke: var(--color-accent) } 17.923%,29.966% { fill: var(--color-accent); stroke: var(--color-accent) } 29.966%,48.118% { fill: var(--color-accent); stroke: var(--color-accent) } 48.118%,61.612% { fill: var(--color-bg); stroke: var(--color-border) } 61.612%,73.656% { fill: var(--color-bg); stroke: var(--color-border) } 73.656%,100% { fill: var(--color-bg); stroke: var(--color-border) } }
-.fl .a5 { animation: a5 26.2s infinite step-end; }
+.fl .a5 { animation: a5 26.196s infinite step-end; }
 @keyframes a6 { 0%,17.922% { fill: var(--color-on-accent) } 17.923%,29.966% { fill: var(--color-on-accent) } 29.966%,48.118% { fill: var(--color-on-accent) } 48.118%,61.612% { fill: var(--color-muted) } 61.612%,73.656% { fill: var(--color-muted) } 73.656%,100% { fill: var(--color-muted) } }
-.fl .a6 { animation: a6 26.2s infinite step-end; }
+.fl .a6 { animation: a6 26.196s infinite step-end; }
 @keyframes a7 { 0%,17.922% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 17.923%,29.966% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 29.966%,48.118% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 48.118%,61.612% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.612%,73.656% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 73.656%,100% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
-.fl .a7 { animation: a7 26.2s infinite step-end; }
+.fl .a7 { animation: a7 26.196s infinite step-end; }
 @keyframes a8 { 0%,17.922% { fill: var(--color-bg); stroke: var(--color-border) } 17.923%,29.966% { fill: var(--color-accent); stroke: var(--color-accent) } 29.966%,48.118% { fill: var(--color-accent); stroke: var(--color-accent) } 48.118%,61.612% { fill: var(--color-bg); stroke: var(--color-border) } 61.612%,73.656% { fill: var(--color-bg); stroke: var(--color-border) } 73.656%,100% { fill: var(--color-bg); stroke: var(--color-border) } }
-.fl .a8 { animation: a8 26.2s infinite step-end; }
+.fl .a8 { animation: a8 26.196s infinite step-end; }
 @keyframes a9 { 0%,17.922% { fill: var(--color-muted) } 17.923%,29.966% { fill: var(--color-on-accent) } 29.966%,48.118% { fill: var(--color-on-accent) } 48.118%,61.612% { fill: var(--color-muted) } 61.612%,73.656% { fill: var(--color-muted) } 73.656%,100% { fill: var(--color-muted) } }
-.fl .a9 { animation: a9 26.2s infinite step-end; }
+.fl .a9 { animation: a9 26.196s infinite step-end; }
 @keyframes a10 { 0%,17.922% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 17.923%,29.966% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 29.966%,48.118% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 48.118%,61.612% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.612%,73.656% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 73.656%,100% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
-.fl .a10 { animation: a10 26.2s infinite step-end; }
+.fl .a10 { animation: a10 26.196s infinite step-end; }
 @keyframes a11 { 0%,17.922% { fill: var(--color-bg); stroke: var(--color-border) } 17.923%,29.966% { fill: var(--color-bg); stroke: var(--color-border) } 29.966%,48.118% { fill: var(--color-accent); stroke: var(--color-accent) } 48.118%,61.612% { fill: var(--color-bg); stroke: var(--color-border) } 61.612%,73.656% { fill: var(--color-bg); stroke: var(--color-border) } 73.656%,100% { fill: var(--color-bg); stroke: var(--color-border) } }
-.fl .a11 { animation: a11 26.2s infinite step-end; }
+.fl .a11 { animation: a11 26.196s infinite step-end; }
 @keyframes a12 { 0%,17.922% { fill: var(--color-muted) } 17.923%,29.966% { fill: var(--color-muted) } 29.966%,48.118% { fill: var(--color-on-accent) } 48.118%,61.612% { fill: var(--color-muted) } 61.612%,73.656% { fill: var(--color-muted) } 73.656%,100% { fill: var(--color-muted) } }
-.fl .a12 { animation: a12 26.2s infinite step-end; }
+.fl .a12 { animation: a12 26.196s infinite step-end; }
 @keyframes a13 { 0%,17.922% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 17.923%,29.966% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 29.966%,48.118% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 48.118%,61.612% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 61.612%,73.656% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 73.656%,100% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
-.fl .a13 { animation: a13 26.2s infinite step-end; }
+.fl .a13 { animation: a13 26.196s infinite step-end; }
 @keyframes a14 { 0%,17.922% { fill: var(--color-bg); stroke: var(--color-border) } 17.923%,29.966% { fill: var(--color-bg); stroke: var(--color-border) } 29.966%,48.118% { fill: var(--color-bg); stroke: var(--color-border) } 48.118%,61.612% { fill: var(--color-accent); stroke: var(--color-accent) } 61.612%,73.656% { fill: var(--color-accent); stroke: var(--color-accent) } 73.656%,100% { fill: var(--color-accent); stroke: var(--color-accent) } }
-.fl .a14 { animation: a14 26.2s infinite step-end; }
+.fl .a14 { animation: a14 26.196s infinite step-end; }
 @keyframes a15 { 0%,17.922% { fill: var(--color-muted) } 17.923%,29.966% { fill: var(--color-muted) } 29.966%,48.118% { fill: var(--color-muted) } 48.118%,61.612% { fill: var(--color-on-accent) } 61.612%,73.656% { fill: var(--color-on-accent) } 73.656%,100% { fill: var(--color-on-accent) } }
-.fl .a15 { animation: a15 26.2s infinite step-end; }
+.fl .a15 { animation: a15 26.196s infinite step-end; }
 @keyframes a16 { 0%,17.922% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 17.923%,29.966% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 29.966%,48.118% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 48.118%,61.612% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.612%,73.656% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 73.656%,100% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
-.fl .a16 { animation: a16 26.2s infinite step-end; }
+.fl .a16 { animation: a16 26.196s infinite step-end; }
 @keyframes a17 { 0%,17.922% { fill: var(--color-bg); stroke: var(--color-border) } 17.923%,29.966% { fill: var(--color-bg); stroke: var(--color-border) } 29.966%,48.118% { fill: var(--color-bg); stroke: var(--color-border) } 48.118%,61.612% { fill: var(--color-bg); stroke: var(--color-border) } 61.612%,73.656% { fill: var(--color-accent); stroke: var(--color-accent) } 73.656%,100% { fill: var(--color-accent); stroke: var(--color-accent) } }
-.fl .a17 { animation: a17 26.2s infinite step-end; }
+.fl .a17 { animation: a17 26.196s infinite step-end; }
 @keyframes a18 { 0%,17.922% { fill: var(--color-muted) } 17.923%,29.966% { fill: var(--color-muted) } 29.966%,48.118% { fill: var(--color-muted) } 48.118%,61.612% { fill: var(--color-muted) } 61.612%,73.656% { fill: var(--color-on-accent) } 73.656%,100% { fill: var(--color-on-accent) } }
-.fl .a18 { animation: a18 26.2s infinite step-end; }
+.fl .a18 { animation: a18 26.196s infinite step-end; }
 @keyframes a19 { 0%,17.922% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 17.923%,29.966% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 29.966%,48.118% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 48.118%,61.612% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.612%,73.656% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 73.656%,100% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
-.fl .a19 { animation: a19 26.2s infinite step-end; }
+.fl .a19 { animation: a19 26.196s infinite step-end; }
 @keyframes a20 { 0%,17.922% { fill: var(--color-bg); stroke: var(--color-border) } 17.923%,29.966% { fill: var(--color-bg); stroke: var(--color-border) } 29.966%,48.118% { fill: var(--color-bg); stroke: var(--color-border) } 48.118%,61.612% { fill: var(--color-bg); stroke: var(--color-border) } 61.612%,73.656% { fill: var(--color-bg); stroke: var(--color-border) } 73.656%,100% { fill: var(--color-accent); stroke: var(--color-accent) } }
-.fl .a20 { animation: a20 26.2s infinite step-end; }
+.fl .a20 { animation: a20 26.196s infinite step-end; }
 @keyframes a21 { 0%,17.922% { fill: var(--color-muted) } 17.923%,29.966% { fill: var(--color-muted) } 29.966%,48.118% { fill: var(--color-muted) } 48.118%,61.612% { fill: var(--color-muted) } 61.612%,73.656% { fill: var(--color-muted) } 73.656%,100% { fill: var(--color-on-accent) } }
-.fl .a21 { animation: a21 26.2s infinite step-end; }
-@keyframes p0-0 { 0%,0% { opacity: 0 } 0%,5.249% { opacity: 1 } 5.249%,100% { opacity: 0 } }
-.fl .p0-0 { animation: p0-0 26.2s infinite step-end; }
-@keyframes p1-0 { 0%,17.923% { opacity: 0 } 17.923%,27.294% { opacity: 1 } 27.294%,100% { opacity: 0 } }
-.fl .p1-0 { animation: p1-0 26.2s infinite step-end; }
-@keyframes p2-0 { 0%,29.966% { opacity: 0 } 29.967%,39.338% { opacity: 1 } 39.338%,100% { opacity: 0 } }
-.fl .p2-0 { animation: p2-0 26.2s infinite step-end; }
-@keyframes p3-0 { 0%,48.118% { opacity: 0 } 48.118%,57.489% { opacity: 1 } 57.49%,100% { opacity: 0 } }
-.fl .p3-0 { animation: p3-0 26.2s infinite step-end; }
-@keyframes p4-0 { 0%,61.612% { opacity: 0 } 61.613%,70.984% { opacity: 1 } 70.984%,100% { opacity: 0 } }
-.fl .p4-0 { animation: p4-0 26.2s infinite step-end; }
-@keyframes p5-0 { 0%,73.656% { opacity: 0 } 73.657%,91.22% { opacity: 1 } 91.22%,100% { opacity: 0 } }
-.fl .p5-0 { animation: p5-0 26.2s infinite step-end; }
+.fl .a21 { animation: a21 26.196s infinite step-end; }
 @keyframes a22 { 0%,17.922% { opacity: 1 } 17.923%,29.966% { opacity: 1 } 29.966%,48.118% { opacity: 1 } 48.118%,61.612% { opacity: 0 } 61.612%,73.656% { opacity: 0 } 73.656%,100% { opacity: 0 } }
-.fl .a22 { animation: a22 26.2s infinite step-end; }
+.fl .a22 { animation: a22 26.196s infinite step-end; }
 @keyframes a23 { 0%,17.922% { opacity: 0 } 17.923%,29.966% { opacity: 0 } 29.966%,48.118% { opacity: 0 } 48.118%,61.612% { opacity: 1 } 61.612%,73.656% { opacity: 1 } 73.656%,100% { opacity: 1 } }
-.fl .a23 { animation: a23 26.2s infinite step-end; }
+.fl .a23 { animation: a23 26.196s infinite step-end; }
 @keyframes a24 { 0%,17.922% { opacity: 1 } 17.923%,29.966% { opacity: 1 } 29.966%,48.118% { opacity: 1 } 48.118%,61.612% { opacity: 0 } 61.612%,73.656% { opacity: 0 } 73.656%,100% { opacity: 0 } }
-.fl .a24 { animation: a24 26.2s infinite step-end; }
+.fl .a24 { animation: a24 26.196s infinite step-end; }
 @keyframes a25 { 0%,17.922% { opacity: 0 } 17.923%,29.966% { opacity: 0 } 29.966%,48.118% { opacity: 0 } 48.118%,61.612% { opacity: 1 } 61.612%,73.656% { opacity: 1 } 73.656%,100% { opacity: 1 } }
-.fl .a25 { animation: a25 26.2s infinite step-end; }
+.fl .a25 { animation: a25 26.196s infinite step-end; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
 <rect width="100%" height="100%" rx="10" fill="var(--color-bg)"/>
@@ -493,12 +481,12 @@
 <g id="e-4" class="fl-edge"><path id="p-4" d="M 362.4 345 L 166 345" class="fl-path a16" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="217.6" y="323" width="93.2" height="18" rx="9" class="pill a17"/><text x="264.2" y="336" class="edgelabel a18">access_token</text></g></g>
 <g id="e-5" class="fl-edge"><path id="p-5" d="M 166 389 L 534.1 389" class="fl-path a19" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="290.2" y="367" width="119.6" height="18" rx="9" class="pill a20"/><text x="350" y="380" class="edgelabel a21">GET /me (Bearer)</text></g></g>
 <g class="fl-note"><rect x="374.4" y="182" width="147.7" height="35" rx="6" class="note-box"/><text x="384.4" y="203" class="row">challenge = S256(verifier)</text></g>
-<g class="p0-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animateMotion dur="26.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0;0.0525;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
-<g class="p1-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animateMotion dur="26.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.1792;0.2729;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
-<g class="p2-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animateMotion dur="26.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.2997;0.3934;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
-<g class="p3-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animateMotion dur="26.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.4812;0.5749;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-3" xlink:href="#p-3"/></animateMotion></g>
-<g class="p4-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animateMotion dur="26.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.6161;0.7098;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-4" xlink:href="#p-4"/></animateMotion></g>
-<g class="p5-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animateMotion dur="26.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.7366;0.9122;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-5" xlink:href="#p-5"/></animateMotion></g>
+<g class="p0-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animate attributeName="opacity" dur="26.196s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.05249" values="1;0"/><animateMotion dur="26.196s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.05249;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
+<g class="p1-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animate attributeName="opacity" dur="26.196s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.17923;0.27294" values="0;1;0"/><animateMotion dur="26.196s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.17923;0.27294;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
+<g class="p2-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animate attributeName="opacity" dur="26.196s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.29966;0.39338" values="0;1;0"/><animateMotion dur="26.196s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.29966;0.39338;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
+<g class="p3-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animate attributeName="opacity" dur="26.196s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.48118;0.5749" values="0;1;0"/><animateMotion dur="26.196s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.48118;0.5749;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-3" xlink:href="#p-3"/></animateMotion></g>
+<g class="p4-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animate attributeName="opacity" dur="26.196s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.61612;0.70984" values="0;1;0"/><animateMotion dur="26.196s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.61612;0.70984;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-4" xlink:href="#p-4"/></animateMotion></g>
+<g class="p5-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animate attributeName="opacity" dur="26.196s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.73656;0.9122" values="0;1;0"/><animateMotion dur="26.196s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.73656;0.9122;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-5" xlink:href="#p-5"/></animateMotion></g>
 </g>
 <text x="320" y="467" opacity="0" class="steplabel a22">인가</text>
 <text x="320" y="467" opacity="0" class="steplabel a23">토큰</text>

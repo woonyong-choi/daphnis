@@ -644,49 +644,49 @@
 @keyframes chart-fade-loop { 0%, 6.43% { opacity: 0; animation-timing-function: var(--easing-reveal); } 12.86%, 100% { opacity: 1; } }
 
 @keyframes a0 { 0%,34.481% { opacity: 1 } 34.483%,99.998% { opacity: 1 } }
-.fl .a0 { animation: a0 4.6s infinite step-end; }
-.fl .cs-0 { animation: a0 4.6s infinite step-end; }
+.fl .a0 { animation: a0 4.64s infinite step-end; }
+.fl .cs-0 { animation: a0 4.64s infinite step-end; }
 @keyframes g0 { 0%,0% { transform: scaleX(0); animation-timing-function: var(--easing-reveal) } 19.397%,100% { transform: none } }
-.fl .cs-0 .grow, .fl .cs-0.grow { animation: g0 4.6s infinite; }
+.fl .cs-0 .grow, .fl .cs-0.grow { animation: g0 4.64s infinite; }
 @keyframes d0 { 0%,0% { stroke-dashoffset: 1; animation-timing-function: var(--easing-reveal) } 19.397%,100% { stroke-dashoffset: 0 } }
-.fl .cs-0 .draw, .fl .cs-0.draw { animation: d0 4.6s infinite; }
+.fl .cs-0 .draw, .fl .cs-0.draw { animation: d0 4.64s infinite; }
 @keyframes w0 { 0%,0% { clip-path: inset(0 100% 0 0); animation-timing-function: var(--easing-reveal) } 19.397%,100% { clip-path: inset(0 0 0 0) } }
-.fl .cs-0 .wipe, .fl .cs-0.wipe { animation: w0 4.6s infinite; }
+.fl .cs-0 .wipe, .fl .cs-0.wipe { animation: w0 4.64s infinite; }
 @keyframes f0 { 0%,9.698% { opacity: 0; animation-timing-function: var(--easing-reveal) } 19.397%,100% { opacity: 1 } }
-.fl .cs-0 .late, .fl .cs-0 .pop, .fl .cs-0.pop { animation: f0 4.6s infinite; }
+.fl .cs-0 .late, .fl .cs-0 .pop, .fl .cs-0.pop { animation: f0 4.64s infinite; }
 @keyframes a1 { 0%,34.481% { opacity: 0.3 } 34.483%,99.998% { opacity: 0.3 } }
-.fl .a1 { animation: a1 4.6s infinite step-end; }
-.fl .cr-0 { animation: a1 4.6s infinite step-end; }
+.fl .a1 { animation: a1 4.64s infinite step-end; }
+.fl .cr-0 { animation: a1 4.64s infinite step-end; }
 @keyframes a2 { 0%,34.481% { opacity: 1 } 34.483%,99.998% { opacity: 1 } }
-.fl .a2 { animation: a2 4.6s infinite step-end; }
-.fl .cr-1 { animation: a2 4.6s infinite step-end; }
+.fl .a2 { animation: a2 4.64s infinite step-end; }
+.fl .cr-1 { animation: a2 4.64s infinite step-end; }
 @keyframes a3 { 0%,34.481% { opacity: 0.3 } 34.483%,99.998% { opacity: 0.3 } }
-.fl .a3 { animation: a3 4.6s infinite step-end; }
-.fl .cr-2 { animation: a3 4.6s infinite step-end; }
+.fl .a3 { animation: a3 4.64s infinite step-end; }
+.fl .cr-2 { animation: a3 4.64s infinite step-end; }
 @keyframes a4 { 0%,34.481% { opacity: 0.3 } 34.483%,99.998% { opacity: 0.3 } }
-.fl .a4 { animation: a4 4.6s infinite step-end; }
-.fl .cr-3 { animation: a4 4.6s infinite step-end; }
+.fl .a4 { animation: a4 4.64s infinite step-end; }
+.fl .cr-3 { animation: a4 4.64s infinite step-end; }
 @keyframes a5 { 0%,34.481% { opacity: 0.3 } 34.483%,99.998% { opacity: 0.3 } }
-.fl .a5 { animation: a5 4.6s infinite step-end; }
-.fl .cr-4 { animation: a5 4.6s infinite step-end; }
+.fl .a5 { animation: a5 4.64s infinite step-end; }
+.fl .cr-4 { animation: a5 4.64s infinite step-end; }
 @keyframes a6 { 0%,34.481% { opacity: 0.3 } 34.483%,99.998% { opacity: 0.3 } }
-.fl .a6 { animation: a6 4.6s infinite step-end; }
-.fl .cr-5 { animation: a6 4.6s infinite step-end; }
+.fl .a6 { animation: a6 4.64s infinite step-end; }
+.fl .cr-5 { animation: a6 4.64s infinite step-end; }
 @keyframes a7 { 0%,34.481% { opacity: 0.3 } 34.483%,99.998% { opacity: 0.3 } }
-.fl .a7 { animation: a7 4.6s infinite step-end; }
-.fl .cr-6 { animation: a7 4.6s infinite step-end; }
+.fl .a7 { animation: a7 4.64s infinite step-end; }
+.fl .cr-6 { animation: a7 4.64s infinite step-end; }
 @keyframes a8 { 0%,34.481% { opacity: 0.3 } 34.483%,99.998% { opacity: 0.3 } }
-.fl .a8 { animation: a8 4.6s infinite step-end; }
-.fl .cr-7 { animation: a8 4.6s infinite step-end; }
+.fl .a8 { animation: a8 4.64s infinite step-end; }
+.fl .cr-7 { animation: a8 4.64s infinite step-end; }
 @keyframes a9 { 0%,34.481% { opacity: 0.3 } 34.483%,99.998% { opacity: 0.3 } }
-.fl .a9 { animation: a9 4.6s infinite step-end; }
-.fl .cr-8 { animation: a9 4.6s infinite step-end; }
+.fl .a9 { animation: a9 4.64s infinite step-end; }
+.fl .cr-8 { animation: a9 4.64s infinite step-end; }
 @keyframes a10 { 0%,34.481% { opacity: 1 } 34.483%,99.998% { opacity: 1 } }
-.fl .a10 { animation: a10 4.6s infinite step-end; }
+.fl .a10 { animation: a10 4.64s infinite step-end; }
 @keyframes a11 { 0%,34.481% { opacity: 1 } 34.483%,99.998% { opacity: 0 } }
-.fl .a11 { animation: a11 4.6s infinite step-end; }
+.fl .a11 { animation: a11 4.64s infinite step-end; }
 @keyframes a12 { 0%,34.481% { opacity: 0 } 34.483%,99.998% { opacity: 1 } }
-.fl .a12 { animation: a12 4.6s infinite step-end; }
+.fl .a12 { animation: a12 4.64s infinite step-end; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
 <rect width="100%" height="100%" rx="10" fill="var(--color-bg)"/>

@@ -644,49 +644,49 @@
 @keyframes chart-fade-loop { 0%, 6.43% { opacity: 0; animation-timing-function: var(--easing-reveal); } 12.86%, 100% { opacity: 1; } }
 
 @keyframes a0 { 0%,45.442% { opacity: 0 } 45.443%,71.864% { opacity: 1 } 71.865%,99.999% { opacity: 1 } }
-.fl .a0 { animation: a0 8.2s infinite step-end; }
-.fl .cs-0 { animation: a0 8.2s infinite step-end; }
+.fl .a0 { animation: a0 8.175s infinite step-end; }
+.fl .cs-0 { animation: a0 8.175s infinite step-end; }
 @keyframes g0 { 0%,45.443% { transform: scaleX(0); animation-timing-function: var(--easing-reveal) } 56.453%,100% { transform: none } }
-.fl .cs-0 .grow, .fl .cs-0.grow { animation: g0 8.2s infinite; }
+.fl .cs-0 .grow, .fl .cs-0.grow { animation: g0 8.175s infinite; }
 @keyframes d0 { 0%,45.443% { stroke-dashoffset: 1; animation-timing-function: var(--easing-reveal) } 56.453%,100% { stroke-dashoffset: 0 } }
-.fl .cs-0 .draw, .fl .cs-0.draw { animation: d0 8.2s infinite; }
+.fl .cs-0 .draw, .fl .cs-0.draw { animation: d0 8.175s infinite; }
 @keyframes w0 { 0%,45.443% { clip-path: inset(0 100% 0 0); animation-timing-function: var(--easing-reveal) } 56.453%,100% { clip-path: inset(0 0 0 0) } }
-.fl .cs-0 .wipe, .fl .cs-0.wipe { animation: w0 8.2s infinite; }
+.fl .cs-0 .wipe, .fl .cs-0.wipe { animation: w0 8.175s infinite; }
 @keyframes f0 { 0%,50.948% { opacity: 0; animation-timing-function: var(--easing-reveal) } 56.453%,100% { opacity: 1 } }
-.fl .cs-0 .late, .fl .cs-0 .pop, .fl .cs-0.pop { animation: f0 8.2s infinite; }
+.fl .cs-0 .late, .fl .cs-0 .pop, .fl .cs-0.pop { animation: f0 8.175s infinite; }
 @keyframes a1 { 0%,45.442% { opacity: 1 } 45.443%,71.864% { opacity: 1 } 71.865%,99.999% { opacity: 1 } }
-.fl .a1 { animation: a1 8.2s infinite step-end; }
-.fl .cs-1 { animation: a1 8.2s infinite step-end; }
+.fl .a1 { animation: a1 8.175s infinite step-end; }
+.fl .cs-1 { animation: a1 8.175s infinite step-end; }
 @keyframes g1 { 0%,0% { transform: scaleX(0); animation-timing-function: var(--easing-reveal) } 11.009%,100% { transform: none } }
-.fl .cs-1 .grow, .fl .cs-1.grow { animation: g1 8.2s infinite; }
+.fl .cs-1 .grow, .fl .cs-1.grow { animation: g1 8.175s infinite; }
 @keyframes d1 { 0%,0% { stroke-dashoffset: 1; animation-timing-function: var(--easing-reveal) } 11.009%,100% { stroke-dashoffset: 0 } }
-.fl .cs-1 .draw, .fl .cs-1.draw { animation: d1 8.2s infinite; }
+.fl .cs-1 .draw, .fl .cs-1.draw { animation: d1 8.175s infinite; }
 @keyframes w1 { 0%,0% { clip-path: inset(0 100% 0 0); animation-timing-function: var(--easing-reveal) } 11.009%,100% { clip-path: inset(0 0 0 0) } }
-.fl .cs-1 .wipe, .fl .cs-1.wipe { animation: w1 8.2s infinite; }
+.fl .cs-1 .wipe, .fl .cs-1.wipe { animation: w1 8.175s infinite; }
 @keyframes f1 { 0%,5.505% { opacity: 0; animation-timing-function: var(--easing-reveal) } 11.009%,100% { opacity: 1 } }
-.fl .cs-1 .late, .fl .cs-1 .pop, .fl .cs-1.pop { animation: f1 8.2s infinite; }
+.fl .cs-1 .late, .fl .cs-1 .pop, .fl .cs-1.pop { animation: f1 8.175s infinite; }
 @keyframes ls { 0%,45.442% { transform: translateY(8px) } 45.443%,71.864% { transform: translateY(0px) } 71.865%,99.999% { transform: translateY(0px) } }
-.fl .chart-label.shift { animation: ls 8.2s infinite step-end; }
+.fl .chart-label.shift { animation: ls 8.175s infinite step-end; }
 @keyframes a2 { 0%,45.442% { opacity: 1 } 45.443%,71.864% { opacity: 1 } 71.865%,99.999% { opacity: 0.3 } }
-.fl .a2 { animation: a2 8.2s infinite step-end; }
-.fl .cr-0 { animation: a2 8.2s infinite step-end; }
+.fl .a2 { animation: a2 8.175s infinite step-end; }
+.fl .cr-0 { animation: a2 8.175s infinite step-end; }
 @keyframes a3 { 0%,45.442% { opacity: 1 } 45.443%,71.864% { opacity: 1 } 71.865%,99.999% { opacity: 1 } }
-.fl .a3 { animation: a3 8.2s infinite step-end; }
-.fl .cr-1 { animation: a3 8.2s infinite step-end; }
+.fl .a3 { animation: a3 8.175s infinite step-end; }
+.fl .cr-1 { animation: a3 8.175s infinite step-end; }
 @keyframes a4 { 0%,45.442% { opacity: 1 } 45.443%,71.864% { opacity: 1 } 71.865%,99.999% { opacity: 0.3 } }
-.fl .a4 { animation: a4 8.2s infinite step-end; }
-.fl .cr-2 { animation: a4 8.2s infinite step-end; }
+.fl .a4 { animation: a4 8.175s infinite step-end; }
+.fl .cr-2 { animation: a4 8.175s infinite step-end; }
 @keyframes a5 { 0%,45.442% { opacity: 1 } 45.443%,71.864% { opacity: 1 } 71.865%,99.999% { opacity: 0.3 } }
-.fl .a5 { animation: a5 8.2s infinite step-end; }
-.fl .cr-3 { animation: a5 8.2s infinite step-end; }
+.fl .a5 { animation: a5 8.175s infinite step-end; }
+.fl .cr-3 { animation: a5 8.175s infinite step-end; }
 @keyframes a6 { 0%,45.442% { opacity: 1 } 45.443%,71.864% { opacity: 0 } 71.865%,99.999% { opacity: 0 } }
-.fl .a6 { animation: a6 8.2s infinite step-end; }
+.fl .a6 { animation: a6 8.175s infinite step-end; }
 @keyframes a7 { 0%,45.442% { opacity: 0 } 45.443%,71.864% { opacity: 1 } 71.865%,99.999% { opacity: 1 } }
-.fl .a7 { animation: a7 8.2s infinite step-end; }
+.fl .a7 { animation: a7 8.175s infinite step-end; }
 @keyframes a8 { 0%,45.442% { opacity: 1 } 45.443%,71.864% { opacity: 0 } 71.865%,99.999% { opacity: 0 } }
-.fl .a8 { animation: a8 8.2s infinite step-end; }
+.fl .a8 { animation: a8 8.175s infinite step-end; }
 @keyframes a9 { 0%,45.442% { opacity: 0 } 45.443%,71.864% { opacity: 1 } 71.865%,99.999% { opacity: 1 } }
-.fl .a9 { animation: a9 8.2s infinite step-end; }
+.fl .a9 { animation: a9 8.175s infinite step-end; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
 <rect width="100%" height="100%" rx="10" fill="var(--color-bg)"/>
