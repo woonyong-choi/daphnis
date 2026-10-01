@@ -187,3 +187,23 @@ test('svg_steplabel_uses_body_font_not_mono', async () => {
   assert.match(svg, /\.fl \.steplabel \{[^}]*font-family: var\(--font-sans\)/);
   assert.doesNotMatch(svg, /\.fl \.steplabel \{[^}]*(font-mono|letter-spacing)/);
 });
+
+test('toSvg_on_off_changes_fade_over_duration_fast_like_the_player_transition', async () => {
+  const { name, result, svg } = (await animatedExamples()).find((e) => e.name === 'memory.muto');
+  const total = result.timeline.total;
+  const fades = [...svg.matchAll(/@keyframes a\d+ \{[^@]*?\}\s*\}/g)].flatMap((m) => [...m[0].matchAll(/([\d.]+)% \{ [^}]+ \} ([\d.]+)%,[\d.]+% \{/g)]);
+
+  assert.ok(fades.length > 0, `${name}: 서서히 가는 구간이 있다`);
+  for (const [, start, settle] of fades) assert.ok(Math.abs(((Number(settle) - Number(start)) * total) / 100 - 200) < 5 || ((Number(settle) - Number(start)) * total) / 100 < 200, `${name}: 서서히 가는 시간 ${((Number(settle) - Number(start)) * total) / 100}ms`);
+  assert.doesNotMatch(svg, /infinite step-end/);
+});
+
+test('toSvg_caption_bottom_margin_equals_the_top_margin_of_the_content', async () => {
+  for (const { name, svg } of await animatedExamples()) {
+    const height = Number(svg.match(/viewBox="0 0 [\d.]+ ([\d.]+)"/)[1]);
+    const baselines = [...svg.matchAll(/<text x="[\d.]+" y="([\d.]+)" class="caption">/g)].map((m) => Number(m[1]));
+
+    assert.ok(baselines.length > 0, name);
+    assert.equal(Math.round((height - Math.max(...baselines)) * 10) / 10, 32, name);
+  }
+});

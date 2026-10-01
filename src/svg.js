@@ -18,6 +18,8 @@ const CAPTION = { size: values.size.text['14'], face: 'regular' };
 const STEP_LABEL = { size: values.size.text['13'], face: 'semibold' };
 // 켜짐 구간 끝을 다음 구간 시작보다 이만큼(ms) 앞당긴다. 같은 퍼센트에 두 값이 겹치지 않게 하기 위해서다.
 const EPSILON_MS = 0.1;
+// 켜짐과 꺼짐이 바뀔 때 새 값으로 서서히 가는 시간(ms). HTML 재생기의 CSS transition(duration.fast)과 같다.
+const FADE_MS = values.duration.fast;
 // 점이 선을 지나는 곡선. HTML 재생기와 같다
 const MOVE = curveOf('move');
 const MOVE_SPLINE = keySpline(MOVE);
@@ -92,7 +94,8 @@ function drawCaptions(timeline, animator, width, top, glyphs) {
   const wrapWidth = width - SPACE['30'];
   const wrapped = new Map(captions.map((c) => [c, wrap(c, wrapWidth, CAPTION.size, CAPTION.face)]));
   const lines = Math.max(1, ...[...wrapped.values()].map((l) => l.length));
-  const height = captions.length ? SPACE['17'] + lines * LINE['20'] : SPACE['15'];
+  // 설명 글 아래 여백은 그림 내용 위 여백(그림 둘레 여백 space.14)과 같다. 마지막 줄 기준선에서 글자 내림 4를 더한 만큼 아래에 둔다.
+  const height = captions.length ? SPACE['22'] + (lines - 1) * LINE['20'] + SPACE['2'] + SPACE['14'] : SPACE['15'];
   const labels = timeline.steps.map((label, si) => {
     glyphs.add(label, STEP_LABEL.face);
     const cls = animator.windows(timeline.segs.map((s) => s.si === si), 'opacity: 1', 'opacity: 0', 's');
@@ -125,6 +128,22 @@ function createAnimator({ segs, total, growMs }) {
   const percent = (ms) => `${Math.round((ms / total) * 100000) / 1000}%`;
 
   // cost: time O(b), heap O(b), stack O(1)
+  // vars: b = 구간 수
+  // basis: estimate
+  // 구간 [시작, 끝, CSS] 목록을 keyframes 본문으로. 앞 구간과 값이 다르면 구간 시작에서 앞 값을 잡고 FADE_MS 동안 새 값으로 서서히 간다(재생기의 transition과 같다).
+  // 한 바퀴의 첫 구간은 이전 값이 없어 바로 시작한다.
+  function fadeFrames(spans) {
+    return spans
+      .map(([start, end, value], i) => {
+        const last = Math.max(start, end - EPSILON_MS);
+        const settle = Math.min(start + FADE_MS, last);
+        if (i === 0 || spans[i - 1][2] === value || settle <= start) return `${percent(start)},${percent(last)} { ${value} }`;
+        return `${percent(start)} { ${spans[i - 1][2]} } ${percent(settle)},${percent(last)} { ${value} }`;
+      })
+      .join(' ');
+  }
+
+  // cost: time O(b), heap O(b), stack O(1)
   // vars: b = 박자 수
   // basis: estimate
   // states[i]는 박자 i의 켜짐이다. { before, after, at }이면 박자 안 at(ms)에서 before가 after로 바뀐다.
@@ -138,8 +157,8 @@ function createAnimator({ segs, total, growMs }) {
     if (!names.has(key)) {
       const name = `a${names.size}`;
       names.set(key, name);
-      const frames = spans.map(([start, end, on]) => `${percent(start)},${percent(Math.max(start, end - EPSILON_MS))} { ${on ? onCss : offCss} }`).join(' ');
-      css.push(`@keyframes ${name} { ${frames} }\n.fl .${name} { animation: ${name} ${duration} infinite step-end; }`);
+      const frames = fadeFrames(spans.map(([start, end, on]) => [start, end, on ? onCss : offCss]));
+      css.push(`@keyframes ${name} { ${frames} }\n.fl .${name} { animation: ${name} ${duration} infinite linear; }`);
     }
     return names.get(key);
   }
@@ -239,7 +258,7 @@ function createAnimator({ segs, total, growMs }) {
     chartSeriesIds(figure).forEach((id, s) => {
       const show = windows(segs.map((g) => g.series.includes(id)), 'opacity: 1', 'opacity: 0', `cs${s}`);
       const reveal = segs.find((g) => g.growing.includes(id));
-      css.push(`.fl .cs-${s} { animation: ${show} ${duration} infinite step-end; }`);
+      css.push(`.fl .cs-${s} { animation: ${show} ${duration} infinite linear; }`);
       if (!reveal) return;
       // 막대와 선과 띠는 자라는 시간 내내, 점과 값 글자는 그 뒤 절반에 나타난다. HTML 재생기(chart/motion.js)와 같다.
       const [a, half, b] = [percent(reveal.t0), percent(reveal.t0 + grow / 2), percent(reveal.t0 + grow)];
@@ -265,14 +284,14 @@ function createAnimator({ segs, total, growMs }) {
       if (!shiftNames.has(key)) {
         const name = `ls${shiftNames.size}`;
         shiftNames.set(key, name);
-        const frames = segs.map((g, i) => `${percent(g.t0)},${percent(Math.max(g.t0, g.t1 - EPSILON_MS))} { transform: translateY(${shifts[i]}px) }`).join(' ');
+        const frames = fadeFrames(segs.map((g, i) => [g.t0, g.t1, `transform: translateY(${shifts[i]}px)`]));
         css.push(`@keyframes ${name} { ${frames} }`);
       }
-      css.push(`.fl .cr-${k} .chart-label.shift { animation: ${shiftNames.get(key)} ${duration} infinite step-end; }`);
+      css.push(`.fl .cr-${k} .chart-label.shift { animation: ${shiftNames.get(key)} ${duration} infinite linear; }`);
     });
     drawn.rowKeys.forEach((key, k) => {
       const dim = windows(segs.map((g) => g.lights.length > 0 && !g.lights.includes(key)), `opacity: ${values.opacity.dim}`, 'opacity: 1', `r${k}`);
-      css.push(`.fl .cr-${k} { animation: ${dim} ${duration} infinite step-end; }`);
+      css.push(`.fl .cr-${k} { animation: ${dim} ${duration} infinite linear; }`);
     });
   }
 
