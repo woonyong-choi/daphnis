@@ -123,7 +123,7 @@ html.embedded .fl-canvas svg {
   background: color-mix(in srgb, var(--color-fg) calc(var(--opacity-tab-on) * 100%), transparent);
 }
 
-.fl-tabs button i {
+.fl-tab-fill {
   position: absolute;
   bottom: var(--space-1);
   left: var(--space-7);

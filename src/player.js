@@ -12,6 +12,7 @@
 function figurePlay(root, data) {
   const NS = 'http://www.w3.org/2000/svg';
   const RATES = [1, 2, 0.5];
+  const BISECT_STEPS = 30;
   const svg = root.querySelector('svg.fl');
   const packetLayer = svg.querySelector('.fl-packets');
   const tabs = root.querySelector('.fl-tabs');
@@ -29,6 +30,7 @@ function figurePlay(root, data) {
   const { segs, metrics } = data;
   const stepSegs = data.steps.map((_, si) => segs.filter((s) => s.si === si));
   const buttons = data.steps.map(createTab);
+  const fills = buttons.map((b) => b.querySelector('.fl-tab-fill'));
   const hasCaption = segs.some((s) => s.caption);
 
   let index = 0;
@@ -97,7 +99,9 @@ function figurePlay(root, data) {
     const button = document.createElement('button');
     button.type = 'button';
     button.setAttribute('role', 'tab');
-    button.append(...richNodes(label, htmlCode), document.createElement('i'));
+    const fill = document.createElement('i');
+    fill.className = 'fl-tab-fill';
+    button.append(...richNodes(label, htmlCode), fill);
     button.addEventListener('click', () => enterSegment(segs.indexOf(stepSegs[si][0])));
     tabs.appendChild(button);
     return button;
@@ -145,7 +149,7 @@ function figurePlay(root, data) {
       b.classList.toggle('on', isCurrent);
       b.setAttribute('aria-selected', isCurrent);
       // 탭을 옮겨도 앞 탭의 진행 막대가 남지 않게 지금 탭이 아닌 막대는 비운다.
-      if (!isCurrent) b.querySelector('i').style.width = '0';
+      if (!isCurrent) fills[si].style.width = '0';
     });
     packets.forEach((p) => p.remove());
     packets = seg.hops.map(createPacket);
@@ -244,19 +248,33 @@ function figurePlay(root, data) {
     return { g: chip, w, h };
   }
 
+  // cost: time O(1), heap O(1), stack O(1)
+  // basis: estimate
+  // 베지어 곡선의 한 축 값. 매개변수 t의 제어점 a, b로 구한다.
+  function bezierAxis(a, b, t) {
+    return 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
+  }
+
   // cost: time O(STEPS), heap O(1), stack O(1)
-  // vars: STEPS = 이분 탐색 횟수(30)
+  // vars: STEPS = BISECT_STEPS
+  // basis: estimate
+  // 곡선의 한 축 값이 target이 되는 매개변수 t를 이분 탐색으로 구한다.
+  function solveBezier(a, b, target) {
+    let [low, high] = [0, 1];
+    for (let i = 0; i < BISECT_STEPS; i++) {
+      const mid = (low + high) / 2;
+      if (bezierAxis(a, b, mid) < target) low = mid;
+      else high = mid;
+    }
+    return (low + high) / 2;
+  }
+
+  // cost: time O(STEPS), heap O(1), stack O(1)
+  // vars: STEPS = BISECT_STEPS
   // basis: estimate
   // 시간 비율 p에서 이동 곡선의 진행 비율. easing.js의 timeAt과 같은 곡선을 반대 방향으로 푼다.
   function progressAt([x1, y1, x2, y2], p) {
-    const axis = (a, b, t) => 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
-    let [low, high] = [0, 1];
-    for (let i = 0; i < 30; i++) {
-      const mid = (low + high) / 2;
-      if (axis(x1, x2, mid) < p) low = mid;
-      else high = mid;
-    }
-    return axis(y1, y2, (low + high) / 2);
+    return bezierAxis(y1, y2, solveBezier(x1, x2, p));
   }
 
   // cost: time O(STEPS·k), 프레임마다 O(k), heap O(k), stack O(1)
@@ -277,18 +295,21 @@ function figurePlay(root, data) {
   }
 
   // cost: time O(STEPS), heap O(1), stack O(1)
-  // vars: STEPS = 이분 탐색 횟수(30)
+  // vars: STEPS = BISECT_STEPS
   // basis: estimate
   // 진행 비율 f에 닿는 시간 비율. easing.js의 timeAt과 같다.
   function timeAtProgress([x1, y1, x2, y2], f) {
-    const axis = (a, b, t) => 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
-    let [low, high] = [0, 1];
-    for (let i = 0; i < 30; i++) {
-      const mid = (low + high) / 2;
-      if (axis(y1, y2, mid) < f) low = mid;
-      else high = mid;
-    }
-    return axis(x1, x2, (low + high) / 2);
+    return bezierAxis(x1, x2, solveBezier(y1, y2, f));
+  }
+
+  // cost: time O(1), heap O(1), stack O(1)
+  // basis: estimate
+  // 박자 seg가 속한 탭(step) 전체 시간 중 지금까지 지난 비율(0~1).
+  function tabProgress(seg) {
+    const steps = stepSegs[seg.si];
+    const start = steps[0].t0;
+    const end = steps.at(-1).t1;
+    return (seg.t0 - start + Math.min(elapsed, seg.t1 - seg.t0)) / (end - start);
   }
 
   // cost: time O(h + k), heap O(1), stack O(1)
@@ -305,10 +326,7 @@ function figurePlay(root, data) {
       showCards(seg.cards, n);
       return false;
     });
-    const steps = stepSegs[seg.si];
-    const start = steps[0].t0;
-    const end = steps.at(-1).t1;
-    buttons[seg.si].querySelector('i').style.width = `${((seg.t0 - start + Math.min(elapsed, seg.t1 - seg.t0)) / (end - start)) * 100}%`;
+    fills[seg.si].style.width = `${tabProgress(seg) * 100}%`;
     if (elapsed >= seg.t1 - seg.t0) enterSegment((index + 1) % segs.length);
     requestAnimationFrame(drawFrame);
   }
