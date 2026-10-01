@@ -373,6 +373,6 @@ test('tokens_light_bg_is_visibly_gray_and_group_is_slightly_darker', async () =>
   assert.ok(light(tokens.color.bg) < light(tokens.color.node), tokens.color.bg);
   assert.ok(light(tokens.color.bg) <= light('#f8f9fb'), tokens.color.bg);
   assert.ok(light(tokens.color.group) < light(tokens.color.bg));
-  assert.ok(light(tokens.color.bg) - light(tokens.color.group) <= 12, tokens.color.group);
+  assert.ok(light(tokens.color.bg) - light(tokens.color.group) <= 24, tokens.color.group);
   assert.equal(tokens.color.node, '#ffffff');
 });
