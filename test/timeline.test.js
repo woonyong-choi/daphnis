@@ -53,18 +53,18 @@ function hopPairs({ scene, timeline }) {
   return timeline.segs.flatMap((seg) => seg.hops.map((h) => ({ length: routeLength(scene.edges[h.edge].points), ms: h.ms })));
 }
 
-test('buildTimeline_hop_time_is_proportional_to_edge_length_inside_limits', async () => {
+test('buildTimeline_hop_time_is_proportional_to_edge_length_above_min', async () => {
   const pairs = hopPairs(await buildFigure(HOP_SOURCE));
-  const free = pairs.filter(({ ms }) => ms > values.duration['hop-min'] && ms < values.duration['hop-max']);
+  const free = pairs.filter(({ ms }) => ms > values.duration['hop-min']);
 
   assert.ok(new Set(free.map((p) => Math.round(p.length))).size > 1);
   for (const { length, ms } of free) assert.ok(Math.abs(ms - (length / values.size['hop-ref']) * values.duration.hop) <= 1);
 });
 
-test('buildTimeline_hop_time_stays_inside_min_and_max', async () => {
+test('buildTimeline_hop_time_has_min_but_no_max', async () => {
   const pairs = hopPairs(await buildFigure(HOP_SOURCE));
 
-  for (const { ms } of pairs) assert.ok(ms >= values.duration['hop-min'] && ms <= values.duration['hop-max']);
+  for (const { ms } of pairs) assert.ok(ms >= values.duration['hop-min']);
 });
 
 test('buildTimeline_speed_header_scales_every_hop_time', async () => {

@@ -54,7 +54,6 @@
   --color-card-on: var(--color-blue-50);
   --color-group: var(--color-gray-100);
   --color-group-border: var(--color-gray-300);
-  --color-dot: var(--color-gray-200);
   --color-frame: var(--color-gray-100);
   --color-page: var(--color-gray-0);
   --color-gallery: var(--color-gray-0);
@@ -100,8 +99,6 @@
   --size-halo: 10px;
   --size-marker: 5px;
   --size-marker-on: 4px;
-  --size-grid: 16px;
-  --size-grid-dot: 1px;
   --size-card: 176px;
   --size-node-min: 100px;
   --size-node-max: 210px;
@@ -197,8 +194,7 @@
   --z-overlay: 10;
   --duration-fast: 200ms;
   --duration-hop: 3750ms;
-  --duration-hop-min: 1500ms;
-  --duration-hop-max: 7500ms;
+  --duration-hop-min: 500ms;
   --duration-dwell: 700ms;
   --duration-dwell-per-char: 45ms;
   --duration-dwell-max: 3200ms;
@@ -220,7 +216,6 @@
     --color-surface: var(--color-neutral-850);
     --color-border: var(--color-neutral-700);
     --color-card-on: var(--color-blue-900);
-    --color-dot: var(--color-neutral-750);
     --color-frame: var(--color-neutral-800);
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
@@ -243,7 +238,6 @@
   --color-surface: var(--color-neutral-850);
   --color-border: var(--color-neutral-700);
   --color-card-on: var(--color-blue-900);
-  --color-dot: var(--color-neutral-750);
   --color-frame: var(--color-neutral-800);
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
@@ -264,7 +258,7 @@ body {
   background: var(--color-page);
 }
 
-/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. 회색은 그림 판만 쓴다. */
+/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. 회색은 SVG가 그리는 그림 판만 쓴다. */
 html.embedded body {
   padding: 0;
 }
@@ -288,7 +282,7 @@ html.embedded .fl-figure {
 
 .fl-canvas {
   padding: var(--space-6);
-  background: var(--color-bg) radial-gradient(var(--color-dot) var(--size-grid-dot), transparent calc(var(--size-grid-dot) * 1.2)) 0 0 / var(--size-grid) var(--size-grid);
+  background: var(--color-page);
   overflow: auto;
 }
 
@@ -906,7 +900,7 @@ html.embedded .fl-figure.fl-chart-page {
 <body>
 <figure class="fl-figure" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="942.1" height="708.7" style="aspect-ratio: 942.1 / 708.7" viewBox="0 0 942.1 708.7" role="img"><title>Saturn 구성</title><defs><pattern id="fl-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1" fill="var(--color-dot)"/></pattern><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><g id="g-0" class="fl-group" data-id="system"><rect x="240" y="28.7" width="356" height="652" rx="14" class="frame-box fl-stroke "/><text x="258" y="46.6" class="frame">Saturn</text></g>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="942.1" height="708.7" style="aspect-ratio: 942.1 / 708.7" viewBox="0 0 942.1 708.7" role="img"><title>Saturn 구성</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><g id="g-0" class="fl-group" data-id="system"><rect x="240" y="28.7" width="356" height="652" rx="14" class="frame-box fl-stroke "/><text x="258" y="46.6" class="frame">Saturn</text></g>
 <g id="n-0" class="fl-node" data-id="cli"><rect x="264" y="172.7" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="314" y="200.7" class="label">명령</text></g>
 <g id="n-1" class="fl-node" data-id="tui"><rect x="396" y="148.7" width="176" height="94" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="484" y="174.7" class="label">화면</text><text x="484" y="190.5" class="sub">하나의 대화</text><rect x="406" y="205.7" width="156" height="27" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card "/><text x="414" y="222.7" class="row muted fl-empty ">—</text><g id="n-1-c0" opacity="0" class="fl-layer "><rect x="414" y="212.7" width="26.8" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="427.4" y="222.9" class="tag" fill="var(--color-tag-blue)">YOU</text><text x="445.8" y="222.7" class="row">이 테스트 왜 깨져?</text></g></g>
 <g id="n-2" class="fl-node" data-id="engine"><rect x="280.3" y="380.7" width="101.2" height="57" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="330.9" y="406.7" class="label">엔진</text><text x="330.9" y="422.5" class="sub">사용자당 하나</text></g>

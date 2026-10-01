@@ -45,7 +45,6 @@
   --color-card-on: var(--color-blue-50);
   --color-group: var(--color-gray-100);
   --color-group-border: var(--color-gray-300);
-  --color-dot: var(--color-gray-200);
   --color-frame: var(--color-gray-100);
   --color-page: var(--color-gray-0);
   --color-gallery: var(--color-gray-0);
@@ -91,8 +90,6 @@
   --size-halo: 10px;
   --size-marker: 5px;
   --size-marker-on: 4px;
-  --size-grid: 16px;
-  --size-grid-dot: 1px;
   --size-card: 176px;
   --size-node-min: 100px;
   --size-node-max: 210px;
@@ -188,8 +185,7 @@
   --z-overlay: 10;
   --duration-fast: 200ms;
   --duration-hop: 3750ms;
-  --duration-hop-min: 1500ms;
-  --duration-hop-max: 7500ms;
+  --duration-hop-min: 500ms;
   --duration-dwell: 700ms;
   --duration-dwell-per-char: 45ms;
   --duration-dwell-max: 3200ms;
@@ -211,7 +207,6 @@
     --color-surface: var(--color-neutral-850);
     --color-border: var(--color-neutral-700);
     --color-card-on: var(--color-blue-900);
-    --color-dot: var(--color-neutral-750);
     --color-frame: var(--color-neutral-800);
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
@@ -234,7 +229,6 @@
   --color-surface: var(--color-neutral-850);
   --color-border: var(--color-neutral-700);
   --color-card-on: var(--color-blue-900);
-  --color-dot: var(--color-neutral-750);
   --color-frame: var(--color-neutral-800);
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
@@ -459,7 +453,7 @@
 .fl .a20 { animation: a20 24.5s infinite step-end; }
 @keyframes a21 { 0%,19.127% { fill: var(--color-muted) } 19.127%,30.636% { fill: var(--color-muted) } 30.636%,48.663% { fill: var(--color-muted) } 48.664%,61.72% { fill: var(--color-muted) } 61.721%,73.229% { fill: var(--color-muted) } 73.23%,100% { fill: var(--color-on-accent) } }
 .fl .a21 { animation: a21 24.5s infinite step-end; }
-@keyframes p0-0 { 0%,0% { opacity: 0 } 0%,6.111% { opacity: 1 } 6.111%,100% { opacity: 0 } }
+@keyframes p0-0 { 0%,0% { opacity: 0 } 0%,5.601% { opacity: 1 } 5.602%,100% { opacity: 0 } }
 .fl .p0-0 { animation: p0-0 24.5s infinite step-end; }
 @keyframes p1-0 { 0%,19.127% { opacity: 0 } 19.128%,27.784% { opacity: 1 } 27.785%,100% { opacity: 0 } }
 .fl .p1-0 { animation: p1-0 24.5s infinite step-end; }
@@ -480,8 +474,8 @@
 @keyframes a25 { 0%,19.127% { opacity: 0 } 19.127%,30.636% { opacity: 0 } 30.636%,48.663% { opacity: 0 } 48.664%,61.72% { opacity: 1 } 61.721%,73.229% { opacity: 1 } 73.23%,100% { opacity: 1 } }
 .fl .a25 { animation: a25 24.5s infinite step-end; }
 </style>
-<defs><pattern id="fl-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1" fill="var(--color-dot)"/></pattern><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
-<rect width="100%" height="100%" fill="var(--color-bg)"/><rect width="100%" height="100%" fill="url(#fl-dots)"/>
+<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
+<rect width="100%" height="100%" rx="10" fill="var(--color-bg)"/>
 <g transform="translate(0 0)">
 <line x1="56" x2="56" y1="110" y2="421" class="lifeline"/>
 <line x1="166" x2="166" y1="110" y2="421" class="lifeline"/>
@@ -498,7 +492,7 @@
 <g id="e-4" class="fl-edge"><path id="p-4" d="M 336 345 L 166 345" class="fl-path a16" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="211" y="323" width="80" height="18" rx="9" class="pill a17"/><text x="251" y="336" class="edgelabel a18">access_token</text></g></g>
 <g id="e-5" class="fl-edge"><path id="p-5" d="M 166 389 L 507.7 389" class="fl-path a19" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="285.8" y="367" width="102" height="18" rx="9" class="pill a20"/><text x="336.8" y="380" class="edgelabel a21">GET /me (Bearer)</text></g></g>
 <g class="fl-note"><rect x="348" y="182" width="147.7" height="35" rx="6" class="note-box"/><text x="358" y="203" class="row">challenge = S256(verifier)</text></g>
-<g class="p0-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animateMotion dur="24.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0;0.0611;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
+<g class="p0-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animateMotion dur="24.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0;0.056;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
 <g class="p1-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animateMotion dur="24.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.1913;0.2778;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
 <g class="p2-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animateMotion dur="24.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3064;0.3929;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
 <g class="p3-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animateMotion dur="24.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.4866;0.5732;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-3" xlink:href="#p-3"/></animateMotion></g>

@@ -45,6 +45,18 @@ test('main_render_writes_svg_and_html', () => {
   });
 });
 
+test('main_render_draws_rounded_backdrop_without_dot_grid', () => {
+  withFolder((folder) => {
+    writeFileSync(join(folder, 'a.muto'), 'flow right\nbox a "A"\nbox b "B"\na -> b\nstep "s"\n  a -> b "x"\n');
+
+    const result = run(['render', 'a.muto', '--html'], folder);
+
+    assert.equal(result.status, 0, result.stderr);
+    for (const file of ['a.svg', 'a.html']) assert.ok(!readFileSync(join(folder, file), 'utf8').includes('fl-dots'));
+    assert.match(readFileSync(join(folder, 'a.svg'), 'utf8'), /<rect width="100%" height="100%" rx="\d+"/);
+  });
+});
+
 test('main_check_error_writes_no_file_and_reports_line', () => {
   withFolder((folder) => {
     writeFileSync(join(folder, 'bad.muto'), 'flow right\nbox a "A"\na -> zz\n');

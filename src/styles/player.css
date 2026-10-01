@@ -6,7 +6,7 @@ body {
   background: var(--color-page);
 }
 
-/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. 회색은 그림 판만 쓴다. */
+/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. 회색은 SVG가 그리는 그림 판만 쓴다. */
 html.embedded body {
   padding: 0;
 }
@@ -30,7 +30,7 @@ html.embedded .fl-figure {
 
 .fl-canvas {
   padding: var(--space-6);
-  background: var(--color-bg) radial-gradient(var(--color-dot) var(--size-grid-dot), transparent calc(var(--size-grid-dot) * 1.2)) 0 0 / var(--size-grid) var(--size-grid);
+  background: var(--color-page);
   overflow: auto;
 }
 
