@@ -40,6 +40,9 @@
     "heat-low": {
       "$value": "{color.blue.50}"
     },
+    "heat-ink": {
+      "$value": "{color.neutral.900}"
+    },
     "series-2": {
       "$value": "#f08a5d"
     },
