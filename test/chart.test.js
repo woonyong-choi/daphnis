@@ -339,3 +339,16 @@ test('toSvg_heatmap_cell_color_follows_css_variables_so_dark_mode_applies', asyn
   assert.match(svg, /\.fl \.chart-heat \{\s*fill: color-mix\(in srgb, var\(--color-heat-high\) calc\(var\(--s\) \* 100%\), var\(--color-heat-low\)\)/);
   assert.match(svg, /prefers-color-scheme: dark[^}]*--color-heat-low: var\(--color-blue-50\)/s);
 });
+
+// cost: time O(build), heap O(m), stack O(1)
+// vars: m = SVG 글자 수
+// basis: estimate
+test('toSvg_heatmap_cell_fill_darkens_monotonically_with_value_and_max_is_heat_high', async () => {
+  const { toSvg } = await import('../src/svg.js');
+  const svg = await toSvg(await buildFigure('chart heatmap\ncell "a" "x" 1\ncell "a" "y" 4\ncell "a" "z" 9\ncell "a" "w" 10'), { isStatic: true });
+  const cells = [...svg.matchAll(/class="chart-heat" style="--s:([\d.]+)" fill="#([0-9a-f]{6})"/g)].map(([, s, hex]) => [Number(s), parseInt(hex.slice(0, 2), 16)]);
+
+  assert.deepEqual(cells.map(([s]) => s), [0.1, 0.4, 0.9, 1]);
+  assert.ok(cells.every(([, red], i) => i === 0 || red < cells[i - 1][1]), JSON.stringify(cells));
+  assert.equal(cells[3][1], 0x1d);
+});
