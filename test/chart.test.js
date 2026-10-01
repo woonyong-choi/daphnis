@@ -364,3 +364,13 @@ test('toSvg_heatmap_cell_fill_darkens_monotonically_with_value_and_max_is_heat_h
   assert.ok(cells.every(([, red], i) => i === 0 || red < cells[i - 1][1]), JSON.stringify(cells));
   assert.equal(cells[3][1], 0x1d);
 });
+
+// 라이트 그림 바탕은 흰 문서 위에서 회색으로 보이고, 그룹 바탕은 그 바탕보다 더 진하다. 상자 채움은 흰색이라 바탕 위에 떠 보인다.
+test('tokens_light_bg_is_visibly_gray_and_group_is_darker', async () => {
+  const { values: tokens } = await import('../src/tokens.js');
+  const light = (hex) => Number.parseInt(hex.slice(1, 3), 16) + Number.parseInt(hex.slice(3, 5), 16) + Number.parseInt(hex.slice(5, 7), 16);
+
+  assert.ok(light(tokens.color.bg) <= light('#f0f2f5'), tokens.color.bg);
+  assert.ok(light(tokens.color.group) < light(tokens.color.bg));
+  assert.equal(tokens.color.node, '#ffffff');
+});

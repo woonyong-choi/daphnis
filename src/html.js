@@ -18,6 +18,49 @@ const EMBED_SCRIPT = `<script>if (window.self !== window.top) {\n  document.docu
 const VIEW_BUTTONS =
   '<button type="button" class="fl-round fl-full"></button>' +
   '<div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>';
+// 목록 쪽 테마 전환. 시스템은 OS 설정을 따르고, 라이트와 다크는 목록 쪽 루트에 color-scheme을 걸어 iframe 안 그림의 prefers-color-scheme도 같은 값이 되게 한다.
+// 목록 쪽 자체 색은 토큰 CSS의 data-theme 값으로 바꾼다. 고른 값은 localStorage에 기억하고, 첫 그림이 그려지기 전에 적용해 깜빡임을 막는다.
+const THEME_MODES = [
+  ['system', '시스템'],
+  ['light', '라이트'],
+  ['dark', '다크'],
+];
+const THEME_BUTTONS = THEME_MODES.map(([mode, label]) => `<button type="button" data-mode="${mode}" aria-pressed="false">${label}</button>`).join('');
+const THEME_SCRIPT = `
+const THEME_KEY = 'mutoscope-theme';
+// cost: time O(1), heap O(1), stack O(1)
+// vars: 단추 3개
+// basis: estimate
+function applyTheme(mode) {
+  const root = document.documentElement;
+  if (mode === 'light' || mode === 'dark') {
+    root.setAttribute('data-theme', mode);
+    root.style.colorScheme = mode;
+  } else {
+    root.removeAttribute('data-theme');
+    root.style.colorScheme = 'light dark';
+  }
+  for (const button of document.querySelectorAll('.theme button')) button.setAttribute('aria-pressed', String(button.dataset.mode === (mode === 'light' || mode === 'dark' ? mode : 'system')));
+}
+function savedTheme() {
+  try {
+    return localStorage.getItem(THEME_KEY);
+  } catch {
+    return null;
+  }
+}
+applyTheme(savedTheme());
+addEventListener('DOMContentLoaded', () => {
+  applyTheme(savedTheme());
+  document.querySelector('.theme').addEventListener('click', (e) => {
+    const mode = e.target.dataset?.mode;
+    if (!mode) return;
+    try {
+      localStorage.setItem(THEME_KEY, mode);
+    } catch {}
+    applyTheme(mode);
+  });
+});`;
 // 재생기가 점과 글 상자, 아이콘을 그릴 때 쓰는 값. 브라우저 코드는 tokens.js를 불러올 수 없어 데이터로 넘긴다.
 const PLAYER_METRICS = Object.freeze({
   accent: tokens.color.accent,
@@ -178,10 +221,14 @@ export function toGallery(figures, heading) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeXml(heading)}</title>
 <style>${STYLES.tokens}${STYLES.gallery}</style>
+<script>${THEME_SCRIPT}</script>
 </head>
 <body>
+<div class="top">
 <h1>${escapeXml(heading)}</h1>
 <p>그림 ${figures.length}개</p>
+<div class="theme" role="group" aria-label="테마">${THEME_BUTTONS}</div>
+</div>
 <main>
 ${cards}
 </main>

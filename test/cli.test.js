@@ -82,6 +82,21 @@ test('main_gallery_writes_index_with_each_figure', () => {
   });
 });
 
+test('main_gallery_has_theme_buttons_and_applies_color_scheme_to_root', () => {
+  withFolder((folder) => {
+    writeFileSync(join(folder, 'a.muto'), 'flow right\nbox a "A"\n');
+
+    assert.equal(run(['gallery', '.', '--out', 'out'], folder).status, 0);
+
+    const index = readFileSync(join(folder, 'out', 'index.html'), 'utf8');
+    for (const mode of ['system', 'light', 'dark']) assert.match(index, new RegExp(`data-mode="${mode}"`));
+    for (const label of ['시스템', '라이트', '다크']) assert.match(index, new RegExp(`>${label}</button>`));
+    assert.match(index, /root\.style\.colorScheme = mode/);
+    assert.match(index, /localStorage\.setItem\(THEME_KEY/);
+    assert.match(index, /:root \{\s*color-scheme: light dark;/);
+  });
+});
+
 test('main_json_lists_related_lines_and_check_number', () => {
   withFolder((folder) => {
     writeFileSync(join(folder, 'warn.muto'), 'flow right\nbox a "A"\nbox b "B"\na -> b "보냄" quiet\nb -> a\nstep "s"\n  b -> a\n');
