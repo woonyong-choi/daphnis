@@ -12,12 +12,12 @@ const INNER_X = SPACE['9'];
 // vars: s = 도형 수, l = 도형 이름 줄 수, c = 테이블 열 수, g = 그룹 수
 // basis: estimate
 /**
- * 장면의 글자 사각형 목록. 글자 높이는 글자 크기이고 가로는 잰 글 폭이다.
+ * 장면의 글자 사각형 목록. 가로는 잰 글 폭이고 높이는 글자 크기에 위아래 `space.1`씩 더한 값이다(글자 위아래 내림과 올림).
  * @returns { x, y, w, h, name }[]. name은 알림 메시지에 쓸 표시 글이다
  */
 export function textBoxes(scene) {
   const boxes = [];
-  const add = (x, center, width, style, name) => boxes.push({ x, y: center - style.size / 2, w: width, h: style.size, name: plainText(name) });
+  const add = (x, center, width, style, name) => boxes.push({ x, y: center - style.size / 2 - SPACE['1'], w: width, h: style.size + SPACE['1'] * 2, name: plainText(name) });
   for (const it of scene.items) {
     if (it.shape === 'table') {
       add(it.x + it.w / 2 - measure(it.label, STYLE.label.size, STYLE.label.face) / 2, it.y + it.rowH / 2, measure(it.label, STYLE.label.size, STYLE.label.face), STYLE.label, it.label);

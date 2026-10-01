@@ -5,10 +5,12 @@ import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
 import { CHIP_GAP, CHIP_MARGIN, chipBoxBetween, placeChip, sizeChip } from '../src/chip.js';
 import { textBoxes } from '../src/draw/boxes.js';
+import { curveOf, timeAt } from '../src/easing.js';
 import { toHtml } from '../src/html.js';
 import { toSvg } from '../src/svg.js';
 
 const EXAMPLES = new URL('../examples/', import.meta.url);
+const MOVE = curveOf('move');
 const SCENE = { width: 600, height: 300 };
 const CHIP = { w: 100, h: 23 };
 
@@ -74,9 +76,9 @@ test('buildFigure_example_moving_text_never_covers_a_name_between_plan_points_ei
       const chip = sizeChip(hop.data);
       const path = hop.chipPath.map(([at, dx, dy]) => ({ at, dx, dy }));
       // 움직이는 SVG와 재생기는 지점 사이를 시간에 선형으로 잇는다. 사이의 여덟 지점까지 본다.
-      // 쪼갤 수 있는 가장 좁은 구간(경로의 0.3%, 몇 밀리초)은 점 위에서 아래로 바뀌는 순간이라 건너뛴다.
+      // 20ms보다 짧은 구간은 점 위에서 아래로 바뀌는 순간이라 건너뛴다.
       for (let k = 0; k < path.length - 1; k++) {
-        if (path[k + 1].at - path[k].at < 0.0032) continue;
+        if ((timeAt(MOVE, path[k + 1].at) - timeAt(MOVE, path[k].at)) * hop.ms < 20) continue;
         for (let q = 0; q <= 8; q++) {
           const { box } = chipBoxBetween(scene.edges[hop.edge].points, hop, chip, [path[k], path[k + 1]], q / 8);
           const hit = names.find((name) => overlaps(box, name));

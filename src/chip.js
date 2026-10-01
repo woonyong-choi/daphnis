@@ -14,6 +14,10 @@ export const CHIP_MARGIN = SPACE['14'];
 const SAMPLES = 20;
 // 지점 사이를 선형으로 이은 자리가 글자를 가리면 지점을 반으로 쪼개는 최대 횟수
 const REFINE_DEPTH = 4;
+// 점 위와 아래가 바뀌는 구간을 이 시간(ms)의 순간으로 만든다
+const FLIP_MS = 16;
+// 바뀜 시각을 찾으려고 구간을 훑는 칸 수
+const FLIP_SCAN = 16;
 // 점이 선을 지나는 곡선. 움직이는 SVG와 재생기와 같다
 const MOVE = curveOf('move');
 // 이름 글자와 겹친 넓이가 이 값 이하면 겹침 없음으로 본다(잰 글 폭의 반올림 차이)
@@ -97,7 +101,7 @@ export function planChip(scene, hop, avoid) {
   const base = Array.from({ length: SAMPLES + 1 }, (_, i) => place(i / SAMPLES));
   // 선형으로 이은 자리 검사는 진행 비율이 오르는 순서(isBack이면 경로 비율이 내려가는 순서)로 한다.
   if (hop.isBack) base.reverse();
-  const isClean = (a, b) => [0.25, 0.5, 0.75].every((ratio) => {
+  const isClean = (a, b, ratios = [0.25, 0.5, 0.75]) => ratios.every((ratio) => {
     const { box } = chipBoxBetween(points, hop, chip, [a, b], ratio);
     return !isOutsideFigure(box, scene) && !avoid.some((text) => overlapArea(box, text) > OVERLAP_SLACK);
   });
@@ -105,9 +109,28 @@ export function planChip(scene, hop, avoid) {
   // vars: p = 경로 점 수, a = 피할 글자 사각형 수, d = 쪼갠 깊이
   // basis: estimate
   const refine = (a, b, depth) => {
-    if (depth === 0 || isClean(a, b)) return [];
+    if (isClean(a, b)) return [];
+    // 더 쪼개도 사이가 글자를 가리면(점 위에서 아래로 바뀌는 구간) 앞 자리를 b 직전까지 붙들어 바뀜을 FLIP_MS 안의 순간으로 만든다.
+    if (depth === 0) return flip(a, b);
     const mid = place((a.fraction + b.fraction) / 2);
     return [...refine(a, mid, depth - 1), mid, ...refine(mid, b, depth - 1)];
+  };
+  // cost: time O(FLIP_SCAN·(p + a) + STEPS), heap O(1), stack O(1)
+  // vars: FLIP_SCAN = 훑는 칸 수(16), p = 경로 점 수, a = 피할 글자 사각형 수, STEPS = 이분 탐색 횟수
+  // basis: estimate
+  // 앞 지점 a의 자리를 붙든 채 점이 가다가 처음 글자를 가리기 직전까지 두고, 거기서 FLIP_MS 안에 b의 자리로 바꾼다. 바뀜이 글자를 가리는 구간을 한 순간으로 줄이는 것이다.
+  const flip = (a, b) => {
+    const [ta, tb] = [timeAt(MOVE, a.at), timeAt(MOVE, b.at)];
+    const held = { ...a, at: b.at };
+    let safe = 0;
+    while (safe < FLIP_SCAN && isClean(a, held, [(safe + 1) / FLIP_SCAN])) safe += 1;
+    const from = Math.min(ta + ((tb - ta) * safe) / FLIP_SCAN, tb - FLIP_MS / hop.ms);
+    const to = Math.min(tb, from + FLIP_MS / hop.ms);
+    const [atFrom, atTo] = [progressAt(MOVE, from), progressAt(MOVE, to)];
+    const entries = [];
+    if (atFrom > a.at) entries.push({ ...a, at: atFrom, fraction: hop.isBack ? 1 - atFrom : atFrom });
+    if (atTo > Math.max(a.at, atFrom) && atTo < b.at) entries.push({ ...b, at: atTo, fraction: hop.isBack ? 1 - atTo : atTo });
+    return entries;
   };
   const samples = base.flatMap((sample, i) => (i < base.length - 1 ? [sample, ...refine(sample, base[i + 1], REFINE_DEPTH)] : [sample]));
   return { path: samples.map(({ at, dx, dy }) => [at, dx, dy]), issues: samples.map(({ at, isOutside, hits }) => ({ at, isOutside, hits })) };
