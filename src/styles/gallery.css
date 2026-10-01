@@ -69,7 +69,7 @@ main {
 
 section {
   overflow: hidden;
-  background: var(--color-bg);
+  background: var(--color-page);
   border: var(--border-thin) solid var(--color-frame);
   border-radius: var(--radius-2xl);
 }

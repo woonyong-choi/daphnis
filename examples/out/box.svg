@@ -99,6 +99,7 @@
   --size-node-min-h: 46px;
   --size-store-cap: 12px;
   --size-figure-min: 560px;
+  --size-hop-ref: 300px;
   --size-chip-max: 210px;
   --size-caption-max: 720px;
   --size-figure-max: 1400px;
@@ -187,6 +188,8 @@
   --z-overlay: 10;
   --duration-fast: 200ms;
   --duration-hop: 3750ms;
+  --duration-hop-min: 1500ms;
+  --duration-hop-max: 7500ms;
   --duration-dwell: 700ms;
   --duration-dwell-per-char: 45ms;
   --duration-dwell-max: 3200ms;
