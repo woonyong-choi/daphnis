@@ -169,3 +169,9 @@ test('main_html_player_has_no_figure_plate_and_card_parts_share_bg_but_svg_keeps
     assert.match(svg, /<rect width="100%" height="100%" rx="\d+" fill="var\(--color-bg\)"\/>/);
   });
 });
+
+test('main_gallery_document_preview_centers_each_figure_paragraph', () => {
+  const doc = readFileSync(new URL('../src/styles/document.css', import.meta.url), 'utf8');
+
+  assert.match(doc, /\.figure \{\s*text-align: center;/);
+});

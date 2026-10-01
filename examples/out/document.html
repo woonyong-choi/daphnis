@@ -7,8 +7,8 @@
 <style>/* tokens.json: 생성물, 손으로 고치지 않음 */
 :root {
   --color-gray-0: #ffffff;
+  --color-gray-25: #f6f7f9;
   --color-gray-50: #eef1f5;
-  --color-gray-75: #eceff3;
   --color-gray-100: #e3e7ec;
   --color-gray-200: #d5dbe3;
   --color-gray-300: #b6c0cc;
@@ -39,7 +39,7 @@
   --color-on-accent: var(--color-gray-0);
   --color-fg: var(--color-ink-900);
   --color-muted: var(--color-ink-600);
-  --color-bg: var(--color-gray-75);
+  --color-bg: var(--color-gray-25);
   --color-node: var(--color-gray-0);
   --color-surface: var(--color-gray-50);
   --color-border: var(--color-gray-300);
@@ -96,7 +96,7 @@
   --size-node-max: 210px;
   --size-node-min-h: 46px;
   --size-store-cap: 12px;
-  --size-figure-min: 560px;
+  --size-figure-min: 640px;
   --size-hop-ref: 300px;
   --size-chip-max: 210px;
   --size-caption-max: 720px;
@@ -287,6 +287,11 @@ h2 {
   font: var(--weight-semibold) var(--size-text-15) var(--font-mono);
 }
 
+/* GitHub README에서는 <p align="center"> 안 img와 같다. */
+.figure {
+  text-align: center;
+}
+
 img {
   max-width: 100%;
   height: auto;
@@ -367,37 +372,37 @@ addEventListener('DOMContentLoaded', () => {
 <p>문서에 넣은 모습 그대로 보는 미리보기다. 그림은 움직이는 SVG 파일을 img로 넣은 것이라 회색 판이 흰 문서 위에서 그림 경계를 만든다.</p>
 <h2>bar</h2>
 <p>장기 기억 정확도</p>
-<p><img src="bar.svg" alt="장기 기억 정확도"></p>
+<p class="figure"><img src="bar.svg" alt="장기 기억 정확도"></p>
 <h2>box</h2>
 <p>응답 지연 분포</p>
-<p><img src="box.svg" alt="응답 지연 분포"></p>
+<p class="figure"><img src="box.svg" alt="응답 지연 분포"></p>
 <h2>dumbbell</h2>
 <p>작업당 토큰</p>
-<p><img src="dumbbell.svg" alt="작업당 토큰"></p>
+<p class="figure"><img src="dumbbell.svg" alt="작업당 토큰"></p>
 <h2>heatmap</h2>
 <p>판단 교차표</p>
-<p><img src="heatmap.svg" alt="판단 교차표"></p>
+<p class="figure"><img src="heatmap.svg" alt="판단 교차표"></p>
 <h2>line</h2>
 <p>주차별 재시도 비율</p>
-<p><img src="line.svg" alt="주차별 재시도 비율"></p>
+<p class="figure"><img src="line.svg" alt="주차별 재시도 비율"></p>
 <h2>memory</h2>
 <p>대화에서 기억 그래프 키우기</p>
-<p><img src="memory.svg" alt="대화에서 기억 그래프 키우기"></p>
+<p class="figure"><img src="memory.svg" alt="대화에서 기억 그래프 키우기"></p>
 <h2>oauth</h2>
 <p>OAuth 인가 코드와 PKCE</p>
-<p><img src="oauth.svg" alt="OAuth 인가 코드와 PKCE"></p>
+<p class="figure"><img src="oauth.svg" alt="OAuth 인가 코드와 PKCE"></p>
 <h2>order-state</h2>
 <p>주문 상태</p>
-<p><img src="order-state.svg" alt="주문 상태"></p>
+<p class="figure"><img src="order-state.svg" alt="주문 상태"></p>
 <h2>orders</h2>
 <p></p>
-<p><img src="orders.svg" alt="orders"></p>
+<p class="figure"><img src="orders.svg" alt="orders"></p>
 <h2>saturn</h2>
 <p>Saturn 구성</p>
-<p><img src="saturn.svg" alt="Saturn 구성"></p>
+<p class="figure"><img src="saturn.svg" alt="Saturn 구성"></p>
 <h2>scatter</h2>
 <p>수정 횟수와 비용</p>
-<p><img src="scatter.svg" alt="수정 횟수와 비용"></p>
+<p class="figure"><img src="scatter.svg" alt="수정 횟수와 비용"></p>
 </article>
 </body>
 </html>

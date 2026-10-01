@@ -272,7 +272,7 @@ addEventListener('message', (e) => {
  */
 export function toDocument(figures, heading) {
   const sections = figures
-    .map((f) => `<h2>${escapeXml(f.name)}</h2>\n<p>${escapeXml(f.title)}</p>\n<p><img src="${escapeXml(f.href)}.svg" alt="${escapeXml(f.title || f.name)}"></p>`)
+    .map((f) => `<h2>${escapeXml(f.name)}</h2>\n<p>${escapeXml(f.title)}</p>\n<p class="figure"><img src="${escapeXml(f.href)}.svg" alt="${escapeXml(f.title || f.name)}"></p>`)
     .join('\n');
   return `<!doctype html>
 <html lang="ko">

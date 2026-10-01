@@ -370,7 +370,8 @@ test('tokens_light_bg_is_visibly_gray_and_group_is_darker', async () => {
   const { values: tokens } = await import('../src/tokens.js');
   const light = (hex) => Number.parseInt(hex.slice(1, 3), 16) + Number.parseInt(hex.slice(3, 5), 16) + Number.parseInt(hex.slice(5, 7), 16);
 
-  assert.ok(light(tokens.color.bg) <= light('#f0f2f5'), tokens.color.bg);
+  assert.ok(light(tokens.color.bg) < light(tokens.color.node), tokens.color.bg);
+  assert.ok(light(tokens.color.bg) <= light('#f8f9fb'), tokens.color.bg);
   assert.ok(light(tokens.color.group) < light(tokens.color.bg));
   assert.equal(tokens.color.node, '#ffffff');
 });

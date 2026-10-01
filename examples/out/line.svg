@@ -6,8 +6,8 @@
 /* tokens.json: 생성물, 손으로 고치지 않음 */
 :root {
   --color-gray-0: #ffffff;
+  --color-gray-25: #f6f7f9;
   --color-gray-50: #eef1f5;
-  --color-gray-75: #eceff3;
   --color-gray-100: #e3e7ec;
   --color-gray-200: #d5dbe3;
   --color-gray-300: #b6c0cc;
@@ -38,7 +38,7 @@
   --color-on-accent: var(--color-gray-0);
   --color-fg: var(--color-ink-900);
   --color-muted: var(--color-ink-600);
-  --color-bg: var(--color-gray-75);
+  --color-bg: var(--color-gray-25);
   --color-node: var(--color-gray-0);
   --color-surface: var(--color-gray-50);
   --color-border: var(--color-gray-300);
@@ -95,7 +95,7 @@
   --size-node-max: 210px;
   --size-node-min-h: 46px;
   --size-store-cap: 12px;
-  --size-figure-min: 560px;
+  --size-figure-min: 640px;
   --size-hop-ref: 300px;
   --size-chip-max: 210px;
   --size-caption-max: 720px;

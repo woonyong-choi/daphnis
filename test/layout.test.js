@@ -160,3 +160,24 @@ test('layoutGraph_wrap_with_group_back_edges_and_labels_keeps_edge_ends', async 
   const result = await buildFigure(source);
 
   assert.equal(result.scene.edges.length, 11);});
+
+test('toSvg_narrow_figure_plate_is_figure_min_and_content_is_centered', async () => {
+  const { values } = await import('../src/tokens.js');
+  const result = await buildFigure('flow down\nbox a "A"\nbox b "B"\na -> b');
+  const svg = await toSvg(result, { isStatic: true });
+  const min = values.size['figure-min'];
+
+  assert.equal(min, values.size['chart-width']);
+  assert.ok(result.scene.width < min);
+  assert.match(svg, new RegExp(`width="${min}" height="[0-9.]+" viewBox="0 0 ${min} `));
+  assert.match(svg, new RegExp(`<g transform="translate\\(${(min - result.scene.width) / 2} 0\\)">`));
+});
+
+test('toSvg_figure_wider_than_figure_min_keeps_its_own_width', async () => {
+  const { values } = await import('../src/tokens.js');
+  const result = await buildFigure('flow right\nbox a "A"\nbox b "B"\nbox c "C"\nbox d "D"\nbox e "E"\nbox f "F"\na -> b\nb -> c\nc -> d\nd -> e\ne -> f');
+  const svg = await toSvg(result, { isStatic: true });
+
+  assert.ok(result.scene.width > values.size['figure-min']);
+  assert.match(svg, new RegExp(`<svg [^>]*width="${Math.round(result.scene.width * 10) / 10}"`));
+});

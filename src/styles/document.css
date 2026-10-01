@@ -42,6 +42,11 @@ h2 {
   font: var(--weight-semibold) var(--size-text-15) var(--font-mono);
 }
 
+/* GitHub README에서는 <p align="center"> 안 img와 같다. */
+.figure {
+  text-align: center;
+}
+
 img {
   max-width: 100%;
   height: auto;

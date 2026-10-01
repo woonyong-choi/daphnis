@@ -9,8 +9,8 @@ export const tokens = freeze({
   "color": {
     "gray": {
       "0": "var(--color-gray-0)",
+      "25": "var(--color-gray-25)",
       "50": "var(--color-gray-50)",
-      "75": "var(--color-gray-75)",
       "100": "var(--color-gray-100)",
       "200": "var(--color-gray-200)",
       "300": "var(--color-gray-300)",
@@ -253,8 +253,8 @@ export const values = freeze({
   "color": {
     "gray": {
       "0": "#ffffff",
+      "25": "#f6f7f9",
       "50": "#eef1f5",
-      "75": "#eceff3",
       "100": "#e3e7ec",
       "200": "#d5dbe3",
       "300": "#b6c0cc",
@@ -292,7 +292,7 @@ export const values = freeze({
     "on-accent": "#ffffff",
     "fg": "#0b0b0b",
     "muted": "#52514e",
-    "bg": "#eceff3",
+    "bg": "#f6f7f9",
     "node": "#ffffff",
     "surface": "#eef1f5",
     "border": "#b6c0cc",
@@ -363,7 +363,7 @@ export const values = freeze({
     "node-max": 210,
     "node-min-h": 46,
     "store-cap": 12,
-    "figure-min": 560,
+    "figure-min": 640,
     "hop-ref": 300,
     "chip-max": 210,
     "caption-max": 720,
