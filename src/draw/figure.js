@@ -98,21 +98,32 @@ function drawShape(it, stroke, glyphs, decorate) {
 // basis: estimate
 // 이름과 부제. 카드가 있으면 위에 붙이고, 없으면 세로 가운데. 사람은 몸통 아래에 쓴다.
 function drawLabels(it) {
+  return labelRows(it)
+    .map(({ cls, text, cx, baseline }) => `<text x="${r(cx)}" y="${r(baseline)}" class="${cls}">${renderRich(text)}</text>`)
+    .join('');
+}
+
+// cost: time O(l), heap O(l), stack O(1)
+// vars: l = 이름과 부제 줄 수
+// basis: estimate
+/**
+ * 도형의 이름과 부제 줄 자리. 그리는 쪽과 글 상자 자리 계산(draw/boxes.js)이 같은 값을 쓴다.
+ * @returns { cls, text, style, cx, center, baseline }[]. center는 줄의 세로 가운데, baseline은 글자 기준선이다
+ */
+export function labelRows(it) {
   const cx = it.x + it.w / 2;
   const lines = [...(it.labelLines ?? []).map((l) => ['label', l, STYLE.label]), ...(it.subLines ?? []).map((l) => ['sub', l, STYLE.sub])];
-  if (!lines.length) return '';
+  if (!lines.length) return [];
   const textH = lines.reduce((sum, [, , s]) => sum + s.line, 0);
   let top;
   if (it.shape === 'person') top = it.y + it.h + SPACE['3'];
   else if (it.card) top = it.y + INNER_Y;
   else top = it.y + (it.h - textH) / 2;
-  return lines
-    .map(([cls, text, style]) => {
-      const baseline = centerBaseline(top + style.line / 2, style.size);
-      top += style.line;
-      return `<text x="${r(cx)}" y="${r(baseline)}" class="${cls}">${renderRich(text)}</text>`;
-    })
-    .join('');
+  return lines.map(([cls, text, style]) => {
+    const center = top + style.line / 2;
+    top += style.line;
+    return { cls, text, style, cx, center, baseline: centerBaseline(center, style.size) };
+  });
 }
 
 // 카드 자리. 사람은 이름표 아래, 테이블은 열 아래, 나머지는 도형 아래쪽 안이다.

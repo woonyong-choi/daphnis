@@ -74,7 +74,7 @@ test('toSvg_moving_text_near_side_edge_is_pushed_inside', async () => {
 
   const svg = await toSvg(await buildFigure(source), {});
 
-  assert.match(svg, /<animateTransform attributeName="transform" type="translate"[^>]*values="[1-9][\d.]* 0;/);
+  assert.match(svg, /<animateTransform attributeName="transform" type="translate"[^>]*values="[1-9][\d.]* \d+;/);
 });
 
 const GROUPED = 'flow right\nbox a "A"\ngroup g "묶음" {\n  box b "B"\n}\nbox c "C"\na -> b "보냄"\nb -> c';

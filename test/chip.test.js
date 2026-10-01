@@ -1,0 +1,105 @@
+// 이동 글 상자 자리: 도형 이름, 열, 그룹 제목을 가리지 않고 판 위아래 끝에서 떨어진다(docs/design/playback.md 이동 글).
+import assert from 'node:assert/strict';
+import { readdirSync, readFileSync } from 'node:fs';
+import { test } from 'node:test';
+import { buildFigure } from '../src/build.js';
+import { CHIP_GAP, CHIP_MARGIN, chipBoxBetween, placeChip, sizeChip } from '../src/chip.js';
+import { textBoxes } from '../src/draw/boxes.js';
+import { toHtml } from '../src/html.js';
+import { toSvg } from '../src/svg.js';
+
+const EXAMPLES = new URL('../examples/', import.meta.url);
+const SCENE = { width: 600, height: 300 };
+const CHIP = { w: 100, h: 23 };
+
+// 겹친 넓이가 0.5px² 이하인 가장자리 닿음(잰 글 폭의 반올림 차이)은 겹침으로 보지 않는다.
+function overlaps(a, b) {
+  return Math.max(0, Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x)) * Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y)) > 0.5;
+}
+
+test('placeChip_keeps_the_chip_above_the_dot_when_nothing_is_in_the_way', () => {
+  const placed = placeChip({ x: 300, y: 150 }, CHIP, SCENE, []);
+
+  assert.deepEqual([placed.dx, placed.dy, placed.hits], [0, 0, []]);
+});
+
+test('placeChip_moves_below_the_dot_when_a_name_is_above_it', () => {
+  const name = { x: 280, y: 120, w: 40, h: 14, name: '이름' };
+
+  const placed = placeChip({ x: 300, y: 150 }, CHIP, SCENE, [name]);
+
+  assert.equal(placed.dy, CHIP.h + CHIP_GAP * 2);
+  assert.deepEqual(placed.hits, []);
+  assert.ok(!overlaps(placed.box, name));
+});
+
+test('placeChip_slides_aside_when_both_sides_of_the_dot_are_covered', () => {
+  const above = { x: 250, y: 120, w: 30, h: 14, name: '위' };
+  const below = { x: 250, y: 168, w: 30, h: 14, name: '아래' };
+
+  const placed = placeChip({ x: 300, y: 150 }, CHIP, SCENE, [above, below]);
+
+  assert.notEqual(placed.dx, 0);
+  assert.deepEqual(placed.hits, []);
+});
+
+test('placeChip_reports_the_name_it_cannot_avoid', () => {
+  const wall = [{ x: 0, y: 100, w: 600, h: 100, name: '벽' }];
+
+  assert.deepEqual(placeChip({ x: 300, y: 150 }, CHIP, SCENE, wall).hits, ['벽']);
+});
+
+test('placeChip_keeps_a_margin_from_the_top_edge_by_going_below', () => {
+  // 점 위 상자의 윗면이 7이라 판 위쪽 끝에 붙는다. 여백(CHIP_MARGIN) 이상 띄우려고 점 아래로 내린다.
+  const placed = placeChip({ x: 300, y: 7 + CHIP.h + CHIP_GAP }, CHIP, SCENE, []);
+
+  assert.ok(placed.dy > 0);
+  assert.ok(placed.box.y >= CHIP_MARGIN);
+});
+
+test('placeChip_still_reports_outside_when_no_candidate_fits_the_figure', () => {
+  const placed = placeChip({ x: 300, y: 30 }, { w: 100, h: 300 }, SCENE, []);
+
+  assert.equal(placed.isOutside, true);
+});
+
+test('buildFigure_example_moving_text_never_covers_a_name_between_plan_points_either', async () => {
+  let checked = 0;
+  for (const file of readdirSync(EXAMPLES).filter((f) => f.endsWith('.muto'))) {
+    const result = await buildFigure(readFileSync(new URL(file, EXAMPLES), 'utf8'), { baseDir: 'examples', strict: true });
+    if (result.chart) continue;
+    const { scene, timeline } = result;
+    const names = textBoxes(scene);
+    for (const hop of timeline.segs.flatMap((seg) => seg.hops).filter((h) => h.data)) {
+      const chip = sizeChip(hop.data);
+      const path = hop.chipPath.map(([at, dx, dy]) => ({ at, dx, dy }));
+      // 움직이는 SVG와 재생기는 지점 사이를 시간에 선형으로 잇는다. 사이의 여덟 지점까지 본다.
+      // 쪼갤 수 있는 가장 좁은 구간(경로의 0.3%, 몇 밀리초)은 점 위에서 아래로 바뀌는 순간이라 건너뛴다.
+      for (let k = 0; k < path.length - 1; k++) {
+        if (path[k + 1].at - path[k].at < 0.0032) continue;
+        for (let q = 0; q <= 8; q++) {
+          const { box } = chipBoxBetween(scene.edges[hop.edge].points, hop, chip, [path[k], path[k + 1]], q / 8);
+          const hit = names.find((name) => overlaps(box, name));
+          assert.ok(!hit, `${file}: 이동 글 상자가 ${hit?.name}을 가린다 (지점 ${k} 다음 ${q}/8)`);
+          assert.ok(box.x >= -0.5 && box.y >= -0.5 && box.x + box.w <= scene.width + 0.5 && box.y + box.h <= scene.height + 0.5, `${file}: 판 밖`);
+        }
+      }
+      assert.ok(path.every((p, k) => k === 0 || p.at > path[k - 1].at), `${file}: 진행 비율이 오르는 순서`);
+      checked += 1;
+    }
+  }
+  assert.ok(checked >= 5, `글 상자가 있는 이동 ${checked}개`);
+});
+
+test('toHtml_and_toSvg_share_the_chip_plan_from_the_timeline', async () => {
+  const result = await buildFigure(readFileSync(new URL('saturn.muto', EXAMPLES), 'utf8'), { baseDir: 'examples' });
+  const hops = result.timeline.segs.flatMap((seg) => seg.hops).filter((hop) => hop.data);
+  const html = await toHtml(result, 'saturn');
+  const svg = await toSvg(result, { name: 'saturn' });
+  const player = readFileSync(new URL('../src/player.js', import.meta.url), 'utf8');
+
+  assert.ok(hops.length > 0 && hops.every((hop) => Array.isArray(hop.chipPath) && hop.chipPath.length >= 21));
+  for (const hop of hops) assert.ok(html.includes(`"chipPath":${JSON.stringify(hop.chipPath)}`));
+  assert.doesNotMatch(player, /function placeChip/);
+  assert.match(svg, /<animateTransform attributeName="transform"/);
+});

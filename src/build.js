@@ -2,7 +2,8 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { checkChartFigure, checkFigure } from './check.js';
-import { CHIP_GAP, sizeChip } from './chip.js';
+import { CHIP_GAP, planChip, sizeChip } from './chip.js';
+import { textBoxes } from './draw/boxes.js';
 import { drawChart } from './chart/draw.js';
 import { layoutGraph } from './layout/graph.js';
 import { layoutSequence } from './layout/sequence.js';
@@ -45,6 +46,7 @@ export async function buildFigure(source, { baseDir = '.', strict = false, requi
   const scene = figure.kind === 'sequence' ? layoutSequence(figure, sizes) : await layoutGraph(figure, sizes);
   const timeline = buildTimeline(figure, cards, wrapChip, scene);
   widenForChips(scene, timeline);
+  planChips(scene, timeline);
   // 태그 색은 원본에 처음 나온 순서로 정한다(docs/design/figure-syntax.md 카드 줄).
   scene.tagOrder = figure.steps.flatMap((s) => s.beats.flatMap((b) => b.ops.filter((o) => o.row?.tag && !o.row.tone).map((o) => o.row.tag)));
   checkFigure(figure, scene, timeline, problems);
@@ -75,6 +77,15 @@ function widenForChips(scene, timeline) {
     if (e.labelAt) e.labelAt = { x: e.labelAt.x + dx, y: e.labelAt.y };
   }
   scene.width = need;
+}
+
+// cost: time O(h·(k·p + k·a)), heap O(a + h·k), stack O(1)
+// vars: h = 글 상자 있는 이동 수, k = 재는 지점 수(21), p = 경로 점 수, a = 글자 사각형 수
+// basis: estimate
+// 글 상자 자리를 경로 지점마다 미리 정해 이동에 담는다. 움직이는 SVG와 재생기는 이 계획을 그대로 걸어 같은 자리를 쓴다.
+function planChips(scene, timeline) {
+  const avoid = textBoxes(scene);
+  for (const seg of timeline.segs) for (const hop of seg.hops) if (hop.data) hop.chipPath = planChip(scene, hop, avoid).path;
 }
 
 // cost: time O(w), heap O(w), stack O(1)

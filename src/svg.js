@@ -1,7 +1,7 @@
 // 스크립트 없이 움직이는 SVG와 멈춘 SVG. 시간표의 박자 상태를 CSS keyframes와 SMIL로 옮긴다(docs/design/playback.md).
 import { fitCanvas } from './canvas.js';
 import { CHART_FACES, chartText } from './chart/draw.js';
-import { CHIP_GAP, placeChip, sampleRoute, sizeChip } from './chip.js';
+import { CHIP_GAP, sizeChip } from './chip.js';
 import { curveOf, keySpline, timeAt } from './easing.js';
 import { drawScene } from './draw/figure.js';
 import { createGlyphSet, embedFonts, measure, wrap } from './measure/fonts.js';
@@ -66,7 +66,7 @@ ${captions.svg}
 function drawFigureBody(result, animator, glyphs) {
   const { scene, timeline } = result;
   const body = drawScene(scene, (kind, i, extra) => animator.decorate(kind, i, extra, scene), glyphs);
-  const packets = timeline.segs.flatMap((seg, si) => seg.hops.map((hop, hi) => animator.packet(seg, hop, `p${si}-${hi}`, { glyphs, scene })));
+  const packets = timeline.segs.flatMap((seg, si) => seg.hops.map((hop, hi) => animator.packet(seg, hop, `p${si}-${hi}`, { glyphs })));
   return { svg: `${body}\n${packets.join('\n')}`, width: scene.width, height: scene.height, className: '' };
 }
 
@@ -181,9 +181,9 @@ function createAnimator({ segs, total, growMs }) {
   // basis: estimate
   // 점 하나가 한 박자 동안 선을 건너고, 실어 보내는 글은 점 위의 상자로 따라간다.
   // 점의 보임과 이동과 글 상자 밀어 넣기는 모두 SMIL이라 한 시계로 돈다. 보임을 CSS에 두면 시계 둘이 따로 반복해, 한 바퀴가 돌아올 때 점이 끝 지점에 잠깐 보였다가 시작 지점으로 뛴다.
-  function packet(seg, hop, name, { glyphs, scene }) {
+  function packet(seg, hop, name, { glyphs }) {
     const [from, to] = [keyTime(seg.t0), keyTime(seg.t0 + hop.ms)];
-    const chip = hop.data ? drawChip(hop.data, glyphs) + pushChip(seg, hop, scene) : '';
+    const chip = hop.data ? drawChip(hop.data, glyphs) + pushChip(seg, hop) : '';
     return (
       `<g class="${name}" opacity="0"><circle r="${values.size.halo}" fill="${tokens.color.accent}" opacity="${values.opacity.halo}"/><circle r="${values.size.packet}" fill="${tokens.color.accent}"/>${chip ? `<g>${chip}</g>` : ''}` +
       showWindow(from, to) +
@@ -217,18 +217,16 @@ function createAnimator({ segs, total, growMs }) {
     );
   }
 
-  // cost: time O(k·p), heap O(k), stack O(1)
-  // vars: k = 재는 지점 수(11), p = 경로 점 수
+  // cost: time O(k), heap O(k), stack O(1)
+  // vars: k = 재는 지점 수(21)
   // basis: estimate
-  // 글 상자가 그림 밖으로 나가는 선이면, 경로 10% 지점마다 밀어 넣은 양을 옮김 움직임으로 건다. 점이 그 지점에 닿는 시각은 이동 곡선을 거꾸로 풀어 구한다.
-  function pushChip(seg, hop, scene) {
-    const size = sizeChip(hop.data);
-    const samples = sampleRoute(scene.edges[hop.edge].points).map(({ fraction, point }) => ({ fraction: hop.isBack ? 1 - fraction : fraction, ...placeChip(point, size, scene.width) }));
-    if (hop.isBack) samples.reverse();
-    if (samples.every((p) => p.dx === 0 && p.dy === 0)) return '';
+  // 글 상자가 점 위 기본 자리에서 벗어나는 선이면(그림 밖으로 나가거나 도형 이름을 피할 때), 시간표가 정해 둔 경로 지점별 옮김을 옮김 움직임으로 건다. 점이 그 지점에 닿는 시각은 이동 곡선을 거꾸로 풀어 구한다.
+  function pushChip(seg, hop) {
+    const path = hop.chipPath;
+    if (path.every(([, dx, dy]) => dx === 0 && dy === 0)) return '';
     const at = (f) => keyTime(seg.t0 + timeAt(MOVE, f) * hop.ms);
-    const keys = [[0, samples[0]], ...samples.map((p) => [at(p.fraction), p]), [1, samples.at(-1)]].filter(([time], i, all) => i === 0 || time > all[i - 1][0]);
-    const moves = keys.map(([, p]) => `${r(p.dx)} ${r(p.dy)}`);
+    const keys = [[0, path[0]], ...path.map((p) => [at(p[0]), p]), [1, path.at(-1)]].filter(([time], i, all) => i === 0 || time > all[i - 1][0]);
+    const moves = keys.map(([, [, dx, dy]]) => `${r(dx)} ${r(dy)}`);
     return `<animateTransform attributeName="transform" type="translate" dur="${duration}" repeatCount="indefinite" calcMode="linear" keyTimes="${keys.map(([time]) => time).join(';')}" values="${moves.join(';')}"/>`;
   }
 

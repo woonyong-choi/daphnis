@@ -1295,7 +1295,7 @@ function figurePlay(root, data) {
   // cost: time O(l), heap O(l), stack O(1)
   // vars: l = 글 상자 줄 수
   // basis: estimate
-  // 점과 글 상자. 글 상자 줄은 html.js가 움직이는 SVG와 같은 너비로 나눠 넘긴다.
+  // 점과 글 상자. 글 상자 줄과 자리는 시간표가 움직이는 SVG와 같게 정해 넘긴다.
   function createPacket(hop) {
     const path = paths[hop.edge];
     const g = document.createElementNS(NS, 'g');
@@ -1305,6 +1305,7 @@ function figurePlay(root, data) {
     const chip = hop.data ? createChip(hop.data) : undefined;
     if (chip) g.appendChild(chip.g);
     const length = path.getTotalLength();
+    const slide = chipSlide(hop);
     return {
       remove: () => g.remove(),
       move(t) {
@@ -1312,7 +1313,7 @@ function figurePlay(root, data) {
         const eased = progressAt(metrics.move, p);
         const point = path.getPointAtLength(length * (hop.isBack ? 1 - eased : eased));
         g.setAttribute('transform', `translate(${point.x} ${point.y})`);
-        if (chip) placeChip(chip, point);
+        if (chip) chip.g.setAttribute('transform', `translate(${slide(p)})`);
         g.style.opacity = p >= 1 ? 0 : 1;
       },
     };
@@ -1365,13 +1366,36 @@ function figurePlay(root, data) {
     return axis(y1, y2, (low + high) / 2);
   }
 
-  // 글 상자가 그림 밖으로 나가면 옆으로 밀어 넣고, 위가 모자라면 점 아래로 내린다.
-  function placeChip(chip, point) {
-    const box = svg.viewBox.baseVal;
-    const half = chip.w / 2 + metrics.chipGap;
-    const x = Math.min(box.x + box.width - half, Math.max(box.x + half, point.x)) - point.x;
-    const isTooHigh = point.y - chip.h - metrics.chipGap < box.y;
-    chip.g.setAttribute('transform', `translate(${x} ${isTooHigh ? chip.h + metrics.chipGap * 2 : 0})`);
+  // cost: time O(STEPS·k), 프레임마다 O(k), heap O(k), stack O(1)
+  // vars: STEPS = 이분 탐색 횟수(30), k = 경로 지점 수(21)
+  // basis: estimate
+  // 글 상자 옮김. 빌드 때 시간표에 담은 경로 지점별 옮김 [진행 비율, dx, dy]를 움직이는 SVG의 옮김 움직임(SMIL, 지점이 점에 닿는 시각 사이를 선형)과 같게 시간 비율 p에서 보간한다.
+  function chipSlide(hop) {
+    const path = hop.chipPath ?? [];
+    const times = path.map(([at]) => timeAtProgress(metrics.move, at));
+    return (p) => {
+      if (!path.length) return '0 0';
+      const k = times.findLastIndex((time) => time <= p);
+      if (k < 0) return `${path[0][1]} ${path[0][2]}`;
+      if (k === path.length - 1) return `${path[k][1]} ${path[k][2]}`;
+      const ratio = times[k + 1] > times[k] ? (p - times[k]) / (times[k + 1] - times[k]) : 1;
+      return `${path[k][1] + (path[k + 1][1] - path[k][1]) * ratio} ${path[k][2] + (path[k + 1][2] - path[k][2]) * ratio}`;
+    };
+  }
+
+  // cost: time O(STEPS), heap O(1), stack O(1)
+  // vars: STEPS = 이분 탐색 횟수(30)
+  // basis: estimate
+  // 진행 비율 f에 닿는 시간 비율. easing.js의 timeAt과 같다.
+  function timeAtProgress([x1, y1, x2, y2], f) {
+    const axis = (a, b, t) => 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
+    let [low, high] = [0, 1];
+    for (let i = 0; i < 30; i++) {
+      const mid = (low + high) / 2;
+      if (axis(y1, y2, mid) < f) low = mid;
+      else high = mid;
+    }
+    return axis(x1, x2, (low + high) / 2);
   }
 
   // cost: time O(h + k), heap O(1), stack O(1)

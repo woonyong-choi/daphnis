@@ -1,5 +1,6 @@
 // 그림 검사. 배치가 끝난 장면에서 화면 오류를 찾아 원본 줄 번호와 함께 알린다(docs/design/figure-check.md).
-import { CHIP_GAP, placeChip, sampleRoute, sizeChip } from './chip.js';
+import { CHIP_GAP, planChip, sizeChip } from './chip.js';
+import { textBoxes } from './draw/boxes.js';
 import { measure } from './measure/fonts.js';
 import { CARD, STYLE, groupTitleWidth, sizePill } from './measure/sizes.js';
 import { values } from './tokens.js';
@@ -300,27 +301,33 @@ function checkNodes(boxes, groups, family, problems) {
   });
 }
 
-// cost: time O(h·p), heap O(1), stack O(1)
-// vars: h = 글 상자 있는 이동 수, p = 경로 점 수
+// cost: time O(h·(k·p + k·a)), heap O(a), stack O(1)
+// vars: h = 글 상자 있는 이동 수, k = 재는 지점 수(21), p = 경로 점 수, a = 글자 사각형 수
 // basis: estimate
-// 7번: 이동 경로의 10% 지점마다 밀어 넣은 글 상자가 그림 안에 있다. 글 상자가 그림보다 넓거나 위아래 어디에도 들어가지 않으면 실패한다.
+// 7번: 이동 경로의 5% 지점마다 정한 글 상자(점 위, 안 되면 아래)가 그림 안에 있고 도형 이름, 열, 그룹 제목을 가리지 않는다.
+// 글 상자가 그림보다 넓거나 위아래 어디에도 들어가지 않으면 오류, 위아래 어디에 두어도 글자를 가리면 경고다.
 function checkChips(scene, timeline, problems) {
+  const avoid = textBoxes(scene);
   const reported = new Set();
   for (const seg of timeline.segs) {
     for (const hop of seg.hops) {
-      if (!hop.data || reported.has(hop)) continue;
-      const chip = sizeChip(hop.data);
-      const outside = sampleRoute(scene.edges[hop.edge].points).find(({ point }) => !inside(placeChip(point, chip, scene.width).box, scene));
-      if (!outside) continue;
-      reported.add(hop);
-      const fix = chip.w + CHIP_GAP * 2 > scene.width ? 'Shorten the moving text' : 'Shorten the moving text or move the edge away from the figure edge';
-      problems.error(hop.line ?? 1, `[check 7] moving text "${hop.data.join(' ')}" leaves the figure at ${Math.round(outside.fraction * 100)}% of edge ${scene.edges[hop.edge].from} -> ${scene.edges[hop.edge].to}. ${fix}`);
+      const key = `${hop.edge}\u0000${hop.data?.join('\u0000')}`;
+      if (!hop.data || reported.has(key)) continue;
+      reported.add(key);
+      const { issues } = planChip(scene, hop, avoid);
+      const edge = scene.edges[hop.edge];
+      const text = hop.data.join(' ');
+      const percent = (at) => Math.round((hop.isBack ? 1 - at : at) * 100);
+      const outside = issues.find((issue) => issue.isOutside);
+      if (outside) {
+        const fix = sizeChip(hop.data).w + CHIP_GAP * 2 > scene.width ? 'Shorten the moving text' : 'Shorten the moving text or move the edge away from the figure edge';
+        problems.error(hop.line ?? 1, `[check 7] moving text "${text}" leaves the figure at ${percent(outside.at)}% of edge ${edge.from} -> ${edge.to}. ${fix}`);
+        continue;
+      }
+      const covered = issues.find((issue) => issue.hits.length);
+      if (covered) problems.warn(hop.line ?? 1, `[check 7] moving text "${text}" covers "${covered.hits[0]}" at ${percent(covered.at)}% of edge ${edge.from} -> ${edge.to}, above and below the dot. Shorten the moving text or move the edge away from the name`);
     }
   }
-}
-
-function inside(box, scene) {
-  return box.x >= -FIT_SLACK && box.y >= -FIT_SLACK && box.x + box.w <= scene.width + FIT_SLACK && box.y + box.h <= scene.height + FIT_SLACK;
 }
 
 // cost: time O(g log g), heap O(g), stack O(1)

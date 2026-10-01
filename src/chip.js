@@ -1,5 +1,5 @@
-// 점 위에 뜨는 글 상자의 크기와 자리. 움직이는 SVG와 그림 검사가 같은 규칙을 쓴다.
-// player.js의 placeChip도 같은 규칙이다. 브라우저 코드는 이 파일을 불러올 수 없어 따로 둔다.
+// 점 위에 뜨는 글 상자의 크기와 자리. 움직이는 SVG, 재생기, 그림 검사가 시간표에 담은 같은 계획을 쓴다(docs/design/playback.md 이동 글).
+import { curveOf, progressAt, timeAt } from './easing.js';
 import { measure } from './measure/fonts.js';
 import { STYLE } from './measure/sizes.js';
 import { pointAlong } from './route.js';
@@ -8,8 +8,18 @@ import { values } from './tokens.js';
 const SPACE = values.space;
 /** 글 상자와 점 사이 간격 */
 export const CHIP_GAP = SPACE['6'];
-// 검사와 SVG가 경로에서 글 상자 자리를 재는 비율 간격(10%)
-const SAMPLES = 10;
+/** 글 상자가 판 위아래 끝에서 떨어져야 하는 거리. 판 안쪽 여백(그림 둘레 여백)과 같다. */
+export const CHIP_MARGIN = SPACE['14'];
+// 글 상자 자리를 재는 경로 비율 간격(5%)
+const SAMPLES = 20;
+// 지점 사이를 선형으로 이은 자리가 글자를 가리면 지점을 반으로 쪼개는 최대 횟수
+const REFINE_DEPTH = 4;
+// 점이 선을 지나는 곡선. 움직이는 SVG와 재생기와 같다
+const MOVE = curveOf('move');
+// 이름 글자와 겹친 넓이가 이 값 이하면 겹침 없음으로 본다(잰 글 폭의 반올림 차이)
+const OVERLAP_SLACK = 0.5;
+// 잰 글 폭의 반올림 차이를 넘기 위한 여유
+const FIT_SLACK = 0.5;
 
 // cost: time O(l·n), heap O(1), stack O(1)
 // vars: l = 줄 수, n = 줄 글자 수
@@ -20,22 +30,105 @@ export function sizeChip(lines) {
   return { w, h: lines.length * STYLE.chip.line + SPACE['4'] };
 }
 
-/**
- * 점 point에서 글 상자를 밀어 넣은 자리. 그림 밖으로 나가면 옆으로 밀고, 위가 모자라면 점 아래로 내린다.
- * @returns { dx, dy, box }. dx, dy는 점 위 기본 자리에서 옮긴 양, box는 그림 좌표의 글 상자 사각형이다
- */
-export function placeChip(point, chip, width) {
-  const half = chip.w / 2 + CHIP_GAP;
-  const x = Math.min(width - half, Math.max(half, point.x));
-  const isTooHigh = point.y - chip.h - CHIP_GAP < 0;
-  const dy = isTooHigh ? chip.h + CHIP_GAP * 2 : 0;
-  return { dx: x - point.x, dy, box: { x: x - chip.w / 2, y: point.y - chip.h - CHIP_GAP + dy, w: chip.w, h: chip.h } };
+function overlapArea(a, b) {
+  return Math.max(0, Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x)) * Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y));
 }
 
-// cost: time O(k·p), heap O(k), stack O(1)
-// vars: k = 재는 지점 수(11), p = 경로 점 수
+// cost: time O(a²), heap O(a), stack O(1)
+// vars: a = 피할 글자 사각형 수
 // basis: estimate
-/** 경로를 10% 간격으로 나눈 지점. 처음과 끝을 포함해 11개다. */
-export function sampleRoute(points) {
-  return Array.from({ length: SAMPLES + 1 }, (_, i) => ({ fraction: i / SAMPLES, point: pointAlong(points, i / SAMPLES) }));
+/**
+ * 점 point 위의 글 상자 자리. 후보(점 위, 점 아래, 그리고 둘을 옆으로 비킨 것)마다 아래 순서로 견주어 가장 나은 것을 쓴다.
+ * 1. 그림 안에 있다. 2. 피할 글자(도형 이름, 열, 그룹 제목)와 겹치지 않는다(겹치면 겹친 넓이가 작은 쪽). 3. 판 위아래 끝에서 CHIP_MARGIN 이상 떨어진다.
+ * 4. 점 위 그대로, 점 아래, 옆으로 비킨 점 위, 옆으로 비킨 점 아래 순서다. 옆으로 비킬 때는 가리는 글자 사각형의 양 끝에 붙는 자리 가운데 점에서 글 상자 반 폭과 간격 안에 있는 것만 후보로 한다. 더 멀리 비키면 글 상자가 점에서 떨어져 보이고 경로를 따라 갑자기 튀기 때문이다.
+ * 옆으로는 그림 밖으로 나가지 않게 밀어 넣는다.
+ * @param scene { width, height }
+ * @param avoid { x, y, w, h, name }[]
+ * @returns { dx, dy, box, isOutside, hits }. dx, dy는 점 위 기본 자리에서 옮긴 양, box는 그림 좌표의 글 상자 사각형이다. hits는 겹친 글자 이름 목록이다
+ */
+export function placeChip(point, chip, scene, avoid = []) {
+  const half = chip.w / 2 + CHIP_GAP;
+  const clamp = (center) => Math.min(scene.width - half, Math.max(half, center));
+  const candidates = [];
+  for (const dy of [0, chip.h + CHIP_GAP * 2]) {
+    const top = point.y - chip.h - CHIP_GAP + dy;
+    const row = { y: top, h: chip.h };
+    // 같은 높이 띠의 글자 양 끝에 붙는 자리가 옆으로 비키는 후보다.
+    const near = avoid.filter((text) => text.y < row.y + row.h && row.y < text.y + text.h);
+    const reach = chip.w / 2 + CHIP_GAP;
+    const centers = [point.x, ...near.flatMap((text) => [text.x + text.w + chip.w / 2 + FIT_SLACK, text.x - chip.w / 2 - FIT_SLACK]).filter((center) => Math.abs(center - point.x) <= reach)];
+    for (const center of centers) {
+      const x = clamp(center);
+      const box = { x: x - chip.w / 2, y: top, w: chip.w, h: chip.h };
+      const hits = avoid.filter((text) => overlapArea(box, text) > OVERLAP_SLACK);
+      const area = hits.reduce((sum, text) => sum + overlapArea(box, text), 0);
+      const isOutside = isOutsideFigure(box, scene);
+      const isTight = top < CHIP_MARGIN - FIT_SLACK || top + chip.h > scene.height - CHIP_MARGIN + FIT_SLACK;
+      const shift = Math.abs(x - point.x);
+      const order = (center === point.x ? 0 : 2) + (dy > 0 ? 1 : 0) + shift / 10000;
+      candidates.push({ dx: x - point.x, dy, box, isOutside, hits: hits.map((h) => h.name), rank: [Number(isOutside), area, Number(isTight), order] });
+    }
+  }
+  const best = candidates.reduce((a, b) => (compare(a.rank, b.rank) <= 0 ? a : b));
+  const { rank, ...placed } = best;
+  return placed;
+}
+
+// cost: time O(r), heap O(1), stack O(1)
+// vars: r = 순위 항목 수(4)
+// basis: estimate
+function compare(a, b) {
+  for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return a[i] - b[i];
+  return 0;
+}
+
+// cost: time O(k·(p + a)·2^d), heap O(k·2^d), stack O(d)
+// vars: k = 재는 지점 수(21), p = 경로 점 수, a = 피할 글자 사각형 수, d = 쪼개는 최대 횟수(4)
+// basis: estimate
+/**
+ * 이동 하나의 글 상자 계획. 경로를 5% 간격으로 나눈 지점마다 글 상자 자리를 정하고, 지점 사이를 선형으로 이은 자리가 글자를 가리거나 그림 밖으로 나가면 그 사이에 지점을 더한다.
+ * 움직이는 SVG와 재생기가 이 목록을 그대로 쓴다.
+ * @returns { path, issues }. path는 이동 진행 비율 at(오름차순)마다 [at, dx, dy]이고, issues는 지점마다 { at, isOutside, hits }다
+ */
+export function planChip(scene, hop, avoid) {
+  const chip = sizeChip(hop.data);
+  const points = scene.edges[hop.edge].points;
+  const place = (fraction) => ({ at: hop.isBack ? 1 - fraction : fraction, fraction, ...placeChip(pointAlong(points, fraction), chip, scene, avoid) });
+  const base = Array.from({ length: SAMPLES + 1 }, (_, i) => place(i / SAMPLES));
+  // 선형으로 이은 자리 검사는 진행 비율이 오르는 순서(isBack이면 경로 비율이 내려가는 순서)로 한다.
+  if (hop.isBack) base.reverse();
+  const isClean = (a, b) => [0.25, 0.5, 0.75].every((ratio) => {
+    const { box } = chipBoxBetween(points, hop, chip, [a, b], ratio);
+    return !isOutsideFigure(box, scene) && !avoid.some((text) => overlapArea(box, text) > OVERLAP_SLACK);
+  });
+  // cost: time O((p + a)·2^d), heap O(2^d), stack O(d)
+  // vars: p = 경로 점 수, a = 피할 글자 사각형 수, d = 쪼갠 깊이
+  // basis: estimate
+  const refine = (a, b, depth) => {
+    if (depth === 0 || isClean(a, b)) return [];
+    const mid = place((a.fraction + b.fraction) / 2);
+    return [...refine(a, mid, depth - 1), mid, ...refine(mid, b, depth - 1)];
+  };
+  const samples = base.flatMap((sample, i) => (i < base.length - 1 ? [sample, ...refine(sample, base[i + 1], REFINE_DEPTH)] : [sample]));
+  return { path: samples.map(({ at, dx, dy }) => [at, dx, dy]), issues: samples.map(({ at, isOutside, hits }) => ({ at, isOutside, hits })) };
+}
+
+// cost: time O(p), heap O(1), stack O(1)
+// vars: p = 경로 점 수
+// basis: estimate
+/**
+ * 두 계획 지점 a, b(진행 비율이 오르는 순서) 사이, 시간 비율이 a 시각에서 b 시각으로 ratio만큼 간 때의 글 상자. 움직이는 SVG와 재생기가 지점 사이를 시간에 선형으로 잇는 것과 같다.
+ * @returns { box, point }. box는 그림 좌표의 글 상자, point는 그 시각 점의 자리다
+ */
+export function chipBoxBetween(points, hop, chip, [a, b], ratio) {
+  const [ta, tb] = [timeAt(MOVE, a.at), timeAt(MOVE, b.at)];
+  const time = ta + (tb - ta) * ratio;
+  const f = progressAt(MOVE, time);
+  const point = pointAlong(points, hop.isBack ? 1 - f : f);
+  const [dx, dy] = [a.dx + (b.dx - a.dx) * ratio, a.dy + (b.dy - a.dy) * ratio];
+  return { point, box: { x: point.x + dx - chip.w / 2, y: point.y - chip.h - CHIP_GAP + dy, w: chip.w, h: chip.h } };
+}
+
+function isOutsideFigure(box, scene) {
+  return box.x < -FIT_SLACK || box.y < -FIT_SLACK || box.x + box.w > scene.width + FIT_SLACK || box.y + box.h > scene.height + FIT_SLACK;
 }

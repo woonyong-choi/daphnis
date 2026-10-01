@@ -1245,7 +1245,7 @@ function figurePlay(root, data) {
   // cost: time O(l), heap O(l), stack O(1)
   // vars: l = 글 상자 줄 수
   // basis: estimate
-  // 점과 글 상자. 글 상자 줄은 html.js가 움직이는 SVG와 같은 너비로 나눠 넘긴다.
+  // 점과 글 상자. 글 상자 줄과 자리는 시간표가 움직이는 SVG와 같게 정해 넘긴다.
   function createPacket(hop) {
     const path = paths[hop.edge];
     const g = document.createElementNS(NS, 'g');
@@ -1255,6 +1255,7 @@ function figurePlay(root, data) {
     const chip = hop.data ? createChip(hop.data) : undefined;
     if (chip) g.appendChild(chip.g);
     const length = path.getTotalLength();
+    const slide = chipSlide(hop);
     return {
       remove: () => g.remove(),
       move(t) {
@@ -1262,7 +1263,7 @@ function figurePlay(root, data) {
         const eased = progressAt(metrics.move, p);
         const point = path.getPointAtLength(length * (hop.isBack ? 1 - eased : eased));
         g.setAttribute('transform', `translate(${point.x} ${point.y})`);
-        if (chip) placeChip(chip, point);
+        if (chip) chip.g.setAttribute('transform', `translate(${slide(p)})`);
         g.style.opacity = p >= 1 ? 0 : 1;
       },
     };
@@ -1315,13 +1316,36 @@ function figurePlay(root, data) {
     return axis(y1, y2, (low + high) / 2);
   }
 
-  // 글 상자가 그림 밖으로 나가면 옆으로 밀어 넣고, 위가 모자라면 점 아래로 내린다.
-  function placeChip(chip, point) {
-    const box = svg.viewBox.baseVal;
-    const half = chip.w / 2 + metrics.chipGap;
-    const x = Math.min(box.x + box.width - half, Math.max(box.x + half, point.x)) - point.x;
-    const isTooHigh = point.y - chip.h - metrics.chipGap < box.y;
-    chip.g.setAttribute('transform', `translate(${x} ${isTooHigh ? chip.h + metrics.chipGap * 2 : 0})`);
+  // cost: time O(STEPS·k), 프레임마다 O(k), heap O(k), stack O(1)
+  // vars: STEPS = 이분 탐색 횟수(30), k = 경로 지점 수(21)
+  // basis: estimate
+  // 글 상자 옮김. 빌드 때 시간표에 담은 경로 지점별 옮김 [진행 비율, dx, dy]를 움직이는 SVG의 옮김 움직임(SMIL, 지점이 점에 닿는 시각 사이를 선형)과 같게 시간 비율 p에서 보간한다.
+  function chipSlide(hop) {
+    const path = hop.chipPath ?? [];
+    const times = path.map(([at]) => timeAtProgress(metrics.move, at));
+    return (p) => {
+      if (!path.length) return '0 0';
+      const k = times.findLastIndex((time) => time <= p);
+      if (k < 0) return `${path[0][1]} ${path[0][2]}`;
+      if (k === path.length - 1) return `${path[k][1]} ${path[k][2]}`;
+      const ratio = times[k + 1] > times[k] ? (p - times[k]) / (times[k + 1] - times[k]) : 1;
+      return `${path[k][1] + (path[k + 1][1] - path[k][1]) * ratio} ${path[k][2] + (path[k + 1][2] - path[k][2]) * ratio}`;
+    };
+  }
+
+  // cost: time O(STEPS), heap O(1), stack O(1)
+  // vars: STEPS = 이분 탐색 횟수(30)
+  // basis: estimate
+  // 진행 비율 f에 닿는 시간 비율. easing.js의 timeAt과 같다.
+  function timeAtProgress([x1, y1, x2, y2], f) {
+    const axis = (a, b, t) => 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
+    let [low, high] = [0, 1];
+    for (let i = 0; i < 30; i++) {
+      const mid = (low + high) / 2;
+      if (axis(y1, y2, mid) < f) low = mid;
+      else high = mid;
+    }
+    return axis(x1, x2, (low + high) / 2);
   }
 
   // cost: time O(h + k), heap O(1), stack O(1)
@@ -1347,7 +1371,7 @@ function figurePlay(root, data) {
   }
 }
 
-figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":4933,"hops":[{"edge":0,"isBack":false,"ms":4078,"to":"extract","data":["민지는 3월에 토스로 옮겼어"],"line":19}],"edgesOn":[0],"nodesOn":[3,0],"groupsOn":[],"columnsOn":[],"cards":{"0":0},"cardsBefore":{},"cardsAt":{"0":4078},"caption":"처음 들은 사실로 그래프를 시작한다","series":[],"growing":[],"lights":[]},{"si":0,"t0":4933,"t1":6383,"hops":[{"edge":1,"isBack":false,"ms":750,"to":"resolve","line":22}],"edgesOn":[0,1],"nodesOn":[3,0,1],"groupsOn":[],"columnsOn":[],"cards":{"0":0},"cardsBefore":{"0":0},"cardsAt":{},"caption":"처음 들은 사실로 그래프를 시작한다","series":[],"growing":[],"lights":[]},{"si":0,"t0":6383,"t1":9433,"hops":[{"edge":2,"isBack":false,"ms":750,"to":"graph","line":23}],"edgesOn":[0,1,2],"nodesOn":[3,0,1,2],"groupsOn":[],"columnsOn":[],"cards":{"0":0,"2":0},"cardsBefore":{"0":0},"cardsAt":{"2":750},"caption":"처음 들은 사실로 그래프를 시작한다","series":[],"growing":[],"lights":[]},{"si":1,"t0":9433,"t1":14771,"hops":[{"edge":0,"isBack":false,"ms":4078,"to":"extract","data":["김민지가 결제팀을 맡았대"],"line":26}],"edgesOn":[0],"nodesOn":[3,0],"groupsOn":[],"columnsOn":[],"cards":{"0":1},"cardsBefore":{},"cardsAt":{"0":4078},"caption":"같은 사람이 다른 이름으로 나와도 한 개체로 합친다","series":[],"growing":[],"lights":[]},{"si":1,"t0":14771,"t1":16221,"hops":[{"edge":1,"isBack":false,"ms":750,"to":"resolve","line":28}],"edgesOn":[0,1],"nodesOn":[3,0,1],"groupsOn":[],"columnsOn":[],"cards":{"0":1,"1":0},"cardsBefore":{"0":1},"cardsAt":{"1":750},"caption":"같은 사람이 다른 이름으로 나와도 한 개체로 합친다","series":[],"growing":[],"lights":[]},{"si":1,"t0":16221,"t1":19271,"hops":[{"edge":2,"isBack":false,"ms":750,"to":"graph","line":30}],"edgesOn":[0,1,2],"nodesOn":[3,0,1,2],"groupsOn":[],"columnsOn":[],"cards":{"0":1,"1":0,"2":1},"cardsBefore":{"0":1,"1":0},"cardsAt":{"2":750},"caption":"같은 사람이 다른 이름으로 나와도 한 개체로 합친다","series":[],"growing":[],"lights":[]},{"si":2,"t0":19271,"t1":20171,"hops":[],"edgesOn":[],"nodesOn":[2],"groupsOn":[],"columnsOn":[],"cards":{"2":1},"cardsBefore":{},"cardsAt":{"2":0},"caption":"질문이 오면 쓰지 않던 선이 나타난다","series":[],"growing":[],"lights":[]},{"si":2,"t0":20171,"t1":34270,"hops":[{"edge":4,"isBack":false,"ms":13399,"to":"answer","data":["민지 지금 어디 팀이야?"],"line":34}],"edgesOn":[4],"nodesOn":[3,4,2],"groupsOn":[],"columnsOn":[],"cards":{"2":1},"cardsBefore":{"2":1},"cardsAt":{},"caption":"질문이 오면 쓰지 않던 선이 나타난다","series":[],"growing":[],"lights":[]},{"si":2,"t0":34270,"t1":39470,"hops":[{"edge":3,"isBack":false,"ms":2900,"to":"answer","data":["민지 → 결제팀"],"line":35}],"edgesOn":[4,3],"nodesOn":[3,4,2],"groupsOn":[],"columnsOn":[],"cards":{"2":1,"4":0},"cardsBefore":{"2":1},"cardsAt":{"4":2900},"caption":"질문이 오면 쓰지 않던 선이 나타난다","series":[],"growing":[],"lights":[]}],"steps":["첫 대화","다음 대화","질문"],"cardCounts":[2,1,2,0,1],"edgeEnds":[[3,0],[0,1],[1,2],[2,4],[3,4]],"seriesCount":0,"rowCount":0,"metrics":{"accent":"var(--color-accent)","chipFill":"var(--color-accent-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
+figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":4933,"hops":[{"edge":0,"isBack":false,"ms":4078,"to":"extract","data":["민지는 3월에 토스로 옮겼어"],"line":19,"chipPath":[[0,3.5931982421874977,0],[0.05,0,0],[0.1,0,0],[0.15,0,0],[0.2,0,0],[0.25,0,0],[0.3,0,47],[0.35,0,47],[0.4,0,47],[0.45,0,47],[0.5,0,47],[0.55,0,47],[0.6,0,47],[0.65,0,47],[0.7,0,47],[0.75,0,47],[0.8,0,47],[0.85,0,47],[0.9,0,0],[0.95,0,0],[1,0,0]]}],"edgesOn":[0],"nodesOn":[3,0],"groupsOn":[],"columnsOn":[],"cards":{"0":0},"cardsBefore":{},"cardsAt":{"0":4078},"caption":"처음 들은 사실로 그래프를 시작한다","series":[],"growing":[],"lights":[]},{"si":0,"t0":4933,"t1":6383,"hops":[{"edge":1,"isBack":false,"ms":750,"to":"resolve","line":22}],"edgesOn":[0,1],"nodesOn":[3,0,1],"groupsOn":[],"columnsOn":[],"cards":{"0":0},"cardsBefore":{"0":0},"cardsAt":{},"caption":"처음 들은 사실로 그래프를 시작한다","series":[],"growing":[],"lights":[]},{"si":0,"t0":6383,"t1":9433,"hops":[{"edge":2,"isBack":false,"ms":750,"to":"graph","line":23}],"edgesOn":[0,1,2],"nodesOn":[3,0,1,2],"groupsOn":[],"columnsOn":[],"cards":{"0":0,"2":0},"cardsBefore":{"0":0},"cardsAt":{"2":750},"caption":"처음 들은 사실로 그래프를 시작한다","series":[],"growing":[],"lights":[]},{"si":1,"t0":9433,"t1":14771,"hops":[{"edge":0,"isBack":false,"ms":4078,"to":"extract","data":["김민지가 결제팀을 맡았대"],"line":26,"chipPath":[[0,0,0],[0.05,0,0],[0.1,0,0],[0.15,0,0],[0.2,0,0],[0.25,0,0],[0.3,0,0],[0.35,0,47],[0.4,0,47],[0.45,0,47],[0.5,0,47],[0.55,0,47],[0.6,0,47],[0.65,0,47],[0.7,0,47],[0.75,0,47],[0.8,0,47],[0.85,0,47],[0.9,0,0],[0.95,0,0],[1,0,0]]}],"edgesOn":[0],"nodesOn":[3,0],"groupsOn":[],"columnsOn":[],"cards":{"0":1},"cardsBefore":{},"cardsAt":{"0":4078},"caption":"같은 사람이 다른 이름으로 나와도 한 개체로 합친다","series":[],"growing":[],"lights":[]},{"si":1,"t0":14771,"t1":16221,"hops":[{"edge":1,"isBack":false,"ms":750,"to":"resolve","line":28}],"edgesOn":[0,1],"nodesOn":[3,0,1],"groupsOn":[],"columnsOn":[],"cards":{"0":1,"1":0},"cardsBefore":{"0":1},"cardsAt":{"1":750},"caption":"같은 사람이 다른 이름으로 나와도 한 개체로 합친다","series":[],"growing":[],"lights":[]},{"si":1,"t0":16221,"t1":19271,"hops":[{"edge":2,"isBack":false,"ms":750,"to":"graph","line":30}],"edgesOn":[0,1,2],"nodesOn":[3,0,1,2],"groupsOn":[],"columnsOn":[],"cards":{"0":1,"1":0,"2":1},"cardsBefore":{"0":1,"1":0},"cardsAt":{"2":750},"caption":"같은 사람이 다른 이름으로 나와도 한 개체로 합친다","series":[],"growing":[],"lights":[]},{"si":2,"t0":19271,"t1":20171,"hops":[],"edgesOn":[],"nodesOn":[2],"groupsOn":[],"columnsOn":[],"cards":{"2":1},"cardsBefore":{},"cardsAt":{"2":0},"caption":"질문이 오면 쓰지 않던 선이 나타난다","series":[],"growing":[],"lights":[]},{"si":2,"t0":20171,"t1":34270,"hops":[{"edge":4,"isBack":false,"ms":13399,"to":"answer","data":["민지 지금 어디 팀이야?"],"line":34,"chipPath":[[0,0,0],[0.025,0,0],[0.037500000000000006,0,0],[0.04062500000000001,0,47],[0.043750000000000004,0,47],[0.05,0,47],[0.1,0,0],[0.15,0,0],[0.2,0,0],[0.25,0,0],[0.3,0,0],[0.35,0,0],[0.4,0,0],[0.45,0,0],[0.5,0,0],[0.55,0,0],[0.6,0,0],[0.65,0,0],[0.7,0,0],[0.75,0,0],[0.8,0,0],[0.85,0,0],[0.9,0,0],[0.95,0,0],[1,0,0]]}],"edgesOn":[4],"nodesOn":[3,4,2],"groupsOn":[],"columnsOn":[],"cards":{"2":1},"cardsBefore":{"2":1},"cardsAt":{},"caption":"질문이 오면 쓰지 않던 선이 나타난다","series":[],"growing":[],"lights":[]},{"si":2,"t0":34270,"t1":39470,"hops":[{"edge":3,"isBack":false,"ms":2900,"to":"answer","data":["민지 → 결제팀"],"line":35,"chipPath":[[0,0,0],[0.05,0,0],[0.1,0,0],[0.15,0,0],[0.2,0,0],[0.25,0,0],[0.3,0,0],[0.35,0,0],[0.4,0,0],[0.45,0,0],[0.5,0,0],[0.55,0,0],[0.6,0,0],[0.65,0,0],[0.7,0,0],[0.75,0,0],[0.8,0,0],[0.85,0,0],[0.9,0,0],[0.95,0,0],[1,0,0]]}],"edgesOn":[4,3],"nodesOn":[3,4,2],"groupsOn":[],"columnsOn":[],"cards":{"2":1,"4":0},"cardsBefore":{"2":1},"cardsAt":{"4":2900},"caption":"질문이 오면 쓰지 않던 선이 나타난다","series":[],"growing":[],"lights":[]}],"steps":["첫 대화","다음 대화","질문"],"cardCounts":[2,1,2,0,1],"edgeEnds":[[3,0],[0,1],[1,2],[2,4],[3,4]],"seriesCount":0,"rowCount":0,"metrics":{"accent":"var(--color-accent)","chipFill":"var(--color-accent-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
 </script>
 </body>
 </html>

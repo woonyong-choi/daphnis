@@ -37,3 +37,18 @@ export function timeAt(curve, progress) {
 export function keySpline(curve) {
   return curve.join(' ');
 }
+
+// cost: time O(STEPS), heap O(1), stack O(1)
+// vars: STEPS = 이분 탐색 횟수
+// basis: estimate
+/** 시간 비율 time의 진행 비율. timeAt의 반대로, 곡선의 x가 time이 되는 매개변수를 이분 탐색으로 찾는다. */
+export function progressAt(curve, time) {
+  const [x1, y1, x2, y2] = curve;
+  let [low, high] = [0, 1];
+  for (let i = 0; i < STEPS; i++) {
+    const mid = (low + high) / 2;
+    if (axis(x1, x2, mid) < time) low = mid;
+    else high = mid;
+  }
+  return axis(y1, y2, (low + high) / 2);
+}
