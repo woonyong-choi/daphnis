@@ -33,6 +33,14 @@ export function pointAlong(pts, fraction) {
   return pts.at(-1);
 }
 
+// cost: time O(p), heap O(1), stack O(1)
+// vars: p = 경로 점 수
+// basis: estimate
+/** 꺾은선 길이(px). 점 이동 시간을 정할 때 쓴다. */
+export function routeLength(points) {
+  return points.slice(1).reduce((sum, p, i) => sum + distance(points[i], p), 0);
+}
+
 // cost: time O(p), heap O(p), stack O(1)
 // vars: p = 경로 점 수
 // basis: estimate

@@ -1,8 +1,10 @@
 // 시간 흐름을 시간표로 편다. 박자마다 상태를 완전히 적어서, 탭으로 건너뛰어도 앞 박자를 다시 계산하지 않는다(docs/design/playback.md).
+import { routeLength } from './route.js';
 import { values } from './tokens.js';
 
 const DWELL = values.duration;
 const BAR = values.size['chart-bar'];
+const HOP_REF = values.size['hop-ref'];
 const BAR_GAP = values.space['2'];
 
 // cost: time O(b·(o + k)), heap O(c·r), stack O(1)
@@ -53,15 +55,27 @@ export function chartSeriesIds(figure) {
   return figure.chart.series.length ? figure.chart.series.map((s) => s.id) : [WHOLE_CHART];
 }
 
+// cost: time O(p), heap O(1), stack O(1)
+// vars: p = 경로 점 수
+// basis: estimate
+// 이동 시간은 선 길이에 비례한다. 기준 길이를 speed(기본 duration.hop)에 지나고, 최소와 최대 시간 안으로 자른다. 같은 속도로 보이게 하려는 것이다.
+// 최소와 최대는 speed를 기본값에서 바꾼 비율만큼 같이 늘고 줄어, 빠르게 한 그림이 최소 시간에 막히지 않는다.
+function hopMs(points, speed) {
+  const scale = speed / DWELL.hop;
+  const ms = (routeLength(points) / HOP_REF) * speed;
+  return Math.round(Math.min(DWELL['hop-max'] * scale, Math.max(DWELL['hop-min'] * scale, ms)));
+}
+
 // cost: time O(b·(h + e + k)), heap O(b·(e + k)), stack O(1)
 // vars: b = 박자 수, h = 박자의 이동 수, e = 선 수, k = 카드 있는 도형 수
 // basis: estimate
 /**
- * 시간표를 만든다.
+ * 시간표를 만든다. 이동 시간에 선 길이가 필요해 배치가 끝난 장면을 받는다. 차트는 장면이 없다.
  * @param chips 이동 글을 글 상자 줄로 나누는 함수
+ * @param scene 배치가 끝난 장면(edges의 points를 쓴다). 차트면 없다
  * @returns { segs, total, steps, growMs }. growMs는 차트 계열이 자라는 시간이다. seg: { si, bi, t0, t1, labelShift, move, hops, edgesOn, nodesOn, columnsOn, cards, cardsBefore, cardsAt, caption, series, growing, lights }
  */
-export function buildTimeline(figure, cards, chips) {
+export function buildTimeline(figure, cards, chips, scene) {
   const speed = figure.speedMs ?? (figure.kind === 'chart' ? DWELL.reveal : DWELL.hop);
   const segs = [];
   const revealed = [];
@@ -77,7 +91,7 @@ export function buildTimeline(figure, cards, chips) {
     step.beats.forEach((beat, bi) => {
       const hops = beat.hops.map((hop) => {
         const edge = figure.kind === 'sequence' ? messageIndex++ : hop.edge;
-        return { edge, isBack: Boolean(hop.isBack), ms: hop.timeMs ?? speed, to: hop.to.split('.')[0], data: hop.data !== undefined && figure.kind !== 'sequence' ? chips(hop.data) : undefined, line: hop.line };
+        return { edge, isBack: Boolean(hop.isBack), ms: hop.timeMs ?? hopMs(scene.edges[edge].points, speed), to: hop.to.split('.')[0], data: hop.data !== undefined && figure.kind !== 'sequence' ? chips(hop.data) : undefined, line: hop.line };
       });
       for (const h of hops) edgesOn.add(h.edge);
       for (const target of beat.light) lit.add(target);
