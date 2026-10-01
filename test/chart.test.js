@@ -326,3 +326,16 @@ test('toSvg_animated_chart_moves_row_label_with_the_timeline_shift', async () =>
   assert.match(svg, /@keyframes ls \{[^}]*translateY\([\d.]+px\)/);
   assert.match(svg, /\.fl \.chart-label\.shift \{ animation: ls /);
 });
+
+// cost: time O(build), heap O(m), stack O(1)
+// vars: m = SVG 글자 수
+// basis: estimate
+test('toSvg_heatmap_cell_color_follows_css_variables_so_dark_mode_applies', async () => {
+  const { toSvg } = await import('../src/svg.js');
+  const svg = await toSvg(await buildFigure('chart heatmap\ncell "a" "x" 10\ncell "a" "y" 5'));
+
+  assert.match(svg, /<rect [^>]*class="chart-heat" style="--s:1" fill="#[0-9a-f]{6}"/);
+  assert.match(svg, /<rect [^>]*class="chart-heat" style="--s:0.5"/);
+  assert.match(svg, /\.fl \.chart-heat \{\s*fill: color-mix\(in srgb, var\(--color-heat-high\) calc\(var\(--s\) \* 100%\), var\(--color-heat-low\)\)/);
+  assert.match(svg, /prefers-color-scheme: dark[^}]*--color-heat-low: var\(--color-blue-50\)/s);
+});

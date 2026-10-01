@@ -59,6 +59,7 @@
   --color-series-2: var(--color-orange-600);
   --color-heat-low: var(--color-blue-100);
   --color-heat-high: var(--color-blue-800);
+  --color-heat-ink: var(--color-ink-900);
   --color-grid: var(--color-ink-200);
   --font-sans: FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
   --font-mono: FigMono, D2Coding, ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -207,6 +208,7 @@
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
     --color-heat-low: var(--color-blue-50);
+    --color-heat-ink: var(--color-neutral-900);
     --color-series-2: #f08a5d;
     --color-grid: var(--color-neutral-750);
   }
@@ -225,6 +227,7 @@
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
   --color-heat-low: var(--color-blue-50);
+  --color-heat-ink: var(--color-neutral-900);
   --color-series-2: #f08a5d;
   --color-grid: var(--color-neutral-750);
 }

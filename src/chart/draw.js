@@ -25,6 +25,7 @@ const ARROW_MIN = SIZE['chart-arrow-min'];
 // 값 글자가 막대 끝 바깥에 들어갈 자리
 const VALUE_W = SPACE['30'] + SPACE['18'];
 // 히트맵 칸 색. 값 0은 핵심 1 옅게, 최댓값은 핵심 1 진하게이고 그 사이는 sRGB 보간이다(문서 스킬 색표).
+// 칸 색은 CSS(.chart-heat의 color-mix)가 변수로 계산해 다크 모드 값을 따라간다. 여기 hex는 color-mix를 모르는 뷰어용 대체 색(라이트)이다.
 const HEAT_LOW = values.color['heat-low'];
 const HEAT_HIGH = values.color['heat-high'];
 const SERIES_COLOR = [tokens.color['series-1'], tokens.color['series-2']];
@@ -354,7 +355,7 @@ function drawHeatmap(figure, top) {
     const [x, y] = [plotX + cols.indexOf(c.col) * cellW, gridTop + rows.indexOf(c.row) * cellH];
     const strength = max ? c.values.value / max : 0;
     parts.push(
-      `<g class="cr-${k}"><rect x="${r(x)}" y="${r(y)}" width="${r(cellW - SPACE['1'])}" height="${r(cellH - SPACE['1'])}" rx="${values.radius.sm}" fill="${heatColor(strength)}"/>` +
+      `<g class="cr-${k}"><rect x="${r(x)}" y="${r(y)}" width="${r(cellW - SPACE['1'])}" height="${r(cellH - SPACE['1'])}" rx="${values.radius.sm}" class="chart-heat" style="--s:${Math.round(strength * 1000) / 1000}" fill="${heatColor(strength)}"/>` +
         `<text x="${r(x + cellW / 2)}" y="${r(centerBaseline(y + cellH / 2, TEXT['11']))}" class="chart-cell${strength > values.opacity['heat-text'] ? ' on' : ''}">${formatNumber(c.values.value)}</text></g>`,
     );
   });

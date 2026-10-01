@@ -100,11 +100,16 @@
   text-anchor: start;
 }
 
+/* 칸 색은 변수로 계산해 다크 모드 heat-low를 따라간다. --s는 칸 강도(0~1)다. */
+.fl .chart-heat {
+  fill: color-mix(in srgb, var(--color-heat-high) calc(var(--s) * 100%), var(--color-heat-low));
+}
+
 .fl .chart-cell {
   font-family: var(--font-mono);
   font-size: var(--size-text-11);
   text-anchor: middle;
-  fill: var(--color-fg);
+  fill: var(--color-heat-ink);
 }
 
 .fl .chart-cell.on {

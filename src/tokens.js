@@ -75,6 +75,7 @@ export const tokens = freeze({
     "series-2": "var(--color-series-2)",
     "heat-low": "var(--color-heat-low)",
     "heat-high": "var(--color-heat-high)",
+    "heat-ink": "var(--color-heat-ink)",
     "grid": "var(--color-grid)"
   },
   "font": {
@@ -313,6 +314,7 @@ export const values = freeze({
     "series-2": "#eb6834",
     "heat-low": "#e3ecf8",
     "heat-high": "#1d4f91",
+    "heat-ink": "#0b0b0b",
     "grid": "#e6e5e1"
   },
   "font": {
