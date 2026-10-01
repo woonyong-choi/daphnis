@@ -114,11 +114,20 @@ function figurePlay(root, data) {
     return button;
   }
 
+  // cost: time O(1), heap O(1), stack O(1)
+  // basis: estimate
+  // 재생 단추 아이콘. shape은 16x16 좌표계의 SVG 도형 조각이다.
+  function iconSvg(shape) {
+    return `<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="0 0 16 16">${shape}</svg>`;
+  }
+
   function setPlaying(value) {
     isPlaying = value;
-    pauseButton.innerHTML = isPlaying
-      ? `<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="0 0 16 16"><path d="M5 2.5v11M11 2.5v11" stroke="currentColor" stroke-width="${metrics.pauseStroke}" stroke-linecap="round"/></svg>`
-      : `<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="0 0 16 16"><path d="M4 2.5v11l9.5-5.5z" fill="currentColor"/></svg>`;
+    pauseButton.innerHTML = iconSvg(
+      isPlaying
+        ? `<path d="M5 2.5v11M11 2.5v11" stroke="currentColor" stroke-width="${metrics.pauseStroke}" stroke-linecap="round"/>`
+        : '<path d="M4 2.5v11l9.5-5.5z" fill="currentColor"/>',
+    );
     pauseButton.setAttribute('aria-label', isPlaying ? '일시정지' : '재생');
   }
 
