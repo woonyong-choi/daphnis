@@ -10,6 +10,7 @@ export const tokens = freeze({
     "gray": {
       "0": "var(--color-gray-0)",
       "25": "var(--color-gray-25)",
+      "40": "var(--color-gray-40)",
       "50": "var(--color-gray-50)",
       "100": "var(--color-gray-100)",
       "200": "var(--color-gray-200)",
@@ -255,6 +256,7 @@ export const values = freeze({
     "gray": {
       "0": "#ffffff",
       "25": "#f6f7f9",
+      "40": "#eef0f3",
       "50": "#eef1f5",
       "100": "#e3e7ec",
       "200": "#d5dbe3",
@@ -298,7 +300,7 @@ export const values = freeze({
     "surface": "#eef1f5",
     "border": "#b6c0cc",
     "card-on": "#edf3fb",
-    "group": "#e3e7ec",
+    "group": "#eef0f3",
     "group-border": "#b6c0cc",
     "frame": "#e3e7ec",
     "page": "#ffffff",

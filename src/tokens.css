@@ -2,6 +2,7 @@
 :root {
   --color-gray-0: #ffffff;
   --color-gray-25: #f6f7f9;
+  --color-gray-40: #eef0f3;
   --color-gray-50: #eef1f5;
   --color-gray-100: #e3e7ec;
   --color-gray-200: #d5dbe3;
@@ -38,7 +39,7 @@
   --color-surface: var(--color-gray-50);
   --color-border: var(--color-gray-300);
   --color-card-on: var(--color-blue-50);
-  --color-group: var(--color-gray-100);
+  --color-group: var(--color-gray-40);
   --color-group-border: var(--color-gray-300);
   --color-frame: var(--color-gray-100);
   --color-page: var(--color-gray-0);
