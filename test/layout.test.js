@@ -136,6 +136,17 @@ test('layoutGraph_group_chain_with_aspect_wraps_and_passes_strict', async () => 
   assert.ok(new Set(scene.items.map((it) => Math.round(it.y))).size > 2, 'chain did not wrap into rows');
 });
 
+test('layoutGraph_group_chain_wrap_keeps_same_column_boxes_aligned_with_equal_gaps', async () => {
+  const { scene } = await buildFigure(WRAP_CHAIN);
+  const chain = scene.items.filter((it) => /^n\d+$/.test(it.id));
+  const rows = new Map();
+  for (const it of chain) rows.set(Math.round(it.y), [...(rows.get(Math.round(it.y)) ?? []), it.x].sort((a, b) => a - b));
+  const gaps = [...rows.values()].map((xs) => xs.slice(1).map((x, i) => x - xs[i]).join());
+
+  assert.equal(new Set([...rows.values()].map((xs) => xs[0])).size, 1, JSON.stringify([...rows.values()]));
+  assert.equal(new Set(gaps).size, 1, JSON.stringify(gaps));
+});
+
 test('toSvg_group_with_aspect_same_source_gives_same_bytes', async () => {
   const first = await toSvg(await buildFigure(WRAP_CHAIN), { isStatic: true, name: 'w' });
   const second = await toSvg(await buildFigure(WRAP_CHAIN), { isStatic: true, name: 'w' });

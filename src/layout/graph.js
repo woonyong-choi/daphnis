@@ -195,6 +195,10 @@ function toElk(model, figure) {
     });
   }
   const hasAspect = figure.aspect !== undefined;
+  // 줄 바꿈한 그림에서 그룹이 있으면, 그룹이 든 열만 넓어져 같은 열의 상자가 가운데나 왼쪽에 놓이고 칸 간격이 줄마다 달라진다.
+  // 바깥 층 도형을 모두 열의 오른쪽 끝에 붙이면 상자 사이 간격이 줄마다 같다. 이 선택 사항은 도형마다 줘야 한다(층 전체에 주면 무시된다).
+  const alignRight = hasAspect && figure.groups.length > 0;
+  const alignOf = (parent) => (alignRight && parent === 'root' ? { 'elk.alignment': 'RIGHT' } : {});
   // cost: time O(p), heap O(p), stack O(1)
   // vars: p = 도형의 연결점 수
   // basis: estimate
@@ -211,7 +215,7 @@ function toElk(model, figure) {
       width: outer.w,
       height: outer.h,
       ports,
-      layoutOptions: { 'elk.portConstraints': ports.length ? (isFirstPass ? 'FIXED_SIDE' : 'FIXED_POS') : 'FREE' },
+      layoutOptions: { 'elk.portConstraints': ports.length ? (isFirstPass ? 'FIXED_SIDE' : 'FIXED_POS') : 'FREE', ...alignOf(n.parent) },
     };
   };
   const toContainer = (c) => ({
@@ -243,6 +247,7 @@ function toElk(model, figure) {
             'elk.padding': `[top=${SIZE['group-title'] + SPACE['6']},left=${SPACE['12']},bottom=${SPACE['12']},right=${SPACE['12']}]`,
             'elk.nodeSize.constraints': 'MINIMUM_SIZE',
             'elk.nodeSize.minimum': `(${groupTitleWidth(c.label)}, ${SIZE['group-title']})`,
+            ...alignOf(c.parent),
           }),
       ...(c.id === 'root' && hasAspect ? wrapOptions(figure.aspect) : {}),
     },
