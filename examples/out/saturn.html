@@ -6,6 +6,18 @@
 <title>Saturn 구성</title>
 <script>if (window.self !== window.top) {
   document.documentElement.classList.add('embedded');
+  addEventListener('message', (e) => {
+    if (e.source !== parent || !e.data || !('theme' in e.data)) return;
+    const root = document.documentElement;
+    if (e.data.theme === 'light' || e.data.theme === 'dark') {
+      root.setAttribute('data-theme', e.data.theme);
+      root.style.colorScheme = e.data.theme;
+    } else {
+      root.removeAttribute('data-theme');
+      root.style.colorScheme = '';
+    }
+  });
+  parent.postMessage({ themeRequest: true }, '*');
   addEventListener('load', () => new ResizeObserver(() => parent.postMessage({ figureHeight: Math.ceil(document.body.getBoundingClientRect().height) }, '*')).observe(document.body));
 }</script>
 <style>@font-face{font-family:FigSans;font-weight:500;src:url(data:font/woff2;base64,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) format("woff2")}
@@ -111,6 +123,7 @@
   --size-figure-max: 1400px;
   --size-gallery-column: 760px;
   --size-gallery-frame: 820px;
+  --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
   --size-chart-width: 640px;
@@ -258,9 +271,10 @@ body {
   background: var(--color-page);
 }
 
-/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. 회색은 SVG가 그리는 그림 판만 쓴다. */
+/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. */
 html.embedded body {
   padding: 0;
+  background: var(--color-bg);
 }
 
 .fl-figure {
@@ -269,7 +283,7 @@ html.embedded body {
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
-  background: var(--color-page);
+  background: var(--color-bg);
   border: var(--border-thin) solid var(--color-frame);
   border-radius: var(--radius-2xl);
 }
@@ -280,9 +294,10 @@ html.embedded .fl-figure {
   border-radius: 0;
 }
 
+/* 카드 전체가 그림 판 한 덩어리다. 제목 줄, 그림 영역, 조작 줄이 모두 color.bg 한 톤이라 숫자 둘레 halo와 선 라벨 알약도 그대로 맞는다. */
 .fl-canvas {
   padding: var(--space-6);
-  background: var(--color-page);
+  background: var(--color-bg);
   overflow: auto;
 }
 
@@ -305,7 +320,7 @@ html.embedded .fl-canvas svg {
   gap: var(--space-6);
   justify-items: center;
   padding: var(--space-7) var(--space-8) var(--space-8);
-  background: var(--color-page);
+  background: var(--color-bg);
   border-top: var(--border-thin) solid var(--color-frame);
 }
 

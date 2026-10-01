@@ -6,6 +6,18 @@
 <title>대화에서 기억 그래프 키우기</title>
 <script>if (window.self !== window.top) {
   document.documentElement.classList.add('embedded');
+  addEventListener('message', (e) => {
+    if (e.source !== parent || !e.data || !('theme' in e.data)) return;
+    const root = document.documentElement;
+    if (e.data.theme === 'light' || e.data.theme === 'dark') {
+      root.setAttribute('data-theme', e.data.theme);
+      root.style.colorScheme = e.data.theme;
+    } else {
+      root.removeAttribute('data-theme');
+      root.style.colorScheme = '';
+    }
+  });
+  parent.postMessage({ themeRequest: true }, '*');
   addEventListener('load', () => new ResizeObserver(() => parent.postMessage({ figureHeight: Math.ceil(document.body.getBoundingClientRect().height) }, '*')).observe(document.body));
 }</script>
 <style>@font-face{font-family:FigSans;font-weight:500;src:url(data:font/woff2;base64,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) format("woff2")}
@@ -111,6 +123,7 @@
   --size-figure-max: 1400px;
   --size-gallery-column: 760px;
   --size-gallery-frame: 820px;
+  --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
   --size-chart-width: 640px;
@@ -258,9 +271,10 @@ body {
   background: var(--color-page);
 }
 
-/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. 회색은 SVG가 그리는 그림 판만 쓴다. */
+/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. */
 html.embedded body {
   padding: 0;
+  background: var(--color-bg);
 }
 
 .fl-figure {
@@ -269,7 +283,7 @@ html.embedded body {
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
-  background: var(--color-page);
+  background: var(--color-bg);
   border: var(--border-thin) solid var(--color-frame);
   border-radius: var(--radius-2xl);
 }
@@ -280,9 +294,10 @@ html.embedded .fl-figure {
   border-radius: 0;
 }
 
+/* 카드 전체가 그림 판 한 덩어리다. 제목 줄, 그림 영역, 조작 줄이 모두 color.bg 한 톤이라 숫자 둘레 halo와 선 라벨 알약도 그대로 맞는다. */
 .fl-canvas {
   padding: var(--space-6);
-  background: var(--color-page);
+  background: var(--color-bg);
   overflow: auto;
 }
 
@@ -305,7 +320,7 @@ html.embedded .fl-canvas svg {
   gap: var(--space-6);
   justify-items: center;
   padding: var(--space-7) var(--space-8) var(--space-8);
-  background: var(--color-page);
+  background: var(--color-bg);
   border-top: var(--border-thin) solid var(--color-frame);
 }
 

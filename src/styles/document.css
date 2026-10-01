@@ -1,0 +1,76 @@
+/* 문서 안 모습 미리보기. GitHub README처럼 문서 바탕 위에 제목, 문단, img로 넣은 SVG를 둔다. */
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  padding: var(--space-12) var(--space-16);
+  font-family: var(--font-sans);
+  color: var(--color-fg);
+  background: var(--color-page);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--size-document-column);
+  margin: 0 auto var(--space-12);
+}
+
+.bar a {
+  font-size: var(--size-text-13);
+  color: var(--color-accent);
+}
+
+article {
+  max-width: var(--size-document-column);
+  margin: 0 auto;
+  font-size: var(--size-text-15);
+  line-height: var(--leading-normal);
+}
+
+h1 {
+  padding-bottom: var(--space-3);
+  font-size: var(--size-text-22);
+  border-bottom: var(--border-thin) solid var(--color-frame);
+}
+
+h2 {
+  margin-top: var(--space-16);
+  font: var(--weight-semibold) var(--size-text-15) var(--font-mono);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.theme {
+  display: flex;
+  padding: var(--space-1-5);
+  background: var(--color-bg);
+  border: var(--border-thin) solid var(--color-frame);
+  border-radius: var(--radius-full);
+}
+
+.theme button {
+  padding: var(--space-2) var(--space-6);
+  font: var(--size-text-13) var(--font-sans);
+  color: var(--color-muted);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-full);
+}
+
+.theme button[aria-pressed='true'] {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+}
+
+.theme button:focus-visible {
+  outline: var(--border-tag) solid var(--color-accent);
+  outline-offset: var(--space-1);
+}

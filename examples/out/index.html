@@ -103,6 +103,7 @@
   --size-figure-max: 1400px;
   --size-gallery-column: 760px;
   --size-gallery-frame: 820px;
+  --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
   --size-chart-width: 640px;
@@ -273,6 +274,10 @@ h1 {
   color: var(--color-muted);
 }
 
+.top a {
+  color: var(--color-accent);
+}
+
 .theme {
   display: flex;
   grid-row: 1 / 3;
@@ -313,7 +318,7 @@ main {
 
 section {
   overflow: hidden;
-  background: var(--color-page);
+  background: var(--color-bg);
   border: var(--border-thin) solid var(--color-frame);
   border-radius: var(--radius-2xl);
 }
@@ -378,6 +383,7 @@ function applyTheme(mode) {
     root.removeAttribute('data-theme');
     root.style.colorScheme = 'light dark';
   }
+  for (const frame of document.querySelectorAll('iframe')) frame.contentWindow?.postMessage({ theme: mode }, '*');
   for (const button of document.querySelectorAll('.theme button')) button.setAttribute('aria-pressed', String(button.dataset.mode === (mode === 'light' || mode === 'dark' ? mode : 'system')));
 }
 function savedTheme() {
@@ -403,7 +409,7 @@ addEventListener('DOMContentLoaded', () => {
 <body>
 <div class="top">
 <h1>예제</h1>
-<p>그림 11개</p>
+<p>그림 11개 · <a href="document.html">문서 안 모습 보기</a></p>
 <div class="theme" role="group" aria-label="테마"><button type="button" data-mode="system" aria-pressed="false">시스템</button><button type="button" data-mode="light" aria-pressed="false">라이트</button><button type="button" data-mode="dark" aria-pressed="false">다크</button></div>
 </div>
 <main>
@@ -420,10 +426,12 @@ addEventListener('DOMContentLoaded', () => {
 <section><header><h2>scatter</h2><p>수정 횟수와 비용</p><nav><a href="scatter.html">열기</a><a href="scatter.svg">SVG</a></nav></header><iframe src="scatter.html" loading="lazy" allowfullscreen title="scatter"></iframe></section>
 </main>
 <script>
-// 그림 쪽이 알려 준 본문 높이로 iframe 높이를 맞춘다. 그림 아래 빈 공간을 없애기 위해서다.
+// 그림 쪽이 알려 준 본문 높이로 iframe 높이를 맞추고(그림 아래 빈 공간을 없애기 위해서다), 새로 뜬 그림에는 현재 테마를 보낸다.
 addEventListener('message', (e) => {
   const frame = [...document.querySelectorAll('iframe')].find((f) => f.contentWindow === e.source);
-  if (frame && e.data?.figureHeight) frame.style.height = e.data.figureHeight + 'px';
+  if (!frame) return;
+  if (e.data?.figureHeight) frame.style.height = e.data.figureHeight + 'px';
+  if (e.data?.themeRequest) frame.contentWindow.postMessage({ theme: savedTheme() }, '*');
 });
 </script>
 </body>

@@ -6,6 +6,18 @@
 <title>수정 횟수와 비용</title>
 <script>if (window.self !== window.top) {
   document.documentElement.classList.add('embedded');
+  addEventListener('message', (e) => {
+    if (e.source !== parent || !e.data || !('theme' in e.data)) return;
+    const root = document.documentElement;
+    if (e.data.theme === 'light' || e.data.theme === 'dark') {
+      root.setAttribute('data-theme', e.data.theme);
+      root.style.colorScheme = e.data.theme;
+    } else {
+      root.removeAttribute('data-theme');
+      root.style.colorScheme = '';
+    }
+  });
+  parent.postMessage({ themeRequest: true }, '*');
   addEventListener('load', () => new ResizeObserver(() => parent.postMessage({ figureHeight: Math.ceil(document.body.getBoundingClientRect().height) }, '*')).observe(document.body));
 }</script>
 <style>@font-face{font-family:FigMono;font-weight:400;src:url(data:font/woff2;base64,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) format("woff2")}
@@ -110,6 +122,7 @@
   --size-figure-max: 1400px;
   --size-gallery-column: 760px;
   --size-gallery-frame: 820px;
+  --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
   --size-chart-width: 640px;
@@ -257,9 +270,10 @@ body {
   background: var(--color-page);
 }
 
-/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. 회색은 SVG가 그리는 그림 판만 쓴다. */
+/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. */
 html.embedded body {
   padding: 0;
+  background: var(--color-bg);
 }
 
 .fl-figure {
@@ -268,7 +282,7 @@ html.embedded body {
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
-  background: var(--color-page);
+  background: var(--color-bg);
   border: var(--border-thin) solid var(--color-frame);
   border-radius: var(--radius-2xl);
 }
@@ -279,9 +293,10 @@ html.embedded .fl-figure {
   border-radius: 0;
 }
 
+/* 카드 전체가 그림 판 한 덩어리다. 제목 줄, 그림 영역, 조작 줄이 모두 color.bg 한 톤이라 숫자 둘레 halo와 선 라벨 알약도 그대로 맞는다. */
 .fl-canvas {
   padding: var(--space-6);
-  background: var(--color-page);
+  background: var(--color-bg);
   overflow: auto;
 }
 
@@ -304,7 +319,7 @@ html.embedded .fl-canvas svg {
   gap: var(--space-6);
   justify-items: center;
   padding: var(--space-7) var(--space-8) var(--space-8);
-  background: var(--color-page);
+  background: var(--color-bg);
   border-top: var(--border-thin) solid var(--color-frame);
 }
 
@@ -919,7 +934,7 @@ html.embedded .fl-figure.fl-chart-page {
 <body>
 <figure class="fl-figure fl-chart-page" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="640" height="470" style="aspect-ratio: 640 / 470" viewBox="0 0 640 470" role="img"><title>수정 횟수와 비용</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><rect width="100%" height="100%" rx="10" fill="var(--color-bg)"/><text x="28" y="43" class="chart-title">수정 횟수와 비용</text>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="640" height="470" style="aspect-ratio: 640 / 470" viewBox="0 0 640 470" role="img"><title>수정 횟수와 비용</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><text x="28" y="43" class="chart-title">수정 횟수와 비용</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 작업당 평균, 화살표는 기억 없음에서 기억 붙임</text>
 <g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-series-1)"/><text x="46" y="85" class="chart-legend">기억 없음</text></g>
 <g class="cs-1"><rect x="108.49609375" y="77" width="12" height="12" rx="4" fill="var(--color-series-2)"/><text x="126.49609375" y="85" class="chart-legend">기억 붙임</text></g>

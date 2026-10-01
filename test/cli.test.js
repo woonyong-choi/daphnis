@@ -140,3 +140,32 @@ test('main_missing_file_reports_one_line_and_checks_the_rest', () => {
     assert.equal(stderr.trim(), 'nope.muto: cannot read the file: ENOENT');
   });
 });
+
+test('main_gallery_writes_document_preview_with_img_per_figure_and_link_from_index', () => {
+  withFolder((folder) => {
+    writeFileSync(join(folder, 'a.muto'), 'flow right\nbox a "A"\n');
+    writeFileSync(join(folder, 'b.muto'), 'chart bar\nseries s "S"\nrow "r" s=1\n');
+
+    assert.equal(run(['gallery', '.', '--out', 'out'], folder).status, 0);
+
+    const doc = readFileSync(join(folder, 'out', 'document.html'), 'utf8');
+    assert.match(doc, /<img src="a\.svg"/);
+    assert.match(doc, /<img src="b\.svg"/);
+    for (const mode of ['system', 'light', 'dark']) assert.match(doc, new RegExp(`data-mode="${mode}"`));
+    assert.match(readFileSync(join(folder, 'out', 'index.html'), 'utf8'), /href="document\.html"/);
+  });
+});
+
+test('main_html_player_has_no_figure_plate_and_card_parts_share_bg_but_svg_keeps_plate', () => {
+  withFolder((folder) => {
+    writeFileSync(join(folder, 'b.muto'), 'chart bar\nseries s "S"\nrow "r" s=1\n');
+
+    assert.equal(run(['render', 'b.muto', '--html'], folder).status, 0);
+
+    const html = readFileSync(join(folder, 'b.html'), 'utf8');
+    const svg = readFileSync(join(folder, 'b.svg'), 'utf8');
+    assert.ok(!html.includes('<rect width="100%" height="100%"'));
+    for (const selector of ['\\.fl-figure', '\\.fl-canvas', '\\.fl-foot', 'html\\.embedded body']) assert.match(html, new RegExp(`${selector} \\{[^}]*background: var\\(--color-bg\\);`));
+    assert.match(svg, /<rect width="100%" height="100%" rx="\d+" fill="var\(--color-bg\)"\/>/);
+  });
+});

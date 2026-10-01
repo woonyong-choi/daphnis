@@ -6,6 +6,18 @@
 <title>OAuth 인가 코드와 PKCE</title>
 <script>if (window.self !== window.top) {
   document.documentElement.classList.add('embedded');
+  addEventListener('message', (e) => {
+    if (e.source !== parent || !e.data || !('theme' in e.data)) return;
+    const root = document.documentElement;
+    if (e.data.theme === 'light' || e.data.theme === 'dark') {
+      root.setAttribute('data-theme', e.data.theme);
+      root.style.colorScheme = e.data.theme;
+    } else {
+      root.removeAttribute('data-theme');
+      root.style.colorScheme = '';
+    }
+  });
+  parent.postMessage({ themeRequest: true }, '*');
   addEventListener('load', () => new ResizeObserver(() => parent.postMessage({ figureHeight: Math.ceil(document.body.getBoundingClientRect().height) }, '*')).observe(document.body));
 }</script>
 <style>@font-face{font-family:FigSans;font-weight:500;src:url(data:font/woff2;base64,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) format("woff2")}
@@ -110,6 +122,7 @@
   --size-figure-max: 1400px;
   --size-gallery-column: 760px;
   --size-gallery-frame: 820px;
+  --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
   --size-chart-width: 640px;
@@ -257,9 +270,10 @@ body {
   background: var(--color-page);
 }
 
-/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. 회색은 SVG가 그리는 그림 판만 쓴다. */
+/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. */
 html.embedded body {
   padding: 0;
+  background: var(--color-bg);
 }
 
 .fl-figure {
@@ -268,7 +282,7 @@ html.embedded body {
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
-  background: var(--color-page);
+  background: var(--color-bg);
   border: var(--border-thin) solid var(--color-frame);
   border-radius: var(--radius-2xl);
 }
@@ -279,9 +293,10 @@ html.embedded .fl-figure {
   border-radius: 0;
 }
 
+/* 카드 전체가 그림 판 한 덩어리다. 제목 줄, 그림 영역, 조작 줄이 모두 color.bg 한 톤이라 숫자 둘레 halo와 선 라벨 알약도 그대로 맞는다. */
 .fl-canvas {
   padding: var(--space-6);
-  background: var(--color-page);
+  background: var(--color-bg);
   overflow: auto;
 }
 
@@ -304,7 +319,7 @@ html.embedded .fl-canvas svg {
   gap: var(--space-6);
   justify-items: center;
   padding: var(--space-7) var(--space-8) var(--space-8);
-  background: var(--color-page);
+  background: var(--color-bg);
   border-top: var(--border-thin) solid var(--color-frame);
 }
 

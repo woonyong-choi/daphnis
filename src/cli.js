@@ -5,7 +5,7 @@ import { mkdirSync, readdirSync, readFileSync, realpathSync, writeFileSync } fro
 import { basename, dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildFigure } from './build.js';
-import { toGallery, toHtml } from './html.js';
+import { toDocument, toGallery, toHtml } from './html.js';
 import { FigureError } from './source/problems.js';
 import { toSvg } from './svg.js';
 
@@ -86,10 +86,10 @@ async function processFile(input, args) {
   return true;
 }
 
-// cost: time O(f·build), heap O(f), stack O(1), io 3f + 1
+// cost: time O(f·build), heap O(f), stack O(1), io 3f + 2
 // vars: f = 폴더 안 원본 수, build = 원본 하나를 만드는 비용
 // basis: estimate
-// 폴더 안 원본마다 SVG와 HTML을 쓰고 목록 쪽 index.html을 쓴다.
+// 폴더 안 원본마다 SVG와 HTML을 쓰고 목록 쪽 index.html과 문서 미리보기 document.html을 쓴다.
 async function writeGallery(args) {
   const folder = args.inputs[0];
   const out = args.out ?? join(folder, 'out');
@@ -109,7 +109,9 @@ async function writeGallery(args) {
     failed = !ok || failed;
     if (ok) figures.push({ name: file.replace(/\.muto$/, ''), title: describe(readFileSync(input, 'utf8')), href: relative(out, join(out, file.replace(/\.muto$/, ''))) });
   }
-  writeOutput(join(out, 'index.html'), toGallery(figures, args.title ?? basename(folder)), false);
+  const heading = args.title ?? basename(folder);
+  writeOutput(join(out, 'index.html'), toGallery(figures, heading), false);
+  writeOutput(join(out, 'document.html'), toDocument(figures, heading), false);
   return failed ? 1 : 0;
 }
 

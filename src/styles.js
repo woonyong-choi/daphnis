@@ -16,6 +16,7 @@ export const STYLES = Object.freeze({
   animated: readStyle('./styles/animated.css'),
   player: readStyle('./styles/player.css'),
   gallery: readStyle('./styles/gallery.css'),
+  document: readStyle('./styles/document.css'),
   chart: readStyle('./styles/chart.css'),
 });
 

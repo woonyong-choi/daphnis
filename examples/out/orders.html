@@ -6,6 +6,18 @@
 <title>orders</title>
 <script>if (window.self !== window.top) {
   document.documentElement.classList.add('embedded');
+  addEventListener('message', (e) => {
+    if (e.source !== parent || !e.data || !('theme' in e.data)) return;
+    const root = document.documentElement;
+    if (e.data.theme === 'light' || e.data.theme === 'dark') {
+      root.setAttribute('data-theme', e.data.theme);
+      root.style.colorScheme = e.data.theme;
+    } else {
+      root.removeAttribute('data-theme');
+      root.style.colorScheme = '';
+    }
+  });
+  parent.postMessage({ themeRequest: true }, '*');
   addEventListener('load', () => new ResizeObserver(() => parent.postMessage({ figureHeight: Math.ceil(document.body.getBoundingClientRect().height) }, '*')).observe(document.body));
 }</script>
 <style>@font-face{font-family:FigSans;font-weight:500;src:url(data:font/woff2;base64,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) format("woff2")}
@@ -111,6 +123,7 @@
   --size-figure-max: 1400px;
   --size-gallery-column: 760px;
   --size-gallery-frame: 820px;
+  --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
   --size-chart-width: 640px;
@@ -258,9 +271,10 @@ body {
   background: var(--color-page);
 }
 
-/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. 회색은 SVG가 그리는 그림 판만 쓴다. */
+/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. */
 html.embedded body {
   padding: 0;
+  background: var(--color-bg);
 }
 
 .fl-figure {
@@ -269,7 +283,7 @@ html.embedded body {
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
-  background: var(--color-page);
+  background: var(--color-bg);
   border: var(--border-thin) solid var(--color-frame);
   border-radius: var(--radius-2xl);
 }
@@ -280,9 +294,10 @@ html.embedded .fl-figure {
   border-radius: 0;
 }
 
+/* 카드 전체가 그림 판 한 덩어리다. 제목 줄, 그림 영역, 조작 줄이 모두 color.bg 한 톤이라 숫자 둘레 halo와 선 라벨 알약도 그대로 맞는다. */
 .fl-canvas {
   padding: var(--space-6);
-  background: var(--color-page);
+  background: var(--color-bg);
   overflow: auto;
 }
 
@@ -305,7 +320,7 @@ html.embedded .fl-canvas svg {
   gap: var(--space-6);
   justify-items: center;
   padding: var(--space-7) var(--space-8) var(--space-8);
-  background: var(--color-page);
+  background: var(--color-bg);
   border-top: var(--border-thin) solid var(--color-frame);
 }
 

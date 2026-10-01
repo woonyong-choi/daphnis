@@ -6,6 +6,18 @@
 <title>응답 지연 분포</title>
 <script>if (window.self !== window.top) {
   document.documentElement.classList.add('embedded');
+  addEventListener('message', (e) => {
+    if (e.source !== parent || !e.data || !('theme' in e.data)) return;
+    const root = document.documentElement;
+    if (e.data.theme === 'light' || e.data.theme === 'dark') {
+      root.setAttribute('data-theme', e.data.theme);
+      root.style.colorScheme = e.data.theme;
+    } else {
+      root.removeAttribute('data-theme');
+      root.style.colorScheme = '';
+    }
+  });
+  parent.postMessage({ themeRequest: true }, '*');
   addEventListener('load', () => new ResizeObserver(() => parent.postMessage({ figureHeight: Math.ceil(document.body.getBoundingClientRect().height) }, '*')).observe(document.body));
 }</script>
 <style>@font-face{font-family:FigMono;font-weight:400;src:url(data:font/woff2;base64,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) format("woff2")}
@@ -110,6 +122,7 @@
   --size-figure-max: 1400px;
   --size-gallery-column: 760px;
   --size-gallery-frame: 820px;
+  --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
   --size-chart-width: 640px;
@@ -257,9 +270,10 @@ body {
   background: var(--color-page);
 }
 
-/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. 회색은 SVG가 그리는 그림 판만 쓴다. */
+/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. */
 html.embedded body {
   padding: 0;
+  background: var(--color-bg);
 }
 
 .fl-figure {
@@ -268,7 +282,7 @@ html.embedded body {
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
-  background: var(--color-page);
+  background: var(--color-bg);
   border: var(--border-thin) solid var(--color-frame);
   border-radius: var(--radius-2xl);
 }
@@ -279,9 +293,10 @@ html.embedded .fl-figure {
   border-radius: 0;
 }
 
+/* 카드 전체가 그림 판 한 덩어리다. 제목 줄, 그림 영역, 조작 줄이 모두 color.bg 한 톤이라 숫자 둘레 halo와 선 라벨 알약도 그대로 맞는다. */
 .fl-canvas {
   padding: var(--space-6);
-  background: var(--color-page);
+  background: var(--color-bg);
   overflow: auto;
 }
 
@@ -304,7 +319,7 @@ html.embedded .fl-canvas svg {
   gap: var(--space-6);
   justify-items: center;
   padding: var(--space-7) var(--space-8) var(--space-8);
-  background: var(--color-page);
+  background: var(--color-bg);
   border-top: var(--border-thin) solid var(--color-frame);
 }
 
@@ -919,7 +934,7 @@ html.embedded .fl-figure.fl-chart-page {
 <body>
 <figure class="fl-figure fl-chart-page" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="640" height="281" style="aspect-ratio: 640 / 281" viewBox="0 0 640 281" role="img"><title>응답 지연 분포</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><rect width="100%" height="100%" rx="10" fill="var(--color-bg)"/><text x="28" y="43" class="chart-title">응답 지연 분포</text>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="640" height="281" style="aspect-ratio: 640 / 281" viewBox="0 0 640 281" role="img"><title>응답 지연 분포</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><text x="28" y="43" class="chart-title">응답 지연 분포</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 요청 1,000개</text>
 <g class="cs-0"><text x="28" y="109.7" class="chart-label cr-0">캐시 적중</text><g class="cr-0"><line x1="171" x2="182.5" y1="105" y2="105" class="chart-whisker"/><rect x="172.5" y="93" width="3.3" height="24" rx="4" class="chart-box grow"/><line x1="173.5" x2="173.5" y1="93" y2="117" class="chart-median"/><text x="188.5" y="109" class="chart-value late">22</text></g>
 <text x="28" y="149.7" class="chart-label cr-1">캐시 없음</text><g class="cr-1"><line x1="198.1" x2="323.4" y1="145" y2="145" class="chart-whisker"/><rect x="213.1" y="133" width="32.6" height="24" rx="4" class="chart-box grow"/><line x1="225.7" x2="225.7" y1="133" y2="157" class="chart-median"/><text x="329.4" y="149" class="chart-value late">230</text></g>

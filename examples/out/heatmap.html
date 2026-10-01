@@ -6,6 +6,18 @@
 <title>판단 교차표</title>
 <script>if (window.self !== window.top) {
   document.documentElement.classList.add('embedded');
+  addEventListener('message', (e) => {
+    if (e.source !== parent || !e.data || !('theme' in e.data)) return;
+    const root = document.documentElement;
+    if (e.data.theme === 'light' || e.data.theme === 'dark') {
+      root.setAttribute('data-theme', e.data.theme);
+      root.style.colorScheme = e.data.theme;
+    } else {
+      root.removeAttribute('data-theme');
+      root.style.colorScheme = '';
+    }
+  });
+  parent.postMessage({ themeRequest: true }, '*');
   addEventListener('load', () => new ResizeObserver(() => parent.postMessage({ figureHeight: Math.ceil(document.body.getBoundingClientRect().height) }, '*')).observe(document.body));
 }</script>
 <style>@font-face{font-family:FigMono;font-weight:400;src:url(data:font/woff2;base64,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) format("woff2")}
@@ -110,6 +122,7 @@
   --size-figure-max: 1400px;
   --size-gallery-column: 760px;
   --size-gallery-frame: 820px;
+  --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
   --size-chart-width: 640px;
@@ -257,9 +270,10 @@ body {
   background: var(--color-page);
 }
 
-/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. 회색은 SVG가 그리는 그림 판만 쓴다. */
+/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. */
 html.embedded body {
   padding: 0;
+  background: var(--color-bg);
 }
 
 .fl-figure {
@@ -268,7 +282,7 @@ html.embedded body {
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
-  background: var(--color-page);
+  background: var(--color-bg);
   border: var(--border-thin) solid var(--color-frame);
   border-radius: var(--radius-2xl);
 }
@@ -279,9 +293,10 @@ html.embedded .fl-figure {
   border-radius: 0;
 }
 
+/* 카드 전체가 그림 판 한 덩어리다. 제목 줄, 그림 영역, 조작 줄이 모두 color.bg 한 톤이라 숫자 둘레 halo와 선 라벨 알약도 그대로 맞는다. */
 .fl-canvas {
   padding: var(--space-6);
-  background: var(--color-page);
+  background: var(--color-bg);
   overflow: auto;
 }
 
@@ -304,7 +319,7 @@ html.embedded .fl-canvas svg {
   gap: var(--space-6);
   justify-items: center;
   padding: var(--space-7) var(--space-8) var(--space-8);
-  background: var(--color-page);
+  background: var(--color-bg);
   border-top: var(--border-thin) solid var(--color-frame);
 }
 
@@ -919,7 +934,7 @@ html.embedded .fl-figure.fl-chart-page {
 <body>
 <figure class="fl-figure fl-chart-page" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="640" height="252" style="aspect-ratio: 640 / 252" viewBox="0 0 640 252" role="img"><title>판단 교차표</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><rect width="100%" height="100%" rx="10" fill="var(--color-bg)"/><text x="28" y="43" class="chart-title">판단 교차표</text>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="640" height="252" style="aspect-ratio: 640 / 252" viewBox="0 0 640 252" role="img"><title>판단 교차표</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><text x="28" y="43" class="chart-title">판단 교차표</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 행은 정답, 열은 판단</text>
 <g class="cs-0"><text x="188.5" y="96" class="chart-tick">Codex</text>
 <text x="229.5" y="96" class="chart-tick">Claude</text>

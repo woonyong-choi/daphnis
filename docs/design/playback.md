@@ -72,7 +72,7 @@
 - 확대, 축소, 끌어 옮기기는 전체 화면에서만 켠다. 문서 안에서는 그림 전체가 보이는 편이 읽기 쉽기 때문이다. 배율은 1배에서 토큰 `scale.zoom-max`배 사이이고, 화면 좌표는 브라우저 변환 행렬로 그림 좌표로 바꾼다.
 - `prefers-reduced-motion`이 켜져 있으면 멈춘 채로 시작하고 차트는 다 자란 상태로 그린다.
 - iframe 안에서는 테두리를 빼고 틀이 카드 너비를 다 채우며, 본문 높이를 바깥 쪽에 알린다.
-- 재생기 틀 바탕은 `color.page`(라이트 흰색)이고 그림 판(SVG 영역)만 `color.bg`(라이트 회색)이다. 제목 줄, 조작 줄, 카드는 `color.page`라 한 톤이고, 회색은 SVG가 그리는 둥근 그림 판(`radius.xl`)에만 있고 점 격자 같은 바탕 무늬는 없어 카드 양옆에 띠가 생기지 않는다.
+- 재생기(단독 HTML, 전체 화면)와 목록 쪽 카드 안은 제목 줄, 그림 영역, 조작 줄까지 모두 `color.bg`(라이트 옅은 회색, 다크 어두운 색) 한 톤이다. 카드가 곧 그림 판이라 판이 카드 안에 따로 보이지 않는다. 차트 HTML은 바탕 사각형을 그리지 않고 카드 바탕이 비친다. 숫자 둘레 halo, 선 라벨 알약, 점 테두리는 `color.bg`를 그대로 써서 맞는다. 카드 바깥 목록 쪽 페이지와 단독 재생기의 바깥 여백은 `color.page`(라이트 흰색)라 회색 카드가 흰 바탕 위에 보인다. 둥근 모서리 회색 판(SVG 바탕 사각형)은 문서에 넣는 SVG 파일(움직이는 SVG, 멈춘 SVG)에만 있다. 흰 문서 안에서 그림 경계를 만드는 용도다.
 
 ### 움직이는 SVG
 
@@ -95,7 +95,7 @@
 | `render 원본` | 움직이는 SVG `{이름}.svg` |
 | `render 원본 --static` | 멈춘 SVG `{이름}.svg` |
 | `render 원본 --html` | `{이름}.svg`와 HTML 재생기 `{이름}.html`. `--static`과 함께 주면 SVG가 멈춘 SVG다 |
-| `gallery 폴더` | 폴더 안 원본마다 `{이름}.svg`와 `{이름}.html`, 목록 쪽 `index.html`. 목록 쪽은 그림마다 HTML과 SVG를 잇는다 |
+| `gallery 폴더` | 폴더 안 원본마다 `{이름}.svg`와 `{이름}.html`, 목록 쪽 `index.html`, 문서 미리보기 `document.html`. 목록 쪽은 그림마다 HTML과 SVG를 잇는다 |
 
 - 한 번의 실행은 `{이름}.svg`를 하나만 쓴다. 움직이는 SVG와 멈춘 SVG가 같은 이름을 다투지 않게 하기 위해서다.
 - HTML은 미리보기와 목록 쪽용이다. 문서 저장소에는 SVG만 넣는다([문서 스킬 연동](docs-integration.md)).
@@ -105,15 +105,23 @@
 - `gallery` 명령은 HTML 결과를 iframe으로 모은 `index.html`을 쓴다.
 - iframe 높이는 그림 쪽이 알린 본문 높이에 맞추고, 카드는 줄에서 가장 긴 카드 높이로 늘이지 않는다.
 - 위쪽에 테마 단추 "시스템 / 라이트 / 다크"가 있다. 고르면 목록 쪽과 모든 iframe 그림이 그 모드로 바뀐다.
-- 시스템은 루트에 `color-scheme: light dark`를 걸어 OS 설정을 따른다. 라이트와 다크는 루트에 `color-scheme`을 그 값으로 걸어 iframe 안 문서의 `prefers-color-scheme`이 같은 값이 되게 하고(Chrome 규칙), 목록 쪽 자체 색은 토큰 CSS의 `data-theme`로 바꾼다.
+- 시스템은 루트에 `color-scheme: light dark`를 걸어 OS 설정을 따른다. 라이트와 다크는 루트에 `color-scheme`을 그 값으로 걸고 목록 쪽 자체 색은 토큰 CSS의 `data-theme`로 바꾼다. iframe 안 문서는 Chrome에서 부모의 `color-scheme`을 `prefers-color-scheme`에 안정적으로 받지 못해(OS 다크에서 라이트를 골라도 어둡게 남음), 목록 쪽이 iframe에 `{ theme }` 메시지를 보내고 iframe 문서가 자기 루트의 `data-theme`과 `color-scheme`을 바꾼다. 새로 뜬 iframe은 `themeRequest`로 현재 테마를 받는다.
 - 고른 값은 `localStorage`의 `mutoscope-theme`에 기억하고 첫 그림 전에 적용한다. 단독 재생기 HTML에는 이 단추가 없고 OS 설정만 따른다.
+
+### 문서 미리보기
+
+- `document.html`은 README처럼 흰(라이트) 또는 어두운(다크) 문서 바탕에 제목, 문단, 그림마다 움직이는 SVG를 `<img>`로 넣은 쪽이다. GitHub README가 SVG를 넣는 방식과 같아, 회색 판이 문서 위에서 어떻게 보이는지 라이브로 확인한다.
+- 위쪽에 목록 쪽과 같은 "시스템 / 라이트 / 다크" 단추와 목록으로 가는 링크가 있고, 목록 쪽 `index.html` 위쪽에는 이 쪽으로 가는 링크가 있다. 고른 테마는 같은 `localStorage` 값을 쓴다.
+- 테마는 루트 `color-scheme`으로 바꾼다. Chrome에서는 img로 넣은 SVG의 `prefers-color-scheme`이 이 값을 따른다(OS 다크에서 라이트 단추, OS 라이트에서 다크 단추 모두 확인).
 
 ### 요구사항
 
 | 요구사항 | 검증 계획 |
 |---|---|
 | 박자 상태가 앞 박자와 상관없이 완전하다. | 아무 박자를 골라 시간표만으로 그린 상태와 처음부터 재생한 상태 비교 |
-| 목록 쪽 테마 단추가 목록과 iframe 그림을 함께 바꾼다. | `test/cli.test.js`의 `main_gallery_has_theme_buttons_and_applies_color_scheme_to_root`. 시스템을 다크로 둔 브라우저에서 라이트 단추를 눌러 흰 카드 안 그림 판이 라이트 회색으로 바뀌는지 확인 |
+| 목록 쪽 테마 단추가 목록과 iframe 그림을 함께 바꾼다. | `test/cli.test.js`의 `main_gallery_has_theme_buttons_and_applies_color_scheme_to_root`. 시스템을 다크로 둔 브라우저에서 라이트 단추를 눌러 카드 전체가 그림과 같은 한 톤인 채 라이트로 바뀌는지 확인 |
+| 재생기 안에는 그림 바탕 판이 없고, SVG 파일에만 있다. | `test/cli.test.js`의 `main_html_player_has_no_figure_plate_and_page_colored_canvas_but_svg_keeps_plate` |
+| gallery가 문서 미리보기를 쓴다. | `test/cli.test.js`의 `main_gallery_writes_document_preview_with_img_per_figure_and_link_from_index` |
 | 차트 계열은 단계가 바뀌어도 남고, 탭으로 건너뛰어도 보인다. | 둘째 탭 상태의 계열 목록 확인 |
 | HTML과 움직이는 SVG의 글 상자 줄이 같다. | 두 결과의 글 상자 줄 비교 |
 | 그림 옆 경계에 가까운 선의 글 상자는 움직이는 SVG에서도 안으로 밀린다. | `test/check.test.js`의 `toSvg_moving_text_near_side_edge_is_pushed_inside` |

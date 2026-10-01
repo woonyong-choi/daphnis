@@ -13,7 +13,23 @@ import { tokens, values } from './tokens.js';
 const PLAYER = readFileSync(new URL('./player.js', import.meta.url), 'utf8');
 const VIEWER = readFileSync(new URL('./viewer.js', import.meta.url), 'utf8');
 // iframe 안에서 열리면 틀을 빼고, 목록 쪽이 iframe 높이를 맞추도록 본문 높이를 알린다. 문서(html) 높이는 iframe 창보다 작아지지 않아 쓰지 않는다.
-const EMBED_SCRIPT = `<script>if (window.self !== window.top) {\n  document.documentElement.classList.add('embedded');\n  addEventListener('load', () => new ResizeObserver(() => parent.postMessage({ figureHeight: Math.ceil(document.body.getBoundingClientRect().height) }, '*')).observe(document.body));\n}</script>`;
+// 목록 쪽의 라이트·다크 선택은 iframe의 prefers-color-scheme에 안정적으로 전해지지 않아, 목록 쪽이 보내는 테마 메시지로 이 문서의 data-theme을 바꾼다. 처음에는 목록 쪽에 현재 테마를 물어본다.
+const EMBED_SCRIPT = `<script>if (window.self !== window.top) {
+  document.documentElement.classList.add('embedded');
+  addEventListener('message', (e) => {
+    if (e.source !== parent || !e.data || !('theme' in e.data)) return;
+    const root = document.documentElement;
+    if (e.data.theme === 'light' || e.data.theme === 'dark') {
+      root.setAttribute('data-theme', e.data.theme);
+      root.style.colorScheme = e.data.theme;
+    } else {
+      root.removeAttribute('data-theme');
+      root.style.colorScheme = '';
+    }
+  });
+  parent.postMessage({ themeRequest: true }, '*');
+  addEventListener('load', () => new ResizeObserver(() => parent.postMessage({ figureHeight: Math.ceil(document.body.getBoundingClientRect().height) }, '*')).observe(document.body));
+}</script>`;
 // 전체 화면 단추와, 전체 화면에서만 보이는 확대·축소 단추. 아이콘은 viewer.js가 그린다.
 const VIEW_BUTTONS =
   '<button type="button" class="fl-round fl-full"></button>' +
@@ -40,6 +56,7 @@ function applyTheme(mode) {
     root.removeAttribute('data-theme');
     root.style.colorScheme = 'light dark';
   }
+  for (const frame of document.querySelectorAll('iframe')) frame.contentWindow?.postMessage({ theme: mode }, '*');
   for (const button of document.querySelectorAll('.theme button')) button.setAttribute('aria-pressed', String(button.dataset.mode === (mode === 'light' || mode === 'dark' ? mode : 'system')));
 }
 function savedTheme() {
@@ -195,8 +212,8 @@ function chartContent(result, glyphs) {
     lights: seg.lights.map((key) => chart.rowKeys.indexOf(key)),
   }));
   const data = { segs, steps: timeline.steps, cardCounts: [], edgeEnds: [], seriesCount: ids.length, rowCount: chart.rowKeys.length, metrics: PLAYER_METRICS };
-  const bg = `<rect width="100%" height="100%" rx="${values.radius.xl}" fill="${tokens.color.bg}"/>`;
-  return { svg: bg + chart.body, width: chart.width, height: chart.height, data };
+  // 재생기 안에서는 그림 바탕 사각형을 그리지 않는다. 카드가 유일한 틀이고, 회색 판은 문서에 넣는 SVG 파일에만 있다.
+  return { svg: chart.body, width: chart.width, height: chart.height, data };
 }
 
 // cost: time O(f), heap O(out), stack O(1)
@@ -226,19 +243,56 @@ export function toGallery(figures, heading) {
 <body>
 <div class="top">
 <h1>${escapeXml(heading)}</h1>
-<p>그림 ${figures.length}개</p>
+<p>그림 ${figures.length}개 · <a href="document.html">문서 안 모습 보기</a></p>
 <div class="theme" role="group" aria-label="테마">${THEME_BUTTONS}</div>
 </div>
 <main>
 ${cards}
 </main>
 <script>
-// 그림 쪽이 알려 준 본문 높이로 iframe 높이를 맞춘다. 그림 아래 빈 공간을 없애기 위해서다.
+// 그림 쪽이 알려 준 본문 높이로 iframe 높이를 맞추고(그림 아래 빈 공간을 없애기 위해서다), 새로 뜬 그림에는 현재 테마를 보낸다.
 addEventListener('message', (e) => {
   const frame = [...document.querySelectorAll('iframe')].find((f) => f.contentWindow === e.source);
-  if (frame && e.data?.figureHeight) frame.style.height = e.data.figureHeight + 'px';
+  if (!frame) return;
+  if (e.data?.figureHeight) frame.style.height = e.data.figureHeight + 'px';
+  if (e.data?.themeRequest) frame.contentWindow.postMessage({ theme: savedTheme() }, '*');
 });
 </script>
+</body>
+</html>
+`;
+}
+
+// cost: time O(f), heap O(out), stack O(1)
+// vars: f = 그림 수, out = 만든 HTML 글자 수
+// basis: estimate
+/**
+ * 문서(README) 안 모습 미리보기. 그림마다 움직이는 SVG를 img로 넣는다(GitHub README와 같은 방식).
+ * @param figures { name, title, href }[]. href는 이 쪽에서 본 확장자 뺀 상대 경로다.
+ */
+export function toDocument(figures, heading) {
+  const sections = figures
+    .map((f) => `<h2>${escapeXml(f.name)}</h2>\n<p>${escapeXml(f.title)}</p>\n<p><img src="${escapeXml(f.href)}.svg" alt="${escapeXml(f.title || f.name)}"></p>`)
+    .join('\n');
+  return `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${escapeXml(heading)} 문서 미리보기</title>
+<style>${STYLES.tokens}${STYLES.document}</style>
+<script>${THEME_SCRIPT}</script>
+</head>
+<body>
+<div class="bar">
+<a href="index.html">목록으로</a>
+<div class="theme" role="group" aria-label="테마">${THEME_BUTTONS}</div>
+</div>
+<article>
+<h1>${escapeXml(heading)}</h1>
+<p>문서에 넣은 모습 그대로 보는 미리보기다. 그림은 움직이는 SVG 파일을 img로 넣은 것이라 회색 판이 흰 문서 위에서 그림 경계를 만든다.</p>
+${sections}
+</article>
 </body>
 </html>
 `;

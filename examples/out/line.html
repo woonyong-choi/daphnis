@@ -6,6 +6,18 @@
 <title>주차별 재시도 비율</title>
 <script>if (window.self !== window.top) {
   document.documentElement.classList.add('embedded');
+  addEventListener('message', (e) => {
+    if (e.source !== parent || !e.data || !('theme' in e.data)) return;
+    const root = document.documentElement;
+    if (e.data.theme === 'light' || e.data.theme === 'dark') {
+      root.setAttribute('data-theme', e.data.theme);
+      root.style.colorScheme = e.data.theme;
+    } else {
+      root.removeAttribute('data-theme');
+      root.style.colorScheme = '';
+    }
+  });
+  parent.postMessage({ themeRequest: true }, '*');
   addEventListener('load', () => new ResizeObserver(() => parent.postMessage({ figureHeight: Math.ceil(document.body.getBoundingClientRect().height) }, '*')).observe(document.body));
 }</script>
 <style>@font-face{font-family:FigMono;font-weight:400;src:url(data:font/woff2;base64,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) format("woff2")}
@@ -110,6 +122,7 @@
   --size-figure-max: 1400px;
   --size-gallery-column: 760px;
   --size-gallery-frame: 820px;
+  --size-document-column: 880px;
   --size-player-chrome: 190px;
   --size-embedded-chrome: 150px;
   --size-chart-width: 640px;
@@ -257,9 +270,10 @@ body {
   background: var(--color-page);
 }
 
-/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. 회색은 SVG가 그리는 그림 판만 쓴다. */
+/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. */
 html.embedded body {
   padding: 0;
+  background: var(--color-bg);
 }
 
 .fl-figure {
@@ -268,7 +282,7 @@ html.embedded body {
   margin: 0 auto;
   overflow: hidden;
   color: var(--color-fg);
-  background: var(--color-page);
+  background: var(--color-bg);
   border: var(--border-thin) solid var(--color-frame);
   border-radius: var(--radius-2xl);
 }
@@ -279,9 +293,10 @@ html.embedded .fl-figure {
   border-radius: 0;
 }
 
+/* 카드 전체가 그림 판 한 덩어리다. 제목 줄, 그림 영역, 조작 줄이 모두 color.bg 한 톤이라 숫자 둘레 halo와 선 라벨 알약도 그대로 맞는다. */
 .fl-canvas {
   padding: var(--space-6);
-  background: var(--color-page);
+  background: var(--color-bg);
   overflow: auto;
 }
 
@@ -304,7 +319,7 @@ html.embedded .fl-canvas svg {
   gap: var(--space-6);
   justify-items: center;
   padding: var(--space-7) var(--space-8) var(--space-8);
-  background: var(--color-page);
+  background: var(--color-bg);
   border-top: var(--border-thin) solid var(--color-frame);
 }
 
@@ -942,7 +957,7 @@ html.embedded .fl-figure.fl-chart-page {
 <body>
 <figure class="fl-figure fl-chart-page" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="640" height="470" style="aspect-ratio: 640 / 470" viewBox="0 0 640 470" role="img"><title>주차별 재시도 비율</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><rect width="100%" height="100%" rx="10" fill="var(--color-bg)"/><text x="28" y="43" class="chart-title">주차별 재시도 비율</text>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="640" height="470" style="aspect-ratio: 640 / 470" viewBox="0 0 640 470" role="img"><title>주차별 재시도 비율</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><text x="28" y="43" class="chart-title">주차별 재시도 비율</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 띠는 신뢰구간, 점선은 목표 5%</text>
 <g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-series-1)"/><text x="46" y="85" class="chart-legend">새 판단기</text></g>
 <g class="cs-1"><rect x="108.49609375" y="77" width="12" height="12" rx="4" fill="var(--color-series-2)"/><text x="126.49609375" y="85" class="chart-legend">기존 판단기</text></g>
