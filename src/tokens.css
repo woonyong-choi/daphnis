@@ -61,7 +61,7 @@
   --color-heat-ink-on: var(--color-gray-0);
   --color-grid: var(--color-ink-200);
   --font-sans: FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-  --font-mono: FigMono, D2Coding, ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono: FigMono, FigSans, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
   --size-text-10-5: 10.5px;
   --size-text-11: 11px;

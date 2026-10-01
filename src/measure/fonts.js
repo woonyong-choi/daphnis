@@ -7,11 +7,12 @@ import subsetFont from 'subset-font';
 const require = createRequire(import.meta.url);
 
 // 글꼴 이름과 파일. weight는 CSS font-weight, family는 SVG 안 @font-face 이름이다.
+// fallback은 이 글꼴에 없는 글자를 대신 그리는 글꼴이다. CSS font-family 사슬(FigMono, FigSans)과 같은 순서다.
 const FACES = {
   regular: { family: 'FigSans', weight: 400, file: 'pretendard/dist/public/static/Pretendard-Regular.otf' },
   medium: { family: 'FigSans', weight: 500, file: 'pretendard/dist/public/static/Pretendard-Medium.otf' },
   semibold: { family: 'FigSans', weight: 600, file: 'pretendard/dist/public/static/Pretendard-SemiBold.otf' },
-  mono: { family: 'FigMono', weight: 400, file: 'd2coding/fonts/d2coding-full.ttf' },
+  mono: { family: 'FigMono', weight: 400, file: 'jetbrains-mono/fonts/webfonts/JetBrainsMono-Regular.woff2', fallback: 'regular' },
 };
 
 // 글꼴 파일은 처음 쓸 때 한 번 읽는다.
@@ -33,18 +34,46 @@ function faceOf(name) {
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 글자 수
 // basis: estimate
+/** 글자를 그릴 글꼴. 글꼴에 있으면 그 글꼴, 없으면 대체 글꼴을 따라가고 어디에도 없으면 undefined. 브라우저의 글자별 대체와 같다. */
+function faceFor(char, face) {
+  for (let name = face; name; name = FACES[name].fallback) {
+    if (faceOf(name).font.hasGlyphForCodePoint(char.codePointAt(0))) return name;
+  }
+  return undefined;
+}
+
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = 글자 수
+// basis: estimate
+/** 글을 같은 글꼴로 그려지는 구간으로 나눈다. 띄어쓰기는 첫 글꼴의 것으로 그려진다. */
+function runsOf(text, face) {
+  const runs = [];
+  for (const c of text) {
+    const name = faceFor(c, face);
+    if (name === undefined) throw new Error(`the font has no glyph for "${c}". Remove the character`);
+    if (runs.at(-1)?.face === name) runs[runs.length - 1].text += c;
+    else runs.push({ face: name, text: c });
+  }
+  return runs;
+}
+
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = 글자 수
+// basis: estimate
 /**
- * 글 한 줄의 폭(px). 같은 글꼴과 글은 한 번만 잰다.
+ * 글 한 줄의 폭(px). 같은 글꼴과 글은 한 번만 잰다. 글꼴에 없는 글자는 대체 글꼴 폭으로 재서 글꼴이 바뀌는 구간마다 더한다.
  * @param face 'regular' | 'medium' | 'semibold' | 'mono'
- * @throws Error 글꼴에 없는 글자가 있을 때. 대신 그릴 글꼴의 폭을 알 수 없기 때문이다
+ * @throws Error 글꼴과 대체 글꼴 어디에도 없는 글자가 있을 때. 대신 그릴 글꼴의 폭을 알 수 없기 때문이다
  */
 export function measure(text, size, face = 'regular') {
   const key = `${face}\u0000${text}`;
   if (!widths.has(key)) {
-    const { font } = faceOf(face);
-    const missing = [...text].find((c) => c !== ' ' && !font.hasGlyphForCodePoint(c.codePointAt(0)));
-    if (missing !== undefined) throw new Error(`the font has no glyph for "${missing}". Remove the character`);
-    widths.set(key, font.layout(text).advanceWidth / font.unitsPerEm);
+    let total = 0;
+    for (const run of runsOf(text, face)) {
+      const { font } = faceOf(run.face);
+      total += font.layout(run.text).advanceWidth / font.unitsPerEm;
+    }
+    widths.set(key, total);
   }
   return widths.get(key) * size;
 }
@@ -52,10 +81,9 @@ export function measure(text, size, face = 'regular') {
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 글자 수
 // basis: estimate
-/** 글꼴에 없는 글자. 원본 검사에서 줄 번호와 함께 알리려고 쓴다. 없으면 undefined. */
+/** 글꼴과 대체 글꼴 어디에도 없는 글자. 원본 검사에서 줄 번호와 함께 알리려고 쓴다. 없으면 undefined. */
 export function findMissingGlyph(text, face = 'regular') {
-  const { font } = faceOf(face);
-  return [...text].find((c) => c !== ' ' && !font.hasGlyphForCodePoint(c.codePointAt(0)));
+  return [...text].find((c) => faceFor(c, face) === undefined);
 }
 
 // cost: time O(n²), heap O(n), stack O(1)
@@ -85,6 +113,21 @@ export function wrap(text, width, size, face = 'regular') {
   return lines;
 }
 
+// cost: time O(g), heap O(g), stack O(1)
+// vars: g = 쓴 글자 수
+// basis: estimate
+/** 글자마다 실제로 그려질 글꼴로 옮겨 담는다. 고정폭 글 안 한글은 본문 글꼴 몫이 된다. */
+function resolveUsed(used) {
+  const resolved = new Map();
+  for (const [face, chars] of used) {
+    for (const c of chars) {
+      const name = faceFor(c, face) ?? face;
+      resolved.set(name, (resolved.get(name) ?? '') + c);
+    }
+  }
+  return new Map([...resolved].map(([name, chars]) => [name, [...new Set(chars)].sort().join('')]));
+}
+
 // cost: time O(g + f), heap O(f), stack O(1), io 1
 // vars: g = 쓴 글자 수, f = 글꼴 파일 크기
 // basis: estimate
@@ -94,7 +137,7 @@ export function wrap(text, width, size, face = 'regular') {
  */
 export async function embedFonts(used) {
   const rules = [];
-  for (const [name, chars] of [...used.entries()].sort()) {
+  for (const [name, chars] of [...resolveUsed(used).entries()].sort()) {
     if (!chars) continue;
     const { buffer } = faceOf(name);
     const subset = await subsetFont(buffer, chars, { targetFormat: 'woff2' });
