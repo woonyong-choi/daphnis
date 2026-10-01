@@ -13,11 +13,15 @@ function figurePlay(root, data) {
   const NS = 'http://www.w3.org/2000/svg';
   const RATES = [1, 2, 0.5];
   const BISECT_STEPS = 30;
+  const ICON_VIEWBOX = '0 0 16 16';
   const svg = root.querySelector('svg.fl');
   const packetLayer = svg.querySelector('.fl-packets');
   const tabs = root.querySelector('.fl-tabs');
   const caption = root.querySelector('.fl-caption');
   const pauseButton = root.querySelector('.fl-pause');
+  const pauseIcon = pauseButton.querySelector('.fl-pause-icon');
+  const ringFill = pauseButton.querySelector('.fl-ring-fill');
+  const ringLength = 2 * Math.PI * ringFill.r.baseVal.value;
   const rateButton = root.querySelector('.fl-rate');
   const nodes = data.cardCounts.map((_, i) => svg.querySelector(`#n-${i}`));
   const groups = [...svg.querySelectorAll('.fl-group')];
@@ -30,7 +34,6 @@ function figurePlay(root, data) {
   const { segs, metrics } = data;
   const stepSegs = data.steps.map((_, si) => segs.filter((s) => s.si === si));
   const buttons = data.steps.map(createTab);
-  const fills = buttons.map((b) => b.querySelector('.fl-tab-fill'));
   const hasCaption = segs.some((s) => s.caption);
 
   let index = 0;
@@ -53,6 +56,7 @@ function figurePlay(root, data) {
       e.preventDefault();
     }
   });
+  ringFill.style.strokeDasharray = ringLength;
   highlightOnHover();
   figureView(root, metrics);
 
@@ -99,16 +103,7 @@ function figurePlay(root, data) {
     const button = document.createElement('button');
     button.type = 'button';
     button.setAttribute('role', 'tab');
-    const fill = document.createElement('i');
-    fill.className = 'fl-tab-fill';
-    const track = document.createElement('span');
-    track.className = 'fl-tab-track';
-    track.setAttribute('aria-hidden', 'true');
-    track.append(fill);
-    const text = document.createElement('span');
-    text.className = 'fl-tab-label';
-    text.append(...richNodes(label, htmlCode));
-    button.append(track, text);
+    button.append(...richNodes(label, htmlCode));
     button.addEventListener('click', () => enterSegment(segs.indexOf(stepSegs[si][0])));
     tabs.appendChild(button);
     return button;
@@ -118,12 +113,12 @@ function figurePlay(root, data) {
   // basis: estimate
   // 재생 단추 아이콘. shape은 16x16 좌표계의 SVG 도형 조각이다.
   function iconSvg(shape) {
-    return `<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="0 0 16 16">${shape}</svg>`;
+    return `<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="${ICON_VIEWBOX}">${shape}</svg>`;
   }
 
   function setPlaying(value) {
     isPlaying = value;
-    pauseButton.innerHTML = iconSvg(
+    pauseIcon.innerHTML = iconSvg(
       isPlaying
         ? `<path d="M5 2.5v11M11 2.5v11" stroke="currentColor" stroke-width="${metrics.pauseStroke}" stroke-linecap="round"/>`
         : '<path d="M4 2.5v11l9.5-5.5z" fill="currentColor"/>',
@@ -164,12 +159,11 @@ function figurePlay(root, data) {
       const isCurrent = si === seg.si;
       b.classList.toggle('on', isCurrent);
       b.setAttribute('aria-selected', isCurrent);
-      // 탭을 옮겨도 앞 탭의 진행 막대가 남지 않게 지금 탭이 아닌 막대는 비운다.
-      if (!isCurrent) fills[si].style.width = '0';
     });
     packets.forEach((p) => p.remove());
     packets = seg.hops.map(createPacket);
     packets.forEach((packet) => packet.move(0));
+    drawRing(seg);
   }
 
   // cost: time O(k), heap O(1), stack O(1)
@@ -320,6 +314,13 @@ function figurePlay(root, data) {
 
   // cost: time O(1), heap O(1), stack O(1)
   // basis: estimate
+  // 재생 단추 둘레 고리를 현재 탭(장면)의 진행 비율만큼 채운다. 12시에서 시계 방향이고, 멈추면 그 자리에 머문다.
+  function drawRing(seg) {
+    ringFill.style.strokeDashoffset = ringLength * (1 - tabProgress(seg));
+  }
+
+  // cost: time O(1), heap O(1), stack O(1)
+  // basis: estimate
   // 박자 seg가 속한 탭(step) 전체 시간 중 지금까지 지난 비율(0~1).
   function tabProgress(seg) {
     const steps = stepSegs[seg.si];
@@ -331,7 +332,7 @@ function figurePlay(root, data) {
   // cost: time O(h + k), heap O(1), stack O(1)
   // vars: h = 박자의 이동 수, k = 카드가 바뀌는 도형 수
   // basis: estimate
-  // 프레임마다 점을 옮기고, 도착한 도형의 카드를 바꾸고, 탭 진행 막대를 채운다.
+  // 프레임마다 점을 옮기고, 도착한 도형의 카드를 바꾸고, 재생 단추 고리를 채운다.
   function drawFrame(now) {
     if (isPlaying) elapsed += (now - before) * rate;
     before = now;
@@ -342,7 +343,7 @@ function figurePlay(root, data) {
       showCards(seg.cards, n);
       return false;
     });
-    fills[seg.si].style.width = `${tabProgress(seg) * 100}%`;
+    drawRing(seg);
     if (elapsed >= seg.t1 - seg.t0) enterSegment((index + 1) % segs.length);
     requestAnimationFrame(drawFrame);
   }

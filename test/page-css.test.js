@@ -2,6 +2,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
+import { buildFigure } from '../src/build.js';
+import { toHtml } from '../src/html.js';
 import { values } from '../src/tokens.js';
 
 const css = (name) => readFileSync(new URL(`../src/styles/${name}.css`, import.meta.url), 'utf8');
@@ -78,17 +80,39 @@ test('playerBody_sets_the_text_color_token_so_inherited_text_is_not_default_blac
   assert.equal(declarationsOf(PLAYER, 'body').color, 'var(--color-fg)');
 });
 
-test('tabProgress_fill_lives_inside_the_pill_behind_the_label_so_nothing_sits_under_the_text', () => {
-  const track = declarationsOf(PLAYER, '.fl-tab-track');
-  const fill = declarationsOf(PLAYER, '.fl-tab-fill');
+test('progressRing_circle_is_built_from_tokens_and_covers_the_pause_button_border', async () => {
+  const result = await buildFigure(readFileSync(new URL('../examples/memory.muto', import.meta.url), 'utf8'), { baseDir: 'examples' });
+  const html = await toHtml(result, 'memory');
+  const size = values.size.control;
+  const width = values.border.edge;
+  const circle = html.match(/<circle class="fl-ring-fill" cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)" stroke-width="([\d.]+)" transform="rotate\(-90 ([\d.]+) ([\d.]+)\)"/);
 
-  assert.equal(track.inset, '0');
-  assert.equal(declarationsOf(PLAYER, '.fl-tab-label').position, 'relative');
-  assert.equal(declarationsOf(PLAYER, '.fl-tabs button').overflow, 'hidden');
-  assert.equal(fill.bottom, undefined);
-  assert.equal(fill.position, undefined);
-  assert.equal(fill.height, '100%');
-  assert.match(fill.background, /var\(--color-accent\)/);
+  assert.ok(circle, 'ring circle markup');
+  assert.deepEqual(circle.slice(1).map(Number), [size / 2, size / 2, (size - width) / 2, width, size / 2, size / 2]);
+  assert.ok(html.includes(`<svg class="fl-ring" viewBox="0 0 ${size} ${size}"`));
+  assert.ok(!html.includes('fl-tab-fill'), 'old tab fill is gone');
+});
+
+test('progressRing_css_sits_over_the_border_box_and_has_no_number_literals_for_the_ring', () => {
+  const ring = declarationsOf(PLAYER, '.fl-ring');
+  const fill = declarationsOf(PLAYER, '.fl-ring-fill');
+
+  assert.equal(ring.inset, 'calc(-1 * var(--border-thin))');
+  assert.equal(fill.stroke, 'var(--color-accent)');
+  assert.equal(fill.fill, 'none');
+  assert.equal(fill['stroke-width'], undefined, 'stroke width comes from the token via markup');
+  assert.doesNotMatch(PLAYER, /fl-tab-(fill|track|label)/);
+});
+
+test('segmentedTabs_active_tab_is_a_solid_pill_with_semibold_label_and_no_progress_element', () => {
+  const active = declarationsOf(PLAYER, '.fl-tabs button.on');
+  const tab = declarationsOf(PLAYER, '.fl-tabs button');
+
+  assert.equal(active.background, 'var(--color-node)');
+  assert.equal(active['font-weight'], 'var(--weight-semibold)');
+  assert.equal(active.color, 'var(--color-fg)');
+  assert.equal(tab.color, 'var(--color-muted)');
+  assert.equal(declarationsOf(PLAYER, '.fl-tabs').background, 'var(--color-bg)');
 });
 
 test('controlsAxis_bar_and_caption_share_one_center_axis_with_symmetric_padding', () => {

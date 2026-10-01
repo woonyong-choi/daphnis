@@ -180,7 +180,6 @@
   --space-22: 44px;
   --space-30: 60px;
   --space-32: 64px;
-  --radius-xs: 2px;
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
@@ -200,7 +199,6 @@
   --dash-card: 3;
   --opacity-tag: 0.15;
   --opacity-halo: 0.2;
-  --opacity-tab-on: 0.06;
   --opacity-dim: 0.3;
   --opacity-band: 0.22;
   --opacity-range: 0.38;
@@ -351,6 +349,29 @@ html.embedded .fl-canvas svg {
   justify-self: start;
 }
 
+/* 현재 탭의 진행은 일시정지 단추 테두리 위를 12시에서 시계 방향으로 도는 accent 고리다. 트랙은 단추 테두리 그대로다. */
+.fl-pause {
+  position: relative;
+}
+
+.fl-ring {
+  position: absolute;
+  inset: calc(-1 * var(--border-thin));
+  width: calc(100% + 2 * var(--border-thin));
+  height: calc(100% + 2 * var(--border-thin));
+  pointer-events: none;
+}
+
+.fl-ring-fill {
+  fill: none;
+  stroke: var(--color-accent);
+}
+
+.fl-pause-icon {
+  display: grid;
+  place-items: center;
+}
+
 .fl-round {
   display: grid;
   place-items: center;
@@ -387,7 +408,7 @@ html.embedded .fl-canvas svg {
   justify-content: center;
   min-height: var(--size-control);
   padding: var(--space-1-5);
-  background: var(--color-node);
+  background: var(--color-bg);
   border: var(--border-thin) solid var(--color-border);
   border-radius: var(--radius-full);
 }
@@ -398,7 +419,6 @@ html.embedded .fl-canvas svg {
   place-items: center;
   min-height: var(--size-control-inner);
   padding: 0 var(--space-7);
-  overflow: hidden;
   font: var(--size-text-13) var(--font-sans);
   color: var(--color-muted);
   background: transparent;
@@ -407,27 +427,12 @@ html.embedded .fl-canvas svg {
   cursor: pointer;
 }
 
+/* segmented 방식: 켜진 탭은 꽉 찬 알약이다. 라이트는 카드 바탕에 옅은 테두리, 다크는 바탕보다 한 단계 밝은 면이다. */
 .fl-tabs button.on {
+  font-weight: var(--weight-semibold);
   color: var(--color-fg);
-  background: color-mix(in srgb, var(--color-fg) calc(var(--opacity-tab-on) * 100%), transparent);
-}
-
-/* 진행 표시: 켜진 탭 알약 바탕이 왼쪽부터 옅은 accent로 차오른다. 글자 아래 선이 없어 글자와 붙어 보이지 않는다. */
-.fl-tab-track {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.fl-tab-label {
-  position: relative;
-}
-
-.fl-tab-fill {
-  display: block;
-  width: 0;
-  height: 100%;
-  background: color-mix(in srgb, var(--color-accent) calc(var(--opacity-halo) * 100%), transparent);
+  background: var(--color-node);
+  box-shadow: 0 0 0 var(--border-thin) var(--color-plate-border);
 }
 
 /* 백틱으로 감싼 글. 코드 글꼴로 그린다. */
@@ -964,7 +969,7 @@ html.embedded .fl-canvas svg {
 <g id="e-5" class="fl-edge"><path id="p-5" d="M 166 404 L 545.6 404" class="fl-path " marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="314" y="382" width="83.5" height="18" rx="9" class="pill "/><text x="355.8" y="395" class="edgelabel "><tspan class="code">GET /me</tspan> 호출</text></g></g>
 <g class="fl-note"><rect x="331.9" y="182" width="201.7" height="50" rx="6" class="note-box"/><text x="341.9" y="203" class="row"><tspan class="code">challenge = S256(verifier)</tspan>를</text><text x="341.9" y="218" class="row">저장한다</text></g><g class="fl-packets"></g></svg></div>
 <figcaption class="fl-foot">
-<div class="fl-bar"><button type="button" class="fl-round fl-pause"></button><div class="fl-tabs" role="tablist"></div><button type="button" class="fl-round fl-rate" aria-label="배속">1×</button></div>
+<div class="fl-bar"><button type="button" class="fl-round fl-pause"><svg class="fl-ring" viewBox="0 0 30 30" aria-hidden="true"><circle class="fl-ring-fill" cx="15" cy="15" r="14.125" stroke-width="1.75" transform="rotate(-90 15 15)"/></svg><span class="fl-pause-icon"></span></button><div class="fl-tabs" role="tablist"></div><button type="button" class="fl-round fl-rate" aria-label="배속">1×</button></div>
 <p class="fl-caption" aria-live="polite"></p>
 </figcaption>
 </figure>
@@ -1102,11 +1107,15 @@ function figurePlay(root, data) {
   const NS = 'http://www.w3.org/2000/svg';
   const RATES = [1, 2, 0.5];
   const BISECT_STEPS = 30;
+  const ICON_VIEWBOX = '0 0 16 16';
   const svg = root.querySelector('svg.fl');
   const packetLayer = svg.querySelector('.fl-packets');
   const tabs = root.querySelector('.fl-tabs');
   const caption = root.querySelector('.fl-caption');
   const pauseButton = root.querySelector('.fl-pause');
+  const pauseIcon = pauseButton.querySelector('.fl-pause-icon');
+  const ringFill = pauseButton.querySelector('.fl-ring-fill');
+  const ringLength = 2 * Math.PI * ringFill.r.baseVal.value;
   const rateButton = root.querySelector('.fl-rate');
   const nodes = data.cardCounts.map((_, i) => svg.querySelector(`#n-${i}`));
   const groups = [...svg.querySelectorAll('.fl-group')];
@@ -1119,7 +1128,6 @@ function figurePlay(root, data) {
   const { segs, metrics } = data;
   const stepSegs = data.steps.map((_, si) => segs.filter((s) => s.si === si));
   const buttons = data.steps.map(createTab);
-  const fills = buttons.map((b) => b.querySelector('.fl-tab-fill'));
   const hasCaption = segs.some((s) => s.caption);
 
   let index = 0;
@@ -1142,6 +1150,7 @@ function figurePlay(root, data) {
       e.preventDefault();
     }
   });
+  ringFill.style.strokeDasharray = ringLength;
   highlightOnHover();
   figureView(root, metrics);
 
@@ -1188,26 +1197,26 @@ function figurePlay(root, data) {
     const button = document.createElement('button');
     button.type = 'button';
     button.setAttribute('role', 'tab');
-    const fill = document.createElement('i');
-    fill.className = 'fl-tab-fill';
-    const track = document.createElement('span');
-    track.className = 'fl-tab-track';
-    track.setAttribute('aria-hidden', 'true');
-    track.append(fill);
-    const text = document.createElement('span');
-    text.className = 'fl-tab-label';
-    text.append(...richNodes(label, htmlCode));
-    button.append(track, text);
+    button.append(...richNodes(label, htmlCode));
     button.addEventListener('click', () => enterSegment(segs.indexOf(stepSegs[si][0])));
     tabs.appendChild(button);
     return button;
   }
 
+  // cost: time O(1), heap O(1), stack O(1)
+  // basis: estimate
+  // 재생 단추 아이콘. shape은 16x16 좌표계의 SVG 도형 조각이다.
+  function iconSvg(shape) {
+    return `<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="${ICON_VIEWBOX}">${shape}</svg>`;
+  }
+
   function setPlaying(value) {
     isPlaying = value;
-    pauseButton.innerHTML = isPlaying
-      ? `<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="0 0 16 16"><path d="M5 2.5v11M11 2.5v11" stroke="currentColor" stroke-width="${metrics.pauseStroke}" stroke-linecap="round"/></svg>`
-      : `<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="0 0 16 16"><path d="M4 2.5v11l9.5-5.5z" fill="currentColor"/></svg>`;
+    pauseIcon.innerHTML = iconSvg(
+      isPlaying
+        ? `<path d="M5 2.5v11M11 2.5v11" stroke="currentColor" stroke-width="${metrics.pauseStroke}" stroke-linecap="round"/>`
+        : '<path d="M4 2.5v11l9.5-5.5z" fill="currentColor"/>',
+    );
     pauseButton.setAttribute('aria-label', isPlaying ? '일시정지' : '재생');
   }
 
@@ -1244,12 +1253,11 @@ function figurePlay(root, data) {
       const isCurrent = si === seg.si;
       b.classList.toggle('on', isCurrent);
       b.setAttribute('aria-selected', isCurrent);
-      // 탭을 옮겨도 앞 탭의 진행 막대가 남지 않게 지금 탭이 아닌 막대는 비운다.
-      if (!isCurrent) fills[si].style.width = '0';
     });
     packets.forEach((p) => p.remove());
     packets = seg.hops.map(createPacket);
     packets.forEach((packet) => packet.move(0));
+    drawRing(seg);
   }
 
   // cost: time O(k), heap O(1), stack O(1)
@@ -1400,6 +1408,13 @@ function figurePlay(root, data) {
 
   // cost: time O(1), heap O(1), stack O(1)
   // basis: estimate
+  // 재생 단추 둘레 고리를 현재 탭(장면)의 진행 비율만큼 채운다. 12시에서 시계 방향이고, 멈추면 그 자리에 머문다.
+  function drawRing(seg) {
+    ringFill.style.strokeDashoffset = ringLength * (1 - tabProgress(seg));
+  }
+
+  // cost: time O(1), heap O(1), stack O(1)
+  // basis: estimate
   // 박자 seg가 속한 탭(step) 전체 시간 중 지금까지 지난 비율(0~1).
   function tabProgress(seg) {
     const steps = stepSegs[seg.si];
@@ -1411,7 +1426,7 @@ function figurePlay(root, data) {
   // cost: time O(h + k), heap O(1), stack O(1)
   // vars: h = 박자의 이동 수, k = 카드가 바뀌는 도형 수
   // basis: estimate
-  // 프레임마다 점을 옮기고, 도착한 도형의 카드를 바꾸고, 탭 진행 막대를 채운다.
+  // 프레임마다 점을 옮기고, 도착한 도형의 카드를 바꾸고, 재생 단추 고리를 채운다.
   function drawFrame(now) {
     if (isPlaying) elapsed += (now - before) * rate;
     before = now;
@@ -1422,7 +1437,7 @@ function figurePlay(root, data) {
       showCards(seg.cards, n);
       return false;
     });
-    fills[seg.si].style.width = `${tabProgress(seg) * 100}%`;
+    drawRing(seg);
     if (elapsed >= seg.t1 - seg.t0) enterSegment((index + 1) % segs.length);
     requestAnimationFrame(drawFrame);
   }

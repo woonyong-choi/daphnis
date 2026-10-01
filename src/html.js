@@ -31,10 +31,31 @@ const EMBED_SCRIPT = `<script>if (window.self !== window.top) {
   parent.postMessage({ themeRequest: true }, '*');
   addEventListener('load', () => new ResizeObserver(() => parent.postMessage({ figureHeight: Math.ceil(document.body.getBoundingClientRect().height) }, '*')).observe(document.body));
 }</script>`;
-// 전체 화면 단추와, 전체 화면에서만 보이는 확대·축소 단추. 아이콘은 viewer.js가 그린다.
+// 원 단추 하나. 일시정지, 배속, 전체 화면, 확대·축소가 모두 이 구성을 쓴다. 아이콘이 필요한 단추는 viewer.js와 player.js가 그린다.
+function roundButton(extraClass, { label, zoom, content = '' } = {}) {
+  const className = extraClass ? `fl-round ${extraClass}` : 'fl-round';
+  const labelAttr = label ? ` aria-label="${label}"` : '';
+  const zoomAttr = zoom ? ` data-zoom="${zoom}"` : '';
+  return `<button type="button" class="${className}"${zoomAttr}${labelAttr}>${content}</button>`;
+}
+
+// 일시정지 단추 둘레의 진행 고리. 단추 바깥 테두리(size.control)를 덮고, 선 굵기의 한가운데가 둘레다. 12시에서 시작한다.
+const RING_START_DEGREES = -90;
+function ringSvg() {
+  const size = values.size.control;
+  const width = values.border.edge;
+  const center = size / 2;
+  const radius = (size - width) / 2;
+  const start = `rotate(${RING_START_DEGREES} ${center} ${center})`;
+  return `<svg class="fl-ring" viewBox="0 0 ${size} ${size}" aria-hidden="true"><circle class="fl-ring-fill" cx="${center}" cy="${center}" r="${radius}" stroke-width="${width}" transform="${start}"/></svg>`;
+}
+
+// 전체 화면 단추와, 전체 화면에서만 보이는 확대·축소 단추.
 const VIEW_BUTTONS =
-  '<button type="button" class="fl-round fl-full"></button>' +
-  '<div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>';
+  roundButton('fl-full') +
+  `<div class="fl-zoom">${roundButton('', { label: '확대', zoom: 'in' })}${roundButton('', { label: '축소', zoom: 'out' })}${roundButton('', { label: '전체 보기', zoom: 'fit' })}</div>`;
+const PAUSE_BUTTON = roundButton('fl-pause', { content: `${ringSvg()}<span class="fl-pause-icon"></span>` });
+const RATE_BUTTON = roundButton('fl-rate', { label: '배속', content: '1×' });
 // 목록 쪽 테마 전환. 시스템은 OS 설정을 따르고, 라이트와 다크는 목록 쪽 루트에 color-scheme을 걸어 iframe 안 그림의 prefers-color-scheme도 같은 값이 되게 한다.
 // 목록 쪽 자체 색은 토큰 CSS의 data-theme 값으로 바꾼다. 고른 값은 localStorage에 기억하고, 첫 그림이 그려지기 전에 적용해 깜빡임을 막는다.
 const THEME_MODES = [
@@ -134,7 +155,7 @@ ${STYLES.tokens}${STYLES.player}${STYLES.figure}${STYLES.chart}${result.chart ? 
 ${VIEW_BUTTONS}
 <div class="fl-canvas">${svg}</div>
 <figcaption class="fl-foot">
-<div class="fl-bar"><button type="button" class="fl-round fl-pause"></button><div class="fl-tabs" role="tablist"></div><button type="button" class="fl-round fl-rate" aria-label="배속">1×</button></div>
+<div class="fl-bar">${PAUSE_BUTTON}<div class="fl-tabs" role="tablist"></div>${RATE_BUTTON}</div>
 <p class="fl-caption" aria-live="polite"></p>
 </figcaption>
 </figure>

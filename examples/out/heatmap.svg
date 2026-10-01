@@ -159,7 +159,6 @@
   --space-22: 44px;
   --space-30: 60px;
   --space-32: 64px;
-  --radius-xs: 2px;
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
@@ -179,7 +178,6 @@
   --dash-card: 3;
   --opacity-tag: 0.15;
   --opacity-halo: 0.2;
-  --opacity-tab-on: 0.06;
   --opacity-dim: 0.3;
   --opacity-band: 0.22;
   --opacity-range: 0.38;

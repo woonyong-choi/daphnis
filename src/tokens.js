@@ -192,7 +192,6 @@ export const tokens = freeze({
     "32": "var(--space-32)"
   },
   "radius": {
-    "xs": "var(--radius-xs)",
     "sm": "var(--radius-sm)",
     "md": "var(--radius-md)",
     "lg": "var(--radius-lg)",
@@ -218,7 +217,6 @@ export const tokens = freeze({
   "opacity": {
     "tag": "var(--opacity-tag)",
     "halo": "var(--opacity-halo)",
-    "tab-on": "var(--opacity-tab-on)",
     "dim": "var(--opacity-dim)",
     "band": "var(--opacity-band)",
     "range": "var(--opacity-range)"
@@ -438,7 +436,6 @@ export const values = freeze({
     "32": 64
   },
   "radius": {
-    "xs": 2,
     "sm": 4,
     "md": 6,
     "lg": 8,
@@ -464,7 +461,6 @@ export const values = freeze({
   "opacity": {
     "tag": 0.15,
     "halo": 0.2,
-    "tab-on": 0.06,
     "dim": 0.3,
     "band": 0.22,
     "range": 0.38
