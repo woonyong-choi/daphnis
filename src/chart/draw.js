@@ -93,7 +93,7 @@ function drawHeader(figure) {
 // cost: time O(r·s), heap O(out), stack O(1)
 // vars: r = 행 수, s = 계열 수, out = 만든 SVG 글자 수
 // basis: estimate
-// 막대: 행마다 계열 막대를 쌓고, 신뢰구간 오차 막대와 값 글자를 붙인다. 값이 없으면 missing 글이다.
+// 막대: 행마다 계열 막대를 쌓고, 신뢰구간 막대기(끝 캡 없는 선)와 값 글자를 붙인다. 값이 없으면 missing 글이다.
 // 값 글자는 기준선 위에 그려야 기준선에 가려지지 않으므로, 막대, 기준선, 값 글자 순으로 쌓는다.
 function drawBars(figure, top) {
   const { chart } = figure;
@@ -106,7 +106,8 @@ function drawBars(figure, top) {
   let y = top;
   chart.rows.forEach((row, k) => {
     const groupH = chart.series.length * BAR + (chart.series.length - 1) * SPACE['2'];
-    parts.push(`<text x="${PAD}" y="${r(centerBaseline(y + groupH / 2, TEXT['13']))}" class="chart-label cr-${k}">${escapeXml(row.label)}</text>`);
+    // 이름은 계열이 모두 보일 때 막대 묶음 가운데에 둔다. 계열을 하나씩 드러내는 동안은 시간표의 labelShift만큼 옮겨 보이는 막대에 맞춘다(timeline.js).
+    parts.push(`<g class="cr-${k}"><text x="${PAD}" y="${r(centerBaseline(y + groupH / 2, TEXT['13']))}" class="chart-label shift">${escapeXml(row.label)}</text></g>`);
     chart.series.forEach((s, i) => {
       const by = y + i * (BAR + SPACE['2']);
       const cy = by + BAR / 2;
@@ -118,7 +119,7 @@ function drawBars(figure, top) {
       const end = scale.at(v);
       const [low, high] = [row.values[`${s.id}.low`], row.values[`${s.id}.high`]];
       const reach = high !== undefined ? scale.at(high) : end;
-      const ci = high !== undefined ? errorBar(`M ${r(scale.at(low))} ${r(cy - CAP / 2)} V ${r(cy + CAP / 2)} M ${r(scale.at(low))} ${r(cy)} H ${r(reach)} M ${r(reach)} ${r(cy - CAP / 2)} V ${r(cy + CAP / 2)}`, false) : '';
+      const ci = high !== undefined ? `<line x1="${r(scale.at(low))}" x2="${r(reach)}" y1="${r(cy)}" y2="${r(cy)}" class="chart-ci late"/>` : '';
       parts.push(`<g class="cr-${k}"><g class="cs-${i}"><rect x="${r(plotX)}" y="${r(by)}" width="${r(Math.max(SPACE['1'], end - plotX))}" height="${BAR}" rx="${values.radius.sm}" fill="${SERIES_COLOR[i]}" class="grow"/>${ci}</g></g>`);
       valueTexts.push(`<g class="cr-${k}"><g class="cs-${i}"><text x="${r(valueX(formatNumber(v), Math.max(end, reach), chart.rules, scale))}" y="${r(centerBaseline(cy, TEXT['11']))}" class="chart-value${i === 0 ? ' ours' : ''} late">${formatNumber(v)}</text></g></g>`);
     });
@@ -143,9 +144,9 @@ function valueX(text, reach, rules, scale) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 신뢰구간 오차 막대 하나. 경로 d는 구간 선과 양 끝 캡이다. 막대 위에 얹는 막대기는 진한 회색 1.5px로 막대 색과 구별하고, 흰 바탕 위의 점 오차 막대(soft)는 보조 글자 색 1px로 점과 이름보다 앞서지 않게 한다.
-function errorBar(d, soft) {
-  return `<path d="${d}" class="chart-ci${soft ? ' soft' : ''} late"/>`;
+// 선 차트에서 신뢰구간이 한 점뿐일 때 쓰는 세로 오차 막대. 경로 d는 구간 선과 양 끝 캡이고, 흰 바탕 위라서 보조 글자 색 가는 선으로 점보다 앞서지 않게 한다.
+function pointInterval(d) {
+  return `<path d="${d}" class="chart-interval late"/>`;
 }
 
 // cost: time O(r + t), heap O(out), stack O(1)
@@ -232,10 +233,10 @@ function drawBoxes(figure, top) {
 // cost: time O(p + l + t), heap O(out), stack O(1)
 // vars: p = 점 수, l = link 수, t = 눈금 수, out = 만든 SVG 글자 수
 // basis: estimate
-// 산점도: 같은 크기 점, 이름 글자, link 화살표. 계열이 있으면 계열 색이다. 신뢰구간은 점 뒤의 세로 오차 막대(선과 양 끝 캡)다.
+// 산점도: 같은 크기 점, 이름 글자, link 화살표. 계열이 있으면 계열 색이다. 신뢰구간은 받지 않는다.
 function drawScatter(figure, top) {
   const { chart } = figure;
-  const { sx, sy, frame, top: plotTop } = plotFrame(figure, top, chart.rows.map((p) => p.values.x), chart.rows.flatMap((p) => [p.values.y, p.values['y.low'], p.values['y.high']]).filter((v) => v !== undefined));
+  const { sx, sy, frame, top: plotTop } = plotFrame(figure, top, chart.rows.map((p) => p.values.x), chart.rows.map((p) => p.values.y));
   const seriesIndex = (p) => Math.max(0, chart.series.findIndex((s) => s.id === p.values.series));
   const parts = [frame];
   const at = new Map(chart.rows.map((p) => [p.label, { x: sx.at(p.values.x), y: sy.at(p.values.y), p }]));
@@ -259,9 +260,7 @@ function drawScatter(figure, top) {
     const toLeft = x + offset + nameW > WIDTH - PAD;
     fits.push({ text: p.label, width: nameW, room: Math.max(WIDTH - PAD - x, x - PAD) - offset, line: p.line, what: 'point name' });
     const name = `<text x="${r(toLeft ? x - offset : x + offset)}" y="${r(centerBaseline(y, TEXT['11']))}" class="chart-name late${toLeft ? ' end' : ''}">${escapeXml(p.label)}</text>`;
-    const [low, high] = [p.values['y.low'], p.values['y.high']];
-    const ci = high === undefined ? '' : errorBar(verticalInterval(x, sy.at(low), sy.at(high)), true);
-    parts.push(`<g class="cr-${k}"><g class="cs-${i}">${ci}<circle cx="${r(x)}" cy="${r(y)}" r="${DOT}" fill="${chart.series.length ? SERIES_COLOR[i] : SERIES_COLOR[0]}" class="pop"/>${name}</g></g>`);
+    parts.push(`<g class="cr-${k}"><g class="cs-${i}"><circle cx="${r(x)}" cy="${r(y)}" r="${DOT}" fill="${chart.series.length ? SERIES_COLOR[i] : SERIES_COLOR[0]}" class="pop"/>${name}</g></g>`);
   });
   parts.push(drawRules(chart.rules, sy, sx.at(sx.ticks[0]), sx.at(sx.ticks.at(-1)), 'y'));
   return { svg: parts.join('\n'), bottom: plotTop + SIZE['chart-plot-h'] + TEXT['11'] * 2 + SPACE['12'], rowKeys: chart.rows.map((p) => p.label), fits };
@@ -279,7 +278,7 @@ function drawLine(figure, top) {
   const { sx, sy, frame, top: plotTop } = plotFrame(figure, top, points.map((p) => p.values.x), ys);
   const parts = [frame];
   chart.series.forEach((s, i) => {
-    const bands = intervalRuns(points, s.id).map((run) => (run.length > 1 ? bandPath(run, s.id, sx, sy, i) : errorBar(verticalInterval(sx.at(run[0].values.x), sy.at(run[0].values[`${s.id}.low`]), sy.at(run[0].values[`${s.id}.high`])), true)));
+    const bands = intervalRuns(points, s.id).map((run) => (run.length > 1 ? bandPath(run, s.id, sx, sy, i) : pointInterval(verticalInterval(sx.at(run[0].values.x), sy.at(run[0].values[`${s.id}.low`]), sy.at(run[0].values[`${s.id}.high`])), true)));
     if (bands.length) parts.push(`<g class="cs-${i}">${bands.join('')}</g>`);
   });
   chart.series.forEach((s, i) => {

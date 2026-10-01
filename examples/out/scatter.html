@@ -59,7 +59,6 @@
   --color-orange-100: #fbe1d5;
   --color-orange-600: #eb6834;
   --color-ink-900: #0b0b0b;
-  --color-ink-800: #2b2a28;
   --color-ink-600: #52514e;
   --color-ink-200: #e6e5e1;
   --color-series-1: var(--color-accent);
@@ -67,7 +66,6 @@
   --color-heat-low: var(--color-blue-50);
   --color-heat-high: var(--color-blue-800);
   --color-grid: var(--color-ink-200);
-  --color-ci: var(--color-ink-800);
   --font-sans: FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
   --font-mono: FigMono, D2Coding, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -214,7 +212,6 @@
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
     --color-series-2: #f08a5d;
-    --color-ci: var(--color-neutral-100);
     --color-grid: var(--color-neutral-750);
   }
 }
@@ -231,7 +228,6 @@
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
   --color-series-2: #f08a5d;
-  --color-ci: var(--color-neutral-100);
   --color-grid: var(--color-neutral-750);
 }
 /* 재생기 틀과 조작 막대. iframe 안(html.embedded)에서는 테두리와 바깥 여백을 뺀다. */
@@ -790,14 +786,14 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .chart-ci {
-  fill: none;
-  stroke: var(--color-ci);
-  stroke-width: var(--border-tag);
+  stroke: var(--color-fg);
+  stroke-width: var(--border-strong);
 }
 
-.fl .chart-ci.soft {
+.fl .chart-interval {
+  fill: none;
   stroke: var(--color-muted);
-  stroke-width: var(--border-thin);
+  stroke-width: var(--border-edge);
 }
 
 .fl .chart-band {
@@ -830,12 +826,22 @@ html.embedded .fl-canvas svg {
 .fl .chart-link {
   stroke: var(--color-series-2);
   stroke-width: var(--border-strong);
-  stroke-dasharray: 1;
 }
 
 .fl .chart-link {
   stroke: var(--color-muted);
-  stroke-width: var(--border-thin);
+  stroke-width: var(--border-strong);
+  stroke-linecap: round;
+}
+
+.fl .chart-label.shift {
+  transform: translateY(var(--label-shift));
+  transition: transform var(--duration-fast);
+}
+
+/* pathLength 1인 선이 stroke-dashoffset으로 그려진다. 선 차트의 선, 덤벨 화살표, 산점도 link가 함께 쓴다. */
+.fl .draw {
+  stroke-dasharray: 1;
 }
 
 .fl .grow {
@@ -882,13 +888,13 @@ html.embedded .fl-canvas svg {
 <text x="28" y="63" class="chart-sub">예시 데이터. 작업당 평균, 화살표는 기억 없음에서 기억 붙임</text>
 <g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-series-1)"/><text x="46" y="85" class="chart-legend">기억 없음</text></g>
 <g class="cs-1"><rect x="108.49609375" y="77" width="12" height="12" rx="4" fill="var(--color-series-2)"/><text x="126.49609375" y="85" class="chart-legend">기억 붙임</text></g>
-<line x1="76" x2="552" y1="396" y2="396" class="chart-grid"/><text x="70" y="400" class="chart-tick end">0</text><line x1="76" x2="552" y1="331" y2="331" class="chart-grid"/><text x="70" y="335" class="chart-tick end">0.5</text><line x1="76" x2="552" y1="266" y2="266" class="chart-grid"/><text x="70" y="270" class="chart-tick end">1</text><line x1="76" x2="552" y1="201" y2="201" class="chart-grid"/><text x="70" y="205" class="chart-tick end">1.5</text><line x1="76" x2="552" y1="136" y2="136" class="chart-grid"/><text x="70" y="140" class="chart-tick end">2</text><text x="76" y="413" class="chart-tick">0</text><text x="234.7" y="413" class="chart-tick">0.5</text><text x="393.3" y="413" class="chart-tick">1</text><text x="552" y="413" class="chart-tick">1.5</text><text x="552" y="434" class="chart-unit">작업당 비용(달러)</text><text x="28" y="120" class="chart-unit start">작업당 수정 횟수(회)</text>
-<g class="cr-0"><g class="cs-1"><line x1="338.5" y1="227.1" x2="197.5" y2="329.6" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
-<g class="cr-2"><g class="cs-1"><line x1="448.5" y1="243.4" x2="338.2" y2="288.6" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
-<g class="cr-0"><g class="cs-0"><path d="M 341.7 259.5 H 349.7 M 345.7 259.5 V 185.4 M 341.7 185.4 H 349.7" class="chart-ci soft late"/><circle cx="345.7" cy="221.8" r="5" fill="var(--color-series-1)" class="pop"/><text x="356.7" y="225.8" class="chart-name late">A 없음</text></g></g>
-<g class="cr-1"><g class="cs-1"><path d="M 186.2 357 H 194.2 M 190.2 357 V 310.2 M 186.2 310.2 H 194.2" class="chart-ci soft late"/><circle cx="190.2" cy="334.9" r="5" fill="var(--color-series-2)" class="pop"/><text x="201.2" y="338.9" class="chart-name late">A 붙음</text></g></g>
-<g class="cr-2"><g class="cs-0"><path d="M 452.8 272.5 H 460.8 M 456.8 272.5 V 211.4 M 452.8 211.4 H 460.8" class="chart-ci soft late"/><circle cx="456.8" cy="240" r="5" fill="var(--color-series-1)" class="pop"/><text x="467.8" y="244" class="chart-name late">B 없음</text></g></g>
-<g class="cr-3"><g class="cs-1"><path d="M 325.9 320.6 H 333.9 M 329.9 320.6 V 264.7 M 325.9 264.7 H 333.9" class="chart-ci soft late"/><circle cx="329.9" cy="292" r="5" fill="var(--color-series-2)" class="pop"/><text x="340.9" y="296" class="chart-name late">B 붙음</text></g></g>
+<line x1="76" x2="552" y1="396" y2="396" class="chart-grid"/><text x="70" y="400" class="chart-tick end">0</text><line x1="76" x2="552" y1="309.3" y2="309.3" class="chart-grid"/><text x="70" y="313.3" class="chart-tick end">0.5</text><line x1="76" x2="552" y1="222.7" y2="222.7" class="chart-grid"/><text x="70" y="226.6" class="chart-tick end">1</text><line x1="76" x2="552" y1="136" y2="136" class="chart-grid"/><text x="70" y="140" class="chart-tick end">1.5</text><text x="76" y="413" class="chart-tick">0</text><text x="234.7" y="413" class="chart-tick">0.5</text><text x="393.3" y="413" class="chart-tick">1</text><text x="552" y="413" class="chart-tick">1.5</text><text x="552" y="434" class="chart-unit">작업당 비용(달러)</text><text x="28" y="120" class="chart-unit start">작업당 수정 횟수(회)</text>
+<g class="cr-0"><g class="cs-1"><line x1="339.3" y1="170" x2="196.7" y2="308.3" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
+<g class="cr-2"><g class="cs-1"><line x1="448.9" y1="192.3" x2="337.8" y2="253" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
+<g class="cr-0"><g class="cs-0"><circle cx="345.7" cy="163.7" r="5" fill="var(--color-series-1)" class="pop"/><text x="356.7" y="167.7" class="chart-name late">A 없음</text></g></g>
+<g class="cr-1"><g class="cs-1"><circle cx="190.2" cy="314.5" r="5" fill="var(--color-series-2)" class="pop"/><text x="201.2" y="318.5" class="chart-name late">A 붙음</text></g></g>
+<g class="cr-2"><g class="cs-0"><circle cx="456.8" cy="188" r="5" fill="var(--color-series-1)" class="pop"/><text x="467.8" y="192" class="chart-name late">B 없음</text></g></g>
+<g class="cr-3"><g class="cs-1"><circle cx="329.9" cy="257.3" r="5" fill="var(--color-series-2)" class="pop"/><text x="340.9" y="261.3" class="chart-name late">B 붙음</text></g></g>
 <g class="fl-packets"></g></svg></div>
 <figcaption class="fl-foot">
 <div class="fl-bar"><button type="button" class="fl-round fl-pause"></button><div class="fl-tabs" role="tablist"></div><button type="button" class="fl-round fl-rate" aria-label="배속">1×</button></div>
@@ -1170,6 +1176,7 @@ function figurePlay(root, data) {
         }
       }
     });
+    svg.style.setProperty('--label-shift', `${seg.labelShift}px`);
     rowEls.forEach((els, k) => els.forEach((el) => el.classList.toggle('dim', seg.lights.length > 0 && !seg.lights.includes(k))));
   }
 
@@ -1274,7 +1281,7 @@ function figurePlay(root, data) {
   }
 }
 
-figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":3310,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"기억 없이 쓴 비용과 수정 횟수다","series":[0],"growing":[0],"lights":[]},{"si":1,"t0":3310,"t1":7025,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"기억을 붙이면 두 에이전트 모두 왼쪽 아래로 간다","series":[0,1],"growing":[1],"lights":[]}],"steps":["기억 없음","기억 붙임"],"cardCounts":[],"edgeEnds":[],"seriesCount":2,"rowCount":4,"metrics":{"accent":"var(--color-accent)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
+figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":3310,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"기억 없이 쓴 비용과 수정 횟수다","labelShift":0,"series":[0],"growing":[0],"lights":[]},{"si":1,"t0":3310,"t1":7025,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"기억을 붙이면 두 에이전트 모두 왼쪽 아래로 간다","labelShift":0,"series":[0,1],"growing":[1],"lights":[]}],"steps":["기억 없음","기억 붙임"],"cardCounts":[],"edgeEnds":[],"seriesCount":2,"rowCount":4,"metrics":{"accent":"var(--color-accent)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
 </script>
 </body>
 </html>

@@ -130,14 +130,14 @@
 }
 
 .fl .chart-ci {
-  fill: none;
-  stroke: var(--color-ci);
-  stroke-width: var(--border-tag);
+  stroke: var(--color-fg);
+  stroke-width: var(--border-strong);
 }
 
-.fl .chart-ci.soft {
+.fl .chart-interval {
+  fill: none;
   stroke: var(--color-muted);
-  stroke-width: var(--border-thin);
+  stroke-width: var(--border-edge);
 }
 
 .fl .chart-band {
@@ -170,12 +170,22 @@
 .fl .chart-link {
   stroke: var(--color-series-2);
   stroke-width: var(--border-strong);
-  stroke-dasharray: 1;
 }
 
 .fl .chart-link {
   stroke: var(--color-muted);
-  stroke-width: var(--border-thin);
+  stroke-width: var(--border-strong);
+  stroke-linecap: round;
+}
+
+.fl .chart-label.shift {
+  transform: translateY(var(--label-shift));
+  transition: transform var(--duration-fast);
+}
+
+/* pathLength 1인 선이 stroke-dashoffset으로 그려진다. 선 차트의 선, 덤벨 화살표, 산점도 link가 함께 쓴다. */
+.fl .draw {
+  stroke-dasharray: 1;
 }
 
 .fl .grow {

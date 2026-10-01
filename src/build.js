@@ -8,7 +8,7 @@ import { layoutGraph } from './layout/graph.js';
 import { layoutSequence } from './layout/sequence.js';
 import { findMissingGlyph, wrap } from './measure/fonts.js';
 import { STYLE, sizeNode } from './measure/sizes.js';
-import { INTERVAL_TYPES, checkChartLightTargets, checkChartRows, intervalIds } from './source/chart-rules.js';
+import { INTERVAL_TYPES, checkChartLightTargets, checkChartRows } from './source/chart-rules.js';
 import { readFigure } from './source/parse.js';
 import { createProblems, FigureError } from './source/problems.js';
 import { collectCards, buildTimeline } from './timeline.js';
@@ -131,7 +131,7 @@ function toRow(record, { chartType, byKey, line, index }, problems) {
     else if (chartType === 'heatmap' && (key === 'row' || key === 'col')) values[key] = value;
     else if (chartType === 'scatter' && key === 'series') values.series = byKey.get(String(value)) ?? String(value);
     else if (series) values[part ? `${series}.${part}` : series] = value;
-    else if (['x', 'y', 'min', 'q1', 'median', 'q3', 'max', 'value'].includes(key) || (chartType === 'scatter' && ['y.low', 'y.high'].includes(key))) values[key] = value;
+    else if (['x', 'y', 'min', 'q1', 'median', 'q3', 'max', 'value'].includes(key)) values[key] = value;
     else problems.warn(line, `data key "${key}" is not used by a ${chartType} chart`);
   }
   for (const [key, value] of Object.entries(values)) {
@@ -153,7 +153,7 @@ function checkSkillRules(figure, { requireData, requireCi }, problems) {
   if (requireData && !chart.data && !isIllustrative) problems.error(chart.rows[0]?.line ?? figure.line, 'values must come from data "results/summary.json" at "/..." (--require-data). Hand-written rows are only for subtitles starting with "예시 데이터."');
   if (!requireCi || !INTERVAL_TYPES.includes(figure.chartType)) return;
   for (const row of chart.rows) {
-    for (const id of intervalIds(figure)) {
+    for (const { id } of chart.series) {
       const hasCi = row.values[`${id}.low`] !== undefined && row.values[`${id}.high`] !== undefined;
       const name = row.label ?? `x=${row.values.x}`;
       if (row.values[id] !== null && !hasCi) problems.error(row.line, `${figure.chartType} "${name}" needs ${id}.low= and ${id}.high= (--require-ci)`);

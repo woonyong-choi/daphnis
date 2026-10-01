@@ -7,10 +7,10 @@ y "작업당 수정 횟수(회)"
 series base "기억 없음"
 series ours "기억 붙임"
 
-point "A 없음" x=0.85 y=1.34 y.low=1.05 y.high=1.62 series=base
-point "A 붙음" x=0.36 y=0.47 y.low=0.30 y.high=0.66 series=ours
-point "B 없음" x=1.20 y=1.20 y.low=0.95 y.high=1.42 series=base
-point "B 붙음" x=0.80 y=0.80 y.low=0.58 y.high=1.01 series=ours
+point "A 없음" x=0.85 y=1.34 series=base
+point "A 붙음" x=0.36 y=0.47 series=ours
+point "B 없음" x=1.20 y=1.20 series=base
+point "B 붙음" x=0.80 y=0.80 series=ours
 link "A 없음" -> "A 붙음"
 link "B 없음" -> "B 붙음"
 

@@ -235,6 +235,11 @@ function createAnimator({ segs, total, growMs }) {
           `@keyframes f${s} { 0%,${half} { opacity: 0; ${ease} } ${b},100% { opacity: 1 } }\n.fl .cs-${s} .late, .fl .cs-${s} .pop, .fl .cs-${s}.pop { animation: f${s} ${duration} infinite; }`,
       );
     });
+    // 행 이름의 세로 옮김은 시간표가 박자마다 정해 둔 값을 그대로 건다. 모든 박자가 0이면 만들지 않는다.
+    if (segs.some((g) => g.labelShift)) {
+      const frames = segs.map((g) => `${percent(g.t0)},${percent(Math.max(g.t0, g.t1 - EPSILON_MS))} { transform: translateY(${g.labelShift}px) }`).join(' ');
+      css.push(`@keyframes ls { ${frames} }\n.fl .chart-label.shift { animation: ls ${duration} infinite step-end; }`);
+    }
     drawn.rowKeys.forEach((key, k) => {
       const dim = windows(segs.map((g) => g.lights.length > 0 && !g.lights.includes(key)), `opacity: ${values.opacity.dim}`, 'opacity: 1', `r${k}`);
       css.push(`.fl .cr-${k} { animation: ${dim} ${duration} infinite step-end; }`);

@@ -66,7 +66,6 @@ export const tokens = freeze({
     },
     "ink": {
       "900": "var(--color-ink-900)",
-      "800": "var(--color-ink-800)",
       "600": "var(--color-ink-600)",
       "200": "var(--color-ink-200)"
     },
@@ -74,8 +73,7 @@ export const tokens = freeze({
     "series-2": "var(--color-series-2)",
     "heat-low": "var(--color-heat-low)",
     "heat-high": "var(--color-heat-high)",
-    "grid": "var(--color-grid)",
-    "ci": "var(--color-ci)"
+    "grid": "var(--color-grid)"
   },
   "font": {
     "sans": "var(--font-sans)",
@@ -304,7 +302,6 @@ export const values = freeze({
     },
     "ink": {
       "900": "#0b0b0b",
-      "800": "#2b2a28",
       "600": "#52514e",
       "200": "#e6e5e1"
     },
@@ -312,8 +309,7 @@ export const values = freeze({
     "series-2": "#eb6834",
     "heat-low": "#edf3fb",
     "heat-high": "#1d4f91",
-    "grid": "#e6e5e1",
-    "ci": "#2b2a28"
+    "grid": "#e6e5e1"
   },
   "font": {
     "sans": "FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif",

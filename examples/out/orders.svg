@@ -52,7 +52,6 @@
   --color-orange-100: #fbe1d5;
   --color-orange-600: #eb6834;
   --color-ink-900: #0b0b0b;
-  --color-ink-800: #2b2a28;
   --color-ink-600: #52514e;
   --color-ink-200: #e6e5e1;
   --color-series-1: var(--color-accent);
@@ -60,7 +59,6 @@
   --color-heat-low: var(--color-blue-50);
   --color-heat-high: var(--color-blue-800);
   --color-grid: var(--color-ink-200);
-  --color-ci: var(--color-ink-800);
   --font-sans: FigSans, Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
   --font-mono: FigMono, D2Coding, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -207,7 +205,6 @@
     --color-page: var(--color-neutral-950);
     --color-gallery: var(--color-neutral-950);
     --color-series-2: #f08a5d;
-    --color-ci: var(--color-neutral-100);
     --color-grid: var(--color-neutral-750);
   }
 }
@@ -224,7 +221,6 @@
   --color-page: var(--color-neutral-950);
   --color-gallery: var(--color-neutral-950);
   --color-series-2: #f08a5d;
-  --color-ci: var(--color-neutral-100);
   --color-grid: var(--color-neutral-750);
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */

@@ -174,40 +174,36 @@ async function bodyOf(source, options) {
   return (await buildFigure(source, options)).chart.body;
 }
 
-test('drawChart_interval_is_drawn_for_dumbbell_scatter_and_line', async () => {
+test('drawChart_interval_is_drawn_for_bar_dumbbell_and_line', async () => {
   const dumbbell = await bodyOf('chart dumbbell\nseries a "A"\nseries b "B"\nrow "r" a=100 a.low=80 a.high=120 b=40 b.low=30 b.high=50');
-  const scatter = await bodyOf('chart scatter\npoint "p" x=1 y=2 y.low=1 y.high=3');
+  const bar = await bodyOf('chart bar\nseries a "A"\nrow "r" a=5 a.low=4 a.high=6');
   const line = await bodyOf('chart line\nseries a "A"\npoint x=1 a=2 a.low=1 a.high=3\npoint x=2 a=3 a.low=2 a.high=4');
 
   assert.equal(dumbbell.match(/class="chart-range pop"/g).length, 2);
-  assert.match(scatter, /class="chart-ci soft late"/);
+  assert.match(bar, /<line [^>]*class="chart-ci late"\/>/);
+  assert.doesNotMatch(bar, /<path [^>]*chart-ci/);
   assert.match(line, /class="chart-band wipe"/);
 });
 
-test('checkChartRows_interval_order_and_pairing_are_errors_in_all_four_kinds', async () => {
+test('checkChartRows_interval_order_and_pairing_are_errors_in_bar_dumbbell_and_line', async () => {
   const sources = [
     'chart bar\nseries a "A"\nrow "r" a=5 a.low=6 a.high=7',
     'chart dumbbell\nseries a "A"\nseries b "B"\nrow "r" a=5 a.low=6 a.high=7 b=3',
-    'chart scatter\npoint "p" x=1 y=2 y.low=3 y.high=4',
     'chart line\nseries a "A"\npoint x=1 a=2 a.low=1',
   ];
   const results = await Promise.all(sources.map(buildErrors));
 
-  assert.deepEqual(results.map((errors) => errors.length), [1, 1, 1, 1], results.flat().join('\n'));
+  assert.deepEqual(results.map((errors) => errors.length), [1, 1, 1], results.flat().join('\n'));
 });
 
-test('buildFigure_require_ci_covers_dumbbell_scatter_and_line', async () => {
-  const sources = ['chart dumbbell\nseries a "A"\nseries b "B"\nrow "r" a=5 b=3', 'chart scatter\npoint "p" x=1 y=2', 'chart line\nseries a "A"\npoint x=1 a=2'];
+test('buildFigure_require_ci_covers_dumbbell_and_line_but_not_scatter', async () => {
+  const sources = ['chart dumbbell\nseries a "A"\nseries b "B"\nrow "r" a=5 b=3', 'chart line\nseries a "A"\npoint x=1 a=2'];
 
   for (const source of sources) await assert.rejects(buildFigure(source, { requireCi: true }), /require-ci/, source);
-  await buildFigure('chart scatter\npoint "p" x=1 y=2 y.low=1 y.high=3', { requireCi: true });
+  await buildFigure('chart scatter\npoint "p" x=1 y=2', { requireCi: true });
 });
 
-test('loadChartData_interval_keys_match_inline_rows_for_scatter_line_and_dumbbell', async () => {
-  const [inlineScatter, dataScatter] = [
-    await bodyOf('chart scatter\nseries s "S" key="new_judge"\npoint "A" x=1 y=2 y.low=1.5 y.high=2.6 series=s'),
-    await bodyOf('chart scatter\nseries s "S" key="new_judge"\ndata "summary.json" at "/points"', { baseDir: FIXTURES }),
-  ];
+test('loadChartData_interval_keys_match_inline_rows_for_line_and_dumbbell', async () => {
   const [inlineLine, dataLine] = [
     await bodyOf('chart line\nseries s "S" key="new_judge"\npoint x=1 s=12 s.low=10 s.high=14\npoint x=2 s=8 s.low=6 s.high=9'),
     await bodyOf('chart line\nseries s "S" key="new_judge"\ndata "summary.json" at "/weeks"', { baseDir: FIXTURES }),
@@ -217,7 +213,7 @@ test('loadChartData_interval_keys_match_inline_rows_for_scatter_line_and_dumbbel
     await bodyOf('chart dumbbell\nseries a "A" key="before"\nseries b "B" key="after"\ndata "summary.json" at "/tokens"', { baseDir: FIXTURES }),
   ];
 
-  assert.deepEqual([dataScatter, dataLine, dataDumbbell], [inlineScatter, inlineLine, inlineDumbbell]);
+  assert.deepEqual([dataLine, dataDumbbell], [inlineLine, inlineDumbbell]);
 });
 
 test('drawDumbbells_close_values_drop_arrow_and_keep_value_text_apart', async () => {
@@ -238,4 +234,53 @@ test('drawBars_value_text_moves_right_of_rule_and_draws_after_rule', async () =>
 
   assert.ok(Number(text[1]) > rule, `${text[1]} > ${rule}`);
   assert.ok(body.indexOf('class="chart-value') > body.indexOf('class="chart-rule"'));
+});
+
+test('drawChart_scatter_rejects_interval_keys_and_draws_no_interval', async () => {
+  const errors = await buildErrors('chart scatter\npoint "p" x=1 y=2 y.low=1 y.high=3');
+  const body = await bodyOf('chart scatter\npoint "p" x=1 y=2\npoint "q" x=2 y=3\nlink "p" -> "q"');
+
+  assert.match(errors.join('\n'), /"y\.low" is not a value of a scatter chart/);
+  assert.doesNotMatch(body, /chart-ci|chart-interval/);
+  assert.match(body, /class="chart-link draw"/);
+});
+
+test('drawChart_line_chart_draw_class_gets_dash_so_the_line_grows_with_the_band', async () => {
+  const css = (await import('node:fs')).readFileSync(new URL('../src/styles/chart.css', import.meta.url), 'utf8');
+
+  assert.match(css, /\.fl \.draw \{\s*stroke-dasharray: 1;/);
+});
+
+const STEPPED_BAR = 'chart bar\nx "정확도(%)"\nseries a "A"\nseries b "B"\nrow "r" a=5 b=3\nstep "하나" "첫째"\n  reveal b\nstep "둘" "둘째"\n  reveal a';
+
+test('buildTimeline_bar_label_shift_follows_visible_bars_and_is_zero_when_all_shown', async () => {
+  const shifts = (await buildFigure(STEPPED_BAR)).timeline.segs.map((seg) => seg.labelShift);
+
+  assert.ok(shifts[0] > 0, `only the second bar is visible: ${shifts}`);
+  assert.equal(shifts.at(-1), 0);
+});
+
+test('buildTimeline_label_shift_is_zero_for_single_series_and_other_kinds', async () => {
+  const single = await buildFigure('chart bar\nx "정확도(%)"\nseries a "A"\nrow "r" a=5\nstep "s" "c"\n  reveal a');
+
+  assert.deepEqual(single.timeline.segs.map((seg) => seg.labelShift), [0]);
+});
+
+test('toSvg_static_chart_shows_every_series_and_has_no_motion', async () => {
+  const { toSvg } = await import('../src/svg.js');
+  const svg = await toSvg(await buildFigure(STEPPED_BAR), { isStatic: true });
+
+  assert.doesNotMatch(svg, /@keyframes ls|animation: a\d|cs-\d \{ animation/);
+  assert.match(svg, /<g class="cs-0">/);
+  assert.match(svg, /<g class="cs-1">/);
+  assert.match(svg, /<svg [^>]*class="fl"/);
+  assert.equal(svg.includes('opacity="0"'), false);
+});
+
+test('toSvg_animated_chart_moves_row_label_with_the_timeline_shift', async () => {
+  const { toSvg } = await import('../src/svg.js');
+  const svg = await toSvg(await buildFigure(STEPPED_BAR));
+
+  assert.match(svg, /@keyframes ls \{[^}]*translateY\([\d.]+px\)/);
+  assert.match(svg, /\.fl \.chart-label\.shift \{ animation: ls /);
 });
