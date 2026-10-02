@@ -59,7 +59,7 @@ export const VALUES = {
 
 /**
  * 문장 낱말. section은 파일 부분(version, header, declare, timeline), kinds는 쓸 수 있는 그림 종류다.
- * node는 도형 선언이고 hasSub는 부제를 받는지, scopes는 선택 사항을 찾을 OPTIONS 범위(기본은 낱말 자신)다.
+ * display는 문서에 적는 꼴이다(선 줄은 첫 낱말이 이름이라 낱말로 가를 수 없다). node는 도형 선언이고 hasSub는 부제를 받는지, scopes는 선택 사항을 찾을 OPTIONS 범위(기본은 낱말 자신)다.
  * positional은 낱말 뒤 자리별 값 목록 이름이다.
  */
 export const STATEMENTS = table({
@@ -81,7 +81,7 @@ export const STATEMENTS = table({
   start: { ...V1, section: 'declare', kinds: ['state'] },
   final: { ...V1, section: 'declare', kinds: ['state'] },
   table: { ...V1, section: 'declare', kinds: ['data'] },
-  edge: { ...V1, section: 'declare', kinds: ['flow', 'state'] },
+  edge: { ...V1, section: 'declare', kinds: ['flow', 'state'], display: 'a -> b' },
   series: { ...V1, section: 'declare', kinds: ['chart'] },
   rule: { ...V1, section: 'declare', kinds: ['chart'] },
   missing: { ...V1, section: 'declare', kinds: ['chart'] },
@@ -90,7 +90,7 @@ export const STATEMENTS = table({
   point: { ...V1, section: 'declare', kinds: ['chart'] },
   cell: { ...V1, section: 'declare', kinds: ['chart'] },
   link: { ...V1, section: 'declare', kinds: ['chart'] },
-  hop: { ...V1, section: 'timeline', kinds: ['flow', 'sequence', 'state', 'data'] },
+  hop: { ...V1, section: 'timeline', kinds: ['flow', 'sequence', 'state', 'data'], display: 'a -> b' },
   step: { ...V1, section: 'timeline', kinds: ALL_KINDS },
   show: { ...V1, section: 'timeline', kinds: ['flow', 'data'], scopes: ['show', 'graph'] },
   clear: { ...V1, section: 'timeline', kinds: ['flow', 'data'] },
@@ -103,11 +103,11 @@ export const STATEMENTS = table({
 
 /**
  * 선택 사항. 키는 `범위.이름`이고 type은 word, text, number, flag다.
- * values는 값 목록 이름, maxLength는 글자 수 상한이다. 값 없는 낱말(flag)은 폐기 별칭을 두지 않는다. 이름 자리의 낱말과 가를 수 없기 때문이다.
+ * values는 값 목록 이름, format은 값 목록이 없는 낱말 값의 문서용 이름, maxLength는 글자 수 상한이다. 값 없는 낱말(flag)은 폐기 별칭을 두지 않는다. 이름 자리의 낱말과 가를 수 없기 때문이다.
  */
 export const OPTIONS = table({
   'group.direction': { ...V1, type: 'word', values: 'direction' },
-  'hop.time': { ...V1, type: 'word' },
+  'hop.time': { ...V1, type: 'word', format: '시간' },
   'hop.dashed': FLAG,
   'edge.quiet': FLAG,
   'edge.dashed': FLAG,
@@ -119,11 +119,11 @@ export const OPTIONS = table({
   'graph.lit': TEXT,
   'series.role': { ...V1, type: 'word', values: 'role' },
   'series.key': TEXT,
-  'point.series': { ...V1, type: 'word' },
-  'light.x': { ...V1, type: 'number' },
+  'point.series': { ...V1, type: 'word', format: '계열 이름' },
+  'light.x': { ...V1, type: 'number', format: '숫자' },
   'column.pk': FLAG,
   'column.unique': FLAG,
-  'column.fk': { ...V1, type: 'word' },
+  'column.fk': { ...V1, type: 'word', format: '테이블.열' },
 });
 
 // cost: time O(o), heap O(o), stack O(1)

@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
+import { DOC_END, DOC_START, renderGrammarTables } from '../src/source/grammar-doc.js';
 import { KINDS, OPTIONS, STATEMENTS, VALUES, VERSION, optionsOf, valueNames } from '../src/source/grammar.js';
 
 const items = () => [
@@ -42,4 +44,19 @@ test('grammar_current_value_names_exclude_deprecated_values', () => {
   assert.deepEqual(valueNames('role'), ['main', 'compare']);
   assert.deepEqual(valueNames('tone'), ['purple', 'green', 'teal', 'gray']);
   assert.deepEqual(Object.keys(optionsOf('series')), ['role', 'key']);
+});
+
+test('grammarDoc_figure_syntax_tables_equal_the_tables_made_from_the_grammar', () => {
+  const doc = readFileSync(new URL('../docs/design/figure-syntax.md', import.meta.url), 'utf8');
+  const written = doc.slice(doc.indexOf(DOC_START) + DOC_START.length, doc.indexOf(DOC_END)).trim();
+
+  assert.equal(written, renderGrammarTables(), 'run npm run grammar to rewrite the tables in docs/design/figure-syntax.md');
+});
+
+test('grammarDoc_lists_every_statement_option_and_value_name', () => {
+  const tables = renderGrammarTables();
+
+  for (const word of Object.keys(STATEMENTS)) assert.ok(tables.includes(`\`${STATEMENTS[word].display ?? word}\``), word);
+  for (const key of Object.keys(OPTIONS)) assert.ok(tables.includes(`\`${key}\``), key);
+  for (const { items } of Object.values(VALUES)) for (const name of Object.keys(items)) assert.ok(tables.includes(`\`${name}\``), name);
 });

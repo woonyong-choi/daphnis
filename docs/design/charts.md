@@ -88,7 +88,7 @@ rule 5 "채택 기준"
 | `x "축 제목"`, `y "축 제목"` | 머리 | 축 제목. 단위는 괄호에 넣는다 |
 | `scale linear\|log` | 머리 | 값 축 눈금. 기본 `linear` |
 | `speed 900ms` | 머리 | `reveal`로 계열이 자라는 시간. 기본 토큰 `duration.reveal` |
-| `series id "이름" [role=main\|compare] [key="JSON 키"]` | 선언 | 계열과 역할. 계열이 하나면 main이라 `role`을 생략할 수 있고(`role=compare`는 오류), 둘이면 둘 다 적고 main 하나, compare 하나여야 한다. 색은 역할이 정하고 선언 순서와 상관없다([색 역할 표](docs-integration.md#색-역할)). 범례, 막대, 점 이름 칸은 main이 먼저다 |
+| `series id "이름" [role=main\|compare] [key="JSON 키"]` | 선언 | 계열과 역할. 계열이 하나면 main이라 `role`을 생략할 수 있고(`role=compare`는 오류), 둘이면 main 하나, compare 하나다. `role`을 생략하면 선언 순서대로 첫 계열 main, 둘째 compare를 받고(덤벨은 시작점이 compare라 첫 계열 compare), 하나만 적으면 다른 계열이 남은 역할을 받는다([호환 규칙](figure-syntax.md#호환-규칙)). 적은 역할이 있으면 색은 역할이 정하고 선언 순서와 상관없다([색 역할 표](docs-integration.md#색-역할)). 범례, 막대, 점 이름 칸은 main이 먼저다 |
 | `rule 값 "라벨"` | 선언 | 기준선. 여러 줄 가능. 보조 글자 색 점선 |
 | `missing "글"` | 선언 | 막대 값이 빠진 자리 글. 기본 `비교 없음` |
 | `data "경로" [at "/포인터"]` | 선언 | JSON 파일의 배열에서 행을 읽는다. `at`을 빼면 문서 전체가 배열이다 |

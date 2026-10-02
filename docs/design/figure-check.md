@@ -56,7 +56,7 @@
 
 - 형식은 [그림 문법](figure-syntax.md) 오류 형식과 같다. 줄 번호는 문제를 일으킨 줄들 가운데 첫 줄이고, 나머지 줄 번호는 `(line N)`으로 괄호에 넣는다.
 - 고치는 방법은 원본에서 바꿀 수 있는 것만 적는다. 라벨 줄이기, 그룹 방향 바꾸기, `aspect` 넣기다.
-- `--json`이면 메시지마다 `{ "file", "line", "lines", "check", "level", "message" }` 한 줄을 표준 출력에 쓴다. `lines`는 첫 줄과 괄호 안 줄 번호다. `check`는 검사 번호이고, 문법 오류와 문법 경고는 `"syntax"`다. AI 도구가 한 줄씩 읽어 처리하게 하기 위해서다.
+- `--json`이면 진단마다 `{ "file", "severity", "code", "line", "column", "message", "fix"? }` 한 줄을 표준 출력에 쓴다. `severity`는 `error`, `warning`, `deprecated`이고, `code`는 검사 번호이면 `check-7`처럼, 문법 진단은 `syntax` 등이다([그림 문법](figure-syntax.md#호환-규칙)의 진단 모양). 함께 문제를 일으킨 줄은 메시지 안 `(line N)`에 있다. AI 도구가 한 줄씩 읽어 처리하게 하기 위해서다.
 
 ### 요구사항
 
