@@ -1,6 +1,7 @@
 // 파랑 accent와 주황의 짝. 주황은 파랑과 같은 L·C에서 색상만 돌린 값이고, 색각 이상에서도 둘이 구분된다.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { contrast, mixHex } from '../src/contrast.js';
 import { themeColor as color } from './helpers.js';
 
 const THEMES = ['light', 'dark'];
@@ -9,6 +10,11 @@ const HUE_TOLERANCE = 1;
 const LIGHTNESS_TOLERANCE = 0.01;
 const CHROMA_TOLERANCE = 0.01;
 const CVD_MIN_DISTANCE = 0.1;
+const GRAPHIC = 3;
+const GRAPHIC_FACES = ['bg', 'group', 'card-on', 'node', 'page', 'gallery'];
+const BORDER_FACES = ['bg', 'group', 'card-on', 'node', 'surface', 'page', 'gallery'];
+// 한 단계 위나 아래 색을 만드는 섞음 비율. 이보다 작은 차이는 같은 단계로 본다.
+const STEP_MIX = 0.01;
 // 색각 이상 시뮬레이션(Machado 2009, 심한 정도 1.0). 선형 sRGB에 곱한다.
 const CVD = {
   protanopia: [[0.152286, 1.052583, -0.204868], [0.114503, 0.786281, 0.099216], [-0.003882, -0.048116, 1.051998]],
@@ -56,16 +62,42 @@ test('palette_light_and_dark_orange_keep_the_blue_lightness_and_chroma_and_only_
   }
 });
 
-test('palette_orange_series_color_follows_the_theme_orange', () => {
-  assert.equal(color('light', 'series-2'), color('light', 'palette.orange.500'));
+test('palette_orange_series_color_follows_the_theme_graphic_orange', () => {
+  assert.equal(color('light', 'series-2'), color('light', 'palette.orange.550'));
   assert.equal(color('dark', 'series-2'), color('dark', 'palette.orange.400'));
   assert.equal(color('light', 'tag.orange'), color('light', 'palette.orange.500'));
 });
 
+for (const hue of ['blue', 'orange']) {
+  test(`palette_light_${hue}_graphic_is_the_lightest_step_of_the_base_hue_that_reaches_3_on_every_face`, () => {
+    const [base, graphic] = [color('light', `palette.${hue}.500`), color('light', `palette.${hue}.550`)];
+    const [, baseC, baseHue] = oklchOf(base);
+    const [graphicL, graphicC, graphicHue] = oklchOf(graphic);
+    const lowest = Math.min(...GRAPHIC_FACES.map((face) => contrast(graphic, color('light', face))));
+    const lighter = Math.min(...GRAPHIC_FACES.map((face) => contrast(mixHex(graphic, '#ffffff', STEP_MIX), color('light', face))));
+
+    assert.ok(Math.abs(graphicHue - baseHue) <= HUE_TOLERANCE, `${hue} hue ${baseHue.toFixed(1)} / ${graphicHue.toFixed(1)}`);
+    assert.ok(Math.abs(graphicC - baseC) <= CHROMA_TOLERANCE, `${hue} C ${baseC.toFixed(3)} / ${graphicC.toFixed(3)}`);
+    assert.ok(lowest >= GRAPHIC && lighter < GRAPHIC, `${hue} ${graphicL.toFixed(3)}: ${lowest.toFixed(3)} / ${lighter.toFixed(3)}`);
+  });
+}
+
+// 경계가 바탕 쪽으로 한 단계 가면(라이트는 흰색, 다크는 검정 쪽) 3 아래로 떨어져야 최소 값이다.
+for (const [theme, toward] of [['light', '#ffffff'], ['dark', '#000000']]) {
+  test(`palette_${theme}_border_is_the_closest_step_to_the_page_that_reaches_3_on_every_face`, () => {
+    const border = color(theme, 'border');
+    const closer = mixHex(border, toward, STEP_MIX);
+    const lowest = Math.min(...BORDER_FACES.map((face) => contrast(border, color(theme, face))));
+    const next = Math.min(...BORDER_FACES.map((face) => contrast(closer, color(theme, face))));
+
+    assert.ok(lowest >= GRAPHIC && next < GRAPHIC, `${theme}: ${lowest.toFixed(3)} / ${next.toFixed(3)}`);
+  });
+}
+
 for (const theme of THEMES) {
   for (const [name, matrix] of Object.entries(CVD)) {
     test(`palette_${theme}_blue_and_orange_stay_apart_for_${name}`, () => {
-      const [blue, orange] = theme === 'light' ? ['palette.blue.500', 'palette.orange.500'] : ['palette.blue.400', 'palette.orange.400'];
+      const [blue, orange] = theme === 'light' ? ['palette.blue.550', 'palette.orange.550'] : ['palette.blue.400', 'palette.orange.400'];
       const distance = distanceOf(seenBy(matrix, color(theme, blue)), seenBy(matrix, color(theme, orange)));
 
       assert.ok(distance >= CVD_MIN_DISTANCE, `${theme} ${name}: ${distance.toFixed(3)}`);

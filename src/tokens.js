@@ -15,7 +15,6 @@ export const tokens = freeze({
         "50": "var(--color-palette-gray-50)",
         "100": "var(--color-palette-gray-100)",
         "200": "var(--color-palette-gray-200)",
-        "400": "var(--color-palette-gray-400)",
         "500": "var(--color-palette-gray-500)",
         "600": "var(--color-palette-gray-600)",
         "900": "var(--color-palette-gray-900)"
@@ -23,7 +22,7 @@ export const tokens = freeze({
       "neutral": {
         "100": "var(--color-palette-neutral-100)",
         "400": "var(--color-palette-neutral-400)",
-        "600": "var(--color-palette-neutral-600)",
+        "500": "var(--color-palette-neutral-500)",
         "700": "var(--color-palette-neutral-700)",
         "750": "var(--color-palette-neutral-750)",
         "800": "var(--color-palette-neutral-800)",
@@ -36,6 +35,7 @@ export const tokens = freeze({
         "200": "var(--color-palette-blue-200)",
         "400": "var(--color-palette-blue-400)",
         "500": "var(--color-palette-blue-500)",
+        "550": "var(--color-palette-blue-550)",
         "600": "var(--color-palette-blue-600)",
         "800": "var(--color-palette-blue-800)",
         "850": "var(--color-palette-blue-850)",
@@ -43,7 +43,8 @@ export const tokens = freeze({
       },
       "orange": {
         "400": "var(--color-palette-orange-400)",
-        "500": "var(--color-palette-orange-500)"
+        "500": "var(--color-palette-orange-500)",
+        "550": "var(--color-palette-orange-550)"
       },
       "ink": {
         "200": "var(--color-palette-ink-200)",
@@ -57,6 +58,9 @@ export const tokens = freeze({
       },
       "green": {
         "500": "var(--color-palette-green-500)"
+      },
+      "slate": {
+        "500": "var(--color-palette-slate-500)"
       }
     },
     "accent": "var(--color-accent)",
@@ -265,15 +269,14 @@ export const values = freeze({
         "50": "#eef1f5",
         "100": "#e3e7ec",
         "200": "#d5dbe3",
-        "400": "#9ba6b4",
-        "500": "#8b949e",
+        "500": "#818b99",
         "600": "#4b5563",
         "900": "#111418"
       },
       "neutral": {
         "100": "#e3e3e3",
         "400": "#9aa0a6",
-        "600": "#55585c",
+        "500": "#72767a",
         "700": "#3a3b3c",
         "750": "#3c3e42",
         "800": "#2c2d30",
@@ -286,6 +289,7 @@ export const values = freeze({
         "200": "#a9cdea",
         "400": "#79c0ff",
         "500": "#2b96ed",
+        "550": "#218fe5",
         "600": "#1072c2",
         "800": "#1d5d91",
         "850": "#2b4254",
@@ -293,7 +297,8 @@ export const values = freeze({
       },
       "orange": {
         "400": "#f5a374",
-        "500": "#dc6e22"
+        "500": "#dc6e22",
+        "550": "#d96c1f"
       },
       "ink": {
         "200": "#c6cacf",
@@ -307,9 +312,12 @@ export const values = freeze({
       },
       "green": {
         "500": "#10b981"
+      },
+      "slate": {
+        "500": "#8b949e"
       }
     },
-    "accent": "#2b96ed",
+    "accent": "#218fe5",
     "accent-strong": "#1072c2",
     "accent-fill": "#1072c2",
     "on-accent": "#ffffff",
@@ -319,10 +327,10 @@ export const values = freeze({
     "node": "#ffffff",
     "control-on": "#ffffff",
     "surface": "#eef1f5",
-    "border": "#9ba6b4",
+    "border": "#818b99",
     "card-on": "#edf5fb",
     "group": "#eef0f3",
-    "group-border": "#9ba6b4",
+    "group-border": "#818b99",
     "frame": "#e3e7ec",
     "plate-border": "#d5dbe3",
     "page": "#ffffff",
@@ -334,8 +342,8 @@ export const values = freeze({
       "orange": "#dc6e22",
       "gray": "#8b949e"
     },
-    "series-1": "#2b96ed",
-    "series-2": "#dc6e22",
+    "series-1": "#218fe5",
+    "series-2": "#d96c1f",
     "heat-low": "#a9cdea",
     "heat-high": "#1d5d91",
     "heat-ink": "#000000",

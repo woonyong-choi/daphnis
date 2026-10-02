@@ -7,13 +7,12 @@ import { contrast, mixHex, pickInk } from '../src/contrast.js';
 import { themeColor, tokenValue } from './helpers.js';
 
 const TEXT = 4.5;
-const BORDER = 2;
-const SUBTLE = 1.5;
 const GRAPHIC = 3;
-const PLATE = 1.3;
-const PILL_EDGE = 1.25;
-// 사용자가 정한 이력서 accent(#2b96ed)와 회색 그림 바탕(#f6f7f9), 그룹(#eef0f3), 카드 바탕이 부딪치는 자리의 실측 최솟값(2.75) 바로 아래.
-const ACCENT_GRAPHIC_MIN = 2.7;
+// 꾸밈 요소는 WCAG 적용 대상 밖이다. 값이나 상태를 전하지 않고 구조만 돕는다.
+const DECORATIVE_LINE = 1.5;
+const DECORATIVE_PLATE_EDGE = 1.3;
+const FIGURE_FACES = ['bg', 'node', 'group', 'card-on'];
+const DOCUMENT_FACES = ['page', 'gallery'];
 const THEMES = ['light', 'dark'];
 
 const color = themeColor;
@@ -40,10 +39,9 @@ for (const theme of THEMES) {
     expectAtLeast(theme, TEXT, [['accent-strong', 'bg'], ['accent-strong', 'node'], ['accent-strong', 'card-on'], ['accent-strong', 'page'], ['accent-strong', 'gallery']]);
   });
 
-  test(`contrast_${theme}_accent_graphics_reach_3_on_small_faces_and_the_floor_on_figure_faces`, () => {
-    // 밝힌 선과 점, 도형·그룹·카드 테두리, 진행 고리(원 단추 면 node), 초점 고리
-    expectAtLeast(theme, GRAPHIC, ['node', 'page', 'gallery'].map((face) => ['accent', face]));
-    expectAtLeast(theme, ACCENT_GRAPHIC_MIN, ['bg', 'group', 'card-on'].map((face) => ['accent', face]));
+  test(`contrast_${theme}_accent_graphics_reach_3_on_every_figure_and_document_face`, () => {
+    // 밝힌 선과 점, 도형·그룹·카드 테두리, 진행 고리, 초점 고리
+    expectAtLeast(theme, GRAPHIC, [...FIGURE_FACES, ...DOCUMENT_FACES].map((face) => ['accent', face]));
   });
 
   test(`contrast_${theme}_text_on_accent_fill_reaches_4_5`, () => {
@@ -61,34 +59,34 @@ for (const theme of THEMES) {
     }
   });
 
-  test(`contrast_${theme}_borders_reach_2_on_every_face_they_separate`, () => {
-    const faces = ['bg', 'node', 'group'];
-    expectAtLeast(theme, BORDER, faces.flatMap((face) => [['border', face], ['group-border', face]]));
+  test(`contrast_${theme}_borders_reach_3_on_every_face_they_separate`, () => {
+    // 노드, 그룹, 카드(surface 면)와 조작부 윤곽
+    const faces = [...FIGURE_FACES, 'surface', ...DOCUMENT_FACES];
+    expectAtLeast(theme, GRAPHIC, faces.flatMap((face) => [['border', face], ['group-border', face]]));
   });
 
   test(`contrast_${theme}_node_face_is_brighter_than_the_figure_ground`, () => {
     assert.ok(contrast(color(theme, 'node'), color(theme, 'bg')) > 1.05);
   });
 
-  test(`contrast_${theme}_active_tab_pill_is_distinct_from_the_tab_group_face_and_keeps_text_4_5`, () => {
+  test(`contrast_${theme}_active_tab_state_ring_reaches_3_on_the_tab_group_face_and_text_keeps_4_5`, () => {
+    // 켜진 탭 표시는 border 색 고리다. 알약 면은 글자 대비만 맡는다.
     expectAtLeast(theme, TEXT, [['fg', 'control-on'], ['muted', 'bg']]);
-    // 다크는 면 대비만으로 알약이 보인다. 라이트는 흰 알약에 옅은 테두리(plate-border)를 두른다.
-    if (theme === 'dark') expectAtLeast(theme, PLATE, [['control-on', 'bg']]);
-    else expectAtLeast(theme, PILL_EDGE, [['plate-border', 'bg']]);
+    expectAtLeast(theme, GRAPHIC, [['border', 'bg']]);
   });
 
-  test(`contrast_${theme}_subsidiary_graphics_reach_1_5_on_the_figure_ground`, () => {
-    expectAtLeast(theme, SUBTLE, [['grid', 'bg'], ['heat-low', 'bg']]);
+  test(`decorative_${theme}_lines_and_bands_reach_1_5_on_the_figure_ground`, () => {
+    // 격자, 히트맵 값 0 칸, 신뢰구간 띠는 값이 숫자로도 적혀 있어 색은 거들 뿐이라 WCAG 적용 대상 밖이다.
+    expectAtLeast(theme, DECORATIVE_LINE, [['grid', 'bg'], ['heat-low', 'bg']]);
     for (const series of ['series-1', 'series-2']) {
       const band = mixHex(color(theme, 'bg'), color(theme, series), opacity('range'));
       const ratio = contrast(band, color(theme, 'bg'));
-      assert.ok(ratio >= SUBTLE, `${theme} range band ${series}: ${ratio.toFixed(2)}`);
+      assert.ok(ratio >= DECORATIVE_LINE, `${theme} range band ${series}: ${ratio.toFixed(2)}`);
     }
   });
 
-  test(`contrast_${theme}_series_marks_reach_3_on_the_figure_ground`, () => {
-    // series-1은 이력서 accent, series-2는 같은 L·C의 주황이다. 라이트 회색 바탕에서 둘 다 3에 조금 못 미치는 ACCENT_GRAPHIC_MIN 예외다.
-    expectAtLeast(theme, ACCENT_GRAPHIC_MIN, [['series-1', 'bg'], ['series-2', 'bg']]);
+  test(`contrast_${theme}_series_marks_reach_3_on_every_figure_face`, () => {
+    expectAtLeast(theme, GRAPHIC, FIGURE_FACES.flatMap((face) => [['series-1', face], ['series-2', face]]));
   });
 
   test(`contrast_${theme}_heat_text_reaches_4_5_on_every_cell_strength`, () => {
@@ -101,13 +99,15 @@ for (const theme of THEMES) {
     }
   });
 
-  test(`contrast_${theme}_figure_plate_edge_reaches_1_3_on_the_document_ground`, () => {
-    expectAtLeast(theme, PLATE, [['plate-border', 'page']]);
+  test(`decorative_${theme}_figure_plate_edge_reaches_1_3_on_the_document_ground`, () => {
+    // 판 테두리는 흰 문서 위 판 모양만 잡는 꾸밈이다. 판 안 도형은 각자 3을 맞춘다.
+    expectAtLeast(theme, DECORATIVE_PLATE_EDGE, [['plate-border', 'page']]);
   });
 }
 
 test('accentPalette_values_follow_the_resume_accent_and_strong_is_the_lightest_same_hue_that_reaches_4_5', () => {
-  assert.equal(color('light', 'accent'), '#2b96ed');
+  assert.equal(color('light', 'palette.blue.500'), '#2b96ed');
+  assert.equal(color('light', 'accent'), color('light', 'palette.blue.550'));
   assert.equal(color('dark', 'accent'), '#79c0ff');
   assert.equal(color('light', 'on-accent'), '#ffffff');
   assert.equal(color('dark', 'on-accent'), '#0d1117');
