@@ -79,8 +79,9 @@ function containerOptions(c, ctx) {
     'elk.edgeRouting': 'ORTHOGONAL',
     'elk.randomSeed': '1',
     'elk.layered.considerModelOrder.strategy': 'NODES_AND_EDGES',
-    // 되도는 선이 있으면 선언 순서를 거스르는 선을 거꾸로 놓는다. 먼저 적은 도형이 앞(왼쪽, 위)에 오게 하기 위해서다.
-    'elk.layered.cycleBreaking.strategy': 'GREEDY_MODEL_ORDER',
+    // 순환이 있으면 자식 순서(order.js)를 거스르는 선, 곧 순환을 끊는 선만 거꾸로 놓아 먼저 적은 도형이 앞(왼쪽, 위)에 오게 한다.
+    // 순환이 없는 그룹은 MODEL_ORDER로 바꾸면 선 높이가 달라지는 그림이 있어(memory 예제) 처음 설정을 지킨다.
+    'elk.layered.cycleBreaking.strategy': c.hasBack ? 'MODEL_ORDER' : 'GREEDY_MODEL_ORDER',
     'elk.spacing.nodeNode': String(SPACE['16']),
     'elk.layered.spacing.nodeNodeBetweenLayers': String(SPACE['30']),
     'elk.spacing.edgeEdge': String(SPACE['5']),

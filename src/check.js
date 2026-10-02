@@ -10,7 +10,7 @@ const INNER_X = SPACE['9'];
 // 잰 글 폭의 반올림 차이를 넘기 위한 여유
 const FIT_SLACK = 0.5;
 const CROWD = values.space['2-5'];
-const ASPECT_MAX = 3;
+const ASPECT_MAX = values.scale['aspect-max'];
 const MIN_READABLE = 9;
 
 // cost: time O(e²·p² + e·s·p + s² + s·k·r·n + h·p), heap O(e + s), stack O(1)

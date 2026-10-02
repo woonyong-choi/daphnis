@@ -265,6 +265,7 @@ export const tokens = freeze({
     "zoom-max": "var(--scale-zoom-max)",
     "fold-aspect": "var(--scale-fold-aspect)",
     "fold-step": "var(--scale-fold-step)",
+    "aspect-max": "var(--scale-aspect-max)",
     "zoom-step": "var(--scale-zoom-step)"
   }
 });
@@ -530,6 +531,7 @@ export const values = freeze({
     "zoom-max": 6,
     "fold-aspect": 1.6,
     "fold-step": 0.75,
+    "aspect-max": 3,
     "zoom-step": 1.25
   }
 });

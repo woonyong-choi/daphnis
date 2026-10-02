@@ -7,12 +7,14 @@ import { isBodyShape, recordPortOrder } from './ports.js';
 import { readElk } from './read.js';
 
 const CANVAS = values.size['figure-canvas'];
+const ASPECT_MAX = values.scale['aspect-max'];
+const TURNED = { right: 'down', down: 'right' };
 // 자동 접기에서 비율을 낮춰 다시 배치해 보는 최대 횟수. 배치 시간이 이 횟수만큼 늘 수 있다.
 const FOLD_TRIES = 4;
 
 let engine;
 
-// cost: time O(FOLD_TRIES·elk(s + e) + e·d), heap O(s + e·d), stack O(d)
+// cost: time O((2 + FOLD_TRIES)·elk(s + e) + e·d), heap O(s + e·d), stack O(d)
 // vars: s = 도형 수, e = 선 수, d = 그룹 깊이, elk = elkjs 층 배치 시간
 // basis: estimate
 /**
@@ -22,27 +24,52 @@ let engine;
  */
 export async function layoutGraph(figure, sizes) {
   engine ??= new ELK();
-  const model = buildModel(figure, sizes);
-  // 사람과 원통은 두 번 배치한다. 처음에는 연결점 순서를 elkjs에 맡기고, 그 순서대로 몸통 범위에 연결점을 고정해 다시 배치한다.
-  // 순서를 미리 정하면 선이 엇갈리고, 맡기기만 하면 연결점이 머리나 뚜껑 자리에 놓이기 때문이다.
-  const hasBodyPorts = [...model.nodes.values()].some((n) => isBodyShape(n) && n.ports.length);
-  if (hasBodyPorts) recordPortOrder(await engine.layout(toElk(model, figure)), model);
-  let laid = await engine.layout(toElk(model, figure));
-  if (laid.width > CANVAS && figure.aspect === undefined) laid = await foldNarrowest(model, figure, laid);
-  return readElk(laid, model);
+  let best = await arrange(figure, sizes);
+  if (best.laid.width > CANVAS && figure.aspect === undefined) best = await fitCanvas(figure, sizes, best);
+  return readElk(best.laid, best.model);
 }
 
-// cost: time O(FOLD_TRIES·elk(s + e)), heap O(s + e), stack O(d)
+// cost: time O(elk(s + e) + e·d), heap O(s + e·d), stack O(d)
 // vars: s = 도형 수, e = 선 수, d = 그룹 깊이, elk = elkjs 층 배치 시간
 // basis: estimate
-// 표준 캔버스 폭보다 넓고 aspect를 적지 않았으면, 자동 비율로 접어 다시 배치한다. 폭에 들 때까지 비율을 낮춰 가며 FOLD_TRIES번까지 보고, 가장 좁은 배치를 쓴다.
-// 그래도 넓으면 표시 폭만 줄인다(docs/design/layout.md 그림 크기).
-async function foldNarrowest(model, figure, flat) {
-  let laid = flat;
+// 모형을 만들고 elkjs로 한 번 배치한다. 사람과 원통이 있으면 두 번 배치한다.
+// 처음에는 연결점 순서를 elkjs에 맡기고, 그 순서대로 몸통 범위에 연결점을 고정해 다시 배치한다.
+// 순서를 미리 정하면 선이 엇갈리고, 맡기기만 하면 연결점이 머리나 뚜껑 자리에 놓이기 때문이다.
+async function arrange(figure, sizes) {
+  const model = buildModel(figure, sizes);
+  const hasBodyPorts = [...model.nodes.values()].some((n) => isBodyShape(n) && n.ports.length);
+  if (hasBodyPorts) recordPortOrder(await engine.layout(toElk(model, figure)), model);
+  return { model, laid: await engine.layout(toElk(model, figure)) };
+}
+
+// 글자 크기를 지킨 채 표준 캔버스에 들어가고 비율도 한도 안인 배치. 높이가 캔버스 안이면 비율은 보지 않는다(그림 검사 9번과 같은 기준).
+function fitsCanvas({ width, height }) {
+  const ratio = width / height;
+  const isBalanced = ratio <= ASPECT_MAX && ratio >= 1 / ASPECT_MAX;
+  return width <= CANVAS && (isBalanced || height <= CANVAS);
+}
+
+// cost: time O((1 + FOLD_TRIES)·elk(s + e)), heap O(s + e), stack O(d)
+// vars: s = 도형 수, e = 선 수, d = 그룹 깊이, elk = elkjs 층 배치 시간
+// basis: estimate
+/**
+ * 한 줄 배치가 캔버스보다 넓을 때 글자 크기를 지키는 배치를 찾는다. 순서는 이렇다.
+ * 1. 바깥 방향을 돌린다(right는 down으로). 선이 줄 사이를 돌아오지 않아 접기보다 선이 짧다.
+ * 2. 자동 비율로 접는다. 폭에 들 때까지 비율을 낮춰 가며 FOLD_TRIES번까지 본다.
+ * 어느 것도 들지 않으면 가장 좁은 배치를 쓰고, 표시 폭만 줄인다(docs/design/layout.md 그림 크기).
+ */
+async function fitCanvas(figure, sizes, flat) {
+  let narrowest = flat;
+  const consider = (candidate) => {
+    if (candidate.laid.width < narrowest.laid.width) narrowest = candidate;
+    return fitsCanvas(candidate.laid);
+  };
+  const turned = await arrange({ ...figure, direction: TURNED[figure.direction] }, sizes);
+  if (consider(turned)) return turned;
   let aspect = values.scale['fold-aspect'];
-  for (let i = 0; i < FOLD_TRIES && laid.width > CANVAS; i++, aspect *= values.scale['fold-step']) {
-    const folded = await engine.layout(toElk(model, { ...figure, aspect }));
-    if (folded.width < laid.width) laid = folded;
+  for (let i = 0; i < FOLD_TRIES; i++, aspect *= values.scale['fold-step']) {
+    const folded = await arrange({ ...figure, aspect }, sizes);
+    if (consider(folded)) return folded;
   }
-  return laid;
+  return narrowest;
 }

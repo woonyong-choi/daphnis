@@ -1,5 +1,6 @@
 // 그림 원본을 배치 모형으로 바꾼다. 그룹 나무, 도형, 선 조각을 만든다. 선 하나는 넘는 경계마다 조각 하나가 더해진다(docs/design/layout.md).
 import { values } from '../tokens.js';
+import { orderByFlow } from './order.js';
 import { addPort, endpoint } from './ports.js';
 
 const SIZE = values.size;
@@ -22,7 +23,9 @@ export function buildModel(figure, sizes) {
   const edges = [...marks.filter((e) => e.isStart), ...figure.edges.map((e, i) => ({ ...e, index: i })), ...marks.filter((e) => !e.isStart)];
   const pieces = new Map();
   for (const edge of edges) pieces.set(edge.index, splitEdge(edge, nodes, containers));
-  return { containers, nodes, edges, pieces };
+  const model = { containers, nodes, edges, pieces };
+  orderByFlow(model);
+  return model;
 }
 
 // cost: time O(g·d), heap O(g), stack O(d)

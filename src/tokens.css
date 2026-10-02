@@ -198,6 +198,7 @@
   --scale-zoom-max: 6;
   --scale-fold-aspect: 1.6;
   --scale-fold-step: 0.75;
+  --scale-aspect-max: 3;
   --scale-zoom-step: 1.25;
 }
 @media (prefers-color-scheme: dark) {
