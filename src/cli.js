@@ -6,6 +6,7 @@ import { basename, dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildFigure } from './build.js';
 import { toDocument, toGallery, toHtml } from './html.js';
+import { migrateSource, previewDiff } from './migrate.js';
 import { FigureError, makeDiagnostic } from './source/problems.js';
 import { toSvg } from './svg.js';
 
@@ -14,8 +15,9 @@ const USAGE = [
   '  mutoscope render <file.muto ...> [--out dir] [--html] [--static] [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
   '  mutoscope check <file.muto ...> [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
   '  mutoscope gallery <dir> [--out dir] [--title "text"]',
+  '  mutoscope migrate <file.muto ...> [--write] [--json]',
 ].join('\n');
-const FLAGS = ['--html', '--static', '--strict', '--no-deprecated', '--require-data', '--require-ci', '--json'];
+const FLAGS = ['--html', '--static', '--strict', '--no-deprecated', '--require-data', '--require-ci', '--json', '--write'];
 // 진단 종류마다 글 출력의 머리말. 오류는 머리말이 없다.
 // 판 표기 줄(`mutoscope 1`). 목록 쪽 머리에서 종류 줄을 찾을 때 건너뛴다.
 const VERSION_LINE = /^\s*mutoscope\s/;
@@ -27,7 +29,7 @@ const SEVERITY_LABEL = { error: '', warning: 'warning: ', deprecated: 'deprecate
 // 명령 인자를 읽는다. 틀리면 { error }다.
 function parseArgs(argv) {
   const [command, ...rest] = argv;
-  if (!['render', 'check', 'gallery'].includes(command)) return { error: USAGE };
+  if (!['render', 'check', 'gallery', 'migrate'].includes(command)) return { error: USAGE };
   const args = { command, inputs: [], out: undefined, title: undefined, flags: new Set() };
   for (let i = 0; i < rest.length; i++) {
     const arg = rest[i];
@@ -40,6 +42,7 @@ function parseArgs(argv) {
     else args.inputs.push(arg);
   }
   if (!args.inputs.length) return { error: USAGE };
+  if (args.flags.has('write') && command !== 'migrate') return { error: `--write is only for migrate\n${USAGE}` };
   return args;
 }
 
@@ -54,7 +57,7 @@ async function main(argv) {
   }
   if (args.command === 'gallery') return writeGallery(args);
   let failed = false;
-  for (const input of args.inputs) failed = !(await processFile(input, args)) || failed;
+  for (const input of args.inputs) failed = !(args.command === 'migrate' ? migrateFile(input, args) : await processFile(input, args)) || failed;
   return failed ? 1 : 0;
 }
 
@@ -87,6 +90,34 @@ async function processFile(input, args) {
   mkdirSync(folder, { recursive: true });
   writeOutput(join(folder, `${name}.svg`), await toSvg(result, { isStatic: args.flags.has('static'), name }), json);
   if (args.flags.has('html')) writeOutput(join(folder, `${name}.html`), await toHtml(result, name), json);
+  return true;
+}
+
+// cost: time O(n + s), heap O(n), stack O(1), io 2
+// vars: n = 원본 글자 수, s = 문장 수
+// basis: estimate
+// 원본 하나의 옛 형식을 고친다. 기본은 바뀔 줄을 미리 보여 주기만 하고, --write일 때만 파일을 쓴다.
+// 원본에 오류가 있거나 고친 글에 진단이 남으면 아무것도 쓰지 않고 그 진단을 알린다.
+function migrateFile(input, args) {
+  const json = args.flags.has('json');
+  let source;
+  try {
+    source = readFileSync(input, 'utf8');
+  } catch (error) {
+    report(input, [makeDiagnostic('error', 0, `cannot read the file: ${error.code ?? error.message}`, { code: 'io' })], json);
+    return false;
+  }
+  const result = migrateSource(source);
+  if (result.errors) {
+    report(input, result.errors, json);
+    return false;
+  }
+  const diff = previewDiff(source, result.text, input);
+  if (!args.flags.has('write')) {
+    if (diff) process.stdout.write(`${diff}\n`);
+    return true;
+  }
+  if (diff) writeOutput(input, result.text, json);
   return true;
 }
 
