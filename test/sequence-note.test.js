@@ -65,6 +65,9 @@ test('layoutSequence_note_beside_the_arrow_keeps_one_row_height', async () => {
 
 const FIGURE = ['sequence', 'box a "호출"', 'box b "응답"', 'box c "저장"', 'step "s" "c"', '  a -> b "요청 라벨"', '  note a "메모"', '  b -> c "저장 요청"', ''].join('\n');
 
+// cost: time O(check), heap O(s), stack O(1)
+// vars: check = 그림 검사 시간, s = 도형 수
+// basis: estimate
 // 장면의 메모를 옮겨 만든 겹침을 그림 검사가 알리는지 본다. 배치가 겹침을 만들지 않으므로 장면을 직접 고친다.
 async function checkMoved(move) {
   const { figure, scene, timeline } = await buildFigure(FIGURE, { strict: true });
