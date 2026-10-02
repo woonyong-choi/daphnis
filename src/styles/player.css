@@ -19,7 +19,7 @@ html.embedded body {
   position: relative;
   max-width: var(--size-figure-canvas);
   margin: 0 auto;
-  overflow: hidden;
+  overflow: clip;
   color: var(--color-fg);
   background: var(--color-bg);
   border-radius: var(--radius-2xl);
@@ -39,22 +39,21 @@ html.embedded .fl-figure {
   overflow: auto;
 }
 
+/* 그림은 표준 캔버스 폭 아래로 줄이지 않는다. 화면 높이에 맞춰 줄이지도 않는다. 세로로 긴 그림은 페이지가 길어지고(조작 막대는 화면 아래에 붙어 따라온다),
+   화면 폭이 캔버스 폭보다 좁으면 그림 영역이 가로로 스크롤된다. 줄이면 글자가 가장 작은 글 토큰(size.text.9)보다 작아져 읽히지 않기 때문이다. */
 .fl-canvas svg {
   display: block;
   width: auto;
   height: auto;
-  max-width: 100%;
-  max-height: calc(100vh - var(--size-player-chrome));
+  min-width: var(--size-figure-canvas);
   margin: 0 auto;
-}
-
-/* iframe 높이는 목록 쪽이 문서 높이에 맞춘다. 화면 높이로 줄이면 서로 맞추다 계속 작아진다. */
-html.embedded .fl-canvas svg {
-  max-height: none;
 }
 
 /* 조작 막대와 설명 줄은 한 가운데 축을 쓴다. 위아래 안쪽 여백이 같고, 막대와 설명 사이는 한 칸(space-6)이다. */
 .fl-foot {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-raised);
   display: grid;
   gap: var(--space-6);
   justify-items: center;
@@ -171,6 +170,7 @@ html.embedded .fl-canvas svg {
 
 .fl-figure.full .fl-canvas svg {
   width: 100%;
+  min-width: 0;
   height: calc(100vh - var(--size-embedded-chrome));
   max-height: none;
   touch-action: none;

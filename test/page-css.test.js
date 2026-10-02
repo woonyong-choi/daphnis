@@ -51,10 +51,21 @@ test('displayWidthRule_containers_take_no_horizontal_padding_or_layout_border_ar
   assert.equal(declarationsOf(PLAYER, 'html.embedded body').padding, '0');
 });
 
-test('displayWidthRule_images_and_svgs_shrink_to_the_container_and_are_centered', () => {
+test('displayWidthRule_document_images_shrink_to_the_container_and_are_centered', () => {
   assert.equal(declarationsOf(DOCUMENT, 'img')['max-width'], '100%');
-  assert.equal(declarationsOf(PLAYER, '.fl-canvas svg')['max-width'], '100%');
   assert.equal(declarationsOf(PLAYER, '.fl-canvas svg').margin, '0 auto');
+});
+
+test('readableRule_player_and_cards_never_shrink_the_figure_below_the_canvas_width_or_to_the_screen_height', () => {
+  const svg = declarationsOf(PLAYER, '.fl-canvas svg');
+
+  assert.equal(svg['min-width'], 'var(--size-figure-canvas)');
+  assert.equal(svg['max-width'], undefined);
+  assert.equal(svg['max-height'], undefined);
+  assert.equal(declarationsOf(PLAYER, 'html.embedded .fl-canvas svg')['max-height'], undefined);
+  assert.equal(declarationsOf(PLAYER, '.fl-canvas').overflow, 'auto', 'a narrow screen scrolls the figure sideways');
+  assert.equal(declarationsOf(PLAYER, '.fl-foot').position, 'sticky', 'a tall figure keeps the controls reachable');
+  assert.equal(declarationsOf(DOCUMENT, 'img')['max-height'], undefined);
 });
 
 test('splitControls_theme_group_player_tabs_and_round_buttons_share_radius_and_height', () => {

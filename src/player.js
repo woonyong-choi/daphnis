@@ -22,6 +22,7 @@ function figurePlay(root, data) {
   bindControls(root, player);
   highlightOnHover(player.stage);
   figureView(root, data.metrics);
+  centerCanvas(root);
   setPlaying(player, player.clock.isPlaying);
   if (data.segs.length) {
     enterSegment(player, 0);
@@ -31,6 +32,18 @@ function figurePlay(root, data) {
     root.querySelector('.fl-foot').hidden = true;
     player.stage.svg.classList.add('chart-loop');
   }
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 화면이 표준 캔버스 폭보다 좁으면 그림 영역이 가로로 스크롤된다. 내용은 캔버스 가운데에 있으므로 가운데에서 시작하고, 화면 크기가 바뀌어도 다시 맞춘다.
+function centerCanvas(root) {
+  const canvas = root.querySelector('.fl-canvas');
+  const center = () => {
+    canvas.scrollLeft = (canvas.scrollWidth - canvas.clientWidth) / 2;
+  };
+  center();
+  addEventListener('resize', center);
 }
 
 // cost: time O(s + c), heap O(s + c), stack O(1)
