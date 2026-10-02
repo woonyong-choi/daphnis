@@ -72,7 +72,8 @@ export const tokens = freeze({
       "gray": "var(--color-tag-gray)"
     },
     "orange": {
-      "100": "var(--color-orange-100)",
+      "400": "var(--color-orange-400)",
+      "500": "var(--color-orange-500)",
       "600": "var(--color-orange-600)"
     },
     "ink": {
@@ -290,7 +291,7 @@ export const values = freeze({
       "blue": "#2b96ed",
       "purple": "#8b5cf6",
       "green": "#10b981",
-      "orange": "#f59e0b",
+      "orange": "#dc6e22",
       "gray": "#8b949e"
     },
     "accent": "#2b96ed",
@@ -315,12 +316,13 @@ export const values = freeze({
       "blue": "#2b96ed",
       "purple": "#8b5cf6",
       "green": "#10b981",
-      "orange": "#f59e0b",
+      "orange": "#dc6e22",
       "gray": "#8b949e"
     },
     "orange": {
-      "100": "#fbe1d5",
-      "600": "#e45f2b"
+      "400": "#f5a374",
+      "500": "#dc6e22",
+      "600": "#b45404"
     },
     "ink": {
       "900": "#0b0b0b",
@@ -330,7 +332,7 @@ export const values = freeze({
       "850": "#0d1117"
     },
     "series-1": "#2b96ed",
-    "series-2": "#e45f2b",
+    "series-2": "#dc6e22",
     "heat-low": "#a9cdea",
     "heat-high": "#1d5d91",
     "heat-ink": "#000000",

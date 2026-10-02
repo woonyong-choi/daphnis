@@ -59,7 +59,7 @@
       "$value": "{color.gray.0}"
     },
     "series-2": {
-      "$value": "#f08a5d"
+      "$value": "{color.orange.400}"
     },
     "grid": {
       "$value": "{color.neutral.750}"

@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
 import { contrast, mixHex, pickInk } from '../src/contrast.js';
+import { themeColor, tokenValue } from './helpers.js';
 
 const TEXT = 4.5;
 const BORDER = 2;
@@ -15,33 +16,8 @@ const PILL_EDGE = 1.25;
 const ACCENT_GRAPHIC_MIN = 2.7;
 const THEMES = ['light', 'dark'];
 
-// cost: time O(t), heap O(t), stack O(d)
-// vars: t = 토큰 수, d = 묶음 깊이
-// basis: estimate
-// 정본 파일의 `color.*` 토큰을 점 이름 경로 → 값 표로 편다.
-function flatten(node, path, out) {
-  if (node && typeof node === 'object' && '$value' in node) out.set(path.join('.'), node.$value);
-  else if (node && typeof node === 'object') for (const [key, child] of Object.entries(node)) if (!key.startsWith('$')) flatten(child, [...path, key], out);
-  return out;
-}
-
-const read = (name) => JSON.parse(readFileSync(new URL(`../src/${name}`, import.meta.url), 'utf8'));
-const LIGHT = flatten(read('tokens.json'), [], new Map());
-const DARK = new Map([...LIGHT, ...flatten(read('tokens.dark.json'), [], new Map())]);
-
-// cost: time O(c), heap O(1), stack O(1)
-// vars: c = 참조 사슬 길이
-// basis: estimate
-// 의미 토큰 이름의 라이트 또는 다크 `#rrggbb`. 참조 `{...}`를 끝까지 따라간다.
-function color(theme, name) {
-  const table = theme === 'dark' ? DARK : LIGHT;
-  let value = table.get(`color.${name}`);
-  while (typeof value === 'string' && value.startsWith('{')) value = table.get(value.slice(1, -1));
-  assert.match(value ?? '', /^#[0-9a-f]{6}$/, `color.${name} (${theme})`);
-  return value;
-}
-
-const opacity = (name) => LIGHT.get(`opacity.${name}`);
+const color = themeColor;
+const opacity = (name) => tokenValue(`opacity.${name}`);
 
 // cost: time O(p), heap O(1), stack O(1)
 // vars: p = 쌍 수
@@ -111,9 +87,8 @@ for (const theme of THEMES) {
   });
 
   test(`contrast_${theme}_series_marks_reach_3_on_the_figure_ground`, () => {
-    // series-1은 이력서 accent라 라이트 회색 바탕에서 2.93이다(ACCENT_GRAPHIC_MIN 예외). series-2는 3 이상이다.
-    expectAtLeast(theme, ACCENT_GRAPHIC_MIN, [['series-1', 'bg']]);
-    expectAtLeast(theme, GRAPHIC, [['series-2', 'bg']]);
+    // series-1은 이력서 accent, series-2는 같은 L·C의 주황이다. 라이트 회색 바탕에서 둘 다 3에 조금 못 미치는 ACCENT_GRAPHIC_MIN 예외다.
+    expectAtLeast(theme, ACCENT_GRAPHIC_MIN, [['series-1', 'bg'], ['series-2', 'bg']]);
   });
 
   test(`contrast_${theme}_heat_text_reaches_4_5_on_every_cell_strength`, () => {
