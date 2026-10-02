@@ -107,7 +107,7 @@ async function writeGallery(args) {
     const input = join(folder, file);
     const ok = await processFile(input, { ...args, command: 'render', out, flags: new Set(['html']) });
     failed = !ok || failed;
-    if (ok) figures.push({ name: file.replace(/\.muto$/, ''), title: describe(readFileSync(input, 'utf8')), href: relative(out, join(out, file.replace(/\.muto$/, ''))) });
+    if (ok) figures.push({ name: file.replace(/\.muto$/, ''), ...describe(readFileSync(input, 'utf8')), href: relative(out, join(out, file.replace(/\.muto$/, ''))) });
   }
   const heading = args.title ?? basename(folder);
   writeOutput(join(out, 'index.html'), toGallery(figures, heading), false);
@@ -115,9 +115,15 @@ async function writeGallery(args) {
   return failed ? 1 : 0;
 }
 
-// 원본의 title 줄, 없으면 첫 주석 줄을 목록 쪽 설명으로 쓴다.
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = 원본 글자 수
+// basis: estimate
+// 목록 쪽 머리에 쓸 값. title은 원본의 title 줄(없으면 첫 주석 줄), kind는 첫 줄의 종류(`flow`, `chart bar`면 `bar`), isChart는 그림 안에 제목이 그려지는 차트인지다.
 function describe(source) {
-  return /^title "(.*)"$/m.exec(source)?.[1] ?? /^#\s*(.+)$/m.exec(source)?.[1] ?? '';
+  const title = /^title "(.*)"$/m.exec(source)?.[1] ?? /^#\s*(.+)$/m.exec(source)?.[1] ?? '';
+  const [first, second] = source.split('\n').find((line) => line.trim() && !line.startsWith('#'))?.trim().split(/\s+/) ?? [];
+  const isChart = first === 'chart';
+  return { title, kind: isChart ? second : first, isChart };
 }
 
 // cost: time O(m), heap O(m), stack O(1), io m

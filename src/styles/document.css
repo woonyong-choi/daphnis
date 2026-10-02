@@ -47,10 +47,18 @@ code {
   font-family: var(--font-mono);
 }
 
-/* 예제 이름은 제목이 아니라 제목 옆 작은 회색 꼬리표다. */
+/* 파일 이름은 코드 글꼴의 보통 글자이고, 종류는 그 옆 작은 회색 꼬리표다. 제목이 앞에 있으면 제목과 간격을 둔다. */
 .name {
+  font-size: var(--size-text-13);
+}
+
+.name:not(:first-child) {
   margin-left: var(--space-3);
-  font: var(--size-text-11) var(--font-sans);
+}
+
+.kind {
+  margin-left: var(--space-3);
+  font-size: var(--size-text-11);
   color: var(--color-muted);
 }
 

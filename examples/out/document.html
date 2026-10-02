@@ -352,10 +352,18 @@ code {
   font-family: var(--font-mono);
 }
 
-/* 예제 이름은 제목이 아니라 제목 옆 작은 회색 꼬리표다. */
+/* 파일 이름은 코드 글꼴의 보통 글자이고, 종류는 그 옆 작은 회색 꼬리표다. 제목이 앞에 있으면 제목과 간격을 둔다. */
 .name {
+  font-size: var(--size-text-13);
+}
+
+.name:not(:first-child) {
   margin-left: var(--space-3);
-  font: var(--size-text-11) var(--font-sans);
+}
+
+.kind {
+  margin-left: var(--space-3);
+  font-size: var(--size-text-11);
   color: var(--color-muted);
 }
 
@@ -415,27 +423,27 @@ addEventListener('DOMContentLoaded', () => {
 <article>
 <h1>예제</h1>
 <p>문서에 넣은 모습 그대로 보는 미리보기다. 그림은 움직이는 SVG 파일을 img로 넣은 것이라 회색 판이 흰 문서 위에서 그림 경계를 만든다.</p>
-<h2>장기 기억 정확도<span class="name">bar</span></h2>
+<h2><code class="name">bar.muto</code><span class="kind">bar</span></h2>
 <p class="figure"><img src="bar.svg" alt="장기 기억 정확도"></p>
-<h2>응답 지연 분포<span class="name">box</span></h2>
+<h2><code class="name">box.muto</code><span class="kind">box</span></h2>
 <p class="figure"><img src="box.svg" alt="응답 지연 분포"></p>
-<h2>작업당 토큰<span class="name">dumbbell</span></h2>
+<h2><code class="name">dumbbell.muto</code><span class="kind">dumbbell</span></h2>
 <p class="figure"><img src="dumbbell.svg" alt="작업당 토큰"></p>
-<h2>판단 교차표<span class="name">heatmap</span></h2>
+<h2><code class="name">heatmap.muto</code><span class="kind">heatmap</span></h2>
 <p class="figure"><img src="heatmap.svg" alt="판단 교차표"></p>
-<h2>주차별 재시도 비율<span class="name">line</span></h2>
+<h2><code class="name">line.muto</code><span class="kind">line</span></h2>
 <p class="figure"><img src="line.svg" alt="주차별 재시도 비율"></p>
-<h2>대화에서 기억 그래프 키우기<span class="name">memory</span></h2>
+<h2>대화에서 기억 그래프 키우기<code class="name">memory.muto</code><span class="kind">flow</span></h2>
 <p class="figure"><img src="memory.svg" alt="대화에서 기억 그래프 키우기"></p>
-<h2>OAuth 인가 코드와 PKCE<span class="name">oauth</span></h2>
+<h2>OAuth 인가 코드와 PKCE<code class="name">oauth.muto</code><span class="kind">sequence</span></h2>
 <p class="figure"><img src="oauth.svg" alt="OAuth 인가 코드와 PKCE"></p>
-<h2>주문 상태<span class="name">order-state</span></h2>
+<h2>주문 상태<code class="name">order-state.muto</code><span class="kind">state</span></h2>
 <p class="figure"><img src="order-state.svg" alt="주문 상태"></p>
-<h2>orders</h2>
+<h2><code class="name">orders.muto</code><span class="kind">data</span></h2>
 <p class="figure"><img src="orders.svg" alt="orders"></p>
-<h2>Saturn 구성<span class="name">saturn</span></h2>
+<h2>Saturn 구성<code class="name">saturn.muto</code><span class="kind">flow</span></h2>
 <p class="figure"><img src="saturn.svg" alt="Saturn 구성"></p>
-<h2>수정 횟수와 비용<span class="name">scatter</span></h2>
+<h2><code class="name">scatter.muto</code><span class="kind">scatter</span></h2>
 <p class="figure"><img src="scatter.svg" alt="수정 횟수와 비용"></p>
 </article>
 </body>

@@ -94,6 +94,21 @@ test('main_gallery_writes_index_with_each_figure', () => {
   });
 });
 
+test('main_gallery_head_shows_file_name_and_kind_and_the_title_only_for_figures_without_a_drawn_title', () => {
+  withFolder((folder) => {
+    writeFileSync(join(folder, 'a.muto'), 'flow right\ntitle "흐름 제목"\nbox a "A"\n');
+    writeFileSync(join(folder, 'b.muto'), 'chart bar\ntitle "차트 제목"\nseries s "S"\nrow "r" s=1\n');
+
+    assert.equal(run(['gallery', '.', '--out', 'out'], folder).status, 0);
+
+    for (const page of ['index', 'document']) {
+      const html = readFileSync(join(folder, 'out', `${page}.html`), 'utf8');
+      assert.match(html, /<h2>흐름 제목<code class="name">a\.muto<\/code><span class="kind">flow<\/span><\/h2>/);
+      assert.match(html, /<h2><code class="name">b\.muto<\/code><span class="kind">bar<\/span><\/h2>/);
+    }
+  });
+});
+
 test('main_gallery_has_theme_buttons_and_applies_color_scheme_to_root', () => {
   withFolder((folder) => {
     writeFileSync(join(folder, 'a.muto'), 'flow right\nbox a "A"\n');

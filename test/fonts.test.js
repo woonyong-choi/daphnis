@@ -84,12 +84,24 @@ test('embedFonts_body_text_splits_inter_and_noto_pieces', async () => {
 
 test('pages_use_inter_and_noto_chain_and_name_tag', async () => {
   const { toDocument, toGallery } = await import('../src/html.js');
-  const figures = [{ name: 'bar', title: '막대 차트', href: 'bar' }];
+  const figures = [{ name: 'bar', title: '막대 차트', kind: 'bar', isChart: true, href: 'bar' }];
   for (const page of [toDocument(figures, '예제'), toGallery(figures, '예제')]) {
     assert.match(page, /--font-sans: [^;]*Inter[^;]*Noto Sans KR/);
     assert.match(page, /font-family: var\(--font-sans\)/);
     assert.doesNotMatch(page, /h2 \{[^}]*font-mono/);
-    assert.match(page, /<h2>막대 차트<span class="name">bar<\/span><\/h2>/);
+    assert.match(page, /<h2><code class="name">bar\.muto<\/code><span class="kind">bar<\/span><\/h2>/);
+  }
+});
+
+test('pageHead_repeats_the_figure_title_only_when_the_figure_does_not_draw_one', async () => {
+  const { toDocument, toGallery } = await import('../src/html.js');
+  const figures = [
+    { name: 'bar', title: '막대 차트', kind: 'bar', isChart: true, href: 'bar' },
+    { name: 'memory', title: '기억 그래프', kind: 'flow', isChart: false, href: 'memory' },
+  ];
+  for (const page of [toDocument(figures, '예제'), toGallery(figures, '예제')]) {
+    assert.doesNotMatch(page, /<h2>[^<]*막대 차트/);
+    assert.match(page, /<h2>기억 그래프<code class="name">memory\.muto<\/code><span class="kind">flow<\/span><\/h2>/);
   }
 });
 
