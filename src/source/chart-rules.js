@@ -21,6 +21,7 @@ export function checkChart(figure, problems) {
   if (chart.series.length < low || chart.series.length > high) {
     problems.error(chart.series[high]?.line ?? figure.line, `a ${chartType} chart takes ${low === high ? low : `${low} to ${high}`} series. Found ${chart.series.length}`);
   }
+  if (checkSeriesRoles(figure, problems)) orderSeriesByRole(figure);
   if (chart.missing !== undefined && chartType !== 'bar') problems.error(figure.line, 'missing is only for bar charts');
   if (chartType === 'bar' && chart.scale === 'log') problems.error(figure.line, 'a bar chart starts at 0, so scale log is not allowed');
   if (chartType === 'heatmap' && (chart.scaleLine !== undefined || chart.rules.length)) problems.error(chart.scaleLine ?? chart.rules[0].line, 'a heatmap has no value axis. Remove scale and rule');
@@ -34,6 +35,41 @@ export function checkChart(figure, problems) {
   }
   checkChartTimeline(figure, problems);
   checkAxisUnits(figure, problems);
+}
+
+// cost: time O(s), heap O(1), stack O(1)
+// vars: s = 계열 수
+// basis: estimate
+// 계열 역할: 하나면 main(role 생략 가능), 둘이면 main 하나와 compare 하나. 맞으면 true다.
+function checkSeriesRoles(figure, problems) {
+  const { series } = figure.chart;
+  if (series.length === 1) {
+    if (series[0].role !== 'compare') return true;
+    problems.error(series[0].line, 'a chart with one series shows it as main. Use role=main or remove role');
+    return false;
+  }
+  if (series.length !== 2) return true;
+  const missing = series.find((s) => s.role === undefined);
+  if (missing) {
+    problems.error(missing.line, `write role=main or role=compare on both series of a two-series chart. "${missing.id}" has no role`);
+    return false;
+  }
+  if (series.filter((s) => s.role === 'main').length !== 1) {
+    problems.error(series[1].line, `two series need one role=main and one role=compare. Found ${series.map((s) => `${s.id} role=${s.role}`).join(', ')}`);
+    return false;
+  }
+  return true;
+}
+
+// cost: time O(s log s), heap O(s), stack O(1)
+// vars: s = 계열 수
+// basis: estimate
+// 계열을 보이는 순서로 세운다. 범례, 막대, 점 이름 칸은 main이 먼저다. 덤벨은 화살표가 compare에서 main으로 가서 compare가 먼저다(범례는 그리는 쪽이 main 먼저로 다시 세운다).
+function orderSeriesByRole(figure) {
+  const { series } = figure.chart;
+  for (const s of series) s.role ??= 'main';
+  const first = figure.chartType === 'dumbbell' ? 'compare' : 'main';
+  series.sort((a, b) => Number(b.role === first) - Number(a.role === first));
 }
 
 // 값 축 종류. 히트맵은 값 축이 없다.
@@ -153,7 +189,8 @@ function checkChartTimeline(figure, problems) {
         else if (!ids.includes(id)) problems.error(beat.line, unknownName('series', id, ids));
         else if (revealed.includes(id)) problems.error(beat.line, `series "${id}" is already revealed`);
         else revealed.push(id);
-        if (chartType === 'dumbbell' && id === ids[1] && !revealed.includes(ids[0])) problems.error(beat.line, `reveal "${ids[0]}" before "${ids[1]}". An arrow starts from the first series`);
+        if (chartType === 'dumbbell' && id === ids[1] && !revealed.includes(ids[0])) problems.error(beat.line, `reveal "${ids[0]}" before "${ids[1]}". The arrow starts from the compare series`);
+        if (['bar', 'line'].includes(chartType) && id === ids[1] && !revealed.includes(ids[0])) problems.error(beat.line, `reveal "${ids[0]}" before "${ids[1]}". The main series comes first`);
       }
       for (const target of beat.chartLight) checkChartLightShape(target, chartType, problems);
     }

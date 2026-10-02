@@ -92,7 +92,7 @@ test('toSvg_every_chart_type_is_canvas_wide_and_inside_its_viewbox', async () =>
     heatmap: 'chart heatmap\ncell "a" "x" 10\ncell "a" "y" 5',
     scatter: 'chart scatter\nx "가(%)"\ny "나(%)"\npoint "p" x=1 y=2\npoint "q" x=3 y=1',
     line: 'chart line\nx "주차"\ny "점수(%)"\nseries a "A"\npoint x=1 a=1\npoint x=2 a=2',
-    dumbbell: 'chart dumbbell\nx "값(%)"\nseries a "전"\nseries b "후"\nrow "항목" a=1 b=3',
+    dumbbell: 'chart dumbbell\nx "값(%)"\nseries a "전" role=compare\nseries b "후" role=main\nrow "항목" a=1 b=3',
   };
   for (const [type, source] of Object.entries(sources)) {
     const result = await buildFigure(source);

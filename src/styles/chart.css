@@ -160,13 +160,13 @@
 
 .fl .chart-before {
   fill: var(--color-bg);
-  stroke: var(--color-data-main);
+  stroke: var(--color-data-compare);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-arrow,
 .fl .chart-link {
-  stroke: var(--color-data-compare);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-strong);
 }
 

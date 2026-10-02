@@ -21,11 +21,11 @@ export const STYLES = Object.freeze({
   chart: readStyle('./styles/chart.css'),
 });
 
-/** 화살촉. 화살촉은 평소(`fl-arrow`), 밝힌 선(`fl-arrow-on`), 덤벨 둘째 계열(`fl-arrow-second`) 세 가지다. */
+/** 화살촉. 화살촉은 평소(`fl-arrow`), 밝힌 선(`fl-arrow-on`), 덤벨 main 계열(`fl-arrow-main`) 세 가지다. */
 export const DEFS =
   drawArrowMarker('fl-arrow', tokens.color.muted, values.size.marker) +
   drawArrowMarker('fl-arrow-on', tokens.color.state.active, values.size['marker-on']) +
-  drawArrowMarker('fl-arrow-second', tokens.color.data.compare, values.size['marker-on']);
+  drawArrowMarker('fl-arrow-main', tokens.color.data.main, values.size['marker-on']);
 
 
 // 화살촉 모양은 viewBox 10 안의 삼각형 좌표다. 크기는 markerWidth로 정한다.

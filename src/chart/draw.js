@@ -33,8 +33,13 @@ const HEAT_HIGH = values.color.data['heat-high'];
 // 칸 안 값 글자 후보. 칸마다 대비가 큰 쪽을 빌드 때 고른다. 다크는 두 후보가 같은 밝은 색이고 칸 색 범위가 그 글자와 4.5 이상이 되게 정했다(테스트가 모든 강도를 잰다).
 const HEAT_INK = values.color.data['heat-ink'];
 const HEAT_INK_ON = values.color.data['heat-ink-on'];
-const SERIES_COLOR = [tokens.color.data.main, tokens.color.data.compare];
+const ROLE_COLOR = { main: tokens.color.data.main, compare: tokens.color.data.compare };
 const REVEAL = curveOf('reveal');
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 계열 번호 i의 색. 계열이 없는 차트(산점도 점)는 main 색이다.
+const seriesColor = (chart, i) => ROLE_COLOR[chart.series[i]?.role ?? 'main'];
 
 // cost: time O(r·s + t), heap O(out), stack O(1)
 // vars: r = 행 수, s = 계열 수, t = 눈금 수, out = 만든 SVG 글자 수
@@ -98,6 +103,14 @@ function labelFit(name, line) {
   return { text: name, width: measure(name, TEXT['13']), room: LABEL_ROOM, line, what: 'item name' };
 }
 
+// cost: time O(s log s), heap O(s), stack O(1)
+// vars: s = 계열 수
+// basis: estimate
+// 범례 순서: main이 먼저다. 계열 번호는 그대로 둬 재생이 같은 번호로 보임을 건다.
+function legendOrder(series) {
+  return series.map((s, i) => ({ s, i })).sort((a, b) => Number(b.s.role === 'main') - Number(a.s.role === 'main'));
+}
+
 // cost: time O(s·n), heap O(out), stack O(1)
 // vars: s = 계열 수, n = 계열 이름 글자 수, out = 만든 SVG 글자 수
 // basis: estimate
@@ -115,8 +128,8 @@ function drawHeader(figure) {
   }
   if (figure.chart.series.length) {
     let x = PAD;
-    figure.chart.series.forEach((s, i) => {
-      parts.push(`<g class="cs-${i}"><rect x="${x}" y="${r(y + SPACE['2'])}" width="${BAR}" height="${BAR}" rx="${values.radius.sm}" fill="${SERIES_COLOR[i]}"/>` + `<text x="${x + BAR + SPACE['3']}" y="${r(y + BAR)}" class="chart-legend">${renderRich(s.label)}</text></g>`);
+    legendOrder(figure.chart.series).forEach(({ s, i }) => {
+      parts.push(`<g class="cs-${i}"><rect x="${x}" y="${r(y + SPACE['2'])}" width="${BAR}" height="${BAR}" rx="${values.radius.sm}" fill="${seriesColor(figure.chart, i)}"/>` + `<text x="${x + BAR + SPACE['3']}" y="${r(y + BAR)}" class="chart-legend">${renderRich(s.label)}</text></g>`);
       x += BAR + SPACE['3'] + measure(s.label, TEXT['12']) + SPACE['9'];
     });
     y += BAR + SPACE['6'];
@@ -160,7 +173,7 @@ function drawBars(figure, top) {
       const [low, high] = [row.values[`${s.id}.low`], row.values[`${s.id}.high`]];
       const reach = high !== undefined ? scale.at(high) : end;
       const ci = high !== undefined ? `<line x1="${r(scale.at(low))}" x2="${r(reach)}" y1="${r(cy)}" y2="${r(cy)}" class="chart-ci late"/>` : '';
-      parts.push(`<g class="cr-${k}"><g class="cs-${i}"><rect x="${r(plotX)}" y="${r(by)}" width="${r(Math.max(SPACE['1'], end - plotX))}" height="${BAR}" rx="${values.radius.sm}" fill="${SERIES_COLOR[i]}" class="grow"/>${ci}</g></g>`);
+      parts.push(`<g class="cr-${k}"><g class="cs-${i}"><rect x="${r(plotX)}" y="${r(by)}" width="${r(Math.max(SPACE['1'], end - plotX))}" height="${BAR}" rx="${values.radius.sm}" fill="${seriesColor(chart, i)}" class="grow"/>${ci}</g></g>`);
       valueTexts.push(`<g class="cr-${k}"><g class="cs-${i}"><text x="${r(Math.max(end, reach) + SPACE['3'])}" y="${r(centerBaseline(cy, TEXT['11']))}" class="chart-value${i === 0 ? ' ours' : ''} late">${formatNumber(v)}</text></g></g>`);
     });
     y += groupH + SPACE['11'];
@@ -220,7 +233,7 @@ function drawDumbbells(figure, top) {
     const base = r(centerBaseline(cy, TEXT['11']));
     const range = (s, i) => {
       const [low, high] = [row.values[`${s.id}.low`], row.values[`${s.id}.high`]];
-      return low === undefined ? '' : `<line x1="${r(scale.at(low))}" x2="${r(scale.at(high))}" y1="${r(cy)}" y2="${r(cy)}" stroke="${SERIES_COLOR[i]}" stroke-width="${RANGE}" class="chart-range pop"/>`;
+      return low === undefined ? '' : `<line x1="${r(scale.at(low))}" x2="${r(scale.at(high))}" y1="${r(cy)}" y2="${r(cy)}" stroke="${seriesColor(chart, i)}" stroke-width="${RANGE}" class="chart-range pop"/>`;
     };
     // 값 글자는 두 점과 두 범위를 모두 덮는 구간의 바깥에 둔다. 한 점의 범위가 다른 점의 글자 자리까지 뻗어도 겹치지 않게 하기 위해서다.
     const ends = [first, second].flatMap((s, i) => {
@@ -231,8 +244,8 @@ function drawDumbbells(figure, top) {
     const gap = Math.abs(x2 - x1) - DOT - SPACE['1'];
     const hasArrow = gap >= ARROW_MIN;
     const arrow = hasArrow
-      ? `<line x1="${r(x1 + dir * (DOT + SPACE['1']))}" y1="${r(cy)}" x2="${r(x2)}" y2="${r(cy)}" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-second)"/>`
-      : `<circle cx="${r(x2)}" cy="${r(cy)}" r="${DOT}" fill="${SERIES_COLOR[1]}" class="chart-after pop"/>`;
+      ? `<line x1="${r(x1 + dir * (DOT + SPACE['1']))}" y1="${r(cy)}" x2="${r(x2)}" y2="${r(cy)}" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-main)"/>`
+      : `<circle cx="${r(x2)}" cy="${r(cy)}" r="${DOT}" fill="${seriesColor(chart, 1)}" class="chart-after pop"/>`;
     const [firstX, secondX] = x1 < x2 ? [left, right] : [right, left];
     const side = (x) => (x === left ? 'end' : 'start');
     parts.push(
@@ -318,7 +331,7 @@ function drawScatter(figure, top) {
     const i = seriesIndex(p);
     fits.push({ text: p.label, width: nameW, room: Math.max(right - x, x - PAD) - offset, line: p.line, what: 'point name' });
     const name = `<text x="${r(toLeft ? x - offset : x + offset)}" y="${r(centerBaseline(y, TEXT['11']))}" class="chart-name late${toLeft ? ' end' : ''}">${renderRich(p.label)}</text>`;
-    parts.push(`<g class="cr-${k}"><g class="cs-${i}"><circle cx="${r(x)}" cy="${r(y)}" r="${DOT}" fill="${chart.series.length ? SERIES_COLOR[i] : SERIES_COLOR[0]}" class="pop"/>${name}</g></g>`);
+    parts.push(`<g class="cr-${k}"><g class="cs-${i}"><circle cx="${r(x)}" cy="${r(y)}" r="${DOT}" fill="${seriesColor(chart, i)}" class="pop"/>${name}</g></g>`);
   });
   parts.push(drawRules(chart.rules, sy, sx.at(sx.ticks[0]), sx.at(sx.ticks.at(-1)), 'y'));
   return { svg: parts.join('\n'), bottom: plotTop + SIZE['chart-plot-h'] + TEXT['11'] * 2 + SPACE['12'], rowKeys: chart.rows.map((p) => p.label), fits };
@@ -352,15 +365,15 @@ function drawLine(figure, top) {
   const order = new Map(points.map((p, k) => [p, k]));
   const ats = chart.series.map((s) => arrivals(points.map((p) => [sx.at(p.values.x), sy.at(p.values[s.id])])));
   chart.series.forEach((s, i) => {
-    const bands = intervalRuns(points, s.id).map((run) => (run.length > 1 ? bandPath(run, s.id, sx, sy, i) : pointInterval(verticalInterval(sx.at(run[0].values.x), sy.at(run[0].values[`${s.id}.low`]), sy.at(run[0].values[`${s.id}.high`])), ats[i][order.get(run[0])])));
+    const bands = intervalRuns(points, s.id).map((run) => (run.length > 1 ? bandPath(run, s.id, sx, sy, seriesColor(chart, i)) : pointInterval(verticalInterval(sx.at(run[0].values.x), sy.at(run[0].values[`${s.id}.low`]), sy.at(run[0].values[`${s.id}.high`])), ats[i][order.get(run[0])])));
     if (bands.length) parts.push(`<g class="cs-${i}">${bands.join('')}</g>`);
   });
   chart.series.forEach((s, i) => {
     const d = points.map((p, k) => `${k ? 'L' : 'M'} ${r(sx.at(p.values.x))} ${r(sy.at(p.values[s.id]))}`).join(' ');
-    parts.push(`<g class="cs-${i}"><path d="${d}" fill="none" stroke="${SERIES_COLOR[i]}" stroke-width="${values.border.strong}" pathLength="1" class="draw"/></g>`);
+    parts.push(`<g class="cs-${i}"><path d="${d}" fill="none" stroke="${seriesColor(chart, i)}" stroke-width="${values.border.strong}" pathLength="1" class="draw"/></g>`);
   });
   chart.rows.forEach((p, k) => {
-    for (const [i, s] of chart.series.entries()) parts.push(`<g class="cr-${k}"><g class="cs-${i}"><circle cx="${r(sx.at(p.values.x))}" cy="${r(sy.at(p.values[s.id]))}" r="${DOT}" fill="${SERIES_COLOR[i]}" class="dot" data-at="${ats[i][order.get(p)]}"/></g></g>`);
+    for (const [i, s] of chart.series.entries()) parts.push(`<g class="cr-${k}"><g class="cs-${i}"><circle cx="${r(sx.at(p.values.x))}" cy="${r(sy.at(p.values[s.id]))}" r="${DOT}" fill="${seriesColor(chart, i)}" class="dot" data-at="${ats[i][order.get(p)]}"/></g></g>`);
   });
   parts.push(drawRules(chart.rules, sy, sx.at(sx.ticks[0]), sx.at(sx.ticks.at(-1)), 'y'));
   return { svg: parts.join('\n'), bottom: plotTop + SIZE['chart-plot-h'] + TEXT['11'] * 2 + SPACE['12'], rowKeys: chart.rows.map((p) => `x=${p.values.x}`), dotAts: [...new Set(ats.flat())].sort((a, b) => a - b) };
@@ -400,10 +413,10 @@ function intervalRuns(points, id) {
 // vars: p = 묶음의 점 수
 // basis: estimate
 // 띠: high를 왼쪽에서 오른쪽으로, low를 오른쪽에서 왼쪽으로 이은 면. 계열이 자랄 때 왼쪽부터 드러난다(wipe).
-function bandPath(run, id, sx, sy, i) {
+function bandPath(run, id, sx, sy, color) {
   const edge = (p, key) => `${r(sx.at(p.values.x))} ${r(sy.at(p.values[`${id}.${key}`]))}`;
   const d = [...run.map((p) => edge(p, 'high')), ...[...run].reverse().map((p) => edge(p, 'low'))].map((xy, k) => `${k ? 'L' : 'M'} ${xy}`).join(' ');
-  return `<path d="${d} Z" fill="${SERIES_COLOR[i]}" class="chart-band wipe"/>`;
+  return `<path d="${d} Z" fill="${color}" class="chart-band wipe"/>`;
 }
 
 // cost: time O(1), heap O(1), stack O(1)

@@ -26,7 +26,7 @@ test('parseChart_rules_reject_values_that_cannot_be_drawn', () => {
     ['chart bar\nseries a "A"\nrow "r" a=0', /all values are 0/],
     ['chart dumbbell\nseries a "A"\nrow "r" a=1', /takes 2 series/],
     ['chart box\nrow "r" min=- q1=1 median=2 q3=3 max=4', /only for bar series/],
-    ['chart dumbbell\nseries a "A"\nseries b "B"\nrow "r" a=1 b=2\nstep "s"\n  reveal b\n  reveal a', /reveal "a" before "b"/],
+    ['chart dumbbell\nseries a "A" role=compare\nseries b "B" role=main\nrow "r" a=1 b=2\nstep "s"\n  reveal b\n  reveal a', /reveal "a" before "b"/],
   ];
   for (const [source, pattern] of cases) assert.match(errorsOf(source).join('\n'), pattern, source);
 });
@@ -86,7 +86,7 @@ test('drawChart_series_less_chart_grows_as_one_series', async () => {
 });
 
 test('drawChart_rule_outside_values_stays_inside_plot', async () => {
-  const { chart } = await buildFigure('chart dumbbell\nseries a "전"\nseries b "후"\nrule 100 "기준"\nrow "x" a=10 b=20');
+  const { chart } = await buildFigure('chart dumbbell\nseries a "전" role=compare\nseries b "후" role=main\nrule 100 "기준"\nrow "x" a=10 b=20');
   const ruleX = Number(/<line x1="([\d.]+)"[^>]*class="chart-rule"/.exec(chart.body)[1]);
 
   assert.ok(ruleX < chart.width, `${ruleX} >= ${chart.width}`);
@@ -175,7 +175,7 @@ async function bodyOf(source, options) {
 }
 
 test('drawChart_interval_is_drawn_for_bar_dumbbell_and_line', async () => {
-  const dumbbell = await bodyOf('chart dumbbell\nseries a "A"\nseries b "B"\nrow "r" a=100 a.low=80 a.high=120 b=40 b.low=30 b.high=50');
+  const dumbbell = await bodyOf('chart dumbbell\nseries a "A" role=compare\nseries b "B" role=main\nrow "r" a=100 a.low=80 a.high=120 b=40 b.low=30 b.high=50');
   const bar = await bodyOf('chart bar\nseries a "A"\nrow "r" a=5 a.low=4 a.high=6');
   const line = await bodyOf('chart line\nseries a "A"\npoint x=1 a=2 a.low=1 a.high=3\npoint x=2 a=3 a.low=2 a.high=4');
 
@@ -188,7 +188,7 @@ test('drawChart_interval_is_drawn_for_bar_dumbbell_and_line', async () => {
 test('checkChartRows_interval_order_and_pairing_are_errors_in_bar_dumbbell_and_line', async () => {
   const sources = [
     'chart bar\nseries a "A"\nrow "r" a=5 a.low=6 a.high=7',
-    'chart dumbbell\nseries a "A"\nseries b "B"\nrow "r" a=5 a.low=6 a.high=7 b=3',
+    'chart dumbbell\nseries a "A" role=compare\nseries b "B" role=main\nrow "r" a=5 a.low=6 a.high=7 b=3',
     'chart line\nseries a "A"\npoint x=1 a=2 a.low=1',
   ];
   const results = await Promise.all(sources.map(buildErrors));
@@ -197,7 +197,7 @@ test('checkChartRows_interval_order_and_pairing_are_errors_in_bar_dumbbell_and_l
 });
 
 test('buildFigure_require_ci_covers_dumbbell_and_line_but_not_scatter', async () => {
-  const sources = ['chart dumbbell\nseries a "A"\nseries b "B"\nrow "r" a=5 b=3', 'chart line\nseries a "A"\npoint x=1 a=2'];
+  const sources = ['chart dumbbell\nseries a "A" role=compare\nseries b "B" role=main\nrow "r" a=5 b=3', 'chart line\nseries a "A"\npoint x=1 a=2'];
 
   for (const source of sources) await assert.rejects(buildFigure(source, { requireCi: true }), /require-ci/, source);
   await buildFigure('chart scatter\npoint "p" x=1 y=2', { requireCi: true });
@@ -209,15 +209,15 @@ test('loadChartData_interval_keys_match_inline_rows_for_line_and_dumbbell', asyn
     await bodyOf('chart line\nseries s "S" key="new_judge"\ndata "summary.json" at "/weeks"', { baseDir: FIXTURES }),
   ];
   const [inlineDumbbell, dataDumbbell] = [
-    await bodyOf('chart dumbbell\nseries a "A" key="before"\nseries b "B" key="after"\nrow "A" a=120000 a.low=100000 a.high=140000 b=30000 b.low=25000 b.high=36000'),
-    await bodyOf('chart dumbbell\nseries a "A" key="before"\nseries b "B" key="after"\ndata "summary.json" at "/tokens"', { baseDir: FIXTURES }),
+    await bodyOf('chart dumbbell\nseries a "A" key="before" role=compare\nseries b "B" key="after" role=main\nrow "A" a=120000 a.low=100000 a.high=140000 b=30000 b.low=25000 b.high=36000'),
+    await bodyOf('chart dumbbell\nseries a "A" key="before" role=compare\nseries b "B" key="after" role=main\ndata "summary.json" at "/tokens"', { baseDir: FIXTURES }),
   ];
 
   assert.deepEqual([dataLine, dataDumbbell], [inlineLine, inlineDumbbell]);
 });
 
 test('drawDumbbells_close_values_drop_arrow_and_keep_value_text_apart', async () => {
-  const close = await bodyOf('chart dumbbell\nscale log\nseries a "A"\nseries b "B"\nrow "r" a=8000 b=9200\nrow "s" a=100000 b=1000');
+  const close = await bodyOf('chart dumbbell\nscale log\nseries a "A" role=compare\nseries b "B" role=main\nrow "r" a=8000 b=9200\nrow "s" a=100000 b=1000');
   const [near, far] = close.split('class="chart-label cr-1"');
   const textX = (svg, cls) => Number(new RegExp(`<text x="([\\d.]+)"[^>]*class="chart-value ${cls} late`).exec(svg)[1]);
 
@@ -293,12 +293,12 @@ test('drawChart_line_chart_draw_class_gets_dash_so_the_line_grows_with_the_band'
   assert.match(css, /\.fl \.draw \{\s*stroke-dasharray: 1;/);
 });
 
-const STEPPED_BAR = 'chart bar\nx "정확도(%)"\nseries a "A"\nseries b "B"\nrow "r" a=5 b=3\nstep "하나" "첫째"\n  reveal b\nstep "둘" "둘째"\n  reveal a';
+const STEPPED_BAR = 'chart bar\nx "정확도(%)"\nseries a "A" role=main\nseries b "B" role=compare\nrow "r" a=5 b=3\nstep "하나" "첫째"\n  reveal a\nstep "둘" "둘째"\n  reveal b';
 
 test('buildTimeline_bar_label_shift_follows_visible_bars_and_is_zero_when_all_shown', async () => {
   const shifts = (await buildFigure(STEPPED_BAR)).timeline.segs.map((seg) => seg.labelShifts[0]);
 
-  assert.ok(shifts[0] > 0, `only the second bar is visible: ${shifts}`);
+  assert.ok(shifts[0] < 0, `only the first (main) bar is visible: ${shifts}`);
   assert.equal(shifts.at(-1), 0);
 });
 
@@ -323,7 +323,7 @@ test('toSvg_animated_chart_moves_row_label_with_the_timeline_shift', async () =>
   const { toSvg } = await import('../src/svg.js');
   const svg = await toSvg(await buildFigure(STEPPED_BAR));
 
-  assert.match(svg, /@keyframes ls0 \{[^}]*translateY\([\d.]+px\)/);
+  assert.match(svg, /@keyframes ls0 \{[^}]*translateY\(-?[\d.]+px\)/);
   assert.match(svg, /\.fl \.cr-0 \.chart-label\.shift \{ animation: ls0 /);
 });
 
@@ -377,16 +377,16 @@ test('tokens_light_bg_is_visibly_gray_and_group_is_slightly_darker', async () =>
   assert.equal(tokens.color.node, '#ffffff');
 });
 
-const MISSING_BAR = 'chart bar\nx "정확도(%)"\nseries a "A"\nseries b "B"\nrow "r" a=5 b=3\nrow "m" a=4 b=-\nstep "하나" "첫째"\n  reveal b\nstep "둘" "둘째"\n  reveal a';
+const MISSING_BAR = 'chart bar\nx "정확도(%)"\nseries a "A" role=main\nseries b "B" role=compare\nrow "r" a=5 b=3\nrow "m" a=- b=4\nstep "하나" "첫째"\n  reveal a\nstep "둘" "둘째"\n  reveal b';
 
 test('buildTimeline_bar_label_shift_ignores_the_missing_note_slot_and_follows_it_only_when_alone', async () => {
   const shifts = (await buildFigure(MISSING_BAR)).timeline.segs.map((seg) => seg.labelShifts);
 
-  // r 행은 모든 계열이 값이 있어 기존처럼 둘째 막대 가운데로 갔다가 0으로 돌아온다.
-  assert.ok(shifts[0][0] > 0);
+  // r 행은 모든 계열이 값이 있어 첫째(main) 막대 가운데로 갔다가 0으로 돌아온다.
+  assert.ok(shifts[0][0] < 0);
   assert.equal(shifts.at(-1)[0], 0);
-  // m 행의 둘째 계열은 값이 없다. 이름은 첫째 막대 가운데에 있고, 안내 글만 보이는 단계에서만 그 글 슬롯으로 내려간다.
-  assert.ok(shifts[0][1] > 0);
+  // m 행의 첫째(main) 계열은 값이 없다. 이름은 둘째 막대 가운데에 있고, 안내 글만 보이는 단계에서만 그 글 슬롯으로 올라간다.
+  assert.ok(shifts[0][1] < 0);
   assert.equal(shifts.at(-1)[1], 0);
 });
 
@@ -396,7 +396,7 @@ test('drawChart_bar_label_of_a_row_with_a_missing_series_is_centered_on_its_only
   const labels = [...body.matchAll(/<text x="28" y="([\d.]+)" class="chart-label shift">/g)].map((m) => Number(m[1]) - 13 * 0.36);
 
   assert.equal(bars.length, 3);
-  // r 행은 두 막대 가운데(첫 막대 가운데 + 8), m 행은 하나뿐인 막대 가운데
+  // r 행은 두 막대 가운데(첫 막대 가운데 + 8), m 행은 하나뿐인 막대(둘째 슬롯) 가운데
   assert.ok(Math.abs(labels[0] - (bars[0] + 8)) < 0.2, `${labels[0]} ${bars[0]}`);
   assert.ok(Math.abs(labels[1] - bars[2]) < 0.2, `${labels[1]} ${bars[2]}`);
 });

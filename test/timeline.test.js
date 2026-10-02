@@ -36,7 +36,7 @@ test('buildTimeline_every_beat_has_positive_length', async () => {
 });
 
 test('buildTimeline_revealed_series_stay_across_steps', async () => {
-  const source = 'chart bar\nseries a "A"\nseries b "B"\nrow "r" a=1 b=2\nstep "1"\n  reveal a\nstep "2"\n  reveal b';
+  const source = 'chart bar\nseries a "A" role=main\nseries b "B" role=compare\nrow "r" a=1 b=2\nstep "1"\n  reveal a\nstep "2"\n  reveal b';
   const { timeline } = await buildFigure(source);
 
   assert.deepEqual(timeline.segs[1].series, ['a', 'b']);

@@ -29,19 +29,27 @@ export function readChartDeclaration(statement, ctx) {
   handlers[word](statement, ctx);
 }
 
+// 계열 역할 값. 의미는 docs/design/docs-integration.md의 색 역할 표다.
+const SERIES_ROLES = ['main', 'compare'];
+const SERIES_USAGE = 'write a series as: series id "name" [role=main|compare] [key="json key"]';
+
 // cost: time O(w), heap O(1), stack O(1)
 // vars: w = 낱말 수
 // basis: estimate
-// `series id "이름" [key="JSON 키"]`
+// `series id "이름" [role=main|compare] [key="JSON 키"]`
 function readSeries({ tokens, line }, { figure, problems }) {
-  const [, id, label, key, extra] = tokens;
-  const isKey = key === undefined || (key.type === 'option' && key.key === 'key' && key.valueType === 'text');
-  if (id?.type !== 'word' || label?.type !== 'text' || !isKey || extra) {
-    problems.error(line, 'write a series as: series id "name" [key="json key"]');
+  const [, id, label, ...options] = tokens;
+  const given = readSeriesOptions(options);
+  if (id?.type !== 'word' || label?.type !== 'text' || !given) {
+    problems.error(line, SERIES_USAGE);
     return;
   }
   if (!ID_PATTERN.test(id.value)) {
     problems.error(line, `"${id.value}" is not a valid series name. Use lowercase letters, digits, and "-"`);
+    return;
+  }
+  if (given.role !== undefined && !SERIES_ROLES.includes(given.role)) {
+    problems.error(line, `role is one of ${SERIES_ROLES.join(', ')}. Found "${given.role}"`);
     return;
   }
   // 선 차트 행의 `x=`는 가로 값이라 같은 이름의 계열 값과 가를 수 없다.
@@ -49,7 +57,22 @@ function readSeries({ tokens, line }, { figure, problems }) {
     problems.error(line, 'a line chart row uses "x=" for the horizontal value, so a series cannot be named "x"');
     return;
   }
-  figure.chart.series.push({ id: id.value, label: label.value, key: key?.value ?? id.value, line });
+  figure.chart.series.push({ id: id.value, label: label.value, key: given.key ?? id.value, role: given.role, line });
+}
+
+// cost: time O(o), heap O(1), stack O(1)
+// vars: o = 선택 낱말 수
+// basis: estimate
+// 계열 선택 낱말 `key="…"`와 `role=…`을 한 번씩 읽는다. 모양이 틀리면 undefined다.
+function readSeriesOptions(options) {
+  const given = {};
+  for (const t of options) {
+    const isKey = t.type === 'option' && t.key === 'key' && t.valueType === 'text';
+    const isRole = t.type === 'option' && t.key === 'role' && t.valueType === 'word';
+    if ((!isKey && !isRole) || t.key in given) return undefined;
+    given[t.key] = t.value;
+  }
+  return given;
 }
 
 // `rule 값 "라벨"`

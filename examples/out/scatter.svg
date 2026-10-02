@@ -602,13 +602,13 @@
 
 .fl .chart-before {
   fill: var(--color-bg);
-  stroke: var(--color-data-main);
+  stroke: var(--color-data-compare);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-arrow,
 .fl .chart-link {
-  stroke: var(--color-data-compare);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-strong);
 }
 
@@ -667,27 +667,27 @@
 @keyframes chart-wipe-loop { 0% { clip-path: inset(0 100% 0 0); animation-timing-function: var(--easing-reveal); } 12.86%, 100% { clip-path: inset(0 0 0 0); } }
 @keyframes chart-fade-loop { 0%, 6.43% { opacity: 0; animation-timing-function: var(--easing-reveal); } 12.86%, 100% { opacity: 1; } }
 
-@keyframes a0 { 0%,47.116% { opacity: 1 } 47.117%,99.999% { opacity: 1 } }
+@keyframes a0 { 0%,47.116% { opacity: 0 } 47.117% { opacity: 0 } 49.964%,99.999% { opacity: 1 } }
 .fl .a0 { animation: a0 7.025s infinite linear; }
 .fl .cs-0 { animation: a0 7.025s infinite linear; }
-@keyframes g0 { 0%,0% { transform: scaleX(0); animation-timing-function: var(--easing-reveal) } 12.811%,100% { transform: none } }
+@keyframes g0 { 0%,47.117% { transform: scaleX(0); animation-timing-function: var(--easing-reveal) } 59.929%,100% { transform: none } }
 .fl .cs-0 .grow, .fl .cs-0.grow { animation: g0 7.025s infinite; }
-@keyframes d0 { 0%,0% { stroke-dashoffset: 1; animation-timing-function: var(--easing-reveal) } 12.811%,100% { stroke-dashoffset: 0 } }
+@keyframes d0 { 0%,47.117% { stroke-dashoffset: 1; animation-timing-function: var(--easing-reveal) } 59.929%,100% { stroke-dashoffset: 0 } }
 .fl .cs-0 .draw, .fl .cs-0.draw { animation: d0 7.025s infinite; }
-@keyframes w0 { 0%,0% { clip-path: inset(0 100% 0 0); animation-timing-function: var(--easing-reveal) } 12.811%,100% { clip-path: inset(0 0 0 0) } }
+@keyframes w0 { 0%,47.117% { clip-path: inset(0 100% 0 0); animation-timing-function: var(--easing-reveal) } 59.929%,100% { clip-path: inset(0 0 0 0) } }
 .fl .cs-0 .wipe, .fl .cs-0.wipe { animation: w0 7.025s infinite; }
-@keyframes f0 { 0%,6.406% { opacity: 0; animation-timing-function: var(--easing-reveal) } 12.811%,100% { opacity: 1 } }
+@keyframes f0 { 0%,53.523% { opacity: 0; animation-timing-function: var(--easing-reveal) } 59.929%,100% { opacity: 1 } }
 .fl .cs-0 .late, .fl .cs-0 .pop, .fl .cs-0.pop { animation: f0 7.025s infinite; }
-@keyframes a1 { 0%,47.116% { opacity: 0 } 47.117% { opacity: 0 } 49.964%,99.999% { opacity: 1 } }
+@keyframes a1 { 0%,47.116% { opacity: 1 } 47.117%,99.999% { opacity: 1 } }
 .fl .a1 { animation: a1 7.025s infinite linear; }
 .fl .cs-1 { animation: a1 7.025s infinite linear; }
-@keyframes g1 { 0%,47.117% { transform: scaleX(0); animation-timing-function: var(--easing-reveal) } 59.929%,100% { transform: none } }
+@keyframes g1 { 0%,0% { transform: scaleX(0); animation-timing-function: var(--easing-reveal) } 12.811%,100% { transform: none } }
 .fl .cs-1 .grow, .fl .cs-1.grow { animation: g1 7.025s infinite; }
-@keyframes d1 { 0%,47.117% { stroke-dashoffset: 1; animation-timing-function: var(--easing-reveal) } 59.929%,100% { stroke-dashoffset: 0 } }
+@keyframes d1 { 0%,0% { stroke-dashoffset: 1; animation-timing-function: var(--easing-reveal) } 12.811%,100% { stroke-dashoffset: 0 } }
 .fl .cs-1 .draw, .fl .cs-1.draw { animation: d1 7.025s infinite; }
-@keyframes w1 { 0%,47.117% { clip-path: inset(0 100% 0 0); animation-timing-function: var(--easing-reveal) } 59.929%,100% { clip-path: inset(0 0 0 0) } }
+@keyframes w1 { 0%,0% { clip-path: inset(0 100% 0 0); animation-timing-function: var(--easing-reveal) } 12.811%,100% { clip-path: inset(0 0 0 0) } }
 .fl .cs-1 .wipe, .fl .cs-1.wipe { animation: w1 7.025s infinite; }
-@keyframes f1 { 0%,53.523% { opacity: 0; animation-timing-function: var(--easing-reveal) } 59.929%,100% { opacity: 1 } }
+@keyframes f1 { 0%,6.406% { opacity: 0; animation-timing-function: var(--easing-reveal) } 12.811%,100% { opacity: 1 } }
 .fl .cs-1 .late, .fl .cs-1 .pop, .fl .cs-1.pop { animation: f1 7.025s infinite; }
 @keyframes a2 { 0%,47.116% { opacity: 1 } 47.117%,99.999% { opacity: 1 } }
 .fl .a2 { animation: a2 7.025s infinite linear; }
@@ -700,20 +700,20 @@
 @keyframes a4 { 0%,49.963% { opacity: 0 } 49.964% { opacity: 0 } 52.811%,99.999% { opacity: 1 } }
 .fl .a4 { animation: a4 7.025s infinite linear; }
 </style>
-<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-compare)"/></marker></defs>
+<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-main)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="545" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
 <g transform="translate(0 0)">
 <text x="28" y="43" class="chart-title">수정 횟수와 비용</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 작업당 평균, 화살표는 기억 없음에서 기억 붙임</text>
-<g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-data-main)"/><text x="46" y="85" class="chart-legend">기억 없음</text></g>
-<g class="cs-1"><rect x="111.535" y="77" width="12" height="12" rx="4" fill="var(--color-data-compare)"/><text x="129.535" y="85" class="chart-legend">기억 붙임</text></g>
+<g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-data-main)"/><text x="46" y="85" class="chart-legend">기억 붙임</text></g>
+<g class="cs-1"><rect x="111.535" y="77" width="12" height="12" rx="4" fill="var(--color-data-compare)"/><text x="129.535" y="85" class="chart-legend">기억 없음</text></g>
 <line x1="76" x2="923.4" y1="396" y2="396" class="chart-grid"/><text x="70" y="400" class="chart-tick end">0</text><line x1="76" x2="923.4" y1="309.3" y2="309.3" class="chart-grid"/><text x="70" y="313.3" class="chart-tick end">0.5</text><line x1="76" x2="923.4" y1="222.7" y2="222.7" class="chart-grid"/><text x="70" y="226.6" class="chart-tick end">1</text><line x1="76" x2="923.4" y1="136" y2="136" class="chart-grid"/><text x="70" y="140" class="chart-tick end">1.5</text><text x="76" y="413" class="chart-tick">0</text><text x="358.5" y="413" class="chart-tick">0.5</text><text x="640.9" y="413" class="chart-tick">1</text><text x="923.4" y="413" class="chart-tick">1.5</text><text x="923.4" y="434" class="chart-unit">작업당 비용(달러)</text><text x="28" y="120" class="chart-unit start">작업당 수정 횟수(회)</text>
-<g class="cr-0"><g class="cs-1"><line x1="548.3" y1="168" x2="296.9" y2="305" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
-<g class="cr-2"><g class="cs-1"><line x1="745.3" y1="190.6" x2="560.4" y2="247.4" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
-<g class="cr-0"><g class="cs-0"><circle cx="556.2" cy="163.7" r="5" fill="var(--color-data-main)" class="pop"/><text x="567.2" y="167.7" class="chart-name late">A 없음</text></g></g>
-<g class="cr-1"><g class="cs-1"><circle cx="279.4" cy="314.5" r="5" fill="var(--color-data-compare)" class="pop"/><text x="290.4" y="318.5" class="chart-name late">A 붙음</text></g></g>
-<g class="cr-2"><g class="cs-0"><circle cx="753.9" cy="188" r="5" fill="var(--color-data-main)" class="pop"/><text x="764.9" y="192" class="chart-name late">B 없음</text></g></g>
-<g class="cr-3"><g class="cs-1"><circle cx="527.9" cy="257.3" r="5" fill="var(--color-data-compare)" class="pop"/><text x="538.9" y="261.3" class="chart-name late">B 붙음</text></g></g>
+<g class="cr-0"><g class="cs-0"><line x1="548.3" y1="168" x2="296.9" y2="305" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
+<g class="cr-2"><g class="cs-0"><line x1="745.3" y1="190.6" x2="560.4" y2="247.4" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
+<g class="cr-0"><g class="cs-1"><circle cx="556.2" cy="163.7" r="5" fill="var(--color-data-compare)" class="pop"/><text x="567.2" y="167.7" class="chart-name late">A 없음</text></g></g>
+<g class="cr-1"><g class="cs-0"><circle cx="279.4" cy="314.5" r="5" fill="var(--color-data-main)" class="pop"/><text x="290.4" y="318.5" class="chart-name late">A 붙음</text></g></g>
+<g class="cr-2"><g class="cs-1"><circle cx="753.9" cy="188" r="5" fill="var(--color-data-compare)" class="pop"/><text x="764.9" y="192" class="chart-name late">B 없음</text></g></g>
+<g class="cr-3"><g class="cs-0"><circle cx="527.9" cy="257.3" r="5" fill="var(--color-data-main)" class="pop"/><text x="538.9" y="261.3" class="chart-name late">B 붙음</text></g></g>
 
 </g>
 <text x="480" y="488" opacity="0" class="steplabel a3">기억 없음</text>
