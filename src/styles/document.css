@@ -64,34 +64,3 @@ img {
   max-width: 100%;
   height: auto;
 }
-
-.theme {
-  display: flex;
-  box-sizing: border-box;
-  min-height: var(--size-control);
-  padding: var(--space-1-5);
-  background: var(--color-bg);
-  border: var(--border-thin) solid var(--color-frame);
-  border-radius: var(--radius-full);
-}
-
-.theme button {
-  min-height: var(--size-control-inner);
-  padding: 0 var(--space-6);
-  font: var(--size-text-13) var(--font-sans);
-  color: var(--color-muted);
-  cursor: pointer;
-  background: transparent;
-  border: 0;
-  border-radius: var(--radius-full);
-}
-
-.theme button[aria-pressed='true'] {
-  color: var(--color-on-accent);
-  background: var(--color-accent-fill);
-}
-
-.theme button:focus-visible {
-  outline: var(--border-tag) solid var(--color-accent);
-  outline-offset: var(--space-1);
-}

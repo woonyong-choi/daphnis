@@ -7,7 +7,7 @@ import { toHtml } from '../src/html.js';
 import { values } from '../src/tokens.js';
 
 const css = (name) => readFileSync(new URL(`../src/styles/${name}.css`, import.meta.url), 'utf8');
-const [PLAYER, GALLERY, DOCUMENT] = [css('player'), css('gallery'), css('document')];
+const [PLAYER, GALLERY, DOCUMENT, CONTROL] = [css('player'), css('gallery'), css('document'), css('control')];
 
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = CSS 글자 수
@@ -58,22 +58,29 @@ test('displayWidthRule_images_and_svgs_shrink_to_the_container_and_are_centered'
 });
 
 test('splitControls_theme_group_player_tabs_and_round_buttons_share_radius_and_height', () => {
-  const groups = [declarationsOf(DOCUMENT, '.theme'), declarationsOf(GALLERY, '.theme'), declarationsOf(PLAYER, '.fl-tabs')];
-  const buttons = [declarationsOf(DOCUMENT, '.theme button'), declarationsOf(GALLERY, '.theme button'), declarationsOf(PLAYER, '.fl-tabs button')];
+  const group = declarationsOf(CONTROL, '.fl-tabs,\n.theme');
+  const button = declarationsOf(CONTROL, '.fl-tabs button,\n.theme button');
   const round = declarationsOf(PLAYER, '.fl-round');
 
-  for (const group of groups) {
-    assert.equal(group['border-radius'], 'var(--radius-full)');
-    assert.equal(group['min-height'], 'var(--size-control)');
-    assert.equal(group.padding, 'var(--space-1-5)');
-  }
-  for (const button of buttons) {
-    assert.equal(button['border-radius'], 'var(--radius-full)');
-    assert.equal(button['min-height'], 'var(--size-control-inner)');
-  }
+  assert.equal(group['border-radius'], 'var(--radius-full)');
+  assert.equal(group['min-height'], 'var(--size-control)');
+  assert.equal(group.padding, 'var(--space-1-5)');
+  assert.equal(button['border-radius'], 'var(--radius-full)');
+  assert.equal(button['min-height'], 'var(--size-control-inner)');
   assert.equal(round['border-radius'], 'var(--radius-full)');
   assert.equal(round.height, 'var(--size-control)');
   assert.equal(values.size['control-inner'], values.size.control - 2 * (values.space['1-5'] + values.border.thin));
+});
+
+test('controlStates_hover_focus_and_selected_rules_live_only_in_control_css_and_cover_all_three_controls', () => {
+  const hover = declarationsOf(CONTROL, '.fl-round:hover,\n.fl-tabs button:hover,\n.theme button:hover');
+  const focus = declarationsOf(CONTROL, '.fl-round:focus-visible,\n.fl-tabs button:focus-visible,\n.theme button:focus-visible');
+  const selected = declarationsOf(CONTROL, ".fl-tabs button.on,\n.theme button[aria-pressed='true']");
+
+  assert.equal(hover.color, 'var(--color-fg)');
+  assert.equal(focus.outline, 'var(--border-tag) solid var(--color-accent)');
+  assert.equal(selected.background, 'var(--color-control-on)');
+  for (const sheet of [PLAYER, GALLERY, DOCUMENT]) assert.doesNotMatch(sheet, /(?:\.fl-round|\.fl-tabs button|\.theme button)[^{]*:(?:hover|focus-visible)/);
 });
 
 test('playerBody_sets_the_text_color_token_so_inherited_text_is_not_default_black', () => {
@@ -105,14 +112,14 @@ test('progressRing_css_sits_over_the_border_box_and_has_no_number_literals_for_t
 });
 
 test('segmentedTabs_active_tab_is_a_solid_pill_with_semibold_label_and_no_progress_element', () => {
-  const active = declarationsOf(PLAYER, '.fl-tabs button.on');
-  const tab = declarationsOf(PLAYER, '.fl-tabs button');
+  const active = declarationsOf(CONTROL, ".fl-tabs button.on,\n.theme button[aria-pressed='true']");
+  const tab = declarationsOf(CONTROL, '.fl-tabs button,\n.theme button');
 
   assert.equal(active.background, 'var(--color-control-on)');
   assert.equal(active['font-weight'], 'var(--weight-semibold)');
   assert.equal(active.color, 'var(--color-fg)');
   assert.equal(tab.color, 'var(--color-muted)');
-  assert.equal(declarationsOf(PLAYER, '.fl-tabs').background, 'var(--color-bg)');
+  assert.equal(declarationsOf(CONTROL, '.fl-tabs,\n.theme').background, 'var(--color-bg)');
 });
 
 test('controlsAxis_bar_and_caption_share_one_center_axis_with_symmetric_padding', () => {
@@ -129,7 +136,7 @@ test('controlsAxis_bar_and_caption_share_one_center_axis_with_symmetric_padding'
 
 test('controlsSize_round_buttons_and_tabs_share_text_size', () => {
   const round = declarationsOf(PLAYER, '.fl-round');
-  const tab = declarationsOf(PLAYER, '.fl-tabs button');
+  const tab = declarationsOf(CONTROL, '.fl-tabs button,\n.theme button');
 
   assert.equal(round.font.split(' ')[0], tab.font.split(' ')[0]);
 });

@@ -148,7 +148,7 @@ export async function toHtml(result, name) {
 <title>${escapeXml(plainText(figure.title ?? name))}</title>
 ${EMBED_SCRIPT}
 <style>${fonts}
-${STYLES.tokens}${STYLES.player}${STYLES.figure}${STYLES.chart}${result.chart ? chartMotionCss(timeline.growMs, result.chart.dotAts) : ''}</style>
+${STYLES.tokens}${STYLES.control}${STYLES.player}${STYLES.figure}${STYLES.chart}${result.chart ? chartMotionCss(timeline.growMs, result.chart.dotAts) : ''}</style>
 </head>
 <body>
 <figure class="fl-figure${result.chart ? ' fl-chart-page' : ''}" tabindex="0">
@@ -271,7 +271,7 @@ export function toGallery(figures, heading) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeXml(heading)}</title>
-<style>${STYLES.tokens}${STYLES.gallery}</style>
+<style>${STYLES.tokens}${STYLES.control}${STYLES.gallery}</style>
 <script>${THEME_SCRIPT}</script>
 </head>
 <body>
@@ -314,7 +314,7 @@ export function toDocument(figures, heading) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeXml(heading)} 문서 미리보기</title>
-<style>${STYLES.tokens}${STYLES.document}</style>
+<style>${STYLES.tokens}${STYLES.control}${STYLES.document}</style>
 <script>${THEME_SCRIPT}</script>
 </head>
 <body>

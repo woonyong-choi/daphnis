@@ -65,7 +65,6 @@
   --color-tag-gray: var(--color-tone-gray);
   --color-orange-400: #f5a374;
   --color-orange-500: #dc6e22;
-  --color-orange-600: #b45404;
   --color-ink-900: #0b0b0b;
   --color-ink-600: #52514e;
   --color-ink-200: #c6cacf;

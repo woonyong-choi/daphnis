@@ -14,6 +14,7 @@ export const STYLES = Object.freeze({
   tokens: readStyle('./tokens.css'),
   figure: readStyle('./styles/figure.css'),
   animated: readStyle('./styles/animated.css'),
+  control: readStyle('./styles/control.css'),
   player: readStyle('./styles/player.css'),
   gallery: readStyle('./styles/gallery.css'),
   document: readStyle('./styles/document.css'),
