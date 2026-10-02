@@ -1,6 +1,7 @@
 // 원본 전체를 읽어 그림 모형(figure)으로 만든다. 줄을 머리, 선언, 시간 흐름 세 부분으로 나누고 문장마다 맡을 함수를 고른다.
 import { readChartDeclaration } from './chart.js';
-import { closeGroup, readColumn, readDeclaration, readEdge } from './declare.js';
+import { readColumn, readDeclaration, readEdge } from './declare.js';
+import { closeGroup } from './group.js';
 import { readGrid, readGridLine } from './grid.js';
 import { DECIMALS_MAX, DEFAULT_VERSION, KINDS, STATEMENTS, VALUES, VERSION, valueNames } from './grammar.js';
 import { tokenizeLine } from './lexer.js';
