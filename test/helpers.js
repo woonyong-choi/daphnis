@@ -87,3 +87,13 @@ export function oklchOf(hex) {
   const [L, a, b] = linearToOklab(linearChannelsOf(hex));
   return [L, Math.hypot(a, b), ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360];
 }
+
+const PLAYER_DIR = new URL('../src/player/', import.meta.url);
+
+// cost: time O(f·n), heap O(f·n), stack O(1), io f
+// vars: f = 브라우저 스크립트 수, n = 파일 글자 수
+// basis: estimate
+/** 브라우저 재생기 스크립트(src/player/ 모든 파일)를 이어 붙인 글. */
+export function playerSource() {
+  return readdirSync(PLAYER_DIR).filter((f) => f.endsWith('.js')).sort().map((f) => readFileSync(new URL(f, PLAYER_DIR), 'utf8')).join('\n');
+}

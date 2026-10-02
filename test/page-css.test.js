@@ -5,6 +5,7 @@ import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
 import { toHtml } from '../src/html.js';
 import { values } from '../src/tokens.js';
+import { playerSource } from './helpers.js';
 
 const css = (name) => readFileSync(new URL(`../src/styles/${name}.css`, import.meta.url), 'utf8');
 const [PLAYER, GALLERY, DOCUMENT, CONTROL] = [css('player'), css('gallery'), css('document'), css('control')];
@@ -153,7 +154,7 @@ test('controlsSize_round_buttons_and_tabs_share_text_size', () => {
 });
 
 test('playerSource_every_template_placeholder_sits_in_a_template_literal', () => {
-  const player = readFileSync(new URL('../src/player.js', import.meta.url), 'utf8');
+  const player = playerSource();
 
   assert.doesNotMatch(player, /'[^'\n]*\$\{[^'\n]*'/);
 });

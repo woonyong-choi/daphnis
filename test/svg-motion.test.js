@@ -6,6 +6,7 @@ import { buildFigure } from '../src/build.js';
 import { curveOf } from '../src/easing.js';
 import { toSvg } from '../src/svg.js';
 import { values } from '../src/tokens.js';
+import { playerSource } from './helpers.js';
 
 const EXAMPLES = new URL('../examples/', import.meta.url);
 const MOVE = curveOf('move');
@@ -257,7 +258,7 @@ test('toSvg_caption_swap_uses_the_caption_fade_token_for_each_phase', async () =
 });
 
 test('player_reads_the_same_caption_fade_token_the_animated_svg_uses', () => {
-  const player = readFileSync(new URL('../src/player.js', import.meta.url), 'utf8');
+  const player = playerSource();
   const tokensCss = readFileSync(new URL('../src/tokens.css', import.meta.url), 'utf8');
 
   assert.match(player, /'--duration-caption-fade'/);
