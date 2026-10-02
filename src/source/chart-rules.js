@@ -1,11 +1,11 @@
 // 차트 규칙. docs/design/charts.md의 "종류와 행 줄", "머리와 선언 줄", "시간 흐름" 절을 확인한다.
+import { VALUES } from './grammar.js';
 import { unknownName } from './problems.js';
 
-// 종류마다 계열 수의 [최소, 최대]
-const SERIES_RANGE = { bar: [1, 2], dumbbell: [2, 2], box: [0, 0], scatter: [0, 2], line: [1, 2], heatmap: [0, 0] };
+const CHART_TYPES = VALUES.chartType.items;
 // 신뢰구간(`값.low`, `값.high`)을 받는 종류
-export const INTERVAL_TYPES = ['bar', 'dumbbell', 'line'];
-const BOX_KEYS = ['min', 'q1', 'median', 'q3', 'max'];
+export const INTERVAL_TYPES = Object.keys(CHART_TYPES).filter((type) => CHART_TYPES[type].isInterval);
+const BOX_KEYS = CHART_TYPES.box.valueKeys;
 // 값의 절댓값 상한. 이보다 크면 십진 반올림이 12자리 정밀도를 넘어 눈금과 글자를 정확히 쓸 수 없다.
 const MAX_VALUE = 1e15;
 // 종류마다 고정 원소 키. 계열 키와 겹치면 JSON에서 둘을 가를 수 없다.
@@ -17,7 +17,7 @@ const FIXED_KEYS = ['label', 'name', 'x', 'y', 'series', 'row', 'col', 'value'];
 /** 원본을 다 읽은 뒤의 차트 규칙. `data`로 읽는 행은 checkChartRows가 읽은 뒤 확인한다. */
 export function checkChart(figure, problems) {
   const { chart, chartType } = figure;
-  const [low, high] = SERIES_RANGE[chartType];
+  const [low, high] = CHART_TYPES[chartType].seriesRange;
   if (chart.series.length < low || chart.series.length > high) {
     problems.error(chart.series[high]?.line ?? figure.line, `a ${chartType} chart takes ${low === high ? low : `${low} to ${high}`} series. Found ${chart.series.length}`);
   }

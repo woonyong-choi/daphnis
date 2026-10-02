@@ -1,9 +1,7 @@
 // 차트 선언 문장을 읽는다. 값의 규칙(계열 수, 음수, log)은 validate.js가 모든 행을 읽은 뒤 확인한다.
+import { VALUES, optionsOf, valueNames } from './grammar.js';
 import { parseNumber } from './values.js';
 import { ID_PATTERN } from './words.js';
-
-// 종류마다 행 줄의 문장 낱말
-const ROW_WORD = { bar: 'row', dumbbell: 'row', box: 'row', scatter: 'point', line: 'point', heatmap: 'cell' };
 
 // cost: time O(t), heap O(t), stack O(1)
 // vars: t = 문장 낱말 수
@@ -16,8 +14,8 @@ export function readChartDeclaration(statement, ctx) {
     ctx.problems.error(statement.line, `unknown chart statement "${word}"`);
     return;
   }
-  const rowWord = ROW_WORD[ctx.figure.chartType];
-  const isRowStatement = ['row', 'point', 'cell'].includes(word);
+  const rowWord = VALUES.chartType.items[ctx.figure.chartType].rowWord;
+  const isRowStatement = Object.values(VALUES.chartType.items).some((type) => type.rowWord === word);
   if (isRowStatement && word !== rowWord) {
     ctx.problems.error(statement.line, `a ${ctx.figure.chartType} chart uses "${rowWord}" lines, not "${word}"`);
     return;
@@ -29,9 +27,7 @@ export function readChartDeclaration(statement, ctx) {
   handlers[word](statement, ctx);
 }
 
-// 계열 역할 값. 의미는 docs/design/docs-integration.md의 색 역할 표다.
-const SERIES_ROLES = ['main', 'compare'];
-const SERIES_USAGE = 'write a series as: series id "name" [role=main|compare] [key="json key"]';
+const SERIES_USAGE = `write a series as: series id "name" [role=${valueNames('role').join('|')}] [key="json key"]`;
 
 // cost: time O(w), heap O(1), stack O(1)
 // vars: w = 낱말 수
@@ -48,8 +44,8 @@ function readSeries({ tokens, line }, { figure, problems }) {
     problems.error(line, `"${id.value}" is not a valid series name. Use lowercase letters, digits, and "-"`);
     return;
   }
-  if (given.role !== undefined && !SERIES_ROLES.includes(given.role)) {
-    problems.error(line, `role is one of ${SERIES_ROLES.join(', ')}. Found "${given.role}"`);
+  if (given.role !== undefined && !valueNames('role').includes(given.role)) {
+    problems.error(line, `role is one of ${valueNames('role').join(', ')}. Found "${given.role}"`);
     return;
   }
   // 선 차트 행의 `x=`는 가로 값이라 같은 이름의 계열 값과 가를 수 없다.
@@ -63,13 +59,13 @@ function readSeries({ tokens, line }, { figure, problems }) {
 // cost: time O(o), heap O(1), stack O(1)
 // vars: o = 선택 낱말 수
 // basis: estimate
-// 계열 선택 낱말 `key="…"`와 `role=…`을 한 번씩 읽는다. 모양이 틀리면 undefined다.
+// 계열 선택 낱말(grammar.js series 범위: key, role)을 한 번씩 읽는다. 모양이 틀리면 undefined다.
 function readSeriesOptions(options) {
+  const specs = optionsOf('series');
   const given = {};
   for (const t of options) {
-    const isKey = t.type === 'option' && t.key === 'key' && t.valueType === 'text';
-    const isRole = t.type === 'option' && t.key === 'role' && t.valueType === 'word';
-    if ((!isKey && !isRole) || t.key in given) return undefined;
+    const isKnown = t.type === 'option' && t.valueType === specs[t.key]?.type;
+    if (!isKnown || t.key in given) return undefined;
     given[t.key] = t.value;
   }
   return given;
