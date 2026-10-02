@@ -79,7 +79,7 @@ html.embedded .fl-canvas svg {
   justify-self: start;
 }
 
-/* 현재 탭의 진행은 일시정지 단추 테두리 위를 12시에서 시계 방향으로 도는 accent 고리다. 트랙은 단추 테두리 그대로다. */
+/* 현재 탭의 진행은 일시정지 단추 테두리 위를 12시에서 시계 방향으로 도는 진행(ui.progress) 고리다. 트랙은 단추 테두리 그대로다. */
 .fl-pause {
   position: relative;
 }
@@ -94,7 +94,7 @@ html.embedded .fl-canvas svg {
 
 .fl-ring-fill {
   fill: none;
-  stroke: var(--color-accent);
+  stroke: var(--color-ui-progress);
 }
 
 .fl-pause-icon {
@@ -201,17 +201,17 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-node.on .fl-stroke {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-card.on {
   fill: var(--color-card-on);
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-edge.on .fl-path,
 .fl .fl-edge.hover .fl-path {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
   stroke-width: var(--border-strong);
 }
 
@@ -226,12 +226,12 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-edge.on .fl-pill rect {
-  fill: var(--color-accent-fill);
-  stroke: var(--color-accent-fill);
+  fill: var(--color-state-active-fill);
+  stroke: var(--color-state-active-fill);
 }
 
 .fl .fl-edge.on .fl-pill text {
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .fl-path,
@@ -269,7 +269,7 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-group.on .fl-stroke {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-col.on .col-bg {

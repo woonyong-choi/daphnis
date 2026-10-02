@@ -46,3 +46,11 @@ test('tokensDarkJson_overrides_reference_the_palette_or_other_roles_never_a_lite
 
   assert.deepEqual(overrides.filter(([, value]) => HEX_VALUE.test(value)), []);
 });
+
+test('tokensJson_color_roles_are_grouped_as_state_ui_data_and_tag_without_the_old_flat_names', () => {
+  const color = JSON.parse(readFileSync(new URL('tokens.json', SRC), 'utf8')).color;
+  const oldNames = ['accent', 'accent-strong', 'accent-fill', 'on-accent', 'control-on', 'series-1', 'series-2', 'heat-low', 'heat-high', 'heat-ink', 'heat-ink-on', 'grid', 'tone'];
+
+  for (const group of ['state', 'ui', 'data', 'tag']) assert.ok(color[group], group);
+  assert.deepEqual(oldNames.filter((name) => name in color), []);
+});

@@ -43,15 +43,25 @@
   --color-palette-purple-500: #8b5cf6;
   --color-palette-green-500: #10b981;
   --color-palette-slate-500: #8b949e;
-  --color-accent: var(--color-palette-blue-550);
-  --color-accent-strong: var(--color-palette-blue-600);
-  --color-accent-fill: var(--color-accent-strong);
-  --color-on-accent: var(--color-palette-gray-0);
+  --color-state-active: var(--color-palette-blue-550);
+  --color-state-active-fill: var(--color-palette-blue-600);
+  --color-state-active-text: var(--color-palette-blue-600);
+  --color-state-on-active: var(--color-palette-gray-0);
+  --color-ui-link: var(--color-palette-blue-600);
+  --color-ui-focus: var(--color-palette-blue-550);
+  --color-ui-progress: var(--color-palette-blue-550);
+  --color-ui-control-on: var(--color-palette-gray-0);
+  --color-data-main: var(--color-palette-blue-550);
+  --color-data-compare: var(--color-palette-orange-550);
+  --color-data-heat-low: var(--color-palette-blue-200);
+  --color-data-heat-high: var(--color-palette-blue-800);
+  --color-data-heat-ink: var(--color-palette-ink-1000);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-ink-200);
   --color-fg: var(--color-palette-ink-900);
   --color-muted: var(--color-palette-ink-600);
   --color-bg: var(--color-palette-gray-25);
   --color-node: var(--color-palette-gray-0);
-  --color-control-on: var(--color-palette-gray-0);
   --color-surface: var(--color-palette-gray-50);
   --color-border: var(--color-palette-gray-500);
   --color-card-on: var(--color-palette-blue-50);
@@ -66,13 +76,6 @@
   --color-tag-green: var(--color-palette-green-500);
   --color-tag-orange: var(--color-palette-orange-500);
   --color-tag-gray: var(--color-palette-slate-500);
-  --color-series-1: var(--color-accent);
-  --color-series-2: var(--color-palette-orange-550);
-  --color-heat-low: var(--color-palette-blue-200);
-  --color-heat-high: var(--color-palette-blue-800);
-  --color-heat-ink: var(--color-palette-ink-1000);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-grid: var(--color-palette-ink-200);
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -204,13 +207,25 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --color-accent: var(--color-palette-blue-400);
-    --color-accent-strong: var(--color-palette-blue-400);
+    --color-state-active: var(--color-palette-blue-400);
+    --color-state-active-fill: var(--color-palette-blue-400);
+    --color-state-active-text: var(--color-palette-blue-400);
+    --color-state-on-active: var(--color-palette-ink-850);
+    --color-ui-link: var(--color-palette-blue-400);
+    --color-ui-focus: var(--color-palette-blue-400);
+    --color-ui-progress: var(--color-palette-blue-400);
+    --color-ui-control-on: var(--color-palette-neutral-750);
+    --color-data-main: var(--color-palette-blue-400);
+    --color-data-compare: var(--color-palette-orange-400);
+    --color-data-heat-low: var(--color-palette-blue-850);
+    --color-data-heat-high: var(--color-palette-blue-600);
+    --color-data-heat-ink: var(--color-palette-gray-0);
+    --color-data-heat-ink-on: var(--color-palette-gray-0);
+    --color-data-grid: var(--color-palette-neutral-750);
     --color-fg: var(--color-palette-neutral-100);
     --color-muted: var(--color-palette-neutral-400);
     --color-bg: var(--color-palette-neutral-900);
     --color-node: var(--color-palette-neutral-850);
-    --color-control-on: var(--color-palette-neutral-750);
     --color-surface: var(--color-palette-neutral-800);
     --color-border: var(--color-palette-neutral-500);
     --color-card-on: var(--color-palette-blue-900);
@@ -219,24 +234,29 @@
     --color-gallery: var(--color-palette-neutral-950);
     --color-group: var(--color-palette-neutral-850);
     --color-group-border: var(--color-palette-neutral-500);
-    --color-heat-low: var(--color-palette-blue-850);
-    --color-heat-high: var(--color-palette-blue-600);
-    --color-heat-ink: var(--color-palette-gray-0);
-    --color-heat-ink-on: var(--color-palette-gray-0);
-    --color-series-2: var(--color-palette-orange-400);
-    --color-grid: var(--color-palette-neutral-750);
     --color-plate-border: var(--color-palette-neutral-800);
-    --color-on-accent: var(--color-palette-ink-850);
   }
 }
 [data-theme='dark'] {
-  --color-accent: var(--color-palette-blue-400);
-  --color-accent-strong: var(--color-palette-blue-400);
+  --color-state-active: var(--color-palette-blue-400);
+  --color-state-active-fill: var(--color-palette-blue-400);
+  --color-state-active-text: var(--color-palette-blue-400);
+  --color-state-on-active: var(--color-palette-ink-850);
+  --color-ui-link: var(--color-palette-blue-400);
+  --color-ui-focus: var(--color-palette-blue-400);
+  --color-ui-progress: var(--color-palette-blue-400);
+  --color-ui-control-on: var(--color-palette-neutral-750);
+  --color-data-main: var(--color-palette-blue-400);
+  --color-data-compare: var(--color-palette-orange-400);
+  --color-data-heat-low: var(--color-palette-blue-850);
+  --color-data-heat-high: var(--color-palette-blue-600);
+  --color-data-heat-ink: var(--color-palette-gray-0);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-neutral-750);
   --color-fg: var(--color-palette-neutral-100);
   --color-muted: var(--color-palette-neutral-400);
   --color-bg: var(--color-palette-neutral-900);
   --color-node: var(--color-palette-neutral-850);
-  --color-control-on: var(--color-palette-neutral-750);
   --color-surface: var(--color-palette-neutral-800);
   --color-border: var(--color-palette-neutral-500);
   --color-card-on: var(--color-palette-blue-900);
@@ -245,14 +265,7 @@
   --color-gallery: var(--color-palette-neutral-950);
   --color-group: var(--color-palette-neutral-850);
   --color-group-border: var(--color-palette-neutral-500);
-  --color-heat-low: var(--color-palette-blue-850);
-  --color-heat-high: var(--color-palette-blue-600);
-  --color-heat-ink: var(--color-palette-gray-0);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-series-2: var(--color-palette-orange-400);
-  --color-grid: var(--color-palette-neutral-750);
   --color-plate-border: var(--color-palette-neutral-800);
-  --color-on-accent: var(--color-palette-ink-850);
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
 .fl text {
@@ -316,7 +329,7 @@
   font-size: var(--size-text-11);
   font-weight: var(--weight-semibold);
   text-anchor: end;
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .mark.key {
@@ -331,13 +344,13 @@
 }
 
 .fl .mini.on {
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .chip {
   font-size: var(--size-text-12);
   text-anchor: middle;
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .md {
@@ -375,7 +388,7 @@
 .fl .cell .key {
   font-size: var(--size-text-9);
   font-weight: var(--weight-semibold);
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .frame-box {
@@ -429,40 +442,40 @@
 
 @keyframes a0 { 0%,43.952% { stroke: var(--color-border) } 43.953%,61.546% { stroke: var(--color-border) } 61.547%,99.999% { stroke: var(--color-border) } }
 .fl .a0 { animation: a0 13.783s infinite linear; }
-@keyframes a1 { 0%,43.952% { stroke: var(--color-accent) } 43.953%,61.546% { stroke: var(--color-accent) } 61.547%,99.999% { stroke: var(--color-accent) } }
+@keyframes a1 { 0%,43.952% { stroke: var(--color-state-active) } 43.953%,61.546% { stroke: var(--color-state-active) } 61.547%,99.999% { stroke: var(--color-state-active) } }
 .fl .a1 { animation: a1 13.783s infinite linear; }
 @keyframes a2 { 0%,29.913% { opacity: 0 } 29.914% { opacity: 0 } 31.365%,43.952% { opacity: 1 } 43.953%,61.546% { opacity: 1 } 61.547%,99.999% { opacity: 1 } }
 .fl .a2 { animation: a2 13.783s infinite linear; }
-@keyframes a3 { 0%,29.913% { stroke: var(--color-border); fill: var(--color-surface) } 29.914% { stroke: var(--color-border); fill: var(--color-surface) } 31.365%,43.952% { stroke: var(--color-accent); fill: var(--color-card-on) } 43.953%,61.546% { stroke: var(--color-accent); fill: var(--color-card-on) } 61.547%,99.999% { stroke: var(--color-accent); fill: var(--color-card-on) } }
+@keyframes a3 { 0%,29.913% { stroke: var(--color-border); fill: var(--color-surface) } 29.914% { stroke: var(--color-border); fill: var(--color-surface) } 31.365%,43.952% { stroke: var(--color-state-active); fill: var(--color-card-on) } 43.953%,61.546% { stroke: var(--color-state-active); fill: var(--color-card-on) } 61.547%,99.999% { stroke: var(--color-state-active); fill: var(--color-card-on) } }
 .fl .a3 { animation: a3 13.783s infinite linear; }
 @keyframes a4 { 0%,29.913% { opacity: 1 } 29.914% { opacity: 1 } 31.365%,43.952% { opacity: 0 } 43.953%,61.546% { opacity: 0 } 61.547%,99.999% { opacity: 0 } }
 .fl .a4 { animation: a4 13.783s infinite linear; }
-@keyframes a5 { 0%,43.952% { stroke: var(--color-border) } 43.953% { stroke: var(--color-border) } 45.404%,61.546% { stroke: var(--color-accent) } 61.547%,99.999% { stroke: var(--color-accent) } }
+@keyframes a5 { 0%,43.952% { stroke: var(--color-border) } 43.953% { stroke: var(--color-border) } 45.404%,61.546% { stroke: var(--color-state-active) } 61.547%,99.999% { stroke: var(--color-state-active) } }
 .fl .a5 { animation: a5 13.783s infinite linear; }
-@keyframes a6 { 0%,43.952% { stroke: var(--color-border) } 43.953%,61.546% { stroke: var(--color-border) } 61.547% { stroke: var(--color-border) } 62.998%,99.999% { stroke: var(--color-accent) } }
+@keyframes a6 { 0%,43.952% { stroke: var(--color-border) } 43.953%,61.546% { stroke: var(--color-border) } 61.547% { stroke: var(--color-border) } 62.998%,99.999% { stroke: var(--color-state-active) } }
 .fl .a6 { animation: a6 13.783s infinite linear; }
-@keyframes a7 { 0%,43.952% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 43.953%,61.546% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 61.547%,99.999% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+@keyframes a7 { 0%,43.952% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 43.953%,61.546% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 61.547%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
 .fl .a7 { animation: a7 13.783s infinite linear; }
-@keyframes a8 { 0%,43.952% { fill: var(--color-accent-fill); stroke: var(--color-accent-fill) } 43.953%,61.546% { fill: var(--color-accent-fill); stroke: var(--color-accent-fill) } 61.547%,99.999% { fill: var(--color-accent-fill); stroke: var(--color-accent-fill) } }
+@keyframes a8 { 0%,43.952% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 43.953%,61.546% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 61.547%,99.999% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } }
 .fl .a8 { animation: a8 13.783s infinite linear; }
-@keyframes a9 { 0%,43.952% { fill: var(--color-on-accent) } 43.953%,61.546% { fill: var(--color-on-accent) } 61.547%,99.999% { fill: var(--color-on-accent) } }
+@keyframes a9 { 0%,43.952% { fill: var(--color-state-on-active) } 43.953%,61.546% { fill: var(--color-state-on-active) } 61.547%,99.999% { fill: var(--color-state-on-active) } }
 .fl .a9 { animation: a9 13.783s infinite linear; }
-@keyframes a10 { 0%,43.952% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 43.953% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 45.404%,61.546% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 61.547%,99.999% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+@keyframes a10 { 0%,43.952% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 43.953% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 45.404%,61.546% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 61.547%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
 .fl .a10 { animation: a10 13.783s infinite linear; }
-@keyframes a11 { 0%,43.952% { fill: var(--color-bg); stroke: var(--color-border) } 43.953% { fill: var(--color-bg); stroke: var(--color-border) } 45.404%,61.546% { fill: var(--color-accent-fill); stroke: var(--color-accent-fill) } 61.547%,99.999% { fill: var(--color-accent-fill); stroke: var(--color-accent-fill) } }
+@keyframes a11 { 0%,43.952% { fill: var(--color-bg); stroke: var(--color-border) } 43.953% { fill: var(--color-bg); stroke: var(--color-border) } 45.404%,61.546% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 61.547%,99.999% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } }
 .fl .a11 { animation: a11 13.783s infinite linear; }
-@keyframes a12 { 0%,43.952% { fill: var(--color-muted) } 43.953% { fill: var(--color-muted) } 45.404%,61.546% { fill: var(--color-on-accent) } 61.547%,99.999% { fill: var(--color-on-accent) } }
+@keyframes a12 { 0%,43.952% { fill: var(--color-muted) } 43.953% { fill: var(--color-muted) } 45.404%,61.546% { fill: var(--color-state-on-active) } 61.547%,99.999% { fill: var(--color-state-on-active) } }
 .fl .a12 { animation: a12 13.783s infinite linear; }
-@keyframes a13 { 0%,43.952% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 43.953%,61.546% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.547% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.998%,99.999% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+@keyframes a13 { 0%,43.952% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 43.953%,61.546% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.547% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.998%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
 .fl .a13 { animation: a13 13.783s infinite linear; }
-@keyframes a14 { 0%,43.952% { fill: var(--color-bg); stroke: var(--color-border) } 43.953%,61.546% { fill: var(--color-bg); stroke: var(--color-border) } 61.547% { fill: var(--color-bg); stroke: var(--color-border) } 62.998%,99.999% { fill: var(--color-accent-fill); stroke: var(--color-accent-fill) } }
+@keyframes a14 { 0%,43.952% { fill: var(--color-bg); stroke: var(--color-border) } 43.953%,61.546% { fill: var(--color-bg); stroke: var(--color-border) } 61.547% { fill: var(--color-bg); stroke: var(--color-border) } 62.998%,99.999% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } }
 .fl .a14 { animation: a14 13.783s infinite linear; }
-@keyframes a15 { 0%,43.952% { fill: var(--color-muted) } 43.953%,61.546% { fill: var(--color-muted) } 61.547% { fill: var(--color-muted) } 62.998%,99.999% { fill: var(--color-on-accent) } }
+@keyframes a15 { 0%,43.952% { fill: var(--color-muted) } 43.953%,61.546% { fill: var(--color-muted) } 61.547% { fill: var(--color-muted) } 62.998%,99.999% { fill: var(--color-state-on-active) } }
 .fl .a15 { animation: a15 13.783s infinite linear; }
 @keyframes a16 { 0%,43.952% { opacity: 1 } 43.953%,61.546% { opacity: 1 } 61.547%,99.999% { opacity: 1 } }
 .fl .a16 { animation: a16 13.783s infinite linear; }
 </style>
-<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
+<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-compare)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="600" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
 <g transform="translate(56.3 0)">
 <g id="g-0" class="fl-group" data-id="system"><rect x="256.3" y="35" width="224" height="462" rx="14" class="frame-box fl-stroke a0"/><text x="274.3" y="53" class="frame">Saturn</text></g>
@@ -473,9 +486,9 @@
 <g id="e-0" class="fl-edge"><path id="p-0" d="M 90.16943359375 75 L 346.3 75 Q 368.3 75, 368.3 97 L 368.3 135" class="fl-path a7" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="156.3" y="65.5" width="40" height="18" rx="9" class="pill a8"/><text x="176.3" y="78.5" class="edgelabel a9">input</text></g></g>
 <g id="e-1" class="fl-edge"><path id="p-1" d="M 368.34033203125 229 L 368.3 367" class="fl-path a10" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="332.3" y="289" width="71.2" height="18" rx="9" class="pill a11"/><text x="368" y="302" class="edgelabel a12">JSON-RPC</text></g></g>
 <g id="e-2" class="fl-edge"><path id="p-2" d="M 368.34033203125 413 L 368.3 451 Q 368.3 473, 390.3 473 L 714.6 473" class="fl-path a13" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="540.3" y="463.5" width="114.3" height="18" rx="9" class="pill a14"/><text x="597.5" y="476.5" class="edgelabel a15">app-server request</text></g></g>
-<g class="p0-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><g><rect x="-33.4" y="-35" width="66.9" height="23" rx="8" fill="var(--color-accent-fill)"/><text x="0" y="-20" class="chip">question</text><animateTransform attributeName="transform" type="translate" dur="13.783s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.04611;0.06586;0.06688;0.06688;0.06789;0.06985;0.0736;0.08052;0.09266;0.1033;0.11295;0.12196;0.13055;0.13889;0.14301;0.14713;0.15541;0.16387;0.17265;0.18195;0.192;0.20315;0.21597;0.23154;0.25257;0.29914;1" values="0 70.5;0 70.5;0 70.5;0 70.5;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 47;0 47;0 47;0 47;0 47;0 47;0 47;0 0;0 0;0 0;0 0;0 0;0 0"/></g><animate attributeName="opacity" dur="13.783s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.29914" values="1;0"/><animateMotion dur="13.783s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.29914;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
-<g class="p1-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><animate attributeName="opacity" dur="13.783s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.43953;0.56468" values="0;1;0"/><animateMotion dur="13.783s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.43953;0.56468;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
-<g class="p2-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><g><rect x="-20.4" y="-35" width="40.8" height="23" rx="8" fill="var(--color-accent-fill)"/><text x="0" y="-20" class="chip">turn</text><animateTransform attributeName="transform" type="translate" dur="13.783s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.61547;0.63848;0.64151;0.6421;0.6421;0.64291;0.64424;0.64902;0.66339;0.67406;0.68289;0.69063;0.69766;0.70421;0.71046;0.71653;0.72252;0.72855;0.7347;0.7411;0.74786;0.75517;0.76329;0.77262;0.78394;0.79924;0.83313;1" values="0 -34.5;0 -34.5;0 -44.4;0 -46.9;0 -46.9;0 47;0 47;0 47;0 47;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 -11.5;0 -11.5;0 -11.5"/></g><animate attributeName="opacity" dur="13.783s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.61547;0.83313" values="0;1;0"/><animateMotion dur="13.783s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.61547;0.83313;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
+<g class="p0-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><g><rect x="-33.4" y="-35" width="66.9" height="23" rx="8" fill="var(--color-state-active-fill)"/><text x="0" y="-20" class="chip">question</text><animateTransform attributeName="transform" type="translate" dur="13.783s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.04611;0.06586;0.06688;0.06688;0.06789;0.06985;0.0736;0.08052;0.09266;0.1033;0.11295;0.12196;0.13055;0.13889;0.14301;0.14713;0.15541;0.16387;0.17265;0.18195;0.192;0.20315;0.21597;0.23154;0.25257;0.29914;1" values="0 70.5;0 70.5;0 70.5;0 70.5;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 47;0 47;0 47;0 47;0 47;0 47;0 47;0 0;0 0;0 0;0 0;0 0;0 0"/></g><animate attributeName="opacity" dur="13.783s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.29914" values="1;0"/><animateMotion dur="13.783s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.29914;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
+<g class="p1-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="13.783s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.43953;0.56468" values="0;1;0"/><animateMotion dur="13.783s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.43953;0.56468;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
+<g class="p2-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><g><rect x="-20.4" y="-35" width="40.8" height="23" rx="8" fill="var(--color-state-active-fill)"/><text x="0" y="-20" class="chip">turn</text><animateTransform attributeName="transform" type="translate" dur="13.783s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.61547;0.63848;0.64151;0.6421;0.6421;0.64291;0.64424;0.64902;0.66339;0.67406;0.68289;0.69063;0.69766;0.70421;0.71046;0.71653;0.72252;0.72855;0.7347;0.7411;0.74786;0.75517;0.76329;0.77262;0.78394;0.79924;0.83313;1" values="0 -34.5;0 -34.5;0 -44.4;0 -46.9;0 -46.9;0 47;0 47;0 47;0 47;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 -11.5;0 -11.5;0 -11.5"/></g><animate attributeName="opacity" dur="13.783s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.61547;0.83313" values="0;1;0"/><animateMotion dur="13.783s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.61547;0.83313;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
 </g>
 <text x="480" y="543" opacity="0" class="steplabel a16">Chat</text>
 <g opacity="0" class="a16"><text x="480" y="569" class="caption">Input goes through the screen to the engine</text></g>

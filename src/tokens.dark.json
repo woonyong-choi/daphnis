@@ -1,11 +1,56 @@
 {
   "color": {
     "$type": "color",
-    "accent": {
-      "$value": "{color.palette.blue.400}"
+    "state": {
+      "active": {
+        "$value": "{color.palette.blue.400}"
+      },
+      "active-fill": {
+        "$value": "{color.palette.blue.400}"
+      },
+      "active-text": {
+        "$value": "{color.palette.blue.400}"
+      },
+      "on-active": {
+        "$value": "{color.palette.ink.850}"
+      }
     },
-    "accent-strong": {
-      "$value": "{color.palette.blue.400}"
+    "ui": {
+      "link": {
+        "$value": "{color.palette.blue.400}"
+      },
+      "focus": {
+        "$value": "{color.palette.blue.400}"
+      },
+      "progress": {
+        "$value": "{color.palette.blue.400}"
+      },
+      "control-on": {
+        "$value": "{color.palette.neutral.750}"
+      }
+    },
+    "data": {
+      "main": {
+        "$value": "{color.palette.blue.400}"
+      },
+      "compare": {
+        "$value": "{color.palette.orange.400}"
+      },
+      "heat-low": {
+        "$value": "{color.palette.blue.850}"
+      },
+      "heat-high": {
+        "$value": "{color.palette.blue.600}"
+      },
+      "heat-ink": {
+        "$value": "{color.palette.gray.0}"
+      },
+      "heat-ink-on": {
+        "$value": "{color.palette.gray.0}"
+      },
+      "grid": {
+        "$value": "{color.palette.neutral.750}"
+      }
     },
     "fg": {
       "$value": "{color.palette.neutral.100}"
@@ -18,9 +63,6 @@
     },
     "node": {
       "$value": "{color.palette.neutral.850}"
-    },
-    "control-on": {
-      "$value": "{color.palette.neutral.750}"
     },
     "surface": {
       "$value": "{color.palette.neutral.800}"
@@ -46,29 +88,8 @@
     "group-border": {
       "$value": "{color.palette.neutral.500}"
     },
-    "heat-low": {
-      "$value": "{color.palette.blue.850}"
-    },
-    "heat-high": {
-      "$value": "{color.palette.blue.600}"
-    },
-    "heat-ink": {
-      "$value": "{color.palette.gray.0}"
-    },
-    "heat-ink-on": {
-      "$value": "{color.palette.gray.0}"
-    },
-    "series-2": {
-      "$value": "{color.palette.orange.400}"
-    },
-    "grid": {
-      "$value": "{color.palette.neutral.750}"
-    },
     "plate-border": {
       "$value": "{color.palette.neutral.800}"
-    },
-    "on-accent": {
-      "$value": "{color.palette.ink.850}"
     }
   }
 }

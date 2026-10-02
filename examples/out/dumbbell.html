@@ -64,15 +64,25 @@
   --color-palette-purple-500: #8b5cf6;
   --color-palette-green-500: #10b981;
   --color-palette-slate-500: #8b949e;
-  --color-accent: var(--color-palette-blue-550);
-  --color-accent-strong: var(--color-palette-blue-600);
-  --color-accent-fill: var(--color-accent-strong);
-  --color-on-accent: var(--color-palette-gray-0);
+  --color-state-active: var(--color-palette-blue-550);
+  --color-state-active-fill: var(--color-palette-blue-600);
+  --color-state-active-text: var(--color-palette-blue-600);
+  --color-state-on-active: var(--color-palette-gray-0);
+  --color-ui-link: var(--color-palette-blue-600);
+  --color-ui-focus: var(--color-palette-blue-550);
+  --color-ui-progress: var(--color-palette-blue-550);
+  --color-ui-control-on: var(--color-palette-gray-0);
+  --color-data-main: var(--color-palette-blue-550);
+  --color-data-compare: var(--color-palette-orange-550);
+  --color-data-heat-low: var(--color-palette-blue-200);
+  --color-data-heat-high: var(--color-palette-blue-800);
+  --color-data-heat-ink: var(--color-palette-ink-1000);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-ink-200);
   --color-fg: var(--color-palette-ink-900);
   --color-muted: var(--color-palette-ink-600);
   --color-bg: var(--color-palette-gray-25);
   --color-node: var(--color-palette-gray-0);
-  --color-control-on: var(--color-palette-gray-0);
   --color-surface: var(--color-palette-gray-50);
   --color-border: var(--color-palette-gray-500);
   --color-card-on: var(--color-palette-blue-50);
@@ -87,13 +97,6 @@
   --color-tag-green: var(--color-palette-green-500);
   --color-tag-orange: var(--color-palette-orange-500);
   --color-tag-gray: var(--color-palette-slate-500);
-  --color-series-1: var(--color-accent);
-  --color-series-2: var(--color-palette-orange-550);
-  --color-heat-low: var(--color-palette-blue-200);
-  --color-heat-high: var(--color-palette-blue-800);
-  --color-heat-ink: var(--color-palette-ink-1000);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-grid: var(--color-palette-ink-200);
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -225,13 +228,25 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --color-accent: var(--color-palette-blue-400);
-    --color-accent-strong: var(--color-palette-blue-400);
+    --color-state-active: var(--color-palette-blue-400);
+    --color-state-active-fill: var(--color-palette-blue-400);
+    --color-state-active-text: var(--color-palette-blue-400);
+    --color-state-on-active: var(--color-palette-ink-850);
+    --color-ui-link: var(--color-palette-blue-400);
+    --color-ui-focus: var(--color-palette-blue-400);
+    --color-ui-progress: var(--color-palette-blue-400);
+    --color-ui-control-on: var(--color-palette-neutral-750);
+    --color-data-main: var(--color-palette-blue-400);
+    --color-data-compare: var(--color-palette-orange-400);
+    --color-data-heat-low: var(--color-palette-blue-850);
+    --color-data-heat-high: var(--color-palette-blue-600);
+    --color-data-heat-ink: var(--color-palette-gray-0);
+    --color-data-heat-ink-on: var(--color-palette-gray-0);
+    --color-data-grid: var(--color-palette-neutral-750);
     --color-fg: var(--color-palette-neutral-100);
     --color-muted: var(--color-palette-neutral-400);
     --color-bg: var(--color-palette-neutral-900);
     --color-node: var(--color-palette-neutral-850);
-    --color-control-on: var(--color-palette-neutral-750);
     --color-surface: var(--color-palette-neutral-800);
     --color-border: var(--color-palette-neutral-500);
     --color-card-on: var(--color-palette-blue-900);
@@ -240,24 +255,29 @@
     --color-gallery: var(--color-palette-neutral-950);
     --color-group: var(--color-palette-neutral-850);
     --color-group-border: var(--color-palette-neutral-500);
-    --color-heat-low: var(--color-palette-blue-850);
-    --color-heat-high: var(--color-palette-blue-600);
-    --color-heat-ink: var(--color-palette-gray-0);
-    --color-heat-ink-on: var(--color-palette-gray-0);
-    --color-series-2: var(--color-palette-orange-400);
-    --color-grid: var(--color-palette-neutral-750);
     --color-plate-border: var(--color-palette-neutral-800);
-    --color-on-accent: var(--color-palette-ink-850);
   }
 }
 [data-theme='dark'] {
-  --color-accent: var(--color-palette-blue-400);
-  --color-accent-strong: var(--color-palette-blue-400);
+  --color-state-active: var(--color-palette-blue-400);
+  --color-state-active-fill: var(--color-palette-blue-400);
+  --color-state-active-text: var(--color-palette-blue-400);
+  --color-state-on-active: var(--color-palette-ink-850);
+  --color-ui-link: var(--color-palette-blue-400);
+  --color-ui-focus: var(--color-palette-blue-400);
+  --color-ui-progress: var(--color-palette-blue-400);
+  --color-ui-control-on: var(--color-palette-neutral-750);
+  --color-data-main: var(--color-palette-blue-400);
+  --color-data-compare: var(--color-palette-orange-400);
+  --color-data-heat-low: var(--color-palette-blue-850);
+  --color-data-heat-high: var(--color-palette-blue-600);
+  --color-data-heat-ink: var(--color-palette-gray-0);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-neutral-750);
   --color-fg: var(--color-palette-neutral-100);
   --color-muted: var(--color-palette-neutral-400);
   --color-bg: var(--color-palette-neutral-900);
   --color-node: var(--color-palette-neutral-850);
-  --color-control-on: var(--color-palette-neutral-750);
   --color-surface: var(--color-palette-neutral-800);
   --color-border: var(--color-palette-neutral-500);
   --color-card-on: var(--color-palette-blue-900);
@@ -266,14 +286,7 @@
   --color-gallery: var(--color-palette-neutral-950);
   --color-group: var(--color-palette-neutral-850);
   --color-group-border: var(--color-palette-neutral-500);
-  --color-heat-low: var(--color-palette-blue-850);
-  --color-heat-high: var(--color-palette-blue-600);
-  --color-heat-ink: var(--color-palette-gray-0);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-series-2: var(--color-palette-orange-400);
-  --color-grid: var(--color-palette-neutral-750);
   --color-plate-border: var(--color-palette-neutral-800);
-  --color-on-accent: var(--color-palette-ink-850);
 }
 /* 조작 단추의 공통 모양과 상태. 재생기(원 단추, 탭), 목록 쪽과 문서 미리보기(테마 묶음)가 모두 이 파일 하나를 쓴다. */
 .fl-round:hover,
@@ -285,7 +298,7 @@
 .fl-round:focus-visible,
 .fl-tabs button:focus-visible,
 .theme button:focus-visible {
-  outline: var(--border-tag) solid var(--color-accent);
+  outline: var(--border-tag) solid var(--color-ui-focus);
   outline-offset: var(--space-1);
 }
 
@@ -316,12 +329,12 @@
   padding: 0 var(--space-6);
 }
 
-/* segmented 방식: 켜진 항목은 꽉 찬 알약(control-on)이다. 켜짐 표시는 묶음 바탕과 대비 3인 border 색 고리다. */
+/* segmented 방식: 켜진 항목은 꽉 찬 알약(ui.control-on)이다. 켜짐 표시는 묶음 바탕과 대비 3인 border 색 고리다. */
 .fl-tabs button.on,
 .theme button[aria-pressed='true'] {
   font-weight: var(--weight-semibold);
   color: var(--color-fg);
-  background: var(--color-control-on);
+  background: var(--color-ui-control-on);
   box-shadow: 0 0 0 var(--border-thin) var(--color-border);
 }
 /* 재생기 틀과 조작 막대. iframe 안(html.embedded)에서는 테두리와 바깥 여백을 뺀다. */
@@ -405,7 +418,7 @@ html.embedded .fl-canvas svg {
   justify-self: start;
 }
 
-/* 현재 탭의 진행은 일시정지 단추 테두리 위를 12시에서 시계 방향으로 도는 accent 고리다. 트랙은 단추 테두리 그대로다. */
+/* 현재 탭의 진행은 일시정지 단추 테두리 위를 12시에서 시계 방향으로 도는 진행(ui.progress) 고리다. 트랙은 단추 테두리 그대로다. */
 .fl-pause {
   position: relative;
 }
@@ -420,7 +433,7 @@ html.embedded .fl-canvas svg {
 
 .fl-ring-fill {
   fill: none;
-  stroke: var(--color-accent);
+  stroke: var(--color-ui-progress);
 }
 
 .fl-pause-icon {
@@ -527,17 +540,17 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-node.on .fl-stroke {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-card.on {
   fill: var(--color-card-on);
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-edge.on .fl-path,
 .fl .fl-edge.hover .fl-path {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
   stroke-width: var(--border-strong);
 }
 
@@ -552,12 +565,12 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-edge.on .fl-pill rect {
-  fill: var(--color-accent-fill);
-  stroke: var(--color-accent-fill);
+  fill: var(--color-state-active-fill);
+  stroke: var(--color-state-active-fill);
 }
 
 .fl .fl-edge.on .fl-pill text {
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .fl-path,
@@ -595,7 +608,7 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-group.on .fl-stroke {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-col.on .col-bg {
@@ -668,7 +681,7 @@ html.embedded .fl-canvas svg {
   font-size: var(--size-text-11);
   font-weight: var(--weight-semibold);
   text-anchor: end;
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .mark.key {
@@ -683,13 +696,13 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .mini.on {
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .chip {
   font-size: var(--size-text-12);
   text-anchor: middle;
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .md {
@@ -727,7 +740,7 @@ html.embedded .fl-canvas svg {
 .fl .cell .key {
   font-size: var(--size-text-9);
   font-weight: var(--weight-semibold);
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .frame-box {
@@ -861,23 +874,23 @@ html.embedded .fl-canvas svg {
 
 /* 칸 색은 변수로 계산해 다크 모드 heat-low를 따라간다. --s는 칸 강도(0~1)다. */
 .fl .chart-heat {
-  fill: color-mix(in srgb, var(--color-heat-high) calc(var(--s) * 100%), var(--color-heat-low));
+  fill: color-mix(in srgb, var(--color-data-heat-high) calc(var(--s) * 100%), var(--color-data-heat-low));
 }
 
 .fl .chart-cell {
   font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   text-anchor: middle;
-  fill: var(--color-heat-ink);
+  fill: var(--color-data-heat-ink);
 }
 
 .fl .chart-cell.on {
-  fill: var(--color-heat-ink-on);
+  fill: var(--color-data-heat-ink-on);
 }
 
 .fl .chart-axis,
 .fl .chart-grid {
-  stroke: var(--color-grid);
+  stroke: var(--color-data-grid);
   stroke-width: var(--border-thin);
 }
 
@@ -920,19 +933,19 @@ html.embedded .fl-canvas svg {
 
 .fl .chart-box {
   fill: var(--color-node);
-  stroke: var(--color-series-1);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-before {
   fill: var(--color-bg);
-  stroke: var(--color-series-1);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-arrow,
 .fl .chart-link {
-  stroke: var(--color-series-2);
+  stroke: var(--color-data-compare);
   stroke-width: var(--border-strong);
 }
 
@@ -995,14 +1008,14 @@ html.embedded .fl-canvas svg {
 <body>
 <figure class="fl-figure fl-chart-page" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="345" style="aspect-ratio: 960 / 345" viewBox="0 0 960 345" role="img"><title>작업당 토큰</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><text x="28" y="43" class="chart-title">작업당 토큰</text>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="345" style="aspect-ratio: 960 / 345" viewBox="0 0 960 345" role="img"><title>작업당 토큰</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-compare)"/></marker></defs><text x="28" y="43" class="chart-title">작업당 토큰</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 에이전트마다 작업 61개 평균</text>
-<g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-series-1)"/><text x="46" y="85" class="chart-legend">기억 없음</text></g>
-<g class="cs-1"><rect x="111.535" y="77" width="12" height="12" rx="4" fill="var(--color-series-2)"/><text x="129.535" y="85" class="chart-legend">기억 붙임</text></g>
-<text x="28" y="133.7" class="chart-label cr-0">코딩 에이전트 A</text><g class="cr-0"><g class="cs-0"><line x1="675.9" x2="707.7" y1="129" y2="129" stroke="var(--color-series-1)" stroke-width="6" class="chart-range pop"/><circle cx="691.6" cy="129" r="5" class="chart-before pop"/><text x="713.7" y="133" class="chart-value first late start">120k</text></g><g class="cs-1"><line x1="528.4" x2="559.9" y1="129" y2="129" stroke="var(--color-series-2)" stroke-width="6" class="chart-range pop"/><line x1="684.6" y1="129" x2="543.6" y2="129" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-second)"/><text x="522.4" y="133" class="chart-value second late end">31k</text><text x="932" y="133.3" class="chart-ratio late">−74%</text></g></g>
-<text x="28" y="173.7" class="chart-label cr-1">코딩 에이전트 B</text><g class="cr-1"><g class="cs-0"><line x1="651.3" x2="680.1" y1="169" y2="169" stroke="var(--color-series-1)" stroke-width="6" class="chart-range pop"/><circle cx="666" cy="169" r="5" class="chart-before pop"/><text x="686.1" y="173" class="chart-value first late start">95k</text></g><g class="cs-1"><line x1="515.6" x2="550.4" y1="169" y2="169" stroke="var(--color-series-2)" stroke-width="6" class="chart-range pop"/><line x1="659" y1="169" x2="532.4" y2="169" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-second)"/><text x="509.6" y="173" class="chart-value second late end">28k</text><text x="932" y="173.3" class="chart-ratio late">−71%</text></g></g>
-<text x="28" y="213.7" class="chart-label cr-2">편집기 도우미</text><g class="cr-2"><g class="cs-0"><line x1="600.1" x2="631.1" y1="209" y2="209" stroke="var(--color-series-1)" stroke-width="6" class="chart-range pop"/><circle cx="615.8" cy="209" r="5" class="chart-before pop"/><text x="637.1" y="213" class="chart-value first late start">60k</text></g><g class="cs-1"><line x1="484.1" x2="520" y1="209" y2="209" stroke="var(--color-series-2)" stroke-width="6" class="chart-range pop"/><line x1="608.8" y1="209" x2="501" y2="209" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-second)"/><text x="478.1" y="213" class="chart-value second late end">21k</text><text x="932" y="213.3" class="chart-ratio late">−65%</text></g></g>
-<text x="28" y="253.7" class="chart-label cr-3">사내 에이전트</text><g class="cr-3"><g class="cs-0"><line x1="379.2" x2="411.9" y1="249" y2="249" stroke="var(--color-series-1)" stroke-width="6" class="chart-range pop"/><circle cx="395.4" cy="249" r="5" class="chart-before pop"/><text x="373.2" y="253" class="chart-value first late end">8k</text></g><g class="cs-1"><line x1="392.6" x2="429.2" y1="249" y2="249" stroke="var(--color-series-2)" stroke-width="6" class="chart-range pop"/><circle cx="410.7" cy="249" r="5" fill="var(--color-series-2)" class="chart-after pop"/><text x="435.2" y="253" class="chart-value second late start">9.2k</text><text x="932" y="253.3" class="chart-ratio late">+15%</text></g></g>
+<g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-data-main)"/><text x="46" y="85" class="chart-legend">기억 없음</text></g>
+<g class="cs-1"><rect x="111.535" y="77" width="12" height="12" rx="4" fill="var(--color-data-compare)"/><text x="129.535" y="85" class="chart-legend">기억 붙임</text></g>
+<text x="28" y="133.7" class="chart-label cr-0">코딩 에이전트 A</text><g class="cr-0"><g class="cs-0"><line x1="675.9" x2="707.7" y1="129" y2="129" stroke="var(--color-data-main)" stroke-width="6" class="chart-range pop"/><circle cx="691.6" cy="129" r="5" class="chart-before pop"/><text x="713.7" y="133" class="chart-value first late start">120k</text></g><g class="cs-1"><line x1="528.4" x2="559.9" y1="129" y2="129" stroke="var(--color-data-compare)" stroke-width="6" class="chart-range pop"/><line x1="684.6" y1="129" x2="543.6" y2="129" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-second)"/><text x="522.4" y="133" class="chart-value second late end">31k</text><text x="932" y="133.3" class="chart-ratio late">−74%</text></g></g>
+<text x="28" y="173.7" class="chart-label cr-1">코딩 에이전트 B</text><g class="cr-1"><g class="cs-0"><line x1="651.3" x2="680.1" y1="169" y2="169" stroke="var(--color-data-main)" stroke-width="6" class="chart-range pop"/><circle cx="666" cy="169" r="5" class="chart-before pop"/><text x="686.1" y="173" class="chart-value first late start">95k</text></g><g class="cs-1"><line x1="515.6" x2="550.4" y1="169" y2="169" stroke="var(--color-data-compare)" stroke-width="6" class="chart-range pop"/><line x1="659" y1="169" x2="532.4" y2="169" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-second)"/><text x="509.6" y="173" class="chart-value second late end">28k</text><text x="932" y="173.3" class="chart-ratio late">−71%</text></g></g>
+<text x="28" y="213.7" class="chart-label cr-2">편집기 도우미</text><g class="cr-2"><g class="cs-0"><line x1="600.1" x2="631.1" y1="209" y2="209" stroke="var(--color-data-main)" stroke-width="6" class="chart-range pop"/><circle cx="615.8" cy="209" r="5" class="chart-before pop"/><text x="637.1" y="213" class="chart-value first late start">60k</text></g><g class="cs-1"><line x1="484.1" x2="520" y1="209" y2="209" stroke="var(--color-data-compare)" stroke-width="6" class="chart-range pop"/><line x1="608.8" y1="209" x2="501" y2="209" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-second)"/><text x="478.1" y="213" class="chart-value second late end">21k</text><text x="932" y="213.3" class="chart-ratio late">−65%</text></g></g>
+<text x="28" y="253.7" class="chart-label cr-3">사내 에이전트</text><g class="cr-3"><g class="cs-0"><line x1="379.2" x2="411.9" y1="249" y2="249" stroke="var(--color-data-main)" stroke-width="6" class="chart-range pop"/><circle cx="395.4" cy="249" r="5" class="chart-before pop"/><text x="373.2" y="253" class="chart-value first late end">8k</text></g><g class="cs-1"><line x1="392.6" x2="429.2" y1="249" y2="249" stroke="var(--color-data-compare)" stroke-width="6" class="chart-range pop"/><circle cx="410.7" cy="249" r="5" fill="var(--color-data-compare)" class="chart-after pop"/><text x="435.2" y="253" class="chart-value second late start">9.2k</text><text x="932" y="253.3" class="chart-ratio late">+15%</text></g></g>
 
 <line x1="168" x2="923.5" y1="277" y2="277" class="chart-axis"/><text x="168" y="294" class="chart-tick">1k</text><text x="419.8" y="294" class="chart-tick">10k</text><text x="671.6" y="294" class="chart-tick">100k</text><text x="923.5" y="294" class="chart-tick">1M</text><text x="923.5" y="311" class="chart-unit">토큰(로그 눈금)</text><g class="fl-packets"></g></svg></div>
 <figcaption class="fl-foot">
@@ -1507,7 +1520,7 @@ function createPacket(hop, stage) {
   const path = stage.paths[hop.edge];
   const g = document.createElementNS(SVG_NS, 'g');
   g.setAttribute('class', 'fl-packet');
-  g.innerHTML = `<circle r="${metrics.halo}" fill="${metrics.accent}" opacity="${metrics.haloOpacity}"/><circle r="${metrics.packet}" fill="${metrics.accent}"/>`;
+  g.innerHTML = `<circle r="${metrics.halo}" fill="${metrics.active}" opacity="${metrics.haloOpacity}"/><circle r="${metrics.packet}" fill="${metrics.active}"/>`;
   stage.packetLayer.appendChild(g);
   const chip = hop.data ? createChip(hop.data, stage) : undefined;
   if (chip) g.appendChild(chip.g);
@@ -1622,7 +1635,7 @@ function chipSlide(hop, metrics) {
   };
 }
 
-figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":3200,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"기억 없이 쓴 토큰이다","labelShifts":[],"series":[0],"growing":[0],"lights":[]},{"si":1,"t0":3200,"t1":5090,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"같은 작업에서 기억을 붙이면 토큰이 준다","labelShifts":[],"series":[0,1],"growing":[1],"lights":[]},{"si":1,"t0":5090,"t1":5810,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"사내 에이전트만 15% 늘었다","labelShifts":[],"series":[0,1],"growing":[],"lights":[]},{"si":1,"t0":5810,"t1":8110,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"사내 에이전트만 15% 늘었다","labelShifts":[],"series":[0,1],"growing":[],"lights":[3]}],"steps":["기억 없음","기억 붙임"],"cardCounts":[],"edgeEnds":[],"seriesCount":2,"rowCount":4,"metrics":{"accent":"var(--color-accent)","chipFill":"var(--color-accent-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
+figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":3200,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"기억 없이 쓴 토큰이다","labelShifts":[],"series":[0],"growing":[0],"lights":[]},{"si":1,"t0":3200,"t1":5090,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"같은 작업에서 기억을 붙이면 토큰이 준다","labelShifts":[],"series":[0,1],"growing":[1],"lights":[]},{"si":1,"t0":5090,"t1":5810,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"사내 에이전트만 15% 늘었다","labelShifts":[],"series":[0,1],"growing":[],"lights":[]},{"si":1,"t0":5810,"t1":8110,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"사내 에이전트만 15% 늘었다","labelShifts":[],"series":[0,1],"growing":[],"lights":[3]}],"steps":["기억 없음","기억 붙임"],"cardCounts":[],"edgeEnds":[],"seriesCount":2,"rowCount":4,"metrics":{"active":"var(--color-state-active)","chipFill":"var(--color-state-active-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
 </script>
 </body>
 </html>

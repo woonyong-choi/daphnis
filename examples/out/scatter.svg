@@ -44,15 +44,25 @@
   --color-palette-purple-500: #8b5cf6;
   --color-palette-green-500: #10b981;
   --color-palette-slate-500: #8b949e;
-  --color-accent: var(--color-palette-blue-550);
-  --color-accent-strong: var(--color-palette-blue-600);
-  --color-accent-fill: var(--color-accent-strong);
-  --color-on-accent: var(--color-palette-gray-0);
+  --color-state-active: var(--color-palette-blue-550);
+  --color-state-active-fill: var(--color-palette-blue-600);
+  --color-state-active-text: var(--color-palette-blue-600);
+  --color-state-on-active: var(--color-palette-gray-0);
+  --color-ui-link: var(--color-palette-blue-600);
+  --color-ui-focus: var(--color-palette-blue-550);
+  --color-ui-progress: var(--color-palette-blue-550);
+  --color-ui-control-on: var(--color-palette-gray-0);
+  --color-data-main: var(--color-palette-blue-550);
+  --color-data-compare: var(--color-palette-orange-550);
+  --color-data-heat-low: var(--color-palette-blue-200);
+  --color-data-heat-high: var(--color-palette-blue-800);
+  --color-data-heat-ink: var(--color-palette-ink-1000);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-ink-200);
   --color-fg: var(--color-palette-ink-900);
   --color-muted: var(--color-palette-ink-600);
   --color-bg: var(--color-palette-gray-25);
   --color-node: var(--color-palette-gray-0);
-  --color-control-on: var(--color-palette-gray-0);
   --color-surface: var(--color-palette-gray-50);
   --color-border: var(--color-palette-gray-500);
   --color-card-on: var(--color-palette-blue-50);
@@ -67,13 +77,6 @@
   --color-tag-green: var(--color-palette-green-500);
   --color-tag-orange: var(--color-palette-orange-500);
   --color-tag-gray: var(--color-palette-slate-500);
-  --color-series-1: var(--color-accent);
-  --color-series-2: var(--color-palette-orange-550);
-  --color-heat-low: var(--color-palette-blue-200);
-  --color-heat-high: var(--color-palette-blue-800);
-  --color-heat-ink: var(--color-palette-ink-1000);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-grid: var(--color-palette-ink-200);
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -205,13 +208,25 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --color-accent: var(--color-palette-blue-400);
-    --color-accent-strong: var(--color-palette-blue-400);
+    --color-state-active: var(--color-palette-blue-400);
+    --color-state-active-fill: var(--color-palette-blue-400);
+    --color-state-active-text: var(--color-palette-blue-400);
+    --color-state-on-active: var(--color-palette-ink-850);
+    --color-ui-link: var(--color-palette-blue-400);
+    --color-ui-focus: var(--color-palette-blue-400);
+    --color-ui-progress: var(--color-palette-blue-400);
+    --color-ui-control-on: var(--color-palette-neutral-750);
+    --color-data-main: var(--color-palette-blue-400);
+    --color-data-compare: var(--color-palette-orange-400);
+    --color-data-heat-low: var(--color-palette-blue-850);
+    --color-data-heat-high: var(--color-palette-blue-600);
+    --color-data-heat-ink: var(--color-palette-gray-0);
+    --color-data-heat-ink-on: var(--color-palette-gray-0);
+    --color-data-grid: var(--color-palette-neutral-750);
     --color-fg: var(--color-palette-neutral-100);
     --color-muted: var(--color-palette-neutral-400);
     --color-bg: var(--color-palette-neutral-900);
     --color-node: var(--color-palette-neutral-850);
-    --color-control-on: var(--color-palette-neutral-750);
     --color-surface: var(--color-palette-neutral-800);
     --color-border: var(--color-palette-neutral-500);
     --color-card-on: var(--color-palette-blue-900);
@@ -220,24 +235,29 @@
     --color-gallery: var(--color-palette-neutral-950);
     --color-group: var(--color-palette-neutral-850);
     --color-group-border: var(--color-palette-neutral-500);
-    --color-heat-low: var(--color-palette-blue-850);
-    --color-heat-high: var(--color-palette-blue-600);
-    --color-heat-ink: var(--color-palette-gray-0);
-    --color-heat-ink-on: var(--color-palette-gray-0);
-    --color-series-2: var(--color-palette-orange-400);
-    --color-grid: var(--color-palette-neutral-750);
     --color-plate-border: var(--color-palette-neutral-800);
-    --color-on-accent: var(--color-palette-ink-850);
   }
 }
 [data-theme='dark'] {
-  --color-accent: var(--color-palette-blue-400);
-  --color-accent-strong: var(--color-palette-blue-400);
+  --color-state-active: var(--color-palette-blue-400);
+  --color-state-active-fill: var(--color-palette-blue-400);
+  --color-state-active-text: var(--color-palette-blue-400);
+  --color-state-on-active: var(--color-palette-ink-850);
+  --color-ui-link: var(--color-palette-blue-400);
+  --color-ui-focus: var(--color-palette-blue-400);
+  --color-ui-progress: var(--color-palette-blue-400);
+  --color-ui-control-on: var(--color-palette-neutral-750);
+  --color-data-main: var(--color-palette-blue-400);
+  --color-data-compare: var(--color-palette-orange-400);
+  --color-data-heat-low: var(--color-palette-blue-850);
+  --color-data-heat-high: var(--color-palette-blue-600);
+  --color-data-heat-ink: var(--color-palette-gray-0);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-neutral-750);
   --color-fg: var(--color-palette-neutral-100);
   --color-muted: var(--color-palette-neutral-400);
   --color-bg: var(--color-palette-neutral-900);
   --color-node: var(--color-palette-neutral-850);
-  --color-control-on: var(--color-palette-neutral-750);
   --color-surface: var(--color-palette-neutral-800);
   --color-border: var(--color-palette-neutral-500);
   --color-card-on: var(--color-palette-blue-900);
@@ -246,14 +266,7 @@
   --color-gallery: var(--color-palette-neutral-950);
   --color-group: var(--color-palette-neutral-850);
   --color-group-border: var(--color-palette-neutral-500);
-  --color-heat-low: var(--color-palette-blue-850);
-  --color-heat-high: var(--color-palette-blue-600);
-  --color-heat-ink: var(--color-palette-gray-0);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-series-2: var(--color-palette-orange-400);
-  --color-grid: var(--color-palette-neutral-750);
   --color-plate-border: var(--color-palette-neutral-800);
-  --color-on-accent: var(--color-palette-ink-850);
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
 .fl text {
@@ -317,7 +330,7 @@
   font-size: var(--size-text-11);
   font-weight: var(--weight-semibold);
   text-anchor: end;
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .mark.key {
@@ -332,13 +345,13 @@
 }
 
 .fl .mini.on {
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .chip {
   font-size: var(--size-text-12);
   text-anchor: middle;
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .md {
@@ -376,7 +389,7 @@
 .fl .cell .key {
   font-size: var(--size-text-9);
   font-weight: var(--weight-semibold);
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .frame-box {
@@ -524,23 +537,23 @@
 
 /* 칸 색은 변수로 계산해 다크 모드 heat-low를 따라간다. --s는 칸 강도(0~1)다. */
 .fl .chart-heat {
-  fill: color-mix(in srgb, var(--color-heat-high) calc(var(--s) * 100%), var(--color-heat-low));
+  fill: color-mix(in srgb, var(--color-data-heat-high) calc(var(--s) * 100%), var(--color-data-heat-low));
 }
 
 .fl .chart-cell {
   font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   text-anchor: middle;
-  fill: var(--color-heat-ink);
+  fill: var(--color-data-heat-ink);
 }
 
 .fl .chart-cell.on {
-  fill: var(--color-heat-ink-on);
+  fill: var(--color-data-heat-ink-on);
 }
 
 .fl .chart-axis,
 .fl .chart-grid {
-  stroke: var(--color-grid);
+  stroke: var(--color-data-grid);
   stroke-width: var(--border-thin);
 }
 
@@ -583,19 +596,19 @@
 
 .fl .chart-box {
   fill: var(--color-node);
-  stroke: var(--color-series-1);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-before {
   fill: var(--color-bg);
-  stroke: var(--color-series-1);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-arrow,
 .fl .chart-link {
-  stroke: var(--color-series-2);
+  stroke: var(--color-data-compare);
   stroke-width: var(--border-strong);
 }
 
@@ -687,20 +700,20 @@
 @keyframes a4 { 0%,49.963% { opacity: 0 } 49.964% { opacity: 0 } 52.811%,99.999% { opacity: 1 } }
 .fl .a4 { animation: a4 7.025s infinite linear; }
 </style>
-<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
+<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-compare)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="545" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
 <g transform="translate(0 0)">
 <text x="28" y="43" class="chart-title">수정 횟수와 비용</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 작업당 평균, 화살표는 기억 없음에서 기억 붙임</text>
-<g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-series-1)"/><text x="46" y="85" class="chart-legend">기억 없음</text></g>
-<g class="cs-1"><rect x="111.535" y="77" width="12" height="12" rx="4" fill="var(--color-series-2)"/><text x="129.535" y="85" class="chart-legend">기억 붙임</text></g>
+<g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-data-main)"/><text x="46" y="85" class="chart-legend">기억 없음</text></g>
+<g class="cs-1"><rect x="111.535" y="77" width="12" height="12" rx="4" fill="var(--color-data-compare)"/><text x="129.535" y="85" class="chart-legend">기억 붙임</text></g>
 <line x1="76" x2="923.4" y1="396" y2="396" class="chart-grid"/><text x="70" y="400" class="chart-tick end">0</text><line x1="76" x2="923.4" y1="309.3" y2="309.3" class="chart-grid"/><text x="70" y="313.3" class="chart-tick end">0.5</text><line x1="76" x2="923.4" y1="222.7" y2="222.7" class="chart-grid"/><text x="70" y="226.6" class="chart-tick end">1</text><line x1="76" x2="923.4" y1="136" y2="136" class="chart-grid"/><text x="70" y="140" class="chart-tick end">1.5</text><text x="76" y="413" class="chart-tick">0</text><text x="358.5" y="413" class="chart-tick">0.5</text><text x="640.9" y="413" class="chart-tick">1</text><text x="923.4" y="413" class="chart-tick">1.5</text><text x="923.4" y="434" class="chart-unit">작업당 비용(달러)</text><text x="28" y="120" class="chart-unit start">작업당 수정 횟수(회)</text>
 <g class="cr-0"><g class="cs-1"><line x1="548.3" y1="168" x2="296.9" y2="305" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
 <g class="cr-2"><g class="cs-1"><line x1="745.3" y1="190.6" x2="560.4" y2="247.4" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
-<g class="cr-0"><g class="cs-0"><circle cx="556.2" cy="163.7" r="5" fill="var(--color-series-1)" class="pop"/><text x="567.2" y="167.7" class="chart-name late">A 없음</text></g></g>
-<g class="cr-1"><g class="cs-1"><circle cx="279.4" cy="314.5" r="5" fill="var(--color-series-2)" class="pop"/><text x="290.4" y="318.5" class="chart-name late">A 붙음</text></g></g>
-<g class="cr-2"><g class="cs-0"><circle cx="753.9" cy="188" r="5" fill="var(--color-series-1)" class="pop"/><text x="764.9" y="192" class="chart-name late">B 없음</text></g></g>
-<g class="cr-3"><g class="cs-1"><circle cx="527.9" cy="257.3" r="5" fill="var(--color-series-2)" class="pop"/><text x="538.9" y="261.3" class="chart-name late">B 붙음</text></g></g>
+<g class="cr-0"><g class="cs-0"><circle cx="556.2" cy="163.7" r="5" fill="var(--color-data-main)" class="pop"/><text x="567.2" y="167.7" class="chart-name late">A 없음</text></g></g>
+<g class="cr-1"><g class="cs-1"><circle cx="279.4" cy="314.5" r="5" fill="var(--color-data-compare)" class="pop"/><text x="290.4" y="318.5" class="chart-name late">A 붙음</text></g></g>
+<g class="cr-2"><g class="cs-0"><circle cx="753.9" cy="188" r="5" fill="var(--color-data-main)" class="pop"/><text x="764.9" y="192" class="chart-name late">B 없음</text></g></g>
+<g class="cr-3"><g class="cs-1"><circle cx="527.9" cy="257.3" r="5" fill="var(--color-data-compare)" class="pop"/><text x="538.9" y="261.3" class="chart-name late">B 붙음</text></g></g>
 
 </g>
 <text x="480" y="488" opacity="0" class="steplabel a3">기억 없음</text>

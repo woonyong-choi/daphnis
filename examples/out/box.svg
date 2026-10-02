@@ -44,15 +44,25 @@
   --color-palette-purple-500: #8b5cf6;
   --color-palette-green-500: #10b981;
   --color-palette-slate-500: #8b949e;
-  --color-accent: var(--color-palette-blue-550);
-  --color-accent-strong: var(--color-palette-blue-600);
-  --color-accent-fill: var(--color-accent-strong);
-  --color-on-accent: var(--color-palette-gray-0);
+  --color-state-active: var(--color-palette-blue-550);
+  --color-state-active-fill: var(--color-palette-blue-600);
+  --color-state-active-text: var(--color-palette-blue-600);
+  --color-state-on-active: var(--color-palette-gray-0);
+  --color-ui-link: var(--color-palette-blue-600);
+  --color-ui-focus: var(--color-palette-blue-550);
+  --color-ui-progress: var(--color-palette-blue-550);
+  --color-ui-control-on: var(--color-palette-gray-0);
+  --color-data-main: var(--color-palette-blue-550);
+  --color-data-compare: var(--color-palette-orange-550);
+  --color-data-heat-low: var(--color-palette-blue-200);
+  --color-data-heat-high: var(--color-palette-blue-800);
+  --color-data-heat-ink: var(--color-palette-ink-1000);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-ink-200);
   --color-fg: var(--color-palette-ink-900);
   --color-muted: var(--color-palette-ink-600);
   --color-bg: var(--color-palette-gray-25);
   --color-node: var(--color-palette-gray-0);
-  --color-control-on: var(--color-palette-gray-0);
   --color-surface: var(--color-palette-gray-50);
   --color-border: var(--color-palette-gray-500);
   --color-card-on: var(--color-palette-blue-50);
@@ -67,13 +77,6 @@
   --color-tag-green: var(--color-palette-green-500);
   --color-tag-orange: var(--color-palette-orange-500);
   --color-tag-gray: var(--color-palette-slate-500);
-  --color-series-1: var(--color-accent);
-  --color-series-2: var(--color-palette-orange-550);
-  --color-heat-low: var(--color-palette-blue-200);
-  --color-heat-high: var(--color-palette-blue-800);
-  --color-heat-ink: var(--color-palette-ink-1000);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-grid: var(--color-palette-ink-200);
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -205,13 +208,25 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --color-accent: var(--color-palette-blue-400);
-    --color-accent-strong: var(--color-palette-blue-400);
+    --color-state-active: var(--color-palette-blue-400);
+    --color-state-active-fill: var(--color-palette-blue-400);
+    --color-state-active-text: var(--color-palette-blue-400);
+    --color-state-on-active: var(--color-palette-ink-850);
+    --color-ui-link: var(--color-palette-blue-400);
+    --color-ui-focus: var(--color-palette-blue-400);
+    --color-ui-progress: var(--color-palette-blue-400);
+    --color-ui-control-on: var(--color-palette-neutral-750);
+    --color-data-main: var(--color-palette-blue-400);
+    --color-data-compare: var(--color-palette-orange-400);
+    --color-data-heat-low: var(--color-palette-blue-850);
+    --color-data-heat-high: var(--color-palette-blue-600);
+    --color-data-heat-ink: var(--color-palette-gray-0);
+    --color-data-heat-ink-on: var(--color-palette-gray-0);
+    --color-data-grid: var(--color-palette-neutral-750);
     --color-fg: var(--color-palette-neutral-100);
     --color-muted: var(--color-palette-neutral-400);
     --color-bg: var(--color-palette-neutral-900);
     --color-node: var(--color-palette-neutral-850);
-    --color-control-on: var(--color-palette-neutral-750);
     --color-surface: var(--color-palette-neutral-800);
     --color-border: var(--color-palette-neutral-500);
     --color-card-on: var(--color-palette-blue-900);
@@ -220,24 +235,29 @@
     --color-gallery: var(--color-palette-neutral-950);
     --color-group: var(--color-palette-neutral-850);
     --color-group-border: var(--color-palette-neutral-500);
-    --color-heat-low: var(--color-palette-blue-850);
-    --color-heat-high: var(--color-palette-blue-600);
-    --color-heat-ink: var(--color-palette-gray-0);
-    --color-heat-ink-on: var(--color-palette-gray-0);
-    --color-series-2: var(--color-palette-orange-400);
-    --color-grid: var(--color-palette-neutral-750);
     --color-plate-border: var(--color-palette-neutral-800);
-    --color-on-accent: var(--color-palette-ink-850);
   }
 }
 [data-theme='dark'] {
-  --color-accent: var(--color-palette-blue-400);
-  --color-accent-strong: var(--color-palette-blue-400);
+  --color-state-active: var(--color-palette-blue-400);
+  --color-state-active-fill: var(--color-palette-blue-400);
+  --color-state-active-text: var(--color-palette-blue-400);
+  --color-state-on-active: var(--color-palette-ink-850);
+  --color-ui-link: var(--color-palette-blue-400);
+  --color-ui-focus: var(--color-palette-blue-400);
+  --color-ui-progress: var(--color-palette-blue-400);
+  --color-ui-control-on: var(--color-palette-neutral-750);
+  --color-data-main: var(--color-palette-blue-400);
+  --color-data-compare: var(--color-palette-orange-400);
+  --color-data-heat-low: var(--color-palette-blue-850);
+  --color-data-heat-high: var(--color-palette-blue-600);
+  --color-data-heat-ink: var(--color-palette-gray-0);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-neutral-750);
   --color-fg: var(--color-palette-neutral-100);
   --color-muted: var(--color-palette-neutral-400);
   --color-bg: var(--color-palette-neutral-900);
   --color-node: var(--color-palette-neutral-850);
-  --color-control-on: var(--color-palette-neutral-750);
   --color-surface: var(--color-palette-neutral-800);
   --color-border: var(--color-palette-neutral-500);
   --color-card-on: var(--color-palette-blue-900);
@@ -246,14 +266,7 @@
   --color-gallery: var(--color-palette-neutral-950);
   --color-group: var(--color-palette-neutral-850);
   --color-group-border: var(--color-palette-neutral-500);
-  --color-heat-low: var(--color-palette-blue-850);
-  --color-heat-high: var(--color-palette-blue-600);
-  --color-heat-ink: var(--color-palette-gray-0);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-series-2: var(--color-palette-orange-400);
-  --color-grid: var(--color-palette-neutral-750);
   --color-plate-border: var(--color-palette-neutral-800);
-  --color-on-accent: var(--color-palette-ink-850);
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
 .fl text {
@@ -317,7 +330,7 @@
   font-size: var(--size-text-11);
   font-weight: var(--weight-semibold);
   text-anchor: end;
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .mark.key {
@@ -332,13 +345,13 @@
 }
 
 .fl .mini.on {
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .chip {
   font-size: var(--size-text-12);
   text-anchor: middle;
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .md {
@@ -376,7 +389,7 @@
 .fl .cell .key {
   font-size: var(--size-text-9);
   font-weight: var(--weight-semibold);
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .frame-box {
@@ -524,23 +537,23 @@
 
 /* 칸 색은 변수로 계산해 다크 모드 heat-low를 따라간다. --s는 칸 강도(0~1)다. */
 .fl .chart-heat {
-  fill: color-mix(in srgb, var(--color-heat-high) calc(var(--s) * 100%), var(--color-heat-low));
+  fill: color-mix(in srgb, var(--color-data-heat-high) calc(var(--s) * 100%), var(--color-data-heat-low));
 }
 
 .fl .chart-cell {
   font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   text-anchor: middle;
-  fill: var(--color-heat-ink);
+  fill: var(--color-data-heat-ink);
 }
 
 .fl .chart-cell.on {
-  fill: var(--color-heat-ink-on);
+  fill: var(--color-data-heat-ink-on);
 }
 
 .fl .chart-axis,
 .fl .chart-grid {
-  stroke: var(--color-grid);
+  stroke: var(--color-data-grid);
   stroke-width: var(--border-thin);
 }
 
@@ -583,19 +596,19 @@
 
 .fl .chart-box {
   fill: var(--color-node);
-  stroke: var(--color-series-1);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-before {
   fill: var(--color-bg);
-  stroke: var(--color-series-1);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-arrow,
 .fl .chart-link {
-  stroke: var(--color-series-2);
+  stroke: var(--color-data-compare);
   stroke-width: var(--border-strong);
 }
 
@@ -656,7 +669,7 @@
 
 
 </style>
-<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
+<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-compare)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="280" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
 <g transform="translate(0 0)">
 <text x="28" y="43" class="chart-title">응답 지연 분포</text>

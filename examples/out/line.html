@@ -64,15 +64,25 @@
   --color-palette-purple-500: #8b5cf6;
   --color-palette-green-500: #10b981;
   --color-palette-slate-500: #8b949e;
-  --color-accent: var(--color-palette-blue-550);
-  --color-accent-strong: var(--color-palette-blue-600);
-  --color-accent-fill: var(--color-accent-strong);
-  --color-on-accent: var(--color-palette-gray-0);
+  --color-state-active: var(--color-palette-blue-550);
+  --color-state-active-fill: var(--color-palette-blue-600);
+  --color-state-active-text: var(--color-palette-blue-600);
+  --color-state-on-active: var(--color-palette-gray-0);
+  --color-ui-link: var(--color-palette-blue-600);
+  --color-ui-focus: var(--color-palette-blue-550);
+  --color-ui-progress: var(--color-palette-blue-550);
+  --color-ui-control-on: var(--color-palette-gray-0);
+  --color-data-main: var(--color-palette-blue-550);
+  --color-data-compare: var(--color-palette-orange-550);
+  --color-data-heat-low: var(--color-palette-blue-200);
+  --color-data-heat-high: var(--color-palette-blue-800);
+  --color-data-heat-ink: var(--color-palette-ink-1000);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-ink-200);
   --color-fg: var(--color-palette-ink-900);
   --color-muted: var(--color-palette-ink-600);
   --color-bg: var(--color-palette-gray-25);
   --color-node: var(--color-palette-gray-0);
-  --color-control-on: var(--color-palette-gray-0);
   --color-surface: var(--color-palette-gray-50);
   --color-border: var(--color-palette-gray-500);
   --color-card-on: var(--color-palette-blue-50);
@@ -87,13 +97,6 @@
   --color-tag-green: var(--color-palette-green-500);
   --color-tag-orange: var(--color-palette-orange-500);
   --color-tag-gray: var(--color-palette-slate-500);
-  --color-series-1: var(--color-accent);
-  --color-series-2: var(--color-palette-orange-550);
-  --color-heat-low: var(--color-palette-blue-200);
-  --color-heat-high: var(--color-palette-blue-800);
-  --color-heat-ink: var(--color-palette-ink-1000);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-grid: var(--color-palette-ink-200);
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -225,13 +228,25 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --color-accent: var(--color-palette-blue-400);
-    --color-accent-strong: var(--color-palette-blue-400);
+    --color-state-active: var(--color-palette-blue-400);
+    --color-state-active-fill: var(--color-palette-blue-400);
+    --color-state-active-text: var(--color-palette-blue-400);
+    --color-state-on-active: var(--color-palette-ink-850);
+    --color-ui-link: var(--color-palette-blue-400);
+    --color-ui-focus: var(--color-palette-blue-400);
+    --color-ui-progress: var(--color-palette-blue-400);
+    --color-ui-control-on: var(--color-palette-neutral-750);
+    --color-data-main: var(--color-palette-blue-400);
+    --color-data-compare: var(--color-palette-orange-400);
+    --color-data-heat-low: var(--color-palette-blue-850);
+    --color-data-heat-high: var(--color-palette-blue-600);
+    --color-data-heat-ink: var(--color-palette-gray-0);
+    --color-data-heat-ink-on: var(--color-palette-gray-0);
+    --color-data-grid: var(--color-palette-neutral-750);
     --color-fg: var(--color-palette-neutral-100);
     --color-muted: var(--color-palette-neutral-400);
     --color-bg: var(--color-palette-neutral-900);
     --color-node: var(--color-palette-neutral-850);
-    --color-control-on: var(--color-palette-neutral-750);
     --color-surface: var(--color-palette-neutral-800);
     --color-border: var(--color-palette-neutral-500);
     --color-card-on: var(--color-palette-blue-900);
@@ -240,24 +255,29 @@
     --color-gallery: var(--color-palette-neutral-950);
     --color-group: var(--color-palette-neutral-850);
     --color-group-border: var(--color-palette-neutral-500);
-    --color-heat-low: var(--color-palette-blue-850);
-    --color-heat-high: var(--color-palette-blue-600);
-    --color-heat-ink: var(--color-palette-gray-0);
-    --color-heat-ink-on: var(--color-palette-gray-0);
-    --color-series-2: var(--color-palette-orange-400);
-    --color-grid: var(--color-palette-neutral-750);
     --color-plate-border: var(--color-palette-neutral-800);
-    --color-on-accent: var(--color-palette-ink-850);
   }
 }
 [data-theme='dark'] {
-  --color-accent: var(--color-palette-blue-400);
-  --color-accent-strong: var(--color-palette-blue-400);
+  --color-state-active: var(--color-palette-blue-400);
+  --color-state-active-fill: var(--color-palette-blue-400);
+  --color-state-active-text: var(--color-palette-blue-400);
+  --color-state-on-active: var(--color-palette-ink-850);
+  --color-ui-link: var(--color-palette-blue-400);
+  --color-ui-focus: var(--color-palette-blue-400);
+  --color-ui-progress: var(--color-palette-blue-400);
+  --color-ui-control-on: var(--color-palette-neutral-750);
+  --color-data-main: var(--color-palette-blue-400);
+  --color-data-compare: var(--color-palette-orange-400);
+  --color-data-heat-low: var(--color-palette-blue-850);
+  --color-data-heat-high: var(--color-palette-blue-600);
+  --color-data-heat-ink: var(--color-palette-gray-0);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-neutral-750);
   --color-fg: var(--color-palette-neutral-100);
   --color-muted: var(--color-palette-neutral-400);
   --color-bg: var(--color-palette-neutral-900);
   --color-node: var(--color-palette-neutral-850);
-  --color-control-on: var(--color-palette-neutral-750);
   --color-surface: var(--color-palette-neutral-800);
   --color-border: var(--color-palette-neutral-500);
   --color-card-on: var(--color-palette-blue-900);
@@ -266,14 +286,7 @@
   --color-gallery: var(--color-palette-neutral-950);
   --color-group: var(--color-palette-neutral-850);
   --color-group-border: var(--color-palette-neutral-500);
-  --color-heat-low: var(--color-palette-blue-850);
-  --color-heat-high: var(--color-palette-blue-600);
-  --color-heat-ink: var(--color-palette-gray-0);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-series-2: var(--color-palette-orange-400);
-  --color-grid: var(--color-palette-neutral-750);
   --color-plate-border: var(--color-palette-neutral-800);
-  --color-on-accent: var(--color-palette-ink-850);
 }
 /* 조작 단추의 공통 모양과 상태. 재생기(원 단추, 탭), 목록 쪽과 문서 미리보기(테마 묶음)가 모두 이 파일 하나를 쓴다. */
 .fl-round:hover,
@@ -285,7 +298,7 @@
 .fl-round:focus-visible,
 .fl-tabs button:focus-visible,
 .theme button:focus-visible {
-  outline: var(--border-tag) solid var(--color-accent);
+  outline: var(--border-tag) solid var(--color-ui-focus);
   outline-offset: var(--space-1);
 }
 
@@ -316,12 +329,12 @@
   padding: 0 var(--space-6);
 }
 
-/* segmented 방식: 켜진 항목은 꽉 찬 알약(control-on)이다. 켜짐 표시는 묶음 바탕과 대비 3인 border 색 고리다. */
+/* segmented 방식: 켜진 항목은 꽉 찬 알약(ui.control-on)이다. 켜짐 표시는 묶음 바탕과 대비 3인 border 색 고리다. */
 .fl-tabs button.on,
 .theme button[aria-pressed='true'] {
   font-weight: var(--weight-semibold);
   color: var(--color-fg);
-  background: var(--color-control-on);
+  background: var(--color-ui-control-on);
   box-shadow: 0 0 0 var(--border-thin) var(--color-border);
 }
 /* 재생기 틀과 조작 막대. iframe 안(html.embedded)에서는 테두리와 바깥 여백을 뺀다. */
@@ -405,7 +418,7 @@ html.embedded .fl-canvas svg {
   justify-self: start;
 }
 
-/* 현재 탭의 진행은 일시정지 단추 테두리 위를 12시에서 시계 방향으로 도는 accent 고리다. 트랙은 단추 테두리 그대로다. */
+/* 현재 탭의 진행은 일시정지 단추 테두리 위를 12시에서 시계 방향으로 도는 진행(ui.progress) 고리다. 트랙은 단추 테두리 그대로다. */
 .fl-pause {
   position: relative;
 }
@@ -420,7 +433,7 @@ html.embedded .fl-canvas svg {
 
 .fl-ring-fill {
   fill: none;
-  stroke: var(--color-accent);
+  stroke: var(--color-ui-progress);
 }
 
 .fl-pause-icon {
@@ -527,17 +540,17 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-node.on .fl-stroke {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-card.on {
   fill: var(--color-card-on);
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-edge.on .fl-path,
 .fl .fl-edge.hover .fl-path {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
   stroke-width: var(--border-strong);
 }
 
@@ -552,12 +565,12 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-edge.on .fl-pill rect {
-  fill: var(--color-accent-fill);
-  stroke: var(--color-accent-fill);
+  fill: var(--color-state-active-fill);
+  stroke: var(--color-state-active-fill);
 }
 
 .fl .fl-edge.on .fl-pill text {
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .fl-path,
@@ -595,7 +608,7 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-group.on .fl-stroke {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-col.on .col-bg {
@@ -668,7 +681,7 @@ html.embedded .fl-canvas svg {
   font-size: var(--size-text-11);
   font-weight: var(--weight-semibold);
   text-anchor: end;
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .mark.key {
@@ -683,13 +696,13 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .mini.on {
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .chip {
   font-size: var(--size-text-12);
   text-anchor: middle;
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .md {
@@ -727,7 +740,7 @@ html.embedded .fl-canvas svg {
 .fl .cell .key {
   font-size: var(--size-text-9);
   font-weight: var(--weight-semibold);
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .frame-box {
@@ -861,23 +874,23 @@ html.embedded .fl-canvas svg {
 
 /* 칸 색은 변수로 계산해 다크 모드 heat-low를 따라간다. --s는 칸 강도(0~1)다. */
 .fl .chart-heat {
-  fill: color-mix(in srgb, var(--color-heat-high) calc(var(--s) * 100%), var(--color-heat-low));
+  fill: color-mix(in srgb, var(--color-data-heat-high) calc(var(--s) * 100%), var(--color-data-heat-low));
 }
 
 .fl .chart-cell {
   font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   text-anchor: middle;
-  fill: var(--color-heat-ink);
+  fill: var(--color-data-heat-ink);
 }
 
 .fl .chart-cell.on {
-  fill: var(--color-heat-ink-on);
+  fill: var(--color-data-heat-ink-on);
 }
 
 .fl .chart-axis,
 .fl .chart-grid {
-  stroke: var(--color-grid);
+  stroke: var(--color-data-grid);
   stroke-width: var(--border-thin);
 }
 
@@ -920,19 +933,19 @@ html.embedded .fl-canvas svg {
 
 .fl .chart-box {
   fill: var(--color-node);
-  stroke: var(--color-series-1);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-before {
   fill: var(--color-bg);
-  stroke: var(--color-series-1);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-arrow,
 .fl .chart-link {
-  stroke: var(--color-series-2);
+  stroke: var(--color-data-compare);
   stroke-width: var(--border-strong);
 }
 
@@ -1018,25 +1031,25 @@ html.embedded .fl-canvas svg {
 <body>
 <figure class="fl-figure fl-chart-page" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="470" style="aspect-ratio: 960 / 470" viewBox="0 0 960 470" role="img"><title>주차별 재시도 비율</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><text x="28" y="43" class="chart-title">주차별 재시도 비율</text>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="470" style="aspect-ratio: 960 / 470" viewBox="0 0 960 470" role="img"><title>주차별 재시도 비율</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-compare)"/></marker></defs><text x="28" y="43" class="chart-title">주차별 재시도 비율</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 띠는 신뢰구간, 점선은 목표 5%</text>
-<g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-series-1)"/><text x="46" y="85" class="chart-legend">새 판단기</text></g>
-<g class="cs-1"><rect x="111.535" y="77" width="12" height="12" rx="4" fill="var(--color-series-2)"/><text x="129.535" y="85" class="chart-legend">기존 판단기</text></g>
+<g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-data-main)"/><text x="46" y="85" class="chart-legend">새 판단기</text></g>
+<g class="cs-1"><rect x="111.535" y="77" width="12" height="12" rx="4" fill="var(--color-data-compare)"/><text x="129.535" y="85" class="chart-legend">기존 판단기</text></g>
 <line x1="76" x2="927" y1="396" y2="396" class="chart-grid"/><text x="70" y="400" class="chart-tick end">0</text><line x1="76" x2="927" y1="309.3" y2="309.3" class="chart-grid"/><text x="70" y="313.3" class="chart-tick end">5</text><line x1="76" x2="927" y1="222.7" y2="222.7" class="chart-grid"/><text x="70" y="226.6" class="chart-tick end">10</text><line x1="76" x2="927" y1="136" y2="136" class="chart-grid"/><text x="70" y="140" class="chart-tick end">15</text><text x="76" y="413" class="chart-tick">1</text><text x="288.8" y="413" class="chart-tick">2</text><text x="501.5" y="413" class="chart-tick">3</text><text x="714.3" y="413" class="chart-tick">4</text><text x="927" y="413" class="chart-tick">5</text><text x="927" y="434" class="chart-unit">주차</text><text x="28" y="120" class="chart-unit start">재시도 비율(%)</text>
-<g class="cs-0"><path d="M 76 151.6 L 288.8 201.9 L 501.5 250.4 L 714.3 285.1 L 927 297.2 L 927 333.6 L 714.3 324.9 L 501.5 293.7 L 288.8 248.7 L 76 207.1 Z" fill="var(--color-series-1)" class="chart-band wipe"/></g>
-<g class="cs-1"><path d="M 76 158.5 L 288.8 165.5 L 501.5 160.3 L 714.3 155.1 L 927 165.5 L 927 215.7 L 714.3 208.8 L 501.5 217.5 L 288.8 219.2 L 76 212.3 Z" fill="var(--color-series-2)" class="chart-band wipe"/></g>
-<g class="cs-0"><path d="M 76 181.1 L 288.8 226.1 L 501.5 272.9 L 714.3 305.9 L 927 316.3" fill="none" stroke="var(--color-series-1)" stroke-width="2.5" pathLength="1" class="draw"/></g>
-<g class="cs-1"><path d="M 76 186.3 L 288.8 193.2 L 501.5 189.7 L 714.3 182.8 L 927 191.5" fill="none" stroke="var(--color-series-2)" stroke-width="2.5" pathLength="1" class="draw"/></g>
-<g class="cr-0"><g class="cs-0"><circle cx="76" cy="181.1" r="5" fill="var(--color-series-1)" class="dot" data-at="0"/></g></g>
-<g class="cr-0"><g class="cs-1"><circle cx="76" cy="186.3" r="5" fill="var(--color-series-2)" class="dot" data-at="0"/></g></g>
-<g class="cr-1"><g class="cs-0"><circle cx="288.8" cy="226.1" r="5" fill="var(--color-series-1)" class="dot" data-at="0.161"/></g></g>
-<g class="cr-1"><g class="cs-1"><circle cx="288.8" cy="193.2" r="5" fill="var(--color-series-2)" class="dot" data-at="0.16"/></g></g>
-<g class="cr-2"><g class="cs-0"><circle cx="501.5" cy="272.9" r="5" fill="var(--color-series-1)" class="dot" data-at="0.346"/></g></g>
-<g class="cr-2"><g class="cs-1"><circle cx="501.5" cy="189.7" r="5" fill="var(--color-series-2)" class="dot" data-at="0.342"/></g></g>
-<g class="cr-3"><g class="cs-0"><circle cx="714.3" cy="305.9" r="5" fill="var(--color-series-1)" class="dot" data-at="0.567"/></g></g>
-<g class="cr-3"><g class="cs-1"><circle cx="714.3" cy="182.8" r="5" fill="var(--color-series-2)" class="dot" data-at="0.563"/></g></g>
-<g class="cr-4"><g class="cs-0"><circle cx="927" cy="316.3" r="5" fill="var(--color-series-1)" class="dot" data-at="1"/></g></g>
-<g class="cr-4"><g class="cs-1"><circle cx="927" cy="191.5" r="5" fill="var(--color-series-2)" class="dot" data-at="1"/></g></g>
+<g class="cs-0"><path d="M 76 151.6 L 288.8 201.9 L 501.5 250.4 L 714.3 285.1 L 927 297.2 L 927 333.6 L 714.3 324.9 L 501.5 293.7 L 288.8 248.7 L 76 207.1 Z" fill="var(--color-data-main)" class="chart-band wipe"/></g>
+<g class="cs-1"><path d="M 76 158.5 L 288.8 165.5 L 501.5 160.3 L 714.3 155.1 L 927 165.5 L 927 215.7 L 714.3 208.8 L 501.5 217.5 L 288.8 219.2 L 76 212.3 Z" fill="var(--color-data-compare)" class="chart-band wipe"/></g>
+<g class="cs-0"><path d="M 76 181.1 L 288.8 226.1 L 501.5 272.9 L 714.3 305.9 L 927 316.3" fill="none" stroke="var(--color-data-main)" stroke-width="2.5" pathLength="1" class="draw"/></g>
+<g class="cs-1"><path d="M 76 186.3 L 288.8 193.2 L 501.5 189.7 L 714.3 182.8 L 927 191.5" fill="none" stroke="var(--color-data-compare)" stroke-width="2.5" pathLength="1" class="draw"/></g>
+<g class="cr-0"><g class="cs-0"><circle cx="76" cy="181.1" r="5" fill="var(--color-data-main)" class="dot" data-at="0"/></g></g>
+<g class="cr-0"><g class="cs-1"><circle cx="76" cy="186.3" r="5" fill="var(--color-data-compare)" class="dot" data-at="0"/></g></g>
+<g class="cr-1"><g class="cs-0"><circle cx="288.8" cy="226.1" r="5" fill="var(--color-data-main)" class="dot" data-at="0.161"/></g></g>
+<g class="cr-1"><g class="cs-1"><circle cx="288.8" cy="193.2" r="5" fill="var(--color-data-compare)" class="dot" data-at="0.16"/></g></g>
+<g class="cr-2"><g class="cs-0"><circle cx="501.5" cy="272.9" r="5" fill="var(--color-data-main)" class="dot" data-at="0.346"/></g></g>
+<g class="cr-2"><g class="cs-1"><circle cx="501.5" cy="189.7" r="5" fill="var(--color-data-compare)" class="dot" data-at="0.342"/></g></g>
+<g class="cr-3"><g class="cs-0"><circle cx="714.3" cy="305.9" r="5" fill="var(--color-data-main)" class="dot" data-at="0.567"/></g></g>
+<g class="cr-3"><g class="cs-1"><circle cx="714.3" cy="182.8" r="5" fill="var(--color-data-compare)" class="dot" data-at="0.563"/></g></g>
+<g class="cr-4"><g class="cs-0"><circle cx="927" cy="316.3" r="5" fill="var(--color-data-main)" class="dot" data-at="1"/></g></g>
+<g class="cr-4"><g class="cs-1"><circle cx="927" cy="191.5" r="5" fill="var(--color-data-compare)" class="dot" data-at="1"/></g></g>
 <line x1="76" x2="927" y1="309.3" y2="309.3" class="chart-rule"/><text x="927" y="305.3" class="chart-rule-label end">목표</text><g class="fl-packets"></g></svg></div>
 <figcaption class="fl-foot">
 <div class="fl-bar"><button type="button" class="fl-round fl-pause"><svg class="fl-ring" viewBox="0 0 30 30" aria-hidden="true"><circle class="fl-ring-fill" cx="15" cy="15" r="14.125" stroke-width="1.75" transform="rotate(-90 15 15)"/></svg><span class="fl-pause-icon"></span></button><div class="fl-tabs" role="tablist"></div><button type="button" class="fl-round fl-rate" aria-label="배속">1×</button></div>
@@ -1540,7 +1553,7 @@ function createPacket(hop, stage) {
   const path = stage.paths[hop.edge];
   const g = document.createElementNS(SVG_NS, 'g');
   g.setAttribute('class', 'fl-packet');
-  g.innerHTML = `<circle r="${metrics.halo}" fill="${metrics.accent}" opacity="${metrics.haloOpacity}"/><circle r="${metrics.packet}" fill="${metrics.accent}"/>`;
+  g.innerHTML = `<circle r="${metrics.halo}" fill="${metrics.active}" opacity="${metrics.haloOpacity}"/><circle r="${metrics.packet}" fill="${metrics.active}"/>`;
   stage.packetLayer.appendChild(g);
   const chip = hop.data ? createChip(hop.data, stage) : undefined;
   if (chip) g.appendChild(chip.g);
@@ -1655,7 +1668,7 @@ function chipSlide(hop, metrics) {
   };
 }
 
-figurePlay(document.querySelector('.fl-figure'), {"segs":[],"steps":[],"cardCounts":[],"edgeEnds":[],"seriesCount":2,"rowCount":5,"metrics":{"accent":"var(--color-accent)","chipFill":"var(--color-accent-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
+figurePlay(document.querySelector('.fl-figure'), {"segs":[],"steps":[],"cardCounts":[],"edgeEnds":[],"seriesCount":2,"rowCount":5,"metrics":{"active":"var(--color-state-active)","chipFill":"var(--color-state-active-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
 </script>
 </body>
 </html>

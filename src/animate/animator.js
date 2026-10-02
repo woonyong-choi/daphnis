@@ -30,19 +30,19 @@ export function createAnimator({ segs, total, growMs }) {
     switch (kind) {
       case 'node':
       case 'group':
-        return toggle(segs.map((s) => litIds(s, scene.edges).has(id)), `stroke: ${c.accent}`, `stroke: ${c.border}`);
+        return toggle(segs.map((s) => litIds(s, scene.edges).has(id)), `stroke: ${c.state.active}`, `stroke: ${c.border}`);
       case 'column':
         return toggle(segs.map((s) => s.columnsOn.includes(extra)), `fill: ${c['card-on']}`, 'fill: transparent');
       case 'edge':
-        return toggle(lit(i), `stroke: ${c.accent}; stroke-width: ${tokens.border.strong}; marker-end: url(#fl-arrow-on)`, `stroke: ${c.muted}; stroke-width: ${tokens.border.edge}; marker-end: url(#fl-arrow)`);
+        return toggle(lit(i), `stroke: ${c.state.active}; stroke-width: ${tokens.border.strong}; marker-end: url(#fl-arrow-on)`, `stroke: ${c.muted}; stroke-width: ${tokens.border.edge}; marker-end: url(#fl-arrow)`);
       case 'pill':
-        return toggle(lit(i), `fill: ${c['accent-fill']}; stroke: ${c['accent-fill']}`, `fill: ${c.bg}; stroke: ${c.border}`);
+        return toggle(lit(i), `fill: ${c.state['active-fill']}; stroke: ${c.state['active-fill']}`, `fill: ${c.bg}; stroke: ${c.border}`);
       case 'pilltext':
-        return toggle(lit(i), `fill: ${c['on-accent']}`, `fill: ${c.muted}`);
+        return toggle(lit(i), `fill: ${c.state['on-active']}`, `fill: ${c.muted}`);
       case 'quiet':
         return toggle(lit(i), 'opacity: 1', 'opacity: 0');
       case 'card':
-        return toggle(cardState(id, (v) => v !== undefined), `stroke: ${c.accent}; fill: ${c['card-on']}`, `stroke: ${c.border}; fill: ${c.surface}`);
+        return toggle(cardState(id, (v) => v !== undefined), `stroke: ${c.state.active}; fill: ${c['card-on']}`, `stroke: ${c.border}; fill: ${c.surface}`);
       case 'layer':
         return toggle(cardState(id, (v) => v === extra), 'opacity: 1', 'opacity: 0');
       case 'empty':

@@ -102,8 +102,8 @@ addEventListener('DOMContentLoaded', () => {
 });`;
 // 재생기가 점과 글 상자, 아이콘을 그릴 때 쓰는 값. 브라우저 코드는 tokens.js를 불러올 수 없어 데이터로 넘긴다.
 const PLAYER_METRICS = Object.freeze({
-  accent: tokens.color.accent,
-  chipFill: tokens.color['accent-fill'],
+  active: tokens.color.state.active,
+  chipFill: tokens.color.state['active-fill'],
   halo: values.size.halo,
   haloOpacity: values.opacity.halo,
   packet: values.size.packet,

@@ -64,15 +64,25 @@
   --color-palette-purple-500: #8b5cf6;
   --color-palette-green-500: #10b981;
   --color-palette-slate-500: #8b949e;
-  --color-accent: var(--color-palette-blue-550);
-  --color-accent-strong: var(--color-palette-blue-600);
-  --color-accent-fill: var(--color-accent-strong);
-  --color-on-accent: var(--color-palette-gray-0);
+  --color-state-active: var(--color-palette-blue-550);
+  --color-state-active-fill: var(--color-palette-blue-600);
+  --color-state-active-text: var(--color-palette-blue-600);
+  --color-state-on-active: var(--color-palette-gray-0);
+  --color-ui-link: var(--color-palette-blue-600);
+  --color-ui-focus: var(--color-palette-blue-550);
+  --color-ui-progress: var(--color-palette-blue-550);
+  --color-ui-control-on: var(--color-palette-gray-0);
+  --color-data-main: var(--color-palette-blue-550);
+  --color-data-compare: var(--color-palette-orange-550);
+  --color-data-heat-low: var(--color-palette-blue-200);
+  --color-data-heat-high: var(--color-palette-blue-800);
+  --color-data-heat-ink: var(--color-palette-ink-1000);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-ink-200);
   --color-fg: var(--color-palette-ink-900);
   --color-muted: var(--color-palette-ink-600);
   --color-bg: var(--color-palette-gray-25);
   --color-node: var(--color-palette-gray-0);
-  --color-control-on: var(--color-palette-gray-0);
   --color-surface: var(--color-palette-gray-50);
   --color-border: var(--color-palette-gray-500);
   --color-card-on: var(--color-palette-blue-50);
@@ -87,13 +97,6 @@
   --color-tag-green: var(--color-palette-green-500);
   --color-tag-orange: var(--color-palette-orange-500);
   --color-tag-gray: var(--color-palette-slate-500);
-  --color-series-1: var(--color-accent);
-  --color-series-2: var(--color-palette-orange-550);
-  --color-heat-low: var(--color-palette-blue-200);
-  --color-heat-high: var(--color-palette-blue-800);
-  --color-heat-ink: var(--color-palette-ink-1000);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-grid: var(--color-palette-ink-200);
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -225,13 +228,25 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --color-accent: var(--color-palette-blue-400);
-    --color-accent-strong: var(--color-palette-blue-400);
+    --color-state-active: var(--color-palette-blue-400);
+    --color-state-active-fill: var(--color-palette-blue-400);
+    --color-state-active-text: var(--color-palette-blue-400);
+    --color-state-on-active: var(--color-palette-ink-850);
+    --color-ui-link: var(--color-palette-blue-400);
+    --color-ui-focus: var(--color-palette-blue-400);
+    --color-ui-progress: var(--color-palette-blue-400);
+    --color-ui-control-on: var(--color-palette-neutral-750);
+    --color-data-main: var(--color-palette-blue-400);
+    --color-data-compare: var(--color-palette-orange-400);
+    --color-data-heat-low: var(--color-palette-blue-850);
+    --color-data-heat-high: var(--color-palette-blue-600);
+    --color-data-heat-ink: var(--color-palette-gray-0);
+    --color-data-heat-ink-on: var(--color-palette-gray-0);
+    --color-data-grid: var(--color-palette-neutral-750);
     --color-fg: var(--color-palette-neutral-100);
     --color-muted: var(--color-palette-neutral-400);
     --color-bg: var(--color-palette-neutral-900);
     --color-node: var(--color-palette-neutral-850);
-    --color-control-on: var(--color-palette-neutral-750);
     --color-surface: var(--color-palette-neutral-800);
     --color-border: var(--color-palette-neutral-500);
     --color-card-on: var(--color-palette-blue-900);
@@ -240,24 +255,29 @@
     --color-gallery: var(--color-palette-neutral-950);
     --color-group: var(--color-palette-neutral-850);
     --color-group-border: var(--color-palette-neutral-500);
-    --color-heat-low: var(--color-palette-blue-850);
-    --color-heat-high: var(--color-palette-blue-600);
-    --color-heat-ink: var(--color-palette-gray-0);
-    --color-heat-ink-on: var(--color-palette-gray-0);
-    --color-series-2: var(--color-palette-orange-400);
-    --color-grid: var(--color-palette-neutral-750);
     --color-plate-border: var(--color-palette-neutral-800);
-    --color-on-accent: var(--color-palette-ink-850);
   }
 }
 [data-theme='dark'] {
-  --color-accent: var(--color-palette-blue-400);
-  --color-accent-strong: var(--color-palette-blue-400);
+  --color-state-active: var(--color-palette-blue-400);
+  --color-state-active-fill: var(--color-palette-blue-400);
+  --color-state-active-text: var(--color-palette-blue-400);
+  --color-state-on-active: var(--color-palette-ink-850);
+  --color-ui-link: var(--color-palette-blue-400);
+  --color-ui-focus: var(--color-palette-blue-400);
+  --color-ui-progress: var(--color-palette-blue-400);
+  --color-ui-control-on: var(--color-palette-neutral-750);
+  --color-data-main: var(--color-palette-blue-400);
+  --color-data-compare: var(--color-palette-orange-400);
+  --color-data-heat-low: var(--color-palette-blue-850);
+  --color-data-heat-high: var(--color-palette-blue-600);
+  --color-data-heat-ink: var(--color-palette-gray-0);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-neutral-750);
   --color-fg: var(--color-palette-neutral-100);
   --color-muted: var(--color-palette-neutral-400);
   --color-bg: var(--color-palette-neutral-900);
   --color-node: var(--color-palette-neutral-850);
-  --color-control-on: var(--color-palette-neutral-750);
   --color-surface: var(--color-palette-neutral-800);
   --color-border: var(--color-palette-neutral-500);
   --color-card-on: var(--color-palette-blue-900);
@@ -266,14 +286,7 @@
   --color-gallery: var(--color-palette-neutral-950);
   --color-group: var(--color-palette-neutral-850);
   --color-group-border: var(--color-palette-neutral-500);
-  --color-heat-low: var(--color-palette-blue-850);
-  --color-heat-high: var(--color-palette-blue-600);
-  --color-heat-ink: var(--color-palette-gray-0);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-series-2: var(--color-palette-orange-400);
-  --color-grid: var(--color-palette-neutral-750);
   --color-plate-border: var(--color-palette-neutral-800);
-  --color-on-accent: var(--color-palette-ink-850);
 }
 /* 조작 단추의 공통 모양과 상태. 재생기(원 단추, 탭), 목록 쪽과 문서 미리보기(테마 묶음)가 모두 이 파일 하나를 쓴다. */
 .fl-round:hover,
@@ -285,7 +298,7 @@
 .fl-round:focus-visible,
 .fl-tabs button:focus-visible,
 .theme button:focus-visible {
-  outline: var(--border-tag) solid var(--color-accent);
+  outline: var(--border-tag) solid var(--color-ui-focus);
   outline-offset: var(--space-1);
 }
 
@@ -316,12 +329,12 @@
   padding: 0 var(--space-6);
 }
 
-/* segmented 방식: 켜진 항목은 꽉 찬 알약(control-on)이다. 켜짐 표시는 묶음 바탕과 대비 3인 border 색 고리다. */
+/* segmented 방식: 켜진 항목은 꽉 찬 알약(ui.control-on)이다. 켜짐 표시는 묶음 바탕과 대비 3인 border 색 고리다. */
 .fl-tabs button.on,
 .theme button[aria-pressed='true'] {
   font-weight: var(--weight-semibold);
   color: var(--color-fg);
-  background: var(--color-control-on);
+  background: var(--color-ui-control-on);
   box-shadow: 0 0 0 var(--border-thin) var(--color-border);
 }
 /* 재생기 틀과 조작 막대. iframe 안(html.embedded)에서는 테두리와 바깥 여백을 뺀다. */
@@ -405,7 +418,7 @@ html.embedded .fl-canvas svg {
   justify-self: start;
 }
 
-/* 현재 탭의 진행은 일시정지 단추 테두리 위를 12시에서 시계 방향으로 도는 accent 고리다. 트랙은 단추 테두리 그대로다. */
+/* 현재 탭의 진행은 일시정지 단추 테두리 위를 12시에서 시계 방향으로 도는 진행(ui.progress) 고리다. 트랙은 단추 테두리 그대로다. */
 .fl-pause {
   position: relative;
 }
@@ -420,7 +433,7 @@ html.embedded .fl-canvas svg {
 
 .fl-ring-fill {
   fill: none;
-  stroke: var(--color-accent);
+  stroke: var(--color-ui-progress);
 }
 
 .fl-pause-icon {
@@ -527,17 +540,17 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-node.on .fl-stroke {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-card.on {
   fill: var(--color-card-on);
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-edge.on .fl-path,
 .fl .fl-edge.hover .fl-path {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
   stroke-width: var(--border-strong);
 }
 
@@ -552,12 +565,12 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-edge.on .fl-pill rect {
-  fill: var(--color-accent-fill);
-  stroke: var(--color-accent-fill);
+  fill: var(--color-state-active-fill);
+  stroke: var(--color-state-active-fill);
 }
 
 .fl .fl-edge.on .fl-pill text {
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .fl-path,
@@ -595,7 +608,7 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-group.on .fl-stroke {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-col.on .col-bg {
@@ -668,7 +681,7 @@ html.embedded .fl-canvas svg {
   font-size: var(--size-text-11);
   font-weight: var(--weight-semibold);
   text-anchor: end;
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .mark.key {
@@ -683,13 +696,13 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .mini.on {
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .chip {
   font-size: var(--size-text-12);
   text-anchor: middle;
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .md {
@@ -727,7 +740,7 @@ html.embedded .fl-canvas svg {
 .fl .cell .key {
   font-size: var(--size-text-9);
   font-weight: var(--weight-semibold);
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .frame-box {
@@ -861,23 +874,23 @@ html.embedded .fl-canvas svg {
 
 /* 칸 색은 변수로 계산해 다크 모드 heat-low를 따라간다. --s는 칸 강도(0~1)다. */
 .fl .chart-heat {
-  fill: color-mix(in srgb, var(--color-heat-high) calc(var(--s) * 100%), var(--color-heat-low));
+  fill: color-mix(in srgb, var(--color-data-heat-high) calc(var(--s) * 100%), var(--color-data-heat-low));
 }
 
 .fl .chart-cell {
   font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   text-anchor: middle;
-  fill: var(--color-heat-ink);
+  fill: var(--color-data-heat-ink);
 }
 
 .fl .chart-cell.on {
-  fill: var(--color-heat-ink-on);
+  fill: var(--color-data-heat-ink-on);
 }
 
 .fl .chart-axis,
 .fl .chart-grid {
-  stroke: var(--color-grid);
+  stroke: var(--color-data-grid);
   stroke-width: var(--border-thin);
 }
 
@@ -920,19 +933,19 @@ html.embedded .fl-canvas svg {
 
 .fl .chart-box {
   fill: var(--color-node);
-  stroke: var(--color-series-1);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-before {
   fill: var(--color-bg);
-  stroke: var(--color-series-1);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-arrow,
 .fl .chart-link {
-  stroke: var(--color-series-2);
+  stroke: var(--color-data-compare);
   stroke-width: var(--border-strong);
 }
 
@@ -975,7 +988,7 @@ html.embedded .fl-canvas svg {
 <body>
 <figure class="fl-figure" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="802" style="aspect-ratio: 960 / 802" viewBox="-335.3 0 960 802" role="img"><title>주문 상태</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><g id="n-0" class="fl-node" data-id="__start"><circle cx="211.4" cy="35" r="7" fill="var(--color-fg)" class="fl-stroke "/></g>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="802" style="aspect-ratio: 960 / 802" viewBox="-335.3 0 960 802" role="img"><title>주문 상태</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-compare)"/></marker></defs><g id="n-0" class="fl-node" data-id="__start"><circle cx="211.4" cy="35" r="7" fill="var(--color-fg)" class="fl-stroke "/></g>
 <g id="n-1" class="fl-node" data-id="created"><rect x="161.4" y="102" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="211.4" y="130" class="label">생성됨</text></g>
 <g id="n-2" class="fl-node" data-id="paid"><rect x="67.1" y="286" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="117.1" y="314" class="label">결제됨</text></g>
 <g id="n-3" class="fl-node" data-id="shipped"><rect x="28" y="470" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="78" y="498" class="label">배송 중</text></g>
@@ -1493,7 +1506,7 @@ function createPacket(hop, stage) {
   const path = stage.paths[hop.edge];
   const g = document.createElementNS(SVG_NS, 'g');
   g.setAttribute('class', 'fl-packet');
-  g.innerHTML = `<circle r="${metrics.halo}" fill="${metrics.accent}" opacity="${metrics.haloOpacity}"/><circle r="${metrics.packet}" fill="${metrics.accent}"/>`;
+  g.innerHTML = `<circle r="${metrics.halo}" fill="${metrics.active}" opacity="${metrics.haloOpacity}"/><circle r="${metrics.packet}" fill="${metrics.active}"/>`;
   stage.packetLayer.appendChild(g);
   const chip = hop.data ? createChip(hop.data, stage) : undefined;
   if (chip) g.appendChild(chip.g);
@@ -1608,7 +1621,7 @@ function chipSlide(hop, metrics) {
   };
 }
 
-figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":4695,"hops":[{"edge":0,"isBack":false,"ms":750,"to":"paid","data":["39,000원"],"line":20,"chipPath":[[0,0,47],[0.05,0,47],[0.1,0,47],[0.15,0,47],[0.2,0,47],[0.25,0,47],[0.3,0,47],[0.35,0,47],[0.4,0,47],[0.41250000000000003,0,47],[0.415625,0,47],[0.4167871977123615,0,47],[0.4167871977123615,-41.92136718749998,0],[0.41875000000000007,-41.92136718749998,0],[0.42500000000000004,-41.92136718749998,0],[0.45,-41.92136718749998,0],[0.5,-41.92136718749998,0],[0.55,-41.92136718749998,0],[0.575,-41.92136718749998,0],[0.5812499999999999,-41.92136718749998,0],[0.5874999999999999,0,0],[0.6,0,0],[0.65,0,0],[0.7,0,0],[0.75,0,0],[0.8,0,0],[0.85,0,0],[0.9,0,0],[0.95,0,0],[1,0,0]]}],"edgesOn":[0],"nodesOn":[0,1],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제가 끝나면 출고되고 수령으로 끝난다","series":[],"growing":[],"lights":[]},{"si":0,"t0":4695,"t1":7949,"hops":[{"edge":1,"isBack":false,"ms":2554,"to":"shipped","line":21}],"edgesOn":[0,1],"nodesOn":[0,1,2],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제가 끝나면 출고되고 수령으로 끝난다","series":[],"growing":[],"lights":[]},{"si":0,"t0":7949,"t1":12163,"hops":[{"edge":2,"isBack":false,"ms":1914,"to":"delivered","line":22}],"edgesOn":[0,1,2],"nodesOn":[0,1,2,3],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제가 끝나면 출고되고 수령으로 끝난다","series":[],"growing":[],"lights":[]},{"si":1,"t0":12163,"t1":13903,"hops":[{"edge":0,"isBack":false,"ms":750,"to":"paid","line":24}],"edgesOn":[0],"nodesOn":[0,1],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제 뒤에도 출고 전이면 취소할 수 있다","series":[],"growing":[],"lights":[]},{"si":1,"t0":13903,"t1":20228,"hops":[{"edge":4,"isBack":false,"ms":4025,"to":"cancelled","data":["환불"],"line":25,"chipPath":[[0,0,-34.5],[0.025,0,-42.55000000000001],[0.037500000000000006,0,-46.57499999999999],[0.04062500000000001,0,-47.58125000000001],[0.042215879675815984,0,-47.58125000000001],[0.042215879675815984,0,47],[0.043750000000000004,0,47],[0.05,0,47],[0.1,0,47],[0.15,0,0],[0.2,0,0],[0.25,0,0],[0.3,0,0],[0.35,0,0],[0.4,0,0],[0.45,0,0],[0.5,0,0],[0.55,0,-13.600000000000023],[0.6,0,-29.69999999999999],[0.625,0,-37.75],[0.63125,0,-39.76249999999999],[0.6343749999999999,0,-40.768749999999955],[0.6359662080126538,0,-40.768749999999955],[0.6359662080126538,0,0],[0.6375,0,0],[0.65,0,0],[0.7,0,0],[0.75,0,0],[0.8,0,0],[0.85,0,0],[0.9,0,0],[0.95,0,0],[1,0,0]]}],"edgesOn":[0,4],"nodesOn":[0,1,5],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제 뒤에도 출고 전이면 취소할 수 있다","series":[],"growing":[],"lights":[]}],"steps":["정상 주문","취소"],"cardCounts":[0,0,0,0,0,0,0,0],"edgeEnds":[[0,1],[1,2],[2,3],[3,4],[1,5],[2,5],[4,6],[5,7]],"seriesCount":0,"rowCount":0,"metrics":{"accent":"var(--color-accent)","chipFill":"var(--color-accent-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
+figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":4695,"hops":[{"edge":0,"isBack":false,"ms":750,"to":"paid","data":["39,000원"],"line":20,"chipPath":[[0,0,47],[0.05,0,47],[0.1,0,47],[0.15,0,47],[0.2,0,47],[0.25,0,47],[0.3,0,47],[0.35,0,47],[0.4,0,47],[0.41250000000000003,0,47],[0.415625,0,47],[0.4167871977123615,0,47],[0.4167871977123615,-41.92136718749998,0],[0.41875000000000007,-41.92136718749998,0],[0.42500000000000004,-41.92136718749998,0],[0.45,-41.92136718749998,0],[0.5,-41.92136718749998,0],[0.55,-41.92136718749998,0],[0.575,-41.92136718749998,0],[0.5812499999999999,-41.92136718749998,0],[0.5874999999999999,0,0],[0.6,0,0],[0.65,0,0],[0.7,0,0],[0.75,0,0],[0.8,0,0],[0.85,0,0],[0.9,0,0],[0.95,0,0],[1,0,0]]}],"edgesOn":[0],"nodesOn":[0,1],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제가 끝나면 출고되고 수령으로 끝난다","series":[],"growing":[],"lights":[]},{"si":0,"t0":4695,"t1":7949,"hops":[{"edge":1,"isBack":false,"ms":2554,"to":"shipped","line":21}],"edgesOn":[0,1],"nodesOn":[0,1,2],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제가 끝나면 출고되고 수령으로 끝난다","series":[],"growing":[],"lights":[]},{"si":0,"t0":7949,"t1":12163,"hops":[{"edge":2,"isBack":false,"ms":1914,"to":"delivered","line":22}],"edgesOn":[0,1,2],"nodesOn":[0,1,2,3],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제가 끝나면 출고되고 수령으로 끝난다","series":[],"growing":[],"lights":[]},{"si":1,"t0":12163,"t1":13903,"hops":[{"edge":0,"isBack":false,"ms":750,"to":"paid","line":24}],"edgesOn":[0],"nodesOn":[0,1],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제 뒤에도 출고 전이면 취소할 수 있다","series":[],"growing":[],"lights":[]},{"si":1,"t0":13903,"t1":20228,"hops":[{"edge":4,"isBack":false,"ms":4025,"to":"cancelled","data":["환불"],"line":25,"chipPath":[[0,0,-34.5],[0.025,0,-42.55000000000001],[0.037500000000000006,0,-46.57499999999999],[0.04062500000000001,0,-47.58125000000001],[0.042215879675815984,0,-47.58125000000001],[0.042215879675815984,0,47],[0.043750000000000004,0,47],[0.05,0,47],[0.1,0,47],[0.15,0,0],[0.2,0,0],[0.25,0,0],[0.3,0,0],[0.35,0,0],[0.4,0,0],[0.45,0,0],[0.5,0,0],[0.55,0,-13.600000000000023],[0.6,0,-29.69999999999999],[0.625,0,-37.75],[0.63125,0,-39.76249999999999],[0.6343749999999999,0,-40.768749999999955],[0.6359662080126538,0,-40.768749999999955],[0.6359662080126538,0,0],[0.6375,0,0],[0.65,0,0],[0.7,0,0],[0.75,0,0],[0.8,0,0],[0.85,0,0],[0.9,0,0],[0.95,0,0],[1,0,0]]}],"edgesOn":[0,4],"nodesOn":[0,1,5],"groupsOn":[],"columnsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제 뒤에도 출고 전이면 취소할 수 있다","series":[],"growing":[],"lights":[]}],"steps":["정상 주문","취소"],"cardCounts":[0,0,0,0,0,0,0,0],"edgeEnds":[[0,1],[1,2],[2,3],[3,4],[1,5],[2,5],[4,6],[5,7]],"seriesCount":0,"rowCount":0,"metrics":{"active":"var(--color-state-active)","chipFill":"var(--color-state-active-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
 </script>
 </body>
 </html>

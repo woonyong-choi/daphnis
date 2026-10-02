@@ -13,6 +13,12 @@ const DECORATIVE_LINE = 1.5;
 const DECORATIVE_PLATE_EDGE = 1.3;
 const FIGURE_FACES = ['bg', 'node', 'group', 'card-on'];
 const DOCUMENT_FACES = ['page', 'gallery'];
+const ALL_FACES = [...FIGURE_FACES, ...DOCUMENT_FACES];
+// 글자 역할(4.5)과 그래픽 역할(3). 역할마다 놓이는 면은 모두 ALL_FACES 안이다.
+// 강조 글자는 그룹 바탕 위에 놓이지 않는다. 카드 표시는 내용이 찬 카드 바탕(card-on)에, 링크는 문서 면에 놓인다.
+const TEXT_FACES = ['bg', 'node', 'card-on', ...DOCUMENT_FACES];
+const TEXT_ROLES = ['state.active-text', 'ui.link'];
+const GRAPHIC_ROLES = ['state.active', 'ui.focus', 'ui.progress', 'data.main', 'data.compare'];
 const THEMES = ['light', 'dark'];
 
 const color = themeColor;
@@ -34,19 +40,19 @@ for (const theme of THEMES) {
     expectAtLeast(theme, TEXT, faces.flatMap((face) => [['fg', face], ['muted', face]]));
   });
 
-  test(`contrast_${theme}_accent_strong_text_and_links_reach_4_5_on_their_faces`, () => {
-    // 링크(열기, SVG, 목록으로), 카드 표시 ✓(내용이 찬 카드 바탕), 열 표시 PK. 빈 카드 바탕(surface)에는 표시가 없다.
-    expectAtLeast(theme, TEXT, [['accent-strong', 'bg'], ['accent-strong', 'node'], ['accent-strong', 'card-on'], ['accent-strong', 'page'], ['accent-strong', 'gallery']]);
+  test(`contrast_${theme}_text_roles_reach_4_5_on_their_faces`, () => {
+    // 링크(열기, SVG, 목록으로), 카드 표시 ✓, 열 표시 PK
+    expectAtLeast(theme, TEXT, TEXT_FACES.flatMap((face) => TEXT_ROLES.map((role) => [role, face])));
   });
 
-  test(`contrast_${theme}_accent_graphics_reach_3_on_every_figure_and_document_face`, () => {
-    // 밝힌 선과 점, 도형·그룹·카드 테두리, 진행 고리, 초점 고리
-    expectAtLeast(theme, GRAPHIC, [...FIGURE_FACES, ...DOCUMENT_FACES].map((face) => ['accent', face]));
+  test(`contrast_${theme}_graphic_roles_reach_3_on_every_figure_and_document_face`, () => {
+    // 밝힌 선과 점, 도형·그룹·카드 테두리(state), 진행 고리, 초점 고리(ui), 계열 막대와 점(data)
+    expectAtLeast(theme, GRAPHIC, ALL_FACES.flatMap((face) => GRAPHIC_ROLES.map((role) => [role, face])));
   });
 
-  test(`contrast_${theme}_text_on_accent_fill_reaches_4_5`, () => {
+  test(`contrast_${theme}_text_on_active_fill_reaches_4_5`, () => {
     // 켜진 선 라벨 알약, 이동 글 상자, 켜진 테마 단추, 카드 안 켜진 이름 알약
-    expectAtLeast(theme, TEXT, [['on-accent', 'accent-fill']]);
+    expectAtLeast(theme, TEXT, [['state.on-active', 'state.active-fill']]);
   });
 
   test(`contrast_${theme}_card_tag_text_reaches_4_5_on_every_tone_band`, () => {
@@ -71,27 +77,23 @@ for (const theme of THEMES) {
 
   test(`contrast_${theme}_active_tab_state_ring_reaches_3_on_the_tab_group_face_and_text_keeps_4_5`, () => {
     // 켜진 탭 표시는 border 색 고리다. 알약 면은 글자 대비만 맡는다.
-    expectAtLeast(theme, TEXT, [['fg', 'control-on'], ['muted', 'bg']]);
+    expectAtLeast(theme, TEXT, [['fg', 'ui.control-on'], ['muted', 'bg']]);
     expectAtLeast(theme, GRAPHIC, [['border', 'bg']]);
   });
 
   test(`decorative_${theme}_lines_and_bands_reach_1_5_on_the_figure_ground`, () => {
     // 격자, 히트맵 값 0 칸, 신뢰구간 띠는 값이 숫자로도 적혀 있어 색은 거들 뿐이라 WCAG 적용 대상 밖이다.
-    expectAtLeast(theme, DECORATIVE_LINE, [['grid', 'bg'], ['heat-low', 'bg']]);
-    for (const series of ['series-1', 'series-2']) {
+    expectAtLeast(theme, DECORATIVE_LINE, [['data.grid', 'bg'], ['data.heat-low', 'bg']]);
+    for (const series of ['data.main', 'data.compare']) {
       const band = mixHex(color(theme, 'bg'), color(theme, series), opacity('range'));
       const ratio = contrast(band, color(theme, 'bg'));
       assert.ok(ratio >= DECORATIVE_LINE, `${theme} range band ${series}: ${ratio.toFixed(2)}`);
     }
   });
 
-  test(`contrast_${theme}_series_marks_reach_3_on_every_figure_face`, () => {
-    expectAtLeast(theme, GRAPHIC, FIGURE_FACES.flatMap((face) => [['series-1', face], ['series-2', face]]));
-  });
-
   test(`contrast_${theme}_heat_text_reaches_4_5_on_every_cell_strength`, () => {
-    const [low, high] = [color(theme, 'heat-low'), color(theme, 'heat-high')];
-    const [dark, light] = [color(theme, 'heat-ink'), color(theme, 'heat-ink-on')];
+    const [low, high] = [color(theme, 'data.heat-low'), color(theme, 'data.heat-high')];
+    const [dark, light] = [color(theme, 'data.heat-ink'), color(theme, 'data.heat-ink-on')];
     for (let step = 0; step <= 1000; step += 1) {
       const cell = mixHex(low, high, step / 1000);
       const ratio = contrast(pickInk(cell, dark, light), cell);
@@ -105,38 +107,38 @@ for (const theme of THEMES) {
   });
 }
 
-test('accentPalette_values_follow_the_resume_accent_and_strong_is_the_lightest_same_hue_that_reaches_4_5', () => {
+test('stateRoles_values_follow_the_resume_accent_and_strong_is_the_lightest_same_hue_that_reaches_4_5', () => {
   assert.equal(color('light', 'palette.blue.500'), '#2b96ed');
-  assert.equal(color('light', 'accent'), color('light', 'palette.blue.550'));
-  assert.equal(color('dark', 'accent'), '#79c0ff');
-  assert.equal(color('light', 'on-accent'), '#ffffff');
-  assert.equal(color('dark', 'on-accent'), '#0d1117');
-  assert.equal(color('dark', 'accent-strong'), color('dark', 'accent'));
-  // 흰 글자가 놓이는 면(accent-fill)은 라이트에서 accent와 같은 색상의 어두운 단계다.
-  assert.equal(color('light', 'accent-strong'), '#1072c2');
-  assert.equal(color('light', 'accent-fill'), color('light', 'accent-strong'));
-  assert.equal(color('dark', 'accent-fill'), color('dark', 'accent'));
+  assert.equal(color('light', 'state.active'), color('light', 'palette.blue.550'));
+  assert.equal(color('dark', 'state.active'), '#79c0ff');
+  assert.equal(color('light', 'state.on-active'), '#ffffff');
+  assert.equal(color('dark', 'state.on-active'), '#0d1117');
+  assert.equal(color('dark', 'state.active-text'), color('dark', 'state.active'));
+  // 흰 글자가 놓이는 면(state.active-fill)은 라이트에서 state.active와 같은 색상의 어두운 단계다.
+  assert.equal(color('light', 'state.active-text'), '#1072c2');
+  assert.equal(color('light', 'state.active-fill'), color('light', 'state.active-text'));
+  assert.equal(color('dark', 'state.active-fill'), color('dark', 'state.active'));
   const faces = ['node', 'bg', 'card-on', 'page', 'gallery'];
-  const lowest = Math.min(...faces.map((face) => contrast(color('light', 'accent-strong'), color('light', face))));
-  const brighter = Math.min(...faces.map((face) => contrast(mixHex(color('light', 'accent-strong'), '#ffffff', 0.01), color('light', face))));
+  const lowest = Math.min(...faces.map((face) => contrast(color('light', 'state.active-text'), color('light', face))));
+  const brighter = Math.min(...faces.map((face) => contrast(mixHex(color('light', 'state.active-text'), '#ffffff', 0.01), color('light', face))));
   assert.ok(lowest >= TEXT && brighter < TEXT, `${lowest.toFixed(2)} / ${brighter.toFixed(2)}`);
-  assert.ok(contrast(color('light', 'accent'), color('light', 'node')) < TEXT, 'accent itself is a graphic color, not a text color');
+  assert.ok(contrast(color('light', 'state.active'), color('light', 'node')) < TEXT, 'state.active itself is a graphic color, not a text color');
 });
 
 test('contrast_dark_heat_inks_are_one_color_so_the_build_time_light_pick_is_right_in_dark', () => {
-  assert.equal(color('dark', 'heat-ink'), color('dark', 'heat-ink-on'));
+  assert.equal(color('dark', 'data.heat-ink'), color('dark', 'data.heat-ink-on'));
 });
 
 test('buildFigure_heatmap_cells_pick_the_ink_with_the_larger_contrast', async () => {
   const source = 'chart heatmap\ncell "a" "x" 1\ncell "a" "y" 50\ncell "b" "x" 100\ncell "b" "y" 0\n';
   const { chart } = await buildFigure(source);
-  const [low, high] = [color('light', 'heat-low'), color('light', 'heat-high')];
+  const [low, high] = [color('light', 'data.heat-low'), color('light', 'data.heat-high')];
   const picked = [...chart.body.matchAll(/class="chart-heat" style="--s:([\d.]+)"[^]*?class="chart-cell( on)?"/g)];
 
   assert.equal(picked.length, 4);
   for (const [, strength, on] of picked) {
     const cell = mixHex(low, high, Number(strength));
-    const expected = pickInk(cell, color('light', 'heat-ink'), color('light', 'heat-ink-on')) === color('light', 'heat-ink-on');
+    const expected = pickInk(cell, color('light', 'data.heat-ink'), color('light', 'data.heat-ink-on')) === color('light', 'data.heat-ink-on');
     assert.equal(Boolean(on), expected, `strength ${strength}`);
   }
 });

@@ -46,15 +46,25 @@
   --color-palette-purple-500: #8b5cf6;
   --color-palette-green-500: #10b981;
   --color-palette-slate-500: #8b949e;
-  --color-accent: var(--color-palette-blue-550);
-  --color-accent-strong: var(--color-palette-blue-600);
-  --color-accent-fill: var(--color-accent-strong);
-  --color-on-accent: var(--color-palette-gray-0);
+  --color-state-active: var(--color-palette-blue-550);
+  --color-state-active-fill: var(--color-palette-blue-600);
+  --color-state-active-text: var(--color-palette-blue-600);
+  --color-state-on-active: var(--color-palette-gray-0);
+  --color-ui-link: var(--color-palette-blue-600);
+  --color-ui-focus: var(--color-palette-blue-550);
+  --color-ui-progress: var(--color-palette-blue-550);
+  --color-ui-control-on: var(--color-palette-gray-0);
+  --color-data-main: var(--color-palette-blue-550);
+  --color-data-compare: var(--color-palette-orange-550);
+  --color-data-heat-low: var(--color-palette-blue-200);
+  --color-data-heat-high: var(--color-palette-blue-800);
+  --color-data-heat-ink: var(--color-palette-ink-1000);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-ink-200);
   --color-fg: var(--color-palette-ink-900);
   --color-muted: var(--color-palette-ink-600);
   --color-bg: var(--color-palette-gray-25);
   --color-node: var(--color-palette-gray-0);
-  --color-control-on: var(--color-palette-gray-0);
   --color-surface: var(--color-palette-gray-50);
   --color-border: var(--color-palette-gray-500);
   --color-card-on: var(--color-palette-blue-50);
@@ -69,13 +79,6 @@
   --color-tag-green: var(--color-palette-green-500);
   --color-tag-orange: var(--color-palette-orange-500);
   --color-tag-gray: var(--color-palette-slate-500);
-  --color-series-1: var(--color-accent);
-  --color-series-2: var(--color-palette-orange-550);
-  --color-heat-low: var(--color-palette-blue-200);
-  --color-heat-high: var(--color-palette-blue-800);
-  --color-heat-ink: var(--color-palette-ink-1000);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-grid: var(--color-palette-ink-200);
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -207,13 +210,25 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --color-accent: var(--color-palette-blue-400);
-    --color-accent-strong: var(--color-palette-blue-400);
+    --color-state-active: var(--color-palette-blue-400);
+    --color-state-active-fill: var(--color-palette-blue-400);
+    --color-state-active-text: var(--color-palette-blue-400);
+    --color-state-on-active: var(--color-palette-ink-850);
+    --color-ui-link: var(--color-palette-blue-400);
+    --color-ui-focus: var(--color-palette-blue-400);
+    --color-ui-progress: var(--color-palette-blue-400);
+    --color-ui-control-on: var(--color-palette-neutral-750);
+    --color-data-main: var(--color-palette-blue-400);
+    --color-data-compare: var(--color-palette-orange-400);
+    --color-data-heat-low: var(--color-palette-blue-850);
+    --color-data-heat-high: var(--color-palette-blue-600);
+    --color-data-heat-ink: var(--color-palette-gray-0);
+    --color-data-heat-ink-on: var(--color-palette-gray-0);
+    --color-data-grid: var(--color-palette-neutral-750);
     --color-fg: var(--color-palette-neutral-100);
     --color-muted: var(--color-palette-neutral-400);
     --color-bg: var(--color-palette-neutral-900);
     --color-node: var(--color-palette-neutral-850);
-    --color-control-on: var(--color-palette-neutral-750);
     --color-surface: var(--color-palette-neutral-800);
     --color-border: var(--color-palette-neutral-500);
     --color-card-on: var(--color-palette-blue-900);
@@ -222,24 +237,29 @@
     --color-gallery: var(--color-palette-neutral-950);
     --color-group: var(--color-palette-neutral-850);
     --color-group-border: var(--color-palette-neutral-500);
-    --color-heat-low: var(--color-palette-blue-850);
-    --color-heat-high: var(--color-palette-blue-600);
-    --color-heat-ink: var(--color-palette-gray-0);
-    --color-heat-ink-on: var(--color-palette-gray-0);
-    --color-series-2: var(--color-palette-orange-400);
-    --color-grid: var(--color-palette-neutral-750);
     --color-plate-border: var(--color-palette-neutral-800);
-    --color-on-accent: var(--color-palette-ink-850);
   }
 }
 [data-theme='dark'] {
-  --color-accent: var(--color-palette-blue-400);
-  --color-accent-strong: var(--color-palette-blue-400);
+  --color-state-active: var(--color-palette-blue-400);
+  --color-state-active-fill: var(--color-palette-blue-400);
+  --color-state-active-text: var(--color-palette-blue-400);
+  --color-state-on-active: var(--color-palette-ink-850);
+  --color-ui-link: var(--color-palette-blue-400);
+  --color-ui-focus: var(--color-palette-blue-400);
+  --color-ui-progress: var(--color-palette-blue-400);
+  --color-ui-control-on: var(--color-palette-neutral-750);
+  --color-data-main: var(--color-palette-blue-400);
+  --color-data-compare: var(--color-palette-orange-400);
+  --color-data-heat-low: var(--color-palette-blue-850);
+  --color-data-heat-high: var(--color-palette-blue-600);
+  --color-data-heat-ink: var(--color-palette-gray-0);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-neutral-750);
   --color-fg: var(--color-palette-neutral-100);
   --color-muted: var(--color-palette-neutral-400);
   --color-bg: var(--color-palette-neutral-900);
   --color-node: var(--color-palette-neutral-850);
-  --color-control-on: var(--color-palette-neutral-750);
   --color-surface: var(--color-palette-neutral-800);
   --color-border: var(--color-palette-neutral-500);
   --color-card-on: var(--color-palette-blue-900);
@@ -248,14 +268,7 @@
   --color-gallery: var(--color-palette-neutral-950);
   --color-group: var(--color-palette-neutral-850);
   --color-group-border: var(--color-palette-neutral-500);
-  --color-heat-low: var(--color-palette-blue-850);
-  --color-heat-high: var(--color-palette-blue-600);
-  --color-heat-ink: var(--color-palette-gray-0);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-series-2: var(--color-palette-orange-400);
-  --color-grid: var(--color-palette-neutral-750);
   --color-plate-border: var(--color-palette-neutral-800);
-  --color-on-accent: var(--color-palette-ink-850);
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
 .fl text {
@@ -319,7 +332,7 @@
   font-size: var(--size-text-11);
   font-weight: var(--weight-semibold);
   text-anchor: end;
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .mark.key {
@@ -334,13 +347,13 @@
 }
 
 .fl .mini.on {
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .chip {
   font-size: var(--size-text-12);
   text-anchor: middle;
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .md {
@@ -378,7 +391,7 @@
 .fl .cell .key {
   font-size: var(--size-text-9);
   font-weight: var(--weight-semibold);
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .frame-box {
@@ -430,24 +443,24 @@
   fill: var(--color-muted);
 }
 
-@keyframes a0 { 0%,60.846% { stroke: var(--color-border) } 60.847% { stroke: var(--color-border) } 63.415%,99.999% { stroke: var(--color-accent) } }
+@keyframes a0 { 0%,60.846% { stroke: var(--color-border) } 60.847% { stroke: var(--color-border) } 63.415%,99.999% { stroke: var(--color-state-active) } }
 .fl .a0 { animation: a0 7.79s infinite linear; }
 @keyframes a1 { 0%,60.846% { fill: var(--color-card-on) } 60.847%,99.999% { fill: var(--color-card-on) } }
 .fl .a1 { animation: a1 7.79s infinite linear; }
 @keyframes a2 { 0%,60.846% { fill: transparent } 60.847%,99.999% { fill: transparent } }
 .fl .a2 { animation: a2 7.79s infinite linear; }
-@keyframes a3 { 0%,60.846% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 60.847% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 63.415%,99.999% { stroke: var(--color-accent); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+@keyframes a3 { 0%,60.846% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 60.847% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 63.415%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
 .fl .a3 { animation: a3 7.79s infinite linear; }
 @keyframes a4 { 0%,60.846% { opacity: 1 } 60.847%,99.999% { opacity: 1 } }
 .fl .a4 { animation: a4 7.79s infinite linear; }
 </style>
-<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
+<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-compare)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="261" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
 <g transform="translate(243.7 0)">
 <g id="n-0" class="fl-node" data-id="orders"><rect x="305.3" y="54" width="139.3" height="104" rx="10" fill="var(--color-node)" class="fl-stroke a0"/><text x="375" y="72" class="label">orders</text><g class="fl-col" data-col="orders.id"><rect x="306.3" y="80" width="137.3" height="26" class="col-bg a1"/><line x1="305.3" x2="444.6" y1="80" y2="80" class="col-line"/><text x="323.3" y="97.3" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="426.6" y="97.3" class="cell type">bigint</text></g><g class="fl-col" data-col="orders.user_id"><rect x="306.3" y="106" width="137.3" height="26" class="col-bg a2"/><line x1="305.3" x2="444.6" y1="106" y2="106" class="col-line"/><text x="323.3" y="123.3" class="cell">user_id</text><text x="426.6" y="123.3" class="cell type">bigint</text></g><g class="fl-col" data-col="orders.status"><rect x="306.3" y="132" width="137.3" height="26" class="col-bg a2"/><line x1="305.3" x2="444.6" y1="132" y2="132" class="col-line"/><text x="323.3" y="149.3" class="cell">status</text><text x="426.6" y="149.3" class="cell type">varchar</text></g></g>
 <g id="n-1" class="fl-node" data-id="payments"><rect x="28" y="28" width="217.3" height="104" rx="10" fill="var(--color-node)" class="fl-stroke a0"/><text x="136.7" y="46" class="label">payments</text><g class="fl-col" data-col="payments.id"><rect x="29" y="54" width="215.3" height="26" class="col-bg a2"/><line x1="28" x2="245.3" y1="54" y2="54" class="col-line"/><text x="46" y="71.3" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="227.3" y="71.3" class="cell type">bigint</text></g><g class="fl-col" data-col="payments.order_id"><rect x="29" y="80" width="215.3" height="26" class="col-bg a1"/><line x1="28" x2="245.3" y1="80" y2="80" class="col-line"/><text x="46" y="97.3" class="cell">order_id<tspan class="key" dx="6">FK</tspan></text><text x="227.3" y="97.3" class="cell type">bigint</text></g><g class="fl-col" data-col="payments.amount"><rect x="29" y="106" width="215.3" height="26" class="col-bg a2"/><line x1="28" x2="245.3" y1="106" y2="106" class="col-line"/><text x="46" y="123.3" class="cell">amount</text><text x="227.3" y="123.3" class="cell type">numeric(10, 2)</text></g></g>
 <g id="e-0" class="fl-edge"><path id="p-0" d="M 245.31845703125 93 L 305.3 93" class="fl-path a3" marker-end="url(#fl-arrow)"/></g>
-<g class="p1-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><g><rect x="-47.7" y="-35" width="95.4" height="23" rx="8" fill="var(--color-accent-fill)"/><text x="0" y="-20" class="chip">order_id 1042</text><animateTransform attributeName="transform" type="translate" dur="7.79s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.60847;0.62331;0.62967;0.63439;0.6383;0.63852;0.63868;0.63868;0.63875;0.63919;0.64006;0.64172;0.64483;0.64773;0.65049;0.65317;0.65583;0.65849;0.66121;0.66404;0.66703;0.67027;0.67386;0.67798;0.68299;0.68976;0.70475;1" values="0 74.5;0 74.5;0 74.5;0 74.5;0 74.5;0 74.5;0 74.5;0 74.5;35.8 -27.5;35.8 -27.5;35.5 -27.5;34.7 -27.5;33.2 -27.5;30.2 -27.5;27.2 -27.5;24.2 -27.5;21.2 -27.5;18.2 -27.5;15.2 -27.5;12.2 -27.5;9.2 -27.5;6.2 -27.5;3.2 -27.5;0 -27.5;0 -27.5;0 -27.5;0 -27.5;0 -27.5;0 -27.5"/></g><animate attributeName="opacity" dur="7.79s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.60847;0.70475" values="0;1;0"/><animateMotion dur="7.79s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.60847;0.70475;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
+<g class="p1-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><g><rect x="-47.7" y="-35" width="95.4" height="23" rx="8" fill="var(--color-state-active-fill)"/><text x="0" y="-20" class="chip">order_id 1042</text><animateTransform attributeName="transform" type="translate" dur="7.79s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.60847;0.62331;0.62967;0.63439;0.6383;0.63852;0.63868;0.63868;0.63875;0.63919;0.64006;0.64172;0.64483;0.64773;0.65049;0.65317;0.65583;0.65849;0.66121;0.66404;0.66703;0.67027;0.67386;0.67798;0.68299;0.68976;0.70475;1" values="0 74.5;0 74.5;0 74.5;0 74.5;0 74.5;0 74.5;0 74.5;0 74.5;35.8 -27.5;35.8 -27.5;35.5 -27.5;34.7 -27.5;33.2 -27.5;30.2 -27.5;27.2 -27.5;24.2 -27.5;21.2 -27.5;18.2 -27.5;15.2 -27.5;12.2 -27.5;9.2 -27.5;6.2 -27.5;3.2 -27.5;0 -27.5;0 -27.5;0 -27.5;0 -27.5;0 -27.5;0 -27.5"/></g><animate attributeName="opacity" dur="7.79s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.60847;0.70475" values="0;1;0"/><animateMotion dur="7.79s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.60847;0.70475;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
 </g>
 <text x="480" y="204" opacity="0" class="steplabel a4">결제</text>
 <g opacity="0" class="a4"><text x="480" y="230" class="caption">결제 행은 주문 행을 외래 키로 가리킨다</text></g>

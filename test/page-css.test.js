@@ -78,8 +78,8 @@ test('controlStates_hover_focus_and_selected_rules_live_only_in_control_css_and_
   const selected = declarationsOf(CONTROL, ".fl-tabs button.on,\n.theme button[aria-pressed='true']");
 
   assert.equal(hover.color, 'var(--color-fg)');
-  assert.equal(focus.outline, 'var(--border-tag) solid var(--color-accent)');
-  assert.equal(selected.background, 'var(--color-control-on)');
+  assert.equal(focus.outline, 'var(--border-tag) solid var(--color-ui-focus)');
+  assert.equal(selected.background, 'var(--color-ui-control-on)');
   for (const sheet of [PLAYER, GALLERY, DOCUMENT]) assert.doesNotMatch(sheet, /(?:\.fl-round|\.fl-tabs button|\.theme button)[^{]*:(?:hover|focus-visible)/);
 });
 
@@ -105,7 +105,7 @@ test('progressRing_css_sits_over_the_border_box_and_has_no_number_literals_for_t
   const fill = declarationsOf(PLAYER, '.fl-ring-fill');
 
   assert.equal(ring.inset, 'calc(-1 * var(--border-thin))');
-  assert.equal(fill.stroke, 'var(--color-accent)');
+  assert.equal(fill.stroke, 'var(--color-ui-progress)');
   assert.equal(fill.fill, 'none');
   assert.equal(fill['stroke-width'], undefined, 'stroke width comes from the token via markup');
   assert.doesNotMatch(PLAYER, /fl-tab-(fill|track|label)/);
@@ -115,7 +115,7 @@ test('segmentedTabs_active_tab_is_a_solid_pill_with_semibold_label_and_no_progre
   const active = declarationsOf(CONTROL, ".fl-tabs button.on,\n.theme button[aria-pressed='true']");
   const tab = declarationsOf(CONTROL, '.fl-tabs button,\n.theme button');
 
-  assert.equal(active.background, 'var(--color-control-on)');
+  assert.equal(active.background, 'var(--color-ui-control-on)');
   assert.equal(active['font-weight'], 'var(--weight-semibold)');
   assert.equal(active.color, 'var(--color-fg)');
   assert.equal(tab.color, 'var(--color-muted)');

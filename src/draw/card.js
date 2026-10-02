@@ -116,7 +116,7 @@ function splitMeta(lines, body, metaAt) {
 // 관계 그래프. 밝힌 이름과, 밝힌 두 이름 사이 선은 강조 색이다. 열을 건너뛰는 관계는 위로 휜다.
 function drawMiniGraph(laid, x, y) {
   const lines = laid.edges.map(({ from, to, isLit, isSkip }) => {
-    const stroke = isLit ? tokens.color.accent : tokens.color.border;
+    const stroke = isLit ? tokens.color.state.active : tokens.color.border;
     if (isSkip) {
       const [x1, x2] = [from.x + from.w / 2, to.x + to.w / 2];
       const top = Math.min(from.y, to.y);
@@ -128,8 +128,8 @@ function drawMiniGraph(laid, x, y) {
     return `<line x1="${r(x + x1)}" y1="${r(y + y1)}" x2="${r(x + x2)}" y2="${r(y + y2)}" stroke="${stroke}" stroke-width="${values.border.thin}"/>`;
   });
   const pills = laid.nodes.map((n) => {
-    const fill = n.isLit ? tokens.color['accent-fill'] : tokens.color.node;
-    const stroke = n.isLit ? tokens.color['accent-fill'] : tokens.color.border;
+    const fill = n.isLit ? tokens.color.state['active-fill'] : tokens.color.node;
+    const stroke = n.isLit ? tokens.color.state['active-fill'] : tokens.color.border;
     return (
       `<rect x="${r(x + n.x)}" y="${r(y + n.y)}" width="${r(n.w)}" height="${n.h}" rx="${n.h / 2}" fill="${fill}" stroke="${stroke}" stroke-width="${values.border.thin}"/>` +
       `<text x="${r(x + n.x + n.w / 2)}" y="${r(centerBaseline(y + n.y + n.h / 2, MINI_TEXT))}" class="mini${n.isLit ? ' on' : ''}">${renderRich(n.name)}</text>`

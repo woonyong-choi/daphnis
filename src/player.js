@@ -376,7 +376,7 @@ function createPacket(hop, stage) {
   const path = stage.paths[hop.edge];
   const g = document.createElementNS(SVG_NS, 'g');
   g.setAttribute('class', 'fl-packet');
-  g.innerHTML = `<circle r="${metrics.halo}" fill="${metrics.accent}" opacity="${metrics.haloOpacity}"/><circle r="${metrics.packet}" fill="${metrics.accent}"/>`;
+  g.innerHTML = `<circle r="${metrics.halo}" fill="${metrics.active}" opacity="${metrics.haloOpacity}"/><circle r="${metrics.packet}" fill="${metrics.active}"/>`;
   stage.packetLayer.appendChild(g);
   const chip = hop.data ? createChip(hop.data, stage) : undefined;
   if (chip) g.appendChild(chip.g);

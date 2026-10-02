@@ -63,8 +63,8 @@ test('palette_light_and_dark_orange_keep_the_blue_lightness_and_chroma_and_only_
 });
 
 test('palette_orange_series_color_follows_the_theme_graphic_orange', () => {
-  assert.equal(color('light', 'series-2'), color('light', 'palette.orange.550'));
-  assert.equal(color('dark', 'series-2'), color('dark', 'palette.orange.400'));
+  assert.equal(color('light', 'data.compare'), color('light', 'palette.orange.550'));
+  assert.equal(color('dark', 'data.compare'), color('dark', 'palette.orange.400'));
   assert.equal(color('light', 'tag.orange'), color('light', 'palette.orange.500'));
 });
 

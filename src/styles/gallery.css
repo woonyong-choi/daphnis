@@ -31,7 +31,7 @@ h1 {
 }
 
 .top a {
-  color: var(--color-accent-strong);
+  color: var(--color-ui-link);
 }
 
 .theme {
@@ -97,12 +97,12 @@ nav {
 
 nav a {
   font-size: var(--size-text-13);
-  color: var(--color-accent-strong);
+  color: var(--color-ui-link);
   text-decoration: none;
 }
 
 nav a:focus-visible {
-  outline: var(--border-tag) solid var(--color-accent);
+  outline: var(--border-tag) solid var(--color-ui-focus);
   outline-offset: var(--space-1);
 }
 

@@ -63,15 +63,31 @@ export const tokens = freeze({
         "500": "var(--color-palette-slate-500)"
       }
     },
-    "accent": "var(--color-accent)",
-    "accent-strong": "var(--color-accent-strong)",
-    "accent-fill": "var(--color-accent-fill)",
-    "on-accent": "var(--color-on-accent)",
+    "state": {
+      "active": "var(--color-state-active)",
+      "active-fill": "var(--color-state-active-fill)",
+      "active-text": "var(--color-state-active-text)",
+      "on-active": "var(--color-state-on-active)"
+    },
+    "ui": {
+      "link": "var(--color-ui-link)",
+      "focus": "var(--color-ui-focus)",
+      "progress": "var(--color-ui-progress)",
+      "control-on": "var(--color-ui-control-on)"
+    },
+    "data": {
+      "main": "var(--color-data-main)",
+      "compare": "var(--color-data-compare)",
+      "heat-low": "var(--color-data-heat-low)",
+      "heat-high": "var(--color-data-heat-high)",
+      "heat-ink": "var(--color-data-heat-ink)",
+      "heat-ink-on": "var(--color-data-heat-ink-on)",
+      "grid": "var(--color-data-grid)"
+    },
     "fg": "var(--color-fg)",
     "muted": "var(--color-muted)",
     "bg": "var(--color-bg)",
     "node": "var(--color-node)",
-    "control-on": "var(--color-control-on)",
     "surface": "var(--color-surface)",
     "border": "var(--color-border)",
     "card-on": "var(--color-card-on)",
@@ -87,14 +103,7 @@ export const tokens = freeze({
       "green": "var(--color-tag-green)",
       "orange": "var(--color-tag-orange)",
       "gray": "var(--color-tag-gray)"
-    },
-    "series-1": "var(--color-series-1)",
-    "series-2": "var(--color-series-2)",
-    "heat-low": "var(--color-heat-low)",
-    "heat-high": "var(--color-heat-high)",
-    "heat-ink": "var(--color-heat-ink)",
-    "heat-ink-on": "var(--color-heat-ink-on)",
-    "grid": "var(--color-grid)"
+    }
   },
   "font": {
     "sans": "var(--font-sans)",
@@ -317,15 +326,31 @@ export const values = freeze({
         "500": "#8b949e"
       }
     },
-    "accent": "#218fe5",
-    "accent-strong": "#1072c2",
-    "accent-fill": "#1072c2",
-    "on-accent": "#ffffff",
+    "state": {
+      "active": "#218fe5",
+      "active-fill": "#1072c2",
+      "active-text": "#1072c2",
+      "on-active": "#ffffff"
+    },
+    "ui": {
+      "link": "#1072c2",
+      "focus": "#218fe5",
+      "progress": "#218fe5",
+      "control-on": "#ffffff"
+    },
+    "data": {
+      "main": "#218fe5",
+      "compare": "#d96c1f",
+      "heat-low": "#a9cdea",
+      "heat-high": "#1d5d91",
+      "heat-ink": "#000000",
+      "heat-ink-on": "#ffffff",
+      "grid": "#c6cacf"
+    },
     "fg": "#0b0b0b",
     "muted": "#52514e",
     "bg": "#f6f7f9",
     "node": "#ffffff",
-    "control-on": "#ffffff",
     "surface": "#eef1f5",
     "border": "#818b99",
     "card-on": "#edf5fb",
@@ -341,14 +366,7 @@ export const values = freeze({
       "green": "#10b981",
       "orange": "#dc6e22",
       "gray": "#8b949e"
-    },
-    "series-1": "#218fe5",
-    "series-2": "#d96c1f",
-    "heat-low": "#a9cdea",
-    "heat-high": "#1d5d91",
-    "heat-ink": "#000000",
-    "heat-ink-on": "#ffffff",
-    "grid": "#c6cacf"
+    }
   },
   "font": {
     "sans": "FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif",

@@ -28,12 +28,12 @@ const ARROW_MIN = SIZE['chart-arrow-min'];
 const RIGHT = WIDTH - PAD;
 // 히트맵 칸 색. 값 0은 핵심 1 옅게, 최댓값은 핵심 1 진하게이고 그 사이는 sRGB 보간이다(문서 스킬 색표).
 // 칸 색은 CSS(.chart-heat의 color-mix)가 변수로 계산해 다크 모드 값을 따라간다. 여기 hex는 color-mix를 모르는 뷰어용 대체 색(라이트)이다.
-const HEAT_LOW = values.color['heat-low'];
-const HEAT_HIGH = values.color['heat-high'];
+const HEAT_LOW = values.color.data['heat-low'];
+const HEAT_HIGH = values.color.data['heat-high'];
 // 칸 안 값 글자 후보. 칸마다 대비가 큰 쪽을 빌드 때 고른다. 다크는 두 후보가 같은 밝은 색이고 칸 색 범위가 그 글자와 4.5 이상이 되게 정했다(테스트가 모든 강도를 잰다).
-const HEAT_INK = values.color['heat-ink'];
-const HEAT_INK_ON = values.color['heat-ink-on'];
-const SERIES_COLOR = [tokens.color['series-1'], tokens.color['series-2']];
+const HEAT_INK = values.color.data['heat-ink'];
+const HEAT_INK_ON = values.color.data['heat-ink-on'];
+const SERIES_COLOR = [tokens.color.data.main, tokens.color.data.compare];
 const REVEAL = curveOf('reveal');
 
 // cost: time O(r·s + t), heap O(out), stack O(1)

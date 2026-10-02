@@ -66,15 +66,25 @@
   --color-palette-purple-500: #8b5cf6;
   --color-palette-green-500: #10b981;
   --color-palette-slate-500: #8b949e;
-  --color-accent: var(--color-palette-blue-550);
-  --color-accent-strong: var(--color-palette-blue-600);
-  --color-accent-fill: var(--color-accent-strong);
-  --color-on-accent: var(--color-palette-gray-0);
+  --color-state-active: var(--color-palette-blue-550);
+  --color-state-active-fill: var(--color-palette-blue-600);
+  --color-state-active-text: var(--color-palette-blue-600);
+  --color-state-on-active: var(--color-palette-gray-0);
+  --color-ui-link: var(--color-palette-blue-600);
+  --color-ui-focus: var(--color-palette-blue-550);
+  --color-ui-progress: var(--color-palette-blue-550);
+  --color-ui-control-on: var(--color-palette-gray-0);
+  --color-data-main: var(--color-palette-blue-550);
+  --color-data-compare: var(--color-palette-orange-550);
+  --color-data-heat-low: var(--color-palette-blue-200);
+  --color-data-heat-high: var(--color-palette-blue-800);
+  --color-data-heat-ink: var(--color-palette-ink-1000);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-ink-200);
   --color-fg: var(--color-palette-ink-900);
   --color-muted: var(--color-palette-ink-600);
   --color-bg: var(--color-palette-gray-25);
   --color-node: var(--color-palette-gray-0);
-  --color-control-on: var(--color-palette-gray-0);
   --color-surface: var(--color-palette-gray-50);
   --color-border: var(--color-palette-gray-500);
   --color-card-on: var(--color-palette-blue-50);
@@ -89,13 +99,6 @@
   --color-tag-green: var(--color-palette-green-500);
   --color-tag-orange: var(--color-palette-orange-500);
   --color-tag-gray: var(--color-palette-slate-500);
-  --color-series-1: var(--color-accent);
-  --color-series-2: var(--color-palette-orange-550);
-  --color-heat-low: var(--color-palette-blue-200);
-  --color-heat-high: var(--color-palette-blue-800);
-  --color-heat-ink: var(--color-palette-ink-1000);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-grid: var(--color-palette-ink-200);
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -227,13 +230,25 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --color-accent: var(--color-palette-blue-400);
-    --color-accent-strong: var(--color-palette-blue-400);
+    --color-state-active: var(--color-palette-blue-400);
+    --color-state-active-fill: var(--color-palette-blue-400);
+    --color-state-active-text: var(--color-palette-blue-400);
+    --color-state-on-active: var(--color-palette-ink-850);
+    --color-ui-link: var(--color-palette-blue-400);
+    --color-ui-focus: var(--color-palette-blue-400);
+    --color-ui-progress: var(--color-palette-blue-400);
+    --color-ui-control-on: var(--color-palette-neutral-750);
+    --color-data-main: var(--color-palette-blue-400);
+    --color-data-compare: var(--color-palette-orange-400);
+    --color-data-heat-low: var(--color-palette-blue-850);
+    --color-data-heat-high: var(--color-palette-blue-600);
+    --color-data-heat-ink: var(--color-palette-gray-0);
+    --color-data-heat-ink-on: var(--color-palette-gray-0);
+    --color-data-grid: var(--color-palette-neutral-750);
     --color-fg: var(--color-palette-neutral-100);
     --color-muted: var(--color-palette-neutral-400);
     --color-bg: var(--color-palette-neutral-900);
     --color-node: var(--color-palette-neutral-850);
-    --color-control-on: var(--color-palette-neutral-750);
     --color-surface: var(--color-palette-neutral-800);
     --color-border: var(--color-palette-neutral-500);
     --color-card-on: var(--color-palette-blue-900);
@@ -242,24 +257,29 @@
     --color-gallery: var(--color-palette-neutral-950);
     --color-group: var(--color-palette-neutral-850);
     --color-group-border: var(--color-palette-neutral-500);
-    --color-heat-low: var(--color-palette-blue-850);
-    --color-heat-high: var(--color-palette-blue-600);
-    --color-heat-ink: var(--color-palette-gray-0);
-    --color-heat-ink-on: var(--color-palette-gray-0);
-    --color-series-2: var(--color-palette-orange-400);
-    --color-grid: var(--color-palette-neutral-750);
     --color-plate-border: var(--color-palette-neutral-800);
-    --color-on-accent: var(--color-palette-ink-850);
   }
 }
 [data-theme='dark'] {
-  --color-accent: var(--color-palette-blue-400);
-  --color-accent-strong: var(--color-palette-blue-400);
+  --color-state-active: var(--color-palette-blue-400);
+  --color-state-active-fill: var(--color-palette-blue-400);
+  --color-state-active-text: var(--color-palette-blue-400);
+  --color-state-on-active: var(--color-palette-ink-850);
+  --color-ui-link: var(--color-palette-blue-400);
+  --color-ui-focus: var(--color-palette-blue-400);
+  --color-ui-progress: var(--color-palette-blue-400);
+  --color-ui-control-on: var(--color-palette-neutral-750);
+  --color-data-main: var(--color-palette-blue-400);
+  --color-data-compare: var(--color-palette-orange-400);
+  --color-data-heat-low: var(--color-palette-blue-850);
+  --color-data-heat-high: var(--color-palette-blue-600);
+  --color-data-heat-ink: var(--color-palette-gray-0);
+  --color-data-heat-ink-on: var(--color-palette-gray-0);
+  --color-data-grid: var(--color-palette-neutral-750);
   --color-fg: var(--color-palette-neutral-100);
   --color-muted: var(--color-palette-neutral-400);
   --color-bg: var(--color-palette-neutral-900);
   --color-node: var(--color-palette-neutral-850);
-  --color-control-on: var(--color-palette-neutral-750);
   --color-surface: var(--color-palette-neutral-800);
   --color-border: var(--color-palette-neutral-500);
   --color-card-on: var(--color-palette-blue-900);
@@ -268,14 +288,7 @@
   --color-gallery: var(--color-palette-neutral-950);
   --color-group: var(--color-palette-neutral-850);
   --color-group-border: var(--color-palette-neutral-500);
-  --color-heat-low: var(--color-palette-blue-850);
-  --color-heat-high: var(--color-palette-blue-600);
-  --color-heat-ink: var(--color-palette-gray-0);
-  --color-heat-ink-on: var(--color-palette-gray-0);
-  --color-series-2: var(--color-palette-orange-400);
-  --color-grid: var(--color-palette-neutral-750);
   --color-plate-border: var(--color-palette-neutral-800);
-  --color-on-accent: var(--color-palette-ink-850);
 }
 /* 조작 단추의 공통 모양과 상태. 재생기(원 단추, 탭), 목록 쪽과 문서 미리보기(테마 묶음)가 모두 이 파일 하나를 쓴다. */
 .fl-round:hover,
@@ -287,7 +300,7 @@
 .fl-round:focus-visible,
 .fl-tabs button:focus-visible,
 .theme button:focus-visible {
-  outline: var(--border-tag) solid var(--color-accent);
+  outline: var(--border-tag) solid var(--color-ui-focus);
   outline-offset: var(--space-1);
 }
 
@@ -318,12 +331,12 @@
   padding: 0 var(--space-6);
 }
 
-/* segmented 방식: 켜진 항목은 꽉 찬 알약(control-on)이다. 켜짐 표시는 묶음 바탕과 대비 3인 border 색 고리다. */
+/* segmented 방식: 켜진 항목은 꽉 찬 알약(ui.control-on)이다. 켜짐 표시는 묶음 바탕과 대비 3인 border 색 고리다. */
 .fl-tabs button.on,
 .theme button[aria-pressed='true'] {
   font-weight: var(--weight-semibold);
   color: var(--color-fg);
-  background: var(--color-control-on);
+  background: var(--color-ui-control-on);
   box-shadow: 0 0 0 var(--border-thin) var(--color-border);
 }
 /* 재생기 틀과 조작 막대. iframe 안(html.embedded)에서는 테두리와 바깥 여백을 뺀다. */
@@ -407,7 +420,7 @@ html.embedded .fl-canvas svg {
   justify-self: start;
 }
 
-/* 현재 탭의 진행은 일시정지 단추 테두리 위를 12시에서 시계 방향으로 도는 accent 고리다. 트랙은 단추 테두리 그대로다. */
+/* 현재 탭의 진행은 일시정지 단추 테두리 위를 12시에서 시계 방향으로 도는 진행(ui.progress) 고리다. 트랙은 단추 테두리 그대로다. */
 .fl-pause {
   position: relative;
 }
@@ -422,7 +435,7 @@ html.embedded .fl-canvas svg {
 
 .fl-ring-fill {
   fill: none;
-  stroke: var(--color-accent);
+  stroke: var(--color-ui-progress);
 }
 
 .fl-pause-icon {
@@ -529,17 +542,17 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-node.on .fl-stroke {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-card.on {
   fill: var(--color-card-on);
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-edge.on .fl-path,
 .fl .fl-edge.hover .fl-path {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
   stroke-width: var(--border-strong);
 }
 
@@ -554,12 +567,12 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-edge.on .fl-pill rect {
-  fill: var(--color-accent-fill);
-  stroke: var(--color-accent-fill);
+  fill: var(--color-state-active-fill);
+  stroke: var(--color-state-active-fill);
 }
 
 .fl .fl-edge.on .fl-pill text {
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .fl-path,
@@ -597,7 +610,7 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .fl-group.on .fl-stroke {
-  stroke: var(--color-accent);
+  stroke: var(--color-state-active);
 }
 
 .fl .fl-col.on .col-bg {
@@ -670,7 +683,7 @@ html.embedded .fl-canvas svg {
   font-size: var(--size-text-11);
   font-weight: var(--weight-semibold);
   text-anchor: end;
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .mark.key {
@@ -685,13 +698,13 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .mini.on {
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .chip {
   font-size: var(--size-text-12);
   text-anchor: middle;
-  fill: var(--color-on-accent);
+  fill: var(--color-state-on-active);
 }
 
 .fl .md {
@@ -729,7 +742,7 @@ html.embedded .fl-canvas svg {
 .fl .cell .key {
   font-size: var(--size-text-9);
   font-weight: var(--weight-semibold);
-  fill: var(--color-accent-strong);
+  fill: var(--color-state-active-text);
 }
 
 .fl .frame-box {
@@ -863,23 +876,23 @@ html.embedded .fl-canvas svg {
 
 /* 칸 색은 변수로 계산해 다크 모드 heat-low를 따라간다. --s는 칸 강도(0~1)다. */
 .fl .chart-heat {
-  fill: color-mix(in srgb, var(--color-heat-high) calc(var(--s) * 100%), var(--color-heat-low));
+  fill: color-mix(in srgb, var(--color-data-heat-high) calc(var(--s) * 100%), var(--color-data-heat-low));
 }
 
 .fl .chart-cell {
   font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   text-anchor: middle;
-  fill: var(--color-heat-ink);
+  fill: var(--color-data-heat-ink);
 }
 
 .fl .chart-cell.on {
-  fill: var(--color-heat-ink-on);
+  fill: var(--color-data-heat-ink-on);
 }
 
 .fl .chart-axis,
 .fl .chart-grid {
-  stroke: var(--color-grid);
+  stroke: var(--color-data-grid);
   stroke-width: var(--border-thin);
 }
 
@@ -922,19 +935,19 @@ html.embedded .fl-canvas svg {
 
 .fl .chart-box {
   fill: var(--color-node);
-  stroke: var(--color-series-1);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-before {
   fill: var(--color-bg);
-  stroke: var(--color-series-1);
+  stroke: var(--color-data-main);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-arrow,
 .fl .chart-link {
-  stroke: var(--color-series-2);
+  stroke: var(--color-data-compare);
   stroke-width: var(--border-strong);
 }
 
@@ -977,10 +990,10 @@ html.embedded .fl-canvas svg {
 <body>
 <figure class="fl-figure" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="773" style="aspect-ratio: 960 / 773" viewBox="-116.9 0 960 773" role="img"><title>대화에서 기억 그래프 키우기</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs><g id="g-0" class="fl-group" data-id="memory"><rect x="238.2" y="31.3" width="224" height="665" rx="14" class="frame-box fl-stroke "/><text x="256.2" y="49.3" class="frame">기억 엔진</text></g>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="773" style="aspect-ratio: 960 / 773" viewBox="-116.9 0 960 773" role="img"><title>대화에서 기억 그래프 키우기</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-compare)"/></marker></defs><g id="g-0" class="fl-group" data-id="memory"><rect x="238.2" y="31.3" width="224" height="665" rx="14" class="frame-box fl-stroke "/><text x="256.2" y="49.3" class="frame">기억 엔진</text></g>
 <g id="n-0" class="fl-node" data-id="extract"><rect x="262.2" y="131.3" width="176" height="128" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="350.2" y="157.4" class="label">추출기</text><text x="350.2" y="173.2" class="sub">LLM</text><rect x="272.2" y="188.3" width="156" height="61" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card "/><text x="280.2" y="205.3" class="row muted fl-empty ">—</text><g id="n-0-c0" opacity="0" class="fl-layer "><rect x="280.2" y="195.3" width="44.7" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="302.6" y="205.6" class="tag">PERSON</text><text x="280.2" y="220.3" class="row">민지</text><rect x="280.2" y="229.3" width="27.5" height="14" rx="4" fill="var(--color-tag-purple)" fill-opacity="0.15"/><text x="294" y="239.6" class="tag">ORG</text><text x="312.8" y="239.3" class="row">토스<tspan class="muted"> · 3월</tspan></text></g><g id="n-0-c1" opacity="0" class="fl-layer "><rect x="280.2" y="195.3" width="44.7" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="302.6" y="205.6" class="tag">PERSON</text><text x="280.2" y="220.3" class="row">김민지 = 민지</text></g></g>
 <g id="n-1" class="fl-node" data-id="resolve"><rect x="262.2" y="319.3" width="176" height="109" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="350.2" y="345.4" class="label">개체 정리</text><text x="350.2" y="361.2" class="sub">같은 사람 합치기</text><rect x="272.2" y="376.3" width="156" height="42" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card "/><text x="280.2" y="393.3" class="row muted fl-empty ">—</text><g id="n-1-c0" opacity="0" class="fl-layer "><rect x="280.2" y="383.3" width="39.8" height="14" rx="4" fill="var(--color-tag-orange)" fill-opacity="0.15"/><text x="300.1" y="393.6" class="tag">MERGE</text><text x="280.2" y="408.3" class="row">김민지 → 민지</text></g></g>
-<g id="n-2" class="fl-node" data-id="graph"><path d="M262.2 500.3 a 88 12 0 0 1 176 0 v 100 a 88 12 0 0 1 -176 0 z" fill="var(--color-node)" class="fl-stroke "/><path d="M262.2 500.3 a 88 12 0 0 0 176 0" fill="none" class="fl-stroke "/><text x="350.2" y="526.4" class="label">기억 그래프</text><rect x="272.2" y="542.3" width="156" height="48" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card "/><text x="280.2" y="559.3" class="row muted fl-empty ">—</text><g id="n-2-c0" opacity="0" class="fl-layer "><line x1="336.4" y1="557.3" x2="364.1" y2="557.3" stroke="var(--color-border)" stroke-width="1"/><rect x="294.1" y="548.3" width="42.2" height="18" rx="9" fill="var(--color-accent-fill)" stroke="var(--color-accent-fill)" stroke-width="1"/><text x="315.2" y="561.3" class="mini on">민지</text><rect x="364.1" y="548.3" width="42.2" height="18" rx="9" fill="var(--color-node)" stroke="var(--color-border)" stroke-width="1"/><text x="385.2" y="561.3" class="mini">토스</text></g><g id="n-2-c1" opacity="0" class="fl-layer "><line x1="324.7" y1="575.3" x2="329.1" y2="575.3" stroke="var(--color-border)" stroke-width="1"/><line x1="371.4" y1="575.3" x2="375.6" y2="575.3" stroke="var(--color-border)" stroke-width="1"/><path d="M 303.6 566.3 Q 350.2 530.3 396.9 566.3" fill="none" stroke="var(--color-accent)" stroke-width="1"/><rect x="282.5" y="566.3" width="42.2" height="18" rx="9" fill="var(--color-accent-fill)" stroke="var(--color-accent-fill)" stroke-width="1"/><text x="303.6" y="579.3" class="mini on">민지</text><rect x="329.1" y="566.3" width="42.2" height="18" rx="9" fill="var(--color-node)" stroke="var(--color-border)" stroke-width="1"/><text x="350.2" y="579.3" class="mini">토스</text><rect x="375.6" y="566.3" width="42.7" height="18" rx="9" fill="var(--color-accent-fill)" stroke="var(--color-accent-fill)" stroke-width="1"/><text x="396.9" y="579.3" class="mini on">결제팀</text></g></g>
+<g id="n-2" class="fl-node" data-id="graph"><path d="M262.2 500.3 a 88 12 0 0 1 176 0 v 100 a 88 12 0 0 1 -176 0 z" fill="var(--color-node)" class="fl-stroke "/><path d="M262.2 500.3 a 88 12 0 0 0 176 0" fill="none" class="fl-stroke "/><text x="350.2" y="526.4" class="label">기억 그래프</text><rect x="272.2" y="542.3" width="156" height="48" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card "/><text x="280.2" y="559.3" class="row muted fl-empty ">—</text><g id="n-2-c0" opacity="0" class="fl-layer "><line x1="336.4" y1="557.3" x2="364.1" y2="557.3" stroke="var(--color-border)" stroke-width="1"/><rect x="294.1" y="548.3" width="42.2" height="18" rx="9" fill="var(--color-state-active-fill)" stroke="var(--color-state-active-fill)" stroke-width="1"/><text x="315.2" y="561.3" class="mini on">민지</text><rect x="364.1" y="548.3" width="42.2" height="18" rx="9" fill="var(--color-node)" stroke="var(--color-border)" stroke-width="1"/><text x="385.2" y="561.3" class="mini">토스</text></g><g id="n-2-c1" opacity="0" class="fl-layer "><line x1="324.7" y1="575.3" x2="329.1" y2="575.3" stroke="var(--color-border)" stroke-width="1"/><line x1="371.4" y1="575.3" x2="375.6" y2="575.3" stroke="var(--color-border)" stroke-width="1"/><path d="M 303.6 566.3 Q 350.2 530.3 396.9 566.3" fill="none" stroke="var(--color-state-active)" stroke-width="1"/><rect x="282.5" y="566.3" width="42.2" height="18" rx="9" fill="var(--color-state-active-fill)" stroke="var(--color-state-active-fill)" stroke-width="1"/><text x="303.6" y="579.3" class="mini on">민지</text><rect x="329.1" y="566.3" width="42.2" height="18" rx="9" fill="var(--color-node)" stroke="var(--color-border)" stroke-width="1"/><text x="350.2" y="579.3" class="mini">토스</text><rect x="375.6" y="566.3" width="42.7" height="18" rx="9" fill="var(--color-state-active-fill)" stroke="var(--color-state-active-fill)" stroke-width="1"/><text x="396.9" y="579.3" class="mini on">결제팀</text></g></g>
 <g id="n-3" class="fl-node" data-id="user"><circle cx="56" cy="38" r="10" fill="var(--color-node)" class="fl-stroke "/><path d="M28 86 V 64 A 28 14 0 0 1 84 64 V 86 Z" fill="var(--color-node)" class="fl-stroke "/><text x="56" y="106" class="label">사용자</text></g>
 <g id="n-4" class="fl-node" data-id="answer"><rect x="522.2" y="636" width="176" height="109" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="610.2" y="662" class="label">답변</text><text x="610.2" y="677.8" class="sub">질의 시점</text><rect x="532.2" y="693" width="156" height="42" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card "/><text x="540.2" y="710" class="row muted fl-empty ">—</text><g id="n-4-c0" opacity="0" class="fl-layer "><rect x="540.2" y="700" width="47.7" height="14" rx="4" fill="var(--color-tag-green)" fill-opacity="0.15"/><text x="564.1" y="710.2" class="tag">ANSWER</text><text x="680.2" y="710" class="mark">✓</text><text x="540.2" y="725" class="row">토스 결제팀</text></g></g>
 <g id="e-0" class="fl-edge"><path id="p-0" d="M 84 71.33333333333334 L 328.2 71.3 Q 350.2 71.3, 350.2 93.3 L 350.2 131.3" class="fl-path " marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="144" y="61.8" width="34.2" height="18" rx="9" class="pill "/><text x="161.1" y="74.8" class="edgelabel ">대화</text></g></g>
@@ -1490,7 +1503,7 @@ function createPacket(hop, stage) {
   const path = stage.paths[hop.edge];
   const g = document.createElementNS(SVG_NS, 'g');
   g.setAttribute('class', 'fl-packet');
-  g.innerHTML = `<circle r="${metrics.halo}" fill="${metrics.accent}" opacity="${metrics.haloOpacity}"/><circle r="${metrics.packet}" fill="${metrics.accent}"/>`;
+  g.innerHTML = `<circle r="${metrics.halo}" fill="${metrics.active}" opacity="${metrics.haloOpacity}"/><circle r="${metrics.packet}" fill="${metrics.active}"/>`;
   stage.packetLayer.appendChild(g);
   const chip = hop.data ? createChip(hop.data, stage) : undefined;
   if (chip) g.appendChild(chip.g);
@@ -1605,7 +1618,7 @@ function chipSlide(hop, metrics) {
   };
 }
 
-figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":4829,"hops":[{"edge":0,"isBack":false,"ms":3974,"to":"extract","data":["민지는 3월에 토스로 옮겼어"],"line":19,"chipPath":[[0,6.488554687499999,74.16666666666666],[0.05,0,74.16666666666666],[0.1,0,74.16666666666666],[0.15,0,74.16666666666666],[0.2,0,74.16666666666666],[0.21250000000000002,0,74.16666666666666],[0.21875,0,74.16666666666666],[0.225,0,50.16666666666666],[0.2375,0,50.16666666666666],[0.24375,0,50.16666666666666],[0.246875,0,0],[0.25,0,0],[0.275,0,0],[0.2875,0,0],[0.29374999999999996,0,0],[0.2949789574798365,0,0],[0.2949789574798365,0,47],[0.296875,0,47],[0.3,0,47],[0.35,0,47],[0.4,0,47],[0.45,0,47],[0.5,0,47],[0.55,0,47],[0.6,0,47],[0.65,0,47],[0.7,0,47],[0.75,0,47],[0.8,0,47],[0.85,0,47],[0.9,0,0],[0.95,0,0],[1,0,0]]}],"edgesOn":[0],"nodesOn":[3,0],"groupsOn":[],"columnsOn":[],"cards":{"0":0},"cardsBefore":{},"cardsAt":{"0":3974},"caption":"처음 들은 사실로 그래프를 시작한다","series":[],"growing":[],"lights":[]},{"si":0,"t0":4829,"t1":6279,"hops":[{"edge":1,"isBack":false,"ms":750,"to":"resolve","line":22}],"edgesOn":[0,1],"nodesOn":[3,0,1],"groupsOn":[],"columnsOn":[],"cards":{"0":0},"cardsBefore":{"0":0},"cardsAt":{},"caption":"처음 들은 사실로 그래프를 시작한다","series":[],"growing":[],"lights":[]},{"si":0,"t0":6279,"t1":9329,"hops":[{"edge":2,"isBack":false,"ms":750,"to":"graph","line":23}],"edgesOn":[0,1,2],"nodesOn":[3,0,1,2],"groupsOn":[],"columnsOn":[],"cards":{"0":0,"2":0},"cardsBefore":{"0":0},"cardsAt":{"2":750},"caption":"처음 들은 사실로 그래프를 시작한다","series":[],"growing":[],"lights":[]},{"si":1,"t0":9329,"t1":14563,"hops":[{"edge":0,"isBack":false,"ms":3974,"to":"extract","data":["김민지가 결제팀을 맡았대"],"line":26,"chipPath":[[0,1.0949999999999989,74.16666666666666],[0.05,0,74.16666666666666],[0.1,0,74.16666666666666],[0.15,0,74.16666666666666],[0.2,0,74.16666666666666],[0.225,0,50.16666666666666],[0.22812500000000002,0,50.16666666666666],[0.23124999954908018,0,50.16666666666666],[0.23124999954908018,0,0],[0.23125,0,0],[0.2375,0,0],[0.25,0,0],[0.3,0,0],[0.30625,0,0],[0.309375,0,0],[0.3119436671006833,0,0],[0.3119436671006833,0,47],[0.3125,0,47],[0.32499999999999996,0,47],[0.35,0,47],[0.4,0,47],[0.45,0,47],[0.5,0,47],[0.55,0,47],[0.6,0,47],[0.65,0,47],[0.7,0,47],[0.75,0,47],[0.8,0,47],[0.85,0,47],[0.9,0,0],[0.95,0,0],[1,0,0]]}],"edgesOn":[0],"nodesOn":[3,0],"groupsOn":[],"columnsOn":[],"cards":{"0":1},"cardsBefore":{},"cardsAt":{"0":3974},"caption":"같은 사람이 다른 이름으로 나와도 한 개체로 합친다","series":[],"growing":[],"lights":[]},{"si":1,"t0":14563,"t1":16013,"hops":[{"edge":1,"isBack":false,"ms":750,"to":"resolve","line":28}],"edgesOn":[0,1],"nodesOn":[3,0,1],"groupsOn":[],"columnsOn":[],"cards":{"0":1,"1":0},"cardsBefore":{"0":1},"cardsAt":{"1":750},"caption":"같은 사람이 다른 이름으로 나와도 한 개체로 합친다","series":[],"growing":[],"lights":[]},{"si":1,"t0":16013,"t1":19063,"hops":[{"edge":2,"isBack":false,"ms":750,"to":"graph","line":30}],"edgesOn":[0,1,2],"nodesOn":[3,0,1,2],"groupsOn":[],"columnsOn":[],"cards":{"0":1,"1":0,"2":1},"cardsBefore":{"0":1,"1":0},"cardsAt":{"2":750},"caption":"같은 사람이 다른 이름으로 나와도 한 개체로 합친다","series":[],"growing":[],"lights":[]},{"si":2,"t0":19063,"t1":19963,"hops":[],"edgesOn":[],"nodesOn":[2],"groupsOn":[],"columnsOn":[],"cards":{"2":1},"cardsBefore":{},"cardsAt":{"2":0},"caption":"질문이 오면 쓰지 않던 선이 나타난다","series":[],"growing":[],"lights":[]},{"si":2,"t0":19963,"t1":33920,"hops":[{"edge":4,"isBack":false,"ms":13257,"to":"answer","data":["민지 지금 어디 팀이야?"],"line":34,"chipPath":[[0,0,66.83333333333334],[0.00625,0,66.83333333333334],[0.009375000000000001,0,66.69692839175829],[0.0125,0,65.59826616081394],[0.015625,0,63.12952056993153],[0.018750000000000003,0,59.9268077829032],[0.025,0,53.299327993143734],[0.05,0,47],[0.1,0,0],[0.15,0,0],[0.2,0,0],[0.25,0,0],[0.3,0,0],[0.35,0,0],[0.4,0,0],[0.45,0,0],[0.5,0,0],[0.55,0,0],[0.6,0,0],[0.65,0,0],[0.7,0,0],[0.75,0,0],[0.8,0,0],[0.85,0,0],[0.9,0,0],[0.95,-14.280688515067936,0],[0.9624999999999999,-27.537987089425997,0],[0.975,-40.795285663783886,0],[0.98125,-47.42393495096263,0],[0.9875,-54.05258423814166,0],[0.99375,-60.681233525320465,0],[0.996875,-63.99555816891001,0],[1,-67.30988281249955,0]]}],"edgesOn":[4],"nodesOn":[3,4,2],"groupsOn":[],"columnsOn":[],"cards":{"2":1},"cardsBefore":{"2":1},"cardsAt":{},"caption":"질문이 오면 쓰지 않던 선이 나타난다","series":[],"growing":[],"lights":[]},{"si":2,"t0":33920,"t1":39016,"hops":[{"edge":3,"isBack":false,"ms":2796,"to":"answer","data":["민지 → 결제팀"],"line":35,"chipPath":[[0,0,47],[0.05,0,47],[0.1,0,47],[0.15,0,47],[0.2,0,0],[0.25,0,0],[0.3,0,0],[0.35,0,0],[0.4,0,0],[0.45,0,0],[0.5,0,0],[0.55,0,0],[0.6,0,0],[0.65,0,0],[0.7,0,0],[0.75,0,0],[0.8,0,-24.83333333333337],[0.85,0,-24.83333333333337],[0.9,0,-24.83333333333337],[0.95,0,-24.83333333333337],[1,0,-24.83333333333337]]}],"edgesOn":[4,3],"nodesOn":[3,4,2],"groupsOn":[],"columnsOn":[],"cards":{"2":1,"4":0},"cardsBefore":{"2":1},"cardsAt":{"4":2796},"caption":"질문이 오면 쓰지 않던 선이 나타난다","series":[],"growing":[],"lights":[]}],"steps":["첫 대화","다음 대화","질문"],"cardCounts":[2,1,2,0,1],"edgeEnds":[[3,0],[0,1],[1,2],[2,4],[3,4]],"seriesCount":0,"rowCount":0,"metrics":{"accent":"var(--color-accent)","chipFill":"var(--color-accent-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
+figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":4829,"hops":[{"edge":0,"isBack":false,"ms":3974,"to":"extract","data":["민지는 3월에 토스로 옮겼어"],"line":19,"chipPath":[[0,6.488554687499999,74.16666666666666],[0.05,0,74.16666666666666],[0.1,0,74.16666666666666],[0.15,0,74.16666666666666],[0.2,0,74.16666666666666],[0.21250000000000002,0,74.16666666666666],[0.21875,0,74.16666666666666],[0.225,0,50.16666666666666],[0.2375,0,50.16666666666666],[0.24375,0,50.16666666666666],[0.246875,0,0],[0.25,0,0],[0.275,0,0],[0.2875,0,0],[0.29374999999999996,0,0],[0.2949789574798365,0,0],[0.2949789574798365,0,47],[0.296875,0,47],[0.3,0,47],[0.35,0,47],[0.4,0,47],[0.45,0,47],[0.5,0,47],[0.55,0,47],[0.6,0,47],[0.65,0,47],[0.7,0,47],[0.75,0,47],[0.8,0,47],[0.85,0,47],[0.9,0,0],[0.95,0,0],[1,0,0]]}],"edgesOn":[0],"nodesOn":[3,0],"groupsOn":[],"columnsOn":[],"cards":{"0":0},"cardsBefore":{},"cardsAt":{"0":3974},"caption":"처음 들은 사실로 그래프를 시작한다","series":[],"growing":[],"lights":[]},{"si":0,"t0":4829,"t1":6279,"hops":[{"edge":1,"isBack":false,"ms":750,"to":"resolve","line":22}],"edgesOn":[0,1],"nodesOn":[3,0,1],"groupsOn":[],"columnsOn":[],"cards":{"0":0},"cardsBefore":{"0":0},"cardsAt":{},"caption":"처음 들은 사실로 그래프를 시작한다","series":[],"growing":[],"lights":[]},{"si":0,"t0":6279,"t1":9329,"hops":[{"edge":2,"isBack":false,"ms":750,"to":"graph","line":23}],"edgesOn":[0,1,2],"nodesOn":[3,0,1,2],"groupsOn":[],"columnsOn":[],"cards":{"0":0,"2":0},"cardsBefore":{"0":0},"cardsAt":{"2":750},"caption":"처음 들은 사실로 그래프를 시작한다","series":[],"growing":[],"lights":[]},{"si":1,"t0":9329,"t1":14563,"hops":[{"edge":0,"isBack":false,"ms":3974,"to":"extract","data":["김민지가 결제팀을 맡았대"],"line":26,"chipPath":[[0,1.0949999999999989,74.16666666666666],[0.05,0,74.16666666666666],[0.1,0,74.16666666666666],[0.15,0,74.16666666666666],[0.2,0,74.16666666666666],[0.225,0,50.16666666666666],[0.22812500000000002,0,50.16666666666666],[0.23124999954908018,0,50.16666666666666],[0.23124999954908018,0,0],[0.23125,0,0],[0.2375,0,0],[0.25,0,0],[0.3,0,0],[0.30625,0,0],[0.309375,0,0],[0.3119436671006833,0,0],[0.3119436671006833,0,47],[0.3125,0,47],[0.32499999999999996,0,47],[0.35,0,47],[0.4,0,47],[0.45,0,47],[0.5,0,47],[0.55,0,47],[0.6,0,47],[0.65,0,47],[0.7,0,47],[0.75,0,47],[0.8,0,47],[0.85,0,47],[0.9,0,0],[0.95,0,0],[1,0,0]]}],"edgesOn":[0],"nodesOn":[3,0],"groupsOn":[],"columnsOn":[],"cards":{"0":1},"cardsBefore":{},"cardsAt":{"0":3974},"caption":"같은 사람이 다른 이름으로 나와도 한 개체로 합친다","series":[],"growing":[],"lights":[]},{"si":1,"t0":14563,"t1":16013,"hops":[{"edge":1,"isBack":false,"ms":750,"to":"resolve","line":28}],"edgesOn":[0,1],"nodesOn":[3,0,1],"groupsOn":[],"columnsOn":[],"cards":{"0":1,"1":0},"cardsBefore":{"0":1},"cardsAt":{"1":750},"caption":"같은 사람이 다른 이름으로 나와도 한 개체로 합친다","series":[],"growing":[],"lights":[]},{"si":1,"t0":16013,"t1":19063,"hops":[{"edge":2,"isBack":false,"ms":750,"to":"graph","line":30}],"edgesOn":[0,1,2],"nodesOn":[3,0,1,2],"groupsOn":[],"columnsOn":[],"cards":{"0":1,"1":0,"2":1},"cardsBefore":{"0":1,"1":0},"cardsAt":{"2":750},"caption":"같은 사람이 다른 이름으로 나와도 한 개체로 합친다","series":[],"growing":[],"lights":[]},{"si":2,"t0":19063,"t1":19963,"hops":[],"edgesOn":[],"nodesOn":[2],"groupsOn":[],"columnsOn":[],"cards":{"2":1},"cardsBefore":{},"cardsAt":{"2":0},"caption":"질문이 오면 쓰지 않던 선이 나타난다","series":[],"growing":[],"lights":[]},{"si":2,"t0":19963,"t1":33920,"hops":[{"edge":4,"isBack":false,"ms":13257,"to":"answer","data":["민지 지금 어디 팀이야?"],"line":34,"chipPath":[[0,0,66.83333333333334],[0.00625,0,66.83333333333334],[0.009375000000000001,0,66.69692839175829],[0.0125,0,65.59826616081394],[0.015625,0,63.12952056993153],[0.018750000000000003,0,59.9268077829032],[0.025,0,53.299327993143734],[0.05,0,47],[0.1,0,0],[0.15,0,0],[0.2,0,0],[0.25,0,0],[0.3,0,0],[0.35,0,0],[0.4,0,0],[0.45,0,0],[0.5,0,0],[0.55,0,0],[0.6,0,0],[0.65,0,0],[0.7,0,0],[0.75,0,0],[0.8,0,0],[0.85,0,0],[0.9,0,0],[0.95,-14.280688515067936,0],[0.9624999999999999,-27.537987089425997,0],[0.975,-40.795285663783886,0],[0.98125,-47.42393495096263,0],[0.9875,-54.05258423814166,0],[0.99375,-60.681233525320465,0],[0.996875,-63.99555816891001,0],[1,-67.30988281249955,0]]}],"edgesOn":[4],"nodesOn":[3,4,2],"groupsOn":[],"columnsOn":[],"cards":{"2":1},"cardsBefore":{"2":1},"cardsAt":{},"caption":"질문이 오면 쓰지 않던 선이 나타난다","series":[],"growing":[],"lights":[]},{"si":2,"t0":33920,"t1":39016,"hops":[{"edge":3,"isBack":false,"ms":2796,"to":"answer","data":["민지 → 결제팀"],"line":35,"chipPath":[[0,0,47],[0.05,0,47],[0.1,0,47],[0.15,0,47],[0.2,0,0],[0.25,0,0],[0.3,0,0],[0.35,0,0],[0.4,0,0],[0.45,0,0],[0.5,0,0],[0.55,0,0],[0.6,0,0],[0.65,0,0],[0.7,0,0],[0.75,0,0],[0.8,0,-24.83333333333337],[0.85,0,-24.83333333333337],[0.9,0,-24.83333333333337],[0.95,0,-24.83333333333337],[1,0,-24.83333333333337]]}],"edgesOn":[4,3],"nodesOn":[3,4,2],"groupsOn":[],"columnsOn":[],"cards":{"2":1,"4":0},"cardsBefore":{"2":1},"cardsAt":{"4":2796},"caption":"질문이 오면 쓰지 않던 선이 나타난다","series":[],"growing":[],"lights":[]}],"steps":["첫 대화","다음 대화","질문"],"cardCounts":[2,1,2,0,1],"edgeEnds":[[3,0],[0,1],[1,2],[2,4],[3,4]],"seriesCount":0,"rowCount":0,"metrics":{"active":"var(--color-state-active)","chipFill":"var(--color-state-active-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
 </script>
 </body>
 </html>
