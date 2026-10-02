@@ -1,5 +1,6 @@
 // 도형과 그룹의 연결점. 선 끝이 어디에 닿는지, 몸통 도형의 연결점을 어디에 놓는지를 정한다(docs/design/layout.md 도형 크기와 연결점, 연결점 순서).
 import { values } from '../tokens.js';
+import { cellPort, circlePort } from './cell-ports.js';
 
 const SIZE = values.size;
 const SIDE_OUT = { right: 'EAST', down: 'SOUTH' };
@@ -39,6 +40,8 @@ function portSpec(node, end) {
   const { way, edge } = end;
   const column = way === 'out' ? edge.fromColumn : edge.toColumn;
   if (node.shape === 'table' && column) return columnPort(node, way, column);
+  if (node.shape === 'grid' && (way === 'out' ? edge.fromCell : edge.toCell)) return cellPort(node, end);
+  if (node.shape === 'circle') return circlePort(node, way);
   // 사람과 원통은 바깥 여백(머리, 이름표, 뚜껑)까지 배치 사각형에 넣으므로, 선이 몸통에만 닿도록 모든 선에 연결점을 둔다.
   if (node.shape === 'person') return { side: way === 'out' ? 'EAST' : 'WEST' };
   if (node.shape === 'decision') return { side: way === 'out' ? 'EAST' : 'WEST', position: { x: way === 'out' ? node.size.w : 0, y: node.size.h / 2 } };
@@ -61,9 +64,9 @@ function storeSide(direction, way) {
   return way === 'out' ? 'EAST' : 'WEST';
 }
 
-function addNodePort(node, end, { side, position }) {
+function addNodePort(node, end, { side, position, lead }) {
   const id = `${node.id}::${end.way}::${end.edge.index}`;
-  node.ports.push({ id, side, position });
+  node.ports.push({ id, way: end.way, side, position, lead });
   return id;
 }
 
