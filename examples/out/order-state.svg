@@ -469,10 +469,6 @@
 .fl .a18 { animation: a18 20.461s infinite linear; }
 @keyframes a19 { 0%,22.946% { opacity: 0 } 22.946%,39.543% { opacity: 0 } 39.544%,60.583% { opacity: 0 } 60.584% { opacity: 0 } 61.561%,69.087% { opacity: 1 } 69.088%,100% { opacity: 1 } }
 .fl .a19 { animation: a19 20.461s infinite linear; }
-@keyframes a20 { 0%,22.946% { opacity: 1 } 22.946%,39.543% { opacity: 1 } 39.544%,60.583% { opacity: 1 } 60.584% { opacity: 1 } 61.561%,69.087% { opacity: 0 } 69.088%,100% { opacity: 0 } }
-.fl .a20 { animation: a20 20.461s infinite linear; }
-@keyframes a21 { 0%,22.946% { opacity: 0 } 22.946%,39.543% { opacity: 0 } 39.544%,60.583% { opacity: 0 } 60.584% { opacity: 0 } 61.561%,69.087% { opacity: 1 } 69.088%,100% { opacity: 1 } }
-.fl .a21 { animation: a21 20.461s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="877" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
@@ -501,6 +497,6 @@
 </g>
 <text x="480" y="820" opacity="0" class="steplabel a18">정상 주문</text>
 <text x="480" y="820" opacity="0" class="steplabel a19">취소</text>
-<g opacity="0" class="a20"><text x="480" y="846" class="caption">결제가 끝나면 출고되고 수령으로 끝난다</text></g>
-<g opacity="0" class="a21"><text x="480" y="846" class="caption">결제 뒤에도 출고 전이면 취소할 수 있다</text></g>
+<g opacity="0" class="a18"><text x="480" y="846" class="caption">결제가 끝나면 출고되고 수령으로 끝난다</text></g>
+<g opacity="0" class="a19"><text x="480" y="846" class="caption">결제 뒤에도 출고 전이면 취소할 수 있다</text></g>
 </svg>

@@ -687,20 +687,10 @@
 @keyframes a3 { 0%,45.442% { opacity: 1 } 45.443%,71.864% { opacity: 1 } 71.865%,99.999% { opacity: 1 } }
 .fl .a3 { animation: a3 8.175s infinite linear; }
 .fl .cr-1 { animation: a3 8.175s infinite linear; }
-@keyframes a4 { 0%,45.442% { opacity: 1 } 45.443%,71.864% { opacity: 1 } 71.865% { opacity: 1 } 74.312%,99.999% { opacity: 0.3 } }
+.fl .cr-2 { animation: a2 8.175s infinite linear; }
+.fl .cr-3 { animation: a2 8.175s infinite linear; }
+@keyframes a4 { 0%,45.442% { opacity: 1 } 45.443% { opacity: 1 } 47.89%,71.864% { opacity: 0 } 71.865%,99.999% { opacity: 0 } }
 .fl .a4 { animation: a4 8.175s infinite linear; }
-.fl .cr-2 { animation: a4 8.175s infinite linear; }
-@keyframes a5 { 0%,45.442% { opacity: 1 } 45.443%,71.864% { opacity: 1 } 71.865% { opacity: 1 } 74.312%,99.999% { opacity: 0.3 } }
-.fl .a5 { animation: a5 8.175s infinite linear; }
-.fl .cr-3 { animation: a5 8.175s infinite linear; }
-@keyframes a6 { 0%,45.442% { opacity: 1 } 45.443% { opacity: 1 } 47.89%,71.864% { opacity: 0 } 71.865%,99.999% { opacity: 0 } }
-.fl .a6 { animation: a6 8.175s infinite linear; }
-@keyframes a7 { 0%,45.442% { opacity: 0 } 45.443% { opacity: 0 } 47.89%,71.864% { opacity: 1 } 71.865%,99.999% { opacity: 1 } }
-.fl .a7 { animation: a7 8.175s infinite linear; }
-@keyframes a8 { 0%,45.442% { opacity: 1 } 45.443% { opacity: 1 } 47.89%,71.864% { opacity: 0 } 71.865%,99.999% { opacity: 0 } }
-.fl .a8 { animation: a8 8.175s infinite linear; }
-@keyframes a9 { 0%,45.442% { opacity: 0 } 45.443% { opacity: 0 } 47.89%,71.864% { opacity: 1 } 71.865%,99.999% { opacity: 1 } }
-.fl .a9 { animation: a9 8.175s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="438" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
@@ -731,8 +721,8 @@
 <g class="cr-3"><g class="cs-1"><text x="732.9" y="285" class="chart-value late">70.3</text></g></g>
 <line x1="168" x2="921.3" y1="295" y2="295" class="chart-axis"/><text x="168" y="312" class="chart-tick">0</text><text x="318.7" y="312" class="chart-tick">20</text><text x="469.3" y="312" class="chart-tick">40</text><text x="620" y="312" class="chart-tick">60</text><text x="770.6" y="312" class="chart-tick">80</text><text x="921.3" y="312" class="chart-tick">100</text><text x="921.3" y="329" class="chart-unit">정확도(%)</text>
 </g>
-<text x="480" y="381" opacity="0" class="steplabel a6">기억 없음</text>
-<text x="480" y="381" opacity="0" class="steplabel a7">기억 붙임</text>
-<g opacity="0" class="a8"><text x="480" y="407" class="caption">기억 없이 답하면 여러 세션 질문에서 크게 틀린다</text></g>
-<g opacity="0" class="a9"><text x="480" y="407" class="caption">같은 질문에 기억을 붙이면 모두 채택 기준을 넘는다</text></g>
+<text x="480" y="381" opacity="0" class="steplabel a4">기억 없음</text>
+<text x="480" y="381" opacity="0" class="steplabel a0">기억 붙임</text>
+<g opacity="0" class="a4"><text x="480" y="407" class="caption">기억 없이 답하면 여러 세션 질문에서 크게 틀린다</text></g>
+<g opacity="0" class="a0"><text x="480" y="407" class="caption">같은 질문에 기억을 붙이면 모두 채택 기준을 넘는다</text></g>
 </svg>

@@ -1,29 +1,19 @@
 // 스크립트 없이 움직이는 SVG와 멈춘 SVG. 시간표의 박자 상태를 CSS keyframes와 SMIL로 옮긴다(docs/design/playback.md).
 import { fitCanvas } from './canvas.js';
 import { CHART_FACES, chartText } from './chart/draw.js';
-import { CHIP_GAP, sizeChip } from './chip.js';
-import { curveOf, keySpline, timeAt } from './easing.js';
+import { createAnimator } from './animate/animator.js';
 import { drawScene } from './draw/figure.js';
-import { createGlyphSet, embedFonts, measure, wrap } from './measure/fonts.js';
+import { createGlyphSet, embedFonts, wrap } from './measure/fonts.js';
 import { STYLE } from './measure/sizes.js';
 import { DEFS, STYLES } from './styles.js';
 import { escapeXml, plainText, renderRich, roundCoord as r } from './text.js';
 import { chartMotionCss } from './chart/motion.js';
-import { chartSeriesIds, litIds } from './timeline.js';
 import { tokens, values } from './tokens.js';
 
 const SPACE = values.space;
 const LINE = values.size.line;
 const CAPTION = { size: values.size.text['14'], face: 'regular' };
 const STEP_LABEL = { size: values.size.text['13'], face: 'semibold' };
-// 켜짐 구간 끝을 다음 구간 시작보다 이만큼(ms) 앞당긴다. 같은 퍼센트에 두 값이 겹치지 않게 하기 위해서다.
-const EPSILON_MS = 0.1;
-// 켜짐과 꺼짐이 바뀔 때 새 값으로 서서히 가는 시간(ms). HTML 재생기의 CSS transition(duration.fast)과 같다.
-const FADE_MS = values.duration.fast;
-// 점이 선을 지나는 곡선. HTML 재생기와 같다
-const MOVE = curveOf('move');
-const MOVE_SPLINE = keySpline(MOVE);
-const LINEAR = '0 0 1 1';
 
 // cost: time O(g·b + b·h + out), heap O(out), stack O(1), io 1
 // vars: g = 켜고 끄는 요소 수, b = 박자 수, h = 박자의 이동 수, out = 만든 SVG 글자 수
@@ -68,7 +58,7 @@ ${captions.svg}
 function drawFigureBody(result, animator, glyphs) {
   const { scene, timeline } = result;
   const body = drawScene(scene, (kind, i, extra) => animator.decorate(kind, i, extra, scene), glyphs);
-  const packets = timeline.segs.flatMap((seg, si) => seg.hops.map((hop, hi) => animator.packet(seg, hop, `p${si}-${hi}`, { glyphs })));
+  const packets = timeline.segs.flatMap((seg, si) => seg.hops.map((hop, hi) => animator.packet({ seg, hop, name: `p${si}-${hi}` }, glyphs)));
   return { svg: `${body}\n${packets.join('\n')}`, width: scene.width, height: scene.height, className: '' };
 }
 
@@ -98,12 +88,12 @@ function drawCaptions(timeline, animator, width, top, glyphs) {
   const height = captions.length ? SPACE['22'] + (lines - 1) * LINE['20'] + SPACE['2'] + SPACE['14'] : SPACE['15'];
   const labels = timeline.steps.map((label, si) => {
     glyphs.add(label, STEP_LABEL.face);
-    const cls = animator.windows(timeline.segs.map((s) => s.si === si), 'opacity: 1', 'opacity: 0', 's');
+    const cls = animator.windows(timeline.segs.map((s) => s.si === si), { on: 'opacity: 1', off: 'opacity: 0' });
     return `<text x="${r(width / 2)}" y="${r(top + SPACE['9'])}" opacity="0" class="steplabel ${cls}">${renderRich(label)}</text>`;
   });
   const said = captions.map((text) => {
     glyphs.add(text, CAPTION.face);
-    const cls = animator.windows(timeline.segs.map((s) => s.caption === text), 'opacity: 1', 'opacity: 0', 'y');
+    const cls = animator.windows(timeline.segs.map((s) => s.caption === text), { on: 'opacity: 1', off: 'opacity: 0' });
     const rows = wrapped.get(text).map((line, li) => `<text x="${r(width / 2)}" y="${r(top + SPACE['22'] + li * LINE['20'])}" class="caption">${renderRich(line)}</text>`);
     return `<g opacity="0" class="${cls}">${rows.join('')}</g>`;
   });
@@ -114,202 +104,3 @@ function drawCaptions(timeline, animator, width, top, glyphs) {
 function staticAnimator() {
   return { css: [], decorate: () => '', packet: () => '', windows: () => '', chart: () => {} };
 }
-
-// cost: time O(1), heap O(1), stack O(1)
-// basis: estimate
-// 박자별 상태를 CSS keyframes class로 바꾼다. 같은 켜짐 순서는 class 하나를 나눠 쓴다.
-function createAnimator({ segs, total, growMs }) {
-  // 한 바퀴 길이는 시간표 total 그대로(1ms 단위). 0.1초로 반올림하면 퍼센트와 keyTimes가 어긋난 채 반복된다.
-  const duration = `${Math.round(total) / 1000}s`;
-  const css = [];
-  const names = new Map();
-  // SMIL keyTimes. 한 바퀴를 0에서 1로 본 비율이고, 같은 값끼리 같은 시각이어야 해서 모든 점 요소가 이 함수 하나를 쓴다.
-  const keyTime = (ms) => Math.round((ms / total) * 100000) / 100000;
-  const percent = (ms) => `${Math.round((ms / total) * 100000) / 1000}%`;
-
-  // cost: time O(b), heap O(b), stack O(1)
-  // vars: b = 구간 수
-  // basis: estimate
-  // 구간 [시작, 끝, CSS] 목록을 keyframes 본문으로. 앞 구간과 값이 다르면 구간 시작에서 앞 값을 잡고 FADE_MS 동안 새 값으로 서서히 간다(재생기의 transition과 같다).
-  // 한 바퀴의 첫 구간은 이전 값이 없어 바로 시작한다.
-  function fadeFrames(spans) {
-    return spans
-      .map(([start, end, value], i) => {
-        const last = Math.max(start, end - EPSILON_MS);
-        const settle = Math.min(start + FADE_MS, last);
-        if (i === 0 || spans[i - 1][2] === value || settle <= start) return `${percent(start)},${percent(last)} { ${value} }`;
-        return `${percent(start)} { ${spans[i - 1][2]} } ${percent(settle)},${percent(last)} { ${value} }`;
-      })
-      .join(' ');
-  }
-
-  // cost: time O(b), heap O(b), stack O(1)
-  // vars: b = 박자 수
-  // basis: estimate
-  // states[i]는 박자 i의 켜짐이다. { before, after, at }이면 박자 안 at(ms)에서 before가 after로 바뀐다.
-  function windows(states, onCss, offCss, prefix) {
-    const spans = segs.flatMap((s, i) => {
-      const st = typeof states[i] === 'object' ? states[i] : { before: states[i], after: states[i], at: 0 };
-      const at = s.t0 + st.at;
-      return st.at > 0 && st.before !== st.after ? [[s.t0, at, st.before], [at, s.t1, st.after]] : [[s.t0, s.t1, st.after]];
-    });
-    const key = prefix + spans.map(([start, , on]) => `${Math.round(start)}${on ? 1 : 0}`).join('');
-    if (!names.has(key)) {
-      const name = `a${names.size}`;
-      names.set(key, name);
-      const frames = fadeFrames(spans.map(([start, end, on]) => [start, end, on ? onCss : offCss]));
-      css.push(`@keyframes ${name} { ${frames} }\n.fl .${name} { animation: ${name} ${duration} infinite linear; }`);
-    }
-    return names.get(key);
-  }
-
-  const lit = (j) => segs.map((s) => s.edgesOn.includes(j));
-  const cardState = (n, test) => segs.map((s) => ({ before: test(s.cardsBefore[n]), after: test(s.cards[n]), at: s.cardsAt[n] ?? 0 }));
-
-  // cost: time O(b), heap O(b), stack O(1)
-  // vars: b = 박자 수
-  // basis: estimate
-  function decorate(kind, i, extra, scene) {
-    const id = kind === 'group' ? scene?.groups[i]?.id : scene?.items[i]?.id;
-    switch (kind) {
-      case 'node':
-      case 'group':
-        return windows(segs.map((s) => litIds(s, scene.edges).has(id)), `stroke: ${tokens.color.accent}`, `stroke: ${tokens.color.border}`, 'n');
-      case 'column':
-        return windows(segs.map((s) => s.columnsOn.includes(extra)), `fill: ${tokens.color['card-on']}`, 'fill: transparent', 'k');
-      case 'edge':
-        return windows(lit(i), `stroke: ${tokens.color.accent}; stroke-width: ${tokens.border.strong}; marker-end: url(#fl-arrow-on)`, `stroke: ${tokens.color.muted}; stroke-width: ${tokens.border.edge}; marker-end: url(#fl-arrow)`, 'e');
-      case 'pill':
-        return windows(lit(i), `fill: ${tokens.color['accent-fill']}; stroke: ${tokens.color['accent-fill']}`, `fill: ${tokens.color.bg}; stroke: ${tokens.color.border}`, 'l');
-      case 'pilltext':
-        return windows(lit(i), `fill: ${tokens.color['on-accent']}`, `fill: ${tokens.color.muted}`, 'x');
-      case 'quiet':
-        return windows(lit(i), 'opacity: 1', 'opacity: 0', 'q');
-      case 'card':
-        return windows(cardState(id, (v) => v !== undefined), `stroke: ${tokens.color.accent}; fill: ${tokens.color['card-on']}`, `stroke: ${tokens.color.border}; fill: ${tokens.color.surface}`, 'c');
-      case 'layer':
-        return windows(cardState(id, (v) => v === extra), 'opacity: 1', 'opacity: 0', 'v');
-      case 'empty':
-        return windows(cardState(id, (v) => v === undefined), 'opacity: 1', 'opacity: 0', 'v');
-      default:
-        return '';
-    }
-  }
-
-  // cost: time O(1), heap O(1), stack O(1)
-  // basis: estimate
-  // 점 하나가 한 박자 동안 선을 건너고, 실어 보내는 글은 점 위의 상자로 따라간다.
-  // 점의 보임과 이동과 글 상자 밀어 넣기는 모두 SMIL이라 한 시계로 돈다. 보임을 CSS에 두면 시계 둘이 따로 반복해, 한 바퀴가 돌아올 때 점이 끝 지점에 잠깐 보였다가 시작 지점으로 뛴다.
-  function packet(seg, hop, name, { glyphs }) {
-    const [from, to] = [keyTime(seg.t0), keyTime(seg.t0 + hop.ms)];
-    const chip = hop.data ? drawChip(hop.data, glyphs) + pushChip(seg, hop) : '';
-    return (
-      `<g class="${name}" opacity="0"><circle r="${values.size.halo}" fill="${tokens.color.accent}" opacity="${values.opacity.halo}"/><circle r="${values.size.packet}" fill="${tokens.color.accent}"/>${chip ? `<g>${chip}</g>` : ''}` +
-      showWindow(from, to) +
-      moveMotion(from, to, hop) +
-      `</g>`
-    );
-  }
-
-  // cost: time O(1), heap O(1), stack O(1)
-  // basis: estimate
-  // 보임 창. 이산 값이라 구간 끝에서 바로 바뀌고, 시작과 끝이 0이나 1이면 겹치는 keyTime을 만들지 않는다.
-  function showWindow(from, to) {
-    const keys = [[0, 0], [from, 1], [to, 0]].filter(([at], i, all) => i === 0 || at > all[i - 1][0]);
-    if (from === 0) keys.splice(0, 1, [0, 1]);
-    return `<animate attributeName="opacity" dur="${duration}" repeatCount="indefinite" calcMode="discrete" keyTimes="${keys.map(([at]) => at).join(';')}" values="${keys.map(([, on]) => on).join(';')}"/>`;
-  }
-
-  // cost: time O(1), heap O(1), stack O(1)
-  // basis: estimate
-  // 선을 따라 이동. 이동 전과 후에는 선의 시작과 끝에 머물고, 이동 구간만 이동 곡선을 쓴다. keyTimes는 늘어나기만 한다.
-  function moveMotion(from, to, hop) {
-    const [start, end] = hop.isBack ? [1, 0] : [0, 1];
-    const keys = [[0, start, LINEAR], [from, start, MOVE_SPLINE], [to, end, LINEAR], [1, end]].filter(([at], i, all) => i === 0 || at > all[i - 1][0]);
-    // 앞 키가 같은 시각이라 지워졌으면 이동 구간의 곡선이 첫 키로 옮겨 가야 한다.
-    if (from === 0) keys[0][2] = MOVE_SPLINE;
-    const last = keys.length - 1;
-    const splines = keys.slice(0, last).map(([, , spline]) => spline);
-    return (
-      `<animateMotion dur="${duration}" repeatCount="indefinite" calcMode="spline" keyTimes="${keys.map(([at]) => at).join(';')}" keySplines="${splines.join(';')}" keyPoints="${keys.map(([, point]) => point).join(';')}">` +
-      `<mpath href="#p-${hop.edge}" xlink:href="#p-${hop.edge}"/></animateMotion>`
-    );
-  }
-
-  // cost: time O(k), heap O(k), stack O(1)
-  // vars: k = 재는 지점 수(21)
-  // basis: estimate
-  // 글 상자가 점 위 기본 자리에서 벗어나는 선이면(그림 밖으로 나가거나 도형 이름을 피할 때), 시간표가 정해 둔 경로 지점별 옮김을 옮김 움직임으로 건다. 점이 그 지점에 닿는 시각은 이동 곡선을 거꾸로 풀어 구한다.
-  function pushChip(seg, hop) {
-    const path = hop.chipPath;
-    if (path.every(([, dx, dy]) => dx === 0 && dy === 0)) return '';
-    const at = (f) => keyTime(seg.t0 + timeAt(MOVE, f) * hop.ms);
-    const keys = [[0, path[0]], ...path.map((p) => [at(p[0]), p]), [1, path.at(-1)]].filter(([time], i, all) => i === 0 || time > all[i - 1][0]);
-    const moves = keys.map(([, [, dx, dy]]) => `${r(dx)} ${r(dy)}`);
-    return `<animateTransform attributeName="transform" type="translate" dur="${duration}" repeatCount="indefinite" calcMode="linear" keyTimes="${keys.map(([time]) => time).join(';')}" values="${moves.join(';')}"/>`;
-  }
-
-  // cost: time O(s·b + r·b), heap O(b), stack O(1)
-  // vars: s = 계열 수, r = 행 수, b = 박자 수
-  // basis: estimate
-  // 차트: 계열마다 보임 keyframes와, 드러내는 박자에서 자라는 keyframes. 밝히지 않은 행은 흐린다.
-  function chart(figure, drawn) {
-    const grow = growMs;
-    chartSeriesIds(figure).forEach((id, s) => {
-      const show = windows(segs.map((g) => g.series.includes(id)), 'opacity: 1', 'opacity: 0', `cs${s}`);
-      const reveal = segs.find((g) => g.growing.includes(id));
-      css.push(`.fl .cs-${s} { animation: ${show} ${duration} infinite linear; }`);
-      if (!reveal) return;
-      // 막대와 선과 띠는 자라는 시간 내내, 점과 값 글자는 그 뒤 절반에 나타난다. HTML 재생기(chart/motion.js)와 같다.
-      const [a, half, b] = [percent(reveal.t0), percent(reveal.t0 + grow / 2), percent(reveal.t0 + grow)];
-      const ease = `animation-timing-function: ${tokens.easing.reveal}`;
-      css.push(
-        `@keyframes g${s} { 0%,${a} { transform: scaleX(0); ${ease} } ${b},100% { transform: none } }\n.fl .cs-${s} .grow, .fl .cs-${s}.grow { animation: g${s} ${duration} infinite; }\n` +
-          `@keyframes d${s} { 0%,${a} { stroke-dashoffset: 1; ${ease} } ${b},100% { stroke-dashoffset: 0 } }\n.fl .cs-${s} .draw, .fl .cs-${s}.draw { animation: d${s} ${duration} infinite; }\n` +
-          `@keyframes w${s} { 0%,${a} { clip-path: inset(0 100% 0 0); ${ease} } ${b},100% { clip-path: inset(0 0 0 0) } }\n.fl .cs-${s} .wipe, .fl .cs-${s}.wipe { animation: w${s} ${duration} infinite; }\n` +
-          `@keyframes f${s} { 0%,${half} { opacity: 0; ${ease} } ${b},100% { opacity: 1 } }\n.fl .cs-${s} .late, .fl .cs-${s} .pop, .fl .cs-${s}.pop { animation: f${s} ${duration} infinite; }`,
-      );
-      // 선 차트 점은 선이 닿는 시각(data-at × 자라는 시간)에 나타난다. 시각 계산은 chart/draw.js arrivals가 끝냈다.
-      for (const at of drawn.dotAts) {
-        const [from, to] = [percent(reveal.t0 + at * grow), percent(reveal.t0 + at * grow + values.duration.fast)];
-        css.push(`@keyframes p${s}-${Math.round(at * 1000)} { 0%,${from} { opacity: 0; ${ease} } ${to},100% { opacity: 1 } }\n.fl .cs-${s} .dot[data-at="${at}"] { animation: p${s}-${Math.round(at * 1000)} ${duration} infinite; }`);
-      }
-    });
-    // 행 이름의 세로 옮김은 시간표가 행마다 박자마다 정해 둔 값을 그대로 건다. 모든 박자가 0이면 만들지 않고, 옮김이 같은 행은 keyframes를 나눠 쓴다.
-    const shiftNames = new Map();
-    drawn.rowKeys.forEach((_, k) => {
-      const shifts = segs.map((g) => g.labelShifts[k] ?? 0);
-      if (!shifts.some(Boolean)) return;
-      const key = shifts.join(',');
-      if (!shiftNames.has(key)) {
-        const name = `ls${shiftNames.size}`;
-        shiftNames.set(key, name);
-        const frames = fadeFrames(segs.map((g, i) => [g.t0, g.t1, `transform: translateY(${shifts[i]}px)`]));
-        css.push(`@keyframes ${name} { ${frames} }`);
-      }
-      css.push(`.fl .cr-${k} .chart-label.shift { animation: ${shiftNames.get(key)} ${duration} infinite linear; }`);
-    });
-    drawn.rowKeys.forEach((key, k) => {
-      const dim = windows(segs.map((g) => g.lights.length > 0 && !g.lights.includes(key)), `opacity: ${values.opacity.dim}`, 'opacity: 1', `r${k}`);
-      css.push(`.fl .cr-${k} { animation: ${dim} ${duration} infinite linear; }`);
-    });
-  }
-
-  return { css, decorate, packet, windows, chart };
-}
-
-// cost: time O(l·n), heap O(out), stack O(1)
-// vars: l = 줄 수, n = 글자 수, out = 만든 SVG 글자 수
-// basis: estimate
-// 점 위에 뜨는 글 상자. 줄은 시간표가 이미 나눴다.
-function drawChip(lines, glyphs) {
-  for (const line of lines) glyphs.add(line, STYLE.chip.face);
-  const { w, h } = sizeChip(lines);
-  const top = -h - CHIP_GAP;
-  return (
-    `<rect x="${r(-w / 2)}" y="${r(top)}" width="${r(w)}" height="${r(h)}" rx="${values.radius.lg}" fill="${tokens.color['accent-fill']}"/>` +
-    lines.map((line, li) => `<text x="0" y="${r(top + STYLE.chip.line * (li + 1))}" class="chip">${renderRich(line)}</text>`).join('')
-  );
-}
-
-

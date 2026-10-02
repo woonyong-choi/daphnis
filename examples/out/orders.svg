@@ -439,8 +439,6 @@
 .fl .a3 { animation: a3 7.79s infinite linear; }
 @keyframes a4 { 0%,60.846% { opacity: 1 } 60.847%,99.999% { opacity: 1 } }
 .fl .a4 { animation: a4 7.79s infinite linear; }
-@keyframes a5 { 0%,60.846% { opacity: 1 } 60.847%,99.999% { opacity: 1 } }
-.fl .a5 { animation: a5 7.79s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="261" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
@@ -451,5 +449,5 @@
 <g class="p1-0" opacity="0"><circle r="10" fill="var(--color-accent)" opacity="0.2"/><circle r="4.5" fill="var(--color-accent)"/><g><rect x="-47.7" y="-35" width="95.4" height="23" rx="8" fill="var(--color-accent-fill)"/><text x="0" y="-20" class="chip">order_id 1042</text><animateTransform attributeName="transform" type="translate" dur="7.79s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.60847;0.61865;0.62331;0.62967;0.63439;0.6383;0.64172;0.64483;0.64773;0.65049;0.65317;0.65583;0.65849;0.66121;0.66404;0.66703;0.67027;0.67386;0.67798;0.68299;0.68976;0.70475;1" values="30.2 0;30.2 0;28.7 0;27.2 0;24.2 0;21.2 0;18.2 0;15.2 0;12.2 0;9.2 0;6.2 0;3.2 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0;0 0"/></g><animate attributeName="opacity" dur="7.79s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.60847;0.70475" values="0;1;0"/><animateMotion dur="7.79s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.60847;0.70475;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
 </g>
 <text x="480" y="204" opacity="0" class="steplabel a4">결제</text>
-<g opacity="0" class="a5"><text x="480" y="230" class="caption">결제 행은 주문 행을 외래 키로 가리킨다</text></g>
+<g opacity="0" class="a4"><text x="480" y="230" class="caption">결제 행은 주문 행을 외래 키로 가리킨다</text></g>
 </svg>

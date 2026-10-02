@@ -678,23 +678,11 @@
 @keyframes a2 { 0%,47.116% { opacity: 1 } 47.117%,99.999% { opacity: 1 } }
 .fl .a2 { animation: a2 7.025s infinite linear; }
 .fl .cr-0 { animation: a2 7.025s infinite linear; }
-@keyframes a3 { 0%,47.116% { opacity: 1 } 47.117%,99.999% { opacity: 1 } }
+.fl .cr-1 { animation: a2 7.025s infinite linear; }
+.fl .cr-2 { animation: a2 7.025s infinite linear; }
+.fl .cr-3 { animation: a2 7.025s infinite linear; }
+@keyframes a3 { 0%,47.116% { opacity: 1 } 47.117% { opacity: 1 } 49.964%,99.999% { opacity: 0 } }
 .fl .a3 { animation: a3 7.025s infinite linear; }
-.fl .cr-1 { animation: a3 7.025s infinite linear; }
-@keyframes a4 { 0%,47.116% { opacity: 1 } 47.117%,99.999% { opacity: 1 } }
-.fl .a4 { animation: a4 7.025s infinite linear; }
-.fl .cr-2 { animation: a4 7.025s infinite linear; }
-@keyframes a5 { 0%,47.116% { opacity: 1 } 47.117%,99.999% { opacity: 1 } }
-.fl .a5 { animation: a5 7.025s infinite linear; }
-.fl .cr-3 { animation: a5 7.025s infinite linear; }
-@keyframes a6 { 0%,47.116% { opacity: 1 } 47.117% { opacity: 1 } 49.964%,99.999% { opacity: 0 } }
-.fl .a6 { animation: a6 7.025s infinite linear; }
-@keyframes a7 { 0%,47.116% { opacity: 0 } 47.117% { opacity: 0 } 49.964%,99.999% { opacity: 1 } }
-.fl .a7 { animation: a7 7.025s infinite linear; }
-@keyframes a8 { 0%,47.116% { opacity: 1 } 47.117% { opacity: 1 } 49.964%,99.999% { opacity: 0 } }
-.fl .a8 { animation: a8 7.025s infinite linear; }
-@keyframes a9 { 0%,47.116% { opacity: 0 } 47.117% { opacity: 0 } 49.964%,99.999% { opacity: 1 } }
-.fl .a9 { animation: a9 7.025s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="545" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
@@ -712,8 +700,8 @@
 <g class="cr-3"><g class="cs-1"><circle cx="527.9" cy="257.3" r="5" fill="var(--color-series-2)" class="pop"/><text x="538.9" y="261.3" class="chart-name late">B 붙음</text></g></g>
 
 </g>
-<text x="480" y="488" opacity="0" class="steplabel a6">기억 없음</text>
-<text x="480" y="488" opacity="0" class="steplabel a7">기억 붙임</text>
-<g opacity="0" class="a8"><text x="480" y="514" class="caption">기억 없이 쓴 비용과 수정 횟수다</text></g>
-<g opacity="0" class="a9"><text x="480" y="514" class="caption">기억을 붙이면 두 에이전트 모두 왼쪽 아래로 간다</text></g>
+<text x="480" y="488" opacity="0" class="steplabel a3">기억 없음</text>
+<text x="480" y="488" opacity="0" class="steplabel a1">기억 붙임</text>
+<g opacity="0" class="a3"><text x="480" y="514" class="caption">기억 없이 쓴 비용과 수정 횟수다</text></g>
+<g opacity="0" class="a1"><text x="480" y="514" class="caption">기억을 붙이면 두 에이전트 모두 왼쪽 아래로 간다</text></g>
 </svg>

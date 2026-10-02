@@ -478,10 +478,6 @@
 .fl .a22 { animation: a22 24.212s infinite linear; }
 @keyframes a23 { 0%,19.391% { opacity: 0 } 19.391%,30.224% { opacity: 0 } 30.225%,47.666% { opacity: 0 } 47.666% { opacity: 0 } 48.492%,60.069% { opacity: 1 } 60.069%,70.902% { opacity: 1 } 70.903%,100% { opacity: 1 } }
 .fl .a23 { animation: a23 24.212s infinite linear; }
-@keyframes a24 { 0%,19.391% { opacity: 1 } 19.391%,30.224% { opacity: 1 } 30.225%,47.666% { opacity: 1 } 47.666% { opacity: 1 } 48.492%,60.069% { opacity: 0 } 60.069%,70.902% { opacity: 0 } 70.903%,100% { opacity: 0 } }
-.fl .a24 { animation: a24 24.212s infinite linear; }
-@keyframes a25 { 0%,19.391% { opacity: 0 } 19.391%,30.224% { opacity: 0 } 30.225%,47.666% { opacity: 0 } 47.666% { opacity: 0 } 48.492%,60.069% { opacity: 1 } 60.069%,70.902% { opacity: 1 } 70.903%,100% { opacity: 1 } }
-.fl .a25 { animation: a25 24.212s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="539" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
@@ -510,6 +506,6 @@
 </g>
 <text x="480" y="482" opacity="0" class="steplabel a22">인가</text>
 <text x="480" y="482" opacity="0" class="steplabel a23">토큰</text>
-<g opacity="0" class="a24"><text x="480" y="508" class="caption">사용자가 인가 서버에서 직접 로그인한다</text></g>
-<g opacity="0" class="a25"><text x="480" y="508" class="caption">코드와 원래 비밀값을 함께 내야 토큰을 준다</text></g>
+<g opacity="0" class="a22"><text x="480" y="508" class="caption">사용자가 인가 서버에서 직접 로그인한다</text></g>
+<g opacity="0" class="a23"><text x="480" y="508" class="caption">코드와 원래 비밀값을 함께 내야 토큰을 준다</text></g>
 </svg>
