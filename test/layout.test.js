@@ -695,3 +695,57 @@ test('buildFigure_state_figures_light_the_edges_their_move_lines_name', async ()
   assert.deepEqual(built.scene.edges.map((e) => `${e.from}>${e.to}`), ['a>b', 'b>c', '__start>a', 'c>__final0']);
   assert.ok(checked >= 3, `상태 그림 ${checked}개`);
 });
+
+const ORDERED = (align, direction = 'down') => `flow right\ngroup g "G" layout=ordered direction=${direction} align=${align} {\n  box a "짧음"\n  box b "아주 긴 이름이 두 줄로 나뉘는 상자입니다 이름이 길다" "부제"\n  box c "중간 이름"\n}`;
+
+// 근거: 설계 layout.md 순서 묶음 "자식은 선언 순서가 놓는 순서이고 align이 반대 축을 맞춘다"
+test('buildFigure_ordered_group_places_children_in_declared_order_and_aligns_the_other_axis', async () => {
+  for (const [align, edgeOf] of [['start', (it) => it.x], ['center', (it) => it.x + it.w / 2], ['end', (it) => it.x + it.w]]) {
+    const { scene } = await buildFigure(ORDERED(align), { strict: true });
+    const [a, b, c] = ['a', 'b', 'c'].map((id) => item(scene, id));
+
+    assert.ok(a.y < b.y && b.y < c.y, `${align}: declared order along the direction`);
+    assert.ok(Math.abs(edgeOf(a) - edgeOf(b)) < 1 && Math.abs(edgeOf(b) - edgeOf(c)) < 1, `${align}: aligned on the other axis`);
+  }
+  const row = (await buildFigure(ORDERED('center', 'right'), { strict: true })).scene;
+
+  assert.ok(item(row, 'a').x < item(row, 'b').x && item(row, 'b').x < item(row, 'c').x);
+});
+
+const LAYERS = `flow right
+group net "층" layout=ordered direction=right {
+  group input "입력" layout=ordered direction=down count=784 {
+    box a "x1" shape=circle
+    box b "x2" shape=circle
+  }
+  group out "출력" layout=ordered direction=down {
+    box y "y" shape=circle
+  }
+}
+a -> y
+b -> y`;
+
+// 근거: 설계 layout.md 순서 묶음 "층 묶음: 층은 선언 순서로 흐름 방향에 놓이고 틀은 안쪽 도형을 감싼다", 개수 요약 "생략 표식이 맨 뒤 자식으로 선다"
+test('buildFigure_layer_groups_follow_declared_order_wrap_their_nodes_and_count_adds_one_omission_mark', async () => {
+  const { scene } = await buildFigure(LAYERS, { strict: true });
+  const frame = (id) => scene.groups.find((g) => g.id === id);
+  const inside = (box, g) => box.x >= g.x && box.y >= g.y && box.x + box.w <= g.x + g.w && box.y + box.h <= g.y + g.h;
+  const more = scene.items.filter((it) => it.shape === 'ellipsis');
+
+  assert.ok(frame('input').x + frame('input').w < frame('out').x);
+  assert.ok(['a', 'b'].every((id) => inside(item(scene, id), frame('input'))) && inside(item(scene, 'y'), frame('out')));
+  assert.deepEqual(more.map((it) => it.id), ['__more-input']);
+  assert.ok(item(scene, 'b').y < more[0].y);
+  assert.equal((await buildFigure(LAYERS.replace('count=784 ', ''), { strict: true })).scene.items.filter((it) => it.shape === 'ellipsis').length, 0);
+});
+
+// 근거: 설계 figure-syntax.md 번호 절 "번호는 라벨 알약의 일부이고 라벨이 없으면 번호 원만 있다"
+test('sizePill_number_adds_a_badge_before_the_label_and_stands_alone_without_a_label', () => {
+  const plain = sizePill('요청');
+  const numbered = sizePill('요청', 1);
+  const alone = sizePill(undefined, 12);
+
+  assert.ok(numbered.w > plain.w);
+  assert.equal(alone.h, plain.h);
+  assert.ok(alone.w >= alone.h && alone.w < numbered.w);
+});

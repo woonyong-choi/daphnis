@@ -83,6 +83,11 @@
   --size-control-inner: 22px;
   --size-control-icon: 12px;
   --size-pill-height: 18px;
+  --size-icon-node: 20px;
+  --size-icon-group: 16px;
+  --size-ellipsis-box: 24px;
+  --size-ellipsis-dot: 2px;
+  --size-ellipsis-pitch: 7px;
   --size-tag-height: 14px;
   --size-packet-radius: 4.5px;
   --size-packet-halo: 10px;
@@ -149,6 +154,7 @@
   --space-0-5: 1px;
   --space-1-5: 3px;
   --space-2-5: 5px;
+  --space-edge-gap: var(--space-8);
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
@@ -420,6 +426,40 @@
 
 .fl .fl-edge.mark .fl-path {
   stroke: var(--color-fg);
+}
+
+/* 도형 윗줄과 그룹 제목 줄의 장식: 글자 배지, 아이콘, 개수 요약의 생략 표식 */
+.fl .badge {
+  font-size: var(--size-text-11);
+  font-weight: var(--weight-semibold);
+  text-anchor: middle;
+  fill: var(--color-fg);
+}
+
+.fl .badge-pill {
+  fill: var(--color-node);
+  stroke: var(--color-border);
+  stroke-width: var(--border-thin);
+}
+
+.fl .fl-icon {
+  color: var(--color-muted);
+}
+
+.fl .ellipsis {
+  fill: var(--color-muted);
+}
+
+/* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
+.fl .number-pill {
+  fill: var(--color-fg);
+}
+
+.fl .number {
+  font-size: var(--size-text-11);
+  font-weight: var(--weight-semibold);
+  text-anchor: middle;
+  fill: var(--color-bg);
 }
 /* 움직이는 SVG에만 있는 단계 이름과 설명 줄 */
 .fl .steplabel {

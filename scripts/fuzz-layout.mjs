@@ -10,7 +10,7 @@ import { Worker } from 'node:worker_threads';
 const LCG_MUL = 1664525;
 const LCG_ADD = 1013904223;
 const LCG_MOD = 4294967296;
-const KEY_LENGTH = 90;
+const KEY_LENGTH = 300;
 // 그림 하나를 만드는 데 허용하는 시간. 보통 수십 ms라 이를 넘으면 배치가 멈춘 것이다.
 const FIGURE_TIME_LIMIT_MS = 5000;
 const HANG_DIR = '.local/fuzz-hang';
@@ -40,6 +40,16 @@ const SHAPES = ['box', 'box', 'person', 'store', 'external', 'circle'];
 const CELL_END_CHANCE = 0.7;
 const HEAD_CHANCE = 0.25;
 const HEADS = ['both', 'none', 'end'];
+// 순서 묶음, 개수 요약, 반복, 번호, 범주, 배지, 아이콘 섞기(흐름 그림). 개수 요약 총수는 보이는 자식 수보다 큰 값이다.
+const ORDERED_CHANCE = 0.35;
+const ALIGNS = ['start', 'center', 'end'];
+const COUNT_CHANCE = 0.4;
+const REPEAT_CHANCE = 0.2;
+const DECOR_CHANCE = 0.3;
+const NUMBER_CHANCE = 0.25;
+const CATEGORIES = ['네트워크', '컴퓨트', '저장소', '보안', '관리'];
+const ICONS = ['server', 'db', 'lb', 'user', 'region', 'cdn'];
+const GROUP_COUNT = 99;
 const ASPECTS = ['0.6', '1', '1.4', '1.6', '2.4'];
 const DIRECTIONS = ['right', 'down'];
 
@@ -94,8 +104,25 @@ function cellLine(id, { row, col, rows, cols }, rnd) {
 }
 
 // 도형 선언 한 줄. circle은 box의 shape 선택 사항이다.
-function nodeLine(shape, id) {
-  return shape === 'circle' ? `box ${id} "${id}" shape=circle` : `${shape} ${id} "${id}"`;
+function nodeLine(shape, id, decor = '') {
+  return shape === 'circle' ? `box ${id} "${id}" shape=circle${decor.includes('category') ? decor.split(' ').filter((w) => w.startsWith('category')).map((w) => ` ${w}`).join('') : ''}` : `${shape} ${id} "${id}"${decor.replace(shape === 'person' ? / (badge|icon|count)=\S+/g : shape === 'box' ? /$^/ : / count=\S+/g, '')}`;
+}
+
+// 흐름 그림 도형의 범주, 배지, 아이콘, 개수 선택 사항. 사람은 범주만, 원은 범주만 받는다(호출 쪽이 걸러낸다).
+function nodeDecor(rnd) {
+  if (rnd.next() >= DECOR_CHANCE) return '';
+  const category = `category="${rnd.pick(CATEGORIES)}"`;
+  const badge = rnd.next() < 0.5 ? ` badge="${rnd.pick(['LB', 'DB', 'API', 'WEB'])}"` : '';
+  const icon = rnd.next() < 0.5 ? ` icon=${rnd.pick(ICONS)}` : '';
+  const count = rnd.next() < 0.2 ? ' count=3' : '';
+  return ` ${category}${badge}${icon}${count}`;
+}
+
+// 그룹 선택 사항: 순서 묶음(맞춤, 개수 요약)이나 반복, 범주.
+function groupDecor(rnd) {
+  const isOrdered = rnd.next() < ORDERED_CHANCE;
+  const parts = [isOrdered ? ` layout=ordered align=${rnd.pick(ALIGNS)}` : '', isOrdered && rnd.next() < COUNT_CHANCE ? ` count=${GROUP_COUNT}` : '', !isOrdered && rnd.next() < REPEAT_CHANCE ? ' repeat=3' : '', rnd.next() < DECOR_CHANCE ? ` category="${rnd.pick(CATEGORIES)}" badge="G" icon=${rnd.pick(ICONS)}` : ''];
+  return parts.join('');
 }
 
 // cost: time O(n), heap O(n), stack O(1)
@@ -104,13 +131,13 @@ function nodeLine(shape, id) {
 // 도형 선언 줄들. 구조 그림은 가끔 칸 격자를 도형 하나로 섞는다. 도형 둘 이상을 묶은 그룹을 섞고, 가끔 첫 그룹을 바깥 그룹으로 한 번 더 감싼다.
 function declareNodes(ids, rnd, kind) {
   const shape = () => (kind === 'state' ? 'state' : rnd.pick(SHAPES));
-  const declare = (id) => (kind === 'flow' && rnd.next() < GRID_CHANCE ? declareGrid(id, rnd) : [nodeLine(shape(), id)]);
+  const declare = (id) => (kind === 'flow' && rnd.next() < GRID_CHANCE ? declareGrid(id, rnd) : [nodeLine(shape(), id, kind === 'flow' ? nodeDecor(rnd) : '')]);
   const parts = [];
   let groups = 0;
   for (let i = 0; i < ids.length; ) {
     const size = Math.min(ids.length - i, GROUP_MIN + rnd.int(GROUP_SPREAD));
     if (rnd.next() < GROUP_CHANCE && i + GROUP_MIN <= ids.length) {
-      parts.push(`group g${groups} "그룹${groups}" direction=${rnd.pick(DIRECTIONS)} {`, ...ids.slice(i, i + size).flatMap((m) => declare(m).map((line) => `  ${line}`)), '}');
+      parts.push(`group g${groups} "그룹${groups}" direction=${rnd.pick(DIRECTIONS)}${kind === 'flow' ? groupDecor(rnd) : ''} {`, ...ids.slice(i, i + size).flatMap((m) => declare(m).map((line) => `  ${line}`)), '}');
       groups++;
       i += size;
     } else {
@@ -163,7 +190,8 @@ function declareEdges(ids, rnd, { kind, cells }) {
     seen.add(`${from}>${to}`);
     const isLabeled = !isInner && (kind === 'state' || rnd.next() < LABEL_CHANCE);
     const head = rnd.next() < HEAD_CHANCE ? ` head=${rnd.pick(HEADS)}` : '';
-    lines.push(`${from} -> ${to}${isLabeled ? ` "l${e}"` : ''}${head}`);
+    const no = kind !== 'data' && rnd.next() < NUMBER_CHANCE ? ` no=${1 + rnd.int(9)}` : '';
+    lines.push(`${from} -> ${to}${isLabeled ? ` "l${e}"` : ''}${head}${no}`);
   }
   return lines;
 }

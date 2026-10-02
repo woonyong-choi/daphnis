@@ -30,7 +30,7 @@ function edgesByContainer({ containers, pieces, edges }) {
   for (const [index, list] of pieces) {
     const edge = edges.find((e) => e.index === index);
     list.forEach((p, k) => {
-      const labels = p.hasLabel && hasPill(edge) && !isBeside(edge, containers.get(p.container)) ? [{ id: `label::${index}`, text: edge.label ?? '', ...sizeOf(sizePill(edge.label, edge.no)), layoutOptions: LABEL_OPTIONS }] : [];
+      const labels = p.hasLabel && hasPill(edge) && !isBeside(edge, containers.get(p.container)) ? [{ id: `label::${index}`, text: edge.label ?? String(edge.no), ...sizeOf(sizePill(edge.label, edge.no)), layoutOptions: LABEL_OPTIONS }] : [];
       byContainer.get(p.container).push({ id: `${index}::${k}`, sources: [p.from], targets: [p.to], labels });
     });
   }
@@ -94,7 +94,7 @@ function containerOptions(c, ctx) {
     'elk.layered.cycleBreaking.strategy': cycleStrategy(c, ctx),
     'elk.spacing.nodeNode': String(SPACE['16']),
     'elk.layered.spacing.nodeNodeBetweenLayers': String(SPACE['30']),
-    'elk.spacing.edgeEdge': String(SPACE['5']),
+    'elk.spacing.edgeEdge': String(SPACE['edge-gap']),
     'elk.spacing.edgeNode': String(SPACE['8']),
     'elk.spacing.edgeLabel': String(SPACE['2']),
     'elk.layered.spacing.edgeNodeBetweenLayers': String(SPACE['8']),

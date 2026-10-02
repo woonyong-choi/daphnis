@@ -145,6 +145,7 @@
   --space-0-5: 1px;
   --space-1-5: 3px;
   --space-2-5: 5px;
+  --space-edge-gap: var(--space-8);
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;

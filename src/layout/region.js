@@ -81,7 +81,7 @@ export function placeRegion(c, children, model) {
     const align = ALIGN_BY_AXIS[model.containers.get(id).align ?? 'center'][c.direction];
     for (const child of children.filter((ch) => model.nodes.get(ch.id).group === id)) {
       Object.assign(child, { [isRow ? 'y' : 'x']: at, [isRow ? 'x' : 'y']: 0 });
-      child.layoutOptions = { ...child.layoutOptions, 'elk.partitioning.partition': String(i), 'elk.alignment': align };
+      child.layoutOptions = { ...child.layoutOptions, ...(model.isSafe ? {} : { 'elk.partitioning.partition': String(i) }), 'elk.alignment': align };
       at += (isRow ? child.height : child.width) + NODE_GAP;
     }
   });
@@ -105,7 +105,7 @@ export function regionOptions(c, model) {
   const left = isRow ? reach[0] : Math.max(...reach.map((r, i) => r - offsetOf(c.align, { widest, cross: sizes[i].cross })));
   const right = isRow ? reach.at(-1) : Math.max(...reach.map((r, i) => r - (widest - sizes[i].cross - offsetOf(c.align, { widest, cross: sizes[i].cross }))));
   return {
-    'elk.partitioning.activate': 'true',
+    'elk.partitioning.activate': String(!model.isSafe),
     'elk.separateConnectedComponents': 'false',
     'elk.layered.nodePlacement.strategy': 'INTERACTIVE',
     'elk.layered.crossingMinimization.strategy': 'INTERACTIVE',

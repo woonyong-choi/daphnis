@@ -1,0 +1,37 @@
+flow right
+title "클라우드 구성도"
+subtitle "사용자 요청이 로드 밸런서, 웹 서버, 앱 서버를 거쳐 저장소에 닿는 순서(1~7)"
+
+person user "사용자"
+group cloud "클라우드" icon=region category="영역" badge="CLOUD" {
+  group vpc "VPC" icon=vpc direction=down {
+    box igw "인터넷 게이트웨이" icon=igw category="네트워크" badge="IGW"
+    group pub "퍼블릭 서브넷" icon=subnet direction=down {
+      box lb "로드 밸런서" icon=lb category="네트워크" badge="LB"
+    }
+    group priv "프라이빗 서브넷" icon=subnet direction=down {
+      box web "웹 서버" icon=server category="컴퓨트" badge="WEB" count=3
+      box app "앱 서버" icon=server category="컴퓨트" badge="APP"
+      store db "데이터베이스" icon=db category="저장소" badge="DB"
+    }
+  }
+  store files "오브젝트 스토리지" icon=object category="저장소" badge="OBJ"
+}
+
+user -> igw "요청" no=1
+igw -> lb "전달" no=2
+lb -> web "분산" no=3
+web -> app "호출" no=4
+app -> db "조회" no=5
+app -> files "저장" no=6
+db -> app "결과" no=7
+
+step "들어오기" "요청이 게이트웨이와 로드 밸런서를 지난다"
+  user -> igw
+  igw -> lb
+step "처리" "웹 서버가 앱 서버를 부른다"
+  lb -> web
+  web -> app
+step "저장" "앱 서버가 데이터베이스와 스토리지를 쓴다"
+  app -> db & app -> files
+  db -> app

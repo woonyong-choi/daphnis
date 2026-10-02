@@ -128,15 +128,16 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | 줄 | 뜻 |
 |---|---|
 | `person id "이름"` | 사람 |
-| `box id "이름" ["부제"] [shape=rect\|circle]` | 구성 요소, 모듈. `shape=circle`은 합류 연산(⊕)처럼 짧은 이름을 담는 작은 원이고 부제가 없다 |
+| `box id "이름" ["부제"] [shape=rect\|circle] [category="범주"] [badge="글"] [icon=이름] [count=N]` | 구성 요소, 모듈. `shape=circle`은 합류 연산(⊕)처럼 짧은 이름을 담는 작은 원이고 부제가 없다 |
 | `external id "이름" ["부제"]` | 외부 프로그램, 외부 서비스. 점선 테두리 |
 | `store id "이름" ["부제"]` | 파일, 데이터베이스. 원통 |
 | `decision id "질문"` | 갈림길. 마름모 |
-| `group id "이름" [direction=right\|down] {`, `}` | 그룹. 두 줄 사이에 도형과 그룹을 둔다 |
+| `group id "이름" [direction=right\|down] [layout=ordered] [align=start\|center\|end] [count=N] [repeat=N] [category="범주"] [badge="글"] [icon=이름] {`, `}` | 그룹. 두 줄 사이에 도형과 그룹을 둔다. `layout=ordered`는 자식을 선언 순서대로 `direction` 방향 한 줄에 놓고 `align`으로 반대 축을 맞춘다. `count`와 `repeat`는 아래 요약과 반복 절 |
+| `icons 이름 "폴더"` | 사용자 아이콘 세트 등록. 폴더의 `<이름>.svg`를 `icon=세트:이름`으로 쓴다 |
 | `grid id "제목" [rows=N] [cols=N] {`, `}` | 칸 격자. 두 줄 사이에 `item`과 `gap` 칸을 둔다. 도형 하나로 배치된다([칸 격자](grid.md)) |
-| `a -> b ["라벨"] [quiet] [dashed] [head=end\|both\|none]` | 선. 끝은 격자 칸 `격자.칸`도 된다 |
+| `a -> b ["라벨"] [quiet] [dashed] [head=end\|both\|none] [no=N]` | 선. 끝은 격자 칸 `격자.칸`도 된다 |
 
-- 도형 크기, 색, 굵기, 아이콘은 적지 않는다. 크기는 글과 카드 내용으로, 모양과 색은 토큰으로 정한다.
+- 도형 크기, 색, 굵기는 적지 않는다. 크기는 글과 카드 내용으로, 모양과 색은 토큰으로 정한다. 아이콘은 `icon=`으로 고르되 모양과 색은 정하지 않는다([배치](layout.md#아이콘)).
 - 선의 양 끝은 선언된 도형이나 그룹이다. 선은 도형 선언보다 앞에 와도 된다. 파일을 다 읽은 뒤 이름을 확인한다.
 - 같은 방향의 두 끝 사이 선은 하나다. `a -> b`가 둘이면 오류다. `a -> b`와 `b -> a`는 함께 둘 수 있다.
 - 거꾸로 적는 `<-`는 없다. 요청이 가는 쪽으로 적는다.
@@ -146,6 +147,15 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 - 그룹 안의 도형을 바깥에서 부를 때도 이름만 쓴다. 이름이 파일 전체에서 하나이기 때문이다.
 - `dashed` 선은 비동기 흐름이나 선택적 흐름이다. 점선 테두리 도형(`external`)과 뜻이 다르다.
 - `quiet` 선은 그 선을 처음 지나는 박자부터 그 단계 끝까지만 보인다. 시간 흐름이 없거나, 시간 흐름에서 한 번도 지나지 않는 `quiet` 선은 [그림 검사](figure-check.md) 11번 경고가 난다.
+
+#### 순서 묶음, 개수 요약, 반복
+
+- `layout=ordered`: 자식을 선언 순서대로 `direction` 방향 한 줄에 놓는다. 선으로 순서가 바뀌지 않는다. `align`은 반대 축 맞춤(기본 `center`)이고 `layout=ordered`에서만 쓴다. 픽셀 좌표나 제약 문법은 없다. 순서 묶음 안에 순서 묶음이 있고 안쪽이 도형뿐이며 방향이 서로 수직이면 층 그래프다([배치](layout.md#순서-묶음)).
+- `count=N`(그룹은 `layout=ordered`에서만, 상자는 `box`만)은 같은 역할 개체의 총수다. 보이는 자식 수 이상이어야 한다. 그룹 제목 줄에 `(N)` 알약이 붙고 보이는 자식이 총수보다 적으면 맨 뒤에 생략 표식(세 점)이 자동으로 선다. 상자는 뒤 윤곽 두 겹과 `(N)` 알약이 붙는다. 보이지 않는 개체는 만들지 않으므로 이름으로 가리킬 수 없다.
+- `repeat=N`은 같은 블록을 순서대로 N번 되풀이한다. 그룹 제목 줄에 `×N` 알약이 붙는다. `count`와 `repeat`는 뜻이 달라(수량과 직렬 반복) 한 그룹에 함께 쓰면 오류다.
+- `no=N`(1 이상 정수)은 선 번호다. 라벨 알약 왼쪽에 번호 원이 붙고(라벨이 없으면 번호 원만), 정지 SVG와 문서에서도 순서가 읽힌다. 재생 단계 번호와 독립이고 같은 번호를 여러 선에 써도 된다.
+- `category="범주"`는 도형과 그룹에 범주색(`tag` 역할 보라, 초록, 청록, 회색, 범주가 처음 나온 줄 순서, 네 개를 넘으면 돌려 씀)을 옅게 깔고, `badge="글"`(8자 이하)은 흑백에서도 뜻이 남도록 도형 윗줄에 글자 알약을 단다. 배지가 없으면 범주 이름이 알약에 보인다. 상태(파랑)와 데이터(주황) 색은 범주로 쓰지 않는다. 원(`shape=circle`)은 범주색만 받고 배지와 아이콘은 오류다. `category`, `badge`, `icon`, `count`, `repeat`는 흐름 그림에서만 쓴다.
+- `icon=이름`은 기본 세트(IBM Carbon)의 범용 개념 이름이다. 등록한 세트는 `icon=세트:이름`이다. 이름이 없거나 파일이 없으면 오류이고, 아이콘 없이 범주색과 배지로 같은 뜻을 낸다.
 
 ### 시간 흐름
 
@@ -308,6 +318,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | 선언하지 않은 이름과 비슷한 이름을 함께 알린다. | `test/grammar.test.js`의 `parseFigure_unknown_name_suggests_the_nearest_declared_name`. `cdex`를 쓴 원본이 `codex`를 제안하는지 확인 |
 | 같은 방향 선 두 개, 자기 자신으로 가는 선, 그룹과 안 도형 사이 선을 막는다. | `test/grammar.test.js`의 `parseFigure_malformed_source_reports_the_line_and_the_rule`(선 행). 원본마다 오류 확인 |
 | 칸 선 끝, `head`, `shape`의 틀린 값(gap, 없는 칸, 같은 칸, 라벨 있는 두 칸 선, 값 목록 밖)을 줄 번호와 함께 알린다. | `test/grammar.test.js`의 `parseFigure_malformed_source_reports_the_line_and_the_rule`(격자, 선, 도형 행)과 `parseFigure_valid_forms_read_without_errors`(칸 선, 양끝 표식 행) |
+| 순서 묶음, 개수, 반복, 번호, 범주, 아이콘의 틀린 값을 줄 번호와 함께 알린다. | `test/grammar.test.js`의 `parseFigure_malformed_source_reports_the_line_and_the_rule`(순서 묶음, 개수, 반복, 번호, 배지, 아이콘 행)과 `parseFigure_valid_forms_read_without_errors` |
 | 이동은 같은 방향 선을 먼저, 없으면 반대 방향 선을 거꾸로 따라간다. | `test/grammar.test.js`의 `parseFigure_hop_follows_the_same_direction_edge_first_then_the_reverse_one`. 두 경우의 이동 방향 확인 |
 | 카드는 도착 규칙대로 바뀐다. | `test/motion.test.js`의 `buildTimeline_card_changes_at_the_latest_arrival_and_the_source_card_at_beat_start`. `&`로 다른 시간에 도착하는 두 이동의 카드 바뀌는 시점 확인 |
 | 오류를 모두 모아 알리고 파일을 쓰지 않는다. | `test/grammar.test.js`의 `parseFigure_all_errors_are_reported_together`(오류 세 개 원본에서 메시지 세 줄), `test/cli.test.js`의 `main_render_with_an_error_writes_no_file_and_reports_the_line`(결과 파일 없음) |

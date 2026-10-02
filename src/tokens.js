@@ -227,7 +227,8 @@ export const tokens = freeze({
     "30": "var(--space-30)",
     "0-5": "var(--space-0-5)",
     "1-5": "var(--space-1-5)",
-    "2-5": "var(--space-2-5)"
+    "2-5": "var(--space-2-5)",
+    "edge-gap": "var(--space-edge-gap)"
   },
   "radius": {
     "sm": "var(--radius-sm)",
@@ -516,7 +517,8 @@ export const values = freeze({
     "30": 60,
     "0-5": 1,
     "1-5": 3,
-    "2-5": 5
+    "2-5": 5,
+    "edge-gap": 16
   },
   "radius": {
     "sm": 4,

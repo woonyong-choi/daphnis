@@ -11,6 +11,8 @@
 export function orderedOptions(c, model) {
   const align = c.align ?? 'center';
   const strategy = align === 'end' && model.first ? 'INTERACTIVE' : 'SIMPLE';
+  // 안전 배치(처음 배치가 실패한 뒤)는 구분 번호를 쓰지 않는다. 거꾸로 가는 선이 있으면 elkjs가 층 제약 충돌로 배치를 거부하기 때문이다. 순서는 모델 순서에 맡긴다.
+  if (model.isSafe) return {};
   return {
     'elk.partitioning.activate': 'true',
     // 선이 없는 자식이 서로 다른 덩어리로 보여 다시 포장되지 않게 한다.
@@ -28,6 +30,7 @@ export function orderedOptions(c, model) {
  * @returns 같은 자식 목록(바꿔서 돌려준다)
  */
 export function orderChildren(c, children, model) {
+  if (model.isSafe) return children;
   const sizes = children.map((child) => (model.first?.has(child.id) ? { w: model.first.get(child.id).width, h: model.first.get(child.id).height } : { w: child.width, h: child.height }));
   const isRow = c.direction === 'right';
   const crossMax = Math.max(...sizes.map((s) => (isRow ? s.h : s.w)));

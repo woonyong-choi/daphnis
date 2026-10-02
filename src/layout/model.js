@@ -30,7 +30,7 @@ export function buildModel(figure, sizes) {
   flattenRegions({ containers, nodes }, edges);
   const pieces = new Map();
   for (const edge of edges) pieces.set(edge.index, splitEdge(edge, nodes, containers));
-  const model = { containers, nodes, edges, pieces };
+  const model = { containers, nodes, edges, pieces, isSafe: figure.safeLayout === true };
   orderByFlow(model);
   return model;
 }

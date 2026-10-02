@@ -1,0 +1,45 @@
+flow right
+title "신경망 층 그래프"
+subtitle "입력층은 784개 중 3개만 그렸다. 층 사이 선은 직접 선언한다"
+
+group network "손글씨 분류 신경망" layout=ordered direction=right {
+  group input "입력층" layout=ordered direction=down count=784 {
+    box x1 "x1" shape=circle
+    box x2 "x2" shape=circle
+    box x784 "x784" shape=circle
+  }
+  group hidden "은닉층" layout=ordered direction=down {
+    box h1 "h1" shape=circle
+    box h2 "h2" shape=circle
+    box h3 "h3" shape=circle
+  }
+  group output "출력층" layout=ordered direction=down {
+    box y0 "0" shape=circle
+    box y9 "9" shape=circle
+  }
+}
+
+x1 -> h1
+x1 -> h2
+x1 -> h3
+x2 -> h1
+x2 -> h2
+x2 -> h3
+x784 -> h1
+x784 -> h2
+x784 -> h3
+h1 -> y0
+h1 -> y9
+h2 -> y0
+h2 -> y9
+h3 -> y0
+h3 -> y9
+
+step "입력" "픽셀 값이 입력층으로 들어간다"
+  light input
+step "은닉" "각 입력이 모든 은닉 노드로 간다"
+  x1 -> h1 & x2 -> h2 & x784 -> h3
+  light hidden
+step "출력" "은닉 노드가 숫자 0과 9의 점수로 모인다"
+  h1 -> y0 & h3 -> y9
+  light output

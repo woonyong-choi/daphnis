@@ -94,6 +94,7 @@ Open `examples/out/index.html` to see every example on one page.
 
 - Figure syntax: one statement per line, quoted text, unique names, and line-numbered errors with suggestions.
 - Figure kinds: structure, sequence, state, and data relation diagrams.
+- Order, count, and categories: `layout=ordered` fixes sibling order and alignment (layer graphs), `count=` summarizes N of the same role, `repeat=` draws an N-times block, `no=` numbers edges so the order reads in still images, and `category=`/`badge=` add category colors and letter badges that survive in black and white. `icon=` uses the bundled IBM Carbon icons (Apache-2.0, color changed only) or your own set registered with `icons name "folder"`.
 - Cell grids: bit fields, arrays, stacks, and matrices drawn cell by cell, with merged, empty, and omitted cells and lit cells. Lines start and end at a single cell (`a -> grid.cell`), turning through the gaps between rows so they never cover a neighbor cell. Edges also take arrowheads at both ends or none (`head=`), and a small circle (`shape=circle`) draws a join such as ⊕.
 - Charts: bar, dumbbell, box, scatter, line, and heatmap charts, with values from the source or a JSON file.
 - Layout: elkjs layout with per-group direction, using shape sizes measured with the embedded fonts.

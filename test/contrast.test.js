@@ -83,11 +83,14 @@ test('contrast_text_pairs_reach_4_5_in_both_themes', () => {
     expectAtLeast(theme, TEXT, ['bg', 'node', 'surface', 'card-on', 'group', 'page'].flatMap((face) => [['fg', face], ['muted', face]]));
     expectAtLeast(theme, TEXT, TEXT_FACES.flatMap((face) => TEXT_ROLES.map((role) => [role, face])));
     expectAtLeast(theme, TEXT, [['state.on-active', 'state.active-fill'], ['fg', 'ui.control-on'], ['muted', 'bg']]);
-    for (const face of ['node', 'surface', 'card-on']) {
+    // 태그 띠와 도형, 그룹 범주색 덮개(category)는 같은 색을 같은 농도로 깐다. 도형 이름과 배지는 fg, 그룹 제목은 muted다.
+    for (const face of ['node', 'surface', 'card-on', 'group', 'bg']) {
       for (const tone of ['purple', 'green', 'teal', 'gray']) {
         const band = mixHex(color(theme, face), color(theme, `tag.${tone}`), opacity('tag'));
-        const ratio = contrast(color(theme, 'fg'), band);
-        assert.ok(ratio >= TEXT, `${theme} tag ${tone} on ${face}: ${ratio.toFixed(2)}`);
+        for (const ink of ['group', 'bg'].includes(face) ? ['fg', 'muted'] : ['fg']) {
+          const ratio = contrast(color(theme, ink), band);
+          assert.ok(ratio >= TEXT, `${theme} ${ink} on tag ${tone} over ${face}: ${ratio.toFixed(2)}`);
+        }
       }
     }
   }

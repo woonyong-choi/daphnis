@@ -100,6 +100,11 @@
   --size-control-inner: 22px;
   --size-control-icon: 12px;
   --size-pill-height: 18px;
+  --size-icon-node: 20px;
+  --size-icon-group: 16px;
+  --size-ellipsis-box: 24px;
+  --size-ellipsis-dot: 2px;
+  --size-ellipsis-pitch: 7px;
   --size-tag-height: 14px;
   --size-packet-radius: 4.5px;
   --size-packet-halo: 10px;
@@ -166,6 +171,7 @@
   --space-0-5: 1px;
   --space-1-5: 3px;
   --space-2-5: 5px;
+  --space-edge-gap: var(--space-8);
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
@@ -777,6 +783,40 @@ html.embedded .fl-figure {
 .fl .fl-edge.mark .fl-path {
   stroke: var(--color-fg);
 }
+
+/* 도형 윗줄과 그룹 제목 줄의 장식: 글자 배지, 아이콘, 개수 요약의 생략 표식 */
+.fl .badge {
+  font-size: var(--size-text-11);
+  font-weight: var(--weight-semibold);
+  text-anchor: middle;
+  fill: var(--color-fg);
+}
+
+.fl .badge-pill {
+  fill: var(--color-node);
+  stroke: var(--color-border);
+  stroke-width: var(--border-thin);
+}
+
+.fl .fl-icon {
+  color: var(--color-muted);
+}
+
+.fl .ellipsis {
+  fill: var(--color-muted);
+}
+
+/* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
+.fl .number-pill {
+  fill: var(--color-fg);
+}
+
+.fl .number {
+  font-size: var(--size-text-11);
+  font-weight: var(--weight-semibold);
+  text-anchor: middle;
+  fill: var(--color-bg);
+}
 /* 차트 글자와 자라는 움직임. 차트 SVG 안에 들어가고, README 이미지에서도 보이게 되풀이한다. */
 .fl .chart-title {
   font-size: var(--size-text-15);
@@ -1006,13 +1046,13 @@ html.embedded .fl-figure {
 <body>
 <figure class="fl-figure" tabindex="0">
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
-<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="774" style="aspect-ratio: 960 / 774" viewBox="-182.7 0 960 774" role="img"><title>다단계 페이지 표는 주소의 필드로 표를 차례로 따라간다</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-main)"/></marker></defs><g id="n-0" class="fl-node" data-id="addr"><rect x="110" y="28" width="360" height="92" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="290" y="47.7" class="label">가상 주소 (16비트)</text><g class="fl-part" data-part="addr.l1"><rect x="122" y="58" width="84" height="32" class="grid-cell "/><text x="164" y="78.7" class="item">1단계 4비트</text></g><g class="fl-part" data-part="addr.l2"><rect x="206" y="58" width="84" height="32" class="grid-cell "/><text x="248" y="78.7" class="item">2단계 4비트</text></g><g class="fl-part" data-part="addr.off"><rect x="290" y="58" width="168" height="32" class="grid-cell "/><text x="374" y="78.7" class="item">오프셋 8비트</text></g></g>
+<div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="774" style="aspect-ratio: 960 / 774" viewBox="-182.7 0 960 774" role="img"><title>다단계 페이지 표는 주소의 필드로 표를 차례로 따라간다</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-main)"/></marker></defs><g id="n-0" class="fl-node" data-id="addr"><rect x="116" y="28" width="360" height="92" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="296" y="47.7" class="label">가상 주소 (16비트)</text><g class="fl-part" data-part="addr.l1"><rect x="128" y="58" width="84" height="32" class="grid-cell "/><text x="170" y="78.7" class="item">1단계 4비트</text></g><g class="fl-part" data-part="addr.l2"><rect x="212" y="58" width="84" height="32" class="grid-cell "/><text x="254" y="78.7" class="item">2단계 4비트</text></g><g class="fl-part" data-part="addr.off"><rect x="296" y="58" width="168" height="32" class="grid-cell "/><text x="380" y="78.7" class="item">오프셋 8비트</text></g></g>
 <g id="n-1" class="fl-node" data-id="top"><rect x="44" y="180" width="178" height="170" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="133" y="199.7" class="label">1단계 페이지 표</text><g class="fl-part" data-part="top.i0"><rect x="56" y="210" width="77" height="32" class="grid-cell "/><text x="94.5" y="230.7" class="item">0</text></g><g class="fl-part" data-part="top.e0"><rect x="133" y="210" width="77" height="32" class="grid-cell "/><text x="171.5" y="230.7" class="item">없음</text></g><g class="fl-part" data-part="top.i1"><rect x="56" y="242" width="77" height="32" class="grid-cell "/><text x="94.5" y="262.7" class="item">1</text></g><g class="fl-part" data-part="top.n1"><rect x="133" y="242" width="77" height="32" class="grid-cell "/><text x="171.5" y="262.7" class="item">2단계 표 A</text></g><g class="fl-part" data-part="top.i2"><rect x="56" y="274" width="77" height="32" class="grid-cell "/><text x="94.5" y="294.7" class="item">2</text></g><g class="fl-part" data-part="top.e2"><rect x="133" y="274" width="77" height="32" class="grid-cell "/><text x="171.5" y="294.7" class="item">없음</text></g><g><rect x="56" y="306" width="154" height="32" class="grid-cell gap"/><text x="133" y="326.7" class="item gap">나머지 항목 ×13</text></g></g>
 <g id="n-2" class="fl-node" data-id="second"><rect x="212.5" y="410" width="162" height="138" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="293.5" y="429.7" class="label">2단계 표 A</text><g class="fl-part" data-part="second.j0"><rect x="224.5" y="440" width="69" height="32" class="grid-cell "/><text x="259" y="460.7" class="item">0</text></g><g class="fl-part" data-part="second.f0"><rect x="293.5" y="440" width="69" height="32" class="grid-cell "/><text x="328" y="460.7" class="item">프레임 6</text></g><g class="fl-part" data-part="second.j1"><rect x="224.5" y="472" width="69" height="32" class="grid-cell "/><text x="259" y="492.7" class="item">1</text></g><g class="fl-part" data-part="second.f1"><rect x="293.5" y="472" width="69" height="32" class="grid-cell "/><text x="328" y="492.7" class="item">프레임 12</text></g><g><rect x="224.5" y="504" width="138" height="32" class="grid-cell gap"/><text x="293.5" y="524.7" class="item gap">나머지 항목 ×14</text></g></g>
 <g id="n-3" class="fl-node" data-id="phys"><rect x="422.5" y="608" width="144" height="138" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="494.5" y="627.7" class="label">물리 메모리</text><g class="fl-part" data-part="phys.fr6"><rect x="434.5" y="638" width="120" height="32" class="grid-cell "/><text x="494.5" y="658.7" class="item">프레임 6</text></g><g class="fl-part" data-part="phys.fr12"><rect x="434.5" y="670" width="120" height="32" class="grid-cell "/><text x="494.5" y="690.7" class="item">프레임 12</text></g><g><rect x="434.5" y="702" width="120" height="32" class="grid-cell gap"/><text x="494.5" y="722.7" class="item gap">나머지 프레임 ×60</text></g></g>
-<g id="e-0" class="fl-edge"><path id="p-0" d="M 164 90 L 164 114 Q 164 136, 142 136 L 50 136 Q 28 136, 28 158 L 28 244 Q 28 258, 42 258 L 56 258" class="fl-path " marker-end="url(#fl-arrow)"/></g>
+<g id="e-0" class="fl-edge"><path id="p-0" d="M 170 90 L 170 114 Q 170 136, 148 136 L 50 136 Q 28 136, 28 158 L 28 244 Q 28 258, 42 258 L 56 258" class="fl-path " marker-end="url(#fl-arrow)"/></g>
 <g id="e-1" class="fl-edge"><path id="p-1" d="M 210 258 L 224 258 Q 238 258, 238 272 L 238 440" class="fl-path " marker-end="url(#fl-arrow)"/></g>
-<g id="e-2" class="fl-edge"><path id="p-2" d="M 248 90 L 248 344 Q 248 366, 226 366 L 218.5 366 Q 196.5 366, 196.5 388 L 196.5 474 Q 196.5 488, 210.5 488 L 224.5 488" class="fl-path " marker-end="url(#fl-arrow)"/></g>
+<g id="e-2" class="fl-edge"><path id="p-2" d="M 254 90 L 254 344 Q 254 366, 232 366 L 218.5 366 Q 196.5 366, 196.5 388 L 196.5 474 Q 196.5 488, 210.5 488 L 224.5 488" class="fl-path " marker-end="url(#fl-arrow)"/></g>
 <g id="e-3" class="fl-edge"><path id="p-3" d="M 362.509794921875 488 L 384.5 488 Q 406.5 488, 406.5 510 L 406.5 672 Q 406.5 686, 420.5 686 L 434.5 686" class="fl-path " marker-end="url(#fl-arrow)"/></g><g class="fl-packets"></g></svg></div>
 <figcaption class="fl-foot">
 <div class="fl-bar"><button type="button" class="fl-round fl-pause"><svg class="fl-ring" viewBox="0 0 30 30" aria-hidden="true"><circle class="fl-ring-fill" cx="15" cy="15" r="14.125" stroke-width="1.75" transform="rotate(-90 15 15)"/></svg><span class="fl-pause-icon"></span></button><div class="fl-tabs" role="tablist"></div><button type="button" class="fl-round fl-rate" aria-label="배속">1×</button></div>
@@ -1686,7 +1726,7 @@ function chipSlide(hop, metrics) {
   };
 }
 
-figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":5730,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"partsOn":["addr.l1"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"주소의 윗 4비트가 1단계 표의 행을 고른다. 이 행은 2단계 표 A를 가리킨다","series":[],"growing":[],"lights":[]},{"si":0,"t0":5730,"t1":10306,"hops":[{"edge":0,"isBack":false,"ms":3876,"to":"top","line":38}],"edgesOn":[0],"nodesOn":[0,1],"groupsOn":[],"partsOn":["addr.l1"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"주소의 윗 4비트가 1단계 표의 행을 고른다. 이 행은 2단계 표 A를 가리킨다","series":[],"growing":[],"lights":[]},{"si":0,"t0":10306,"t1":12606,"hops":[],"edgesOn":[0],"nodesOn":[0,1],"groupsOn":[],"partsOn":["addr.l1","top.i1","top.n1"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"주소의 윗 4비트가 1단계 표의 행을 고른다. 이 행은 2단계 표 A를 가리킨다","series":[],"growing":[],"lights":[]},{"si":1,"t0":12606,"t1":16110,"hops":[{"edge":1,"isBack":false,"ms":2559,"to":"second","line":41}],"edgesOn":[1],"nodesOn":[1,2],"groupsOn":[],"partsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"다음 4비트가 2단계 표의 행을 고른다","series":[],"growing":[],"lights":[]},{"si":1,"t0":16110,"t1":16810,"hops":[],"edgesOn":[1],"nodesOn":[1,2],"groupsOn":[],"partsOn":["addr.l2"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"다음 4비트가 2단계 표의 행을 고른다","series":[],"growing":[],"lights":[]},{"si":1,"t0":16810,"t1":23205,"hops":[{"edge":2,"isBack":false,"ms":5695,"to":"second","line":43}],"edgesOn":[1,2],"nodesOn":[1,2,0],"groupsOn":[],"partsOn":["addr.l2"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"다음 4비트가 2단계 표의 행을 고른다","series":[],"growing":[],"lights":[]},{"si":1,"t0":23205,"t1":25505,"hops":[],"edgesOn":[1,2],"nodesOn":[1,2,0],"groupsOn":[],"partsOn":["addr.l2","second.j1","second.f1"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"다음 4비트가 2단계 표의 행을 고른다","series":[],"growing":[],"lights":[]},{"si":2,"t0":25505,"t1":30060,"hops":[{"edge":3,"isBack":false,"ms":3205,"to":"phys","line":46}],"edgesOn":[3],"nodesOn":[2,3],"groupsOn":[],"partsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"그 행의 프레임 번호에 오프셋을 붙여 물리 주소가 된다","series":[],"growing":[],"lights":[]},{"si":2,"t0":30060,"t1":32360,"hops":[],"edgesOn":[3],"nodesOn":[2,3],"groupsOn":[],"partsOn":["phys.fr12"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"그 행의 프레임 번호에 오프셋을 붙여 물리 주소가 된다","series":[],"growing":[],"lights":[]}],"steps":["1단계","2단계","물리 주소"],"cardCounts":[0,0,0,0],"edgeEnds":[[0,1],[1,2],[0,2],[2,3]],"seriesCount":0,"rowCount":0,"metrics":{"active":"var(--color-state-active)","chipFill":"var(--color-state-active-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
+figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":5730,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"partsOn":["addr.l1"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"주소의 윗 4비트가 1단계 표의 행을 고른다. 이 행은 2단계 표 A를 가리킨다","series":[],"growing":[],"lights":[]},{"si":0,"t0":5730,"t1":10381,"hops":[{"edge":0,"isBack":false,"ms":3951,"to":"top","line":38}],"edgesOn":[0],"nodesOn":[0,1],"groupsOn":[],"partsOn":["addr.l1"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"주소의 윗 4비트가 1단계 표의 행을 고른다. 이 행은 2단계 표 A를 가리킨다","series":[],"growing":[],"lights":[]},{"si":0,"t0":10381,"t1":12681,"hops":[],"edgesOn":[0],"nodesOn":[0,1],"groupsOn":[],"partsOn":["addr.l1","top.i1","top.n1"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"주소의 윗 4비트가 1단계 표의 행을 고른다. 이 행은 2단계 표 A를 가리킨다","series":[],"growing":[],"lights":[]},{"si":1,"t0":12681,"t1":16185,"hops":[{"edge":1,"isBack":false,"ms":2559,"to":"second","line":41}],"edgesOn":[1],"nodesOn":[1,2],"groupsOn":[],"partsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"다음 4비트가 2단계 표의 행을 고른다","series":[],"growing":[],"lights":[]},{"si":1,"t0":16185,"t1":16885,"hops":[],"edgesOn":[1],"nodesOn":[1,2],"groupsOn":[],"partsOn":["addr.l2"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"다음 4비트가 2단계 표의 행을 고른다","series":[],"growing":[],"lights":[]},{"si":1,"t0":16885,"t1":23355,"hops":[{"edge":2,"isBack":false,"ms":5770,"to":"second","line":43}],"edgesOn":[1,2],"nodesOn":[1,2,0],"groupsOn":[],"partsOn":["addr.l2"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"다음 4비트가 2단계 표의 행을 고른다","series":[],"growing":[],"lights":[]},{"si":1,"t0":23355,"t1":25655,"hops":[],"edgesOn":[1,2],"nodesOn":[1,2,0],"groupsOn":[],"partsOn":["addr.l2","second.j1","second.f1"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"다음 4비트가 2단계 표의 행을 고른다","series":[],"growing":[],"lights":[]},{"si":2,"t0":25655,"t1":30210,"hops":[{"edge":3,"isBack":false,"ms":3205,"to":"phys","line":46}],"edgesOn":[3],"nodesOn":[2,3],"groupsOn":[],"partsOn":[],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"그 행의 프레임 번호에 오프셋을 붙여 물리 주소가 된다","series":[],"growing":[],"lights":[]},{"si":2,"t0":30210,"t1":32510,"hops":[],"edgesOn":[3],"nodesOn":[2,3],"groupsOn":[],"partsOn":["phys.fr12"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"그 행의 프레임 번호에 오프셋을 붙여 물리 주소가 된다","series":[],"growing":[],"lights":[]}],"steps":["1단계","2단계","물리 주소"],"cardCounts":[0,0,0,0],"edgeEnds":[[0,1],[1,2],[0,2],[2,3]],"seriesCount":0,"rowCount":0,"metrics":{"active":"var(--color-state-active)","chipFill":"var(--color-state-active-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
 </script>
 </body>
 </html>

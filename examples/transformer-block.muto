@@ -1,0 +1,29 @@
+flow down
+title "Transformer 인코더 블록"
+subtitle "같은 블록을 N번 쌓는다. 블록 안 순서는 위에서 아래다"
+
+box tokens "입력 임베딩" "토큰과 위치" category="입력" badge="IN"
+group block "인코더 블록" direction=down repeat=6 category="블록" badge="BLK" {
+  box attn "멀티헤드 어텐션" category="블록" badge="ATT"
+  box add1 "Add & Norm" "잔차를 더한다"
+  box ffn "피드포워드" category="블록" badge="FFN"
+  box add2 "Add & Norm" "잔차를 더한다"
+}
+box head "출력층" "다음 토큰 확률" category="출력" badge="OUT"
+
+tokens -> attn "Q K V" no=1
+attn -> add1 no=2
+add1 -> ffn no=3
+ffn -> add2 no=4
+add2 -> head "N번 되풀이한 뒤" no=5
+tokens -> add1 "잔차" dashed
+add1 -> add2 "잔차" dashed
+
+step "어텐션" "토큰끼리 서로 본다"
+  tokens -> attn
+  attn -> add1
+step "피드포워드" "각 토큰을 따로 변환한다"
+  add1 -> ffn
+  ffn -> add2
+step "출력" "블록 N개를 거친 뒤 다음 토큰을 고른다"
+  add2 -> head

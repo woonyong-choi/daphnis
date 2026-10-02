@@ -82,6 +82,11 @@
   --size-control-inner: 22px;
   --size-control-icon: 12px;
   --size-pill-height: 18px;
+  --size-icon-node: 20px;
+  --size-icon-group: 16px;
+  --size-ellipsis-box: 24px;
+  --size-ellipsis-dot: 2px;
+  --size-ellipsis-pitch: 7px;
   --size-tag-height: 14px;
   --size-packet-radius: 4.5px;
   --size-packet-halo: 10px;
@@ -148,6 +153,7 @@
   --space-0-5: 1px;
   --space-1-5: 3px;
   --space-2-5: 5px;
+  --space-edge-gap: var(--space-8);
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
@@ -420,6 +426,40 @@
 .fl .fl-edge.mark .fl-path {
   stroke: var(--color-fg);
 }
+
+/* 도형 윗줄과 그룹 제목 줄의 장식: 글자 배지, 아이콘, 개수 요약의 생략 표식 */
+.fl .badge {
+  font-size: var(--size-text-11);
+  font-weight: var(--weight-semibold);
+  text-anchor: middle;
+  fill: var(--color-fg);
+}
+
+.fl .badge-pill {
+  fill: var(--color-node);
+  stroke: var(--color-border);
+  stroke-width: var(--border-thin);
+}
+
+.fl .fl-icon {
+  color: var(--color-muted);
+}
+
+.fl .ellipsis {
+  fill: var(--color-muted);
+}
+
+/* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
+.fl .number-pill {
+  fill: var(--color-fg);
+}
+
+.fl .number {
+  font-size: var(--size-text-11);
+  font-weight: var(--weight-semibold);
+  text-anchor: middle;
+  fill: var(--color-bg);
+}
 /* 움직이는 SVG에만 있는 단계 이름과 설명 줄 */
 .fl .steplabel {
   font-family: var(--font-sans);
@@ -435,75 +475,75 @@
   fill: var(--color-muted);
 }
 
-@keyframes a0 { 0%,24.128% { stroke: var(--color-border) } 24.129%,37.562% { stroke: var(--color-border) } 37.563%,58.248% { stroke: var(--color-border) } 58.249%,76.462% { stroke: var(--color-border) } 76.462%,99.999% { stroke: var(--color-border) } }
-.fl .a0 { animation: a0 19.458s infinite linear; }
-@keyframes a1 { 0%,24.128% { stroke: var(--color-state-active) } 24.129%,37.562% { stroke: var(--color-state-active) } 37.563%,58.248% { stroke: var(--color-state-active) } 58.249%,76.462% { stroke: var(--color-state-active) } 76.462%,99.999% { stroke: var(--color-state-active) } }
-.fl .a1 { animation: a1 19.458s infinite linear; }
-@keyframes a2 { 0%,24.128% { stroke: var(--color-border) } 24.129% { stroke: var(--color-border) } 25.157%,37.562% { stroke: var(--color-state-active) } 37.563%,58.248% { stroke: var(--color-state-active) } 58.249% { stroke: var(--color-state-active) } 59.276%,76.462% { stroke: var(--color-border) } 76.462%,99.999% { stroke: var(--color-border) } }
-.fl .a2 { animation: a2 19.458s infinite linear; }
-@keyframes a3 { 0%,24.128% { stroke: var(--color-border) } 24.129%,37.562% { stroke: var(--color-border) } 37.563% { stroke: var(--color-border) } 38.591%,58.248% { stroke: var(--color-state-active) } 58.249% { stroke: var(--color-state-active) } 59.276%,76.462% { stroke: var(--color-border) } 76.462%,99.999% { stroke: var(--color-border) } }
-.fl .a3 { animation: a3 19.458s infinite linear; }
-@keyframes a4 { 0%,24.128% { stroke: var(--color-border) } 24.129%,37.562% { stroke: var(--color-border) } 37.563%,58.248% { stroke: var(--color-border) } 58.249%,76.462% { stroke: var(--color-border) } 76.462% { stroke: var(--color-border) } 77.49%,99.999% { stroke: var(--color-state-active) } }
-.fl .a4 { animation: a4 19.458s infinite linear; }
-@keyframes a5 { 0%,24.128% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 24.129%,37.562% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 37.563%,58.248% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 58.249%,76.462% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 76.462%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
-.fl .a5 { animation: a5 19.458s infinite linear; }
-@keyframes a6 { 0%,24.128% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 24.129%,37.562% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 37.563%,58.248% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 58.249%,76.462% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 76.462%,99.999% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } }
-.fl .a6 { animation: a6 19.458s infinite linear; }
-@keyframes a7 { 0%,24.128% { fill: var(--color-state-on-active) } 24.129%,37.562% { fill: var(--color-state-on-active) } 37.563%,58.248% { fill: var(--color-state-on-active) } 58.249%,76.462% { fill: var(--color-state-on-active) } 76.462%,99.999% { fill: var(--color-state-on-active) } }
-.fl .a7 { animation: a7 19.458s infinite linear; }
-@keyframes a8 { 0%,24.128% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 24.129% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.157%,37.562% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 37.563%,58.248% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 58.249% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 59.276%,76.462% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.462%,99.999% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
-.fl .a8 { animation: a8 19.458s infinite linear; }
-@keyframes a9 { 0%,24.128% { fill: var(--color-bg); stroke: var(--color-border) } 24.129% { fill: var(--color-bg); stroke: var(--color-border) } 25.157%,37.562% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 37.563%,58.248% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 58.249% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 59.276%,76.462% { fill: var(--color-bg); stroke: var(--color-border) } 76.462%,99.999% { fill: var(--color-bg); stroke: var(--color-border) } }
-.fl .a9 { animation: a9 19.458s infinite linear; }
-@keyframes a10 { 0%,24.128% { fill: var(--color-muted) } 24.129% { fill: var(--color-muted) } 25.157%,37.562% { fill: var(--color-state-on-active) } 37.563%,58.248% { fill: var(--color-state-on-active) } 58.249% { fill: var(--color-state-on-active) } 59.276%,76.462% { fill: var(--color-muted) } 76.462%,99.999% { fill: var(--color-muted) } }
-.fl .a10 { animation: a10 19.458s infinite linear; }
-@keyframes a11 { 0%,24.128% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 24.129%,37.562% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.563% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 38.591%,58.248% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 58.249% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 59.276%,76.462% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.462%,99.999% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
-.fl .a11 { animation: a11 19.458s infinite linear; }
-@keyframes a12 { 0%,24.128% { fill: var(--color-bg); stroke: var(--color-border) } 24.129%,37.562% { fill: var(--color-bg); stroke: var(--color-border) } 37.563% { fill: var(--color-bg); stroke: var(--color-border) } 38.591%,58.248% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 58.249% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 59.276%,76.462% { fill: var(--color-bg); stroke: var(--color-border) } 76.462%,99.999% { fill: var(--color-bg); stroke: var(--color-border) } }
-.fl .a12 { animation: a12 19.458s infinite linear; }
-@keyframes a13 { 0%,24.128% { fill: var(--color-muted) } 24.129%,37.562% { fill: var(--color-muted) } 37.563% { fill: var(--color-muted) } 38.591%,58.248% { fill: var(--color-state-on-active) } 58.249% { fill: var(--color-state-on-active) } 59.276%,76.462% { fill: var(--color-muted) } 76.462%,99.999% { fill: var(--color-muted) } }
-.fl .a13 { animation: a13 19.458s infinite linear; }
-@keyframes a14 { 0%,24.128% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 24.129%,37.562% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.563%,58.248% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 58.249%,76.462% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.462%,99.999% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
-.fl .a14 { animation: a14 19.458s infinite linear; }
-@keyframes a15 { 0%,24.128% { fill: var(--color-bg); stroke: var(--color-border) } 24.129%,37.562% { fill: var(--color-bg); stroke: var(--color-border) } 37.563%,58.248% { fill: var(--color-bg); stroke: var(--color-border) } 58.249%,76.462% { fill: var(--color-bg); stroke: var(--color-border) } 76.462%,99.999% { fill: var(--color-bg); stroke: var(--color-border) } }
-.fl .a15 { animation: a15 19.458s infinite linear; }
-@keyframes a16 { 0%,24.128% { fill: var(--color-muted) } 24.129%,37.562% { fill: var(--color-muted) } 37.563%,58.248% { fill: var(--color-muted) } 58.249%,76.462% { fill: var(--color-muted) } 76.462%,99.999% { fill: var(--color-muted) } }
-.fl .a16 { animation: a16 19.458s infinite linear; }
-@keyframes a17 { 0%,24.128% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 24.129%,37.562% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.563%,58.248% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 58.249%,76.462% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.462% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 77.49%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
-.fl .a17 { animation: a17 19.458s infinite linear; }
-@keyframes a18 { 0%,24.128% { fill: var(--color-bg); stroke: var(--color-border) } 24.129%,37.562% { fill: var(--color-bg); stroke: var(--color-border) } 37.563%,58.248% { fill: var(--color-bg); stroke: var(--color-border) } 58.249%,76.462% { fill: var(--color-bg); stroke: var(--color-border) } 76.462% { fill: var(--color-bg); stroke: var(--color-border) } 77.49%,99.999% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } }
-.fl .a18 { animation: a18 19.458s infinite linear; }
-@keyframes a19 { 0%,24.128% { fill: var(--color-muted) } 24.129%,37.562% { fill: var(--color-muted) } 37.563%,58.248% { fill: var(--color-muted) } 58.249%,76.462% { fill: var(--color-muted) } 76.462% { fill: var(--color-muted) } 77.49%,99.999% { fill: var(--color-state-on-active) } }
-.fl .a19 { animation: a19 19.458s infinite linear; }
-@keyframes a20 { 0%,24.128% { opacity: 1 } 24.129%,37.562% { opacity: 1 } 37.563%,58.248% { opacity: 1 } 58.249% { opacity: 1 } 59.276%,76.462% { opacity: 0 } 76.462%,99.999% { opacity: 0 } }
-.fl .a20 { animation: a20 19.458s infinite linear; }
-@keyframes a21 { 0%,24.128% { opacity: 0 } 24.129%,37.562% { opacity: 0 } 37.563%,59.276% { opacity: 0 } 59.276% { opacity: 0 } 60.304%,76.462% { opacity: 1 } 76.462%,99.999% { opacity: 1 } }
-.fl .a21 { animation: a21 19.458s infinite linear; }
+@keyframes a0 { 0%,25.015% { stroke: var(--color-border) } 25.016%,37.936% { stroke: var(--color-border) } 37.937%,59.382% { stroke: var(--color-border) } 59.383%,73.849% { stroke: var(--color-border) } 73.849%,99.999% { stroke: var(--color-border) } }
+.fl .a0 { animation: a0 18.768s infinite linear; }
+@keyframes a1 { 0%,25.015% { stroke: var(--color-state-active) } 25.016%,37.936% { stroke: var(--color-state-active) } 37.937%,59.382% { stroke: var(--color-state-active) } 59.383%,73.849% { stroke: var(--color-state-active) } 73.849%,99.999% { stroke: var(--color-state-active) } }
+.fl .a1 { animation: a1 18.768s infinite linear; }
+@keyframes a2 { 0%,25.015% { stroke: var(--color-border) } 25.016% { stroke: var(--color-border) } 26.082%,37.936% { stroke: var(--color-state-active) } 37.937%,59.382% { stroke: var(--color-state-active) } 59.383% { stroke: var(--color-state-active) } 60.449%,73.849% { stroke: var(--color-border) } 73.849%,99.999% { stroke: var(--color-border) } }
+.fl .a2 { animation: a2 18.768s infinite linear; }
+@keyframes a3 { 0%,25.015% { stroke: var(--color-border) } 25.016%,37.936% { stroke: var(--color-border) } 37.937% { stroke: var(--color-border) } 39.003%,59.382% { stroke: var(--color-state-active) } 59.383% { stroke: var(--color-state-active) } 60.449%,73.849% { stroke: var(--color-border) } 73.849%,99.999% { stroke: var(--color-border) } }
+.fl .a3 { animation: a3 18.768s infinite linear; }
+@keyframes a4 { 0%,25.015% { stroke: var(--color-border) } 25.016%,37.936% { stroke: var(--color-border) } 37.937%,59.382% { stroke: var(--color-border) } 59.383%,73.849% { stroke: var(--color-border) } 73.849% { stroke: var(--color-border) } 74.915%,99.999% { stroke: var(--color-state-active) } }
+.fl .a4 { animation: a4 18.768s infinite linear; }
+@keyframes a5 { 0%,25.015% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 25.016%,37.936% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 37.937%,59.382% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 59.383%,73.849% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 73.849%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+.fl .a5 { animation: a5 18.768s infinite linear; }
+@keyframes a6 { 0%,25.015% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 25.016%,37.936% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 37.937%,59.382% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 59.383%,73.849% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 73.849%,99.999% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } }
+.fl .a6 { animation: a6 18.768s infinite linear; }
+@keyframes a7 { 0%,25.015% { fill: var(--color-state-on-active) } 25.016%,37.936% { fill: var(--color-state-on-active) } 37.937%,59.382% { fill: var(--color-state-on-active) } 59.383%,73.849% { fill: var(--color-state-on-active) } 73.849%,99.999% { fill: var(--color-state-on-active) } }
+.fl .a7 { animation: a7 18.768s infinite linear; }
+@keyframes a8 { 0%,25.015% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.016% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 26.082%,37.936% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 37.937%,59.382% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 59.383% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 60.449%,73.849% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 73.849%,99.999% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+.fl .a8 { animation: a8 18.768s infinite linear; }
+@keyframes a9 { 0%,25.015% { fill: var(--color-bg); stroke: var(--color-border) } 25.016% { fill: var(--color-bg); stroke: var(--color-border) } 26.082%,37.936% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 37.937%,59.382% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 59.383% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 60.449%,73.849% { fill: var(--color-bg); stroke: var(--color-border) } 73.849%,99.999% { fill: var(--color-bg); stroke: var(--color-border) } }
+.fl .a9 { animation: a9 18.768s infinite linear; }
+@keyframes a10 { 0%,25.015% { fill: var(--color-muted) } 25.016% { fill: var(--color-muted) } 26.082%,37.936% { fill: var(--color-state-on-active) } 37.937%,59.382% { fill: var(--color-state-on-active) } 59.383% { fill: var(--color-state-on-active) } 60.449%,73.849% { fill: var(--color-muted) } 73.849%,99.999% { fill: var(--color-muted) } }
+.fl .a10 { animation: a10 18.768s infinite linear; }
+@keyframes a11 { 0%,25.015% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.016%,37.936% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.937% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.003%,59.382% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 59.383% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 60.449%,73.849% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 73.849%,99.999% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+.fl .a11 { animation: a11 18.768s infinite linear; }
+@keyframes a12 { 0%,25.015% { fill: var(--color-bg); stroke: var(--color-border) } 25.016%,37.936% { fill: var(--color-bg); stroke: var(--color-border) } 37.937% { fill: var(--color-bg); stroke: var(--color-border) } 39.003%,59.382% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 59.383% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 60.449%,73.849% { fill: var(--color-bg); stroke: var(--color-border) } 73.849%,99.999% { fill: var(--color-bg); stroke: var(--color-border) } }
+.fl .a12 { animation: a12 18.768s infinite linear; }
+@keyframes a13 { 0%,25.015% { fill: var(--color-muted) } 25.016%,37.936% { fill: var(--color-muted) } 37.937% { fill: var(--color-muted) } 39.003%,59.382% { fill: var(--color-state-on-active) } 59.383% { fill: var(--color-state-on-active) } 60.449%,73.849% { fill: var(--color-muted) } 73.849%,99.999% { fill: var(--color-muted) } }
+.fl .a13 { animation: a13 18.768s infinite linear; }
+@keyframes a14 { 0%,25.015% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.016%,37.936% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.937%,59.382% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 59.383%,73.849% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 73.849%,99.999% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+.fl .a14 { animation: a14 18.768s infinite linear; }
+@keyframes a15 { 0%,25.015% { fill: var(--color-bg); stroke: var(--color-border) } 25.016%,37.936% { fill: var(--color-bg); stroke: var(--color-border) } 37.937%,59.382% { fill: var(--color-bg); stroke: var(--color-border) } 59.383%,73.849% { fill: var(--color-bg); stroke: var(--color-border) } 73.849%,99.999% { fill: var(--color-bg); stroke: var(--color-border) } }
+.fl .a15 { animation: a15 18.768s infinite linear; }
+@keyframes a16 { 0%,25.015% { fill: var(--color-muted) } 25.016%,37.936% { fill: var(--color-muted) } 37.937%,59.382% { fill: var(--color-muted) } 59.383%,73.849% { fill: var(--color-muted) } 73.849%,99.999% { fill: var(--color-muted) } }
+.fl .a16 { animation: a16 18.768s infinite linear; }
+@keyframes a17 { 0%,25.015% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.016%,37.936% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.937%,59.382% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 59.383%,73.849% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 73.849% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 74.915%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+.fl .a17 { animation: a17 18.768s infinite linear; }
+@keyframes a18 { 0%,25.015% { fill: var(--color-bg); stroke: var(--color-border) } 25.016%,37.936% { fill: var(--color-bg); stroke: var(--color-border) } 37.937%,59.382% { fill: var(--color-bg); stroke: var(--color-border) } 59.383%,73.849% { fill: var(--color-bg); stroke: var(--color-border) } 73.849% { fill: var(--color-bg); stroke: var(--color-border) } 74.915%,99.999% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } }
+.fl .a18 { animation: a18 18.768s infinite linear; }
+@keyframes a19 { 0%,25.015% { fill: var(--color-muted) } 25.016%,37.936% { fill: var(--color-muted) } 37.937%,59.382% { fill: var(--color-muted) } 59.383%,73.849% { fill: var(--color-muted) } 73.849% { fill: var(--color-muted) } 74.915%,99.999% { fill: var(--color-state-on-active) } }
+.fl .a19 { animation: a19 18.768s infinite linear; }
+@keyframes a20 { 0%,25.015% { opacity: 1 } 25.016%,37.936% { opacity: 1 } 37.937%,59.382% { opacity: 1 } 59.383% { opacity: 1 } 60.449%,73.849% { opacity: 0 } 73.849%,99.999% { opacity: 0 } }
+.fl .a20 { animation: a20 18.768s infinite linear; }
+@keyframes a21 { 0%,25.015% { opacity: 0 } 25.016%,37.936% { opacity: 0 } 37.937%,60.448% { opacity: 0 } 60.449% { opacity: 0 } 61.514%,73.849% { opacity: 1 } 73.849%,99.999% { opacity: 1 } }
+.fl .a21 { animation: a21 18.768s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-main)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="877" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
-<g transform="translate(335.3 0)">
-<g id="n-0" class="fl-node" data-id="__start"><circle cx="211.4" cy="35" r="7" fill="var(--color-fg)" class="fl-stroke a0"/></g>
-<g id="n-1" class="fl-node" data-id="created"><rect x="161.4" y="102" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a1"/><text x="211.4" y="129.7" class="label">생성됨</text></g>
-<g id="n-2" class="fl-node" data-id="paid"><rect x="67.1" y="286" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a1"/><text x="117.1" y="313.7" class="label">결제됨</text></g>
+<g transform="translate(332.8 0)">
+<g id="n-0" class="fl-node" data-id="__start"><circle cx="111.3" cy="35" r="7" fill="var(--color-fg)" class="fl-stroke a0"/></g>
+<g id="n-1" class="fl-node" data-id="created"><rect x="61.3" y="102" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a1"/><text x="111.3" y="129.7" class="label">생성됨</text></g>
+<g id="n-2" class="fl-node" data-id="paid"><rect x="44.7" y="286" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a1"/><text x="94.7" y="313.7" class="label">결제됨</text></g>
 <g id="n-3" class="fl-node" data-id="shipped"><rect x="28" y="470" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a2"/><text x="78" y="497.7" class="label">배송 중</text></g>
 <g id="n-4" class="fl-node" data-id="delivered"><rect x="28" y="654" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a3"/><text x="78" y="681.7" class="label">배송 완료</text></g>
-<g id="n-5" class="fl-node" data-id="cancelled"><rect x="161.4" y="470" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a4"/><text x="211.4" y="497.7" class="label">취소됨</text></g>
+<g id="n-5" class="fl-node" data-id="cancelled"><rect x="160" y="470" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke a4"/><text x="210" y="497.7" class="label">취소됨</text></g>
 <g id="n-6" class="fl-node" data-id="__final0"><circle cx="78" cy="767" r="7" fill="none" class="fl-stroke a0"/><circle cx="78" cy="767" r="3.5" fill="var(--color-fg)"/></g>
-<g id="n-7" class="fl-node" data-id="__final1"><circle cx="211.4" cy="583" r="7" fill="none" class="fl-stroke a0"/><circle cx="211.4" cy="583" r="3.5" fill="var(--color-fg)"/></g>
-<g id="e-0" class="fl-edge"><path id="p-0" d="M 194.74 148 L 194.7 156 Q 194.7 164, 186.7 164 L 139.1 164 Q 117.1 164, 117.1 186 L 117.1 286" class="fl-path a5" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="88.1" y="208" width="57.6" height="18" rx="9" class="pill a6"/><text x="116.9" y="221" class="edgelabel a7">결제 승인</text></g></g>
-<g id="e-1" class="fl-edge"><path id="p-1" d="M 100.40666666666668 332 L 100.4 340 Q 100.4 348, 92.4 348 L 89.2 348 Q 78 348, 78 359.2 L 78 470" class="fl-path a8" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="60.5" y="392" width="34.2" height="18" rx="9" class="pill a9"/><text x="77.6" y="405" class="edgelabel a10">출고</text></g></g>
+<g id="n-7" class="fl-node" data-id="__final1"><circle cx="210" cy="583" r="7" fill="none" class="fl-stroke a0"/><circle cx="210" cy="583" r="3.5" fill="var(--color-fg)"/></g>
+<g id="e-0" class="fl-edge"><path id="p-0" d="M 94.66666666666667 148 L 94.7 286" class="fl-path a5" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="65.7" y="208" width="57.6" height="18" rx="9" class="pill a6"/><text x="94.5" y="221" class="edgelabel a7">결제 승인</text></g></g>
+<g id="e-1" class="fl-edge"><path id="p-1" d="M 78 332 L 78 470" class="fl-path a8" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="60.5" y="392" width="34.2" height="18" rx="9" class="pill a9"/><text x="77.6" y="405" class="edgelabel a10">출고</text></g></g>
 <g id="e-2" class="fl-edge"><path id="p-2" d="M 78 516 L 78 654" class="fl-path a11" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="49" y="576" width="57.6" height="18" rx="9" class="pill a12"/><text x="77.8" y="589" class="edgelabel a13">수령 확인</text></g></g>
-<g id="e-3" class="fl-edge"><path id="p-3" d="M 228.07333333333335 148 L 228.1 470" class="fl-path a14" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="199.1" y="300" width="57.6" height="18" rx="9" class="pill a15"/><text x="227.9" y="313" class="edgelabel a16">결제 실패</text></g></g>
-<g id="e-4" class="fl-edge"><path id="p-4" d="M 133.74 332 L 133.7 404 Q 133.7 426, 155.7 426 L 172.7 426 Q 194.7 426, 194.7 448 L 194.7 470" class="fl-path a17" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="104.7" y="392" width="57.6" height="18" rx="9" class="pill a18"/><text x="133.5" y="405" class="edgelabel a19">고객 취소</text></g></g>
-<g id="e-5" class="fl-edge mark"><path id="p-5" d="M 211.4066666666667 42 L 211.4 102" class="fl-path a14" marker-end="url(#fl-arrow)"/></g>
+<g id="e-3" class="fl-edge"><path id="p-3" d="M 128 148 L 128 156 Q 128 164, 136 164 L 215.9 164 Q 237.9 164, 237.9 186 L 237.9 420.4 Q 237.9 426, 232.3 426 L 232.3 426 Q 226.7 426, 226.7 431.6 L 226.7 470" class="fl-path a14" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="208.9" y="300" width="57.6" height="18" rx="9" class="pill a15"/><text x="237.7" y="313" class="edgelabel a16">결제 실패</text></g></g>
+<g id="e-4" class="fl-edge"><path id="p-4" d="M 111.33333333333333 332 L 111.3 340 Q 111.3 348, 119.3 348 L 171.3 348 Q 193.3 348, 193.3 370 L 193.3 470" class="fl-path a17" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="164.3" y="392" width="57.6" height="18" rx="9" class="pill a18"/><text x="193.1" y="405" class="edgelabel a19">고객 취소</text></g></g>
+<g id="e-5" class="fl-edge mark"><path id="p-5" d="M 111.33333333333334 42 L 111.3 102" class="fl-path a14" marker-end="url(#fl-arrow)"/></g>
 <g id="e-6" class="fl-edge mark"><path id="p-6" d="M 78 700 L 78 760" class="fl-path a14" marker-end="url(#fl-arrow)"/></g>
-<g id="e-7" class="fl-edge mark"><path id="p-7" d="M 211.4066666666667 516 L 211.4 576" class="fl-path a14" marker-end="url(#fl-arrow)"/></g>
-<g class="p0-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><g><rect x="-32.3" y="-35" width="64.6" height="23" rx="8" fill="var(--color-state-active-fill)"/><text x="0" y="-20" class="chip">39,000원</text><animateTransform attributeName="transform" type="translate" dur="19.458s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.00171;0.00343;0.00514;0.00685;0.03769;0.05139;0.05311;0.05482;0.05653;0.05825;0.05996;0.06167;0.06338;0.06852;0.07195;0.07538;0.07709;0.0788;0.08052;0.08223;0.08394;0.08565;0.08737;0.08908;0.09079;0.09251;0.09422;0.09593;0.09765;0.09936;0.10107;0.10279;0.1045;0.10621;0.10792;0.10964;0.11135;0.11306;0.11478;0.11649;0.1182;0.11992;0.12163;0.12334;0.12506;0.12848;0.13126;1" values="-5 68;-5 67.8;-5 67.4;-5 67;-5 66.4;0 101;0 101;0 100.9;0 100.4;0 99.2;0 96.9;0 93.4;0 89.2;0 84.5;0 70;0 60.6;0 51.5;0 47.1;0 42.8;0 38.7;0 34.7;0 30.8;0 27;0 23.4;0 20;0 16.7;0 13.6;0 10.6;0 7.7;0 5.1;0 2.5;0 0.1;0 -2.1;0 -4.2;0 -6.2;0 -8;0 -9.7;0 -11.3;0 -12.7;0 -14;0 -15.2;0 -16.3;0 -17.2;0 -18.1;0 -18.8;0 -19.5;0 -20.5;0 -21;0 -21"/></g><animate attributeName="opacity" dur="19.458s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.13126" values="1;0"/><animateMotion dur="19.458s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.13126;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
-<g class="p1-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="19.458s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.24129;0.33965" values="0;1;0"/><animateMotion dur="19.458s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.24129;0.33965;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
-<g class="p2-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="19.458s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.37563;0.46428" values="0;1;0"/><animateMotion dur="19.458s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.37563;0.46428;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
-<g class="p3-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="19.458s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.58249;0.71374" values="0;1;0"/><animateMotion dur="19.458s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.58249;0.71374;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
-<g class="p4-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><g><rect x="-19.1" y="-35" width="38.2" height="23" rx="8" fill="var(--color-state-active-fill)"/><text x="0" y="-20" class="chip">환불</text><animateTransform attributeName="transform" type="translate" dur="19.458s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.76462;0.76633;0.76805;0.76976;0.77147;0.77319;0.7749;0.77661;0.77833;0.78004;0.78175;0.78347;0.78518;0.78689;0.7886;0.79032;0.79203;0.79374;0.79546;0.79717;0.79888;0.8006;0.80231;0.80402;0.80574;0.80745;0.80916;0.81087;0.81259;0.81601;0.81773;0.81944;0.82115;0.82287;0.82458;0.82629;0.82801;0.83486;0.83657;0.85199;0.8818;1" values="0 68;0 68;0 67.8;0 67.4;0 66.9;0 66.3;0 65.6;0 64.7;0 63.7;0 62.5;0 61.2;0 59.7;0 58.1;0 56.3;0 54.4;0 52.2;0 49.9;0 47.4;0 44.7;0 41.9;0 38.8;0 35.6;0 32.2;0 28.6;0 24.8;0 20.9;0 16.8;0 12.5;0 8.2;0 3.6;0 -5.7;0 -10.4;0 -15;0 -19.2;0 -22.4;0 -24.6;0 -25.7;0 -26;0 -26;0 -26.3;0 0;0 0;0 0"/></g><animate attributeName="opacity" dur="19.458s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.76462;0.8818" values="0;1;0"/><animateMotion dur="19.458s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.76462;0.8818;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-4" xlink:href="#p-4"/></animateMotion></g>
+<g id="e-7" class="fl-edge mark"><path id="p-7" d="M 210 516 L 210 576" class="fl-path a14" marker-end="url(#fl-arrow)"/></g>
+<g class="p0-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><g><rect x="-32.3" y="-35" width="64.6" height="23" rx="8" fill="var(--color-state-active-fill)"/><text x="0" y="-20" class="chip">39,000원</text><animateTransform attributeName="transform" type="translate" dur="18.768s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.09191;1" values="103 0;103 0;103 0"/></g><animate attributeName="opacity" dur="18.768s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.09191" values="1;0"/><animateMotion dur="18.768s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.09191;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
+<g class="p1-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="18.768s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.25016;0.34207" values="0;1;0"/><animateMotion dur="18.768s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.25016;0.34207;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
+<g class="p2-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="18.768s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.37937;0.47128" values="0;1;0"/><animateMotion dur="18.768s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.37937;0.47128;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
+<g class="p3-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="18.768s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.59383;0.68574" values="0;1;0"/><animateMotion dur="18.768s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.59383;0.68574;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
+<g class="p4-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><g><rect x="-19.1" y="-35" width="38.2" height="23" rx="8" fill="var(--color-state-active-fill)"/><text x="0" y="-20" class="chip">환불</text><animateTransform attributeName="transform" type="translate" dur="18.768s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.73849;0.74027;0.74204;0.74382;0.7456;0.74737;0.74915;0.75092;0.7527;0.75448;0.75625;0.75803;0.76336;0.76513;0.76691;0.76868;0.78467;0.79533;0.7971;0.79888;0.80065;0.80243;0.80421;0.80598;0.81131;0.81486;0.81841;0.82019;0.82197;0.82374;0.82552;0.82729;0.82907;0.83085;0.83262;0.8344;0.83618;0.83795;0.83973;0.8415;0.84328;0.84506;0.84683;0.84861;0.85038;0.85216;0.85394;0.85571;0.85749;0.85926;0.86104;0.86282;0.86459;0.86637;0.86814;0.86992;0.87347;0.87702;0.87745;1" values="0 68;0 68;0 67.8;0 67.4;0 67;0 66.5;0 65.8;0 65;0 64.1;0 63.1;0 61.9;0 60.6;0 59.2;0 54.5;0 53.1;0 52.3;0 52;0 101;0 101;0 100.7;0 99.6;0 97.5;0 94.4;0 90.3;0 85.6;0 71.2;0 61.8;0 52.7;0 48.3;0 44.1;0 39.9;0 35.9;0 32;0 28.3;0 24.6;0 21.2;0 17.9;0 14.7;0 11.7;0 8.9;0 6.1;0 3.6;0 1.2;0 -1.1;0 -3.3;0 -5.3;0 -7.1;0 -8.9;0 -10.5;0 -12;0 -13.3;0 -14.6;0 -15.7;0 -16.7;0 -17.6;0 -18.4;0 -19.1;0 -20.2;0 -20.9;0 -21;0 -21"/></g><animate attributeName="opacity" dur="18.768s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.73849;0.87745" values="0;1;0"/><animateMotion dur="18.768s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.73849;0.87745;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-4" xlink:href="#p-4"/></animateMotion></g>
 </g>
 <text x="480" y="820" opacity="0" class="steplabel a20">정상 주문</text>
 <text x="480" y="820" opacity="0" class="steplabel a21">취소</text>
