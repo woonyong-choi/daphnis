@@ -1153,6 +1153,8 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 const PLAYER_RATES = [1, 2, 0.5];
 const BISECT_STEPS = 30;
 const ICON_VIEWBOX = '0 0 16 16';
+// 설명 글이 바뀔 때 앞 글이 사라지고 뒤 글이 나타나는 각 시간(ms)을 담은 토큰 변수. 움직이는 SVG와 같은 토큰이다.
+const CAPTION_FADE_VAR = '--duration-caption-fade';
 
 // cost: time O(s + c) 시작, 프레임마다 O(h + k), heap O(s + c), stack O(1)
 // vars: s = 도형 수, c = 선 수, h = 한 박자의 이동 수, k = 카드 있는 도형 수
@@ -1191,6 +1193,8 @@ function createPlayer(root, data) {
     stepSegs: data.steps.map((_, si) => data.segs.filter((s) => s.si === si)),
     hasCaption: data.segs.some((s) => s.caption),
     caption: root.querySelector('.fl-caption'),
+    captionText: undefined,
+    captionFade: undefined,
     pause: { button: pauseButton, icon: pauseButton.querySelector('.fl-pause-icon') },
     ring: createRing(pauseButton),
     tabs: [],
@@ -1255,11 +1259,36 @@ function enterSegment(player, i) {
   clock.index = i;
   clock.elapsed = 0;
   drawSegmentState(player.stage, seg);
-  player.caption.replaceChildren(...richNodes(seg.caption, htmlCode));
-  player.caption.hidden = !player.hasCaption;
+  showCaption(player, seg.caption);
   markTabs(player.tabs, seg.si);
   resetPackets(player.stage, seg);
   player.ring.draw(tabProgress(player, seg));
+}
+
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = 설명 글자 수
+// basis: estimate
+// 설명 글을 바꾼다. 앞 글이 다 사라진 뒤 뒤 글이 나타난다(순차 페이드). 같은 글이면 그대로 두고, 첫 글과 움직임 줄이기 설정에서는 바로 바꾼다.
+function showCaption(player, text) {
+  const { caption } = player;
+  caption.hidden = !player.hasCaption;
+  if (text === player.captionText) return;
+  const isFirst = player.captionText === undefined;
+  player.captionText = text;
+  player.captionFade?.cancel();
+  const fadeMs = parseFloat(getComputedStyle(caption).getPropertyValue(CAPTION_FADE_VAR));
+  const fill = () => caption.replaceChildren(...richNodes(text, htmlCode));
+  if (isFirst || !fadeMs || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    fill();
+    return;
+  }
+  const out = caption.animate([{ opacity: getComputedStyle(caption).opacity }, { opacity: 0 }], { duration: fadeMs, fill: 'forwards' });
+  player.captionFade = out;
+  out.finished.then(() => {
+    fill();
+    player.captionFade = caption.animate([{ opacity: 0 }, { opacity: 1 }], { duration: fadeMs });
+    out.cancel();
+  }, () => {});
 }
 
 // ---- 재생 단추와 배속 ----

@@ -685,6 +685,8 @@
 .fl .cr-3 { animation: a2 7.025s infinite linear; }
 @keyframes a3 { 0%,47.116% { opacity: 1 } 47.117% { opacity: 1 } 49.964%,99.999% { opacity: 0 } }
 .fl .a3 { animation: a3 7.025s infinite linear; }
+@keyframes a4 { 0%,49.963% { opacity: 0 } 49.964% { opacity: 0 } 52.811%,99.999% { opacity: 1 } }
+.fl .a4 { animation: a4 7.025s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="545" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
@@ -703,7 +705,7 @@
 
 </g>
 <text x="480" y="488" opacity="0" class="steplabel a3">기억 없음</text>
-<text x="480" y="488" opacity="0" class="steplabel a1">기억 붙임</text>
+<text x="480" y="488" opacity="0" class="steplabel a4">기억 붙임</text>
 <g opacity="0" class="a3"><text x="480" y="514" class="caption">기억 없이 쓴 비용과 수정 횟수다</text></g>
-<g opacity="0" class="a1"><text x="480" y="514" class="caption">기억을 붙이면 두 에이전트 모두 왼쪽 아래로 간다</text></g>
+<g opacity="0" class="a4"><text x="480" y="514" class="caption">기억을 붙이면 두 에이전트 모두 왼쪽 아래로 간다</text></g>
 </svg>

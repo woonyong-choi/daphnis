@@ -5,6 +5,7 @@ import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
 import { curveOf } from '../src/easing.js';
 import { toSvg } from '../src/svg.js';
+import { values } from '../src/tokens.js';
 
 const EXAMPLES = new URL('../examples/', import.meta.url);
 const MOVE = curveOf('move');
@@ -206,4 +207,57 @@ test('toSvg_caption_bottom_margin_equals_the_top_margin_of_the_content', async (
     assert.ok(baselines.length > 0, name);
     assert.equal(Math.round((height - Math.max(...baselines)) * 10) / 10, 32, name);
   }
+});
+
+// cost: time O(k), heap O(k), stack O(1)
+// vars: k = 키프레임 점 수
+// basis: estimate
+// 키프레임 본문(`P% { opacity: v } P%,Q% { opacity: v }`)의 시각 pct(%)에서의 투명도. 점 사이는 선형이다.
+function opacityAt(frames, pct) {
+  const points = [...frames.matchAll(/([\d.]+)%(?:,([\d.]+)%)? \{ opacity: ([\d.]+) \}/g)].flatMap(([, from, to, value]) => [[Number(from), Number(value)], [Number(to ?? from), Number(value)]]);
+  const after = points.findIndex(([at]) => at > pct);
+  if (after <= 0) return points[after < 0 ? points.length - 1 : 0][1];
+  const [[a, va], [b, vb]] = [points[after - 1], points[after]];
+  return va + ((vb - va) * (pct - a)) / (b - a);
+}
+
+test('toSvg_caption_and_step_label_fade_one_after_another_never_crossfade', async () => {
+  const SEEN = 0.02;
+  let checked = 0;
+  for (const file of readdirSync(EXAMPLES).filter((f) => f.endsWith('.muto'))) {
+    const result = await buildFigure(readFileSync(new URL(file, EXAMPLES), 'utf8'), { baseDir: 'examples' });
+    if (!result.timeline.segs.length) continue;
+    const svg = await toSvg(result, { name: file });
+    const frames = new Map([...svg.matchAll(/@keyframes (a\d+) \{ ([^\n]*?) \}\n/g)].map((m) => [m[1], m[2]]));
+    for (const group of [/<g opacity="0" class="(a\d+)"><text[^>]*class="caption"/g, /<text [^>]*class="steplabel (a\d+)"/g]) {
+      const classes = [...svg.matchAll(group)].map((m) => m[1]);
+      if (classes.length < 2) continue;
+      for (let ms = 0; ms < result.timeline.total; ms += 5) {
+        const shown = classes.filter((name) => opacityAt(frames.get(name), (ms / result.timeline.total) * 100) > SEEN);
+        assert.ok(shown.length <= 1, `${file} ${ms}ms: 글 ${shown.length}개가 같이 보인다`);
+      }
+      checked += 1;
+    }
+  }
+  assert.ok(checked >= 2, `검사한 글 묶음 ${checked}개`);
+});
+
+test('toSvg_caption_swap_uses_the_caption_fade_token_for_each_phase', async () => {
+  const result = await buildFigure(readFileSync(new URL('dumbbell.muto', EXAMPLES), 'utf8'), { baseDir: 'examples' });
+  const svg = await toSvg(result, { name: 'dumbbell' });
+  const { total } = result.timeline;
+  const name = svg.match(/<g opacity="0" class="(a\d+)"><text[^>]*class="caption"/)[1];
+  const frames = svg.match(new RegExp(`@keyframes ${name} \\{ ([^\\n]*?) \\}\\n`))[1];
+  const ramp = [...frames.matchAll(/(?<![\d.,])([\d.]+)% \{ opacity: [\d.]+ \} ([\d.]+)%,/g)].map((m) => ((Number(m[2]) - Number(m[1])) * total) / 100);
+
+  assert.ok(ramp.length > 0);
+  for (const ms of ramp) assert.ok(Math.abs(ms - values.duration['caption-fade']) < 5, `전환 ${ms}ms`);
+});
+
+test('player_reads_the_same_caption_fade_token_the_animated_svg_uses', () => {
+  const player = readFileSync(new URL('../src/player.js', import.meta.url), 'utf8');
+  const tokensCss = readFileSync(new URL('../src/tokens.css', import.meta.url), 'utf8');
+
+  assert.match(player, /'--duration-caption-fade'/);
+  assert.match(tokensCss, new RegExp(`--duration-caption-fade: ${values.duration['caption-fade']}ms;`));
 });

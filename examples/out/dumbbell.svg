@@ -687,10 +687,12 @@
 .fl .cr-3 { animation: a3 8.11s infinite linear; }
 @keyframes a4 { 0%,39.456% { opacity: 1 } 39.457% { opacity: 1 } 41.924%,62.761% { opacity: 0 } 62.762%,71.639% { opacity: 0 } 71.64%,99.999% { opacity: 0 } }
 .fl .a4 { animation: a4 8.11s infinite linear; }
-@keyframes a5 { 0%,39.456% { opacity: 0 } 39.457% { opacity: 0 } 41.924%,62.761% { opacity: 1 } 62.762% { opacity: 1 } 65.228%,71.639% { opacity: 0 } 71.64%,99.999% { opacity: 0 } }
+@keyframes a5 { 0%,41.922% { opacity: 0 } 41.924% { opacity: 0 } 44.39%,62.761% { opacity: 1 } 62.762%,71.639% { opacity: 1 } 71.64%,99.999% { opacity: 1 } }
 .fl .a5 { animation: a5 8.11s infinite linear; }
-@keyframes a6 { 0%,39.456% { opacity: 0 } 39.457%,62.761% { opacity: 0 } 62.762% { opacity: 0 } 65.228%,71.639% { opacity: 1 } 71.64%,99.999% { opacity: 1 } }
+@keyframes a6 { 0%,41.922% { opacity: 0 } 41.924% { opacity: 0 } 44.39%,62.761% { opacity: 1 } 62.762% { opacity: 1 } 65.228%,71.639% { opacity: 0 } 71.64%,99.999% { opacity: 0 } }
 .fl .a6 { animation: a6 8.11s infinite linear; }
+@keyframes a7 { 0%,39.456% { opacity: 0 } 39.457%,65.227% { opacity: 0 } 65.228% { opacity: 0 } 67.694%,71.639% { opacity: 1 } 71.64%,99.999% { opacity: 1 } }
+.fl .a7 { animation: a7 8.11s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="420" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
@@ -707,8 +709,8 @@
 <line x1="168" x2="923.5" y1="277" y2="277" class="chart-axis"/><text x="168" y="294" class="chart-tick">1k</text><text x="419.8" y="294" class="chart-tick">10k</text><text x="671.6" y="294" class="chart-tick">100k</text><text x="923.5" y="294" class="chart-tick">1M</text><text x="923.5" y="311" class="chart-unit">토큰(로그 눈금)</text>
 </g>
 <text x="480" y="363" opacity="0" class="steplabel a4">기억 없음</text>
-<text x="480" y="363" opacity="0" class="steplabel a1">기억 붙임</text>
+<text x="480" y="363" opacity="0" class="steplabel a5">기억 붙임</text>
 <g opacity="0" class="a4"><text x="480" y="389" class="caption">기억 없이 쓴 토큰이다</text></g>
-<g opacity="0" class="a5"><text x="480" y="389" class="caption">같은 작업에서 기억을 붙이면 토큰이 준다</text></g>
-<g opacity="0" class="a6"><text x="480" y="389" class="caption">사내 에이전트만 15% 늘었다</text></g>
+<g opacity="0" class="a6"><text x="480" y="389" class="caption">같은 작업에서 기억을 붙이면 토큰이 준다</text></g>
+<g opacity="0" class="a7"><text x="480" y="389" class="caption">사내 에이전트만 15% 늘었다</text></g>
 </svg>

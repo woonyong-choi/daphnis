@@ -5,6 +5,8 @@ import { values } from '../tokens.js';
 const EPSILON_MS = 0.1;
 // 켜짐과 꺼짐이 바뀔 때 새 값으로 서서히 가는 시간(ms). HTML 재생기의 CSS transition(duration.fast)과 같다.
 const FADE_MS = values.duration.fast;
+// 설명 글과 단계 이름이 바뀔 때 앞 글이 사라지는 시간이자 뒤 글이 나타나는 시간(ms). 재생기도 같은 토큰을 읽는다.
+const SWAP_MS = values.duration['caption-fade'];
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -21,14 +23,14 @@ export function createWindows(clock, segs, css) {
   // cost: time O(b), heap O(b), stack O(1)
   // vars: b = 구간 수
   // basis: estimate
-  // 구간 [시작, 끝, CSS] 목록을 keyframes 본문으로. 앞 구간과 값이 다르면 구간 시작에서 앞 값을 잡고 FADE_MS 동안 새 값으로 서서히 간다(재생기의 transition과 같다).
+  // 구간 [시작, 끝, CSS] 목록을 keyframes 본문으로. 앞 구간과 값이 다르면 구간 시작에서 앞 값을 잡고 fadeMs 동안 새 값으로 서서히 간다(재생기의 transition과 같다).
   // 한 바퀴의 첫 구간은 이전 값이 없어 바로 시작한다.
-  function fadeFrames(spans) {
+  function fadeFrames(spans, fadeMs = FADE_MS) {
     const { percent } = clock;
     return spans
       .map(([start, end, value], i) => {
         const last = Math.max(start, end - EPSILON_MS);
-        const settle = Math.min(start + FADE_MS, last);
+        const settle = Math.min(start + fadeMs, last);
         if (i === 0 || spans[i - 1][2] === value || settle <= start) return `${percent(start)},${percent(last)} { ${value} }`;
         return `${percent(start)} { ${spans[i - 1][2]} } ${percent(settle)},${percent(last)} { ${value} }`;
       })
@@ -41,23 +43,33 @@ export function createWindows(clock, segs, css) {
   /**
    * states[i]는 박자 i의 켜짐이다. { before, after, at }이면 박자 안 at(ms)에서 before가 after로 바뀐다.
    * 켜짐 순서와 켜짐, 꺼짐 CSS가 같으면 같은 class 이름을 돌려준다.
-   * @param css { on, off }. 켜짐일 때와 꺼짐일 때의 CSS 선언
+   * @param css { on, off, isSwap }. 켜짐일 때와 꺼짐일 때의 CSS 선언. isSwap이면 앞 글이 다 사라진 뒤 이 글이 나타난다(순차 페이드)
    */
-  function windows(states, { on: onCss, off: offCss }) {
-    const spans = segs.flatMap((s, i) => {
+  function windows(states, { on: onCss, off: offCss, isSwap = false }) {
+    const flat = segs.flatMap((s, i) => {
       const st = typeof states[i] === 'object' ? states[i] : { before: states[i], after: states[i], at: 0 };
       const at = s.t0 + st.at;
       return st.at > 0 && st.before !== st.after ? [[s.t0, at, st.before], [at, s.t1, st.after]] : [[s.t0, s.t1, st.after]];
     });
-    const key = `${onCss}|${offCss}|${spans.map(([start, , on]) => `${Math.round(start)}${on ? 1 : 0}`).join('')}`;
+    const spans = isSwap ? delayEntrances(flat, SWAP_MS) : flat;
+    const key = `${isSwap ? 'swap|' : ''}${onCss}|${offCss}|${spans.map(([start, , on]) => `${Math.round(start)}${on ? 1 : 0}`).join('')}`;
     if (!names.has(key)) {
       const name = `a${names.size}`;
       names.set(key, name);
-      const frames = fadeFrames(spans.map(([start, end, on]) => [start, end, on ? onCss : offCss]));
+      const frames = fadeFrames(spans.map(([start, end, on]) => [start, end, on ? onCss : offCss]), isSwap ? SWAP_MS : FADE_MS);
       css.push(`@keyframes ${name} { ${frames} }\n.fl .${name} { animation: ${name} ${clock.duration} infinite linear; }`);
     }
     return names.get(key);
   }
 
   return { windows, fadeFrames };
+}
+
+// cost: time O(b), heap O(b), stack O(1)
+// vars: b = 구간 수
+// basis: estimate
+// 꺼짐에서 켜짐으로 바뀌는 구간의 시작을 delay(ms) 늦추고, 앞 꺼짐 구간을 그만큼 늘린다. 한 바퀴의 첫 구간은 이전 값이 없어 그대로 둔다.
+function delayEntrances(spans, delay) {
+  const isEntrance = (i) => i > 0 && spans[i][2] && !spans[i - 1][2];
+  return spans.map(([start, end, on], i) => [isEntrance(i) ? Math.min(start + delay, end) : start, i + 1 < spans.length && isEntrance(i + 1) ? Math.min(spans[i + 1][0] + delay, spans[i + 1][1]) : end, on]);
 }

@@ -469,7 +469,7 @@
 .fl .a17 { animation: a17 20.228s infinite linear; }
 @keyframes a18 { 0%,23.21% { opacity: 1 } 23.21%,39.297% { opacity: 1 } 39.297%,60.129% { opacity: 1 } 60.13% { opacity: 1 } 61.118%,68.731% { opacity: 0 } 68.731%,100% { opacity: 0 } }
 .fl .a18 { animation: a18 20.228s infinite linear; }
-@keyframes a19 { 0%,23.21% { opacity: 0 } 23.21%,39.297% { opacity: 0 } 39.297%,60.129% { opacity: 0 } 60.13% { opacity: 0 } 61.118%,68.731% { opacity: 1 } 68.731%,100% { opacity: 1 } }
+@keyframes a19 { 0%,23.21% { opacity: 0 } 23.21%,39.297% { opacity: 0 } 39.297%,61.118% { opacity: 0 } 61.118% { opacity: 0 } 62.107%,68.731% { opacity: 1 } 68.731%,100% { opacity: 1 } }
 .fl .a19 { animation: a19 20.228s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-accent)"/></marker><marker id="fl-arrow-second" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-series-2)"/></marker></defs>

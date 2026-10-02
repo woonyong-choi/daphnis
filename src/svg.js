@@ -88,12 +88,12 @@ function drawCaptions(timeline, animator, width, top, glyphs) {
   const height = captions.length ? SPACE['22'] + (lines - 1) * LINE['20'] + SPACE['2'] + SPACE['14'] : SPACE['15'];
   const labels = timeline.steps.map((label, si) => {
     glyphs.add(label, STEP_LABEL.face);
-    const cls = animator.windows(timeline.segs.map((s) => s.si === si), { on: 'opacity: 1', off: 'opacity: 0' });
+    const cls = animator.windows(timeline.segs.map((s) => s.si === si), { on: 'opacity: 1', off: 'opacity: 0', isSwap: true });
     return `<text x="${r(width / 2)}" y="${r(top + SPACE['9'])}" opacity="0" class="steplabel ${cls}">${renderRich(label)}</text>`;
   });
   const said = captions.map((text) => {
     glyphs.add(text, CAPTION.face);
-    const cls = animator.windows(timeline.segs.map((s) => s.caption === text), { on: 'opacity: 1', off: 'opacity: 0' });
+    const cls = animator.windows(timeline.segs.map((s) => s.caption === text), { on: 'opacity: 1', off: 'opacity: 0', isSwap: true });
     const rows = wrapped.get(text).map((line, li) => `<text x="${r(width / 2)}" y="${r(top + SPACE['22'] + li * LINE['20'])}" class="caption">${renderRich(line)}</text>`);
     return `<g opacity="0" class="${cls}">${rows.join('')}</g>`;
   });
