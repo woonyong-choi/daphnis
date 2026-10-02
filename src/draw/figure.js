@@ -16,7 +16,7 @@ const INNER_Y = SPACE['6'];
 // basis: estimate
 /**
  * 장면을 그린다. 순서는 그룹, 생명선, 도형, 선, 메모다.
- * @param decorate (kind, index, extra) => class. 움직이는 SVG가 박자별 class를 넣는다. kind: node, edge, pill, pilltext, quiet, card, layer, column
+ * @param decorate (kind, index, extra) => class. 움직이는 SVG가 박자별 class를 넣는다. kind: node, edge, pill, pilltext, quiet, card, layer, part
  * @param glyphs 쓴 글자를 모으는 그릇(createGlyphSet)
  */
 export function drawScene(scene, decorate, glyphs) {
@@ -154,7 +154,7 @@ function drawTable(it, stroke, { decorate, glyphs }) {
     glyphs.add(key, 'semibold');
     const baseline = r(centerBaseline(y + rowH / 2, STYLE.cell.size));
     return (
-      `<g class="fl-col" data-col="${escapeXml(key2)}"><rect x="${r(it.x + values.border.thin)}" y="${r(y)}" width="${r(it.w - values.border.thin * 2)}" height="${r(rowH)}" class="col-bg ${decorate('column', 0, key2)}"/>` +
+      `<g class="fl-part" data-part="${escapeXml(key2)}"><rect x="${r(it.x + values.border.thin)}" y="${r(y)}" width="${r(it.w - values.border.thin * 2)}" height="${r(rowH)}" class="part-bg ${decorate('part', 0, key2)}"/>` +
       `<line x1="${r(it.x)}" x2="${r(it.x + it.w)}" y1="${r(y)}" y2="${r(y)}" class="col-line"/>` +
       `<text x="${r(it.x + SPACE['9'])}" y="${baseline}" class="cell">${escapeXml(c.name)}${key ? `<tspan class="key" dx="${SPACE['3']}">${key}</tspan>` : ''}</text>` +
       `<text x="${r(it.x + it.w - SPACE['9'])}" y="${baseline}" class="cell type">${escapeXml(c.type)}</text></g>`

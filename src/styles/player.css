@@ -272,7 +272,7 @@ html.embedded .fl-figure {
   stroke: var(--color-state-active);
 }
 
-.fl .fl-col.on .col-bg {
+.fl .fl-part.on .part-bg {
   fill: var(--color-card-on);
 }
 
