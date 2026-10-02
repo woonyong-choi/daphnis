@@ -23,7 +23,7 @@ async function problemsOf(source) {
 // basis: estimate
 function recheck({ figure, scene, timeline }) {
   const problems = createProblems();
-  checkFigure(figure, scene, timeline, problems);
+  checkFigure({ figure, scene, timeline }, problems);
   return problems.errors.map(formatProblem);
 }
 
@@ -163,7 +163,7 @@ test('checkFigure_parallel_segments_of_edges_between_different_shapes_stay_check
   const scene = { edges: [edge('a', 'b', [{ x: 0, y: 0 }, { x: 100, y: 0 }]), edge('c', 'd', [{ x: 0, y: 4 }, { x: 100, y: 4 }])], items: [], groups: [], width: 100, height: 100 };
   const problems = createProblems();
 
-  checkFigure({ kind: 'flow', direction: 'right' }, scene, { segs: [] }, problems);
+  checkFigure({ figure: { kind: 'flow', direction: 'right' }, scene, timeline: { segs: [] } }, problems);
 
   assert.ok(problems.errors.some((p) => p.code === 'check-5'), JSON.stringify(problems.errors));
 });

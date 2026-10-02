@@ -73,7 +73,7 @@ async function checkMoved(move) {
   const { figure, scene, timeline } = await buildFigure(FIGURE, { strict: true });
   move(scene);
   const problems = createProblems(FIGURE);
-  checkFigure(figure, scene, timeline, problems);
+  checkFigure({ figure, scene, timeline }, problems);
   return [...problems.errors, ...problems.warnings].filter((d) => d.code === 'check-12');
 }
 

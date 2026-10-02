@@ -89,7 +89,7 @@ async function attemptScene(figure, { sizes, cards, source }) {
   planChips(scene, timeline);
   // 태그 색은 원본에 처음 나온 순서로 정한다(docs/design/figure-syntax.md 카드 줄).
   scene.tagOrder = figure.steps.flatMap((s) => s.beats.flatMap((b) => b.ops.filter((o) => o.row?.tag && !o.row.tone).map((o) => o.row.tag)));
-  checkFigure(figure, scene, timeline, local);
+  checkFigure({ figure, scene, timeline }, local);
   return { scene, timeline, local };
 }
 
