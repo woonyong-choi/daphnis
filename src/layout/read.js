@@ -13,7 +13,9 @@ export function readElk(laid, model) {
   const { items, groups, offsets } = readNodes(laid, model);
   const { sections, labels } = readEdges(laid, model, offsets);
   const rects = new Map(items.map((it) => [it.id, it]));
-  const edges = model.edges.map((edge) => {
+  // 선 번호는 원본에 적은 선의 번호다. 시간표와 그리기가 같은 번호로 선을 찾으므로, 처음 점과 끝 겹원의 선(모델 순서에서는 앞뒤에 놓인다)은 맨 뒤에 둔다.
+  const declared = [...model.edges.filter((edge) => !edge.isMark), ...model.edges.filter((edge) => edge.isMark)];
+  const edges = declared.map((edge) => {
     const parts = model.pieces.get(edge.index).map((_, k) => sections.get(`${edge.index}::${k}`) ?? []);
     const joined = parts.flatMap((p, k) => (k === 0 ? p : p.slice(1)));
     const points = settleEnd(settleEnd(joined, freeRect(edge.from, rects)).reverse(), freeRect(edge.to, rects)).reverse();
