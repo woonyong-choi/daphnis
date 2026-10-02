@@ -1,6 +1,7 @@
 // elkjs 결과를 그림 좌표로 바꾼다. 그룹 경계 연결점에서 끊긴 선 조각은 이어 붙인다(docs/design/layout.md 선 그리기).
 import { values } from '../tokens.js';
 import { LayoutError } from './error.js';
+import { placeTitles } from './titles.js';
 import { ROOT } from './model.js';
 
 const SETTLE = values.space['4'];
@@ -29,6 +30,7 @@ export function readElk(laid, model) {
     const points = dropCollinear(settleEnd(start.reverse(), freeRect(edge.to, rects), crowd.get(edge.to)?.filter(near('end'))).reverse());
     return { ...edge, points, labelAt: labels.get(`label::${edge.index}`) };
   });
+  placeTitles(groups, edges);
   return { items, groups, edges, width: laid.width, height: laid.height };
 }
 

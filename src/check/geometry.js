@@ -8,7 +8,6 @@ import { values } from '../tokens.js';
 export const FIT_SLACK = 0.5;
 /** 도형 경계와 선 끝이 같다고 보는 거리 */
 export const TOUCH = 0.5;
-const INNER_X = values.space['9'];
 
 /** 도형과 그룹 안쪽으로 들어가야 선이 지나간 것으로 보는 안쪽 여백 */
 export const THROUGH_INSET = 1;
@@ -23,7 +22,7 @@ export function drawnBox(it) {
 
 // 그룹 제목 글이 차지하는 사각형. 그리는 자리는 draw/figure.js drawGroup이다.
 export function titleBox(g) {
-  return { x: g.x + INNER_X, y: g.y, w: measure(g.label, STYLE.group.size, STYLE.group.face), h: values.size['group-title'] };
+  return { x: g.x + g.titleDx, y: g.y, w: measure(g.label, STYLE.group.size, STYLE.group.face), h: values.size['group-title'] };
 }
 
 export function pillBox(e) {

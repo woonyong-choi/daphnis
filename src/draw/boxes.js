@@ -38,7 +38,7 @@ function textBoxes(scene) {
       add({ x: row.cx - width / 2, center: row.center, width }, row.style, row.text);
     }
   }
-  for (const g of scene.groups) if (g.label) add({ x: g.x + INNER_X, center: g.y + values.size['group-title'] / 2, width: measure(g.label, STYLE.group.size, STYLE.group.face) }, STYLE.group, g.label);
+  for (const g of scene.groups) if (g.label) add({ x: g.x + g.titleDx, center: g.y + values.size['group-title'] / 2, width: measure(g.label, STYLE.group.size, STYLE.group.face) }, STYLE.group, g.label);
   return boxes;
 }
 

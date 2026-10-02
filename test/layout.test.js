@@ -3,6 +3,8 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { buildFigure } from '../src/build.js';
+import { titleBox } from '../src/check/geometry.js';
+import { TITLE_INSET } from '../src/layout/titles.js';
 import { sizeNode } from '../src/measure/sizes.js';
 import { toSvg } from '../src/svg.js';
 import { docExamples } from './helpers.js';
@@ -160,3 +162,28 @@ test('layoutGraph_wrap_with_group_back_edges_and_labels_keeps_edge_ends', async 
   const result = await buildFigure(source);
 
   assert.equal(result.scene.edges.length, 11);});
+
+test('buildFigure_group_title_steps_aside_so_no_edge_crosses_it', async () => {
+  const source = readFileSync(new URL('./fixtures/layout/group-title-edge.muto', import.meta.url), 'utf8');
+
+  const { scene } = await buildFigure(source, { strict: true });
+
+  for (const g of scene.groups) {
+    const box = titleBox(g);
+    for (const e of scene.edges) {
+      e.points.slice(1).forEach((p, i) => {
+        const a = e.points[i];
+        const hit = Math.min(a.x, p.x) < box.x + box.w && box.x < Math.max(a.x, p.x) && Math.min(a.y, p.y) < box.y + box.h && box.y < Math.max(a.y, p.y);
+        assert.ok(!hit, `edge ${e.from} -> ${e.to} crosses the title of group ${g.id}`);
+      });
+    }
+  }
+});
+
+test('buildFigure_group_title_fixture_needs_the_step_aside', async () => {
+  const source = readFileSync(new URL('./fixtures/layout/group-title-edge.muto', import.meta.url), 'utf8');
+
+  const { scene } = await buildFigure(source, { strict: true });
+
+  assert.ok(scene.groups[0].titleDx > TITLE_INSET);
+});
