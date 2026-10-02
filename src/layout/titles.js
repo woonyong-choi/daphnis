@@ -1,6 +1,5 @@
 // 그룹 제목 글의 가로 자리. 기본은 그룹 왼쪽 안쪽이고, 선이 그 자리를 지나면 선 오른쪽으로 비킨다(docs/design/layout.md 그룹).
-import { measure } from '../measure/fonts.js';
-import { STYLE } from '../measure/sizes.js';
+import { groupHead } from '../measure/sizes.js';
 import { values } from '../tokens.js';
 
 const SIZE = values.size;
@@ -23,7 +22,7 @@ export function placeTitles(groups, edges) {
 // 제목 사각형을 지나는 선분의 오른쪽 끝 바로 너머로 옮기기를 되풀이한다. 옮길 때마다 값이 커지므로 선분 수만큼만 돈다.
 // 부동소수점 반올림으로 값이 더 커지지 않으면 이미 선분에 맞닿은 자리라 거기서 멈추고, 상한(선분 수 + 1)에 걸리면 기본 거리를 둔다.
 function titleDx(g, edges) {
-  const w = measure(g.label, STYLE.group.size, STYLE.group.face);
+  const w = groupHead(g).w;
   const limit = g.w - TITLE_INSET - w;
   const segments = edges.flatMap((e) => e.points.slice(1).map((p, i) => [e.points[i], p]));
   let dx = TITLE_INSET;

@@ -1,5 +1,5 @@
 // 2번과 6번: 글과 도형이 겹치지 않는다.
-import { overlaps } from './geometry.js';
+import { labelOf, overlaps } from './geometry.js';
 
 // cost: time O((l + t)² + (l + t)·s), heap O(1), stack O(1)
 // vars: l = 선 라벨 수, t = 그룹 제목 수, s = 도형 수
@@ -9,13 +9,13 @@ import { overlaps } from './geometry.js';
 export function checkLabels({ pills, titles, boxes, family }, problems) {
   pills.forEach((a, i) => {
     for (const b of pills.slice(i + 1)) {
-      if (overlaps(a, b)) problems.error(a.edge.line, `[check 2] edge label "${a.edge.label}" overlaps edge label "${b.edge.label}" (line ${b.edge.line}). Shorten a label or ${family.hint}`);
+      if (overlaps(a, b)) problems.error(a.edge.line, `[check 2] edge label "${labelOf(a.edge)}" overlaps edge label "${labelOf(b.edge)}" (line ${b.edge.line}). Shorten a label or ${family.hint}`);
     }
     for (const box of boxes) {
-      if (overlaps(a, box)) problems.error(a.edge.line, `[check 2] edge label "${a.edge.label}" overlaps node "${box.id}" (line ${box.line}). Shorten the label`);
+      if (overlaps(a, box)) problems.error(a.edge.line, `[check 2] edge label "${labelOf(a.edge)}" overlaps node "${box.id}" (line ${box.line}). Shorten the label`);
     }
     for (const t of titles) {
-      if (overlaps(a, t)) problems.error(a.edge.line, `[check 2] edge label "${a.edge.label}" overlaps the title of group "${t.group.id}" (line ${t.group.line}). Shorten the label or change the direction of group "${t.group.id}"`);
+      if (overlaps(a, t)) problems.error(a.edge.line, `[check 2] edge label "${labelOf(a.edge)}" overlaps the title of group "${t.group.id}" (line ${t.group.line}). Shorten the label or change the direction of group "${t.group.id}"`);
     }
   });
   titles.forEach((a, i) => {

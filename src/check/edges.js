@@ -72,6 +72,8 @@ function isPortPlace(p, it, { way, column, cell }) {
   if (it.shape === 'table' && column) return near(p.x, it.isBracket ? it.x + it.w : side) && near(p.y, it.y + it.rowH * (it.columns.findIndex((c) => c.name === column) + 1.5));
   if (it.shape === 'decision') return near(p.x, side) && near(p.y, it.y + it.h / 2);
   if (it.shape === 'person' && it.direction === 'down') return near(p.x, side) && onBorder(p, it);
+  // 원의 연결점은 면 가운데이거나, 층 안 원처럼 면 가운데에서 비껴 간 둘레 위 점이다.
+  if (it.shape === 'circle') return onBorder(p, it) || near(Math.hypot(p.x - (it.x + it.w / 2), p.y - (it.y + it.h / 2)), it.w / 2);
   // 원통은 뚜껑 윤곽까지가 선이 닿는 면이라 그린 사각형으로 본다.
   if (it.shape === 'store') {
     const drawn = drawnBox(it);

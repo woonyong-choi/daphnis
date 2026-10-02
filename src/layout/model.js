@@ -3,6 +3,7 @@ import { values } from '../tokens.js';
 import { orderByFlow } from './order.js';
 import { isInnerEdge } from './cell-ports.js';
 import { addPort, endpoint } from './ports.js';
+import { flattenRegions } from './region.js';
 
 const SIZE = values.size;
 /** 가장 바깥 그룹의 내부 이름. 원본 이름은 소문자, 숫자, `-`뿐이라 `_`가 든 이 이름과 부딪히지 않는다. */
@@ -21,9 +22,12 @@ export function buildModel(figure, sizes) {
     containers.get(parent).children.push(n.id);
   }
   addStateMarks(figure, nodes, containers);
+  addOmissionMarks(nodes, containers);
   // 처음 점과 그 선은 모델 순서의 맨 앞에 둔다. 선언 순서를 따르는 배치에서 처음 점이 맨 앞(왼쪽, 위)에 오게 하기 위해서다.
   const marks = figure.markEdges ?? [];
   const edges = [...marks.filter((e) => e.isStart), ...figure.edges.map((e, i) => ({ ...e, index: i })), ...marks.filter((e) => !e.isStart)];
+  countLines(nodes, edges);
+  flattenRegions({ containers, nodes }, edges);
   const pieces = new Map();
   for (const edge of edges) pieces.set(edge.index, splitEdge(edge, nodes, containers));
   const model = { containers, nodes, edges, pieces };
@@ -36,11 +40,28 @@ export function buildModel(figure, sizes) {
 // basis: estimate
 function buildContainers(figure) {
   const containers = new Map([[ROOT, { id: ROOT, direction: figure.direction, parent: undefined, children: [], edges: [], ports: [] }]]);
-  for (const g of figure.groups) containers.set(g.id, { id: g.id, label: g.label, line: g.line, direction: undefined, own: g.direction, parent: g.parent ?? ROOT, children: [], edges: [], ports: [] });
+  for (const g of figure.groups) containers.set(g.id, { ...decorOf(g), id: g.id, label: g.label, line: g.line, direction: undefined, own: g.direction, parent: g.parent ?? ROOT, children: [], edges: [], ports: [] });
   for (const g of figure.groups) containers.get(g.parent ?? ROOT).children.push(g.id);
   for (const c of containers.values()) c.direction = c.own ?? directionOf(c.parent, containers, figure);
   for (const c of containers.values()) c.parentDirection = c.parent ? containers.get(c.parent).direction : undefined;
   return containers;
+}
+
+// cost: time O(e), heap O(1), stack O(1)
+// vars: e = 선 수
+// basis: estimate
+// 도형마다 들어오고 나가는 선 수(lineCount). 원의 연결점이 한 면에서 몇 점으로 나뉠지 정하는 데 쓴다.
+function countLines(nodes, edges) {
+  for (const n of nodes.values()) n.lineCount = { in: 0, out: 0 };
+  for (const e of edges) {
+    if (nodes.has(e.from)) nodes.get(e.from).lineCount.out++;
+    if (nodes.has(e.to)) nodes.get(e.to).lineCount.in++;
+  }
+}
+
+// 그룹의 순서 묶음, 개수 요약, 반복, 범주, 아이콘 선택 사항. 배치와 그리기가 그룹 이름으로 찾는 값이다.
+export function decorOf({ layout, align, count, repeat, category, badge, icon, iconData }) {
+  return { layout, align, count, repeat, category, badge, icon, iconData };
 }
 
 // cost: time O(d), heap O(1), stack O(1)
@@ -50,6 +71,20 @@ function directionOf(parent, containers, figure) {
   if (!parent) return figure.direction;
   const c = containers.get(parent);
   return c.own ?? directionOf(c.parent, containers, figure);
+}
+
+// cost: time O(g), heap O(g), stack O(1)
+// vars: g = 그룹 수
+// basis: estimate
+// 개수 요약(count)이 보이는 자식보다 크면 맨 뒤에 생략 표식(세 점)을 자식으로 더한다. 원본 도형이 아니라 이름으로 가리킬 수 없다.
+function addOmissionMarks(nodes, containers) {
+  for (const c of containers.values()) {
+    if (c.count === undefined || c.count <= c.children.length) continue;
+    const id = `__more-${c.id}`;
+    const size = { w: SIZE.ellipsis.box, h: SIZE.ellipsis.box, marginTop: 0, marginBottom: 0, labelLines: [], subLines: [] };
+    nodes.set(id, { id, shape: 'ellipsis', label: '', size, ports: [], parent: c.id, direction: c.direction, axis: c.direction });
+    c.children.push(id);
+  }
 }
 
 // cost: time O(f), heap O(f), stack O(1)

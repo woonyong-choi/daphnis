@@ -1,7 +1,9 @@
 // 배치 모형을 elkjs 그래프로 바꾼다. 선택 사항 값은 모두 토큰이다(docs/design/layout.md 간격과 결정성).
-import { groupTitleWidth, sizePill } from '../measure/sizes.js';
+import { groupTitleWidth, hasPill, sizePill } from '../measure/sizes.js';
 import { values } from '../tokens.js';
 import { ROOT } from './model.js';
+import { orderChildren, orderedOptions } from './ordered.js';
+import { placeRegion, regionOptions } from './region.js';
 import { isBodyShape, outerBox, spreadBodyPorts } from './ports.js';
 
 const SPACE = values.space;
@@ -28,7 +30,7 @@ function edgesByContainer({ containers, pieces, edges }) {
   for (const [index, list] of pieces) {
     const edge = edges.find((e) => e.index === index);
     list.forEach((p, k) => {
-      const labels = p.hasLabel && edge.label && !isBeside(edge, containers.get(p.container)) ? [{ id: `label::${index}`, text: edge.label, ...sizeOf(sizePill(edge.label)), layoutOptions: LABEL_OPTIONS }] : [];
+      const labels = p.hasLabel && hasPill(edge) && !isBeside(edge, containers.get(p.container)) ? [{ id: `label::${index}`, text: edge.label ?? '', ...sizeOf(sizePill(edge.label, edge.no)), layoutOptions: LABEL_OPTIONS }] : [];
       byContainer.get(p.container).push({ id: `${index}::${k}`, sources: [p.from], targets: [p.to], labels });
     });
   }
@@ -50,9 +52,10 @@ function alignOf(parent, ctx) {
 // vars: c = 자식 수, p = 연결점 수, d = 그룹 깊이
 // basis: estimate
 function containerToElk(c, ctx) {
+  const children = c.children.map((id) => (ctx.model.containers.has(id) ? containerToElk(ctx.model.containers.get(id), ctx) : nodeToElk(ctx.model.nodes.get(id), ctx)));
   return {
     id: c.id,
-    children: c.children.map((id) => (ctx.model.containers.has(id) ? containerToElk(ctx.model.containers.get(id), ctx) : nodeToElk(ctx.model.nodes.get(id), ctx))),
+    children: c.region ? placeRegion(c, children, ctx.model) : c.layout === 'ordered' ? orderChildren(c, children, ctx.model) : children,
     edges: ctx.byContainer.get(c.id),
     ports: c.ports.map((p) => ({ id: p.id, width: 0, height: 0, layoutOptions: { 'elk.port.side': p.side } })),
     layoutOptions: containerOptions(c, ctx),
@@ -99,6 +102,7 @@ function containerOptions(c, ctx) {
     'elk.edgeLabels.inline': 'true',
     'elk.portConstraints': c.ports.length ? 'FIXED_SIDE' : 'FREE',
     ...(c.id === ROOT ? rootOptions(ctx.figure) : groupOptions(c, ctx)),
+    ...(c.region ? regionOptions(c, ctx.model) : c.layout === 'ordered' ? orderedOptions(c, ctx.model) : {}),
   };
 }
 
@@ -119,7 +123,7 @@ function groupOptions(c, ctx) {
   return {
     'elk.padding': `[top=${SIZE.group.title + SPACE['6']},left=${SPACE['12']},bottom=${SPACE['12']},right=${SPACE['12']}]`,
     'elk.nodeSize.constraints': 'MINIMUM_SIZE',
-    'elk.nodeSize.minimum': `(${groupTitleWidth(c.label)}, ${SIZE.group.title})`,
+    'elk.nodeSize.minimum': `(${groupTitleWidth(c)}, ${SIZE.group.title})`,
     ...alignOf(c.parent, ctx),
   };
 }

@@ -3,6 +3,7 @@ import { readChartDeclaration } from './chart.js';
 import { readColumn, readDeclaration, readEdge } from './declare.js';
 import { closeGroup } from './group.js';
 import { readGrid, readGridLine } from './grid.js';
+import { readIcons } from './icons.js';
 import { DECIMALS_MAX, DEFAULT_VERSION, KINDS, STATEMENTS, VALUES, VERSION, valueNames } from './grammar.js';
 import { tokenizeLine } from './lexer.js';
 import { normalizeKind, normalizeStatement } from './normalize.js';
@@ -101,6 +102,8 @@ function emptyFigure() {
     // 이름 오류로 버린 선언의 이름. 그 이름을 가리키는 줄에 "모르는 이름" 오류를 덧붙이지 않기 위해 둔다.
     rejectedNames: new Set(),
     groups: [],
+    // `icons` 줄로 등록한 사용자 아이콘 세트 { name, path, line }
+    iconSets: [],
     edges: [],
     start: undefined,
     finals: [],
@@ -231,6 +234,7 @@ function readByPart({ word, section }, statement, ctx) {
     ctx.previous = word;
   } else if (word === 'edge') readEdge(statement, ctx);
   else if (word === 'grid') readGrid(statement, ctx);
+  else if (word === 'icons') readIcons(statement, ctx);
   else if (ctx.figure.kind === 'chart') readChartDeclaration(statement, ctx);
   else readDeclaration(statement, ctx);
 }

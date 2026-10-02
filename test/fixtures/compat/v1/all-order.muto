@@ -1,0 +1,22 @@
+mutoscope 1
+flow right
+title "순서 묶음, 개수 요약, 반복, 번호, 범주, 아이콘의 모든 낱말"
+subtitle "layout, align, count, repeat, no, category, badge, icon, icons"
+
+icons mine "order-icons"
+group layers "층" layout=ordered direction=right align=center {
+  group first "입력" layout=ordered direction=down align=start count=100 category="입력" badge="IN" {
+    box a "a" shape=circle
+    box b "b" shape=circle
+  }
+  group last "출력" layout=ordered direction=down align=end {
+    box y "y" shape=circle
+  }
+}
+group loop "반복" layout=auto direction=down repeat=6 icon=mine:chip category="블록" badge="BLK" {
+  box attn "주의" icon=server category="블록" badge="ATT" count=3
+  box mlp "변환" icon=carbon:db
+}
+a -> y "더하기" no=1
+b -> y
+attn -> mlp "다음" no=3

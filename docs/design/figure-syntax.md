@@ -232,7 +232,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | 머리 | `aspect` | flow, state, data | 판 1 |  |
 | 머리 | `x`, `y`, `scale`, `decimals` | chart | 판 1 |  |
 | 선언 | `person`, `box`, `external`, `store` | flow, sequence | 판 1 |  |
-| 선언 | `decision`, `grid`, `item`, `gap` | flow | 판 1 |  |
+| 선언 | `decision`, `grid`, `icons`, `item`, `gap` | flow | 판 1 |  |
 | 선언 | `state`, `start`, `final` | state | 판 1 |  |
 | 선언 | `group`, `a -> b` | flow, state | 판 1 |  |
 | 선언 | `table` | data | 판 1 |  |
@@ -247,6 +247,18 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | 선택 사항 | 값 | 판 | 폐기 |
 |---|---|---|---|
 | `group.direction` | `right`, `down` | 판 1 |  |
+| `group.layout` | `auto`, `ordered` | 판 1 |  |
+| `group.align` | `center`, `start`, `end` | 판 1 |  |
+| `group.count` | 2 이상 정수 | 판 1 |  |
+| `group.repeat` | 2 이상 정수 | 판 1 |  |
+| `group.category` | 글, 최대 12자 | 판 1 |  |
+| `group.badge` | 글, 최대 8자 | 판 1 |  |
+| `group.icon` | 이름 또는 세트:이름 | 판 1 |  |
+| `node.category` | 글, 최대 12자 | 판 1 |  |
+| `node.badge` | 글, 최대 8자 | 판 1 |  |
+| `node.icon` | 이름 또는 세트:이름 | 판 1 |  |
+| `box.count` | 2 이상 정수 | 판 1 |  |
+| `edge.no` | 양의 정수 | 판 1 |  |
 | `hop.time` | 시간 | 판 1 |  |
 | `hop.dashed` | 값 없음(낱말만) | 판 1 |  |
 | `edge.quiet` | 값 없음(낱말만) | 판 1 |  |
@@ -283,6 +295,8 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `role` | `series.role` | `main`, `compare` | 선언 순서대로 main, compare(`dumbbell`은 compare, main) | 없음 |
 | `head` | `edge.head` | `end`, `both`, `none` | `end` | 없음 |
 | `shape` | `box.shape` | `rect`, `circle` | `rect` | 없음 |
+| `groupLayout` | `group.layout` | `auto`, `ordered` | `auto` | 없음 |
+| `alignment` | `group.align` | `center`, `start`, `end` | `center` | 없음 |
 <!-- grammar-table:end -->
 
 ### 요구사항

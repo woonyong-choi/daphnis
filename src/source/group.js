@@ -1,12 +1,15 @@
-// 그룹 선언(`group id "이름" [direction=down] {`)과 닫는 `}`를 읽는다.
-import { valueNames } from './grammar.js';
+// 그룹 선언(`group id "이름" [direction=down] [layout=ordered] [align=start] [count=N] [repeat=N] [category="범주"] [badge="LB"] [icon=server] {`)과 닫는 `}`를 읽는다.
 import { checkId, currentGroup, rejectName } from './names.js';
+import { readOptions } from './options.js';
 import { ID_PATTERN } from './words.js';
+
+// 흐름 그림에서만 쓰는 선택 사항
+const FLOW_ONLY = ['count', 'repeat', 'category', 'badge', 'icon'];
 
 // cost: time O(t), heap O(1), stack O(1)
 // vars: t = 문장 낱말 수
 // basis: estimate
-// `group id "이름" [direction=down] {`
+// `group id "이름" [선택 사항...] {`
 export function readGroup({ tokens, line }, ctx) {
   const [, id, label, ...rest] = tokens;
   if (!checkId(id, { line, ctx }, ID_PATTERN)) {
@@ -19,14 +22,25 @@ export function readGroup({ tokens, line }, ctx) {
   const openAt = rest.findIndex((t) => t.type === 'open');
   if (openAt === -1) ctx.problems.error(line, 'end the group line with "{"');
   else if (openAt < rest.length - 1) ctx.problems.error(line, 'end the group line with "{" and put the group contents on the next lines');
-  let direction;
-  for (const t of openAt === -1 ? rest : rest.slice(0, openAt)) {
-    if (t.type === 'option' && t.key === 'direction' && valueNames('direction').includes(t.value) && t.valueType === 'word') direction = t.value;
-    else ctx.problems.error(line, 'a group takes only direction=right or direction=down');
-  }
-  const group = { id: id.value, label: label?.value ?? '', direction, parent: currentGroup(ctx), line, hasError: openAt !== rest.length - 1 };
+  const found = readOptions(openAt === -1 ? rest : rest.slice(0, openAt), { scopes: ['group'], what: 'a group', line, ctx });
+  checkGroupOptions(found, line, ctx);
+  const { direction, layout, align, count, repeat, category, badge, icon } = found;
+  const group = { id: id.value, label: label?.value ?? '', direction, layout: layout ?? 'auto', align, count, repeat, category, badge, icon, parent: currentGroup(ctx), line, hasError: openAt !== rest.length - 1 };
   ctx.figure.groups.push(group);
   ctx.groups.push(group);
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 선택 사항끼리 맞는지 본다. 정렬과 개수 요약은 순서 묶음(layout=ordered)에서만, 개수와 반복은 함께 못 쓰고, 꾸밈은 흐름 그림에서만 쓴다.
+function checkGroupOptions(found, line, ctx) {
+  const { problems, figure } = ctx;
+  const isOrdered = found.layout === 'ordered';
+  if (found.align !== undefined && !isOrdered) problems.error(line, 'align places the children of an ordered group. Add layout=ordered');
+  if (found.count !== undefined && !isOrdered) problems.error(line, 'count summarizes the children of an ordered group. Add layout=ordered');
+  if (found.count !== undefined && found.repeat !== undefined) problems.error(line, 'count (how many of the same role) and repeat (the same block in sequence) mean different things. Write one of them');
+  const outside = FLOW_ONLY.filter((key) => found[key] !== undefined);
+  if (figure.kind !== 'flow' && outside.length) problems.error(line, `${outside.join(', ')} belongs to flow figures only`);
 }
 
 /** `}`로 그룹이나 테이블을 닫는다. */

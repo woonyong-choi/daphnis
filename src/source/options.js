@@ -39,6 +39,7 @@ function readValue(token, spec, { line, ctx }) {
     if (token.valueType !== 'text') return bad(`${token.key} is quoted text: ${token.key}="..."`);
     return spec.maxLength === undefined || token.value.length <= spec.maxLength ? token.value : bad(`${token.key} is at most ${spec.maxLength} characters. Found ${token.value.length}`);
   }
+  if (!spec.values) return token.valueType === 'word' ? token.value : bad(`${token.key} is a ${spec.format}, not quoted text`);
   const isListed = token.valueType === 'word' && valueNames(spec.values).includes(token.value);
   return isListed ? token.value : bad(`${token.key} is one of ${valueNames(spec.values).join(', ')}`);
 }

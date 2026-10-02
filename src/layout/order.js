@@ -15,11 +15,14 @@ export function orderByFlow(model) {
     const node = model.nodes.get(id);
     if (node?.shape === 'start') return -1;
     if (node?.shape === 'final') return Number.MAX_SAFE_INTEGER;
+    if (node?.shape === 'ellipsis') return Number.MAX_SAFE_INTEGER - 1;
     return node?.line ?? model.containers.get(id).line;
   };
   for (const c of model.containers.values()) {
-    const { order, hasBack } = flowOrder([...c.children].sort((a, b) => lineOf(a) - lineOf(b)), arcs.get(c.id));
-    c.children = order;
+    const declared = [...c.children].sort((a, b) => lineOf(a) - lineOf(b));
+    const { order, hasBack } = flowOrder(declared, arcs.get(c.id));
+    // 순서 묶음(layout=ordered)은 선이 있어도 선언 순서가 곧 놓는 순서다.
+    if (!c.region) c.children = c.layout === 'ordered' ? declared : order;
     c.hasBack = hasBack;
   }
 }

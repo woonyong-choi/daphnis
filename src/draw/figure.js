@@ -1,10 +1,12 @@
 // 구조, 상태, 데이터 관계, 순서 그림의 장면을 SVG 조각으로 그린다. 크기와 자리는 배치가 정한 그대로 쓴다.
-import { CARD, STYLE, sizePill } from '../measure/sizes.js';
+import { BADGE_STYLE, bodyOf } from '../measure/decor.js';
+import { CARD, STYLE, groupHead, hasPill, sizePill } from '../measure/sizes.js';
 import { routePolyline } from '../route.js';
 import { centerBaseline, escapeXml, renderRich, roundCoord as r } from '../text.js';
 import { tokens, values } from '../tokens.js';
 import { cardGlyphs, createTones, drawCard } from './card.js';
-import { drawShape } from './shape.js';
+import { createCategoryTones, drawDecor, drawEllipsis, drawGroupTint } from './decor.js';
+import { drawShape, drawTint } from './shape.js';
 
 const SPACE = values.space;
 const SIZE = values.size;
@@ -23,7 +25,7 @@ const HAS_OWN_LABELS = new Set(['table', 'grid']);
  * @param glyphs 쓴 글자를 모으는 그릇(createGlyphSet)
  */
 export function drawScene(scene, decorate, glyphs) {
-  const paint = { toneOf: createTones(scene.tagOrder), decorate, glyphs };
+  const paint = { toneOf: createTones(scene.tagOrder), tintOf: createCategoryTones(scene.categoryOrder), decorate, glyphs };
   const parts = [];
   scene.groups.forEach((g, j) => parts.push(drawGroup(g, j, paint)));
   for (const line of scene.lifelines ?? []) parts.push(`<line x1="${r(line.x)}" x2="${r(line.x)}" y1="${r(line.y1)}" y2="${r(line.y2)}" class="lifeline"/>`);
@@ -33,12 +35,16 @@ export function drawScene(scene, decorate, glyphs) {
   return parts.join('\n');
 }
 
-// 그리는 데 함께 쓰는 것: toneOf(카드 태그 색), decorate(움직이는 SVG의 class), glyphs(쓴 글자 모음)
-function drawGroup(g, j, { decorate, glyphs }) {
+// 그리는 데 함께 쓰는 것: toneOf(카드 태그 색), tintOf(범주색), decorate(움직이는 SVG의 class), glyphs(쓴 글자 모음)
+function drawGroup(g, j, { decorate, glyphs, tintOf }) {
   glyphs.add(g.label, 'semibold');
+  const head = groupHead(g);
+  const left = g.x + g.titleDx;
+  const decor = head.decor ? drawDecor(head.decor, { x: left, y: g.y + (SIZE.group.title - head.decor.h) / 2, iconData: g.iconData, tint: tintOf(g.category) }, glyphs) : '';
+  const title = g.category === undefined ? '' : `<title>${escapeXml(g.category)}</title>`;
   return (
-    `<g id="g-${j}" class="fl-group" data-id="${escapeXml(g.id)}"><rect x="${r(g.x)}" y="${r(g.y)}" width="${r(g.w)}" height="${r(g.h)}" rx="${RADIUS['2xl']}" class="frame-box fl-stroke ${decorate('group', j)}"/>` +
-    `<text x="${r(g.x + g.titleDx)}" y="${r(centerBaseline(g.y + SIZE.group.title / 2, STYLE.group.size))}" class="frame">${renderRich(g.label)}</text></g>`
+    `<g id="g-${j}" class="fl-group" data-id="${escapeXml(g.id)}">${title}<rect x="${r(g.x)}" y="${r(g.y)}" width="${r(g.w)}" height="${r(g.h)}" rx="${RADIUS['2xl']}" class="frame-box fl-stroke ${decorate('group', j)}"/>${drawGroupTint(g, tintOf(g.category))}` +
+    `<text x="${r(left + head.textDx)}" y="${r(centerBaseline(g.y + SIZE.group.title / 2, STYLE.group.size))}" class="frame">${renderRich(g.label)}</text>${decor}</g>`
   );
 }
 
@@ -47,15 +53,19 @@ function drawGroup(g, j, { decorate, glyphs }) {
 // basis: estimate
 // 도형 하나: 윤곽, 이름, 부제, 카드. 사람과 원통의 머리, 어깨, 뚜껑은 배치 사각형 바깥 여백에 그린다.
 function drawItem(it, i, paint) {
-  const { decorate, glyphs } = paint;
+  const { decorate, glyphs, tintOf } = paint;
+  if (it.shape === 'ellipsis') return `<g id="n-${i}" class="fl-marker">${drawEllipsis(it)}</g>`;
   const stroke = `class="fl-stroke ${decorate('node', i)}"`;
-  const open = `<g id="n-${i}" class="fl-node" data-id="${escapeXml(it.id)}">`;
+  const title = it.category === undefined ? '' : `<title>${escapeXml(it.category)}</title>`;
+  const open = `<g id="n-${i}" class="fl-node" data-id="${escapeXml(it.id)}">${title}`;
   for (const l of it.labelLines ?? []) glyphs.add(l, 'medium');
   for (const l of it.subLines ?? []) glyphs.add(l, 'regular');
   if (it.card) cardGlyphs(it.card.layouts, glyphs);
-  const shape = drawShape(it, stroke, paint);
+  const tint = tintOf(it.category);
+  const shape = drawShape(it, stroke, paint) + drawTint(it, tint);
+  const decor = it.decor ? drawDecor(it.decor, { x: it.x + it.decor.x, y: it.y + it.decor.y, iconData: it.iconData, tint }, glyphs) : '';
   const card = it.card ? drawCard(it.card, { box: cardBox(it), i }, paint) : '';
-  return `${open}${shape}${HAS_OWN_LABELS.has(it.shape) ? '' : drawLabels(it)}${card}</g>`;
+  return `${open}${shape}${decor}${HAS_OWN_LABELS.has(it.shape) ? '' : drawLabels(it)}${card}</g>`;
 }
 
 // cost: time O(l), heap O(out), stack O(1)
@@ -76,14 +86,16 @@ function drawLabels(it) {
  * @returns { cls, text, style, cx, center, baseline }[]. center는 줄의 세로 가운데, baseline은 글자 기준선이다
  */
 export function labelRows(it) {
-  const cx = it.x + it.w / 2;
+  const body = bodyOf(it);
+  const cx = body.x + body.w / 2;
   const lines = [...(it.labelLines ?? []).map((l) => ['label', l, STYLE.label]), ...(it.subLines ?? []).map((l) => ['sub', l, STYLE.sub])];
   if (!lines.length) return [];
   const textH = lines.reduce((sum, [, , s]) => sum + s.line, 0);
   let top;
   if (it.shape === 'person') top = it.y + it.h + SPACE['3'];
+  else if (it.decor) top = it.y + INNER_Y + it.decor.room;
   else if (it.card) top = it.y + INNER_Y;
-  else top = it.y + (it.h - textH) / 2;
+  else top = it.y + (body.h - textH) / 2;
   return lines.map(([cls, text, style]) => {
     const center = top + style.line / 2;
     top += style.line;
@@ -96,7 +108,8 @@ function cardBox(it) {
   const { w, h } = it.card;
   if (it.shape === 'person') return { x: it.x + (it.w - w) / 2, y: it.y + it.h + SPACE['3'] + it.labelLines.length * STYLE.label.line + CARD.margin, w, h };
   if (it.shape === 'table') return { x: it.x + CARD.margin, y: it.y + it.rowH * (it.columns.length + 1) + CARD.margin, w, h };
-  return { x: it.x + CARD.margin, y: it.y + it.h - CARD.margin - h, w, h };
+  const body = bodyOf(it);
+  return { x: it.x + CARD.margin, y: body.y + body.h - CARD.margin - h, w, h };
 }
 
 // 선 양끝 화살촉 속성. 기본은 끝(`end`)에만, `both`는 시작에도, `none`은 없다.
@@ -115,13 +128,34 @@ function drawEdge(e, j, { decorate, glyphs }) {
   const path = `<path id="p-${j}" d="${d}" class="fl-path ${decorate('edge', j)}"${dash}${arrowheads(e)}/>`;
   const quiet = e.quiet ? ` quiet ${decorate('quiet', j)}` : '';
   const open = `<g id="e-${j}" class="fl-edge${e.isMark ? ' mark' : ''}${quiet}">`;
-  if (!e.label || !e.labelAt) return `${open}${path}</g>`;
-  glyphs.add(e.label, STYLE.pill.face);
-  const { w, h } = sizePill(e.label);
+  if (!hasPill(e) || !e.labelAt) return `${open}${path}</g>`;
+  const { w, h, numW, textW } = sizePill(e.label, e.no);
   const { x, y } = e.labelAt;
+  const frame = e.label === undefined ? '' : `<rect x="${r(x - w / 2)}" y="${r(y - h / 2)}" width="${r(w)}" height="${h}" rx="${h / 2}" class="pill ${decorate('pill', j)}"/>`;
+  const number = e.no === undefined ? '' : drawNumber(e.no, { x: x - w / 2 + SPACE['1'], y, numW }, glyphs);
+  const text = e.label === undefined ? '' : drawPillText(e.label, { x: e.no === undefined ? x : x - w / 2 + SPACE['1'] + numW + SPACE['2'] + textW / 2, y, cls: decorate('pilltext', j) }, glyphs);
+  return `${open}${path}<g class="fl-pill">${frame}${number}${text}</g></g>`;
+}
+
+// cost: time O(n), heap O(out), stack O(1)
+// vars: n = 글자 수, out = 만든 SVG 글자 수
+// basis: estimate
+// 선 라벨 글. 번호 원이 왼쪽에 붙으면 글 가운데가 그만큼 오른쪽이다.
+function drawPillText(label, { x, y, cls }, glyphs) {
+  glyphs.add(label, STYLE.pill.face);
+  return `<text x="${r(x)}" y="${r(centerBaseline(y, STYLE.pill.size))}" class="edgelabel ${cls}">${renderRich(label)}</text>`;
+}
+
+// cost: time O(1), heap O(out), stack O(1)
+// vars: out = 만든 SVG 글자 수
+// basis: estimate
+// 선 번호 원. 정지 그림과 문서에서도 순서가 읽히도록 선언한 번호를 그대로 쓴다(재생 단계 번호와 독립이다). left는 원 왼쪽 끝, y는 세로 가운데다.
+function drawNumber(no, { x: left, y, numW }, glyphs) {
+  glyphs.add(String(no), BADGE_STYLE.face);
+  const h = numW;
   return (
-    `${open}${path}<g class="fl-pill"><rect x="${r(x - w / 2)}" y="${r(y - h / 2)}" width="${r(w)}" height="${h}" rx="${h / 2}" class="pill ${decorate('pill', j)}"/>` +
-    `<text x="${r(x)}" y="${r(centerBaseline(y, STYLE.pill.size))}" class="edgelabel ${decorate('pilltext', j)}">${renderRich(e.label)}</text></g></g>`
+    `<rect x="${r(left)}" y="${r(y - h / 2)}" width="${r(numW)}" height="${h}" rx="${h / 2}" class="number-pill"/>` +
+    `<text x="${r(left + numW / 2)}" y="${r(centerBaseline(y, BADGE_STYLE.size))}" class="number">${no}</text>`
   );
 }
 

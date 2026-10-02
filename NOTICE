@@ -1,0 +1,12 @@
+mutoscope
+Copyright (c) 2026 choi woo-nyong
+
+This product includes third-party material.
+
+IBM Carbon icons
+  Source:    https://github.com/carbon-design-system/carbon (npm package @carbon/icons 11.89.0, svg/32)
+  Copyright: 2015 IBM Corp.
+  License:   Apache License 2.0 (full text in src/icons/LICENSE)
+  Files:     src/icons/carbon/*.svg (29 icons, listed by general concept name in src/icons/names.json)
+  Modified:  color only. The root svg element gets fill="currentColor" so the figure colors the icon with a color role token. The shapes are unchanged.
+  Not included: Carbon logo--* trademark logos and the kubernetes icon.

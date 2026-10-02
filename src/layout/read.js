@@ -1,10 +1,11 @@
 // elkjs 결과를 그림 좌표로 바꾼다. 그룹 경계 연결점에서 끊긴 선 조각은 이어 붙인다(docs/design/layout.md 선 그리기).
-import { sizePill } from '../measure/sizes.js';
+import { hasPill, sizePill } from '../measure/sizes.js';
 import { values } from '../tokens.js';
 import { LayoutError } from './error.js';
 import { withLeads } from './cell-ports.js';
 import { placeTitles } from './titles.js';
-import { ROOT } from './model.js';
+import { ROOT, decorOf } from './model.js';
+import { regionFrames } from './region.js';
 
 const SETTLE = values.space['4'];
 // 두 좌표가 같다고 보는 거리
@@ -32,7 +33,7 @@ export function readElk(laid, model) {
     const near = (end) => (other) => other.at !== `${edge.index}:${end}`;
     const start = settleEnd(joined[i], freeRect(edge.from, rects), crowd.get(edge.from)?.filter(near('start')));
     const points = dropCollinear(settleEnd(start.reverse(), freeRect(edge.to, rects), crowd.get(edge.to)?.filter(near('end'))).reverse());
-    return { ...edge, points, labelAt: labels.get(`label::${edge.index}`) ?? (edge.quiet && edge.label ? besideLabel(points, edge.label, laid.width) : undefined) };
+    return { ...edge, points, labelAt: labels.get(`label::${edge.index}`) ?? (edge.quiet && hasPill(edge) ? besideLabel(points, sizePill(edge.label, edge.no), laid.width) : undefined) };
   });
   placeTitles(groups, edges);
   return { items, groups, edges, width: laid.width, height: laid.height };
@@ -43,8 +44,7 @@ export function readElk(laid, model) {
 // basis: estimate
 // 선 옆에 두는 라벨 자리(알약 가운데). 가장 긴 곧은 구간이 세로면 그 가운데 옆, 가로면 그 위 가운데다.
 // 세로선 옆은 그림 가장자리가 가까운 쪽에 둔다. 넓은 이동 글 상자가 알약을 비켜 반대쪽(넓은 쪽)에 들어갈 자리를 남기기 위해서다.
-function besideLabel(points, label, width) {
-  const { w, h } = sizePill(label);
+function besideLabel(points, { w, h }, width) {
   const runs = points.slice(1).map((p, i) => [points[i], p]);
   const [a, b] = runs.reduce((best, run) => (Math.hypot(run[1].x - run[0].x, run[1].y - run[0].y) > Math.hypot(best[1].x - best[0].x, best[1].y - best[0].y) ? run : best));
   const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
@@ -76,18 +76,31 @@ function readNodes(laid, model) {
       const y = oy + node.y + child.y;
       if (model.containers.has(child.id)) {
         const c = model.containers.get(child.id);
-        groups.push({ id: child.id, label: c.label, line: c.line, parent: c.parent, x, y, w: child.width, h: child.height });
+        groups.push({ ...decorOf(c), id: child.id, label: c.label, line: c.line, parent: c.parent, x, y, w: child.width, h: child.height });
         offsets.set(child.id, { x, y });
       } else {
         const n = model.nodes.get(child.id);
         // 배치 사각형에서 바깥 여백을 빼서 몸통 사각형으로 되돌린다.
-        items.push({ ...n, ...n.size, x: x + (n.size.marginSide ?? 0), y: y + n.size.marginTop, w: n.size.w, h: n.size.h });
+        items.push({ ...n, ...n.size, parent: n.group ?? n.parent, x: x + (n.size.marginSide ?? 0), y: y + n.size.marginTop, w: n.size.w, h: n.size.h });
       }
       walk(child, ox + node.x, oy + node.y);
     }
   };
   walk(laid, 0, 0);
+  addRegionFrames(groups, items, model);
   return { items, groups, offsets };
+}
+
+// cost: time O(g·n), heap O(g), stack O(1)
+// vars: g = 층 수, n = 도형 수
+// basis: estimate
+// 층 묶음(region.js)의 층 틀을 안쪽 도형 자리에서 구해 그 묶음 바로 뒤에 넣는다(바깥 틀이 먼저 그려진다).
+function addRegionFrames(groups, items, model) {
+  for (const c of model.containers.values()) {
+    if (!c.region) continue;
+    const frames = regionFrames(c, items, model).map((f) => ({ ...decorOf(model.containers.get(f.id)), ...f, label: model.containers.get(f.id).label, line: model.containers.get(f.id).line, parent: c.id }));
+    groups.splice(groups.findIndex((g) => g.id === c.id) + 1, 0, ...frames);
+  }
 }
 
 // cost: time O(e + l), heap O(e·p + l), stack O(d)

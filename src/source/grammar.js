@@ -16,6 +16,14 @@ const TEXT = { ...V1, type: 'text' };
 /** 칸 격자의 정수 선택 사항. min은 받는 가장 작은 값이다(칸 위치는 0, 크기와 개수는 1). */
 const COUNT = { ...V1, type: 'number', format: '양의 정수', min: 1 };
 const INDEX = { ...V1, type: 'number', format: '0 이상 정수', min: 0 };
+/** 개수 요약과 반복 수. 하나는 요약할 것이 없어 2부터 받는다. */
+/** 아이콘 이름. 기본 세트의 이름(`server`)이거나 등록한 세트의 `세트:이름`이다. */
+const ICON = { ...V1, type: 'word', format: '이름 또는 세트:이름' };
+const PLURAL = { ...V1, type: 'number', format: '2 이상 정수', min: 2 };
+/** 도형 글자 배지의 글자 수 상한. 도형 윗줄에 이름 글과 함께 들어갈 만큼이다. */
+export const BADGE_MAX = 8;
+/** 범주 이름의 글자 수 상한. 배지가 없으면 도형에 이 글이 배지로 보인다. */
+export const CATEGORY_MAX = 12;
 
 /** 그림 종류 문장. argument는 둘째 낱말이 읽는 값 목록 이름이다. */
 export const KINDS = table({
@@ -63,6 +71,8 @@ export const VALUES = {
   role: { items: table({ main: V1, compare: V1 }) },
   head: { default: 'end', items: table({ end: V1, both: V1, none: V1 }) },
   shape: { default: 'rect', items: table({ rect: V1, circle: V1 }) },
+  groupLayout: { default: 'auto', items: table({ auto: V1, ordered: V1 }) },
+  alignment: { default: 'center', items: table({ center: V1, start: V1, end: V1 }) },
 };
 
 /**
@@ -80,14 +90,15 @@ export const STATEMENTS = table({
   y: { ...V1, section: 'header', kinds: ['chart'] },
   scale: { ...V1, section: 'header', kinds: ['chart'], positional: ['scale'] },
   decimals: { ...V1, section: 'header', kinds: ['chart'] },
-  person: { ...V1, section: 'declare', kinds: FLOW_SEQUENCE, node: { hasSub: false } },
-  box: { ...V1, section: 'declare', kinds: FLOW_SEQUENCE, node: { hasSub: true } },
-  external: { ...V1, section: 'declare', kinds: FLOW_SEQUENCE, node: { hasSub: true } },
-  store: { ...V1, section: 'declare', kinds: FLOW_SEQUENCE, node: { hasSub: true } },
+  person: { ...V1, section: 'declare', kinds: FLOW_SEQUENCE, node: { hasSub: false }, scopes: ['node'] },
+  box: { ...V1, section: 'declare', kinds: FLOW_SEQUENCE, node: { hasSub: true }, scopes: ['box', 'node'] },
+  external: { ...V1, section: 'declare', kinds: FLOW_SEQUENCE, node: { hasSub: true }, scopes: ['node'] },
+  store: { ...V1, section: 'declare', kinds: FLOW_SEQUENCE, node: { hasSub: true }, scopes: ['node'] },
   decision: { ...V1, section: 'declare', kinds: ['flow'], node: { hasSub: false } },
   state: { ...V1, section: 'declare', kinds: ['state'], node: { hasSub: false } },
   group: { ...V1, section: 'declare', kinds: ['flow', 'state'] },
   grid: { ...V1, section: 'declare', kinds: ['flow'] },
+  icons: { ...V1, section: 'declare', kinds: ['flow'] },
   item: { ...V1, section: 'declare', kinds: ['flow'] },
   gap: { ...V1, section: 'declare', kinds: ['flow'], scopes: ['gap', 'item'] },
   start: { ...V1, section: 'declare', kinds: ['state'] },
@@ -119,6 +130,18 @@ export const STATEMENTS = table({
  */
 export const OPTIONS = table({
   'group.direction': { ...V1, type: 'word', values: 'direction' },
+  'group.layout': { ...V1, type: 'word', values: 'groupLayout' },
+  'group.align': { ...V1, type: 'word', values: 'alignment' },
+  'group.count': PLURAL,
+  'group.repeat': PLURAL,
+  'group.category': { ...TEXT, maxLength: CATEGORY_MAX },
+  'group.badge': { ...TEXT, maxLength: BADGE_MAX },
+  'group.icon': ICON,
+  'node.category': { ...TEXT, maxLength: CATEGORY_MAX },
+  'node.badge': { ...TEXT, maxLength: BADGE_MAX },
+  'node.icon': ICON,
+  'box.count': PLURAL,
+  'edge.no': COUNT,
   'hop.time': { ...V1, type: 'word', format: '시간' },
   'hop.dashed': FLAG,
   'edge.quiet': FLAG,

@@ -5,6 +5,7 @@ import { values } from '../tokens.js';
 import { toElk } from './elk.js';
 import { LayoutError } from './error.js';
 import { buildModel } from './model.js';
+import { needsFirstPass, recordFirstPass } from './ordered.js';
 import { isBodyShape, recordPortOrder } from './ports.js';
 import { readElk } from './read.js';
 
@@ -60,7 +61,12 @@ async function place(figure, sizes) {
 async function arrange(figure, sizes) {
   const model = buildModel(figure, sizes);
   const hasBodyPorts = [...model.nodes.values()].some((n) => isBodyShape(n) && n.ports.length);
-  if (hasBodyPorts) recordPortOrder(await engine.layout(toElk(model, figure)), model);
+  // 몸통 연결점 순서와, 순서 묶음이 쓸 자식 크기와 안쪽 도형 자리는 모두 첫 배치에서 얻는다. 둘이 겹쳐도 첫 배치는 한 번이다.
+  if (hasBodyPorts || needsFirstPass(model)) {
+    const first = await engine.layout(toElk(model, figure));
+    if (hasBodyPorts) recordPortOrder(first, model);
+    if (needsFirstPass(model)) recordFirstPass(first, model);
+  }
   return { model, laid: await engine.layout(toElk(model, figure)) };
 }
 

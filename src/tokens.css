@@ -74,6 +74,11 @@
   --size-control-inner: 22px;
   --size-control-icon: 12px;
   --size-pill-height: 18px;
+  --size-icon-node: 20px;
+  --size-icon-group: 16px;
+  --size-ellipsis-box: 24px;
+  --size-ellipsis-dot: 2px;
+  --size-ellipsis-pitch: 7px;
   --size-tag-height: 14px;
   --size-packet-radius: 4.5px;
   --size-packet-halo: 10px;
