@@ -4,8 +4,8 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
 import { flattenRoute } from '../src/route.js';
-import { CHIP_GAP, CHIP_MARGIN, chipBoxBetween, placeChip, sizeChip } from '../src/chip.js';
-import { chipObstacles } from '../src/draw/boxes.js';
+import { CHIP_CLEAR, CHIP_GAP, CHIP_MARGIN, chipBoxBetween, placeChip, planChip, sizeChip } from '../src/chip.js';
+import { chipLines, chipObstacles } from '../src/draw/boxes.js';
 import { curveOf, progressAt, timeAt } from '../src/easing.js';
 import { toHtml } from '../src/html.js';
 import { toSvg } from '../src/svg.js';
@@ -143,4 +143,59 @@ test('toHtml_and_toSvg_share_the_chip_plan_from_the_timeline', async () => {
   for (const hop of hops) assert.ok(html.includes(`"chipPath":${JSON.stringify(hop.chipPath)}`));
   assert.doesNotMatch(player, /function placeChip/);
   assert.match(svg, /<animateTransform attributeName="transform"/);
+});
+
+test('placeChip_keeps_the_minimum_clearance_from_the_obstacle_it_lifts_over', () => {
+  const pill = { x: 280, y: 130, w: 40, h: 18, name: '알약' };
+
+  const { box } = placeChip({ x: 300, y: 150 }, CHIP, SCENE, [pill]);
+
+  assert.ok(pill.y - (box.y + box.h) >= CHIP_CLEAR - 0.01, `간격 ${pill.y - (box.y + box.h)}`);
+});
+
+test('placeChip_prefers_a_spot_clear_of_a_nearby_line_and_never_reports_it_as_a_hit', () => {
+  // 점 바로 위를 가로지르는 다른 선. 점 위 기본 자리는 선에 CHIP_CLEAR 안으로 들어온다.
+  const line = { x: 200, y: 120, w: 400, h: 4, soft: true, edge: 9 };
+
+  const placed = placeChip({ x: 300, y: 150 }, CHIP, SCENE, [line]);
+
+  const padded = { x: placed.box.x - CHIP_CLEAR, y: placed.box.y - CHIP_CLEAR, w: placed.box.w + CHIP_CLEAR * 2, h: placed.box.h + CHIP_CLEAR * 2 };
+  assert.ok(!overlaps(padded, line), '선에서 떨어진 자리');
+  assert.deepEqual(placed.hits, []);
+});
+
+test('planChip_ignores_the_moving_edges_own_line_but_avoids_other_lines', async () => {
+  const source = readFileSync(new URL('memory.muto', EXAMPLES), 'utf8');
+  const { scene, timeline } = await buildFigure(source, { strict: true });
+  const hop = timeline.segs.flatMap((seg) => seg.hops).find((h) => h.data);
+  const own = chipLines(scene).filter((l) => l.edge === hop.edge);
+  const withOwn = planChip(scene, hop, [...chipObstacles(scene), ...chipLines(scene)]);
+  const withoutOwn = planChip(scene, hop, [...chipObstacles(scene), ...chipLines(scene).filter((l) => l.edge !== hop.edge)]);
+
+  assert.ok(own.length > 0);
+  assert.deepEqual(withOwn.path, withoutOwn.path);
+});
+
+test('buildFigure_examples_keep_moving_text_clear_of_other_lines_at_most_30_percent_of_the_samples', async () => {
+  let near = 0;
+  let samples = 0;
+  for (const file of readdirSync(EXAMPLES).filter((f) => f.endsWith('.muto'))) {
+    const result = await buildFigure(readFileSync(new URL(file, EXAMPLES), 'utf8'), { baseDir: 'examples', strict: true });
+    if (result.chart) continue;
+    const { scene, timeline } = result;
+    const lines = chipLines(scene);
+    for (const hop of timeline.segs.flatMap((seg) => seg.hops).filter((h) => h.data)) {
+      const chip = sizeChip(hop.data);
+      const route = flattenRoute(scene.edges[hop.edge].points);
+      const path = hop.chipPath.map(([at, dx, dy]) => ({ at, dx, dy }));
+      for (let k = 0; k < path.length - 1; k++) {
+        const { box } = chipBoxBetween(route, hop, chip, [path[k], path[k + 1]], 0.5);
+        const padded = { x: box.x - CHIP_CLEAR, y: box.y - CHIP_CLEAR, w: box.w + CHIP_CLEAR * 2, h: box.h + CHIP_CLEAR * 2 };
+        samples += 1;
+        if (lines.some((l) => l.edge !== hop.edge && overlaps(padded, l))) near += 1;
+      }
+    }
+  }
+  assert.ok(samples > 100);
+  assert.ok(near / samples < 0.3, `선 가까이 ${near}/${samples}`);
 });
