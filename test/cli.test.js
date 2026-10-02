@@ -76,7 +76,7 @@ test('main_json_prints_one_message_per_line', () => {
     const lines = run(['check', 'bad.muto', '--json'], folder).stdout.trim().split('\n');
 
     assert.equal(lines.length, 2);
-    for (const line of lines) assert.deepEqual(Object.keys(JSON.parse(line)), ['file', 'severity', 'code', 'line', 'column', 'message']);
+    for (const line of lines) assert.deepEqual(Object.keys(JSON.parse(line)), ['file', 'line', 'lines', 'check', 'level', 'message', 'severity', 'code', 'column']);
     assert.deepEqual(lines.map((line) => JSON.parse(line).code), ['syntax', 'syntax']);
   });
 });

@@ -6,6 +6,7 @@ import { basename, dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildFigure } from './build.js';
 import { toDocument, toGallery, toHtml } from './html.js';
+import { toJson } from './diagnostics.js';
 import { migrateSource, previewDiff } from './migrate.js';
 import { FigureError, makeDiagnostic } from './source/problems.js';
 import { toSvg } from './svg.js';
@@ -164,10 +165,10 @@ function describe(source) {
 // cost: time O(m), heap O(m), stack O(1), io m
 // vars: m = 메시지 수
 // basis: estimate
-// 진단(오류, 경고, 폐기). 기본은 `파일:줄: 메시지`, --json이면 진단마다 `{ file, severity, code, line, column, message, fix? }` 한 줄을 stdout에 쓴다.
+// 진단(오류, 경고, 폐기). 기본은 `파일:줄: 메시지`, --json이면 진단마다 `toJson`(src/diagnostics.js)이 정한 한 줄을 stdout에 쓴다.
 function report(file, diagnostics, json) {
   for (const d of diagnostics) {
-    if (json) process.stdout.write(`${JSON.stringify({ file, ...d })}\n`);
+    if (json) process.stdout.write(`${JSON.stringify(toJson(file, d))}\n`);
     // 줄 번호가 없는 문제(파일 읽기, 도구 버그)는 줄 0이고, 글로는 `파일: 메시지`로 쓴다.
     else process.stderr.write(`${file}${d.line ? `:${d.line}` : ''}: ${SEVERITY_LABEL[d.severity]}${d.message}\n`);
   }

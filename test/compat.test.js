@@ -1,7 +1,11 @@
 // 호환 고정 묶음. test/fixtures/compat/v1/의 파일은 판 1 문법으로 쓴 원본이고 앞으로 고치지 않는다.
 // 새 판(깨지는 변경)이 생기면 v2 폴더를 더하고, 같은 판 안의 기능 추가는 새 파일을 더한다.
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
 import { KINDS, OPTIONS, STATEMENTS, VALUES } from '../src/source/grammar.js';
@@ -11,6 +15,9 @@ import { createProblems } from '../src/source/problems.js';
 const V1 = new URL('./fixtures/compat/v1/', import.meta.url);
 const NAMES = readdirSync(V1).filter((name) => name.endsWith('.muto')).sort();
 const SNAPSHOT = JSON.parse(readFileSync(new URL('structure.snapshot.json', V1), 'utf8'));
+
+// 한 번도 지나지 않는 quiet 선(경고 11번)이 있는 원본
+const QUIET_SOURCE = 'flow right\nbox a "A"\nbox b "B"\na -> b "보냄" quiet\nb -> a\nstep "s"\n  b -> a\n';
 
 const sourceOf = (name) => readFileSync(new URL(name, V1), 'utf8');
 
@@ -108,4 +115,40 @@ test('compat_v1_covers_every_word_option_and_value_in_the_grammar_table', () => 
   }
 
   assert.deepEqual(missing, [], 'add a new .muto file to test/fixtures/compat/v1 that uses each missing entry (never edit the existing ones)');
+});
+
+// cost: time O(1), heap O(1), stack O(1), io 1
+// basis: estimate
+// CLI를 실행해 { status, stdout, stderr }를 돌려준다.
+const cli = (args) => spawnSync(process.execPath, [fileURLToPath(new URL('../src/cli.js', import.meta.url)), ...args], { encoding: 'utf8' });
+
+test('compat_cli_json_keeps_the_old_fields_with_old_values_next_to_the_new_ones', () => {
+  const old = cli(['check', new URL('old-tone-blue-orange.muto', V1).pathname, '--json']);
+  const folder = mkdtempSync(join(tmpdir(), 'mutoscope-quiet-'));
+  const QUIET = join(folder, 'quiet.muto');
+  writeFileSync(QUIET, QUIET_SOURCE);
+  const quiet = cli(['check', QUIET, '--json']);
+  rmSync(folder, { recursive: true, force: true });
+  const [first] = old.stdout.trim().split('\n').map((line) => JSON.parse(line));
+  const [warning] = quiet.stdout.trim().split('\n').map((line) => JSON.parse(line));
+
+  assert.deepEqual([first.line, first.lines, first.check, first.level], [7, [7], 'syntax', 'warning']);
+  assert.deepEqual([first.severity, first.code, first.column, first.fix.text], ['deprecated', 'deprecated-value', 30, 'teal']);
+  assert.deepEqual([warning.check, warning.level, warning.lines, warning.severity, warning.code], [11, 'warning', [4], 'warning', 'check-11']);
+});
+
+test('compat_cli_old_options_and_exit_codes_still_work', () => {
+  const file = new URL('main-bar.muto', V1).pathname;
+  const out = mkdtempSync(join(tmpdir(), 'mutoscope-compat-'));
+  try {
+    assert.equal(cli(['check', file, '--strict', '--json']).status, 0);
+    assert.equal(cli(['render', file, '--static', '--html', '--out', out]).status, 0);
+    assert.equal(cli(['check', 'missing.muto']).status, 1);
+    assert.equal(cli([]).status, 2);
+    assert.equal(cli(['check', file, '--unknown']).status, 2);
+    writeFileSync(join(out, 'quiet.muto'), QUIET_SOURCE);
+    assert.equal(cli(['check', join(out, 'quiet.muto'), '--strict']).status, 1);
+  } finally {
+    rmSync(out, { recursive: true, force: true });
+  }
 });
