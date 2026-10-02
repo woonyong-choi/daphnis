@@ -892,10 +892,6 @@ html.embedded .fl-figure {
   fill: var(--color-data-heat-ink);
 }
 
-.fl .chart-cell.ink {
-  transition: opacity var(--duration-fast), fill var(--duration-fast);
-}
-
 .fl .chart-axis,
 .fl .chart-grid {
   stroke: var(--color-data-grid);
@@ -1000,6 +996,12 @@ html.embedded .fl-figure {
 .fl .cs-1,
 .fl [class*="cr-"] {
   transition: opacity var(--duration-fast);
+}
+
+/* 면이 바탕 쪽으로 옅어지는 중간에는 밝은 글자와 어두운 글자 모두 대비 4.5에 못 미친다. 칸 면과 글자는 서서히 가지 않고 한꺼번에 바뀐다. */
+.fl .chart-heat-cell,
+.fl .chart-cell.ink {
+  transition: none;
 }
 </style>
 </head>
