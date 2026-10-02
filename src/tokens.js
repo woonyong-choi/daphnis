@@ -262,6 +262,7 @@ export const tokens = freeze({
   },
   "scale": {
     "zoom-max": "var(--scale-zoom-max)",
+    "aspect-fit-max": "var(--scale-aspect-fit-max)",
     "fold-aspect": "var(--scale-fold-aspect)",
     "fold-step": "var(--scale-fold-step)",
     "aspect-max": "var(--scale-aspect-max)",
@@ -527,6 +528,7 @@ export const values = freeze({
   },
   "scale": {
     "zoom-max": 6,
+    "aspect-fit-max": 1.6,
     "fold-aspect": 1.6,
     "fold-step": 0.75,
     "aspect-max": 3,

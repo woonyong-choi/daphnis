@@ -44,3 +44,18 @@ test('layoutGraph_figure_that_fits_keeps_the_declared_direction', async () => {
   const { scene } = await buildFigure(readFileSync(new URL('../examples/memory.muto', import.meta.url), 'utf8'), { strict: true });
   assert.ok(item(scene, 'user').x < item(scene, 'answer').x, 'flow right 그대로');
 });
+
+test('layoutGraph_auto_fit_picks_a_ratio_inside_the_fit_range_for_every_fixture_that_needed_fitting', async () => {
+  const min = 1 / values.scale['aspect-max'];
+  const max = values.scale['aspect-fit-max'];
+  for (const name of ['event-loop', 'event-loop-right', 'task-lifecycle']) {
+    const { scene } = await build(name);
+    const ratio = scene.width / scene.height;
+    assert.ok(ratio >= min && ratio <= max, `${name} 비율 ${ratio.toFixed(2)}`);
+  }
+});
+
+test('layoutGraph_fit_range_wide_limit_is_the_desktop_screen_ratio', () => {
+  assert.equal(values.scale['aspect-fit-max'], values.scale['fold-aspect']);
+  assert.ok(values.scale['aspect-fit-max'] >= 1400 / 900 && values.scale['aspect-fit-max'] < values.scale['aspect-max']);
+});

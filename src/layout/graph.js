@@ -9,6 +9,9 @@ import { readElk } from './read.js';
 
 const CANVAS = values.size['figure-canvas'];
 const ASPECT_MAX = values.scale['aspect-max'];
+// 알맞은 비율의 범위. 세로로 긴 쪽은 두 화면 모두 페이지 스크롤로 읽혀 한도(aspect-max)의 역수까지, 가로로 넓은 쪽은 데스크톱 가로 화면 비율(1400x900)까지다.
+const FIT_MIN = 1 / ASPECT_MAX;
+const FIT_MAX = values.scale['aspect-fit-max'];
 const TURNED = { right: 'down', down: 'right' };
 // 자동 접기에서 비율을 낮춰 다시 배치해 보는 최대 횟수. 배치 시간이 이 횟수만큼 늘 수 있다.
 const FOLD_TRIES = 4;
@@ -67,20 +70,30 @@ function fitsCanvas({ width, height }) {
   return width <= CANVAS && (isBalanced || height <= CANVAS);
 }
 
+// 알맞은 비율 범위에서 벗어난 정도(비율을 로그로 본 거리). 범위 안이면 0이다.
+function ratioMiss({ width, height }) {
+  const ratio = width / height;
+  return Math.max(0, Math.log(FIT_MIN / ratio), Math.log(ratio / FIT_MAX));
+}
+
 // cost: time O((1 + FOLD_TRIES)·elk(s + e)), heap O(s + e), stack O(d)
 // vars: s = 도형 수, e = 선 수, d = 그룹 깊이, elk = elkjs 층 배치 시간
 // basis: estimate
 /**
- * 한 줄 배치가 캔버스보다 넓을 때 글자 크기를 지키는 배치를 찾는다. 순서는 이렇다.
+ * 한 줄 배치가 캔버스보다 넓을 때 글자 크기를 지키는 배치를 찾는다. 후보 순서는 이렇다.
  * 1. 바깥 방향을 돌린다(right는 down으로). 선이 줄 사이를 돌아오지 않아 접기보다 선이 짧다.
  * 2. 자동 비율로 접는다. 폭에 들 때까지 비율을 낮춰 가며 FOLD_TRIES번까지 본다.
- * 어느 것도 들지 않으면 가장 좁은 배치를 쓰고, 표시 폭만 줄인다(docs/design/layout.md 그림 크기).
+ * 캔버스에 들고 비율이 알맞은 범위(FIT_MIN~FIT_MAX) 안인 첫 후보를 쓴다. 범위 안인 후보가 없으면 캔버스에 드는 후보 가운데 범위에 가장 가까운 것을 쓴다.
+ * 캔버스에 드는 후보가 없으면 가장 좁은 배치를 쓰고, 표시 폭만 줄인다(docs/design/layout.md 그림 크기).
  */
 async function fitCanvas(figure, sizes, flat) {
   let narrowest = flat;
+  const fitting = [];
   const consider = (candidate) => {
     if (candidate.laid.width < narrowest.laid.width) narrowest = candidate;
-    return fitsCanvas(candidate.laid);
+    if (!fitsCanvas(candidate.laid)) return false;
+    fitting.push(candidate);
+    return ratioMiss(candidate.laid) === 0;
   };
   const turned = await arrange({ ...figure, direction: TURNED[figure.direction] }, sizes);
   if (consider(turned)) return turned;
@@ -89,5 +102,5 @@ async function fitCanvas(figure, sizes, flat) {
     const folded = await arrange({ ...figure, aspect }, sizes);
     if (consider(folded)) return folded;
   }
-  return narrowest;
+  return fitting.sort((a, b) => ratioMiss(a.laid) - ratioMiss(b.laid))[0] ?? narrowest;
 }

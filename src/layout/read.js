@@ -4,6 +4,10 @@ import { LayoutError } from './error.js';
 import { ROOT } from './model.js';
 
 const SETTLE = values.space['4'];
+// 두 좌표가 같다고 보는 거리
+const TOUCH = 0.5;
+// 같은 면의 선 끝이 이보다 가까워지면 붙어 보인다(그림 검사 5번과 같은 값)
+const CROWD = values.space['2-5'];
 
 // cost: time O(s + e·(d + p)), heap O(s + e·p), stack O(d)
 // vars: s = 도형 수, e = 선 수, d = 그룹 깊이, p = 경로 점 수
@@ -17,10 +21,12 @@ export function readElk(laid, model) {
   const rects = new Map(items.map((it) => [it.id, it]));
   // 선 번호는 원본에 적은 선의 번호다. 시간표와 그리기가 같은 번호로 선을 찾으므로, 처음 점과 끝 겹원의 선(모델 순서에서는 앞뒤에 놓인다)은 맨 뒤에 둔다.
   const declared = [...model.edges.filter((edge) => !edge.isMark), ...model.edges.filter((edge) => edge.isMark)];
-  const edges = declared.map((edge) => {
-    const parts = model.pieces.get(edge.index).map((_, k) => routeOf(sections, edge, k));
-    const joined = parts.flatMap((p, k) => (k === 0 ? p : p.slice(1)));
-    const points = settleEnd(settleEnd(joined, freeRect(edge.from, rects)).reverse(), freeRect(edge.to, rects)).reverse();
+  const joined = declared.map((edge) => model.pieces.get(edge.index).map((_, k) => routeOf(sections, edge, k)).flatMap((p, k) => (k === 0 ? p : p.slice(1))));
+  const crowd = endsByNode(declared, joined);
+  const edges = declared.map((edge, i) => {
+    const near = (end) => (other) => other.at !== `${edge.index}:${end}`;
+    const start = settleEnd(joined[i], freeRect(edge.from, rects), crowd.get(edge.from)?.filter(near('start')));
+    const points = dropCollinear(settleEnd(start.reverse(), freeRect(edge.to, rects), crowd.get(edge.to)?.filter(near('end'))).reverse());
     return { ...edge, points, labelAt: labels.get(`label::${edge.index}`) };
   });
   return { items, groups, edges, width: laid.width, height: laid.height };
@@ -87,6 +93,20 @@ function readEdges(laid, model, offsets) {
   return { sections, labels };
 }
 
+// cost: time O(e), heap O(e), stack O(1)
+// vars: e = 선 수
+// basis: estimate
+// 도형마다 그 도형에 닿는 선 끝(고르기 전 elkjs 자리). 선 끝을 펼 때 같은 도형의 다른 선 끝과 붙지 않게 하는 데 쓴다.
+function endsByNode(declared, joined) {
+  const ends = new Map();
+  const add = (id, point, at) => ends.set(id, [...(ends.get(id) ?? []), { point, at }]);
+  declared.forEach((edge, i) => {
+    add(edge.from, joined[i][0], `${edge.index}:start`);
+    add(edge.to, joined[i].at(-1), `${edge.index}:end`);
+  });
+  return ends;
+}
+
 // 연결점 제약이 없는 도형만 선 끝을 옮길 수 있다. 사람(세로), 갈림길, 원통(세로), 테이블 열은 연결점이 정해져 있다.
 function freeRect(id, rects) {
   const it = rects.get(id);
@@ -99,9 +119,9 @@ function freeRect(id, rects) {
 /**
  * 선 끝에서 시작해 가로지르는 방향으로 SETTLE 미만만 흔들리는 구간을, 구간 끝의 높이로 편다.
  * 그룹 경계 연결점 높이는 안쪽 배치가, 선 끝은 바깥 배치가 정해 몇 px 어긋나는 계단이 남기 때문이다.
- * 옮긴 선 끝이 도형 면 밖으로 나가면 펴지 않는다. 선 끝 쪽 한 구간만 다룬다.
+ * 옮긴 선 끝이 도형 면 밖으로 나가거나 같은 면의 다른 선 끝(others)에 CROWD보다 가까워지면 펴지 않는다. 선 끝 쪽 한 구간만 다룬다.
  */
-function settleEnd(points, rect) {
+function settleEnd(points, rect, others = []) {
   if (!rect || points.length < 3) return points;
   const [start, next] = points;
   const isHorizontal = Math.abs(start.y - next.y) < 0.5;
@@ -117,5 +137,18 @@ function settleEnd(points, rect) {
   const target = points[end][across];
   const [low, high] = isHorizontal ? [rect.y, rect.y + rect.h] : [rect.x, rect.x + rect.w];
   if (end < 2 || target < low || target > high) return points;
+  if (others.some((o) => Math.abs(o.point[along] - start[along]) < TOUCH && Math.abs(o.point[across] - target) < CROWD)) return points;
   return [{ ...start, [across]: target }, ...points.slice(end)];
+}
+
+// cost: time O(p), heap O(p), stack O(1)
+// vars: p = 경로 점 수
+// basis: estimate
+/**
+ * 같은 방향으로 곧게 이어지는 가운데 점을 뺀다. elkjs가 선 끝을 펴고 남긴 점이 한 선분을 둘로 쪼개면
+ * 그림 검사 5번이 쪼개진 쪽을 같은 도형에서 나가는 첫 선분으로 보지 못해, 바르게 그린 선을 붙었다고 알린다.
+ */
+function dropCollinear(points) {
+  const isStraight = (a, b, c) => (Math.abs(a.y - b.y) < TOUCH && Math.abs(b.y - c.y) < TOUCH && (b.x - a.x) * (c.x - b.x) > 0) || (Math.abs(a.x - b.x) < TOUCH && Math.abs(b.x - c.x) < TOUCH && (b.y - a.y) * (c.y - b.y) > 0);
+  return points.filter((p, i) => i === 0 || i === points.length - 1 || !isStraight(points[i - 1], p, points[i + 1]));
 }
