@@ -19,9 +19,10 @@
   "scripts": {
     "test": "node --test test/*.test.js",
     "grammar": "node scripts/build-grammar-doc.mjs",
+    "fuzz": "node scripts/fuzz-layout.mjs",
     "checkdoc": "node scripts/build-check-doc.mjs",
     "tokens": "node scripts/build-tokens.mjs src/tokens.json --out src",
-    "check": "node scripts/check-tokens.mjs src && node scripts/check-cost-comments.mjs src test",
+    "check": "node scripts/check-tokens.mjs src && node scripts/check-cost-comments.mjs src test && node scripts/check-size.mjs src scripts",
     "examples": "node src/cli.js gallery examples --out examples/out --title \"예제\"",
     "screens": "node scripts/screens.mjs"
   },
