@@ -246,7 +246,7 @@ test('drawBars_value_text_stays_next_to_bar_end_and_draws_after_rule', async () 
 test('chartCss_value_halo_uses_the_background_color_token_that_dark_mode_overrides', async () => {
   const { STYLES } = await import('../src/styles.js');
 
-  assert.match(STYLES.chart, /\.fl \.chart-value \{[^}]*paint-order: stroke;[^}]*stroke: var\(--color-bg\);[^}]*stroke-width: var\(--border-halo\)/);
+  assert.match(STYLES.chart, /\.fl \.chart-value,\s*\.fl \.chart-name \{[^}]*paint-order: stroke;[^}]*stroke: var\(--color-bg\);[^}]*stroke-width: var\(--border-halo\)/);
   assert.match(STYLES.tokens, /prefers-color-scheme: dark\) \{[\s\S]*?--color-bg:/);
 });
 
@@ -419,4 +419,17 @@ test('toSvg_light_dims_the_face_more_than_the_text_and_heat_text_turns_to_the_da
   assert.match(bar, new RegExp(`opacity: ${dimInk}[^;}]*\\}`));
   assert.doesNotMatch(bar, /opacity: 1; fill: var\(--ink\)/);
   assert.match(bar, /\.fl \.cr-1\.ink \{ animation: a\d+ /);
+});
+
+// cost: time O(build), heap O(m), stack O(1)
+// vars: build = 원본 하나를 만드는 비용, m = 결과 글자 수
+// basis: estimate
+async function ruleLabelClass(rows) {
+  const body = await bodyOf(`chart line\nseries a "A"\nrule 5 "목표"\n${rows}`);
+  return /class="(chart-rule-label[^"]*)">목표/.exec(body)[1];
+}
+
+test('drawLine_rule_label_moves_to_the_left_end_when_the_data_covers_the_right_end', async () => {
+  assert.equal(await ruleLabelClass('point x=1 a=12\npoint x=2 a=5.2'), 'chart-rule-label');
+  assert.equal(await ruleLabelClass('point x=1 a=5.2\npoint x=2 a=12'), 'chart-rule-label end');
 });

@@ -63,11 +63,11 @@ function legendOrder(series) {
 // cost: time O(s·n), heap O(out), stack O(1)
 // vars: s = 계열 수, n = 계열 이름 글자 수, out = 만든 SVG 글자 수
 // basis: estimate
-// 계열 범례 한 줄과 그 아래 y
+// 계열 범례 한 줄과 그 아래 y. 범례는 계열을 드러내기 전에도 보인다(`cs-` 묶음 밖). 드러나지 않은 계열의 범례만 빠지면 왼쪽이 비어 어긋나 보인다.
 function drawLegend(chart, y) {
   let x = PAD;
   const items = legendOrder(chart.series).map(({ s, i }) => {
-    const item = `<g class="cs-${i}"><rect x="${x}" y="${r(y + SPACE['2'])}" width="${BAR}" height="${BAR}" rx="${values.radius.sm}" fill="${seriesColor(chart, i)}"/>` + `<text x="${x + BAR + SPACE['3']}" y="${r(y + BAR)}" class="chart-legend">${renderRich(s.label)}</text></g>`;
+    const item = `<rect x="${x}" y="${r(y + SPACE['2'])}" width="${BAR}" height="${BAR}" rx="${values.radius.sm}" fill="${seriesColor(chart, i)}"/>` + `<text x="${x + BAR + SPACE['3']}" y="${r(y + BAR)}" class="chart-legend">${renderRich(s.label)}</text>`;
     x += BAR + SPACE['3'] + measure(s.label, TEXT['12']) + SPACE['9'];
     return item;
   });

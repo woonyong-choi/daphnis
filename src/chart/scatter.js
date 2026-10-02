@@ -82,6 +82,7 @@ export function drawScatter(figure, top) {
     return { text: p.label, width: nameW, room: Math.max(right - x, x - PAD) - NAME_OFFSET, line: p.line, what: 'point name' };
   });
   const parts = [frame, ...chart.links.map((link) => linkArrow(ctx, link)), ...names.map((name, k) => pointMark(ctx, name, k))];
-  parts.push(drawRules(chart.rules, sy, { axis: 'y', from: sx.at(sx.ticks[0]), to: sx.at(sx.ticks.at(-1)) }));
+  const occupied = [...names.map(({ box }) => ({ x0: box.x0, x1: box.x1, y0: box.y0, y1: box.y1 })), ...[...at.values()].map(({ x, y }) => ({ x0: x - DOT, x1: x + DOT, y0: y - DOT, y1: y + DOT }))];
+  parts.push(drawRules(chart.rules, sy, { axis: 'y', from: sx.at(sx.ticks[0]), to: sx.at(sx.ticks.at(-1)), occupied }));
   return { svg: parts.join('\n'), bottom, rowKeys: chart.rows.map((p) => p.label), fits };
 }

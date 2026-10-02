@@ -4,7 +4,7 @@ import { roundCoord as r } from '../text.js';
 import { values } from '../tokens.js';
 import { curveOf, timeAt } from '../easing.js';
 import { drawRules } from './axis.js';
-import { CAP, DOT, seriesColor } from './metrics.js';
+import { CAP, DOT, SPACE, seriesColor } from './metrics.js';
 import { plotFrame } from './plot-frame.js';
 
 const REVEAL = curveOf('reveal');
@@ -70,6 +70,36 @@ function intervalMarks(ctx, s, i) {
   });
 }
 
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 두 점 사이 계열 값(key가 value, low, high)을 x에서 보간한 값. 두 점 가운데 하나라도 값이 없으면 없다.
+function valueBetween([a, b], key, x, sx) {
+  const [va, vb] = [a.values[key], b.values[key]];
+  if (va === undefined || vb === undefined) return undefined;
+  const [xa, xb] = [sx.at(a.values.x), sx.at(b.values.x)];
+  return va + ((vb - va) * (x - xa)) / (xb - xa || 1);
+}
+
+// cost: time O(s·w·p), heap O(s·w), stack O(1)
+// vars: s = 계열 수, w = 그림 너비를 샘플 간격으로 나눈 수, p = 점 수
+// basis: estimate
+// 선과 띠가 차지한 자리. 가로로 샘플 간격(space.2)마다 선 값과 신뢰구간 값이 닿는 세로 구간을 모은다. 기준선 라벨이 피할 때 쓴다.
+function occupiedRects(ctx) {
+  const { chart, points, sx, sy } = ctx;
+  const step = SPACE['2'];
+  const rects = [];
+  for (let k = 1; k < points.length; k++) {
+    const pair = [points[k - 1], points[k]];
+    for (let x = sx.at(pair[0].values.x); x < sx.at(pair[1].values.x); x += step) {
+      for (const s of chart.series) {
+        const ys = ['', '.low', '.high'].map((suffix) => valueBetween(pair, `${s.id}${suffix}`, x, sx)).filter((v) => v !== undefined).map(sy.at);
+        rects.push({ x0: x, x1: x + step, y0: Math.min(...ys), y1: Math.max(...ys) });
+      }
+    }
+  }
+  return rects;
+}
+
 // cost: time O(p·s), heap O(out), stack O(1)
 // vars: p = 점 수, s = 계열 수, out = 만든 SVG 글자 수
 // basis: estimate
@@ -101,7 +131,8 @@ export function drawLine(figure, top) {
   const { sx, sy, frame, bottom } = plotFrame(figure, top, { xs: points.map((p) => p.values.x), ys });
   const order = new Map(points.map((p, k) => [p, k]));
   const ats = chart.series.map((s) => arrivals(points.map((p) => [sx.at(p.values.x), sy.at(p.values[s.id])])));
-  const parts = [frame, ...seriesMarks({ chart, points, sx, sy, ats, order })];
-  parts.push(drawRules(chart.rules, sy, { axis: 'y', from: sx.at(sx.ticks[0]), to: sx.at(sx.ticks.at(-1)) }));
+  const ctx = { chart, points, sx, sy, ats, order };
+  const parts = [frame, ...seriesMarks(ctx)];
+  parts.push(drawRules(chart.rules, sy, { axis: 'y', from: sx.at(sx.ticks[0]), to: sx.at(sx.ticks.at(-1)), occupied: occupiedRects(ctx) }));
   return { svg: parts.join('\n'), bottom, rowKeys: chart.rows.map((p) => `x=${p.values.x}`), dotAts: [...new Set(ats.flat())].sort((a, b) => a - b) };
 }

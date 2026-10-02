@@ -66,20 +66,32 @@ function drawValueAxis(scale, y, title) {
   return `<line x1="${r(start)}" x2="${r(start + length)}" y1="${r(y)}" y2="${r(y)}" class="chart-axis"/>${axisLabels(scale, y, title)}`;
 }
 
-// cost: time O(r), heap O(out), stack O(1)
-// vars: r = 기준선 수, out = 만든 SVG 글자 수
+// cost: time O(o), heap O(1), stack O(1)
+// vars: o = 데이터가 차지한 자리 수
+// basis: estimate
+// 가로 기준선 라벨 자리. 오른쪽 끝이 기본이고, 데이터가 더 많이 가리면 왼쪽 끝에 둔다. 가린 수가 같으면 오른쪽이다.
+function ruleLabelSide(rule, at, { from, to, occupied }) {
+  const width = measure(rule.label, TEXT['11']);
+  const [top, bottom] = [at - SPACE['2'] - TEXT['11'], at - SPACE['2']];
+  const hits = (x0, x1) => occupied.filter((o) => o.x1 > x0 && o.x0 < x1 && o.y1 > top && o.y0 < bottom).length;
+  return hits(to - width, to) <= hits(from, from + width) ? 'end' : 'start';
+}
+
+// cost: time O(r·o), heap O(out), stack O(1)
+// vars: r = 기준선 수, o = 데이터가 차지한 자리 수, out = 만든 SVG 글자 수
 // basis: estimate
 /**
  * 기준선: 값 축에 수직인 점선과 라벨
- * @param span { axis, from, to }. axis 'x'는 세로선(값 축이 가로), 'y'는 가로선이다. from과 to는 선이 닿는 구간이다
+ * @param span { axis, from, to, occupied }. axis 'x'는 세로선(값 축이 가로), 'y'는 가로선이다. from과 to는 선이 닿는 구간이다.
+ * occupied는 'y' 기준선 라벨을 피할 데이터 자리 { x0, x1, y0, y1 }[]이다
  */
-export function drawRules(rules, scale, { axis, from, to }) {
+export function drawRules(rules, scale, { axis, from, to, occupied = [] }) {
   return rules
     .map((rule) => {
       const at = scale.at(rule.value);
-      return axis === 'x'
-        ? `<line x1="${r(at)}" x2="${r(at)}" y1="${r(from - SPACE['3'])}" y2="${r(to)}" class="chart-rule"/><text x="${r(at + SPACE['2'])}" y="${r(from - SPACE['4'])}" class="chart-rule-label">${renderRich(rule.label)}</text>`
-        : `<line x1="${r(from)}" x2="${r(to)}" y1="${r(at)}" y2="${r(at)}" class="chart-rule"/><text x="${r(to)}" y="${r(at - SPACE['2'])}" class="chart-rule-label end">${renderRich(rule.label)}</text>`;
+      if (axis === 'x') return `<line x1="${r(at)}" x2="${r(at)}" y1="${r(from - SPACE['3'])}" y2="${r(to)}" class="chart-rule"/><text x="${r(at + SPACE['2'])}" y="${r(from - SPACE['4'])}" class="chart-rule-label">${renderRich(rule.label)}</text>`;
+      const isEnd = ruleLabelSide(rule, at, { from, to, occupied }) === 'end';
+      return `<line x1="${r(from)}" x2="${r(to)}" y1="${r(at)}" y2="${r(at)}" class="chart-rule"/><text x="${r(isEnd ? to : from)}" y="${r(at - SPACE['2'])}" class="chart-rule-label${isEnd ? ' end' : ''}">${renderRich(rule.label)}</text>`;
     })
     .join('');
 }

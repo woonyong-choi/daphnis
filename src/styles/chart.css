@@ -26,6 +26,11 @@
 
 .fl .chart-value {
   fill: var(--color-fg);
+}
+
+/* 값 글자와 점 이름은 뒤의 격자와 기준선이 글자 둘레에서 끊기게 바탕색 테두리를 두른다. */
+.fl .chart-value,
+.fl .chart-name {
   paint-order: stroke;
   stroke: var(--color-bg);
   stroke-width: var(--border-halo);

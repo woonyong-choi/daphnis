@@ -468,6 +468,11 @@
 
 .fl .chart-value {
   fill: var(--color-fg);
+}
+
+/* 값 글자와 점 이름은 뒤의 격자와 기준선이 글자 둘레에서 끊기게 바탕색 테두리를 두른다. */
+.fl .chart-value,
+.fl .chart-name {
   paint-order: stroke;
   stroke: var(--color-bg);
   stroke-width: var(--border-halo);
@@ -741,8 +746,8 @@
 <g transform="translate(0 0)">
 <text x="28" y="43" class="chart-title">장기 기억 정확도</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. n=500, 점선은 채택 기준 80%</text>
-<g class="cs-0"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-data-main)"/><text x="46" y="85" class="chart-legend">기억 붙임</text></g>
-<g class="cs-1"><rect x="111.535" y="77" width="12" height="12" rx="4" fill="var(--color-data-compare)"/><text x="129.535" y="85" class="chart-legend">기억 없음</text></g>
+<rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-data-main)"/><text x="46" y="85" class="chart-legend">기억 붙임</text>
+<rect x="111.535" y="77" width="12" height="12" rx="4" fill="var(--color-data-compare)"/><text x="129.535" y="85" class="chart-legend">기억 없음</text>
 <g class="cr-0 ink"><text x="28" y="127.7" class="chart-label shift">단일 세션 사실</text></g>
 <g class="cr-0"><g class="cs-0"><rect x="168" y="109" width="688.5" height="12" rx="4" fill="var(--color-data-main)" class="grow"/><line x1="837.7" x2="872.3" y1="115" y2="115" class="chart-ci-casing late"/><line x1="837.7" x2="872.3" y1="115" y2="115" class="chart-ci late"/></g></g>
 <g class="cr-0"><g class="cs-1"><rect x="168" y="125" width="453.5" height="12" rx="4" fill="var(--color-data-compare)" class="grow"/><line x1="588.3" x2="653.1" y1="131" y2="131" class="chart-ci-casing late"/><line x1="588.3" x2="653.1" y1="131" y2="131" class="chart-ci late"/></g></g>
