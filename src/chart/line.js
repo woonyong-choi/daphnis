@@ -4,7 +4,7 @@ import { roundCoord as r } from '../text.js';
 import { values } from '../tokens.js';
 import { curveOf, timeAt } from '../easing.js';
 import { drawRules } from './axis.js';
-import { CAP, DOT, SIZE, SPACE, TEXT, seriesColor } from './metrics.js';
+import { CAP, DOT, seriesColor } from './metrics.js';
 import { plotFrame } from './plot-frame.js';
 
 const REVEAL = curveOf('reveal');
@@ -98,10 +98,10 @@ export function drawLine(figure, top) {
   const { chart } = figure;
   const points = [...chart.rows].sort((a, b) => a.values.x - b.values.x);
   const ys = points.flatMap((p) => chart.series.flatMap((s) => [p.values[s.id], p.values[`${s.id}.low`], p.values[`${s.id}.high`]])).filter((v) => v !== undefined);
-  const { sx, sy, frame, top: plotTop } = plotFrame(figure, top, { xs: points.map((p) => p.values.x), ys });
+  const { sx, sy, frame, bottom } = plotFrame(figure, top, { xs: points.map((p) => p.values.x), ys });
   const order = new Map(points.map((p, k) => [p, k]));
   const ats = chart.series.map((s) => arrivals(points.map((p) => [sx.at(p.values.x), sy.at(p.values[s.id])])));
   const parts = [frame, ...seriesMarks({ chart, points, sx, sy, ats, order })];
   parts.push(drawRules(chart.rules, sy, { axis: 'y', from: sx.at(sx.ticks[0]), to: sx.at(sx.ticks.at(-1)) }));
-  return { svg: parts.join('\n'), bottom: plotTop + SIZE['chart-plot-h'] + TEXT['11'] * 2 + SPACE['12'], rowKeys: chart.rows.map((p) => `x=${p.values.x}`), dotAts: [...new Set(ats.flat())].sort((a, b) => a - b) };
+  return { svg: parts.join('\n'), bottom, rowKeys: chart.rows.map((p) => `x=${p.values.x}`), dotAts: [...new Set(ats.flat())].sort((a, b) => a - b) };
 }

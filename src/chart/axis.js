@@ -34,15 +34,36 @@ export function ruleReach(rules) {
   return rules.map((rule) => ({ value: rule.value, extra: SPACE['2'] + measure(rule.label, TEXT['11']) }));
 }
 
+// 눈금 글자 기준선은 축선에서 글자 높이 더하기 한 칸, 축 제목 기준선은 그 아래 글자 한 줄과 한 칸이다.
+const TICK_BASE = TEXT['11'] + SPACE['3'];
+const TITLE_BASE = TEXT['11'] * 2 + SPACE['6'];
+// 마지막 글자 줄의 먹이 기준선 아래로 내려오는 몫. 위쪽은 제목 글자 줄 윗면이 PAD 아래에서 시작해 먹이 그만큼 내려와 있어, 아래도 같게 둬 위아래 여백이 같아 보이게 한다.
+const LINE_DROP = SPACE['1-5'];
+
+// cost: time O(t), heap O(out), stack O(1)
+// vars: t = 눈금 수, out = 만든 SVG 글자 수
+// basis: estimate
+/** 값 축 아래 글자: 눈금 글자와 오른쪽 끝에 맞춘 축 제목. y는 축선(눈금 0 줄)의 세로 자리다. */
+export function axisLabels(scale, y, title) {
+  const ticks = scale.ticks.map((t) => `<text x="${r(scale.at(t))}" y="${r(y + TICK_BASE)}" class="chart-tick">${formatNumber(t)}</text>`).join('');
+  const label = title ? `<text x="${r(scale.start + scale.length)}" y="${r(y + TITLE_BASE)}" class="chart-unit">${renderRich(title)}</text>` : '';
+  return ticks + label;
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+/** 축 글자까지 포함한 차트 내용의 아래 끝. 그림 아래 여백(PAD)은 이 아래에 더한다. 축 제목이 없으면 눈금 글자 줄이 끝이다. */
+export function axisEnd(y, hasTitle) {
+  return y + (hasTitle ? TITLE_BASE : TICK_BASE) + LINE_DROP;
+}
+
 // cost: time O(t), heap O(out), stack O(1)
 // vars: t = 눈금 수, out = 만든 SVG 글자 수
 // basis: estimate
 // 값 축: 축선, 눈금 글자, 축 제목
 function drawValueAxis(scale, y, title) {
   const { start, length } = scale;
-  const ticks = scale.ticks.map((t) => `<text x="${r(scale.at(t))}" y="${r(y + TEXT['11'] + SPACE['3'])}" class="chart-tick">${formatNumber(t)}</text>`).join('');
-  const label = title ? `<text x="${r(start + length)}" y="${r(y + TEXT['11'] * 2 + SPACE['6'])}" class="chart-unit">${renderRich(title)}</text>` : '';
-  return `<line x1="${r(start)}" x2="${r(start + length)}" y1="${r(y)}" y2="${r(y)}" class="chart-axis"/>${ticks}${label}`;
+  return `<line x1="${r(start)}" x2="${r(start + length)}" y1="${r(y)}" y2="${r(y)}" class="chart-axis"/>${axisLabels(scale, y, title)}`;
 }
 
 // cost: time O(r), heap O(out), stack O(1)
@@ -88,5 +109,5 @@ export function rowValueScale(chart, { kind, min, max, reaches }) {
 export function finishRowChart(chart, { parts, over = [], scale, top, bottom }) {
   const rules = drawRules(chart.rules, scale, { axis: 'x', from: top, to: bottom });
   const svg = [...parts, rules, ...over, drawValueAxis(scale, bottom + SPACE['4'], chart.x)];
-  return { svg: svg.join('\n'), bottom: bottom + SPACE['4'] + TEXT['11'] * 2 + SPACE['9'], rowKeys: chart.rows.map((row) => row.label), fits: chart.rows.map((row) => labelFit(row.label, row.line)) };
+  return { svg: svg.join('\n'), bottom: axisEnd(bottom + SPACE['4'], Boolean(chart.x)), rowKeys: chart.rows.map((row) => row.label), fits: chart.rows.map((row) => labelFit(row.label, row.line)) };
 }

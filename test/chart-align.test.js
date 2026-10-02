@@ -106,3 +106,14 @@ test('drawChart_scatter_arrowhead_stays_clear_of_every_point_name', async () => 
     }
   }
 });
+
+// 마지막 글자 줄 기준선에서 그림 아래 끝까지는 PAD에 기준선 아래 먹 몫(space.1-5)을 더한 값이다. 위쪽 PAD와 대칭이다.
+for (const [file, source] of charts.filter(([name]) => !name.startsWith('heatmap'))) {
+  test(`drawChart_${file.replace('.muto', '')}_bottom_margin_is_the_pad_below_the_last_text_line`, async () => {
+    const { values } = await import('../src/tokens.js');
+    const { chart } = await buildFigure(source, { baseDir: new URL('.', EXAMPLES).pathname });
+    const baselines = [...chart.body.matchAll(/<text x="[\d.-]+" y="([\d.-]+)" class="chart-unit">/g)].map((m) => Number(m[1]));
+
+    assert.equal(chart.height - Math.max(...baselines), PAD + values.space['1-5']);
+  });
+}

@@ -72,7 +72,7 @@ function pointMark(ctx, { p, toLeft }, k) {
 // basis: estimate
 export function drawScatter(figure, top) {
   const { chart } = figure;
-  const { sx, sy, frame, top: plotTop, right } = plotFrame(figure, top, { xs: chart.rows.map((p) => p.values.x), ys: chart.rows.map((p) => p.values.y) });
+  const { sx, sy, frame, right, bottom } = plotFrame(figure, top, { xs: chart.rows.map((p) => p.values.x), ys: chart.rows.map((p) => p.values.y) });
   const at = new Map(chart.rows.map((p) => [p.label, { x: sx.at(p.values.x), y: sy.at(p.values.y), p }]));
   const names = pointNames(chart, at, right);
   const ctx = { chart, at, names };
@@ -82,5 +82,5 @@ export function drawScatter(figure, top) {
   });
   const parts = [frame, ...chart.links.map((link) => linkArrow(ctx, link)), ...names.map((name, k) => pointMark(ctx, name, k))];
   parts.push(drawRules(chart.rules, sy, { axis: 'y', from: sx.at(sx.ticks[0]), to: sx.at(sx.ticks.at(-1)) }));
-  return { svg: parts.join('\n'), bottom: plotTop + SIZE['chart-plot-h'] + TEXT['11'] * 2 + SPACE['12'], rowKeys: chart.rows.map((p) => p.label), fits };
+  return { svg: parts.join('\n'), bottom, rowKeys: chart.rows.map((p) => p.label), fits };
 }
