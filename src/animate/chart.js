@@ -42,7 +42,7 @@ function animateSeries({ clock, segs, growMs, css, windows }, id, s, dotAts) {
   const rule = ([key, from, to, cls]) =>
     `@keyframes ${key}${s} { 0%,${a} { ${from}; ${ease} } ${b},100% { ${to} } }\n.fl .cs-${s} ${cls}, .fl .cs-${s}${cls} { animation: ${key}${s} ${clock.duration} infinite; }`;
   css.push([...GROWS.map(rule), lateFade(clock, s, [half, b], ease)].join('\n'));
-  // 선 차트 점은 선이 닿는 시각(data-at × 자라는 시간)에 나타난다. 시각 계산은 chart/draw.js arrivals가 끝냈다.
+  // 선 차트 점은 선이 닿는 시각(data-at × 자라는 시간)에 나타난다. 시각 계산은 chart/line.js arrivals가 끝냈다.
   for (const at of dotAts) css.push(dotFade({ clock, s, ease }, reveal.t0 + at * growMs, at));
 }
 

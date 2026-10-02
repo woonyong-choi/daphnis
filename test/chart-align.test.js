@@ -9,7 +9,7 @@ const EXAMPLES = new URL('../examples/', import.meta.url);
 const PAD = 28;
 const TOLERANCE = 1;
 
-// 글 종류(class)마다 글자 크기, 글꼴, 정렬. draw.js와 styles/chart.css가 정한 값이다.
+// 글 종류(class)마다 글자 크기, 글꼴, 정렬. src/chart/*.js와 styles/chart.css가 정한 값이다.
 const TEXT_STYLES = [
   ['chart-title', 15, 'semibold'],
   ['chart-sub', 12, 'regular'],

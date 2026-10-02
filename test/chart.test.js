@@ -16,7 +16,7 @@ test('formatChange_rounds_half_away_and_skips_zero_base', () => {
 });
 
 test('makeScale_log_ticks_are_powers_of_ten', () => {
-  assert.deepEqual(makeScale('log', 28000, 120000, 0, 100).ticks, [10000, 100000, 1000000]);
+  assert.deepEqual(makeScale('log', { min: 28000, max: 120000, start: 0, length: 100 }).ticks, [10000, 100000, 1000000]);
 });
 
 test('parseChart_rules_reject_values_that_cannot_be_drawn', () => {
@@ -114,7 +114,7 @@ test('roundHalfAway_handles_exponent_notation', async () => {
   const { roundHalfAway, makeScale } = await import('../src/chart/scale.js');
 
   assert.deepEqual([roundHalfAway(1e21), roundHalfAway(5e-7, 7)], [1e21, 5e-7]);
-  assert.ok(makeScale('linear', 0.000001, 0.000002, 0, 100).ticks.every(Number.isFinite));
+  assert.ok(makeScale('linear', { min: 0.000001, max: 0.000002, start: 0, length: 100 }).ticks.every(Number.isFinite));
 });
 
 test('drawChart_scatter_name_near_right_edge_moves_left', async () => {

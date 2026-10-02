@@ -39,13 +39,16 @@ export function formatChange(before, after) {
 /**
  * 값 → 좌표 함수와 눈금. log는 10의 거듭제곱마다, linear는 1, 2, 5 단위로 다섯 칸 안팎이다.
  * linear는 0과 가장 작은 값 가운데 작은 쪽에서 시작한다. 값 축이 아닌 축(선 차트 가로축)은 fromZero=false로 가장 작은 값에서 시작한다.
+ * @param range { min, max, start, length, fromZero }. 값 범위와, 좌표에서 축이 놓이는 시작과 길이
+ * @returns { at, ticks, origin, start, length }
  */
-export function makeScale(kind, min, max, start, length, { fromZero = true } = {}) {
+export function makeScale(kind, { min, max, start, length, fromZero = true }) {
+  const axis = { start, length };
   if (kind === 'log') {
     const lo = Math.floor(Math.log10(min));
     const hi = Math.max(lo + 1, Math.ceil(Math.log10(max)));
     const ticks = Array.from({ length: hi - lo + 1 }, (_, k) => 10 ** (lo + k));
-    return { at: (v) => start + ((Math.log10(v) - lo) / (hi - lo)) * length, ticks, origin: 10 ** lo };
+    return { ...axis, at: (v) => start + ((Math.log10(v) - lo) / (hi - lo)) * length, ticks, origin: 10 ** lo };
   }
   const low = fromZero ? Math.min(0, min) : min;
   const step = niceStep((max - low) / 5 || 1);
@@ -53,7 +56,7 @@ export function makeScale(kind, min, max, start, length, { fromZero = true } = {
   const top = Math.max(bottom + step, Math.ceil(max / step) * step);
   const count = Math.round((top - bottom) / step);
   const ticks = Array.from({ length: count + 1 }, (_, k) => roundHalfAway(bottom + k * step, 10));
-  return { at: (v) => start + ((v - bottom) / (top - bottom)) * length, ticks, origin: Math.max(bottom, Math.min(0, top)) };
+  return { ...axis, at: (v) => start + ((v - bottom) / (top - bottom)) * length, ticks, origin: Math.max(bottom, Math.min(0, top)) };
 }
 
 // cost: time O(1), heap O(1), stack O(1), alloc 1
