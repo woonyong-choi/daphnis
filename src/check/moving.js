@@ -1,5 +1,6 @@
 // 7번: 이동 글 상자가 그림 안에 있고 이름을 가리지 않는다.
-import { CHIP_GAP, planChip, sizeChip } from '../chip.js';
+import { CHIP_GAP, sizeChip } from '../chip.js';
+import { planChip } from '../chip-plan.js';
 import { chipLines, chipObstacles } from '../draw/boxes.js';
 
 // cost: time O(h·(k·p + k·a)), heap O(a), stack O(1)

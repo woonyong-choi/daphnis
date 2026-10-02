@@ -2,7 +2,8 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { checkChartFigure, checkFigure } from './check.js';
-import { CHIP_GAP, planChip, sizeChip } from './chip.js';
+import { CHIP_GAP, sizeChip } from './chip.js';
+import { planChip } from './chip-plan.js';
 import { chipLines, chipObstacles } from './draw/boxes.js';
 import { drawChart } from './chart/draw.js';
 import { LayoutError } from './layout/error.js';
