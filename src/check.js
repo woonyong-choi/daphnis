@@ -1,6 +1,7 @@
 // 그림 검사. 배치가 끝난 장면에서 화면 오류를 찾아 원본 줄 번호와 함께 알린다(docs/design/figure-check.md).
 import { CHIP_GAP, planChip, sizeChip } from './chip.js';
 import { chipLines, chipObstacles } from './draw/boxes.js';
+import { ROOT } from './layout/model.js';
 import { measure } from './measure/fonts.js';
 import { CARD, STYLE, groupTitleWidth, sizePill } from './measure/sizes.js';
 import { values } from './tokens.js';
@@ -68,7 +69,7 @@ function createFamily(scene) {
   // vars: d = 그룹 깊이
   // basis: estimate
   const contains = (a, b) => {
-    for (let p = parents.get(b); p !== undefined && p !== 'root'; p = parents.get(p)) if (p === a) return true;
+    for (let p = parents.get(b); p !== undefined && p !== ROOT; p = parents.get(p)) if (p === a) return true;
     return false;
   };
   // 배치를 바꾸라는 안내. 그룹이 없으면 그룹 방향을 바꿀 수 없어 선언 순서를 권한다.
@@ -345,7 +346,7 @@ function checkAspect(figure, scene, problems) {
   const size = (g) => (isWide ? g.w : g.h);
   const own = new Map(figure.groups.map((g) => [g.id, g.direction]));
   // 방향을 바꿔 비율이 달라지는 그룹은 안에 둘 이상(도형이나 하위 그룹)이 있는 그룹뿐이다.
-  const members = (id) => [...scene.items, ...scene.groups].filter((it) => (it.parent ?? 'root') === id).length;
+  const members = (id) => [...scene.items, ...scene.groups].filter((it) => (it.parent ?? ROOT) === id).length;
   const group = [...scene.groups].filter((g) => own.get(g.id) !== turn && members(g.id) > 1).sort((a, b) => size(b) - size(a))[0];
   let fix;
   if (group) fix = `Set direction=${turn} on group "${group.id}"`;

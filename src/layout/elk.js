@@ -1,6 +1,7 @@
 // 배치 모형을 elkjs 그래프로 바꾼다. 선택 사항 값은 모두 토큰이다(docs/design/layout.md 간격과 결정성).
 import { groupTitleWidth, sizePill } from '../measure/sizes.js';
 import { values } from '../tokens.js';
+import { ROOT } from './model.js';
 import { isBodyShape, outerBox, spreadBodyPorts } from './ports.js';
 
 const SPACE = values.space;
@@ -16,7 +17,7 @@ const LABEL_OPTIONS = { 'elk.edgeLabels.inline': 'true', 'elk.edgeLabels.placeme
 export function toElk(model, figure) {
   const byContainer = edgesByContainer(model);
   const ctx = { model, figure, byContainer, alignRight: figure.aspect !== undefined && figure.groups.length > 0 };
-  return containerToElk(model.containers.get('root'), ctx);
+  return containerToElk(model.containers.get(ROOT), ctx);
 }
 
 // cost: time O(e·k), heap O(e·k), stack O(1)
@@ -37,7 +38,7 @@ function edgesByContainer({ containers, pieces, edges }) {
 // 줄 바꿈한 그림에서 그룹이 있으면, 그룹이 든 열만 넓어져 같은 열의 상자가 가운데나 왼쪽에 놓이고 칸 간격이 줄마다 달라진다.
 // 바깥 층 도형을 모두 열의 오른쪽 끝에 붙이면 상자 사이 간격이 줄마다 같다. 이 선택 사항은 도형마다 줘야 한다(층 전체에 주면 무시된다).
 function alignOf(parent, ctx) {
-  return ctx.alignRight && parent === 'root' ? { 'elk.alignment': 'RIGHT' } : {};
+  return ctx.alignRight && parent === ROOT ? { 'elk.alignment': 'RIGHT' } : {};
 }
 
 // cost: time O(c + p), heap O(c + p), stack O(d)
@@ -91,7 +92,7 @@ function containerOptions(c, ctx) {
     'elk.edgeLabels.placement': 'CENTER',
     'elk.edgeLabels.inline': 'true',
     'elk.portConstraints': c.ports.length ? 'FIXED_SIDE' : 'FREE',
-    ...(c.id === 'root' ? rootOptions(ctx.figure) : groupOptions(c, ctx)),
+    ...(c.id === ROOT ? rootOptions(ctx.figure) : groupOptions(c, ctx)),
   };
 }
 

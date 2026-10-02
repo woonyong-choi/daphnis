@@ -1,5 +1,6 @@
 // elkjs 결과를 그림 좌표로 바꾼다. 그룹 경계 연결점에서 끊긴 선 조각은 이어 붙인다(docs/design/layout.md 선 그리기).
 import { values } from '../tokens.js';
+import { ROOT } from './model.js';
 
 const SETTLE = values.space['4'];
 
@@ -31,7 +32,7 @@ export function readElk(laid, model) {
 function readNodes(laid, model) {
   const items = [];
   const groups = [];
-  const offsets = new Map([['root', { x: 0, y: 0 }]]);
+  const offsets = new Map([[ROOT, { x: 0, y: 0 }]]);
   // cost: time O(s), heap O(d), stack O(d)
   // vars: s = 도형과 그룹 수, d = 그룹 깊이
   // basis: estimate

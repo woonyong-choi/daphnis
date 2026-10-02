@@ -4,6 +4,8 @@ import { orderByFlow } from './order.js';
 import { addPort, endpoint } from './ports.js';
 
 const SIZE = values.size;
+/** 가장 바깥 그룹의 내부 이름. 원본 이름은 소문자, 숫자, `-`뿐이라 `_`가 든 이 이름과 부딪히지 않는다. */
+export const ROOT = '__root';
 
 // cost: time O(s + e·d), heap O(s + e·d), stack O(1)
 // vars: s = 도형 수, e = 선 수, d = 그룹 깊이
@@ -13,7 +15,7 @@ export function buildModel(figure, sizes) {
   const containers = buildContainers(figure);
   const nodes = new Map();
   for (const n of figure.nodes) {
-    const parent = n.parent ?? 'root';
+    const parent = n.parent ?? ROOT;
     nodes.set(n.id, { ...n, size: sizes.get(n.id), ports: [], parent, direction: containers.get(parent).direction });
     containers.get(parent).children.push(n.id);
   }
@@ -32,9 +34,9 @@ export function buildModel(figure, sizes) {
 // vars: g = 그룹 수, d = 그룹 깊이
 // basis: estimate
 function buildContainers(figure) {
-  const containers = new Map([['root', { id: 'root', direction: figure.direction, parent: undefined, children: [], edges: [], ports: [] }]]);
-  for (const g of figure.groups) containers.set(g.id, { id: g.id, label: g.label, line: g.line, direction: undefined, own: g.direction, parent: g.parent ?? 'root', children: [], edges: [], ports: [] });
-  for (const g of figure.groups) containers.get(g.parent ?? 'root').children.push(g.id);
+  const containers = new Map([[ROOT, { id: ROOT, direction: figure.direction, parent: undefined, children: [], edges: [], ports: [] }]]);
+  for (const g of figure.groups) containers.set(g.id, { id: g.id, label: g.label, line: g.line, direction: undefined, own: g.direction, parent: g.parent ?? ROOT, children: [], edges: [], ports: [] });
+  for (const g of figure.groups) containers.get(g.parent ?? ROOT).children.push(g.id);
   for (const c of containers.values()) c.direction = c.own ?? directionOf(c.parent, containers, figure);
   for (const c of containers.values()) c.parentDirection = c.parent ? containers.get(c.parent).direction : undefined;
   return containers;
@@ -60,9 +62,9 @@ function addStateMarks(figure, nodes, containers) {
   const marks = [...(figure.start ? [{ id: '__start', shape: 'start', from: '__start', to: figure.start.id }] : []), ...figure.finals.map((f, i) => ({ id: `__final${i}`, shape: 'final', from: f.id, to: `__final${i}` }))];
   marks.forEach((m, i) => {
     const size = { w: SIZE['state-dot'], h: SIZE['state-dot'], marginTop: 0, marginBottom: 0, labelLines: [], subLines: [] };
-    nodes.set(m.id, { id: m.id, shape: m.shape, label: '', size, ports: [], parent: 'root', direction: figure.direction });
-    if (m.shape === 'start') containers.get('root').children.unshift(m.id);
-    else containers.get('root').children.push(m.id);
+    nodes.set(m.id, { id: m.id, shape: m.shape, label: '', size, ports: [], parent: ROOT, direction: figure.direction });
+    if (m.shape === 'start') containers.get(ROOT).children.unshift(m.id);
+    else containers.get(ROOT).children.push(m.id);
     figure.markEdges.push({ from: m.from, to: m.to, label: undefined, quiet: false, dashed: false, index: `mark${i}`, isMark: true, isStart: m.shape === 'start' });
   });
 }
@@ -74,7 +76,7 @@ function addStateMarks(figure, nodes, containers) {
 function splitEdge(edge, nodes, containers) {
   const up = chain(edge.from, nodes, containers);
   const down = chain(edge.to, nodes, containers);
-  const common = up.find((c) => down.includes(c)) ?? 'root';
+  const common = up.find((c) => down.includes(c)) ?? ROOT;
   const pieces = [];
   let from = endpoint(edge.from, { way: 'out', edge }, nodes);
   for (const g of up.slice(0, up.indexOf(common))) {
