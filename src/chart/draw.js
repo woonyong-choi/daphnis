@@ -1,6 +1,6 @@
 // 여섯 종류 차트를 SVG 조각으로 그린다. 계열 요소는 class `cs-{계열 번호}`, 행 요소는 `cr-{행 번호}`를 달아 재생이 드러내기와 밝히기를 건다.
 import { drawBars } from './bar.js';
-import { drawBoxes } from './box.js';
+import { drawBoxes, MEDIAN_LABEL } from './box.js';
 import { drawDumbbells } from './dumbbell.js';
 import { drawHeatmap } from './heatmap.js';
 import { drawHeader } from './labels.js';
@@ -36,5 +36,5 @@ export function chartText(figure) {
   const { chart } = figure;
   return [figure.title, figure.subtitle, chart.x, chart.y, chart.missing ?? '비교 없음', ...chart.series.map((s) => s.label), ...chart.rules.map((x) => x.label), ...chart.rows.flatMap((row) => [row.label ?? '', row.row ?? '', row.col ?? ''])]
     .filter(Boolean)
-    .join('') + '0123456789.kM−+%-';
+    .join('') + `0123456789.kM−+%-${figure.chartType === 'box' ? MEDIAN_LABEL : ''}`;
 }

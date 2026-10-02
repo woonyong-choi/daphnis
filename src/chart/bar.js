@@ -5,7 +5,7 @@ import { values } from '../tokens.js';
 import { finishRowChart, rowValueScale } from './axis.js';
 import { inkGroup, labelText, valueText } from './labels.js';
 import { BAR, SPACE, TEXT, seriesColor } from './metrics.js';
-import { formatNumber } from './scale.js';
+import { valueFormat } from './scale.js';
 import { presentSlots, slotMiddle } from './slots.js';
 
 // cost: time O(r·s), heap O(r·s), stack O(1)
@@ -13,13 +13,22 @@ import { presentSlots, slotMiddle } from './slots.js';
 // basis: estimate
 // 값 글자가 가장 멀리 닿는 막대 끝(신뢰구간 high가 있으면 그 끝)과 값 글자 폭
 function valueReaches(chart) {
+  const formats = seriesFormats(chart);
   return chart.rows.flatMap((row) =>
     chart.series.flatMap((s, i) => {
       const v = row.values[s.id];
       if (typeof v !== 'number') return [];
-      return [{ value: Math.max(v, row.values[`${s.id}.high`] ?? 0), extra: SPACE['3'] + measure(formatNumber(v), TEXT['11'], i === 0 ? 'numSemibold' : 'num') }];
+      return [{ value: Math.max(v, row.values[`${s.id}.high`] ?? 0), extra: SPACE['3'] + measure(formats[i](v), TEXT['11'], i === 0 ? 'numSemibold' : 'num') }];
     }),
   );
+}
+
+// cost: time O(r·s), heap O(s), stack O(1)
+// vars: r = 행 수, s = 계열 수
+// basis: estimate
+// 계열마다 값 글자 만드는 함수. 계열 안은 같은 소수 자릿수다.
+function seriesFormats(chart) {
+  return chart.series.map((s) => valueFormat(chart.rows.map((row) => row.values[s.id]).filter((v) => typeof v === 'number'), chart.decimals));
 }
 
 // cost: time O(r·s), heap O(1), stack O(1)
@@ -51,7 +60,7 @@ function confidenceLine({ x1, x2, cy }) {
 // basis: estimate
 /** 계열 s 막대 하나의 막대와 신뢰구간 막대기 조각, 값 글자 조각 */
 function barMark(ctx, row, at) {
-  const { chart, scale, plotX } = ctx;
+  const { chart, scale, plotX, formats } = ctx;
   const { k, i, by } = at;
   const cy = by + BAR / 2;
   const s = chart.series[i];
@@ -62,7 +71,7 @@ function barMark(ctx, row, at) {
   const reach = high !== undefined ? scale.at(high) : end;
   const ci = high !== undefined ? confidenceLine({ x1: scale.at(low), x2: reach, cy }) : '';
   const rect = `<rect x="${r(plotX)}" y="${r(by)}" width="${r(Math.max(SPACE['1'], end - plotX))}" height="${BAR}" rx="${values.radius.sm}" fill="${seriesColor(chart, i)}" class="grow"/>`;
-  const text = valueText({ x: Math.max(end, reach) + SPACE['3'], cy }, formatNumber(v), `chart-value${i === 0 ? ' ours' : ''} late`);
+  const text = valueText({ x: Math.max(end, reach) + SPACE['3'], cy }, formats[i](v), `chart-value${i === 0 ? ' ours' : ''} late`);
   return { mark: `<g class="cr-${k}"><g class="cs-${i}">${rect}${ci}</g></g>`, value: inkGroup(k, text, i) };
 }
 
@@ -88,7 +97,7 @@ export function drawBars(figure, top) {
   const { chart } = figure;
   const { scale, plotX } = barScale(chart);
   const groupH = chart.series.length * BAR + (chart.series.length - 1) * SPACE['2'];
-  const ctx = { chart, scale, plotX, top, pitch: groupH + SPACE['11'] };
+  const ctx = { chart, scale, plotX, top, pitch: groupH + SPACE['11'], formats: seriesFormats(chart) };
   const rows = chart.rows.map((row, k) => barRow(ctx, row, k));
   const bottom = top + chart.rows.length * ctx.pitch - SPACE['11'];
   return finishRowChart(chart, { parts: rows.flatMap((x) => x.marks), over: rows.flatMap((x) => x.values), scale, top, bottom });

@@ -22,7 +22,7 @@ const GROWS = [
  * @param drawn 차트 그리기 결과(dotAts, rowKeys, dimsInkColor)
  */
 export function animateChart(ctx, seriesIds, drawn) {
-  seriesIds.forEach((id, s) => animateSeries(ctx, id, s, drawn.dotAts));
+  seriesIds.forEach((id, s) => animateSeries(ctx, { id, s }, drawn.dotAts));
   animateLabelShifts(ctx, drawn.rowKeys);
   animateDimming(ctx, drawn);
 }
@@ -30,8 +30,8 @@ export function animateChart(ctx, seriesIds, drawn) {
 // cost: time O(b + a), heap O(a), stack O(1)
 // vars: b = 박자 수, a = 점이 나타나는 서로 다른 시각 수
 // basis: estimate
-// 계열 s: 보임 keyframes와 자라는 keyframes. 드러내는 박자가 없으면 보임만 건다.
-function animateSeries({ clock, segs, growMs, css, windows }, id, s, dotAts) {
+// 계열 { id, s }(s는 계열 번호): 보임 keyframes와 자라는 keyframes. 드러내는 박자가 없으면 보임만 건다.
+function animateSeries({ clock, segs, growMs, css, windows }, { id, s }, dotAts) {
   const show = windows(segs.map((g) => g.series.includes(id)), { on: 'opacity: 1', off: 'opacity: 0' });
   const reveal = segs.find((g) => g.growing.includes(id));
   css.push(`.fl .cs-${s} { animation: ${show} ${clock.duration} infinite linear; }`);
@@ -41,13 +41,13 @@ function animateSeries({ clock, segs, growMs, css, windows }, id, s, dotAts) {
   const ease = `animation-timing-function: ${tokens.easing.reveal}`;
   const rule = ([key, from, to, cls]) =>
     `@keyframes ${key}${s} { 0%,${a} { ${from}; ${ease} } ${b},100% { ${to} } }\n.fl .cs-${s} ${cls}, .fl .cs-${s}${cls} { animation: ${key}${s} ${clock.duration} infinite; }`;
-  css.push([...GROWS.map(rule), lateFade(clock, s, [half, b], ease)].join('\n'));
+  css.push([...GROWS.map(rule), lateFade({ clock, s, ease }, [half, b])].join('\n'));
   // 선 차트 점은 선이 닿는 시각(data-at × 자라는 시간)에 나타난다. 시각 계산은 chart/line.js arrivals가 끝냈다.
   for (const at of dotAts) css.push(dotFade({ clock, s, ease }, reveal.t0 + at * growMs, at));
 }
 
 // 값 글자와 점이 자라는 시간의 뒤 절반에 나타난다.
-function lateFade(clock, s, [half, end], ease) {
+function lateFade({ clock, s, ease }, [half, end]) {
   return `@keyframes f${s} { 0%,${half} { opacity: 0; ${ease} } ${end},100% { opacity: 1 } }\n.fl .cs-${s} .late, .fl .cs-${s} .pop, .fl .cs-${s}.pop { animation: f${s} ${clock.duration} infinite; }`;
 }
 

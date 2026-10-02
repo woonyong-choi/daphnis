@@ -23,6 +23,9 @@ export const KINDS = table({
   chart: { ...V1, argument: 'chartType', isArgumentRequired: true },
 });
 
+/** `decimals` 머리 줄이 받는 소수 자릿수의 상한. 값 글자의 자동 자릿수도 이 값까지만 쓴다. */
+export const DECIMALS_MAX = 6;
+
 const ALL_KINDS = Object.keys(KINDS);
 const FLOW_SEQUENCE = ['flow', 'sequence'];
 
@@ -71,6 +74,7 @@ export const STATEMENTS = table({
   x: { ...V1, section: 'header', kinds: ['chart'] },
   y: { ...V1, section: 'header', kinds: ['chart'] },
   scale: { ...V1, section: 'header', kinds: ['chart'], positional: ['scale'] },
+  decimals: { ...V1, section: 'header', kinds: ['chart'] },
   person: { ...V1, section: 'declare', kinds: FLOW_SEQUENCE, node: { hasSub: false } },
   box: { ...V1, section: 'declare', kinds: FLOW_SEQUENCE, node: { hasSub: true } },
   external: { ...V1, section: 'declare', kinds: FLOW_SEQUENCE, node: { hasSub: true } },

@@ -4,7 +4,7 @@ import { centerBaseline, roundCoord as r } from '../text.js';
 import { finishRowChart, rowValueScale } from './axis.js';
 import { inkGroup, labelText, valueText } from './labels.js';
 import { DOT, ROW, SIZE, SPACE, TEXT, WIDTH, PAD, seriesColor } from './metrics.js';
-import { formatChange, formatNumber } from './scale.js';
+import { formatChange, valueFormat } from './scale.js';
 
 const ARROW_MIN = SIZE['chart-arrow-min'];
 
@@ -15,17 +15,26 @@ function boundsOf(row, s) {
   return [`${s.id}.low`, `${s.id}.high`].map((key) => row.values[key]).filter((v) => v !== undefined);
 }
 
+// cost: time O(r), heap O(1), stack O(1)
+// vars: r = 행 수
+// basis: estimate
+// 두 계열의 값 글자 만드는 함수. 계열 안은 같은 소수 자릿수다.
+function seriesFormats(chart) {
+  return chart.series.map((s) => valueFormat(chart.rows.map((row) => row.values[s.id]).filter((v) => typeof v === 'number'), chart.decimals));
+}
+
 // cost: time O(r), heap O(r), stack O(1)
 // vars: r = 행 수
 // basis: estimate
 // 덤벨 행마다 오른쪽 끝에 닿는 요소. 값 글자는 두 점과 두 범위 바깥 끝 옆에 놓이고, 그 오른쪽에 바뀐 비율 글자가 오른쪽 끝에 붙는다. 값 글자와 비율 글자 사이는 한 칸 띄운다.
 function dumbbellReach(chart, unit) {
   const [first, second] = chart.series;
+  const [formatFirst, formatSecond] = seriesFormats(chart);
   return chart.rows.flatMap((row) => {
     const [before, after] = [row.values[first.id], row.values[second.id]];
     const change = formatChange(before, after);
     const isAfterRight = unit.at(after) >= unit.at(before);
-    const rightText = measure(formatNumber(isAfterRight ? after : before), TEXT['11'], isAfterRight ? 'numSemibold' : 'num');
+    const rightText = measure((isAfterRight ? formatSecond(after) : formatFirst(before)), TEXT['11'], isAfterRight ? 'numSemibold' : 'num');
     const tail = SPACE['3'] + rightText + (change ? SPACE['6'] + measure(change, TEXT['12'], 'numSemibold') : 0);
     const bounds = [first, second].flatMap((s) => boundsOf(row, s));
     return [...[before, after].map((value) => ({ value, extra: DOT + tail })), ...bounds.map((value) => ({ value, extra: tail }))];
@@ -81,7 +90,7 @@ function valueTextEdges(ctx, row, [x1, x2]) {
 // basis: estimate
 // 행 k의 SVG: 이름, 두 계열의 도형(범위, 점, 화살표), 두 계열의 글자(값, 바뀐 비율). 글자가 도형 위에 얹힌다.
 function dumbbellRow(ctx, row, k) {
-  const { chart, scale, cy } = ctx;
+  const { chart, scale, cy, formats } = ctx;
   const [first, second] = chart.series;
   const [before, after] = [row.values[first.id], row.values[second.id]];
   const xs = [scale.at(before), scale.at(after)];
@@ -90,7 +99,7 @@ function dumbbellRow(ctx, row, k) {
   const side = (x) => (x === left ? 'end' : 'start');
   const ratio = `<text x="${WIDTH - PAD}" y="${r(centerBaseline(cy, TEXT['12']))}" class="chart-ratio late">${formatChange(before, after)}</text>`;
   const marks = `<g class="cr-${k}"><g class="cs-0">${rangeBar(ctx, row, 0)}<circle cx="${r(xs[0])}" cy="${r(cy)}" r="${DOT}" class="chart-before pop"/></g><g class="cs-1">${rangeBar(ctx, row, 1)}${endMark(ctx, xs)}</g></g>`;
-  const texts = `<g class="cr-${k} ink"><g class="cs-0">${valueText({ x: firstX, cy }, formatNumber(before), `chart-value first late ${side(firstX)}`)}</g><g class="cs-1">${valueText({ x: secondX, cy }, formatNumber(after), `chart-value second late ${side(secondX)}`)}${ratio}</g></g>`;
+  const texts = `<g class="cr-${k} ink"><g class="cs-0">${valueText({ x: firstX, cy }, formats[0](before), `chart-value first late ${side(firstX)}`)}</g><g class="cs-1">${valueText({ x: secondX, cy }, formats[1](after), `chart-value second late ${side(secondX)}`)}${ratio}</g></g>`;
   return inkGroup(k, labelText(row.label, cy, 'chart-label')) + marks + texts;
 }
 
@@ -101,6 +110,7 @@ function dumbbellRow(ctx, row, k) {
 export function drawDumbbells(figure, top) {
   const { chart } = figure;
   const { scale } = dumbbellScale(chart);
-  const parts = chart.rows.map((row, k) => dumbbellRow({ chart, scale, cy: top + k * ROW + ROW / 2 }, row, k));
+  const formats = seriesFormats(chart);
+  const parts = chart.rows.map((row, k) => dumbbellRow({ chart, scale, cy: top + k * ROW + ROW / 2, formats }, row, k));
   return finishRowChart(chart, { parts, scale, top, bottom: top + chart.rows.length * ROW });
 }

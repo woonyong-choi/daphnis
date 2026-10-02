@@ -1,7 +1,7 @@
 // 원본 전체를 읽어 그림 모형(figure)으로 만든다. 줄을 머리, 선언, 시간 흐름 세 부분으로 나누고 문장마다 맡을 함수를 고른다.
 import { readChartDeclaration } from './chart.js';
 import { closeGroup, readColumn, readDeclaration, readEdge } from './declare.js';
-import { DEFAULT_VERSION, KINDS, STATEMENTS, VALUES, VERSION, valueNames } from './grammar.js';
+import { DECIMALS_MAX, DEFAULT_VERSION, KINDS, STATEMENTS, VALUES, VERSION, valueNames } from './grammar.js';
 import { tokenizeLine } from './lexer.js';
 import { normalizeKind, normalizeStatement } from './normalize.js';
 import { createProblems } from './problems.js';
@@ -101,7 +101,7 @@ function emptyFigure() {
     edges: [],
     start: undefined,
     finals: [],
-    chart: { series: [], rules: [], missing: undefined, data: undefined, x: undefined, y: undefined, scale: VALUES.scale.default, scaleLine: undefined, rows: [], links: [] },
+    chart: { series: [], rules: [], missing: undefined, data: undefined, x: undefined, y: undefined, scale: VALUES.scale.default, scaleLine: undefined, decimals: undefined, rows: [], links: [] },
     steps: [],
   };
 }
@@ -239,6 +239,10 @@ function readHeader({ tokens, line }, { figure, problems }) {
     const ratio = Number(value?.value);
     if (value?.type !== 'word' || !NUMBER_PATTERN.test(value.value) || !(ratio > 0)) problems.error(line, 'write aspect as a positive number such as 1.6');
     else figure.aspect = ratio;
+  } else if (key === 'decimals') {
+    const places = Number(value?.value);
+    if (value?.type !== 'word' || !Number.isInteger(places) || places < 0 || places > DECIMALS_MAX) problems.error(line, `write decimals as a whole number from 0 to ${DECIMALS_MAX}, such as decimals 2`);
+    else figure.chart.decimals = places;
   } else if (key === 'scale') {
     if (!valueNames('scale').includes(value?.value)) problems.error(line, `scale is ${valueNames('scale').map((v) => `"${v}"`).join(' or ')}`);
     else Object.assign(figure.chart, { scale: value.value, scaleLine: line });

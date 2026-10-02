@@ -1,4 +1,5 @@
 // 차트 축 눈금, 숫자 표기, 바뀐 비율. 규칙은 docs/design/charts.md의 그리기 절이다.
+import { DECIMALS_MAX } from '../source/grammar.js';
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -24,6 +25,27 @@ export function formatNumber(value) {
   const inK = roundHalfAway(value / 1000, 1);
   if (Math.abs(inK) < 1000) return `${inK}k`;
   return `${roundHalfAway(value / 1e6, 1)}M`;
+}
+
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = 값 수
+// basis: estimate
+/** 값 목록에 쓰인 가장 긴 소수 자릿수(상한 DECIMALS_MAX). 1000 이상 값은 k, M 표기라 세지 않는다. */
+export function decimalPlaces(list) {
+  const places = list.filter((v) => Math.abs(v) < 1000).map((v) => (String(Number(v.toPrecision(12))).split('.')[1] ?? '').length);
+  return Math.min(DECIMALS_MAX, Math.max(0, ...places));
+}
+
+// cost: time O(n), heap O(1), stack O(1)
+// vars: n = 값 수
+// basis: estimate
+/**
+ * 값 글자를 만드는 함수. 같은 목록(계열, 표)은 같은 소수 자릿수로 쓴다. 자릿수는 decimals(머리 줄)이고, 없으면 목록에 쓰인 가장 긴 소수 자릿수다.
+ * 1000 이상은 formatNumber(k, M)로 쓴다.
+ */
+export function valueFormat(list, decimals) {
+  const places = decimals ?? decimalPlaces(list);
+  return (value) => (Math.abs(value) >= 1000 ? formatNumber(value) : roundHalfAway(value, places).toFixed(places));
 }
 
 /** 덤벨 바뀐 비율 글자. 줄면 −, 늘면 +. 첫 값이 0이면 빈 글이다. */

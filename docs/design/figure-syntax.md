@@ -226,7 +226,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | 판 표기 | `mutoscope` | 모든 그림 | 판 1 |  |
 | 머리 | `title`, `subtitle`, `speed` | 모든 그림 | 판 1 |  |
 | 머리 | `aspect` | flow, state, data | 판 1 |  |
-| 머리 | `x`, `y`, `scale` | chart | 판 1 |  |
+| 머리 | `x`, `y`, `scale`, `decimals` | chart | 판 1 |  |
 | 선언 | `person`, `box`, `external`, `store` | flow, sequence | 판 1 |  |
 | 선언 | `decision` | flow | 판 1 |  |
 | 선언 | `state`, `start`, `final` | state | 판 1 |  |
