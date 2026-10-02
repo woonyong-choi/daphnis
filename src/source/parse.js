@@ -180,7 +180,7 @@ function isPlaced(word, { tokens, line }, ctx) {
 // 문장 하나의 부분(머리, 선언, 시간 흐름)을 정하고, 순서를 어기면 오류를 낸다.
 function readStatement(statement, ctx) {
   const { tokens, line } = statement;
-  const { figure, problems } = ctx;
+  const { problems } = ctx;
   if (ctx.table) {
     normalizeStatement(statement, { word: 'column', isHeadWord: false }, ctx);
     readColumn(statement, ctx);
@@ -206,17 +206,24 @@ function readStatement(statement, ctx) {
   const section = STATEMENTS[word]?.section ?? 'declare';
   if (!isPlaced(word, statement, ctx)) return;
   ctx.section = section;
+  readByPart({ word, section }, statement, ctx);
+}
+
+// cost: time O(t), heap O(t), stack O(1)
+// vars: t = 문장 낱말 수
+// basis: estimate
+// 정해진 부분(머리, 시간 흐름, 선, 차트 선언, 선언)의 읽는 함수로 보낸다.
+function readByPart({ word, section }, statement, ctx) {
+  const { line } = statement;
   if (section === 'header') {
-    if (ctx.headers.has(word)) problems.error(line, `"${word}" is written twice (line ${ctx.headers.get(word)})`);
+    if (ctx.headers.has(word)) ctx.problems.error(line, `"${word}" is written twice (line ${ctx.headers.get(word)})`);
     ctx.headers.set(word, line);
     readHeader(statement, ctx);
-  }
-  else if (section === 'timeline') {
+  } else if (section === 'timeline') {
     readTimeline(word, statement, ctx);
     ctx.previous = word;
-  }
-  else if (word === 'edge') readEdge(statement, ctx);
-  else if (figure.kind === 'chart') readChartDeclaration(statement, ctx);
+  } else if (word === 'edge') readEdge(statement, ctx);
+  else if (ctx.figure.kind === 'chart') readChartDeclaration(statement, ctx);
   else readDeclaration(statement, ctx);
 }
 

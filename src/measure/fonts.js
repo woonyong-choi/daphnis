@@ -141,9 +141,9 @@ function toMarkup(chars) {
 // basis: estimate
 /**
  * width 안에 들어가게 띄어쓰기 자리로 줄을 나눈다. 띄어쓰기 없는 긴 낱말은 글자 단위로 나눈다.
- * 백틱 코드 구간이 줄 사이에 걸치면 줄마다 백틱을 닫고 다시 연다. 돌려주는 줄은 짝이 맞는 백틱 표시 글이다.
+ * 글자 모양은 { size, face }다(STYLE 항목을 그대로 넘긴다). 백틱 코드 구간이 줄 사이에 걸치면 줄마다 백틱을 닫고 다시 연다. 돌려주는 줄은 짝이 맞는 백틱 표시 글이다.
  */
-export function wrap(text, width, size, face = 'regular') {
+export function wrap(text, width, { size, face = 'regular' }) {
   const chars = codeParts(text).flatMap((part) => [...part.text].map((c) => ({ c, code: part.code })));
   const words = [{ sep: undefined, chars: [] }];
   for (const ch of chars) {

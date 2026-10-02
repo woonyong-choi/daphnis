@@ -27,9 +27,9 @@ export async function toSvg(result, { isStatic = false, name = '' } = {}) {
   const { figure, timeline } = result;
   const glyphs = createGlyphSet();
   const animator = isStatic || !timeline.segs.length ? staticAnimator() : createAnimator(timeline);
-  const content = result.chart ? drawChartBody(result, animator, glyphs, isStatic) : drawFigureBody(result, animator, glyphs);
+  const content = result.chart ? drawChartBody(result, { animator, glyphs, isStatic }) : drawFigureBody(result, animator, glyphs);
   const { viewWidth: width, shownWidth, scale } = fitCanvas(content.width, 0);
-  const captions = isStatic ? { svg: '', height: 0 } : drawCaptions(timeline, animator, width, content.height, glyphs);
+  const captions = isStatic ? { svg: '', height: 0 } : drawCaptions(timeline, { animator, glyphs }, { width, top: content.height });
   const height = content.height + captions.height;
   const shownHeight = height * scale;
   const fonts = await embedFonts(glyphs.used);
@@ -56,7 +56,7 @@ ${captions.svg}
 // 구조, 상태, 데이터, 순서 그림 본문과 점
 function drawFigureBody(result, animator, glyphs) {
   const { scene, timeline } = result;
-  const body = drawScene(scene, (kind, i, extra) => animator.decorate(kind, i, extra, scene), glyphs);
+  const body = drawScene(scene, animator.decorate(scene), glyphs);
   const packets = timeline.segs.flatMap((seg, si) => seg.hops.map((hop, hi) => animator.packet({ seg, hop, name: `p${si}-${hi}` }, glyphs)));
   return { svg: `${body}\n${packets.join('\n')}`, width: scene.width, height: scene.height, className: '' };
 }
@@ -65,7 +65,7 @@ function drawFigureBody(result, animator, glyphs) {
 // vars: c = 차트 글자 수
 // basis: estimate
 // 차트 본문. 시간 흐름이 없으면 되풀이 class를 단다.
-function drawChartBody(result, animator, glyphs, isStatic) {
+function drawChartBody(result, { animator, glyphs, isStatic }) {
   const { figure, chart, timeline } = result;
   for (const face of CHART_FACES) glyphs.add(chartText(figure), face);
   const isLoop = !isStatic && !timeline.segs.length;
@@ -77,11 +77,11 @@ function drawChartBody(result, animator, glyphs, isStatic) {
 // vars: c = 서로 다른 설명 수, n = 설명 글자 수, out = 만든 SVG 글자 수
 // basis: estimate
 // 그림 아래에 단계 이름과 설명을 박자에 맞춰 바꿔 보인다.
-function drawCaptions(timeline, animator, width, top, glyphs) {
+function drawCaptions(timeline, { animator, glyphs }, { width, top }) {
   if (!timeline.segs.length) return { svg: '', height: 0 };
   const captions = [...new Set(timeline.segs.map((s) => s.caption))].filter(Boolean);
   const wrapWidth = width - SPACE['30'];
-  const wrapped = new Map(captions.map((c) => [c, wrap(c, wrapWidth, CAPTION.size, CAPTION.face)]));
+  const wrapped = new Map(captions.map((c) => [c, wrap(c, wrapWidth, CAPTION)]));
   const lines = Math.max(1, ...[...wrapped.values()].map((l) => l.length));
   // 설명 글 아래 여백은 그림 내용 위 여백(그림 둘레 여백 space.14)과 같다. 마지막 줄 기준선에서 글자 내림 4를 더한 만큼 아래에 둔다.
   const height = captions.length ? SPACE['22'] + (lines - 1) * LINE['20'] + SPACE['2'] + SPACE['14'] : SPACE['15'];
@@ -101,5 +101,5 @@ function drawCaptions(timeline, animator, width, top, glyphs) {
 
 // 멈춘 SVG: 모든 선과 도형을 보이고 카드는 비운다. 움직임 class는 없다.
 function staticAnimator() {
-  return { css: [], decorate: () => '', packet: () => '', windows: () => '', chart: () => {} };
+  return { css: [], decorate: () => () => '', packet: () => '', windows: () => '', chart: () => {} };
 }

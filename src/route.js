@@ -31,7 +31,7 @@ export function flattenRoute(points, radius = values.radius.route) {
   const flat = [pts[0]];
   for (let i = 1; i < pts.length - 1; i++) {
     const { from, via, to } = cornerAt(pts, i, radius);
-    for (let k = 0; k <= CURVE_STEPS; k++) flat.push(quadAt(from, via, to, k / CURVE_STEPS));
+    for (let k = 0; k <= CURVE_STEPS; k++) flat.push(quadAt({ from, via, to }, k / CURVE_STEPS));
   }
   flat.push(pts.at(-1));
   return flat;
@@ -45,7 +45,7 @@ function cornerAt(pts, i, radius) {
 }
 
 // 2차 베지어 곡선 위 t 지점
-function quadAt(from, via, to, t) {
+function quadAt({ from, via, to }, t) {
   const [u, w] = [(1 - t) ** 2, t * t];
   return { x: u * from.x + 2 * (1 - t) * t * via.x + w * to.x, y: u * from.y + 2 * (1 - t) * t * via.y + w * to.y };
 }

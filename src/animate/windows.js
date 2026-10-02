@@ -19,23 +19,7 @@ const SWAP_MS = values.duration['caption-fade'];
  */
 export function createWindows(clock, segs, css) {
   const names = new Map();
-
-  // cost: time O(b), heap O(b), stack O(1)
-  // vars: b = 구간 수
-  // basis: estimate
-  // 구간 [시작, 끝, CSS] 목록을 keyframes 본문으로. 앞 구간과 값이 다르면 구간 시작에서 앞 값을 잡고 fadeMs 동안 새 값으로 서서히 간다(재생기의 transition과 같다).
-  // 한 바퀴의 첫 구간은 이전 값이 없어 바로 시작한다.
-  function fadeFrames(spans, fadeMs = FADE_MS) {
-    const { percent } = clock;
-    return spans
-      .map(([start, end, value], i) => {
-        const last = Math.max(start, end - EPSILON_MS);
-        const settle = Math.min(start + fadeMs, last);
-        if (i === 0 || spans[i - 1][2] === value || settle <= start) return `${percent(start)},${percent(last)} { ${value} }`;
-        return `${percent(start)} { ${spans[i - 1][2]} } ${percent(settle)},${percent(last)} { ${value} }`;
-      })
-      .join(' ');
-  }
+  const fadeFrames = (spans, fadeMs = FADE_MS) => framesOf(spans, clock.percent, fadeMs);
 
   // cost: time O(b), heap O(b), stack O(1)
   // vars: b = 박자 수
@@ -46,11 +30,7 @@ export function createWindows(clock, segs, css) {
    * @param css { on, off, isSwap }. 켜짐일 때와 꺼짐일 때의 CSS 선언. isSwap이면 앞 글이 다 사라진 뒤 이 글이 나타난다(순차 페이드)
    */
   function windows(states, { on: onCss, off: offCss, isSwap = false }) {
-    const flat = segs.flatMap((s, i) => {
-      const st = typeof states[i] === 'object' ? states[i] : { before: states[i], after: states[i], at: 0 };
-      const at = s.t0 + st.at;
-      return st.at > 0 && st.before !== st.after ? [[s.t0, at, st.before], [at, s.t1, st.after]] : [[s.t0, s.t1, st.after]];
-    });
+    const flat = spansOf(states, segs);
     const spans = isSwap ? delayEntrances(flat, SWAP_MS) : flat;
     const key = `${isSwap ? 'swap|' : ''}${onCss}|${offCss}|${spans.map(([start, , on]) => `${Math.round(start)}${on ? 1 : 0}`).join('')}`;
     if (!names.has(key)) {
@@ -63,6 +43,34 @@ export function createWindows(clock, segs, css) {
   }
 
   return { windows, fadeFrames };
+}
+
+// cost: time O(b), heap O(b), stack O(1)
+// vars: b = 구간 수
+// basis: estimate
+// 구간 [시작, 끝, CSS] 목록을 keyframes 본문으로. 앞 구간과 값이 다르면 구간 시작에서 앞 값을 잡고 fadeMs 동안 새 값으로 서서히 간다(재생기의 transition과 같다).
+// 한 바퀴의 첫 구간은 이전 값이 없어 바로 시작한다.
+function framesOf(spans, percent, fadeMs) {
+  return spans
+    .map(([start, end, value], i) => {
+      const last = Math.max(start, end - EPSILON_MS);
+      const settle = Math.min(start + fadeMs, last);
+      if (i === 0 || spans[i - 1][2] === value || settle <= start) return `${percent(start)},${percent(last)} { ${value} }`;
+      return `${percent(start)} { ${spans[i - 1][2]} } ${percent(settle)},${percent(last)} { ${value} }`;
+    })
+    .join(' ');
+}
+
+// cost: time O(b), heap O(b), stack O(1)
+// vars: b = 박자 수
+// basis: estimate
+// 박자별 켜짐을 [시작, 끝, 켜짐] 구간으로. 박자 안에서 켜짐이 바뀌면 그 박자는 두 구간이다.
+function spansOf(states, segs) {
+  return segs.flatMap((s, i) => {
+    const st = typeof states[i] === 'object' ? states[i] : { before: states[i], after: states[i], at: 0 };
+    const at = s.t0 + st.at;
+    return st.at > 0 && st.before !== st.after ? [[s.t0, at, st.before], [at, s.t1, st.after]] : [[s.t0, s.t1, st.after]];
+  });
 }
 
 // cost: time O(b), heap O(b), stack O(1)

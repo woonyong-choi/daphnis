@@ -24,7 +24,7 @@ export function layoutSequence(figure, sizes) {
   const index = new Map(participants.map((p, i) => [p.id, i]));
   const messages = figure.steps.flatMap((s) => s.beats).filter((b) => b.hops.length);
   const noteBoxes = messages.flatMap((beat, m) => beat.notes.map((n) => ({ ...n, m, ...sizeNote(n.text) })));
-  const centers = placeColumns(participants, sizes, messages, noteBoxes, index);
+  const centers = placeColumns({ participants, sizes, index }, messages, noteBoxes);
   const headH = Math.max(...participants.map((p) => sizes.get(p.id).h + sizes.get(p.id).marginTop + sizes.get(p.id).marginBottom));
   const items = participants.map((p, i) => {
     const size = sizes.get(p.id);
@@ -48,7 +48,7 @@ function layoutRows(messages, noteBoxes, ctx) {
   const edges = [];
   const notes = [];
   messages.forEach((beat, m) => {
-    const row = layoutRow(beat, noteBoxes.filter((n) => n.m === m), ctx, { m, y });
+    const row = layoutRow(beat, noteBoxes.filter((n) => n.m === m), { ...ctx, m, y });
     edges.push(row.edge);
     notes.push(...row.notes);
     y += row.height;
@@ -60,7 +60,7 @@ function layoutRows(messages, noteBoxes, ctx) {
 // vars: n = 행의 메모 수
 // basis: estimate
 // 한 행. 메모가 화살표나 그 라벨과 가로로 겹치면 메모를 위에, 화살표와 라벨을 그 아래에 쌓는다. 겹치지 않으면 한 높이에 나란히 둔다.
-function layoutRow(beat, rowNotes, { index, centers }, { m, y }) {
+function layoutRow(beat, rowNotes, { index, centers, m, y }) {
   const hop = beat.hops[0];
   const [a, b] = [index.get(hop.from), index.get(hop.to)];
   const isSelf = a === b;
@@ -96,7 +96,7 @@ function noteX(note, center, toRight) {
 // vars: p = 참여자 수, m = 메시지 수
 // basis: estimate
 // 왼쪽 열부터 가운데 x를 정한다. 이웃 참여자 너비 절반의 합, 건너는 메시지 라벨 폭, 메모와 자기 고리 폭을 모두 만족하는 가장 작은 간격이다.
-function placeColumns(participants, sizes, messages, noteBoxes, index) {
+function placeColumns({ participants, sizes, index }, messages, noteBoxes) {
   const half = (i) => sizes.get(participants[i].id).w / 2;
   const rightNeed = participants.map(() => 0);
   const leftNeed = participants.map(() => 0);
@@ -127,7 +127,7 @@ function placeColumns(participants, sizes, messages, noteBoxes, index) {
 // basis: estimate
 // 메모 상자 크기. 너비 NOTE_MAX에서 줄을 나눈다.
 function sizeNote(text) {
-  const lines = wrap(text, NOTE_MAX - NOTE_PAD * 2, STYLE.row.size);
+  const lines = wrap(text, NOTE_MAX - NOTE_PAD * 2, STYLE.row);
   const w = Math.max(...lines.map((l) => measure(l, STYLE.row.size))) + NOTE_PAD * 2;
   return { lines, w, h: lines.length * STYLE.row.line + NOTE_PAD * 2 };
 }

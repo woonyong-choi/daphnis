@@ -29,13 +29,13 @@ const errorsFor = (source) => {
 };
 
 test('makeDiagnostic_has_severity_code_line_column_and_message', () => {
-  const diagnostic = makeDiagnostic('warning', 2, 'text', {}, ['a', '  box x']);
+  const diagnostic = makeDiagnostic({ severity: 'warning', line: 2, message: 'text' }, {}, ['a', '  box x']);
 
   assert.deepEqual(diagnostic, { severity: 'warning', code: 'syntax', line: 2, column: 3, message: 'text' });
 });
 
 test('makeDiagnostic_moves_the_check_prefix_into_the_code', () => {
-  const diagnostic = makeDiagnostic('error', 1, '[check 7] moving text leaves', { fix: { line: 1, column: 1, length: 1, text: 'x' } });
+  const diagnostic = makeDiagnostic({ severity: 'error', line: 1, message: '[check 7] moving text leaves' }, { fix: { line: 1, column: 1, length: 1, text: 'x' } });
 
   assert.deepEqual([diagnostic.code, diagnostic.message, diagnostic.fix.text], ['check-7', 'moving text leaves', 'x']);
 });

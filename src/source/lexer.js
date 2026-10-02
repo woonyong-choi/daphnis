@@ -23,7 +23,7 @@ export function tokenizeLine(text, line, problems) {
     } else if (c === '#') {
       break;
     } else if (c === '"') {
-      const quoted = readQuoted(text, i, line, problems);
+      const quoted = readQuoted(text, i, { line, problems });
       // 빈 글은 이름 없는 도형이나 빈 항목이 된다. 글이 필요 없으면 따옴표째 뺀다.
       if (quoted.value.trim() === '') problems.error(line, 'quoted text cannot be empty. Write the text or remove the quotes', { column: i + 1 });
       tokens.push({ type: 'text', value: quoted.value, column: i + 1, length: quoted.end - i });
@@ -35,7 +35,7 @@ export function tokenizeLine(text, line, problems) {
       while (i < text.length && !/\s|\uFEFF/.test(text[i]) && text[i] !== '"' && text[i] !== '#') i++;
       const word = text.slice(start, i);
       if (text[i] === '"' && word.endsWith('=')) {
-        const quoted = readQuoted(text, i, line, problems);
+        const quoted = readQuoted(text, i, { line, problems });
         if (quoted.value.trim() === '') problems.error(line, `${word.slice(0, -1)}= cannot be empty. Write the text or remove the option`, { column: start + 1 });
         tokens.push({ type: 'option', key: word.slice(0, -1), value: quoted.value, valueType: 'text', column: start + 1, length: quoted.end - start, valueColumn: i + 1 });
         i = quoted.end;
@@ -80,7 +80,7 @@ function pushWord(tokens, { word, line, column }, problems) {
 // vars: n = 따옴표 안 글자 수
 // basis: estimate
 // start의 따옴표부터 닫는 따옴표까지 읽는다. `\"`, `\\`만 받는다.
-function readQuoted(text, start, line, problems) {
+function readQuoted(text, start, { line, problems }) {
   let value = '';
   let j = start + 1;
   while (j < text.length && text[j] !== '"') {

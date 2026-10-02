@@ -29,7 +29,7 @@ function resolveName(name, { table, category, label, line, column, ctx }) {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /** 낱말 자리의 값을 값 목록과 맞춰 본다. 낱말(word)이 아니면 건드리지 않는다. */
-function resolveValue(token, list, line, ctx) {
+function resolveValue(token, list, { line, ctx }) {
   if (!list || token?.type !== 'word') return;
   token.value = resolveName(token.value, { table: VALUES[list].items, category: 'value', label: `${list} value`, line, column: token.column, ctx });
 }
@@ -38,17 +38,17 @@ function resolveValue(token, list, line, ctx) {
 // vars: t = 문장 낱말 수, s = 범위 수
 // basis: estimate
 // `키=값` 낱말의 키와 값을 지금 이름으로 바꾼다. 키는 `범위.키` 이름으로 찾는다.
-function resolveOptions(tokens, scopes, line, ctx) {
+function resolveOptions(tokens, scopes, at) {
   for (const token of tokens) {
     const scope = token.type === 'option' ? scopes.find((s) => entryOf(OPTIONS, `${s}.${token.key}`)) : undefined;
-    if (scope) resolveOption(token, scope, line, ctx);
+    if (scope) resolveOption(token, scope, at);
   }
 }
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 // 선택 사항 하나. 키가 폐기면 새 키로 바꾸고, 새 키의 값 목록으로 값을 맞춰 본다.
-function resolveOption(token, scope, line, ctx) {
+function resolveOption(token, scope, { line, ctx }) {
   const options = optionsOf(scope);
   token.key = resolveName(token.key, { table: options, category: 'option', label: 'option', line, column: token.column, ctx });
   const list = options[token.key]?.values;
@@ -70,9 +70,9 @@ export function normalizeStatement({ tokens, line }, { word, isHeadWord }, ctx) 
   if (isHeadWord) {
     resolved = resolveName(word, { table: STATEMENTS, category: 'statement', label: 'statement word', line, column: tokens[0].column, ctx });
     tokens[0].value = resolved;
-    STATEMENTS[resolved]?.positional?.forEach((list, i) => resolveValue(tokens[i + 1], list, line, ctx));
+    STATEMENTS[resolved]?.positional?.forEach((list, i) => resolveValue(tokens[i + 1], list, { line, ctx }));
   }
-  resolveOptions(tokens, STATEMENTS[resolved]?.scopes ?? [resolved], line, ctx);
+  resolveOptions(tokens, STATEMENTS[resolved]?.scopes ?? [resolved], { line, ctx });
   return resolved;
 }
 
@@ -83,5 +83,5 @@ export function normalizeKind({ tokens, line }, ctx) {
   const [kind, second] = tokens;
   if (kind.type !== 'word') return;
   kind.value = resolveName(kind.value, { table: KINDS, category: 'kind', label: 'kind', line, column: kind.column, ctx });
-  resolveValue(second, entryOf(KINDS, kind.value)?.argument, line, ctx);
+  resolveValue(second, entryOf(KINDS, kind.value)?.argument, { line, ctx });
 }

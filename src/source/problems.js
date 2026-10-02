@@ -17,12 +17,12 @@ export class FigureError extends Error {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /**
- * 진단 하나를 만든다. `[check N] ` 머리말이 있으면 code `check-N`으로 옮기고 메시지에서 뗀다.
+ * 진단 하나를 만든다. 첫 인자는 { severity, line, message }다. `[check N] ` 머리말이 있으면 code `check-N`으로 옮기고 메시지에서 뗀다.
  * column을 모르면 그 줄의 첫 글자 자리다(1부터. 줄 0은 0).
  * @param lines 원본 줄 목록. 기본 column을 구하는 데 쓴다
  * @param extra { code?, column?, fix? }. fix는 { line, column, length, text }로, 그 줄의 column부터 length글자를 text로 바꾼다
  */
-export function makeDiagnostic(severity, line, message, extra = {}, lines = []) {
+export function makeDiagnostic({ severity, line, message }, extra = {}, lines = []) {
   const check = CHECK_PREFIX.exec(message);
   const firstColumn = line > 0 ? (lines[line - 1] ?? '').search(/\S/) + 1 || 1 : 0;
   const diagnostic = {
@@ -50,7 +50,7 @@ export function createProblems(source = '') {
   const deprecations = [];
   // 같은 줄의 같은 메시지는 한 번만 남긴다. 한 줄의 낱말마다 같은 진단이 되풀이되는 일을 막기 위해서다.
   const collect = (list, severity) => (line, message, extra) => {
-    const diagnostic = makeDiagnostic(severity, line, message, extra, lines);
+    const diagnostic = makeDiagnostic({ severity, line, message }, extra, lines);
     if (!list.some((d) => d.line === line && d.message === diagnostic.message && d.column === diagnostic.column)) list.push(diagnostic);
   };
   return {

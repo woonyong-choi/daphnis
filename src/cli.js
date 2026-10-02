@@ -72,7 +72,7 @@ async function processFile(input, args) {
   try {
     source = readFileSync(input, 'utf8');
   } catch (error) {
-    report(input, [makeDiagnostic('error', 0, `cannot read the file: ${error.code ?? error.message}`, { code: 'io' })], json);
+    report(input, [makeDiagnostic({ severity: 'error', line: 0, message: `cannot read the file: ${error.code ?? error.message}` }, { code: 'io' })], json);
     return false;
   }
   let result;
@@ -80,7 +80,7 @@ async function processFile(input, args) {
     result = await buildFigure(source, { baseDir: dirname(input), strict: args.flags.has('strict'), noDeprecated: args.flags.has('no-deprecated'), requireData: args.flags.has('require-data'), requireCi: args.flags.has('require-ci') });
   } catch (error) {
     // 원본 오류가 아닌 실패는 이 도구의 버그다. 스택 대신 한 줄로 알리고 다음 파일로 넘어간다.
-    const problems = error instanceof FigureError ? error.problems : [makeDiagnostic('error', 0, `internal error: ${error.message}. Please report this`, { code: 'internal' })];
+    const problems = error instanceof FigureError ? error.problems : [makeDiagnostic({ severity: 'error', line: 0, message: `internal error: ${error.message}. Please report this` }, { code: 'internal' })];
     report(input, problems, json);
     return false;
   }
@@ -105,7 +105,7 @@ function migrateFile(input, args) {
   try {
     source = readFileSync(input, 'utf8');
   } catch (error) {
-    report(input, [makeDiagnostic('error', 0, `cannot read the file: ${error.code ?? error.message}`, { code: 'io' })], json);
+    report(input, [makeDiagnostic({ severity: 'error', line: 0, message: `cannot read the file: ${error.code ?? error.message}` }, { code: 'io' })], json);
     return false;
   }
   const result = migrateSource(source);

@@ -60,13 +60,12 @@ function overlapArea(a, b) {
  * 4. 선택 순서는 점 위 그대로, 가리는 것을 비켜 조금 더 올린 자리, 선 반대쪽(점 아래)과 그것을 조금 더 내린 자리, 가리는 사각형의 양 끝에 붙게 옆으로 비킨 자리(점에서 글 상자 반 폭과 간격 안), 그보다 멀리 옆으로 비킨 자리다.
  * 멀리 비킨 자리는 글 상자가 점에서 떨어져 보이지만, 점이 노드 안에서 출발해 도형을 벗어날 때까지 글 상자를 선을 따라 노드 밖에 두어 점이 따라잡게 하는 마지막 수단이다. 그래도 겹치면 그림 검사(check.js)가 경고한다.
  * 옆으로는 그림 밖으로 나가지 않게 밀어 넣는다.
- * @param scene { width, height }
- * @param avoid { x, y, w, h, name }[]
+ * @param field { scene, avoid }. scene은 { width, height }, avoid는 { x, y, w, h, name }[]
  * @returns { dx, dy, box, isOutside, hits }. dx, dy는 점 위 기본 자리에서 옮긴 양, box는 그림 좌표의 글 상자 사각형이다. hits는 겹친 이름 목록이다
  */
-export function placeChip(point, chip, scene, avoid = []) {
+export function placeChip(point, chip, { scene, avoid = [] }) {
   const ctx = { point, chip, scene, avoid };
-  const candidates = rowsOf(ctx).flatMap((row) => centersOf(ctx, row.top).map(({ center, order }) => candidateAt(ctx, row, center, order)));
+  const candidates = rowsOf(ctx).flatMap((row) => centersOf(ctx, row.top).map((side) => candidateAt(ctx, row, side)));
   const best = candidates.reduce((a, b) => (compare(a.rank, b.rank) <= 0 ? a : b));
   const { rank, ...placed } = best;
   return placed;
@@ -107,7 +106,7 @@ function centersOf({ point, chip, avoid }, top) {
 // vars: a = 피할 사각형 수
 // basis: estimate
 // 후보 하나의 자리와 순위
-function candidateAt({ point, chip, scene, avoid }, row, center, sideOrder) {
+function candidateAt({ point, chip, scene, avoid }, row, { center, order: sideOrder }) {
   const half = chip.w / 2 + CHIP_GAP;
   const x = Math.min(scene.width - half, Math.max(half, center));
   const box = { x: x - chip.w / 2, y: row.top, w: chip.w, h: chip.h };
@@ -139,52 +138,67 @@ function compare(a, b) {
  * @returns { path, issues }. path는 이동 진행 비율 at(오름차순)마다 [at, dx, dy]이고, issues는 지점마다 { at, isOutside, hits }다
  */
 export function planChip(scene, hop, avoid) {
-  const chip = sizeChip(hop.data);
-  const field = avoid.filter((o) => o.edge !== hop.edge);
-  const route = flattenRoute(scene.edges[hop.edge].points);
-  const place = (fraction) => ({ at: hop.isBack ? 1 - fraction : fraction, fraction, ...placeChip(pointAlong(route, fraction), chip, scene, field) });
-  const base = Array.from({ length: SAMPLES + 1 }, (_, i) => place(i / SAMPLES));
+  const plan = { scene, hop, chip: sizeChip(hop.data), field: avoid.filter((o) => o.edge !== hop.edge), route: flattenRoute(scene.edges[hop.edge].points) };
+  const base = Array.from({ length: SAMPLES + 1 }, (_, i) => placeAt(plan, i / SAMPLES));
   // 선형으로 이은 자리 검사는 진행 비율이 오르는 순서(isBack이면 경로 비율이 내려가는 순서)로 한다.
   if (hop.isBack) base.reverse();
-  const isClean = (a, b, ratios = BETWEEN_RATIOS) => ratios.every((ratio) => {
-    const { box } = chipBoxBetween(route, hop, chip, [a, b], ratio);
+  const samples = base.flatMap((sample, i) => (i < base.length - 1 ? [sample, ...refine(plan, [sample, base[i + 1]], REFINE_DEPTH)] : [sample]));
+  return { path: samples.map(({ at, dx, dy }) => [at, dx, dy]), issues: samples.map(({ at, isOutside, hits }) => ({ at, isOutside, hits })) };
+}
+
+// cost: time O(p + a), heap O(1), stack O(1)
+// vars: p = 경로 점 수, a = 피할 글자 사각형 수
+// basis: estimate
+// 경로 비율 fraction 지점의 글 상자 자리. at은 이동 진행 비율이다.
+function placeAt({ scene, hop, chip, field, route }, fraction) {
+  return { at: hop.isBack ? 1 - fraction : fraction, fraction, ...placeChip(pointAlong(route, fraction), chip, { scene, avoid: field }) };
+}
+
+// cost: time O(r·(p + a)), heap O(1), stack O(1)
+// vars: r = 재는 비율 수, p = 경로 점 수, a = 피할 글자 사각형 수
+// basis: estimate
+// 두 지점 사이를 선형으로 이은 자리가 ratios 모든 비율에서 그림 안이고 글자를 가리지 않는지
+function isClean({ scene, hop, chip, field, route }, pair, ratios = BETWEEN_RATIOS) {
+  return ratios.every((ratio) => {
+    const { box } = chipBoxBetween({ route, hop, chip }, pair, ratio);
     return !isOutsideFigure(box, scene) && !field.some((text) => !text.soft && overlapArea(box, text) > OVERLAP_SLACK);
   });
-  // cost: time O((p + a)·2^d), heap O(2^d), stack O(d)
-  // vars: p = 경로 점 수, a = 피할 글자 사각형 수, d = 쪼갠 깊이
-  // basis: estimate
-  const refine = (a, b, depth) => {
-    if (isClean(a, b)) return [];
-    // 더 쪼개도 사이가 글자를 가리면(점 위에서 아래로 바뀌는 구간) 앞 자리를 b 직전까지 붙들어 바뀜을 같은 시각의 두 지점(순간 이동)으로 만든다.
-    if (depth === 0) return flip(a, b);
-    const mid = place((a.fraction + b.fraction) / 2);
-    return [...refine(a, mid, depth - 1), mid, ...refine(mid, b, depth - 1)];
-  };
-  // cost: time O((FLIP_SCAN + FLIP_BISECT)·(p + a)), heap O(1), stack O(1)
-  // vars: FLIP_SCAN = 훑는 칸 수(16), FLIP_BISECT = 이분 탐색 횟수(8), p = 경로 점 수, a = 피할 글자 사각형 수
-  // basis: estimate
-  // 앞 지점 a의 자리를 붙든 채 점이 가다가 처음 글자를 가리기 직전까지 두고, 거기서 같은 시각에 b의 자리로 바꾼다. 바뀜이 가리는 구간을 시간 없는 순간으로 줄여, 어느 프레임에도 중간 자리가 보이지 않게 한다. 한 시각에 지점이 둘이라 SMIL keyTimes도 같은 값이 이어진다.
-  const flip = (a, b) => {
-    const [ta, tb] = [timeAt(MOVE, a.at), timeAt(MOVE, b.at)];
-    const held = { ...a, at: b.at };
-    let safe = 0;
-    while (safe < FLIP_SCAN && isClean(a, held, [(safe + 1) / FLIP_SCAN])) safe += 1;
-    // 겹침은 깨끗한 마지막 칸 끝과 겹치는 칸 끝 사이 어딘가에서 시작하므로, 그 칸 안에서 마지막으로 깨끗한 비율을 찾는다.
-    let [low, high] = [safe / FLIP_SCAN, Math.min(1, (safe + 1) / FLIP_SCAN)];
-    for (let i = 0; i < FLIP_BISECT; i++) {
-      const mid = (low + high) / 2;
-      if (isClean(a, held, [mid])) low = mid;
-      else high = mid;
-    }
-    const atFrom = progressAt(MOVE, ta + (tb - ta) * low);
-    const entries = [];
-    const at = { at: atFrom, fraction: hop.isBack ? 1 - atFrom : atFrom };
-    if (atFrom > a.at && atFrom < b.at) entries.push({ ...a, ...at });
-    if (atFrom < b.at) entries.push({ ...b, ...at });
-    return entries;
-  };
-  const samples = base.flatMap((sample, i) => (i < base.length - 1 ? [sample, ...refine(sample, base[i + 1], REFINE_DEPTH)] : [sample]));
-  return { path: samples.map(({ at, dx, dy }) => [at, dx, dy]), issues: samples.map(({ at, isOutside, hits }) => ({ at, isOutside, hits })) };
+}
+
+// cost: time O((p + a)·2^d), heap O(2^d), stack O(d)
+// vars: p = 경로 점 수, a = 피할 글자 사각형 수, d = 쪼갠 깊이
+// basis: estimate
+// 두 지점 사이가 깨끗하지 않으면 가운데 지점을 더해 반씩 다시 본다.
+function refine(plan, [a, b], depth) {
+  if (isClean(plan, [a, b])) return [];
+  // 더 쪼개도 사이가 글자를 가리면(점 위에서 아래로 바뀌는 구간) 앞 자리를 b 직전까지 붙들어 바뀜을 같은 시각의 두 지점(순간 이동)으로 만든다.
+  if (depth === 0) return flip(plan, [a, b]);
+  const mid = placeAt(plan, (a.fraction + b.fraction) / 2);
+  return [...refine(plan, [a, mid], depth - 1), mid, ...refine(plan, [mid, b], depth - 1)];
+}
+
+// cost: time O((FLIP_SCAN + FLIP_BISECT)·(p + a)), heap O(1), stack O(1)
+// vars: FLIP_SCAN = 훑는 칸 수(16), FLIP_BISECT = 이분 탐색 횟수(8), p = 경로 점 수, a = 피할 글자 사각형 수
+// basis: estimate
+// 앞 지점 a의 자리를 붙든 채 점이 가다가 처음 글자를 가리기 직전까지 두고, 거기서 같은 시각에 b의 자리로 바꾼다. 바뀜이 가리는 구간을 시간 없는 순간으로 줄여, 어느 프레임에도 중간 자리가 보이지 않게 한다. 한 시각에 지점이 둘이라 SMIL keyTimes도 같은 값이 이어진다.
+function flip(plan, [a, b]) {
+  const [ta, tb] = [timeAt(MOVE, a.at), timeAt(MOVE, b.at)];
+  const held = { ...a, at: b.at };
+  let safe = 0;
+  while (safe < FLIP_SCAN && isClean(plan, [a, held], [(safe + 1) / FLIP_SCAN])) safe += 1;
+  // 겹침은 깨끗한 마지막 칸 끝과 겹치는 칸 끝 사이 어딘가에서 시작하므로, 그 칸 안에서 마지막으로 깨끗한 비율을 찾는다.
+  let [low, high] = [safe / FLIP_SCAN, Math.min(1, (safe + 1) / FLIP_SCAN)];
+  for (let i = 0; i < FLIP_BISECT; i++) {
+    const mid = (low + high) / 2;
+    if (isClean(plan, [a, held], [mid])) low = mid;
+    else high = mid;
+  }
+  const atFrom = progressAt(MOVE, ta + (tb - ta) * low);
+  const entries = [];
+  const at = { at: atFrom, fraction: plan.hop.isBack ? 1 - atFrom : atFrom };
+  if (atFrom > a.at && atFrom < b.at) entries.push({ ...a, ...at });
+  if (atFrom < b.at) entries.push({ ...b, ...at });
+  return entries;
 }
 
 // cost: time O(p), heap O(1), stack O(1)
@@ -192,10 +206,10 @@ export function planChip(scene, hop, avoid) {
 // basis: estimate
 /**
  * 두 계획 지점 a, b(진행 비율이 오르는 순서) 사이, 시간 비율이 a 시각에서 b 시각으로 ratio만큼 간 때의 글 상자. 움직이는 SVG와 재생기가 지점 사이를 시간에 선형으로 잇는 것과 같다.
- * @param route 그려지는 경로를 편 점 목록(flattenRoute). 점은 둥근 모서리 경로를 따라가므로 꺾은선이 아니라 이것으로 자리를 잰다
+ * @param move { route, hop, chip }. route는 그려지는 경로를 편 점 목록(flattenRoute)이다. 점은 둥근 모서리 경로를 따라가므로 꺾은선이 아니라 이것으로 자리를 잰다
  * @returns { box, point }. box는 그림 좌표의 글 상자, point는 그 시각 점의 자리다
  */
-export function chipBoxBetween(route, hop, chip, [a, b], ratio) {
+export function chipBoxBetween({ route, hop, chip }, [a, b], ratio) {
   const [ta, tb] = [timeAt(MOVE, a.at), timeAt(MOVE, b.at)];
   const time = ta + (tb - ta) * ratio;
   const f = progressAt(MOVE, time);

@@ -23,7 +23,7 @@ function readNode({ tokens, line }, ctx) {
   const [head, id, label, sub, ...rest] = tokens;
   const shape = head.value;
   const takesSub = STATEMENTS[shape].node.hasSub;
-  if (!checkId(id, line, ctx, ID_PATTERN)) return rejectName(id, ctx);
+  if (!checkId(id, { line, ctx }, ID_PATTERN)) return rejectName(id, ctx);
   if (label?.type !== 'text') {
     ctx.problems.error(line, `write ${shape} as: ${shape} ${id.value} "${shape === 'decision' ? 'question' : 'name'}"`);
     return;
@@ -39,7 +39,7 @@ function readNode({ tokens, line }, ctx) {
 // `group id "이름" [direction=down] {`
 function readGroup({ tokens, line }, ctx) {
   const [, id, label, ...rest] = tokens;
-  if (!checkId(id, line, ctx, ID_PATTERN)) {
+  if (!checkId(id, { line, ctx }, ID_PATTERN)) {
     rejectName(id, ctx);
     // 닫는 `}`가 짝을 찾도록 자리만 연다.
     if (tokens.at(-1).type === 'open') ctx.groups.push({ isRejected: true, line });
@@ -89,7 +89,7 @@ function readStateMark({ tokens, line }, ctx) {
 // `table id "이름" {`
 function readTable({ tokens, line }, ctx) {
   const [, id, label, open, extra] = tokens;
-  if (!checkId(id, line, ctx, TABLE_PATTERN)) {
+  if (!checkId(id, { line, ctx }, TABLE_PATTERN)) {
     rejectName(id, ctx);
     // 열 줄을 그 테이블의 열로 읽어 넘기도록 버린 테이블 자리를 연다.
     if (tokens.at(-1).type === 'open') ctx.table = { id: id?.value, columns: [], isRejected: true };
@@ -172,7 +172,7 @@ function rejectName(token, ctx) {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 // 이름 낱말 형식을 확인한다. 문장 종류는 첫 낱말 자리로 정해서 예약어도 이름이 된다.
-function checkId(token, line, ctx, pattern) {
+function checkId(token, { line, ctx }, pattern) {
   if (token?.type !== 'word') {
     ctx.problems.error(line, 'write a name (id) after the statement word');
     return false;

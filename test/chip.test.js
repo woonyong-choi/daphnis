@@ -9,6 +9,7 @@ import { chipLines, chipObstacles } from '../src/draw/boxes.js';
 import { curveOf, progressAt, timeAt } from '../src/easing.js';
 import { toHtml } from '../src/html.js';
 import { toSvg } from '../src/svg.js';
+import { playerSource } from './helpers.js';
 
 const EXAMPLES = new URL('../examples/', import.meta.url);
 const MOVE = curveOf('move');
@@ -21,7 +22,7 @@ function overlaps(a, b) {
 }
 
 test('placeChip_keeps_the_chip_above_the_dot_when_nothing_is_in_the_way', () => {
-  const placed = placeChip({ x: 300, y: 150 }, CHIP, SCENE, []);
+  const placed = placeChip({ x: 300, y: 150 }, CHIP, { scene: SCENE, avoid: [] });
 
   assert.deepEqual([placed.dx, placed.dy, placed.hits], [0, 0, []]);
 });
@@ -29,7 +30,7 @@ test('placeChip_keeps_the_chip_above_the_dot_when_nothing_is_in_the_way', () => 
 test('placeChip_moves_below_the_dot_when_a_name_is_above_it', () => {
   const name = { x: 280, y: 80, w: 40, h: 80, name: '이름' };
 
-  const placed = placeChip({ x: 300, y: 150 }, CHIP, SCENE, [name]);
+  const placed = placeChip({ x: 300, y: 150 }, CHIP, { scene: SCENE, avoid: [name] });
 
   assert.equal(placed.dy, CHIP.h + CHIP_GAP * 2);
   assert.deepEqual(placed.hits, []);
@@ -39,7 +40,7 @@ test('placeChip_moves_below_the_dot_when_a_name_is_above_it', () => {
 test('placeChip_lifts_the_chip_just_clear_of_a_small_obstacle_instead_of_flipping', () => {
   const pill = { x: 280, y: 130, w: 40, h: 18, name: '알약' };
 
-  const placed = placeChip({ x: 300, y: 150 }, CHIP, SCENE, [pill]);
+  const placed = placeChip({ x: 300, y: 150 }, CHIP, { scene: SCENE, avoid: [pill] });
 
   assert.ok(placed.dy < 0 && placed.dy >= -CHIP_GAP * 4);
   assert.deepEqual(placed.hits, []);
@@ -49,7 +50,7 @@ test('placeChip_slides_aside_when_both_sides_of_the_dot_are_covered', () => {
   const above = { x: 250, y: 60, w: 30, h: 80, name: '위' };
   const below = { x: 250, y: 168, w: 30, h: 80, name: '아래' };
 
-  const placed = placeChip({ x: 300, y: 150 }, CHIP, SCENE, [above, below]);
+  const placed = placeChip({ x: 300, y: 150 }, CHIP, { scene: SCENE, avoid: [above, below] });
 
   assert.notEqual(placed.dx, 0);
   assert.deepEqual(placed.hits, []);
@@ -58,19 +59,19 @@ test('placeChip_slides_aside_when_both_sides_of_the_dot_are_covered', () => {
 test('placeChip_reports_the_name_it_cannot_avoid', () => {
   const wall = [{ x: 0, y: 0, w: 600, h: 300, name: '벽' }];
 
-  assert.deepEqual(placeChip({ x: 300, y: 150 }, CHIP, SCENE, wall).hits, ['벽']);
+  assert.deepEqual(placeChip({ x: 300, y: 150 }, CHIP, { scene: SCENE, avoid: wall }).hits, ['벽']);
 });
 
 test('placeChip_keeps_a_margin_from_the_top_edge_by_going_below', () => {
   // 점 위 상자의 윗면이 7이라 판 위쪽 끝에 붙는다. 여백(CHIP_MARGIN) 이상 띄우려고 점 아래로 내린다.
-  const placed = placeChip({ x: 300, y: 7 + CHIP.h + CHIP_GAP }, CHIP, SCENE, []);
+  const placed = placeChip({ x: 300, y: 7 + CHIP.h + CHIP_GAP }, CHIP, { scene: SCENE, avoid: [] });
 
   assert.ok(placed.dy > 0);
   assert.ok(placed.box.y >= CHIP_MARGIN);
 });
 
 test('placeChip_still_reports_outside_when_no_candidate_fits_the_figure', () => {
-  const placed = placeChip({ x: 300, y: 30 }, { w: 100, h: 300 }, SCENE, []);
+  const placed = placeChip({ x: 300, y: 30 }, { w: 100, h: 300 }, { scene: SCENE, avoid: [] });
 
   assert.equal(placed.isOutside, true);
 });
@@ -90,7 +91,7 @@ test('buildFigure_example_moving_text_never_covers_a_name_between_plan_points_ei
       for (let k = 0; k < path.length - 1; k++) {
         if ((timeAt(MOVE, path[k + 1].at) - timeAt(MOVE, path[k].at)) * hop.ms < 20) continue;
         for (let q = 0; q <= 8; q++) {
-          const { box } = chipBoxBetween(flattenRoute(scene.edges[hop.edge].points), hop, chip, [path[k], path[k + 1]], q / 8);
+          const { box } = chipBoxBetween({ route: flattenRoute(scene.edges[hop.edge].points), hop, chip }, [path[k], path[k + 1]], q / 8);
           const hit = names.find((name) => overlaps(box, name));
           assert.ok(!hit, `${file}: 이동 글 상자가 ${hit?.name}을 가린다 (지점 ${k} 다음 ${q}/8)`);
           assert.ok(box.x >= -0.5 && box.y >= -0.5 && box.x + box.w <= scene.width + 0.5 && box.y + box.h <= scene.height + 0.5, `${file}: 판 밖`);
@@ -122,7 +123,7 @@ test('buildFigure_example_moving_text_never_touches_a_name_in_any_60fps_frame', 
         const [a, b] = [path[Math.min(k, path.length - 2)], path[Math.min(k, path.length - 2) + 1]];
         const span = timeAt(MOVE, b.at) - timeAt(MOVE, a.at);
         const ratio = span ? Math.min(1, Math.max(0, (timeAt(MOVE, progress) - timeAt(MOVE, a.at)) / span)) : 0;
-        const { box } = chipBoxBetween(route, hop, chip, [a, b], ratio);
+        const { box } = chipBoxBetween({ route, hop, chip }, [a, b], ratio);
         const hit = names.find((name) => overlaps(box, name));
         assert.ok(!hit, `${file}: ${Math.round(t)}ms에 이동 글 상자가 ${hit?.name}을 가린다`);
         frames += 1;
@@ -137,7 +138,7 @@ test('toHtml_and_toSvg_share_the_chip_plan_from_the_timeline', async () => {
   const hops = result.timeline.segs.flatMap((seg) => seg.hops).filter((hop) => hop.data);
   const html = await toHtml(result, 'saturn');
   const svg = await toSvg(result, { name: 'saturn' });
-  const player = readFileSync(new URL('../src/player.js', import.meta.url), 'utf8');
+  const player = playerSource();
 
   assert.ok(hops.length > 0 && hops.every((hop) => Array.isArray(hop.chipPath) && hop.chipPath.length >= 21));
   for (const hop of hops) assert.ok(html.includes(`"chipPath":${JSON.stringify(hop.chipPath)}`));
@@ -148,7 +149,7 @@ test('toHtml_and_toSvg_share_the_chip_plan_from_the_timeline', async () => {
 test('placeChip_keeps_the_minimum_clearance_from_the_obstacle_it_lifts_over', () => {
   const pill = { x: 280, y: 130, w: 40, h: 18, name: '알약' };
 
-  const { box } = placeChip({ x: 300, y: 150 }, CHIP, SCENE, [pill]);
+  const { box } = placeChip({ x: 300, y: 150 }, CHIP, { scene: SCENE, avoid: [pill] });
 
   assert.ok(pill.y - (box.y + box.h) >= CHIP_CLEAR - 0.01, `간격 ${pill.y - (box.y + box.h)}`);
 });
@@ -157,7 +158,7 @@ test('placeChip_prefers_a_spot_clear_of_a_nearby_line_and_never_reports_it_as_a_
   // 점 바로 위를 가로지르는 다른 선. 점 위 기본 자리는 선에 CHIP_CLEAR 안으로 들어온다.
   const line = { x: 200, y: 120, w: 400, h: 4, soft: true, edge: 9 };
 
-  const placed = placeChip({ x: 300, y: 150 }, CHIP, SCENE, [line]);
+  const placed = placeChip({ x: 300, y: 150 }, CHIP, { scene: SCENE, avoid: [line] });
 
   const padded = { x: placed.box.x - CHIP_CLEAR, y: placed.box.y - CHIP_CLEAR, w: placed.box.w + CHIP_CLEAR * 2, h: placed.box.h + CHIP_CLEAR * 2 };
   assert.ok(!overlaps(padded, line), '선에서 떨어진 자리');
@@ -189,7 +190,7 @@ test('buildFigure_examples_keep_moving_text_clear_of_other_lines_at_most_30_perc
       const route = flattenRoute(scene.edges[hop.edge].points);
       const path = hop.chipPath.map(([at, dx, dy]) => ({ at, dx, dy }));
       for (let k = 0; k < path.length - 1; k++) {
-        const { box } = chipBoxBetween(route, hop, chip, [path[k], path[k + 1]], 0.5);
+        const { box } = chipBoxBetween({ route, hop, chip }, [path[k], path[k + 1]], 0.5);
         const padded = { x: box.x - CHIP_CLEAR, y: box.y - CHIP_CLEAR, w: box.w + CHIP_CLEAR * 2, h: box.h + CHIP_CLEAR * 2 };
         samples += 1;
         if (lines.some((l) => l.edge !== hop.edge && overlaps(padded, l))) near += 1;

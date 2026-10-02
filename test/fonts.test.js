@@ -49,7 +49,7 @@ test('measure_mono_hangul_uses_noto_sans_kr_width', () => {
 
 test('measure_and_wrap_are_deterministic', () => {
   assert.equal(measure('app-server 요청', 11, 'mono'), measure('app-server 요청', 11, 'mono'));
-  assert.deepEqual(wrap('app-server 요청 보내기', 60, 11, 'mono'), wrap('app-server 요청 보내기', 60, 11, 'mono'));
+  assert.deepEqual(wrap('app-server 요청 보내기', 60, { size: 11, face: 'mono' }), wrap('app-server 요청 보내기', 60, { size: 11, face: 'mono' }));
 });
 
 test('findMissingGlyph_follows_fallback_chain', () => {
@@ -138,7 +138,7 @@ test('embedFonts_backtick_span_embeds_mono_piece_only_for_code', async () => {
 });
 
 test('wrap_splits_backtick_span_and_pairs_marks_per_line', () => {
-  const lines = wrap('aa `bb cc dd` ee', measure('aa `bb`', 12), 12);
+  const lines = wrap('aa `bb cc dd` ee', measure('aa `bb`', 12), { size: 12 });
   assert.ok(lines.length > 1);
   for (const line of lines) assert.equal((line.match(/`/g) ?? []).length % 2, 0);
   assert.equal(lines.join(' ').replaceAll('`', '').replace(/\s+/g, ' '), 'aa bb cc dd ee');

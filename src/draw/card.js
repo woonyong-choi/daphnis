@@ -32,10 +32,10 @@ export function createTones(tagOrder = []) {
 // basis: estimate
 /**
  * 카드 틀, 빈 표시, 내용 층을 그린다.
- * @param box { x, y, w, h } 카드 자리
- * @param decorate 움직이는 SVG가 박자별 class를 넣는 함수
+ * @param place { box, i }. box는 { x, y, w, h } 카드 자리, i는 도형 번호
+ * @param paint { toneOf, decorate }. decorate는 움직이는 SVG가 박자별 class를 넣는 함수
  */
-export function drawCard(card, box, i, toneOf, decorate) {
+export function drawCard(card, { box, i }, { toneOf, decorate }) {
   const layers = card.layouts
     .map((layout, k) => `<g id="n-${i}-c${k}" opacity="0" class="fl-layer ${decorate('layer', i, k)}">${drawRows(layout, box, toneOf)}</g>`)
     .join('');
@@ -60,7 +60,7 @@ function drawRows(layout, box, toneOf) {
         y += graph.height + CARD.gap;
         return drawn;
       }
-      const parts = [drawTag(row, left, y, toneOf), drawMark(row, box.x + box.w - CARD.side, y)];
+      const parts = [drawTag(row, { x: left, y }, toneOf), drawMark(row, box.x + box.w - CARD.side, y)];
       if (isHeading) y += STYLE.row.line;
       const indent = !isHeading && tagW ? tagW : 0;
       const body = row.text + (row.meta !== undefined ? ` · ${row.meta}` : '');
@@ -75,7 +75,7 @@ function drawRows(layout, box, toneOf) {
     .join('');
 }
 
-function drawTag(row, x, y, toneOf) {
+function drawTag(row, { x, y }, toneOf) {
   if (!row.tag) return '';
   const tag = row.tag.toUpperCase();
   const tone = toneOf(row);

@@ -40,7 +40,7 @@ export async function buildFigure(source, { baseDir = '.', strict = false, noDep
   problems.throwIfAny();
   const cards = collectCards(figure);
   if (figure.kind === 'chart') {
-    const timeline = buildTimeline(figure, cards, wrapChip);
+    const timeline = buildTimeline(figure, { cards, chips: wrapChip });
     const chart = drawChart(figure);
     checkChartFigure(chart, problems);
     return finish({ figure, chart, timeline }, problems, { strict, noDeprecated });
@@ -84,7 +84,7 @@ async function placeScene(figure, inputs, problems) {
 async function attemptScene(figure, { sizes, cards, source }) {
   const local = createProblems(source);
   const scene = figure.kind === 'sequence' ? layoutSequence(figure, sizes) : await layoutOrFail(figure, sizes, local);
-  const timeline = buildTimeline(figure, cards, wrapChip, scene);
+  const timeline = buildTimeline(figure, { cards, chips: wrapChip, scene });
   widenForChips(scene, timeline);
   planChips(scene, timeline);
   // 태그 색은 원본에 처음 나온 순서로 정한다(docs/design/figure-syntax.md 카드 줄).
@@ -155,7 +155,7 @@ function finish(result, problems, { strict, noDeprecated }) {
 
 /** 글 상자 글을 토큰 `size.chip-max` 너비의 줄로 나눈다. HTML과 SVG가 같은 줄을 쓴다. */
 export function wrapChip(text) {
-  return wrap(text, values.size['chip-max'], STYLE.chip.size);
+  return wrap(text, values.size['chip-max'], STYLE.chip);
 }
 
 // cost: time O(j + r·k), heap O(j), stack O(1), io 1

@@ -20,17 +20,18 @@ const INNER_Y = SPACE['6'];
  * @param glyphs 쓴 글자를 모으는 그릇(createGlyphSet)
  */
 export function drawScene(scene, decorate, glyphs) {
-  const toneOf = createTones(scene.tagOrder);
+  const paint = { toneOf: createTones(scene.tagOrder), decorate, glyphs };
   const parts = [];
-  scene.groups.forEach((g, j) => parts.push(drawGroup(g, j, decorate, glyphs)));
+  scene.groups.forEach((g, j) => parts.push(drawGroup(g, j, paint)));
   for (const line of scene.lifelines ?? []) parts.push(`<line x1="${r(line.x)}" x2="${r(line.x)}" y1="${r(line.y1)}" y2="${r(line.y2)}" class="lifeline"/>`);
-  scene.items.forEach((it, i) => parts.push(drawItem(it, i, toneOf, decorate, glyphs)));
-  scene.edges.forEach((e, j) => parts.push(drawEdge(e, j, decorate, glyphs)));
+  scene.items.forEach((it, i) => parts.push(drawItem(it, i, paint)));
+  scene.edges.forEach((e, j) => parts.push(drawEdge(e, j, paint)));
   for (const note of scene.notes ?? []) parts.push(drawNote(note, glyphs));
   return parts.join('\n');
 }
 
-function drawGroup(g, j, decorate, glyphs) {
+// 그리는 데 함께 쓰는 것: toneOf(카드 태그 색), decorate(움직이는 SVG의 class), glyphs(쓴 글자 모음)
+function drawGroup(g, j, { decorate, glyphs }) {
   glyphs.add(g.label, 'semibold');
   return (
     `<g id="g-${j}" class="fl-group" data-id="${escapeXml(g.id)}"><rect x="${r(g.x)}" y="${r(g.y)}" width="${r(g.w)}" height="${r(g.h)}" rx="${RADIUS['2xl']}" class="frame-box fl-stroke ${decorate('group', j)}"/>` +
@@ -42,21 +43,22 @@ function drawGroup(g, j, decorate, glyphs) {
 // vars: k = 카드 내용 수, r = 카드 줄 수, n = 글자 수, out = 만든 SVG 글자 수
 // basis: estimate
 // 도형 하나: 윤곽, 이름, 부제, 카드. 사람과 원통의 머리, 어깨, 뚜껑은 배치 사각형 바깥 여백에 그린다.
-function drawItem(it, i, toneOf, decorate, glyphs) {
+function drawItem(it, i, paint) {
+  const { decorate, glyphs } = paint;
   const stroke = `class="fl-stroke ${decorate('node', i)}"`;
   const open = `<g id="n-${i}" class="fl-node" data-id="${escapeXml(it.id)}">`;
   for (const l of it.labelLines ?? []) glyphs.add(l, 'medium');
   for (const l of it.subLines ?? []) glyphs.add(l, 'regular');
   if (it.card) cardGlyphs(it.card.layouts, glyphs);
-  const shape = drawShape(it, stroke, glyphs, decorate);
-  const card = it.card ? drawCard(it.card, cardBox(it), i, toneOf, decorate) : '';
+  const shape = drawShape(it, stroke, paint);
+  const card = it.card ? drawCard(it.card, { box: cardBox(it), i }, paint) : '';
   return `${open}${shape}${it.shape === 'table' ? '' : drawLabels(it)}${card}</g>`;
 }
 
 // cost: time O(c), heap O(out), stack O(1)
 // vars: c = 테이블 열 수, out = 만든 SVG 글자 수
 // basis: estimate
-function drawShape(it, stroke, glyphs, decorate) {
+function drawShape(it, stroke, paint) {
   const { x, y, w, h } = it;
   const cx = x + w / 2;
   const fill = `fill="${tokens.color.node}"`;
@@ -85,7 +87,7 @@ function drawShape(it, stroke, glyphs, decorate) {
     case 'final':
       return `<circle cx="${r(cx)}" cy="${r(y + h / 2)}" r="${r(w / 2)}" fill="none" ${stroke}/><circle cx="${r(cx)}" cy="${r(y + h / 2)}" r="${r(w / 4)}" fill="${tokens.color.fg}"/>`;
     case 'table':
-      return drawTable(it, stroke, glyphs, decorate);
+      return drawTable(it, stroke, paint);
     default: {
       const dash = it.shape === 'external' ? ` stroke-dasharray="${EDGE_DASH}"` : '';
       return `<rect x="${r(x)}" y="${r(y)}" width="${r(w)}" height="${r(h)}" rx="${RADIUS.xl}" ${fill} ${stroke}${dash}/>`;
@@ -138,7 +140,7 @@ function cardBox(it) {
 // vars: c = 열 수, out = 만든 SVG 글자 수
 // basis: estimate
 // 테이블: 머리 칸, 열마다 이름과 표시(PK, FK, UNQ), 타입. 열 줄은 밝히기 대상이다.
-function drawTable(it, stroke, glyphs, decorate) {
+function drawTable(it, stroke, { decorate, glyphs }) {
   const rowH = it.rowH;
   const frame = `<rect x="${r(it.x)}" y="${r(it.y)}" width="${r(it.w)}" height="${r(it.h)}" rx="${RADIUS.xl}" fill="${tokens.color.node}" ${stroke}/>`;
   glyphs.add(it.label, 'medium');
@@ -165,7 +167,7 @@ function drawTable(it, stroke, glyphs, decorate) {
 // vars: p = 경로 점 수, n = 라벨 글자 수, out = 만든 SVG 글자 수
 // basis: estimate
 // 선 하나와 알약 라벨. 라벨 자리는 배치가 정했다.
-function drawEdge(e, j, decorate, glyphs) {
+function drawEdge(e, j, { decorate, glyphs }) {
   const { d } = routePolyline(e.points, RADIUS.route);
   const dash = e.dashed ? ` stroke-dasharray="${EDGE_DASH}"` : '';
   const path = `<path id="p-${j}" d="${d}" class="fl-path ${decorate('edge', j)}"${dash} marker-end="url(#fl-arrow)"/>`;

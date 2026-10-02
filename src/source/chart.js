@@ -114,7 +114,7 @@ function readRow({ tokens, line }, { figure, problems }) {
     figure.chart.hasRejectedRow = true;
     return;
   }
-  const values = readValues(rest, line, problems);
+  const values = readValues(rest, { line, problems });
   if (values) figure.chart.rows.push({ label: label.value, values, line });
   else figure.chart.hasRejectedRow = true;
 }
@@ -131,7 +131,7 @@ function readPoint({ tokens, line }, { figure, problems }) {
     figure.chart.hasRejectedRow = true;
     return;
   }
-  const values = readValues(isScatter ? rest : tokens.slice(1), line, problems, isScatter ? ['series'] : []);
+  const values = readValues(isScatter ? rest : tokens.slice(1), { line, problems }, isScatter ? ['series'] : []);
   if (values) figure.chart.rows.push({ label: isScatter ? name.value : undefined, values, line });
   else figure.chart.hasRejectedRow = true;
 }
@@ -168,7 +168,7 @@ function readLink({ tokens, line }, { figure, problems }) {
 // vars: t = 낱말 수
 // basis: estimate
 // `키=값` 낱말들을 { 키: 숫자 | null }로. `-`는 빠진 값 null이다. textKeys는 이름 값을 받는 키다.
-function readValues(tokens, line, problems, textKeys = []) {
+function readValues(tokens, { line, problems }, textKeys = []) {
   const values = {};
   for (const t of tokens) {
     if (t.type !== 'option' || t.valueType !== 'word') {

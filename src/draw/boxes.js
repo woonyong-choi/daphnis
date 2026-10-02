@@ -18,26 +18,27 @@ const SIZE = values.size;
  */
 export function textBoxes(scene) {
   const boxes = [];
-  const add = (x, center, width, style, name) => boxes.push({ x, y: center - style.size / 2 - SPACE['1'], w: width, h: style.size + SPACE['1'] * 2, name: plainText(name) });
+  const add = ({ x, center, width }, style, name) => boxes.push({ x, y: center - style.size / 2 - SPACE['1'], w: width, h: style.size + SPACE['1'] * 2, name: plainText(name) });
   for (const it of scene.items) {
     if (it.shape === 'table') {
-      add(it.x + it.w / 2 - measure(it.label, STYLE.label.size, STYLE.label.face) / 2, it.y + it.rowH / 2, measure(it.label, STYLE.label.size, STYLE.label.face), STYLE.label, it.label);
+      const labelW = measure(it.label, STYLE.label.size, STYLE.label.face);
+      add({ x: it.x + it.w / 2 - labelW / 2, center: it.y + it.rowH / 2, width: labelW }, STYLE.label, it.label);
       it.columns.forEach((c, k) => {
         const center = it.y + it.rowH * (k + 1.5);
         const key = c.pk ? 'PK' : c.fk ? 'FK' : c.unique ? 'UNQ' : '';
         const nameW = measure(c.name, STYLE.cell.size) + (key ? SPACE['3'] + measure(key, STYLE.tag.size, STYLE.tag.face) : 0);
         const typeW = measure(c.type, STYLE.type.size, STYLE.type.face);
-        add(it.x + INNER_X, center, nameW, STYLE.cell, c.name);
-        add(it.x + it.w - INNER_X - typeW, center, typeW, STYLE.type, c.type);
+        add({ x: it.x + INNER_X, center, width: nameW }, STYLE.cell, c.name);
+        add({ x: it.x + it.w - INNER_X - typeW, center, width: typeW }, STYLE.type, c.type);
       });
       continue;
     }
     for (const row of labelRows(it)) {
       const width = measure(row.text, row.style.size, row.style.face);
-      add(row.cx - width / 2, row.center, width, row.style, row.text);
+      add({ x: row.cx - width / 2, center: row.center, width }, row.style, row.text);
     }
   }
-  for (const g of scene.groups) if (g.label) add(g.x + INNER_X, g.y + values.size['group-title'] / 2, measure(g.label, STYLE.group.size, STYLE.group.face), STYLE.group, g.label);
+  for (const g of scene.groups) if (g.label) add({ x: g.x + INNER_X, center: g.y + values.size['group-title'] / 2, width: measure(g.label, STYLE.group.size, STYLE.group.face) }, STYLE.group, g.label);
   return boxes;
 }
 
