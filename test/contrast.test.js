@@ -101,6 +101,11 @@ for (const theme of THEMES) {
     }
   });
 
+  test(`contrast_${theme}_confidence_line_reaches_3_against_its_casing_on_every_bar_color`, () => {
+    // 신뢰구간 선(fg)은 막대 위에 얹히므로 둘레 바탕색 테두리(bg)와 맞닿는다. 테두리와 선이 3 이상이면 막대 색과 상관없이 보인다.
+    expectAtLeast(theme, GRAPHIC, [['fg', 'bg']]);
+  });
+
   test(`decorative_${theme}_figure_plate_edge_reaches_1_3_on_the_document_ground`, () => {
     // 판 테두리는 흰 문서 위 판 모양만 잡는 꾸밈이다. 판 안 도형은 각자 3을 맞춘다.
     expectAtLeast(theme, DECORATIVE_PLATE_EDGE, [['plate-border', 'page']]);
@@ -141,4 +146,11 @@ test('buildFigure_heatmap_cells_pick_the_ink_with_the_larger_contrast', async ()
     const expected = pickInk(cell, color('light', 'data.heat-ink'), color('light', 'data.heat-ink-on')) === color('light', 'data.heat-ink-on');
     assert.equal(Boolean(on), expected, `strength ${strength}`);
   }
+});
+
+test('chartCss_confidence_line_is_thin_text_color_with_a_background_casing', async () => {
+  const { STYLES } = await import('../src/styles.js');
+
+  assert.match(STYLES.chart, /\.fl \.chart-ci \{[^}]*stroke: var\(--color-fg\);[^}]*stroke-width: var\(--border-tag\)/);
+  assert.match(STYLES.chart, /\.fl \.chart-ci-casing \{[^}]*stroke: var\(--color-bg\);[^}]*stroke-width: var\(--border-casing\)/);
 });

@@ -197,6 +197,7 @@
   --border-tag: 1.5px;
   --border-edge: 1.75px;
   --border-strong: 2.5px;
+  --border-casing: 4.5px;
   --border-halo: 8px;
   --dash-line: 5;
   --dash-gap: 4;
@@ -907,7 +908,12 @@ html.embedded .fl-canvas svg {
 
 .fl .chart-ci {
   stroke: var(--color-fg);
-  stroke-width: var(--border-strong);
+  stroke-width: var(--border-tag);
+}
+
+.fl .chart-ci-casing {
+  stroke: var(--color-bg);
+  stroke-width: var(--border-casing);
 }
 
 .fl .chart-interval {

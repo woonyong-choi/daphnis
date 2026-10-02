@@ -41,6 +41,14 @@ function missingMark(chart, plotX, { k, i, cy }) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
+// 신뢰구간 선. 막대 위에 얹히므로 바탕색 테두리(casing)를 먼저 깔아 막대 색과 선이 갈리게 한다.
+function confidenceLine({ x1, x2, cy }) {
+  const at = `x1="${r(x1)}" x2="${r(x2)}" y1="${r(cy)}" y2="${r(cy)}"`;
+  return `<line ${at} class="chart-ci-casing late"/><line ${at} class="chart-ci late"/>`;
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
 /** 계열 s 막대 하나의 막대와 신뢰구간 막대기 조각, 값 글자 조각 */
 function barMark(ctx, row, at) {
   const { chart, scale, plotX } = ctx;
@@ -52,7 +60,7 @@ function barMark(ctx, row, at) {
   const end = scale.at(v);
   const [low, high] = [row.values[`${s.id}.low`], row.values[`${s.id}.high`]];
   const reach = high !== undefined ? scale.at(high) : end;
-  const ci = high !== undefined ? `<line x1="${r(scale.at(low))}" x2="${r(reach)}" y1="${r(cy)}" y2="${r(cy)}" class="chart-ci late"/>` : '';
+  const ci = high !== undefined ? confidenceLine({ x1: scale.at(low), x2: reach, cy }) : '';
   const rect = `<rect x="${r(plotX)}" y="${r(by)}" width="${r(Math.max(SPACE['1'], end - plotX))}" height="${BAR}" rx="${values.radius.sm}" fill="${seriesColor(chart, i)}" class="grow"/>`;
   const text = valueText({ x: Math.max(end, reach) + SPACE['3'], cy }, formatNumber(v), `chart-value${i === 0 ? ' ours' : ''} late`);
   return { mark: `<g class="cr-${k}"><g class="cs-${i}">${rect}${ci}</g></g>`, value: `<g class="cr-${k}"><g class="cs-${i}">${text}</g></g>` };

@@ -225,6 +225,7 @@ export const tokens = freeze({
     "tag": "var(--border-tag)",
     "edge": "var(--border-edge)",
     "strong": "var(--border-strong)",
+    "casing": "var(--border-casing)",
     "halo": "var(--border-halo)"
   },
   "dash": {
@@ -488,6 +489,7 @@ export const values = freeze({
     "tag": 1.5,
     "edge": 1.75,
     "strong": 2.5,
+    "casing": 4.5,
     "halo": 8
   },
   "dash": {
