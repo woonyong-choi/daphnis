@@ -21,18 +21,22 @@ export function placeTitles(groups, edges) {
 // vars: e = 선 수, p = 선 하나의 경로 점 수
 // basis: estimate
 // 제목 사각형을 지나는 선분의 오른쪽 끝 바로 너머로 옮기기를 되풀이한다. 옮길 때마다 값이 커지므로 선분 수만큼만 돈다.
+// 부동소수점 반올림으로 값이 더 커지지 않으면 이미 선분에 맞닿은 자리라 거기서 멈추고, 상한(선분 수 + 1)에 걸리면 기본 거리를 둔다.
 function titleDx(g, edges) {
   const w = measure(g.label, STYLE.group.size, STYLE.group.face);
   const limit = g.w - TITLE_INSET - w;
   const segments = edges.flatMap((e) => e.points.slice(1).map((p, i) => [e.points[i], p]));
   let dx = TITLE_INSET;
-  for (;;) {
+  for (let pass = 0; pass <= segments.length; pass++) {
     const box = { x: g.x + dx - TITLE_CLEAR, y: g.y, w: w + TITLE_CLEAR * 2, h: SIZE['group-title'] };
     const crossing = segments.filter(([a, b]) => crosses(a, b, box));
     if (!crossing.length) return dx;
-    dx = Math.max(...crossing.map(([a, b]) => Math.max(a.x, b.x))) - g.x + TITLE_CLEAR;
-    if (dx > limit) return TITLE_INSET;
+    const next = Math.max(...crossing.map(([a, b]) => Math.max(a.x, b.x))) - g.x + TITLE_CLEAR;
+    if (next <= dx) return dx;
+    if (next > limit) return TITLE_INSET;
+    dx = next;
   }
+  return TITLE_INSET;
 }
 
 // 가로 또는 세로 선분이 사각형 안쪽과 만나는가
