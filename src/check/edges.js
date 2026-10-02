@@ -42,10 +42,10 @@ export function checkEnds({ edges, scene, figure }, problems) {
 // cost: time O(c), heap O(1), stack O(1)
 // vars: c = 테이블 열 수
 // basis: estimate
-// 도형별 연결점. 나가는 선은 오른쪽(세로 원통은 아래), 들어오는 선은 왼쪽(세로 원통은 위)이다. 세로 그림의 테이블 열은 들어오는 선도 오른쪽이다. 그 밖의 도형과 그룹은 경계 어디나다.
+// 도형별 연결점. 나가는 선은 오른쪽(세로 원통은 아래), 들어오는 선은 왼쪽(세로 원통은 위)이다. 묶음 배치한 테이블 열은 들어오는 선도 오른쪽이다. 그 밖의 도형과 그룹은 경계 어디나다.
 function isPortPlace(p, it, { way, column }) {
   const side = way === 'out' ? it.x + it.w : it.x;
-  if (it.shape === 'table' && column) return near(p.x, it.direction === 'down' ? it.x + it.w : side) && near(p.y, it.y + it.rowH * (it.columns.findIndex((c) => c.name === column) + 1.5));
+  if (it.shape === 'table' && column) return near(p.x, it.isBracket ? it.x + it.w : side) && near(p.y, it.y + it.rowH * (it.columns.findIndex((c) => c.name === column) + 1.5));
   if (it.shape === 'decision') return near(p.x, side) && near(p.y, it.y + it.h / 2);
   if (it.shape === 'person' && it.direction === 'down') return near(p.x, side) && onBorder(p, it);
   // 원통은 뚜껑 윤곽까지가 선이 닿는 면이라 그린 사각형으로 본다.

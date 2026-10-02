@@ -31,8 +31,8 @@ export function endpoint(id, end, nodes) {
   const column = way === 'out' ? edge.fromColumn : edge.toColumn;
   if (node.shape === 'table' && column) {
     const row = node.columns.findIndex((c) => c.name === column);
-    // 세로 그림은 들어오는 선도 오른쪽 면이다. 왼쪽 면이면 아래 도형이 오른쪽으로 계단처럼 밀려 캔버스에 들지 않고 줄 바꿈 선이 그림을 가로지른다(docs/design/layout.md 연결점).
-    const isEast = way === 'out' || node.direction === 'down';
+    // 묶음 배치(`isBracket`)는 들어오는 선도 오른쪽 면이다. 왼쪽 면이면 아래 도형이 오른쪽으로 계단처럼 밀려 캔버스에 들지 않고 줄 바꿈 선이 그림을 가로지른다(docs/design/layout.md 연결점).
+    const isEast = way === 'out' || node.isBracket;
     return addNodePort(node, end, { side: isEast ? 'EAST' : 'WEST', position: { x: isEast ? node.size.w : 0, y: node.size.rowH * (row + 1.5) } });
   }
   // 사람과 원통은 바깥 여백(머리, 이름표, 뚜껑)까지 배치 사각형에 넣으므로, 선이 몸통에만 닿도록 모든 선에 연결점을 둔다.

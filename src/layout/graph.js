@@ -77,12 +77,19 @@ function ratioMiss({ width, height }) {
   return Math.max(0, Math.log(FIT_MIN / ratio), Math.log(ratio / FIT_MAX));
 }
 
-// cost: time O((1 + FOLD_TRIES)·elk(s + e)), heap O(s + e), stack O(d)
+// cost: time O(e), heap O(1), stack O(1)
+// vars: e = 선 수
+// basis: estimate
+function hasColumnEdges(figure) {
+  return figure.edges.some((e) => e.fromColumn || e.toColumn);
+}
+
+// cost: time O((2 + FOLD_TRIES)·elk(s + e)), heap O(s + e), stack O(d)
 // vars: s = 도형 수, e = 선 수, d = 그룹 깊이, elk = elkjs 층 배치 시간
 // basis: estimate
 /**
  * 한 줄 배치가 캔버스보다 넓을 때 글자 크기를 지키는 배치를 찾는다. 후보 순서는 이렇다.
- * 1. 바깥 방향을 돌린다(right는 down으로). 선이 줄 사이를 돌아오지 않아 접기보다 선이 짧다.
+ * 1. 바깥 방향을 돌린다(right는 down으로). 선이 줄 사이를 돌아오지 않아 접기보다 선이 짧다. 열을 이은 테이블이 있고 이것이 폭에 들지 않으면 열 선을 오른쪽 면으로 모은 묶음 배치도 본다.
  * 2. 자동 비율로 접는다. 폭에 들 때까지 비율을 낮춰 가며 FOLD_TRIES번까지 본다.
  * 캔버스에 들고 비율이 알맞은 범위(FIT_MIN~FIT_MAX) 안인 첫 후보를 쓴다. 범위 안인 후보가 없으면 캔버스에 드는 후보 가운데 범위에 가장 가까운 것을 쓴다.
  * 캔버스에 드는 후보가 없으면 가장 좁은 배치를 쓰고, 표시 폭만 줄인다(docs/design/layout.md 그림 크기).
@@ -98,6 +105,11 @@ async function fitCanvas(figure, sizes, flat) {
   };
   const turned = await arrange({ ...figure, direction: TURNED[figure.direction] }, sizes);
   if (consider(turned)) return turned;
+  // 열을 이은 테이블은 세로로 돌려도 들어오는 선이 왼쪽 면이라 아래 도형이 계단처럼 밀려 폭에 들지 않는다. 선이 모두 오른쪽 면인 묶음 배치로 한 번 더 본다.
+  if (hasColumnEdges(figure)) {
+    const bracket = await arrange({ ...figure, direction: TURNED[figure.direction], isBracket: true }, sizes);
+    if (consider(bracket)) return bracket;
+  }
   let aspect = values.scale['fold-aspect'];
   for (let i = 0; i < FOLD_TRIES; i++, aspect *= values.scale['fold-step']) {
     const folded = await arrange({ ...figure, aspect }, sizes);

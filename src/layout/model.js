@@ -16,7 +16,7 @@ export function buildModel(figure, sizes) {
   const nodes = new Map();
   for (const n of figure.nodes) {
     const parent = n.parent ?? ROOT;
-    nodes.set(n.id, { ...n, size: sizes.get(n.id), ports: [], parent, direction: containers.get(parent).direction });
+    nodes.set(n.id, { ...n, size: sizes.get(n.id), ports: [], parent, direction: containers.get(parent).direction, isBracket: figure.isBracket === true });
     containers.get(parent).children.push(n.id);
   }
   addStateMarks(figure, nodes, containers);

@@ -28,8 +28,8 @@ test('layout_table_chain_total_edge_length_is_shorter_than_the_wrapped_layout', 
   assert.ok(total({ scene }) < total(wrapped) / 2, `${total({ scene })} vs ${total(wrapped)}`);
 });
 
-test('layout_table_column_edges_in_a_down_data_figure_leave_and_enter_on_the_right_face_at_the_row', async () => {
-  const { scene } = await buildFigure(CHAIN.replace('data right', 'data down'));
+test('layout_table_column_edges_of_a_bracketed_stack_leave_and_enter_on_the_right_face_at_the_row', async () => {
+  const { scene } = await buildFigure(CHAIN);
   const at = new Map(scene.items.map((item) => [item.id, item]));
 
   for (const edge of scene.edges.filter((e) => e.fromColumn)) {
