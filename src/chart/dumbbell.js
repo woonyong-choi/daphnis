@@ -1,4 +1,4 @@
-// 덤벨 차트: 첫 계열 값(compare 빈 점)에서 둘째 계열 값(main 화살표)으로 이은 한 줄과 오른쪽 바뀐 비율.
+// 덤벨 차트: 첫 계열 값(compare 빈 점)에서 둘째 계열 값(main 채운 점)으로 이은 한 줄과 오른쪽 바뀐 비율.
 import { measure } from '../measure/fonts.js';
 import { centerBaseline, roundCoord as r } from '../text.js';
 import { finishRowChart, rowValueScale } from './axis.js';
@@ -54,13 +54,15 @@ function rangeBar(ctx, row, i) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 두 점이 가까워 화살표를 그릴 자리가 없으면 화살표를 빼고 둘째 값을 점으로 찍는다.
-function arrowOrDot(ctx, [x1, x2]) {
+// 끝점과 연결 화살표. 끝점은 거리와 상관없이 main 색 채운 점 하나로 모든 행이 같다.
+// 화살표는 두 점 가장자리(점 반지름과 한 칸 간격 밖) 사이가 ARROW_MIN 이상일 때만 그리고, 모자라면 화살표만 뺀다.
+function endMark(ctx, [x1, x2]) {
   const { chart, cy } = ctx;
   const dir = x2 >= x1 ? 1 : -1;
-  const gap = Math.abs(x2 - x1) - DOT - SPACE['1'];
-  if (gap >= ARROW_MIN) return `<line x1="${r(x1 + dir * (DOT + SPACE['1']))}" y1="${r(cy)}" x2="${r(x2)}" y2="${r(cy)}" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-main)"/>`;
-  return `<circle cx="${r(x2)}" cy="${r(cy)}" r="${DOT}" fill="${seriesColor(chart, 1)}" class="chart-after pop"/>`;
+  const edge = DOT + SPACE['1'];
+  const dot = `<circle cx="${r(x2)}" cy="${r(cy)}" r="${DOT}" fill="${seriesColor(chart, 1)}" class="chart-after pop"/>`;
+  if (Math.abs(x2 - x1) - 2 * edge < ARROW_MIN) return dot;
+  return `<line x1="${r(x1 + dir * edge)}" y1="${r(cy)}" x2="${r(x2 - dir * edge)}" y2="${r(cy)}" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-main)"/>${dot}`;
 }
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -90,7 +92,7 @@ function dumbbellRow(ctx, row, k) {
   return (
     labelText(row.label, cy, `chart-label cr-${k}`) +
     `<g class="cr-${k}"><g class="cs-0">${rangeBar(ctx, row, 0)}<circle cx="${r(xs[0])}" cy="${r(cy)}" r="${DOT}" class="chart-before pop"/>${valueText({ x: firstX, cy }, formatNumber(before), `chart-value first late ${side(firstX)}`)}</g>` +
-    `<g class="cs-1">${rangeBar(ctx, row, 1)}${arrowOrDot(ctx, xs)}` +
+    `<g class="cs-1">${rangeBar(ctx, row, 1)}${endMark(ctx, xs)}` +
     `${valueText({ x: secondX, cy }, formatNumber(after), `chart-value second late ${side(secondX)}`)}${ratio}</g></g>`
   );
 }

@@ -216,14 +216,17 @@ test('loadChartData_interval_keys_match_inline_rows_for_line_and_dumbbell', asyn
   assert.deepEqual([dataLine, dataDumbbell], [inlineLine, inlineDumbbell]);
 });
 
-test('drawDumbbells_close_values_drop_arrow_and_keep_value_text_apart', async () => {
+test('drawDumbbells_every_row_ends_in_the_same_main_dot_and_close_rows_only_lose_the_arrow', async () => {
   const close = await bodyOf('chart dumbbell\nscale log\nseries a "A" role=compare\nseries b "B" role=main\nrow "r" a=8000 b=9200\nrow "s" a=100000 b=1000');
   const [near, far] = close.split('class="chart-label cr-1"');
   const textX = (svg, cls) => Number(new RegExp(`<text x="([\\d.]+)"[^>]*class="chart-value ${cls} late`).exec(svg)[1]);
 
+  const dots = (svg) => [...svg.matchAll(/<circle [^>]*r="(\d+)" fill="([^"]+)" class="chart-after pop"/g)].map((m) => m.slice(1).join(' '));
+
   assert.equal(near.includes('chart-arrow'), false);
-  assert.match(near, /class="chart-after pop"/);
   assert.match(far, /chart-arrow draw/);
+  assert.equal(dots(near).length, 1);
+  assert.deepEqual(dots(far), dots(near));
   assert.ok(textX(near, 'second') > textX(near, 'first'));
 });
 
