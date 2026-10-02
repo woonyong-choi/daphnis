@@ -17,7 +17,7 @@ const TIP_STEP = 1;
 // 화살표가 끝 점에서 tip만큼 떨어져 끝날 때 화살촉(끝에서 시작 쪽으로 뻗은 삼각형)이 글자 상자 box와 겹치는가. end는 화살촉 끝 좌표, dir은 시작 점에서 끝 점으로 향하는 단위 방향이다.
 // 화살촉은 선 굵기 곱 토큰 크기라 선 굵기가 두꺼우면 크다. 삼각형의 세 꼭짓점과 가운데를 상자에 간격 `space.2`를 더해 본다.
 function arrowheadHits(end, dir, box) {
-  const length = SIZE.marker * values.border.strong;
+  const length = SIZE.arrow.head * values.border.strong;
   const [bx, by] = [end.x - dir.ux * length, end.y - dir.uy * length];
   const [px, py] = [-dir.uy * length * HEAD_HALF_WIDTH, dir.ux * length * HEAD_HALF_WIDTH];
   const points = [[end.x, end.y], [bx + px, by + py], [bx - px, by - py], [bx, by], [(end.x + bx) / 2, (end.y + by) / 2]];

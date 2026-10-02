@@ -104,8 +104,8 @@ html.embedded .fl-figure {
 .fl-round {
   display: grid;
   place-items: center;
-  min-width: var(--size-control);
-  height: var(--size-control);
+  min-width: var(--size-control-outer);
+  height: var(--size-control-outer);
   padding: 0 var(--space-2);
   font: var(--size-text-13) var(--font-sans);
   font-variant-numeric: tabular-nums;
@@ -136,7 +136,7 @@ html.embedded .fl-figure {
 }
 
 .fl-caption {
-  max-width: var(--size-caption-max);
+  max-width: var(--size-player-caption-max);
   min-height: calc(var(--size-text-14) * var(--leading-normal));
   margin: 0;
   font-size: var(--size-text-14);
@@ -171,7 +171,7 @@ html.embedded .fl-figure {
 .fl-figure.full .fl-canvas svg {
   width: 100%;
   min-width: 0;
-  height: calc(100vh - var(--size-embedded-chrome));
+  height: calc(100vh - var(--size-player-embedded-chrome));
   max-height: none;
   touch-action: none;
   user-select: none;
@@ -188,7 +188,7 @@ html.embedded .fl-figure {
 /* 확대·축소는 전체 화면에서만 보인다. 문서 안에서는 그림을 그대로 보이는 편이 읽기 쉽다. */
 .fl-zoom {
   position: absolute;
-  top: calc(var(--space-5) + var(--size-control) + var(--space-3));
+  top: calc(var(--space-5) + var(--size-control-outer) + var(--space-3));
   right: var(--space-5);
   z-index: var(--z-raised);
   display: none;

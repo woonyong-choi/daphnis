@@ -90,11 +90,9 @@ export const tokens = freeze({
     "border": "var(--color-border)",
     "card-on": "var(--color-card-on)",
     "group": "var(--color-group)",
-    "group-border": "var(--color-group-border)",
     "frame": "var(--color-frame)",
     "plate-border": "var(--color-plate-border)",
     "page": "var(--color-page)",
-    "gallery": "var(--color-gallery)",
     "tag": {
       "purple": "var(--color-tag-purple)",
       "green": "var(--color-tag-green)",
@@ -122,48 +120,76 @@ export const tokens = freeze({
       "20": "var(--size-line-20)",
       "22": "var(--size-line-22)"
     },
-    "control": "var(--size-control)",
-    "control-inner": "var(--size-control-inner)",
-    "pill": "var(--size-pill)",
-    "tag": "var(--size-tag)",
-    "icon": "var(--size-icon)",
-    "packet": "var(--size-packet)",
-    "halo": "var(--size-halo)",
-    "marker": "var(--size-marker)",
-    "marker-on": "var(--size-marker-on)",
-    "card": "var(--size-card)",
-    "node-min": "var(--size-node-min)",
-    "node-max": "var(--size-node-max)",
-    "node-min-h": "var(--size-node-min-h)",
-    "store-cap": "var(--size-store-cap)",
+    "control": {
+      "outer": "var(--size-control-outer)",
+      "inner": "var(--size-control-inner)",
+      "icon": "var(--size-control-icon)"
+    },
+    "pill": {
+      "height": "var(--size-pill-height)"
+    },
+    "tag": {
+      "height": "var(--size-tag-height)"
+    },
+    "packet": {
+      "radius": "var(--size-packet-radius)",
+      "halo": "var(--size-packet-halo)",
+      "hop-ref": "var(--size-packet-hop-ref)"
+    },
+    "arrow": {
+      "head": "var(--size-arrow-head)",
+      "head-lit": "var(--size-arrow-head-lit)"
+    },
+    "node": {
+      "card-width": "var(--size-node-card-width)",
+      "min-width": "var(--size-node-min-width)",
+      "max-width": "var(--size-node-max-width)",
+      "min-height": "var(--size-node-min-height)",
+      "store-cap": "var(--size-node-store-cap)",
+      "state-dot": "var(--size-node-state-dot)",
+      "table-row": "var(--size-node-table-row)"
+    },
     "figure-canvas": "var(--size-figure-canvas)",
-    "hop-ref": "var(--size-hop-ref)",
-    "chip-max": "var(--size-chip-max)",
-    "caption-max": "var(--size-caption-max)",
-    "gallery-column": "var(--size-gallery-column)",
-    "gallery-frame": "var(--size-gallery-frame)",
-    "document-column": "var(--size-document-column)",
-    "embedded-chrome": "var(--size-embedded-chrome)",
-    "chart-width": "var(--size-chart-width)",
-    "chart-label": "var(--size-chart-label)",
-    "chart-label-max": "var(--size-chart-label-max)",
-    "chart-bar": "var(--size-chart-bar)",
-    "chart-row": "var(--size-chart-row)",
-    "chart-dot": "var(--size-chart-dot)",
-    "person-w": "var(--size-person-w)",
-    "person-head": "var(--size-person-head)",
-    "person-shoulder": "var(--size-person-shoulder)",
-    "person-body": "var(--size-person-body)",
-    "state-dot": "var(--size-state-dot)",
-    "table-row": "var(--size-table-row)",
-    "seq-row": "var(--size-seq-row)",
-    "group-title": "var(--size-group-title)",
-    "chart-plot-h": "var(--size-chart-plot-h)",
-    "chart-axis": "var(--size-chart-axis)",
-    "chart-cell": "var(--size-chart-cell)",
-    "chart-cap": "var(--size-chart-cap)",
-    "chart-range": "var(--size-chart-range)",
-    "chart-arrow-min": "var(--size-chart-arrow-min)"
+    "chip": {
+      "max-width": "var(--size-chip-max-width)"
+    },
+    "player": {
+      "caption-max": "var(--size-player-caption-max)",
+      "embedded-chrome": "var(--size-player-embedded-chrome)"
+    },
+    "gallery": {
+      "column": "var(--size-gallery-column)",
+      "frame": "var(--size-gallery-frame)"
+    },
+    "document": {
+      "column": "var(--size-document-column)"
+    },
+    "chart": {
+      "width": "var(--size-chart-width)",
+      "label": "var(--size-chart-label)",
+      "label-max": "var(--size-chart-label-max)",
+      "bar": "var(--size-chart-bar)",
+      "row": "var(--size-chart-row)",
+      "dot": "var(--size-chart-dot)",
+      "plot-h": "var(--size-chart-plot-h)",
+      "axis": "var(--size-chart-axis)",
+      "cell": "var(--size-chart-cell)",
+      "cap": "var(--size-chart-cap)",
+      "range": "var(--size-chart-range)",
+      "arrow-min": "var(--size-chart-arrow-min)"
+    },
+    "person": {
+      "width": "var(--size-person-width)",
+      "head": "var(--size-person-head)",
+      "shoulder": "var(--size-person-shoulder)",
+      "body": "var(--size-person-body)"
+    },
+    "sequence": {
+      "row": "var(--size-sequence-row)"
+    },
+    "group": {
+      "title": "var(--size-group-title)"
+    }
   },
   "weight": {
     "medium": "var(--weight-medium)",
@@ -188,11 +214,9 @@ export const tokens = freeze({
     "9": "var(--space-9)",
     "11": "var(--space-11)",
     "12": "var(--space-12)",
-    "13": "var(--space-13)",
     "14": "var(--space-14)",
     "15": "var(--space-15)",
     "16": "var(--space-16)",
-    "18": "var(--space-18)",
     "20": "var(--space-20)",
     "22": "var(--space-22)",
     "30": "var(--space-30)",
@@ -350,11 +374,9 @@ export const values = freeze({
     "border": "#818b99",
     "card-on": "#edf5fb",
     "group": "#eef0f3",
-    "group-border": "#818b99",
     "frame": "#e3e7ec",
     "plate-border": "#d5dbe3",
     "page": "#ffffff",
-    "gallery": "#ffffff",
     "tag": {
       "purple": "#8b5cf6",
       "green": "#10b981",
@@ -382,48 +404,76 @@ export const values = freeze({
       "20": 20,
       "22": 22
     },
-    "control": 30,
-    "control-inner": 22,
-    "pill": 18,
-    "tag": 14,
-    "icon": 12,
-    "packet": 4.5,
-    "halo": 10,
-    "marker": 5,
-    "marker-on": 4,
-    "card": 176,
-    "node-min": 100,
-    "node-max": 210,
-    "node-min-h": 46,
-    "store-cap": 12,
+    "control": {
+      "outer": 30,
+      "inner": 22,
+      "icon": 12
+    },
+    "pill": {
+      "height": 18
+    },
+    "tag": {
+      "height": 14
+    },
+    "packet": {
+      "radius": 4.5,
+      "halo": 10,
+      "hop-ref": 300
+    },
+    "arrow": {
+      "head": 5,
+      "head-lit": 4
+    },
+    "node": {
+      "card-width": 176,
+      "min-width": 100,
+      "max-width": 210,
+      "min-height": 46,
+      "store-cap": 12,
+      "state-dot": 14,
+      "table-row": 26
+    },
     "figure-canvas": 960,
-    "hop-ref": 300,
-    "chip-max": 210,
-    "caption-max": 720,
-    "gallery-column": 960,
-    "gallery-frame": 820,
-    "document-column": 960,
-    "embedded-chrome": 150,
-    "chart-width": 960,
-    "chart-label": 140,
-    "chart-label-max": 240,
-    "chart-bar": 12,
-    "chart-row": 40,
-    "chart-dot": 5,
-    "person-w": 56,
-    "person-head": 20,
-    "person-shoulder": 14,
-    "person-body": 22,
-    "state-dot": 14,
-    "table-row": 26,
-    "seq-row": 44,
-    "group-title": 28,
-    "chart-plot-h": 260,
-    "chart-axis": 48,
-    "chart-cell": 40,
-    "chart-cap": 8,
-    "chart-range": 6,
-    "chart-arrow-min": 16
+    "chip": {
+      "max-width": 210
+    },
+    "player": {
+      "caption-max": 720,
+      "embedded-chrome": 150
+    },
+    "gallery": {
+      "column": 960,
+      "frame": 820
+    },
+    "document": {
+      "column": 960
+    },
+    "chart": {
+      "width": 960,
+      "label": 140,
+      "label-max": 240,
+      "bar": 12,
+      "row": 40,
+      "dot": 5,
+      "plot-h": 260,
+      "axis": 48,
+      "cell": 40,
+      "cap": 8,
+      "range": 6,
+      "arrow-min": 16
+    },
+    "person": {
+      "width": 56,
+      "head": 20,
+      "shoulder": 14,
+      "body": 22
+    },
+    "sequence": {
+      "row": 44
+    },
+    "group": {
+      "title": 28
+    }
   },
   "weight": {
     "medium": 500,
@@ -448,11 +498,9 @@ export const values = freeze({
     "9": 18,
     "11": 22,
     "12": 24,
-    "13": 26,
     "14": 28,
     "15": 30,
     "16": 32,
-    "18": 36,
     "20": 40,
     "22": 44,
     "30": 60,

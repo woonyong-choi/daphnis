@@ -6,7 +6,7 @@ import { inkGroup, labelText, valueText } from './labels.js';
 import { DOT, ROW, SIZE, SPACE, TEXT, WIDTH, PAD, seriesColor } from './metrics.js';
 import { formatChange, valueFormat } from './scale.js';
 
-const ARROW_MIN = SIZE['chart-arrow-min'];
+const ARROW_MIN = SIZE.chart['arrow-min'];
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -58,7 +58,7 @@ function dumbbellScale(chart) {
 function rangeBar(ctx, row, i) {
   const { chart, scale, cy } = ctx;
   const [low, high] = [row.values[`${chart.series[i].id}.low`], row.values[`${chart.series[i].id}.high`]];
-  return low === undefined ? '' : `<line x1="${r(scale.at(low))}" x2="${r(scale.at(high))}" y1="${r(cy)}" y2="${r(cy)}" stroke="${seriesColor(chart, i)}" stroke-width="${SIZE['chart-range']}" class="chart-range pop"/>`;
+  return low === undefined ? '' : `<line x1="${r(scale.at(low))}" x2="${r(scale.at(high))}" y1="${r(cy)}" y2="${r(cy)}" stroke="${seriesColor(chart, i)}" stroke-width="${SIZE.chart.range}" class="chart-range pop"/>`;
 }
 
 // cost: time O(1), heap O(1), stack O(1)

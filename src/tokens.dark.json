@@ -79,14 +79,8 @@
     "page": {
       "$value": "{color.palette.neutral.950}"
     },
-    "gallery": {
-      "$value": "{color.palette.neutral.950}"
-    },
     "group": {
       "$value": "{color.palette.neutral.850}"
-    },
-    "group-border": {
-      "$value": "{color.palette.neutral.500}"
     },
     "plate-border": {
       "$value": "{color.palette.neutral.800}"

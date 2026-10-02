@@ -4,8 +4,8 @@ import { centerBaseline, renderRich, roundCoord as r } from '../text.js';
 import { values } from '../tokens.js';
 import { BAR, PAD, SIZE, SPACE, TEXT, seriesColor } from './metrics.js';
 
-const LABEL_W = SIZE['chart-label'];
-const LABEL_MAX = SIZE['chart-label-max'];
+const LABEL_W = SIZE.chart.label;
+const LABEL_MAX = SIZE.chart['label-max'];
 const LABEL_GAP = SPACE['6'];
 // 차트 항목 이름이 칸에 들어가는 최대 폭
 const LABEL_ROOM = LABEL_MAX - LABEL_GAP;

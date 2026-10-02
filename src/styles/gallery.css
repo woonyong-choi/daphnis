@@ -8,7 +8,7 @@ body {
   padding: var(--space-20) var(--space-16);
   font-family: var(--font-sans);
   color: var(--color-fg);
-  background: var(--color-gallery);
+  background: var(--color-page);
 }
 
 .top {

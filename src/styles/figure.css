@@ -124,7 +124,7 @@
 
 .fl .frame-box {
   fill: var(--color-group);
-  stroke: var(--color-group-border);
+  stroke: var(--color-border);
 }
 
 .fl .lifeline {

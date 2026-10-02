@@ -15,7 +15,7 @@ const GRAPHIC = 3;
 const DECORATIVE_LINE = 1.5;
 const DECORATIVE_PLATE_EDGE = 1.3;
 const FIGURE_FACES = ['bg', 'node', 'group', 'card-on'];
-const DOCUMENT_FACES = ['page', 'gallery'];
+const DOCUMENT_FACES = ['page'];
 const ALL_FACES = [...FIGURE_FACES, ...DOCUMENT_FACES];
 const BORDER_FACES = [...FIGURE_FACES, 'surface', ...DOCUMENT_FACES];
 // 강조 글자는 그룹 바탕 위에 놓이지 않는다. 카드 표시는 내용이 찬 카드 바탕(card-on)에, 링크는 문서 면에 놓인다.
@@ -78,7 +78,7 @@ function listTokens(node, path = []) {
 // 근거: 규칙 docs-integration.md 대비 기준 표: 본문·보조·강조·태그 글자, 켜진 면 위 글자, 켜진 탭 글자는 모든 면에서 4.5 이상
 test('contrast_text_pairs_reach_4_5_in_both_themes', () => {
   for (const theme of THEMES) {
-    expectAtLeast(theme, TEXT, ['bg', 'node', 'surface', 'card-on', 'group', 'page', 'gallery'].flatMap((face) => [['fg', face], ['muted', face]]));
+    expectAtLeast(theme, TEXT, ['bg', 'node', 'surface', 'card-on', 'group', 'page'].flatMap((face) => [['fg', face], ['muted', face]]));
     expectAtLeast(theme, TEXT, TEXT_FACES.flatMap((face) => TEXT_ROLES.map((role) => [role, face])));
     expectAtLeast(theme, TEXT, [['state.on-active', 'state.active-fill'], ['fg', 'ui.control-on'], ['muted', 'bg']]);
     for (const face of ['node', 'surface', 'card-on']) {
@@ -95,7 +95,7 @@ test('contrast_text_pairs_reach_4_5_in_both_themes', () => {
 test('contrast_graphic_pairs_reach_3_in_both_themes', () => {
   for (const theme of THEMES) {
     expectAtLeast(theme, GRAPHIC, ALL_FACES.flatMap((face) => GRAPHIC_ROLES.map((role) => [role, face])));
-    expectAtLeast(theme, GRAPHIC, BORDER_FACES.flatMap((face) => [['border', face], ['group-border', face]]));
+    expectAtLeast(theme, GRAPHIC, BORDER_FACES.flatMap((face) => [['border', face]]));
     expectAtLeast(theme, GRAPHIC, [['fg', 'bg']]);
   }
 });
@@ -153,7 +153,7 @@ test('figureGround_light_bg_is_gray_group_is_slightly_darker_and_node_face_is_br
 
 // 근거: 결정 docs-integration.md "대비 규칙이 색 선택보다 우선: 같은 색상에서 기준을 넘는 가장 밝은 단계를 그 자리에만 쓴다"
 test('palette_graphic_text_and_border_colors_are_the_lightest_step_that_reaches_their_floor', () => {
-  const graphicFaces = ['bg', 'group', 'card-on', 'node', 'page', 'gallery'];
+  const graphicFaces = ['bg', 'group', 'card-on', 'node', 'page'];
   const lowest = (value, faces, theme = 'light') => Math.min(...faces.map((face) => contrast(value, color(theme, face))));
   for (const [hue, base] of [['blue', RESUME_ACCENT], ['orange', RESUME_ORANGE]]) {
     const graphic = color('light', `palette.${hue}.550`);
@@ -163,7 +163,7 @@ test('palette_graphic_text_and_border_colors_are_the_lightest_step_that_reaches_
     assert.ok(Math.abs(graphicHue - baseHue) <= HUE_TOLERANCE && Math.abs(graphicC - baseC) <= CHROMA_TOLERANCE, `${hue} hue/chroma`);
     assert.ok(lowest(graphic, graphicFaces) >= GRAPHIC && lowest(mixHex(graphic, '#ffffff', STEP_MIX), graphicFaces) < GRAPHIC, `${hue} graphic step`);
   }
-  const textFaces = ['node', 'bg', 'card-on', 'page', 'gallery'];
+  const textFaces = ['node', 'bg', 'card-on', 'page'];
   const strong = color('light', 'state.active-text');
   assert.ok(lowest(strong, textFaces) >= TEXT && lowest(mixHex(strong, '#ffffff', STEP_MIX), textFaces) < TEXT, 'light active text step');
   assert.ok(contrast(color('light', 'state.active'), color('light', 'node')) < TEXT, 'state.active itself is a graphic color, not a text color');
