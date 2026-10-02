@@ -33,14 +33,16 @@ function figurePlay(root, data) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 화면이 표준 캔버스 폭보다 좁으면 그림 영역이 가로로 스크롤된다. 내용은 캔버스 가운데에 있으므로 가운데에서 시작하고, 화면 크기가 바뀌어도 다시 맞춘다.
+// 화면이 표준 캔버스 폭보다 좁으면 그림 영역이 가로로 스크롤된다. 내용이 캔버스보다 좁은 그림은 내용이 캔버스 가운데에 있으므로 가운데에서 시작하고(viewBox 왼쪽이 음수),
+// 캔버스를 꽉 채우는 차트와 넓은 그림은 왼쪽 끝(이름과 축)에서 시작한다. 화면 크기가 바뀌어도 다시 맞춘다.
 function centerCanvas(root) {
   const canvas = root.querySelector('.fl-canvas');
-  const center = () => {
-    canvas.scrollLeft = (canvas.scrollWidth - canvas.clientWidth) / 2;
+  const isCentered = root.querySelector('svg.fl').viewBox.baseVal.x < 0;
+  const place = () => {
+    canvas.scrollLeft = isCentered ? (canvas.scrollWidth - canvas.clientWidth) / 2 : 0;
   };
-  center();
-  addEventListener('resize', center);
+  place();
+  addEventListener('resize', place);
 }
 
 // cost: time O(s + c), heap O(s + c), stack O(1)
