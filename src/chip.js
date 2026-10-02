@@ -23,6 +23,14 @@ const SIDE_NEAR = 2;
 const SIDE_FAR = 4;
 // 후보 순위에서 옆으로 비킨 거리를 가르는 가중치. 후보 종류(위, 아래, 옆)의 순서를 넘지 않을 만큼 작다
 const SHIFT_WEIGHT = 1 / 10000;
+// 세로 줄 종류마다 선택 순서 가중치와 윗면. 윗면은 점 위 기본 윗면 above, 글 상자, 가리는 사각형 o로 정한다.
+const ROW_ORDER = { above: 0, below: ROW_BELOW, lift: ROW_LIFT, drop: ROW_BELOW + ROW_LIFT };
+const ROW_TOP = {
+  above: (above) => above,
+  below: (above, chip) => above + chip.h + CHIP_GAP * 2,
+  lift: (above, chip, o) => o.y - chip.h - CHIP_CLEAR,
+  drop: (above, chip, o) => o.y + o.h + CHIP_CLEAR,
+};
 
 // cost: time O(l·n), heap O(1), stack O(1)
 // vars: l = 줄 수, n = 줄 글자 수
@@ -64,17 +72,17 @@ export function placeChip(point, chip, field) {
  * isWide면 가리지 않는 사각형이라도 글 상자 높이 안에 있으면 그 옆 줄을 후보로 더한다(이동 계획용). 점이 다가가면 곧 가릴 사각형 바로 옆 자리를 이동 내내 이어 쓰기 위해서다.
  * @returns { key, desc, dx, dy, box, isOutside, hits, rank }[]. rank는 [그림 밖, 겹친 넓이, 가까운 선 넓이, 위아래 끝 여백 부족, 가장자리 여백 부족, 선택 순서]이고 작을수록 낫다
  */
-export function chipCandidates(point, chip, { scene, avoid = [], isWide = false }) {
-  const ctx = { point, chip, scene, avoid, isWide };
-  return rowDescs(ctx).flatMap((row) => sideDescs(ctx, rowFor(ctx, row).top).flatMap((side) => insetsOf(ctx, side).map((inset) => candidateOf(ctx, { row, side, inset }))));
+export function chipCandidates(point, chip, { scene, avoid = [], isWide = false, index }) {
+  const ctx = { point, chip, scene, avoid, isWide, index };
+  return rowDescs(ctx).flatMap((row) => sideDescs(ctx, rowFor(ctx, row).top).flatMap((side) => insetsOf(ctx, side).map((inset) => candidateOf(ctx, descOf(row, side, inset)))));
 }
 
 // cost: time O(a), heap O(1), stack O(1)
 // vars: a = 피할 사각형 수
 // basis: estimate
 /** chipCandidates가 돌려준 desc(field에 담아 넘긴다)의 후보를 다른 점 point에서 다시 만든다. 바깥 틀(가리는 사각형 번호)이 같으면 같은 종류의 자리다. */
-export function chipCandidateAt(point, chip, { scene, avoid = [], desc }) {
-  return candidateOf({ point, chip, scene, avoid }, desc);
+export function chipCandidateAt(point, chip, { scene, avoid = [], desc, index }) {
+  return candidateOf({ point, chip, scene, avoid, index }, desc);
 }
 
 // cost: time O(a), heap O(a), stack O(1)
@@ -97,9 +105,8 @@ function rowDescs(ctx) {
 // 세로 줄 desc의 윗면과 선택 순서 가중치. dy는 점 위 기본 자리에서 옮긴 양이다.
 function rowFor({ point, chip, avoid }, [kind, i]) {
   const above = point.y - chip.h - CHIP_GAP;
-  const tops = { above, below: above + chip.h + CHIP_GAP * 2, lift: avoid[i] && avoid[i].y - chip.h - CHIP_CLEAR, drop: avoid[i] && avoid[i].y + avoid[i].h + CHIP_CLEAR };
-  const orders = { above: 0, below: ROW_BELOW, lift: ROW_LIFT, drop: ROW_BELOW + ROW_LIFT };
-  return { top: tops[kind], order: orders[kind], dy: tops[kind] - above };
+  const top = ROW_TOP[kind](above, chip, avoid[i]);
+  return { top, order: ROW_ORDER[kind], dy: top - above };
 }
 
 // cost: time O(a), heap O(a), stack O(1)
@@ -136,32 +143,54 @@ function insetsOf(ctx, [kind, i, end]) {
   return fitInset(ctx, center, 'gap') === fitInset(ctx, center, 'clear') ? ['gap'] : ['gap', 'clear'];
 }
 
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+/** 세로 줄, 가로 기준, 여백 종류로 만든 desc. key는 같은 종류의 자리를 점이 움직여도 알아보는 이름이다. */
+export function descOf(row, side, inset) {
+  return { row, side, inset, key: `${row.join(':')}/${side.join(':')}/${inset}` };
+}
+
 // cost: time O(a), heap O(1), stack O(1)
 // vars: a = 피할 사각형 수
 // basis: estimate
 // desc 하나의 후보
 function candidateOf(ctx, desc) {
   const side = sideFor(ctx, desc.side);
-  const key = `${desc.row.join(':')}/${desc.side.join(':')}/${desc.inset}`;
-  return { ...candidateAt(ctx, rowFor(ctx, desc.row), { x: fitInset(ctx, side.center, desc.inset), order: side.order }), key, desc };
+  return candidateAt(ctx, { row: rowFor(ctx, desc.row), x: fitInset(ctx, side.center, desc.inset), order: side.order }, desc);
 }
 
-// cost: time O(a), heap O(1), stack O(1)
-// vars: a = 피할 사각형 수
+// cost: time O(a) 색인이 없을 때, O(m) 있을 때, heap O(m), stack O(1)
+// vars: a = 피할 사각형 수, m = 글 상자 둘레 칸에 걸린 사각형 수(a 이하)
 // basis: estimate
-// 후보 하나의 자리와 순위
-function candidateAt({ point, chip, scene, avoid }, row, { x, order: sideOrder }) {
+// 후보 하나의 자리와 순위. index(chip-grid.js)가 있으면 글 상자 둘레의 사각형만 잰다. 번호 순서를 지켜 합이 같다.
+function candidateAt({ point, chip, scene, avoid, index }, { row, x, order: sideOrder }, desc) {
   const box = { x: x - chip.w / 2, y: row.top, w: chip.w, h: chip.h };
-  const hits = avoid.filter((o) => !o.soft && overlapArea(box, o) > OVERLAP_SLACK);
-  const area = hits.reduce((sum, o) => sum + overlapArea(box, o), 0);
   // 선과 그룹 틀은 최소 간격 안에 들어와도 순위만 낮춘다.
   const padded = { x: box.x - CHIP_CLEAR, y: box.y - CHIP_CLEAR, w: box.w + CHIP_CLEAR * 2, h: box.h + CHIP_CLEAR * 2 };
-  const nearArea = avoid.filter((o) => o.soft).reduce((sum, o) => sum + overlapArea(padded, o), 0);
+  const { hits, area, nearArea } = overlapsOf({ box, padded }, avoid, index?.near(padded));
   const isOutside = isOutsideFigure(box, scene);
   const isTight = row.top < CHIP_MARGIN - FIT_SLACK || row.top + chip.h > scene.height - CHIP_MARGIN + FIT_SLACK;
   const isCrowded = Math.min(box.x, scene.width - box.x - box.w) < CHIP_GAP - FIT_SLACK;
   const order = row.order + sideOrder + (Math.abs(x - point.x) + Math.abs(row.dy)) * SHIFT_WEIGHT;
-  return { dx: x - point.x, dy: row.dy, box, isOutside, hits: hits.map((h) => h.name), rank: [Number(isOutside), area, nearArea, Number(isTight), Number(isCrowded), order] };
+  return { dx: x - point.x, dy: row.dy, box, isOutside, hits, rank: [Number(isOutside), area, nearArea, Number(isTight), Number(isCrowded), order], key: desc.key, desc };
+}
+
+// cost: time O(m), heap O(h), stack O(1)
+// vars: m = 잴 사각형 수(ids가 있으면 그 수, 없으면 avoid 전체), h = 가리는 이름 수
+// basis: estimate
+// 글 상자와 겹치는 도형, 글자, 알약의 이름과 겹친 넓이 합, 선과 그룹 틀(soft)과 간격을 둔 상자의 겹친 넓이 합. ids는 잴 번호(오름차순)이고 없으면 모두 잰다.
+function overlapsOf({ box, padded }, avoid, ids) {
+  const hits = [];
+  let [area, nearArea] = [0, 0];
+  for (let k = 0; k < (ids ? ids.length : avoid.length); k++) {
+    const o = avoid[ids ? ids[k] : k];
+    if (o.soft) nearArea += overlapArea(padded, o);
+    else if (overlapArea(box, o) > OVERLAP_SLACK) {
+      hits.push(o.name);
+      area += overlapArea(box, o);
+    }
+  }
+  return { hits, area, nearArea };
 }
 
 // cost: time O(r), heap O(1), stack O(1)

@@ -60,10 +60,10 @@ function offsetAt(path, ms, t) {
   return [1, 2, 3].map((i) => a[i] + (b[i] - a[i]) * ratio);
 }
 
-// cost: time O(a), heap O(1), stack O(1)
-// vars: a = 피할 사각형 수
+// cost: time O(m), heap O(1), stack O(1)
+// vars: m = 글 상자 둘레 칸에 걸린 도형, 글자, 알약 수
 // basis: estimate
 // 글 상자가 그림 밖이거나 도형, 글자, 알약을 가리는지(선과 그룹 틀은 순위만 낮추므로 보지 않는다)
 export function isHit(ctx, box) {
-  return isOutsideFigure(box, ctx.scene) || ctx.hard.some((o) => overlapArea(box, o) > OVERLAP_SLACK);
+  return isOutsideFigure(box, ctx.scene) || ctx.hardIndex.some(box, (i) => overlapArea(box, ctx.hard[i]) > OVERLAP_SLACK);
 }

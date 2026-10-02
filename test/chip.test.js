@@ -5,7 +5,7 @@ import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
 import { flattenRoute } from '../src/route.js';
 import { CHIP_CLEAR, CHIP_GAP, CHIP_MARGIN, placeChip, sizeChip } from '../src/chip.js';
-import { CHIP_FRAME_MS, CHIP_STEP_MAX, CHIP_VISIBLE_MIN, chipStateAt, planChip } from '../src/chip-plan.js';
+import { CHIP_FRAME_MS, CHIP_STEP_MAX, CHIP_VISIBLE_MIN, chipStateAt, issuesOfHop, planChip } from '../src/chip-plan.js';
 import { chipLines, chipObstacles } from '../src/draw/boxes.js';
 import { toHtml } from '../src/html.js';
 import { toSvg } from '../src/svg.js';
@@ -199,6 +199,18 @@ test('toHtml_and_toSvg_share_the_chip_plan_from_the_timeline', async () => {
   for (const hop of hops) assert.ok(html.includes(`"chipPath":${JSON.stringify(hop.chipPath)}`));
   assert.doesNotMatch(player, /function placeChip/);
   assert.match(svg, /<animateTransform attributeName="transform"/);
+});
+
+test('planHops_plans_identical_hops_once_and_check_reuses_the_plan', async () => {
+  const result = await buildFigure(readFileSync(new URL('./fixtures/csapp/dns-structure.muto', import.meta.url), 'utf8'), { baseDir: 'test/fixtures/csapp' });
+  const hops = result.timeline.segs.flatMap((seg) => seg.hops).filter((hop) => hop.data);
+  const avoid = [...chipObstacles(result.scene), ...chipLines(result.scene)];
+  const sameKey = (a, b) => a.edge === b.edge && a.ms === b.ms && a.isBack === b.isBack && a.data.join('\n') === b.data.join('\n');
+  const twins = hops.flatMap((a, i) => hops.slice(i + 1).filter((b) => sameKey(a, b)).map((b) => [a, b]));
+
+  assert.ok(twins.length > 0, '같은 이동이 둘 이상인 예제여야 한다');
+  for (const [a, b] of twins) assert.equal(a.chipPath, b.chipPath);
+  for (const hop of hops) assert.deepEqual(issuesOfHop(result.scene, hop, avoid), planChip(result.scene, hop, avoid).issues);
 });
 
 test('placeChip_keeps_the_minimum_clearance_from_the_obstacle_it_lifts_over', () => {
