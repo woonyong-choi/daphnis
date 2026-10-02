@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
+import { heatLook } from '../src/chart/heatmap.js';
 import { contrast, mixHex, pickInk } from '../src/contrast.js';
 import { RESUME_ACCENT, themeColor, tokenValue } from './helpers.js';
 
@@ -100,6 +101,20 @@ for (const theme of THEMES) {
     }
   });
 
+  test(`contrast_${theme}_heat_cell_look_reaches_4_5_on_every_hundredth_of_strength_lit_and_dimmed`, () => {
+    // 칸 색과 글자색은 heatLook 한 식이 함께 고른다. 0.01 단위로 훑어 평소(밝힘)와 흐림 모두 잰다.
+    const heat = { low: color(theme, 'data.heat-low'), high: color(theme, 'data.heat-high'), ink: color(theme, 'data.heat-ink'), inkOn: color(theme, 'data.heat-ink-on') };
+    const bg = color(theme, 'bg');
+    for (let step = 0; step <= 100; step++) {
+      const look = heatLook(step / 100, heat);
+      const lit = contrast(look.isOn ? heat.inkOn : heat.ink, look.fill);
+      assert.ok(lit >= TEXT, `${theme} lit strength ${step / 100} (${look.fill}): ${lit.toFixed(2)}`);
+      const face = mixHex(bg, look.fill, opacity('dim'));
+      const dimmed = contrast(mixHex(face, heat.ink, opacity('dim-ink')), face);
+      assert.ok(dimmed >= TEXT, `${theme} dimmed strength ${step / 100}: ${dimmed.toFixed(2)}`);
+    }
+  });
+
   test(`contrast_${theme}_confidence_line_reaches_3_against_its_casing_on_every_bar_color`, () => {
     // 신뢰구간 선(fg)은 막대 위에 얹히므로 둘레 바탕색 테두리(bg)와 맞닿는다. 테두리와 선이 3 이상이면 막대 색과 상관없이 보인다.
     expectAtLeast(theme, GRAPHIC, [['fg', 'bg']]);
@@ -151,6 +166,22 @@ test('stateRoles_values_follow_the_resume_accent_and_strong_is_the_lightest_same
 
 test('contrast_dark_heat_inks_are_one_color_so_the_build_time_light_pick_is_right_in_dark', () => {
   assert.equal(color('dark', 'data.heat-ink'), color('dark', 'data.heat-ink-on'));
+});
+
+test('buildFigure_heatmap_cells_draw_fill_and_ink_from_the_strength_written_in_the_style', async () => {
+  // 칸 색(--s와 fill 속성)과 글자색(on class)이 같은 강도에서 나온다. 0~100을 1씩 훑는다.
+  const rows = Array.from({ length: 101 }, (_, v) => `cell "r${v}" "c" ${v}`);
+  const { chart } = await buildFigure(`chart heatmap\n${rows.join('\n')}\n`);
+  const cells = [...chart.body.matchAll(/class="chart-heat" style="--s:([\d.]+)" fill="(#[0-9a-f]{6})"[^]*?class="cr-\d+ ink chart-cell( on)?"/g)];
+  const heat = { low: color('light', 'data.heat-low'), high: color('light', 'data.heat-high'), ink: color('light', 'data.heat-ink'), inkOn: color('light', 'data.heat-ink-on') };
+
+  assert.equal(cells.length, 101);
+  for (const [, strength, fill, on] of cells) {
+    const look = heatLook(Number(strength), heat);
+    assert.equal(fill, look.fill, `strength ${strength}`);
+    assert.equal(Boolean(on), look.isOn, `strength ${strength}`);
+    assert.equal(look.strength, Number(strength));
+  }
 });
 
 test('buildFigure_heatmap_cells_pick_the_ink_with_the_larger_contrast', async () => {

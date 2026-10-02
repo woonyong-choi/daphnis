@@ -9,18 +9,22 @@ import { valueFormat } from './scale.js';
 
 // 칸 색. 값 0은 핵심 1 옅게, 최댓값은 핵심 1 진하게이고 그 사이는 sRGB 보간이다(문서 스킬 색표).
 // 칸 색은 CSS(.chart-heat의 color-mix)가 변수로 계산해 다크 모드 값을 따라간다. 여기 hex는 color-mix를 모르는 뷰어용 대체 색(라이트)이다.
-const HEAT_LOW = values.color.data['heat-low'];
-const HEAT_HIGH = values.color.data['heat-high'];
 // 칸 안 값 글자 후보. 칸마다 대비가 큰 쪽을 빌드 때 고른다. 다크는 두 후보가 같은 밝은 색이고 칸 색 범위가 그 글자와 4.5 이상이 되게 정했다(테스트가 모든 강도를 잰다).
-const HEAT_INK = values.color.data['heat-ink'];
-const HEAT_INK_ON = values.color.data['heat-ink-on'];
+const LIGHT_HEAT = { low: values.color.data['heat-low'], high: values.color.data['heat-high'], ink: values.color.data['heat-ink'], inkOn: values.color.data['heat-ink-on'] };
 // 칸 강도(0~1)를 `--s`에 담을 때 줄이는 자릿수 배율(소수 셋째 자리)
 const STRENGTH_PRECISION = 1000;
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-function heatColor(strength) {
-  return mixHex(HEAT_LOW, HEAT_HIGH, strength);
+/**
+ * 칸 하나의 모양. 칸 색(`fill`)과 글자색(`isOn`: 밝은 글자)을 같은 강도 한 값에서 같은 식으로 정한다. CSS `--s`도 이 `strength`를 쓰므로 CSS가 계산하는 칸 색과 어긋나지 않는다.
+ * @param heat { low, high, ink, inkOn }. 칸 색 양끝과 글자 후보(`#rrggbb`)
+ * @returns { strength, fill, isOn }. strength는 STRENGTH_PRECISION에 맞춰 줄인 강도다.
+ */
+export function heatLook(rawStrength, heat) {
+  const strength = Math.round(rawStrength * STRENGTH_PRECISION) / STRENGTH_PRECISION;
+  const fill = mixHex(heat.low, heat.high, strength);
+  return { strength, fill, isOn: pickInk(fill, heat.ink, heat.inkOn) === heat.inkOn };
 }
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -29,10 +33,9 @@ function heatColor(strength) {
 function heatCell(grid, c, k) {
   const { rows, cols, plotX, cellW, cellH, top, max, format } = grid;
   const [x, y] = [plotX + cols.indexOf(c.col) * cellW, top + rows.indexOf(c.row) * cellH];
-  const strength = max ? c.values.value / max : 0;
-  const isOn = pickInk(heatColor(strength), HEAT_INK, HEAT_INK_ON) === HEAT_INK_ON;
+  const { strength, fill, isOn } = heatLook(max ? c.values.value / max : 0, LIGHT_HEAT);
   return (
-    `<g class="cr-${k}"><rect x="${r(x)}" y="${r(y)}" width="${r(cellW - SPACE['1'])}" height="${r(cellH - SPACE['1'])}" rx="${values.radius.sm}" class="chart-heat" style="--s:${Math.round(strength * STRENGTH_PRECISION) / STRENGTH_PRECISION}" fill="${heatColor(strength)}"/></g>` +
+    `<g class="cr-${k}"><rect x="${r(x)}" y="${r(y)}" width="${r(cellW - SPACE['1'])}" height="${r(cellH - SPACE['1'])}" rx="${values.radius.sm}" class="chart-heat" style="--s:${strength}" fill="${fill}"/></g>` +
     `<text x="${r(x + cellW / 2)}" y="${r(centerBaseline(y + cellH / 2, TEXT['11']))}" class="cr-${k} ink chart-cell${isOn ? ' on' : ''}">${format(c.values.value)}</text>`
   );
 }
