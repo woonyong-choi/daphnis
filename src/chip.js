@@ -61,10 +61,11 @@ export function placeChip(point, chip, field) {
 // basis: estimate
 /**
  * 점 point 위의 글 상자 후보 모두. 후보마다 desc(세로 줄, 가로 기준, 여백 종류)와 그 글 `key`가 있다. 같은 desc는 점이 움직여도 같은 종류의 자리라, chipCandidateAt이 다른 점에서 다시 만든다.
+ * isWide면 가리지 않는 사각형이라도 글 상자 높이 안에 있으면 그 옆 줄을 후보로 더한다(이동 계획용). 점이 다가가면 곧 가릴 사각형 바로 옆 자리를 이동 내내 이어 쓰기 위해서다.
  * @returns { key, desc, dx, dy, box, isOutside, hits, rank }[]. rank는 [그림 밖, 겹친 넓이, 가까운 선 넓이, 위아래 끝 여백 부족, 가장자리 여백 부족, 선택 순서]이고 작을수록 낫다
  */
-export function chipCandidates(point, chip, { scene, avoid = [] }) {
-  const ctx = { point, chip, scene, avoid };
+export function chipCandidates(point, chip, { scene, avoid = [], isWide = false }) {
+  const ctx = { point, chip, scene, avoid, isWide };
   return rowDescs(ctx).flatMap((row) => sideDescs(ctx, rowFor(ctx, row).top).flatMap((side) => insetsOf(ctx, side).map((inset) => candidateOf(ctx, { row, side, inset }))));
 }
 
@@ -84,7 +85,8 @@ function rowDescs(ctx) {
   const { point, chip, avoid } = ctx;
   const above = point.y - chip.h - CHIP_GAP;
   const below = above + chip.h + CHIP_GAP * 2;
-  const covering = (top) => avoid.flatMap((o, i) => (o.x < point.x + chip.w / 2 && point.x - chip.w / 2 < o.x + o.w && o.y < top + chip.h && top < o.y + o.h ? [i] : []));
+  const band = ctx.isWide ? chip.h : 0;
+  const covering = (top) => avoid.flatMap((o, i) => (o.x < point.x + chip.w / 2 && point.x - chip.w / 2 < o.x + o.w && o.y < top + chip.h + band && top - band < o.y + o.h ? [i] : []));
   const lifts = covering(above).filter((i) => above - rowFor(ctx, ['lift', i]).top <= LIFT_MAX).map((i) => ['lift', i]);
   const drops = covering(below).filter((i) => rowFor(ctx, ['drop', i]).top - below <= LIFT_MAX).map((i) => ['drop', i]);
   return [['above'], ['below'], ...lifts, ...drops];

@@ -68,7 +68,7 @@ function nodeTimes(ms) {
 function usefulDescs(ctx, times) {
   const descs = new Map();
   for (const t of times) {
-    for (const c of chipCandidates(dotAt(ctx, t), ctx.chip, { scene: ctx.scene, avoid: ctx.field })) if (!c.isOutside && c.hits.length === 0) descs.set(c.key, c.desc);
+    for (const c of chipCandidates(dotAt(ctx, t), ctx.chip, { scene: ctx.scene, avoid: ctx.field, isWide: true })) if (!c.isOutside && c.hits.length === 0) descs.set(c.key, c.desc);
   }
   const fallback = { row: ['above'], side: ['mid'], inset: 'gap' };
   return descs.set('above/mid/gap', fallback);
