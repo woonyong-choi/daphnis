@@ -180,3 +180,32 @@ test('embedFonts_hangul_only_text_still_embeds_a_space_glyph_in_the_same_weight_
     assert.ok(inter.font.hasGlyphForCodePoint(0x20), `FigSans ${weight} has U+0020`);
   }
 });
+
+const NOTO_LATIN = '@expo-google-fonts/noto-sans/400Regular/NotoSans_400Regular.ttf';
+const NOTO_MATH = '@expo-google-fonts/noto-sans-math/400Regular/NotoSansMath_400Regular.ttf';
+
+test('measure_math_symbols_fall_back_to_the_open_font_chain_instead_of_failing', () => {
+  for (const text of ['Kᵀ', 'X⁻¹', '√d', 'a × b', '∑ x', 'x ∈ S', 'f ∘ g', '≤ ≥ ≈ ∞']) {
+    assert.equal(findMissingGlyph(text), undefined, text);
+    assert.ok(measure(text, 12) > 0, text);
+  }
+});
+
+test('measure_superscript_t_uses_noto_sans_width_and_the_composition_sign_uses_noto_sans_math', () => {
+  assertNear(measure('ᵀ', 12), widthIn(NOTO_LATIN, 'ᵀ', 12));
+  assertNear(measure('∘', 12), widthIn(NOTO_MATH, '∘', 12));
+});
+
+test('measure_glyph_missing_from_every_font_still_throws', () => {
+  assert.equal(findMissingGlyph('😀'), '😀');
+  assert.throws(() => measure('😀', 12), /no glyph/);
+});
+
+test('embedFonts_math_symbols_embed_the_symbol_and_math_families_and_keep_the_font_sans_chain', async () => {
+  const { values } = await import('../src/tokens.js');
+  const css = await embedFonts(new Map([['regular', 'Q Kᵀ √ ∘ ×']]));
+  assert.match(css, /font-family:FigSansSym;font-weight:400/);
+  assert.match(css, /font-family:FigSansMath;font-weight:400 900/);
+  assert.match(values.font.sans, /^FigSans, FigSansKo, FigSansSym, FigSansMath, /);
+  assert.match(values.font.mono, /^FigMono, FigSans, FigSansKo, FigSansSym, FigSansMath, /);
+});

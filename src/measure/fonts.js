@@ -9,16 +9,25 @@ const require = createRequire(import.meta.url);
 
 // 글꼴 이름과 파일. weight는 CSS font-weight, family는 SVG 안 @font-face 이름이다.
 // 본문은 라틴과 기호를 Inter(FigSans), 한글을 Noto Sans KR(FigSansKo)로 그린다. 이력서와 같은 글꼴 구성이다.
-// fallback은 이 글꼴에 없는 글자를 대신 그리는 글꼴이다. CSS font-family 사슬(FigMono, FigSans, FigSansKo)과 같은 순서다.
+// 수학 기호는 Inter에 없는 것만 뒤 글꼴이 그린다. 위 첨자(ᵀ, ⁻¹)와 아래 첨자는 Noto Sans(FigSansSym), 연산자와 집합 기호(∈, ∇, ⊙)는 Noto Sans Math(FigSansMath)다. 모두 SIL OFL이다.
+// fallback은 이 글꼴에 없는 글자를 대신 그리는 글꼴이다. CSS font-family 사슬(FigMono, FigSans, FigSansKo, FigSansSym, FigSansMath)과 같은 순서다.
 const INTER = '@expo-google-fonts/inter';
 const NOTO = '@expo-google-fonts/noto-sans-kr';
+const NOTO_LATIN = '@expo-google-fonts/noto-sans';
+const NOTO_MATH = '@expo-google-fonts/noto-sans-math';
+// 굵기마다 파일이 없는 수학 글꼴은 모든 굵기에 한 파일을 쓴다. 굵기를 400으로만 적으면 브라우저가 굵은 글에서 글자를 덧칠해 폭이 달라진다.
+const ALL_WEIGHTS = '400 900';
 const FACES = {
   regular: { family: 'FigSans', weight: 400, file: `${INTER}/400Regular/Inter_400Regular.ttf`, fallback: 'koRegular' },
   medium: { family: 'FigSans', weight: 500, file: `${INTER}/500Medium/Inter_500Medium.ttf`, fallback: 'koMedium' },
   semibold: { family: 'FigSans', weight: 600, file: `${INTER}/600SemiBold/Inter_600SemiBold.ttf`, fallback: 'koSemibold' },
-  koRegular: { family: 'FigSansKo', weight: 400, file: `${NOTO}/400Regular/NotoSansKR_400Regular.ttf` },
-  koMedium: { family: 'FigSansKo', weight: 500, file: `${NOTO}/500Medium/NotoSansKR_500Medium.ttf` },
-  koSemibold: { family: 'FigSansKo', weight: 600, file: `${NOTO}/600SemiBold/NotoSansKR_600SemiBold.ttf` },
+  koRegular: { family: 'FigSansKo', weight: 400, file: `${NOTO}/400Regular/NotoSansKR_400Regular.ttf`, fallback: 'symRegular' },
+  koMedium: { family: 'FigSansKo', weight: 500, file: `${NOTO}/500Medium/NotoSansKR_500Medium.ttf`, fallback: 'symMedium' },
+  koSemibold: { family: 'FigSansKo', weight: 600, file: `${NOTO}/600SemiBold/NotoSansKR_600SemiBold.ttf`, fallback: 'symSemibold' },
+  symRegular: { family: 'FigSansSym', weight: 400, file: `${NOTO_LATIN}/400Regular/NotoSans_400Regular.ttf`, fallback: 'math' },
+  symMedium: { family: 'FigSansSym', weight: 500, file: `${NOTO_LATIN}/500Medium/NotoSans_500Medium.ttf`, fallback: 'math' },
+  symSemibold: { family: 'FigSansSym', weight: 600, file: `${NOTO_LATIN}/600SemiBold/NotoSans_600SemiBold.ttf`, fallback: 'math' },
+  math: { family: 'FigSansMath', weight: ALL_WEIGHTS, file: `${NOTO_MATH}/400Regular/NotoSansMath_400Regular.ttf` },
   // 차트 숫자는 Inter의 tnum(자리 폭이 같은 숫자)으로 그린다. 파일과 @font-face는 base 글꼴의 것을 쓴다.
   num: { base: 'regular', features: ['tnum'], fallback: 'koRegular' },
   numSemibold: { base: 'semibold', features: ['tnum'], fallback: 'koSemibold' },
@@ -32,6 +41,7 @@ function baseOf(name) {
 
 // 한글 굵기마다 짝이 되는 Inter 굵기
 const KOREAN_PAIR = { koRegular: 'regular', koMedium: 'medium', koSemibold: 'semibold' };
+const LATIN_FACES = ['regular', 'medium', 'semibold'];
 
 // 글꼴 파일은 처음 쓸 때 한 번 읽는다.
 const loaded = new Map();
@@ -178,7 +188,7 @@ function resolveUsed(used) {
   // 띄어쓰기는 Inter의 것으로 그려지므로(글꼴 우선순위 첫 글꼴), 한글 조각이 든 굵기마다 같은 굵기 Inter 조각에 공백을 항상 넣는다. 한글만 있는 글의 공백이 조각에 없어 보는 쪽 시스템 글꼴로 그려지는 일을 막는다.
   for (const name of [...resolved.keys()]) {
     const latin = KOREAN_PAIR[name] ?? name;
-    if (latin !== 'mono') resolved.set(latin, `${resolved.get(latin) ?? ''} `);
+    if (LATIN_FACES.includes(latin)) resolved.set(latin, `${resolved.get(latin) ?? ''} `);
   }
   return new Map([...resolved].map(([name, chars]) => [name, [...new Set(chars)].sort().join('')]));
 }

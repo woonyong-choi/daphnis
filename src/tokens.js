@@ -372,8 +372,8 @@ export const values = freeze({
     }
   },
   "font": {
-    "sans": "FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif",
-    "mono": "FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace"
+    "sans": "FigSans, FigSansKo, FigSansSym, FigSansMath, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif",
+    "mono": "FigMono, FigSans, FigSansKo, FigSansSym, FigSansMath, ui-monospace, SFMono-Regular, Menlo, monospace"
   },
   "size": {
     "text": {
