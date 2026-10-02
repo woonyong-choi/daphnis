@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFileSync } from 'node:fs';
 import { buildFigure } from '../src/build.js';
-import { routeLength } from '../src/route.js';
+import { flattenRoute, routeLength } from '../src/route.js';
 import { values } from '../src/tokens.js';
 
 test('buildTimeline_card_changes_at_latest_arrival_of_that_node', async () => {
@@ -50,7 +50,7 @@ const HOP_SOURCE = readFileSync(new URL('../examples/saturn.muto', import.meta.u
 // basis: estimate
 // 이동이 지나는 선의 길이와 시간 쌍. 모든 박자의 이동을 모은다.
 function hopPairs({ scene, timeline }) {
-  return timeline.segs.flatMap((seg) => seg.hops.map((h) => ({ length: routeLength(scene.edges[h.edge].points), ms: h.ms })));
+  return timeline.segs.flatMap((seg) => seg.hops.map((h) => ({ length: routeLength(flattenRoute(scene.edges[h.edge].points)), ms: h.ms })));
 }
 
 test('buildTimeline_hop_time_is_proportional_to_edge_length_above_min', async () => {

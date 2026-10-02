@@ -2,7 +2,7 @@
 import { curveOf, progressAt, timeAt } from './easing.js';
 import { measure } from './measure/fonts.js';
 import { STYLE } from './measure/sizes.js';
-import { pointAlong } from './route.js';
+import { flattenRoute, pointAlong } from './route.js';
 import { values } from './tokens.js';
 
 const SPACE = values.space;
@@ -15,9 +15,11 @@ const SAMPLES = 20;
 // 지점 사이를 선형으로 이은 자리가 글자를 가리면 지점을 반으로 쪼개는 최대 횟수
 const REFINE_DEPTH = 4;
 // 점 위와 아래가 바뀌는 구간을 이 시간(ms)의 순간으로 만든다
-const FLIP_MS = 16;
+const FLIP_MS = values.duration['chip-flip'];
 // 바뀜 시각을 찾으려고 구간을 훑는 칸 수
 const FLIP_SCAN = 16;
+// 겹치기 시작하는 칸 안에서 바뀜 시각을 이분 탐색하는 횟수. 칸 폭의 1/256까지 좁혀 한 프레임보다 훨씬 정확하다
+const FLIP_BISECT = 8;
 // 점이 선을 지나는 곡선. 움직이는 SVG와 재생기와 같다
 const MOVE = curveOf('move');
 // 이름 글자와 겹친 넓이가 이 값 이하면 겹침 없음으로 본다(잰 글 폭의 반올림 차이)
@@ -96,13 +98,13 @@ function compare(a, b) {
  */
 export function planChip(scene, hop, avoid) {
   const chip = sizeChip(hop.data);
-  const points = scene.edges[hop.edge].points;
-  const place = (fraction) => ({ at: hop.isBack ? 1 - fraction : fraction, fraction, ...placeChip(pointAlong(points, fraction), chip, scene, avoid) });
+  const route = flattenRoute(scene.edges[hop.edge].points);
+  const place = (fraction) => ({ at: hop.isBack ? 1 - fraction : fraction, fraction, ...placeChip(pointAlong(route, fraction), chip, scene, avoid) });
   const base = Array.from({ length: SAMPLES + 1 }, (_, i) => place(i / SAMPLES));
   // 선형으로 이은 자리 검사는 진행 비율이 오르는 순서(isBack이면 경로 비율이 내려가는 순서)로 한다.
   if (hop.isBack) base.reverse();
   const isClean = (a, b, ratios = [0.25, 0.5, 0.75]) => ratios.every((ratio) => {
-    const { box } = chipBoxBetween(points, hop, chip, [a, b], ratio);
+    const { box } = chipBoxBetween(route, hop, chip, [a, b], ratio);
     return !isOutsideFigure(box, scene) && !avoid.some((text) => overlapArea(box, text) > OVERLAP_SLACK);
   });
   // cost: time O((p + a)·2^d), heap O(2^d), stack O(d)
@@ -115,8 +117,8 @@ export function planChip(scene, hop, avoid) {
     const mid = place((a.fraction + b.fraction) / 2);
     return [...refine(a, mid, depth - 1), mid, ...refine(mid, b, depth - 1)];
   };
-  // cost: time O(FLIP_SCAN·(p + a) + STEPS), heap O(1), stack O(1)
-  // vars: FLIP_SCAN = 훑는 칸 수(16), p = 경로 점 수, a = 피할 글자 사각형 수, STEPS = 이분 탐색 횟수
+  // cost: time O((FLIP_SCAN + FLIP_BISECT)·(p + a)), heap O(1), stack O(1)
+  // vars: FLIP_SCAN = 훑는 칸 수(16), FLIP_BISECT = 이분 탐색 횟수(8), p = 경로 점 수, a = 피할 글자 사각형 수
   // basis: estimate
   // 앞 지점 a의 자리를 붙든 채 점이 가다가 처음 글자를 가리기 직전까지 두고, 거기서 FLIP_MS 안에 b의 자리로 바꾼다. 바뀜이 글자를 가리는 구간을 한 순간으로 줄이는 것이다.
   const flip = (a, b) => {
@@ -124,7 +126,14 @@ export function planChip(scene, hop, avoid) {
     const held = { ...a, at: b.at };
     let safe = 0;
     while (safe < FLIP_SCAN && isClean(a, held, [(safe + 1) / FLIP_SCAN])) safe += 1;
-    const from = Math.min(ta + ((tb - ta) * safe) / FLIP_SCAN, tb - FLIP_MS / hop.ms);
+    // 겹침은 깨끗한 마지막 칸 끝과 겹치는 칸 끝 사이 어딘가에서 시작하므로, 그 칸 안에서 마지막으로 깨끗한 비율을 찾는다.
+    let [low, high] = [safe / FLIP_SCAN, Math.min(1, (safe + 1) / FLIP_SCAN)];
+    for (let i = 0; i < FLIP_BISECT; i++) {
+      const mid = (low + high) / 2;
+      if (isClean(a, held, [mid])) low = mid;
+      else high = mid;
+    }
+    const from = Math.min(ta + (tb - ta) * low, tb - FLIP_MS / hop.ms);
     const to = Math.min(tb, from + FLIP_MS / hop.ms);
     const [atFrom, atTo] = [progressAt(MOVE, from), progressAt(MOVE, to)];
     const entries = [];
@@ -141,13 +150,14 @@ export function planChip(scene, hop, avoid) {
 // basis: estimate
 /**
  * 두 계획 지점 a, b(진행 비율이 오르는 순서) 사이, 시간 비율이 a 시각에서 b 시각으로 ratio만큼 간 때의 글 상자. 움직이는 SVG와 재생기가 지점 사이를 시간에 선형으로 잇는 것과 같다.
+ * @param route 그려지는 경로를 편 점 목록(flattenRoute). 점은 둥근 모서리 경로를 따라가므로 꺾은선이 아니라 이것으로 자리를 잰다
  * @returns { box, point }. box는 그림 좌표의 글 상자, point는 그 시각 점의 자리다
  */
-export function chipBoxBetween(points, hop, chip, [a, b], ratio) {
+export function chipBoxBetween(route, hop, chip, [a, b], ratio) {
   const [ta, tb] = [timeAt(MOVE, a.at), timeAt(MOVE, b.at)];
   const time = ta + (tb - ta) * ratio;
   const f = progressAt(MOVE, time);
-  const point = pointAlong(points, hop.isBack ? 1 - f : f);
+  const point = pointAlong(route, hop.isBack ? 1 - f : f);
   const [dx, dy] = [a.dx + (b.dx - a.dx) * ratio, a.dy + (b.dy - a.dy) * ratio];
   return { point, box: { x: point.x + dx - chip.w / 2, y: point.y - chip.h - CHIP_GAP + dy, w: chip.w, h: chip.h } };
 }

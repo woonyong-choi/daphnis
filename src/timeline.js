@@ -1,6 +1,6 @@
 // 시간 흐름을 시간표로 편다. 박자마다 상태를 완전히 적어서, 탭으로 건너뛰어도 앞 박자를 다시 계산하지 않는다(docs/design/playback.md).
 import { presentSlots, slotMiddle } from './chart/slots.js';
-import { routeLength } from './route.js';
+import { flattenRoute, routeLength } from './route.js';
 import { values } from './tokens.js';
 
 const DWELL = values.duration;
@@ -61,7 +61,7 @@ export function chartSeriesIds(figure) {
 // 최소는 speed를 기본값에서 바꾼 비율만큼 같이 늘고 줄어, 빠르게 한 그림이 최소 시간에 막히지 않는다.
 function hopMs(points, speed) {
   const scale = speed / DWELL.hop;
-  const ms = (routeLength(points) / HOP_REF) * speed;
+  const ms = (routeLength(flattenRoute(points)) / HOP_REF) * speed;
   return Math.round(Math.max(DWELL['hop-min'] * scale, ms));
 }
 

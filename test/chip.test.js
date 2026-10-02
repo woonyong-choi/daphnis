@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
+import { flattenRoute } from '../src/route.js';
 import { CHIP_GAP, CHIP_MARGIN, chipBoxBetween, placeChip, sizeChip } from '../src/chip.js';
 import { textBoxes } from '../src/draw/boxes.js';
-import { curveOf, timeAt } from '../src/easing.js';
+import { curveOf, progressAt, timeAt } from '../src/easing.js';
 import { toHtml } from '../src/html.js';
 import { toSvg } from '../src/svg.js';
 
@@ -80,7 +81,7 @@ test('buildFigure_example_moving_text_never_covers_a_name_between_plan_points_ei
       for (let k = 0; k < path.length - 1; k++) {
         if ((timeAt(MOVE, path[k + 1].at) - timeAt(MOVE, path[k].at)) * hop.ms < 20) continue;
         for (let q = 0; q <= 8; q++) {
-          const { box } = chipBoxBetween(scene.edges[hop.edge].points, hop, chip, [path[k], path[k + 1]], q / 8);
+          const { box } = chipBoxBetween(flattenRoute(scene.edges[hop.edge].points), hop, chip, [path[k], path[k + 1]], q / 8);
           const hit = names.find((name) => overlaps(box, name));
           assert.ok(!hit, `${file}: 이동 글 상자가 ${hit?.name}을 가린다 (지점 ${k} 다음 ${q}/8)`);
           assert.ok(box.x >= -0.5 && box.y >= -0.5 && box.x + box.w <= scene.width + 0.5 && box.y + box.h <= scene.height + 0.5, `${file}: 판 밖`);
@@ -91,6 +92,35 @@ test('buildFigure_example_moving_text_never_covers_a_name_between_plan_points_ei
     }
   }
   assert.ok(checked >= 5, `글 상자가 있는 이동 ${checked}개`);
+});
+
+// 60fps 프레임 하나도 빠짐없이: 이동 시간을 프레임 간격으로 훑어 지점 사이 선형 보간 자리를 잰다. 바뀜 순간 구간도 건너뛰지 않는다.
+test('buildFigure_example_moving_text_never_touches_a_name_in_any_60fps_frame', async () => {
+  const FRAME_MS = 1000 / 60;
+  let frames = 0;
+  for (const file of readdirSync(EXAMPLES).filter((f) => f.endsWith('.muto'))) {
+    const result = await buildFigure(readFileSync(new URL(file, EXAMPLES), 'utf8'), { baseDir: 'examples', strict: true });
+    if (result.chart) continue;
+    const { scene, timeline } = result;
+    const names = textBoxes(scene);
+    for (const hop of timeline.segs.flatMap((seg) => seg.hops).filter((h) => h.data)) {
+      const chip = sizeChip(hop.data);
+      const route = flattenRoute(scene.edges[hop.edge].points);
+      const path = hop.chipPath.map(([at, dx, dy]) => ({ at, dx, dy }));
+      for (let t = 0; t <= hop.ms; t += FRAME_MS) {
+        const progress = progressAt(MOVE, t / hop.ms);
+        const k = Math.max(0, path.findLastIndex((p) => p.at <= progress));
+        const [a, b] = [path[Math.min(k, path.length - 2)], path[Math.min(k, path.length - 2) + 1]];
+        const span = timeAt(MOVE, b.at) - timeAt(MOVE, a.at);
+        const ratio = span ? Math.min(1, Math.max(0, (timeAt(MOVE, progress) - timeAt(MOVE, a.at)) / span)) : 0;
+        const { box } = chipBoxBetween(route, hop, chip, [a, b], ratio);
+        const hit = names.find((name) => overlaps(box, name));
+        assert.ok(!hit, `${file}: ${Math.round(t)}ms에 이동 글 상자가 ${hit?.name}을 가린다`);
+        frames += 1;
+      }
+    }
+  }
+  assert.ok(frames > 100, `잰 프레임 ${frames}개`);
 });
 
 test('toHtml_and_toSvg_share_the_chip_plan_from_the_timeline', async () => {
