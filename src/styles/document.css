@@ -34,6 +34,7 @@ article {
 h1 {
   padding-bottom: var(--space-3);
   font-size: var(--size-text-22);
+  font-weight: var(--weight-semibold);
   border-bottom: var(--border-thin) solid var(--color-plate-border);
 }
 
