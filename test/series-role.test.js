@@ -59,10 +59,12 @@ test('buildFigure_dumbbell_starts_at_compare_ends_at_main_and_legend_lists_main_
   assert.match(errorsOf('chart dumbbell\nx "값(%)"\nseries ours "O" role=main\nseries base "B" role=compare\nrow "r" ours=2 base=9\nstep "s"\n  reveal ours\n  reveal base\n').join(), /reveal "base" before "ours". The arrow starts from the compare series/);
 });
 
-test('buildFigure_bar_rejects_revealing_compare_before_main', () => {
-  const errors = errorsOf(`${BAR}step "s"\n  reveal b\nstep "t"\n  reveal a\n`).join();
+test('buildFigure_bar_lets_the_author_reveal_compare_before_main_while_the_legend_stays_main_first', async () => {
+  const { chart } = await buildFigure(`${BAR}step "전"\n  reveal b\nstep "후"\n  reveal a\n`);
+  const legend = [...chart.body.matchAll(/class="chart-legend">([^<]+)</g)].map((m) => m[1]);
 
-  assert.match(errors, /reveal "a" before "b". The main series comes first/);
+  assert.deepEqual(errorsOf(`${BAR}step "전"\n  reveal b\nstep "후"\n  reveal a\n`), []);
+  assert.deepEqual(legend, ['A', 'B']);
 });
 
 test('drawChart_series_color_follows_the_role_not_the_declaration_order', async () => {

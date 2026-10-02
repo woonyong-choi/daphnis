@@ -190,7 +190,6 @@ function checkChartTimeline(figure, problems) {
         else if (revealed.includes(id)) problems.error(beat.line, `series "${id}" is already revealed`);
         else revealed.push(id);
         if (chartType === 'dumbbell' && id === ids[1] && !revealed.includes(ids[0])) problems.error(beat.line, `reveal "${ids[0]}" before "${ids[1]}". The arrow starts from the compare series`);
-        if (['bar', 'line'].includes(chartType) && id === ids[1] && !revealed.includes(ids[0])) problems.error(beat.line, `reveal "${ids[0]}" before "${ids[1]}". The main series comes first`);
       }
       for (const target of beat.chartLight) checkChartLightShape(target, chartType, problems);
     }
