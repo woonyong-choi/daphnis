@@ -57,9 +57,14 @@ for (const theme of THEMES) {
     expectAtLeast(theme, TEXT, faces.flatMap((face) => [['fg', face], ['muted', face]]));
   });
 
-  test(`contrast_${theme}_accent_text_and_links_reach_4_5_on_their_faces`, () => {
+  test(`contrast_${theme}_accent_strong_text_and_links_reach_4_5_on_their_faces`, () => {
     // 링크(열기, SVG, 목록으로), 카드 표시 ✓(내용이 찬 카드 바탕), 열 표시 PK. 빈 카드 바탕(surface)에는 표시가 없다.
-    expectAtLeast(theme, TEXT, [['accent', 'bg'], ['accent', 'node'], ['accent', 'card-on'], ['accent', 'page'], ['accent', 'gallery']]);
+    expectAtLeast(theme, TEXT, [['accent-strong', 'bg'], ['accent-strong', 'node'], ['accent-strong', 'card-on'], ['accent-strong', 'page'], ['accent-strong', 'gallery']]);
+  });
+
+  test(`contrast_${theme}_accent_graphics_reach_3_on_every_face_they_touch`, () => {
+    // 밝힌 선과 점, 도형·그룹·카드 테두리, 진행 고리(원 단추 면 node), 초점 고리
+    expectAtLeast(theme, GRAPHIC, ['bg', 'node', 'group', 'card-on', 'page', 'gallery'].map((face) => ['accent', face]));
   });
 
   test(`contrast_${theme}_text_on_accent_fill_reaches_4_5`, () => {
@@ -83,7 +88,8 @@ for (const theme of THEMES) {
   });
 
   test(`contrast_${theme}_node_face_is_brighter_than_the_figure_ground`, () => {
-    assert.ok(contrast(color(theme, 'node'), color(theme, 'bg')) > 1.05);
+    // 라이트 그림 바탕이 accent 대비 3 때문에 거의 흰색이라 면 차이는 작고, 경계선(대비 2)이 노드를 가른다.
+    assert.ok(contrast(color(theme, 'node'), color(theme, 'bg')) > 1.01);
   });
 
   test(`contrast_${theme}_active_tab_pill_is_distinct_from_the_tab_group_face_and_keeps_text_4_5`, () => {
@@ -120,6 +126,23 @@ for (const theme of THEMES) {
     expectAtLeast(theme, PLATE, [['plate-border', 'page']]);
   });
 }
+
+test('accentPalette_values_follow_the_resume_accent_and_strong_is_the_lightest_same_hue_that_reaches_4_5', () => {
+  assert.equal(color('light', 'accent'), '#2b96ed');
+  assert.equal(color('dark', 'accent'), '#79c0ff');
+  assert.equal(color('light', 'on-accent'), '#ffffff');
+  assert.equal(color('dark', 'on-accent'), '#0d1117');
+  assert.equal(color('dark', 'accent-strong'), color('dark', 'accent'));
+  // 흰 글자가 놓이는 면(accent-fill)은 라이트에서 accent와 같은 색상의 어두운 단계다.
+  assert.equal(color('light', 'accent-strong'), '#1177ca');
+  assert.equal(color('light', 'accent-fill'), color('light', 'accent-strong'));
+  assert.equal(color('dark', 'accent-fill'), color('dark', 'accent'));
+  const faces = ['node', 'bg', 'card-on', 'page', 'gallery'];
+  const lowest = Math.min(...faces.map((face) => contrast(color('light', 'accent-strong'), color('light', face))));
+  const brighter = Math.min(...faces.map((face) => contrast(mixHex(color('light', 'accent-strong'), '#ffffff', 0.01), color('light', face))));
+  assert.ok(lowest >= TEXT && brighter < TEXT, `${lowest.toFixed(2)} / ${brighter.toFixed(2)}`);
+  assert.ok(contrast(color('light', 'accent'), color('light', 'node')) < TEXT, 'accent itself is a graphic color, not a text color');
+});
 
 test('contrast_dark_heat_inks_are_one_color_so_the_build_time_light_pick_is_right_in_dark', () => {
   assert.equal(color('dark', 'heat-ink'), color('dark', 'heat-ink-on'));

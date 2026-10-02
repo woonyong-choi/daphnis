@@ -21,7 +21,7 @@ body {
 
 .bar a {
   font-size: var(--size-text-13);
-  color: var(--color-accent);
+  color: var(--color-accent-strong);
 }
 
 article {

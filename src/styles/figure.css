@@ -60,7 +60,7 @@
   font-size: var(--size-text-11);
   font-weight: var(--weight-semibold);
   text-anchor: end;
-  fill: var(--color-accent);
+  fill: var(--color-accent-strong);
 }
 
 .fl .mark.key {
@@ -119,7 +119,7 @@
 .fl .cell .key {
   font-size: var(--size-text-9);
   font-weight: var(--weight-semibold);
-  fill: var(--color-accent);
+  fill: var(--color-accent-strong);
 }
 
 .fl .frame-box {

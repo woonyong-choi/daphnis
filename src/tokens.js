@@ -30,10 +30,10 @@ export const tokens = freeze({
       "950": "var(--color-neutral-950)"
     },
     "blue": {
-      "200": "var(--color-blue-200)",
-      "100": "var(--color-blue-100)",
       "50": "var(--color-blue-50)",
+      "200": "var(--color-blue-200)",
       "400": "var(--color-blue-400)",
+      "500": "var(--color-blue-500)",
       "600": "var(--color-blue-600)",
       "900": "var(--color-blue-900)",
       "850": "var(--color-blue-850)",
@@ -47,6 +47,7 @@ export const tokens = freeze({
       "gray": "var(--color-tone-gray)"
     },
     "accent": "var(--color-accent)",
+    "accent-strong": "var(--color-accent-strong)",
     "accent-fill": "var(--color-accent-fill)",
     "on-accent": "var(--color-on-accent)",
     "fg": "var(--color-fg)",
@@ -78,7 +79,8 @@ export const tokens = freeze({
       "900": "var(--color-ink-900)",
       "600": "var(--color-ink-600)",
       "200": "var(--color-ink-200)",
-      "1000": "var(--color-ink-1000)"
+      "1000": "var(--color-ink-1000)",
+      "850": "var(--color-ink-850)"
     },
     "series-1": "var(--color-series-1)",
     "series-2": "var(--color-series-2)",
@@ -254,8 +256,8 @@ export const values = freeze({
   "color": {
     "gray": {
       "0": "#ffffff",
-      "25": "#f6f7f9",
-      "40": "#eef0f3",
+      "25": "#fcfdfd",
+      "40": "#fafbfc",
       "50": "#eef1f5",
       "100": "#e3e7ec",
       "200": "#d5dbe3",
@@ -275,41 +277,42 @@ export const values = freeze({
       "950": "#111214"
     },
     "blue": {
-      "200": "#b3cbea",
-      "100": "#e3ecf8",
-      "50": "#edf3fb",
-      "400": "#3396e8",
-      "600": "#266dc6",
-      "900": "#1d2733",
-      "850": "#2b3d54",
-      "800": "#1d4f91"
+      "50": "#f8fcff",
+      "200": "#b3d1ea",
+      "400": "#79c0ff",
+      "500": "#2b96ed",
+      "600": "#1177ca",
+      "900": "#1d2933",
+      "850": "#2b4254",
+      "800": "#1d5d91"
     },
     "tone": {
-      "blue": "#3b82f6",
+      "blue": "#2b96ed",
       "purple": "#8b5cf6",
       "green": "#10b981",
       "orange": "#f59e0b",
       "gray": "#8b949e"
     },
-    "accent": "#266dc6",
-    "accent-fill": "#266dc6",
+    "accent": "#2b96ed",
+    "accent-strong": "#1177ca",
+    "accent-fill": "#1177ca",
     "on-accent": "#ffffff",
     "fg": "#0b0b0b",
     "muted": "#52514e",
-    "bg": "#f6f7f9",
+    "bg": "#fcfdfd",
     "node": "#ffffff",
     "control-on": "#ffffff",
     "surface": "#eef1f5",
     "border": "#9ba6b4",
-    "card-on": "#edf3fb",
-    "group": "#eef0f3",
+    "card-on": "#f8fcff",
+    "group": "#fafbfc",
     "group-border": "#9ba6b4",
     "frame": "#e3e7ec",
     "plate-border": "#d5dbe3",
     "page": "#ffffff",
     "gallery": "#ffffff",
     "tag": {
-      "blue": "#3b82f6",
+      "blue": "#2b96ed",
       "purple": "#8b5cf6",
       "green": "#10b981",
       "orange": "#f59e0b",
@@ -323,12 +326,13 @@ export const values = freeze({
       "900": "#0b0b0b",
       "600": "#52514e",
       "200": "#c6cacf",
-      "1000": "#000000"
+      "1000": "#000000",
+      "850": "#0d1117"
     },
-    "series-1": "#266dc6",
+    "series-1": "#2b96ed",
     "series-2": "#e45f2b",
-    "heat-low": "#b3cbea",
-    "heat-high": "#1d4f91",
+    "heat-low": "#b3d1ea",
+    "heat-high": "#1d5d91",
     "heat-ink": "#000000",
     "heat-ink-on": "#ffffff",
     "grid": "#c6cacf"
@@ -465,7 +469,7 @@ export const values = freeze({
     "halo": 0.2,
     "dim": 0.3,
     "band": 0.22,
-    "range": 0.38
+    "range": 0.4
   },
   "z": {
     "raised": 2,

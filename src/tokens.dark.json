@@ -4,8 +4,8 @@
     "accent": {
       "$value": "{color.blue.400}"
     },
-    "accent-fill": {
-      "$value": "{color.blue.600}"
+    "accent-strong": {
+      "$value": "{color.blue.400}"
     },
     "fg": {
       "$value": "{color.neutral.100}"
@@ -66,6 +66,9 @@
     },
     "plate-border": {
       "$value": "{color.neutral.800}"
+    },
+    "on-accent": {
+      "$value": "{color.ink.850}"
     }
   }
 }

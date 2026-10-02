@@ -1,8 +1,8 @@
 /* tokens.json: 생성물, 손으로 고치지 않음 */
 :root {
   --color-gray-0: #ffffff;
-  --color-gray-25: #f6f7f9;
-  --color-gray-40: #eef0f3;
+  --color-gray-25: #fcfdfd;
+  --color-gray-40: #fafbfc;
   --color-gray-50: #eef1f5;
   --color-gray-100: #e3e7ec;
   --color-gray-200: #d5dbe3;
@@ -18,21 +18,22 @@
   --color-neutral-850: #242526;
   --color-neutral-900: #1b1b1d;
   --color-neutral-950: #111214;
-  --color-blue-200: #b3cbea;
-  --color-blue-100: #e3ecf8;
-  --color-blue-50: #edf3fb;
-  --color-blue-400: #3396e8;
-  --color-blue-600: #266dc6;
-  --color-blue-900: #1d2733;
-  --color-blue-850: #2b3d54;
-  --color-blue-800: #1d4f91;
-  --color-tone-blue: #3b82f6;
+  --color-blue-50: #f8fcff;
+  --color-blue-200: #b3d1ea;
+  --color-blue-400: #79c0ff;
+  --color-blue-500: #2b96ed;
+  --color-blue-600: #1177ca;
+  --color-blue-900: #1d2933;
+  --color-blue-850: #2b4254;
+  --color-blue-800: #1d5d91;
+  --color-tone-blue: var(--color-blue-500);
   --color-tone-purple: #8b5cf6;
   --color-tone-green: #10b981;
   --color-tone-orange: #f59e0b;
   --color-tone-gray: #8b949e;
-  --color-accent: var(--color-blue-600);
-  --color-accent-fill: var(--color-accent);
+  --color-accent: var(--color-blue-500);
+  --color-accent-strong: var(--color-blue-600);
+  --color-accent-fill: var(--color-accent-strong);
   --color-on-accent: var(--color-gray-0);
   --color-fg: var(--color-ink-900);
   --color-muted: var(--color-ink-600);
@@ -59,6 +60,7 @@
   --color-ink-600: #52514e;
   --color-ink-200: #c6cacf;
   --color-ink-1000: #000000;
+  --color-ink-850: #0d1117;
   --color-series-1: var(--color-accent);
   --color-series-2: var(--color-orange-600);
   --color-heat-low: var(--color-blue-200);
@@ -175,7 +177,7 @@
   --opacity-halo: 0.2;
   --opacity-dim: 0.3;
   --opacity-band: 0.22;
-  --opacity-range: 0.38;
+  --opacity-range: 0.4;
   --z-raised: 2;
   --z-overlay: 10;
   --duration-fast: 200ms;
@@ -197,7 +199,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     --color-accent: var(--color-blue-400);
-    --color-accent-fill: var(--color-blue-600);
+    --color-accent-strong: var(--color-blue-400);
     --color-fg: var(--color-neutral-100);
     --color-muted: var(--color-neutral-400);
     --color-bg: var(--color-neutral-900);
@@ -218,11 +220,12 @@
     --color-series-2: #f08a5d;
     --color-grid: var(--color-neutral-750);
     --color-plate-border: var(--color-neutral-800);
+    --color-on-accent: var(--color-ink-850);
   }
 }
 [data-theme='dark'] {
   --color-accent: var(--color-blue-400);
-  --color-accent-fill: var(--color-blue-600);
+  --color-accent-strong: var(--color-blue-400);
   --color-fg: var(--color-neutral-100);
   --color-muted: var(--color-neutral-400);
   --color-bg: var(--color-neutral-900);
@@ -243,4 +246,5 @@
   --color-series-2: #f08a5d;
   --color-grid: var(--color-neutral-750);
   --color-plate-border: var(--color-neutral-800);
+  --color-on-accent: var(--color-ink-850);
 }
