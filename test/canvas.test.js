@@ -72,7 +72,7 @@ test('buildFigure_wide_wrapped_content_without_aspect_is_folded_into_the_canvas'
 test('buildFigure_content_still_wider_than_canvas_after_shrinking_warns_check_10', async () => {
   const { warnings } = await buildFigure(WIDE_SEQUENCE);
 
-  assert.ok(warnings.some((w) => w.message.startsWith('[check 10]')), JSON.stringify(warnings));
+  assert.ok(warnings.some((w) => w.code === 'check-10'), JSON.stringify(warnings));
 });
 
 test('toHtml_player_viewbox_is_canvas_wide_with_content_centered', async () => {

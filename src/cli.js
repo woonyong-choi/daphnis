@@ -6,16 +6,20 @@ import { basename, dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildFigure } from './build.js';
 import { toDocument, toGallery, toHtml } from './html.js';
-import { FigureError } from './source/problems.js';
+import { FigureError, makeDiagnostic } from './source/problems.js';
 import { toSvg } from './svg.js';
 
 const USAGE = [
   'usage:',
-  '  mutoscope render <file.muto ...> [--out dir] [--html] [--static] [--strict] [--require-data] [--require-ci] [--json]',
-  '  mutoscope check <file.muto ...> [--strict] [--require-data] [--require-ci] [--json]',
+  '  mutoscope render <file.muto ...> [--out dir] [--html] [--static] [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
+  '  mutoscope check <file.muto ...> [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
   '  mutoscope gallery <dir> [--out dir] [--title "text"]',
 ].join('\n');
-const FLAGS = ['--html', '--static', '--strict', '--require-data', '--require-ci', '--json'];
+const FLAGS = ['--html', '--static', '--strict', '--no-deprecated', '--require-data', '--require-ci', '--json'];
+// 진단 종류마다 글 출력의 머리말. 오류는 머리말이 없다.
+// 판 표기 줄(`mutoscope 1`). 목록 쪽 머리에서 종류 줄을 찾을 때 건너뛴다.
+const VERSION_LINE = /^\s*mutoscope\s/;
+const SEVERITY_LABEL = { error: '', warning: 'warning: ', deprecated: 'deprecated: ' };
 
 // cost: time O(a), heap O(a), stack O(1)
 // vars: a = 인자 수
@@ -64,19 +68,19 @@ async function processFile(input, args) {
   try {
     source = readFileSync(input, 'utf8');
   } catch (error) {
-    report(input, [{ line: 0, level: 'error', check: 'io', message: `cannot read the file: ${error.code ?? error.message}` }], json);
+    report(input, [makeDiagnostic('error', 0, `cannot read the file: ${error.code ?? error.message}`, { code: 'io' })], json);
     return false;
   }
   let result;
   try {
-    result = await buildFigure(source, { baseDir: dirname(input), strict: args.flags.has('strict'), requireData: args.flags.has('require-data'), requireCi: args.flags.has('require-ci') });
+    result = await buildFigure(source, { baseDir: dirname(input), strict: args.flags.has('strict'), noDeprecated: args.flags.has('no-deprecated'), requireData: args.flags.has('require-data'), requireCi: args.flags.has('require-ci') });
   } catch (error) {
     // 원본 오류가 아닌 실패는 이 도구의 버그다. 스택 대신 한 줄로 알리고 다음 파일로 넘어간다.
-    const problems = error instanceof FigureError ? error.problems : [{ line: 0, level: 'error', check: 'internal', message: `internal error: ${error.message}. Please report this` }];
+    const problems = error instanceof FigureError ? error.problems : [makeDiagnostic('error', 0, `internal error: ${error.message}. Please report this`, { code: 'internal' })];
     report(input, problems, json);
     return false;
   }
-  report(input, result.warnings, json);
+  report(input, [...result.warnings, ...result.deprecations].sort((a, b) => a.line - b.line), json);
   if (args.command === 'check') return true;
   const name = basename(input).replace(/\.muto$/, '');
   const folder = args.out ?? dirname(input);
@@ -121,7 +125,7 @@ async function writeGallery(args) {
 // 목록 쪽 머리에 쓸 값. title은 원본의 title 줄(없으면 첫 주석 줄), kind는 첫 줄의 종류(`flow`, `chart bar`면 `bar`), isChart는 그림 안에 제목이 그려지는 차트인지다.
 function describe(source) {
   const title = /^title "(.*)"$/m.exec(source)?.[1] ?? /^#\s*(.+)$/m.exec(source)?.[1] ?? '';
-  const [first, second] = source.split('\n').find((line) => line.trim() && !line.startsWith('#'))?.trim().split(/\s+/) ?? [];
+  const [first, second] = source.split('\n').find((line) => line.trim() && !line.startsWith('#') && !VERSION_LINE.test(line))?.trim().split(/\s+/) ?? [];
   const isChart = first === 'chart';
   return { title, kind: isChart ? second : first, isChart };
 }
@@ -129,17 +133,12 @@ function describe(source) {
 // cost: time O(m), heap O(m), stack O(1), io m
 // vars: m = 메시지 수
 // basis: estimate
-// 오류와 경고. 기본은 `파일:줄: 메시지`, --json이면 메시지마다 JSON 한 줄을 stdout에 쓴다.
-function report(file, problems, json) {
-  for (const p of problems) {
-    const check = /^\[check (\d+)\] /.exec(p.message);
-    const message = check ? p.message.slice(check[0].length) : p.message;
-    // 함께 문제를 일으킨 줄은 메시지 안 "(line N)"에 있다(docs/design/figure-check.md 메시지).
-    const lines = [p.line, ...[...message.matchAll(/\(line (\d+)\)/g)].map((m) => Number(m[1]))];
+// 진단(오류, 경고, 폐기). 기본은 `파일:줄: 메시지`, --json이면 진단마다 `{ file, severity, code, line, column, message, fix? }` 한 줄을 stdout에 쓴다.
+function report(file, diagnostics, json) {
+  for (const d of diagnostics) {
+    if (json) process.stdout.write(`${JSON.stringify({ file, ...d })}\n`);
     // 줄 번호가 없는 문제(파일 읽기, 도구 버그)는 줄 0이고, 글로는 `파일: 메시지`로 쓴다.
-    const kind = p.check ?? (check ? Number(check[1]) : 'syntax');
-    if (json) process.stdout.write(`${JSON.stringify({ file, line: p.line, lines: p.line ? lines : [], check: kind, level: p.level, message })}\n`);
-    else process.stderr.write(`${file}${p.line ? `:${p.line}` : ''}: ${p.level === 'warning' ? 'warning: ' : ''}${message}\n`);
+    else process.stderr.write(`${file}${d.line ? `:${d.line}` : ''}: ${SEVERITY_LABEL[d.severity]}${d.message}\n`);
   }
 }
 

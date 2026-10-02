@@ -76,7 +76,8 @@ test('main_json_prints_one_message_per_line', () => {
     const lines = run(['check', 'bad.muto', '--json'], folder).stdout.trim().split('\n');
 
     assert.equal(lines.length, 2);
-    for (const line of lines) assert.equal(JSON.parse(line).check, 'syntax');
+    for (const line of lines) assert.deepEqual(Object.keys(JSON.parse(line)), ['file', 'severity', 'code', 'line', 'column', 'message']);
+    assert.deepEqual(lines.map((line) => JSON.parse(line).code), ['syntax', 'syntax']);
   });
 });
 
@@ -124,13 +125,13 @@ test('main_gallery_has_theme_buttons_and_applies_color_scheme_to_root', () => {
   });
 });
 
-test('main_json_lists_related_lines_and_check_number', () => {
+test('main_json_gives_severity_check_code_and_position', () => {
   withFolder((folder) => {
     writeFileSync(join(folder, 'warn.muto'), 'flow right\nbox a "A"\nbox b "B"\na -> b "보냄" quiet\nb -> a\nstep "s"\n  b -> a\n');
 
     const [message] = run(['check', 'warn.muto', '--json'], folder).stdout.trim().split('\n').map((l) => JSON.parse(l));
 
-    assert.deepEqual([message.check, message.level, message.lines], [11, 'warning', [4]]);
+    assert.deepEqual([message.code, message.severity, message.line, message.column], ['check-11', 'warning', 4, 1]);
   });
 });
 

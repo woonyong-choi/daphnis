@@ -25,11 +25,13 @@ const LABEL_KEY = { bar: 'label', dumbbell: 'label', box: 'label', scatter: 'nam
 /**
  * 원본을 장면과 시간표로 만든다.
  * @param baseDir `data` 경로의 기준 폴더
- * @returns { figure, scene, timeline, warnings }. 차트면 scene 대신 chart가 있다
+ * @param strict 경고도 오류로 올린다
+ * @param noDeprecated 폐기 진단도 오류로 올린다
+ * @returns { figure, scene, timeline, warnings, deprecations }. 차트면 scene 대신 chart가 있다
  * @throws FigureError 원본 오류나 그림 검사 오류가 있을 때. 모든 문제를 담는다
  */
-export async function buildFigure(source, { baseDir = '.', strict = false, requireData = false, requireCi = false } = {}) {
-  const problems = createProblems();
+export async function buildFigure(source, { baseDir = '.', strict = false, noDeprecated = false, requireData = false, requireCi = false } = {}) {
+  const problems = createProblems(source);
   const figure = readFigure(source, problems);
   if (figure.kind === 'chart' && figure.chart.data) loadChartData(figure, baseDir, problems);
   checkGlyphs(figure, problems);
@@ -40,7 +42,7 @@ export async function buildFigure(source, { baseDir = '.', strict = false, requi
     const timeline = buildTimeline(figure, cards, wrapChip);
     const chart = drawChart(figure);
     checkChartFigure(chart, problems);
-    return finish({ figure, chart, timeline }, problems, strict);
+    return finish({ figure, chart, timeline }, problems, { strict, noDeprecated });
   }
   const sizes = new Map(figure.nodes.map((n) => [n.id, sizeNode(n, cards.contents.get(n.id), figure.kind === 'sequence' ? undefined : countLines(figure, n.id))]));
   const scene = figure.kind === 'sequence' ? layoutSequence(figure, sizes) : await layoutGraph(figure, sizes);
@@ -50,7 +52,7 @@ export async function buildFigure(source, { baseDir = '.', strict = false, requi
   // 태그 색은 원본에 처음 나온 순서로 정한다(docs/design/figure-syntax.md 카드 줄).
   scene.tagOrder = figure.steps.flatMap((s) => s.beats.flatMap((b) => b.ops.filter((o) => o.row?.tag && !o.row.tone).map((o) => o.row.tag)));
   checkFigure(figure, scene, timeline, problems);
-  return finish({ figure, scene, timeline }, problems, strict);
+  return finish({ figure, scene, timeline }, problems, { strict, noDeprecated });
 }
 
 // cost: time O(e), heap O(1), stack O(1)
@@ -89,12 +91,14 @@ function planChips(scene, timeline) {
 }
 
 // cost: time O(w), heap O(w), stack O(1)
-// vars: w = 경고 수
+// vars: w = 경고와 폐기 수
 // basis: estimate
-function finish(result, problems, strict) {
-  if (strict) for (const w of problems.warnings) problems.error(w.line, w.message);
+// 경고(strict)와 폐기(noDeprecated)를 오류로 올리고, 오류가 없으면 남은 진단과 함께 돌려준다.
+function finish(result, problems, { strict, noDeprecated }) {
+  const promoted = [...(strict ? problems.warnings : []), ...(noDeprecated ? problems.deprecations : [])];
+  for (const d of promoted) problems.error(d.line, d.message, { code: d.code, column: d.column, fix: d.fix });
   problems.throwIfAny();
-  return { ...result, warnings: problems.warnings };
+  return { ...result, warnings: problems.warnings, deprecations: problems.deprecations };
 }
 
 /** 글 상자 글을 토큰 `size.chip-max` 너비의 줄로 나눈다. HTML과 SVG가 같은 줄을 쓴다. */

@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
 import { parseFigure } from '../src/source/parse.js';
 import { formatChange, formatNumber, makeScale } from '../src/chart/scale.js';
-import { errorsOf } from './helpers.js';
+import { errorsOf, formatProblem } from './helpers.js';
 
 const FIXTURES = new URL('./fixtures/', import.meta.url).pathname;
 
@@ -54,7 +54,7 @@ async function buildErrors(source) {
     return [];
   } catch (error) {
     if (!error.problems) throw error;
-    return error.problems.map((p) => `${p.line}: ${p.message}`);
+    return error.problems.map(formatProblem);
   }
 }
 
@@ -63,7 +63,7 @@ test('checkChartFigure_name_wider_than_label_column_is_check_1_error', async () 
 
   const errors = await buildErrors(source);
 
-  assert.ok(errors.some((e) => e.startsWith('3: [check 1] item name')), errors.join('\n'));
+  assert.ok(errors.some((e) => e.startsWith('3: [check-1] item name')), errors.join('\n'));
 });
 
 test('checkChart_heatmap_with_scale_line_is_error', () => {

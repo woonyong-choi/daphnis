@@ -21,6 +21,9 @@ export function docExamples() {
     .filter(({ source }) => /^(flow|sequence|state|data|chart)\b/.test(source));
 }
 
+/** 진단 하나를 `줄: 메시지`로. 그림 검사 진단은 `[check-N]` 머리말을 붙여 어느 검사인지 보인다. */
+export const formatProblem = (p) => `${p.line}: ${p.code.startsWith('check-') ? `[${p.code}] ` : ''}${p.message}`;
+
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 원본 글자 수
 // basis: estimate

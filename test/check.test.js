@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
 import { checkFigure } from '../src/check.js';
 import { createProblems } from '../src/source/problems.js';
+import { formatProblem } from './helpers.js';
 
 // cost: time O(build), heap O(build), stack O(1)
 // vars: build = 원본 하나를 만드는 비용
@@ -13,7 +14,7 @@ async function problemsOf(source) {
     return [];
   } catch (error) {
     if (!error.problems) throw error;
-    return error.problems.map((p) => `${p.line}: ${p.message}`);
+    return error.problems.map(formatProblem);
   }
 }
 
@@ -23,7 +24,7 @@ async function problemsOf(source) {
 function recheck({ figure, scene, timeline }) {
   const problems = createProblems();
   checkFigure(figure, scene, timeline, problems);
-  return problems.errors.map((p) => `${p.line}: ${p.message}`);
+  return problems.errors.map(formatProblem);
 }
 
 test('checkFigure_moving_text_taller_than_short_figure_is_check_7_error', async () => {
@@ -31,7 +32,7 @@ test('checkFigure_moving_text_taller_than_short_figure_is_check_7_error', async 
 
   const messages = await problemsOf(source);
 
-  assert.ok(messages.some((m) => m.startsWith('8: [check 7]')), messages.join('\n'));
+  assert.ok(messages.some((m) => m.startsWith('8: [check-7]')), messages.join('\n'));
 });
 
 test('buildFigure_narrow_figure_widens_for_moving_text', async () => {
@@ -55,7 +56,7 @@ test('checkFigure_label_wider_than_node_is_check_1_internal_error', async () => 
 
   const messages = recheck(result);
 
-  assert.ok(messages.some((m) => m.startsWith('2: [check 1] internal: label')), messages.join('\n'));
+  assert.ok(messages.some((m) => m.startsWith('2: [check-1] internal: label')), messages.join('\n'));
 });
 
 test('checkFigure_card_text_wider_than_card_is_check_1_internal_error', async () => {
@@ -65,7 +66,7 @@ test('checkFigure_card_text_wider_than_card_is_check_1_internal_error', async ()
 
   const messages = recheck(result);
 
-  assert.ok(messages.some((m) => m.startsWith('2: [check 1] internal: card text')), messages.join('\n'));
+  assert.ok(messages.some((m) => m.startsWith('2: [check-1] internal: card text')), messages.join('\n'));
 });
 
 test('toSvg_moving_text_near_side_edge_is_pushed_inside', async () => {
@@ -88,7 +89,7 @@ test('checkFigure_edge_through_unrelated_group_is_check_3_error', async () => {
 
   const messages = recheck(result);
 
-  assert.ok(messages.some((m) => m.includes('[check 3]') && m.includes('group "g"')), messages.join('\n'));
+  assert.ok(messages.some((m) => m.includes('[check-3]') && m.includes('group "g"')), messages.join('\n'));
 });
 
 test('checkFigure_node_inside_unrelated_group_is_check_6_internal_error', async () => {
@@ -99,7 +100,7 @@ test('checkFigure_node_inside_unrelated_group_is_check_6_internal_error', async 
 
   const messages = recheck(result);
 
-  assert.ok(messages.some((m) => m.includes('[check 6] internal: node "c" overlaps group "g"') || m.includes('[check 6] internal: group "g" overlaps node "c"')), messages.join('\n'));
+  assert.ok(messages.some((m) => m.includes('[check-6] internal: node "c" overlaps group "g"') || m.includes('[check-6] internal: group "g" overlaps node "c"')), messages.join('\n'));
 });
 
 test('checkFigure_edge_label_on_group_title_is_check_2_error', async () => {
@@ -110,7 +111,7 @@ test('checkFigure_edge_label_on_group_title_is_check_2_error', async () => {
 
   const messages = recheck(result);
 
-  assert.ok(messages.some((m) => m.includes('[check 2]') && m.includes('title of group "g"')), messages.join('\n'));
+  assert.ok(messages.some((m) => m.includes('[check-2]') && m.includes('title of group "g"')), messages.join('\n'));
 });
 
 test('checkFigure_decision_edge_off_vertex_is_check_4_internal_error', async () => {
@@ -121,7 +122,7 @@ test('checkFigure_decision_edge_off_vertex_is_check_4_internal_error', async () 
 
   const messages = recheck(result);
 
-  assert.ok(messages.some((m) => m.includes('[check 4] internal')), messages.join('\n'));
+  assert.ok(messages.some((m) => m.includes('[check-4] internal')), messages.join('\n'));
 });
 
 test('buildFigure_sequence_without_participants_is_error_not_crash', async () => {
@@ -164,7 +165,7 @@ test('checkFigure_parallel_segments_of_edges_between_different_shapes_stay_check
 
   checkFigure({ kind: 'flow', direction: 'right' }, scene, { segs: [] }, problems);
 
-  assert.ok(problems.errors.some((p) => p.message.startsWith('[check 5]')), JSON.stringify(problems.errors));
+  assert.ok(problems.errors.some((p) => p.code === 'check-5'), JSON.stringify(problems.errors));
 });
 
 test('checkFigure_wide_group_figure_with_too_wide_aspect_suggests_smaller_aspect', async () => {

@@ -4,52 +4,57 @@
 
 /** 이 도구가 읽는 가장 높은 문법 판. 깨지는 변경에만 올린다. */
 export const VERSION = 1;
+/** 첫 줄에 판 표기(`mutoscope 1`)가 없을 때 읽는 판. 판 표기가 생기기 전 파일이 모두 이 판이다. */
+export const DEFAULT_VERSION = 1;
+
+// 원형이 없는 표. `constructor` 같은 낱말이 표 항목으로 잡히지 않게 한다.
+const table = (entries) => Object.assign(Object.create(null), entries);
 
 const V1 = { since: 1 };
 const FLAG = { ...V1, type: 'flag' };
 const TEXT = { ...V1, type: 'text' };
 
 /** 그림 종류 문장. argument는 둘째 낱말이 읽는 값 목록 이름이다. */
-export const KINDS = {
+export const KINDS = table({
   flow: { ...V1, argument: 'direction' },
   sequence: { ...V1 },
   state: { ...V1, argument: 'direction' },
   data: { ...V1, argument: 'direction' },
   chart: { ...V1, argument: 'chartType', isArgumentRequired: true },
-};
+});
 
 const ALL_KINDS = Object.keys(KINDS);
 const FLOW_SEQUENCE = ['flow', 'sequence'];
 
 /**
  * 값 목록. items의 항목마다 { since, retired?, deprecated? }를 둘 수 있다.
- * deprecated: { since, replace, note? }는 옛 값이다. 계속 읽고, replace 값으로 바꿔 읽는다.
+ * deprecated: { since, replace, note? }는 옛 이름이다. 문장 낱말, 선택 사항 키, 값, 그림 종류 어디에 있든 같다. 계속 읽고, replace로 바꿔 읽고, 폐기 진단과 고칠 글(fix)을 낸다.
  * retired: { replace, note }는 이미 막은 값이다. 오류로 알리며 replace를 안내한다(문법 호환 단계가 deprecated로 되돌린다).
  */
 export const VALUES = {
-  direction: { default: 'right', items: { right: V1, down: V1 } },
-  scale: { default: 'linear', items: { linear: V1, log: V1 } },
+  direction: { default: 'right', items: table({ right: V1, down: V1 }) },
+  scale: { default: 'linear', items: table({ linear: V1, log: V1 }) },
   chartType: {
-    items: {
+    items: table({
       bar: { ...V1, rowWord: 'row', seriesRange: [1, 2], isInterval: true },
       dumbbell: { ...V1, rowWord: 'row', seriesRange: [2, 2], isInterval: true },
       box: { ...V1, rowWord: 'row', seriesRange: [0, 0], valueKeys: ['min', 'q1', 'median', 'q3', 'max'] },
       scatter: { ...V1, rowWord: 'point', seriesRange: [0, 2] },
       line: { ...V1, rowWord: 'point', seriesRange: [1, 2], isInterval: true },
       heatmap: { ...V1, rowWord: 'cell', seriesRange: [0, 0] },
-    },
+    }),
   },
   tone: {
-    items: {
+    items: table({
       purple: V1,
       green: V1,
       teal: V1,
       gray: V1,
       blue: { ...V1, retired: { replace: 'teal', note: 'Blue means the active state and orange means compare, so tags use purple, green, teal, gray' } },
       orange: { ...V1, retired: { replace: 'purple', note: 'Blue means the active state and orange means compare, so tags use purple, green, teal, gray' } },
-    },
+    }),
   },
-  role: { items: { main: V1, compare: V1 } },
+  role: { items: table({ main: V1, compare: V1 }) },
 };
 
 /**
@@ -57,7 +62,8 @@ export const VALUES = {
  * node는 도형 선언이고 hasSub는 부제를 받는지, scopes는 선택 사항을 찾을 OPTIONS 범위(기본은 낱말 자신)다.
  * positional은 낱말 뒤 자리별 값 목록 이름이다.
  */
-export const STATEMENTS = {
+export const STATEMENTS = table({
+  mutoscope: { ...V1, section: 'version', kinds: ALL_KINDS },
   title: { ...V1, section: 'header', kinds: ALL_KINDS },
   subtitle: { ...V1, section: 'header', kinds: ALL_KINDS },
   speed: { ...V1, section: 'header', kinds: ALL_KINDS },
@@ -93,13 +99,13 @@ export const STATEMENTS = {
   reveal: { ...V1, section: 'timeline', kinds: ['chart'] },
   say: { ...V1, section: 'timeline', kinds: ALL_KINDS },
   wait: { ...V1, section: 'timeline', kinds: ALL_KINDS },
-};
+});
 
 /**
  * 선택 사항. 키는 `범위.이름`이고 type은 word, text, number, flag다.
  * values는 값 목록 이름, maxLength는 글자 수 상한이다. 값 없는 낱말(flag)은 폐기 별칭을 두지 않는다. 이름 자리의 낱말과 가를 수 없기 때문이다.
  */
-export const OPTIONS = {
+export const OPTIONS = table({
   'group.direction': { ...V1, type: 'word', values: 'direction' },
   'hop.time': { ...V1, type: 'word' },
   'hop.dashed': FLAG,
@@ -118,7 +124,7 @@ export const OPTIONS = {
   'column.pk': FLAG,
   'column.unique': FLAG,
   'column.fk': { ...V1, type: 'word' },
-};
+});
 
 // cost: time O(o), heap O(o), stack O(1)
 // vars: o = 선택 사항 수
@@ -126,7 +132,7 @@ export const OPTIONS = {
 /** 한 범위의 선택 사항을 { 이름: 항목 }으로. */
 export function optionsOf(scope) {
   const prefix = `${scope}.`;
-  return Object.fromEntries(Object.entries(OPTIONS).filter(([key]) => key.startsWith(prefix)).map(([key, spec]) => [key.slice(prefix.length), spec]));
+  return table(Object.fromEntries(Object.entries(OPTIONS).filter(([key]) => key.startsWith(prefix)).map(([key, spec]) => [key.slice(prefix.length), spec])));
 }
 
 // cost: time O(o), heap O(o), stack O(1)

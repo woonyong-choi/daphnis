@@ -15,7 +15,7 @@ test('grammar_every_entry_has_a_version_not_above_the_current_one', () => {
 
 test('grammar_statements_use_known_sections_and_kinds', () => {
   for (const [word, statement] of Object.entries(STATEMENTS)) {
-    assert.ok(['header', 'declare', 'timeline'].includes(statement.section), word);
+    assert.ok(['version', 'header', 'declare', 'timeline'].includes(statement.section), word);
     assert.ok(statement.kinds.length && statement.kinds.every((kind) => kind in KINDS), word);
   }
 });
