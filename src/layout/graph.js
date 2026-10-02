@@ -2,6 +2,7 @@
 import ELK from 'elkjs/lib/elk.bundled.js';
 import { values } from '../tokens.js';
 import { toElk } from './elk.js';
+import { LayoutError } from './error.js';
 import { buildModel } from './model.js';
 import { isBodyShape, recordPortOrder } from './ports.js';
 import { readElk } from './read.js';
@@ -24,8 +25,25 @@ let engine;
  */
 export async function layoutGraph(figure, sizes) {
   engine ??= new ELK();
+  try {
+    return await place(figure, sizes);
+  } catch (first) {
+    // 처음 배치가 실패하면 줄 바꿈과 모델 순서 없이 한 번 더 한다. 이것도 실패하면 줄 번호가 있는 배치 오류로 알린다.
+    try {
+      return await place({ ...figure, aspect: undefined, safeLayout: true }, sizes);
+    } catch {
+      throw first instanceof LayoutError ? first : new LayoutError(first.message, figure.line);
+    }
+  }
+}
+
+// cost: time O((2 + FOLD_TRIES)·elk(s + e) + e·d), heap O(s + e·d), stack O(d)
+// vars: s = 도형 수, e = 선 수, d = 그룹 깊이, elk = elkjs 층 배치 시간
+// basis: estimate
+// 배치 한 번. 안전 배치(safeLayout)는 자동 접기와 방향 돌리기를 하지 않는다.
+async function place(figure, sizes) {
   let best = await arrange(figure, sizes);
-  if (best.laid.width > CANVAS && figure.aspect === undefined) best = await fitCanvas(figure, sizes, best);
+  if (best.laid.width > CANVAS && figure.aspect === undefined && !figure.safeLayout) best = await fitCanvas(figure, sizes, best);
   return readElk(best.laid, best.model);
 }
 

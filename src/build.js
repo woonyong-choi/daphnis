@@ -5,6 +5,7 @@ import { checkChartFigure, checkFigure } from './check.js';
 import { CHIP_GAP, planChip, sizeChip } from './chip.js';
 import { chipLines, chipObstacles } from './draw/boxes.js';
 import { drawChart } from './chart/draw.js';
+import { LayoutError } from './layout/error.js';
 import { layoutGraph } from './layout/graph.js';
 import { layoutSequence } from './layout/sequence.js';
 import { findMissingGlyph, wrap } from './measure/fonts.js';
@@ -45,7 +46,7 @@ export async function buildFigure(source, { baseDir = '.', strict = false, noDep
     return finish({ figure, chart, timeline }, problems, { strict, noDeprecated });
   }
   const sizes = new Map(figure.nodes.map((n) => [n.id, sizeNode(n, cards.contents.get(n.id), figure.kind === 'sequence' ? undefined : countLines(figure, n.id))]));
-  const scene = figure.kind === 'sequence' ? layoutSequence(figure, sizes) : await layoutGraph(figure, sizes);
+  const scene = figure.kind === 'sequence' ? layoutSequence(figure, sizes) : await layoutOrFail(figure, sizes, problems);
   const timeline = buildTimeline(figure, cards, wrapChip, scene);
   widenForChips(scene, timeline);
   planChips(scene, timeline);
@@ -53,6 +54,20 @@ export async function buildFigure(source, { baseDir = '.', strict = false, noDep
   scene.tagOrder = figure.steps.flatMap((s) => s.beats.flatMap((b) => b.ops.filter((o) => o.row?.tag && !o.row.tone).map((o) => o.row.tag)));
   checkFigure(figure, scene, timeline, problems);
   return finish({ figure, scene, timeline }, problems, { strict, noDeprecated });
+}
+
+// cost: time O(elk), heap O(s + e), stack O(1)
+// vars: elk = 배치 시간, s = 도형 수, e = 선 수
+// basis: estimate
+// 구조 그림 배치. 배치가 끝내 실패하면 원인 선의 줄 번호가 있는 오류로 바꿔 알린다(내부 오류로 끝내지 않는다).
+async function layoutOrFail(figure, sizes, problems) {
+  try {
+    return await layoutGraph(figure, sizes);
+  } catch (error) {
+    if (!(error instanceof LayoutError)) throw error;
+    problems.error(error.line ?? figure.line, `${error.message}. Change a group direction, remove "aspect", or break the cycle into fewer back edges`, { code: 'layout' });
+    return problems.throwIfAny();
+  }
 }
 
 // cost: time O(e), heap O(1), stack O(1)

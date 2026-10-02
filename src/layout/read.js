@@ -1,5 +1,6 @@
 // elkjs 결과를 그림 좌표로 바꾼다. 그룹 경계 연결점에서 끊긴 선 조각은 이어 붙인다(docs/design/layout.md 선 그리기).
 import { values } from '../tokens.js';
+import { LayoutError } from './error.js';
 import { ROOT } from './model.js';
 
 const SETTLE = values.space['4'];
@@ -17,12 +18,19 @@ export function readElk(laid, model) {
   // 선 번호는 원본에 적은 선의 번호다. 시간표와 그리기가 같은 번호로 선을 찾으므로, 처음 점과 끝 겹원의 선(모델 순서에서는 앞뒤에 놓인다)은 맨 뒤에 둔다.
   const declared = [...model.edges.filter((edge) => !edge.isMark), ...model.edges.filter((edge) => edge.isMark)];
   const edges = declared.map((edge) => {
-    const parts = model.pieces.get(edge.index).map((_, k) => sections.get(`${edge.index}::${k}`) ?? []);
+    const parts = model.pieces.get(edge.index).map((_, k) => routeOf(sections, edge, k));
     const joined = parts.flatMap((p, k) => (k === 0 ? p : p.slice(1)));
     const points = settleEnd(settleEnd(joined, freeRect(edge.from, rects)).reverse(), freeRect(edge.to, rects)).reverse();
     return { ...edge, points, labelAt: labels.get(`label::${edge.index}`) };
   });
   return { items, groups, edges, width: laid.width, height: laid.height };
+}
+
+// 선 조각 하나의 경로. elkjs가 경로를 주지 않은 조각이 있으면 선을 그릴 수 없으므로 실패다.
+function routeOf(sections, edge, k) {
+  const route = sections.get(`${edge.index}::${k}`);
+  if (!route) throw new LayoutError(`the layout has no route for edge ${edge.from} -> ${edge.to}`, edge.line);
+  return route;
 }
 
 // cost: time O(s), heap O(s + d), stack O(d)
