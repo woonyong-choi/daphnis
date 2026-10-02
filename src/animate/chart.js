@@ -2,6 +2,9 @@
 // 자라는 규칙은 HTML 재생기(chart/motion.js)와 같다.
 import { tokens, values } from '../tokens.js';
 
+// 점이 나타나는 시각 비율(0~1)을 keyframes 이름에 쓸 정수로 바꾸는 배율
+const AT_KEY_SCALE = 1000;
+
 // 자라는 움직임. [keyframes 접두사, 시작 값, 끝 값, 걸 class]
 const GROWS = [
   ['g', 'transform: scaleX(0)', 'transform: none', '.grow'],
@@ -51,7 +54,7 @@ function lateFade(clock, s, [half, end], ease) {
 // 선 차트 점 하나가 시각 start(ms)부터 duration.fast 동안 나타난다.
 function dotFade({ clock, s, ease }, start, at) {
   const [from, to] = [clock.percent(start), clock.percent(start + values.duration.fast)];
-  const name = `p${s}-${Math.round(at * 1000)}`;
+  const name = `p${s}-${Math.round(at * AT_KEY_SCALE)}`;
   return `@keyframes ${name} { 0%,${from} { opacity: 0; ${ease} } ${to},100% { opacity: 1 } }\n.fl .cs-${s} .dot[data-at="${at}"] { animation: ${name} ${clock.duration} infinite; }`;
 }
 

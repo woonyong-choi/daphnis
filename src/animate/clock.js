@@ -2,6 +2,7 @@
 
 // keyTimes와 퍼센트를 자르는 소수 자릿수(10^5)
 const PRECISION = 100000;
+const MS_PER_SECOND = 1000;
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -12,7 +13,7 @@ const PRECISION = 100000;
  */
 export function createClock(total) {
   return {
-    duration: `${Math.round(total) / 1000}s`,
+    duration: `${Math.round(total) / MS_PER_SECOND}s`,
     keyTime: (ms) => Math.round((ms / total) * PRECISION) / PRECISION,
     percent: (ms) => `${Math.round((ms / total) * PRECISION) / (PRECISION / 100)}%`,
   };

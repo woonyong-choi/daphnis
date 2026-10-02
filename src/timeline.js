@@ -5,6 +5,8 @@ import { values } from './tokens.js';
 
 const DWELL = values.duration;
 const HOP_REF = values.size['hop-ref'];
+// 행 이름 세로 옮김(px)을 반올림하는 단위의 역수(소수 둘째 자리)
+const SHIFT_PRECISION = 100;
 
 // cost: time O(b·(o + k)), heap O(c·r), stack O(1)
 // vars: b = 박자 수, o = 박자의 카드 줄 수, k = 카드 있는 도형 수, c = 카드 내용 수, r = 줄 수
@@ -147,7 +149,7 @@ function labelShiftsOf(figure, shown) {
     if (!seen.length) return 0;
     const present = presentSlots(row, series);
     const bars = seen.filter((i) => present.includes(i));
-    return Math.round((slotMiddle(bars.length ? bars : seen) - slotMiddle(present)) * 100) / 100;
+    return Math.round((slotMiddle(bars.length ? bars : seen) - slotMiddle(present)) * SHIFT_PRECISION) / SHIFT_PRECISION;
   });
 }
 

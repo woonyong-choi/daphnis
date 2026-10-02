@@ -26,6 +26,10 @@ const MOVE = curveOf('move');
 const OVERLAP_SLACK = 0.5;
 // 잰 글 폭의 반올림 차이를 넘기 위한 여유
 const FIT_SLACK = 0.5;
+// 지점 사이 자리를 글자와 견주는 시간 비율(구간의 1/4, 1/2, 3/4)
+const BETWEEN_RATIOS = [0.25, 0.5, 0.75];
+// 후보 순위에서 옆으로 비킨 거리를 가르는 가중치. 후보 종류(위, 아래, 옆)의 순서를 넘지 않을 만큼 작다
+const SHIFT_WEIGHT = 1 / 10000;
 
 // cost: time O(l·n), heap O(1), stack O(1)
 // vars: l = 줄 수, n = 줄 글자 수
@@ -71,7 +75,7 @@ export function placeChip(point, chip, scene, avoid = []) {
       const isOutside = isOutsideFigure(box, scene);
       const isTight = top < CHIP_MARGIN - FIT_SLACK || top + chip.h > scene.height - CHIP_MARGIN + FIT_SLACK;
       const shift = Math.abs(x - point.x);
-      const order = (center === point.x ? 0 : 2) + (dy > 0 ? 1 : 0) + shift / 10000;
+      const order = (center === point.x ? 0 : 2) + (dy > 0 ? 1 : 0) + shift * SHIFT_WEIGHT;
       candidates.push({ dx: x - point.x, dy, box, isOutside, hits: hits.map((h) => h.name), rank: [Number(isOutside), area, Number(isTight), order] });
     }
   }
@@ -103,7 +107,7 @@ export function planChip(scene, hop, avoid) {
   const base = Array.from({ length: SAMPLES + 1 }, (_, i) => place(i / SAMPLES));
   // 선형으로 이은 자리 검사는 진행 비율이 오르는 순서(isBack이면 경로 비율이 내려가는 순서)로 한다.
   if (hop.isBack) base.reverse();
-  const isClean = (a, b, ratios = [0.25, 0.5, 0.75]) => ratios.every((ratio) => {
+  const isClean = (a, b, ratios = BETWEEN_RATIOS) => ratios.every((ratio) => {
     const { box } = chipBoxBetween(route, hop, chip, [a, b], ratio);
     return !isOutsideFigure(box, scene) && !avoid.some((text) => overlapArea(box, text) > OVERLAP_SLACK);
   });

@@ -4,7 +4,6 @@ import { CHART_FACES, chartText } from './chart/draw.js';
 import { createAnimator } from './animate/animator.js';
 import { drawScene } from './draw/figure.js';
 import { createGlyphSet, embedFonts, wrap } from './measure/fonts.js';
-import { STYLE } from './measure/sizes.js';
 import { DEFS, STYLES } from './styles.js';
 import { escapeXml, plainText, renderRich, roundCoord as r } from './text.js';
 import { chartMotionCss } from './chart/motion.js';
