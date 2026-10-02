@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
 import { contrast, mixHex, pickInk } from '../src/contrast.js';
-import { themeColor, tokenValue } from './helpers.js';
+import { RESUME_ACCENT, themeColor, tokenValue } from './helpers.js';
 
 const TEXT = 4.5;
 const GRAPHIC = 3;
@@ -108,7 +108,7 @@ for (const theme of THEMES) {
 }
 
 test('stateRoles_values_follow_the_resume_accent_and_strong_is_the_lightest_same_hue_that_reaches_4_5', () => {
-  assert.equal(color('light', 'palette.blue.500'), '#2b96ed');
+  assert.ok(contrast(RESUME_ACCENT, color('light', 'bg')) < GRAPHIC, 'the resume accent itself misses 3 on the figure ground');
   assert.equal(color('light', 'state.active'), color('light', 'palette.blue.550'));
   assert.equal(color('dark', 'state.active'), '#79c0ff');
   assert.equal(color('light', 'state.on-active'), '#ffffff');

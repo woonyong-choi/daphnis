@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { contrast, mixHex } from '../src/contrast.js';
-import { linearChannelsOf as channelsOf, linearToOklab, oklchOf, themeColor as color } from './helpers.js';
+import { linearChannelsOf as channelsOf, linearToOklab, oklchOf, RESUME_ACCENT, RESUME_ORANGE, themeColor as color } from './helpers.js';
 
 const THEMES = ['light', 'dark'];
 const ORANGE_HUE = 50;
@@ -31,9 +31,9 @@ const distanceOf = (p, q) => Math.hypot(...p.map((v, i) => v - q[i]));
 const seenBy = (matrix, hex) => linearToOklab(matrix.map((row) => row.reduce((sum, weight, i) => sum + weight * channelsOf(hex)[i], 0)));
 
 test('palette_light_and_dark_orange_keep_the_blue_lightness_and_chroma_and_only_turn_the_hue', () => {
-  for (const [theme, blue, orange] of [['light', 'palette.blue.500', 'palette.orange.500'], ['dark', 'palette.blue.400', 'palette.orange.400']]) {
-    const [blueL, blueC] = oklchOf(color(theme, blue));
-    const [orangeL, orangeC, orangeHue] = oklchOf(color(theme, orange));
+  for (const [theme, blue, orange] of [['light', RESUME_ACCENT, RESUME_ORANGE], ['dark', 'palette.blue.400', 'palette.orange.400']]) {
+    const [blueL, blueC] = oklchOf(blue.startsWith('#') ? blue : color(theme, blue));
+    const [orangeL, orangeC, orangeHue] = oklchOf(orange.startsWith('#') ? orange : color(theme, orange));
 
     assert.ok(Math.abs(blueL - orangeL) <= LIGHTNESS_TOLERANCE, `${theme} L ${blueL.toFixed(3)} / ${orangeL.toFixed(3)}`);
     assert.ok(Math.abs(blueC - orangeC) <= CHROMA_TOLERANCE, `${theme} C ${blueC.toFixed(3)} / ${orangeC.toFixed(3)}`);
@@ -48,7 +48,7 @@ test('palette_orange_series_color_follows_the_theme_graphic_orange', () => {
 
 for (const hue of ['blue', 'orange']) {
   test(`palette_light_${hue}_graphic_is_the_lightest_step_of_the_base_hue_that_reaches_3_on_every_face`, () => {
-    const [base, graphic] = [color('light', `palette.${hue}.500`), color('light', `palette.${hue}.550`)];
+    const [base, graphic] = [hue === 'blue' ? RESUME_ACCENT : RESUME_ORANGE, color('light', `palette.${hue}.550`)];
     const [, baseC, baseHue] = oklchOf(base);
     const [graphicL, graphicC, graphicHue] = oklchOf(graphic);
     const lowest = Math.min(...GRAPHIC_FACES.map((face) => contrast(graphic, color('light', face))));

@@ -34,7 +34,6 @@ export const tokens = freeze({
         "50": "var(--color-palette-blue-50)",
         "200": "var(--color-palette-blue-200)",
         "400": "var(--color-palette-blue-400)",
-        "500": "var(--color-palette-blue-500)",
         "550": "var(--color-palette-blue-550)",
         "600": "var(--color-palette-blue-600)",
         "800": "var(--color-palette-blue-800)",
@@ -43,7 +42,6 @@ export const tokens = freeze({
       },
       "orange": {
         "400": "var(--color-palette-orange-400)",
-        "500": "var(--color-palette-orange-500)",
         "550": "var(--color-palette-orange-550)"
       },
       "ink": {
@@ -299,7 +297,6 @@ export const values = freeze({
         "50": "#edf5fb",
         "200": "#a9cdea",
         "400": "#79c0ff",
-        "500": "#2b96ed",
         "550": "#218fe5",
         "600": "#1072c2",
         "800": "#1d5d91",
@@ -308,7 +305,6 @@ export const values = freeze({
       },
       "orange": {
         "400": "#f5a374",
-        "500": "#dc6e22",
         "550": "#d96c1f"
       },
       "ink": {
