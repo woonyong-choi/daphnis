@@ -36,6 +36,17 @@ export function labelText(label, cy, className) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
+/**
+ * 행 k의 글자 묶음. 밝히지 않은 행에서 글자는 면(막대, 점)보다 덜 흐려야 읽히므로 `ink` class를 달아 따로 흐린다.
+ * 계열 i를 주면 그 계열 묶음(`cs-i`) 안에 둬 계열을 드러낼 때 함께 나타난다.
+ */
+export function inkGroup(k, inner, i) {
+  const body = i === undefined ? inner : `<g class="cs-${i}">${inner}</g>`;
+  return `<g class="cr-${k} ink">${body}</g>`;
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
 /** 값 글자. at.x에서 시작하거나 className의 `end`로 at.x가 오른쪽 끝이고, 세로 가운데 at.cy에 맞춘다. */
 export function valueText({ x, cy }, text, className) {
   return `<text x="${r(x)}" y="${r(centerBaseline(cy, TEXT['11']))}" class="${className}">${text}</text>`;

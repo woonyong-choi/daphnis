@@ -187,6 +187,7 @@
   --opacity-tag: 0.15;
   --opacity-halo: 0.2;
   --opacity-dim: 0.3;
+  --opacity-dim-ink: 0.65;
   --opacity-band: 0.22;
   --opacity-range: 0.4;
   --z-raised: 2;

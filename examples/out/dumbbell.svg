@@ -184,6 +184,7 @@
   --opacity-tag: 0.15;
   --opacity-halo: 0.2;
   --opacity-dim: 0.3;
+  --opacity-dim-ink: 0.65;
   --opacity-band: 0.22;
   --opacity-range: 0.4;
   --z-raised: 2;
@@ -540,14 +541,24 @@
 }
 
 .fl .chart-cell {
+  --ink: var(--color-data-heat-ink);
   font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   text-anchor: middle;
-  fill: var(--color-data-heat-ink);
+  fill: var(--ink);
 }
 
 .fl .chart-cell.on {
-  fill: var(--color-data-heat-ink-on);
+  --ink: var(--color-data-heat-ink-on);
+}
+
+/* 흐린 칸은 면이 바탕 쪽으로 옅어져 진한 칸의 밝은 글자가 묻힌다. 흐린 동안은 모든 칸이 어두운 글자(다크는 같은 밝은 글자)다. */
+.fl .chart-cell.dim {
+  fill: var(--color-data-heat-ink);
+}
+
+.fl .chart-cell.ink {
+  transition: opacity var(--duration-fast), fill var(--duration-fast);
 }
 
 .fl .chart-axis,
@@ -645,6 +656,11 @@
   opacity: var(--opacity-dim);
 }
 
+/* 글자는 면보다 덜 흐려, 흐린 행에서도 글자가 바탕과 대비 4.5 이상이다. */
+.fl .ink.dim {
+  opacity: var(--opacity-dim-ink);
+}
+
 .fl .cs-0,
 .fl .cs-1,
 .fl [class*="cr-"] {
@@ -695,20 +711,28 @@
 .fl .cs-1 .late, .fl .cs-1 .pop, .fl .cs-1.pop { animation: f1 8.11s infinite; }
 @keyframes a2 { 0%,39.456% { opacity: 1 } 39.457%,62.761% { opacity: 1 } 62.762%,71.639% { opacity: 1 } 71.64% { opacity: 1 } 74.106%,99.999% { opacity: 0.3 } }
 .fl .a2 { animation: a2 8.11s infinite linear; }
-.fl .cr-0 { animation: a2 8.11s infinite linear; }
-.fl .cr-1 { animation: a2 8.11s infinite linear; }
-.fl .cr-2 { animation: a2 8.11s infinite linear; }
-@keyframes a3 { 0%,39.456% { opacity: 1 } 39.457%,62.761% { opacity: 1 } 62.762%,71.639% { opacity: 1 } 71.64%,99.999% { opacity: 1 } }
+@keyframes a3 { 0%,39.456% { opacity: 1 } 39.457%,62.761% { opacity: 1 } 62.762%,71.639% { opacity: 1 } 71.64% { opacity: 1 } 74.106%,99.999% { opacity: 0.65 } }
 .fl .a3 { animation: a3 8.11s infinite linear; }
-.fl .cr-3 { animation: a3 8.11s infinite linear; }
-@keyframes a4 { 0%,39.456% { opacity: 1 } 39.457% { opacity: 1 } 41.924%,62.761% { opacity: 0 } 62.762%,71.639% { opacity: 0 } 71.64%,99.999% { opacity: 0 } }
+.fl .cr-0 { animation: a2 8.11s infinite linear; }
+.fl .cr-0.ink { animation: a3 8.11s infinite linear; }
+.fl .cr-1 { animation: a2 8.11s infinite linear; }
+.fl .cr-1.ink { animation: a3 8.11s infinite linear; }
+.fl .cr-2 { animation: a2 8.11s infinite linear; }
+.fl .cr-2.ink { animation: a3 8.11s infinite linear; }
+@keyframes a4 { 0%,39.456% { opacity: 1 } 39.457%,62.761% { opacity: 1 } 62.762%,71.639% { opacity: 1 } 71.64%,99.999% { opacity: 1 } }
 .fl .a4 { animation: a4 8.11s infinite linear; }
-@keyframes a5 { 0%,41.922% { opacity: 0 } 41.924% { opacity: 0 } 44.39%,62.761% { opacity: 1 } 62.762%,71.639% { opacity: 1 } 71.64%,99.999% { opacity: 1 } }
+@keyframes a5 { 0%,39.456% { opacity: 1 } 39.457%,62.761% { opacity: 1 } 62.762%,71.639% { opacity: 1 } 71.64%,99.999% { opacity: 1 } }
 .fl .a5 { animation: a5 8.11s infinite linear; }
-@keyframes a6 { 0%,41.922% { opacity: 0 } 41.924% { opacity: 0 } 44.39%,62.761% { opacity: 1 } 62.762% { opacity: 1 } 65.228%,71.639% { opacity: 0 } 71.64%,99.999% { opacity: 0 } }
+.fl .cr-3 { animation: a4 8.11s infinite linear; }
+.fl .cr-3.ink { animation: a5 8.11s infinite linear; }
+@keyframes a6 { 0%,39.456% { opacity: 1 } 39.457% { opacity: 1 } 41.924%,62.761% { opacity: 0 } 62.762%,71.639% { opacity: 0 } 71.64%,99.999% { opacity: 0 } }
 .fl .a6 { animation: a6 8.11s infinite linear; }
-@keyframes a7 { 0%,39.456% { opacity: 0 } 39.457%,65.227% { opacity: 0 } 65.228% { opacity: 0 } 67.694%,71.639% { opacity: 1 } 71.64%,99.999% { opacity: 1 } }
+@keyframes a7 { 0%,41.922% { opacity: 0 } 41.924% { opacity: 0 } 44.39%,62.761% { opacity: 1 } 62.762%,71.639% { opacity: 1 } 71.64%,99.999% { opacity: 1 } }
 .fl .a7 { animation: a7 8.11s infinite linear; }
+@keyframes a8 { 0%,41.922% { opacity: 0 } 41.924% { opacity: 0 } 44.39%,62.761% { opacity: 1 } 62.762% { opacity: 1 } 65.228%,71.639% { opacity: 0 } 71.64%,99.999% { opacity: 0 } }
+.fl .a8 { animation: a8 8.11s infinite linear; }
+@keyframes a9 { 0%,39.456% { opacity: 0 } 39.457%,65.227% { opacity: 0 } 65.228% { opacity: 0 } 67.694%,71.639% { opacity: 1 } 71.64%,99.999% { opacity: 1 } }
+.fl .a9 { animation: a9 8.11s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-main)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="417" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
@@ -717,16 +741,16 @@
 <text x="28" y="63" class="chart-sub">예시 데이터. 에이전트마다 작업 61개 평균</text>
 <g class="cs-1"><rect x="28" y="77" width="12" height="12" rx="4" fill="var(--color-data-main)"/><text x="46" y="85" class="chart-legend">기억 붙임</text></g>
 <g class="cs-0"><rect x="111.535" y="77" width="12" height="12" rx="4" fill="var(--color-data-compare)"/><text x="129.535" y="85" class="chart-legend">기억 없음</text></g>
-<text x="28" y="133.7" class="chart-label cr-0">코딩 에이전트 A</text><g class="cr-0"><g class="cs-0"><line x1="675.9" x2="707.7" y1="129" y2="129" stroke="var(--color-data-compare)" stroke-width="6" class="chart-range pop"/><circle cx="691.6" cy="129" r="5" class="chart-before pop"/><text x="713.7" y="133" class="chart-value first late start">120k</text></g><g class="cs-1"><line x1="528.4" x2="559.9" y1="129" y2="129" stroke="var(--color-data-main)" stroke-width="6" class="chart-range pop"/><line x1="684.6" y1="129" x2="550.6" y2="129" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-main)"/><circle cx="543.6" cy="129" r="5" fill="var(--color-data-main)" class="chart-after pop"/><text x="522.4" y="133" class="chart-value second late end">31k</text><text x="932" y="133.3" class="chart-ratio late">−74%</text></g></g>
-<text x="28" y="173.7" class="chart-label cr-1">코딩 에이전트 B</text><g class="cr-1"><g class="cs-0"><line x1="651.3" x2="680.1" y1="169" y2="169" stroke="var(--color-data-compare)" stroke-width="6" class="chart-range pop"/><circle cx="666" cy="169" r="5" class="chart-before pop"/><text x="686.1" y="173" class="chart-value first late start">95k</text></g><g class="cs-1"><line x1="515.6" x2="550.4" y1="169" y2="169" stroke="var(--color-data-main)" stroke-width="6" class="chart-range pop"/><line x1="659" y1="169" x2="539.4" y2="169" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-main)"/><circle cx="532.4" cy="169" r="5" fill="var(--color-data-main)" class="chart-after pop"/><text x="509.6" y="173" class="chart-value second late end">28k</text><text x="932" y="173.3" class="chart-ratio late">−71%</text></g></g>
-<text x="28" y="213.7" class="chart-label cr-2">편집기 도우미</text><g class="cr-2"><g class="cs-0"><line x1="600.1" x2="631.1" y1="209" y2="209" stroke="var(--color-data-compare)" stroke-width="6" class="chart-range pop"/><circle cx="615.8" cy="209" r="5" class="chart-before pop"/><text x="637.1" y="213" class="chart-value first late start">60k</text></g><g class="cs-1"><line x1="484.1" x2="520" y1="209" y2="209" stroke="var(--color-data-main)" stroke-width="6" class="chart-range pop"/><line x1="608.8" y1="209" x2="508" y2="209" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-main)"/><circle cx="501" cy="209" r="5" fill="var(--color-data-main)" class="chart-after pop"/><text x="478.1" y="213" class="chart-value second late end">21k</text><text x="932" y="213.3" class="chart-ratio late">−65%</text></g></g>
-<text x="28" y="253.7" class="chart-label cr-3">사내 에이전트</text><g class="cr-3"><g class="cs-0"><line x1="379.2" x2="411.9" y1="249" y2="249" stroke="var(--color-data-compare)" stroke-width="6" class="chart-range pop"/><circle cx="395.4" cy="249" r="5" class="chart-before pop"/><text x="373.2" y="253" class="chart-value first late end">8k</text></g><g class="cs-1"><line x1="392.6" x2="429.2" y1="249" y2="249" stroke="var(--color-data-main)" stroke-width="6" class="chart-range pop"/><circle cx="410.7" cy="249" r="5" fill="var(--color-data-main)" class="chart-after pop"/><text x="435.2" y="253" class="chart-value second late start">9.2k</text><text x="932" y="253.3" class="chart-ratio late">+15%</text></g></g>
+<g class="cr-0 ink"><text x="28" y="133.7" class="chart-label">코딩 에이전트 A</text></g><g class="cr-0"><g class="cs-0"><line x1="675.9" x2="707.7" y1="129" y2="129" stroke="var(--color-data-compare)" stroke-width="6" class="chart-range pop"/><circle cx="691.6" cy="129" r="5" class="chart-before pop"/></g><g class="cs-1"><line x1="528.4" x2="559.9" y1="129" y2="129" stroke="var(--color-data-main)" stroke-width="6" class="chart-range pop"/><line x1="684.6" y1="129" x2="550.6" y2="129" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-main)"/><circle cx="543.6" cy="129" r="5" fill="var(--color-data-main)" class="chart-after pop"/></g></g><g class="cr-0 ink"><g class="cs-0"><text x="713.7" y="133" class="chart-value first late start">120k</text></g><g class="cs-1"><text x="522.4" y="133" class="chart-value second late end">31k</text><text x="932" y="133.3" class="chart-ratio late">−74%</text></g></g>
+<g class="cr-1 ink"><text x="28" y="173.7" class="chart-label">코딩 에이전트 B</text></g><g class="cr-1"><g class="cs-0"><line x1="651.3" x2="680.1" y1="169" y2="169" stroke="var(--color-data-compare)" stroke-width="6" class="chart-range pop"/><circle cx="666" cy="169" r="5" class="chart-before pop"/></g><g class="cs-1"><line x1="515.6" x2="550.4" y1="169" y2="169" stroke="var(--color-data-main)" stroke-width="6" class="chart-range pop"/><line x1="659" y1="169" x2="539.4" y2="169" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-main)"/><circle cx="532.4" cy="169" r="5" fill="var(--color-data-main)" class="chart-after pop"/></g></g><g class="cr-1 ink"><g class="cs-0"><text x="686.1" y="173" class="chart-value first late start">95k</text></g><g class="cs-1"><text x="509.6" y="173" class="chart-value second late end">28k</text><text x="932" y="173.3" class="chart-ratio late">−71%</text></g></g>
+<g class="cr-2 ink"><text x="28" y="213.7" class="chart-label">편집기 도우미</text></g><g class="cr-2"><g class="cs-0"><line x1="600.1" x2="631.1" y1="209" y2="209" stroke="var(--color-data-compare)" stroke-width="6" class="chart-range pop"/><circle cx="615.8" cy="209" r="5" class="chart-before pop"/></g><g class="cs-1"><line x1="484.1" x2="520" y1="209" y2="209" stroke="var(--color-data-main)" stroke-width="6" class="chart-range pop"/><line x1="608.8" y1="209" x2="508" y2="209" pathLength="1" class="chart-arrow draw" marker-end="url(#fl-arrow-main)"/><circle cx="501" cy="209" r="5" fill="var(--color-data-main)" class="chart-after pop"/></g></g><g class="cr-2 ink"><g class="cs-0"><text x="637.1" y="213" class="chart-value first late start">60k</text></g><g class="cs-1"><text x="478.1" y="213" class="chart-value second late end">21k</text><text x="932" y="213.3" class="chart-ratio late">−65%</text></g></g>
+<g class="cr-3 ink"><text x="28" y="253.7" class="chart-label">사내 에이전트</text></g><g class="cr-3"><g class="cs-0"><line x1="379.2" x2="411.9" y1="249" y2="249" stroke="var(--color-data-compare)" stroke-width="6" class="chart-range pop"/><circle cx="395.4" cy="249" r="5" class="chart-before pop"/></g><g class="cs-1"><line x1="392.6" x2="429.2" y1="249" y2="249" stroke="var(--color-data-main)" stroke-width="6" class="chart-range pop"/><circle cx="410.7" cy="249" r="5" fill="var(--color-data-main)" class="chart-after pop"/></g></g><g class="cr-3 ink"><g class="cs-0"><text x="373.2" y="253" class="chart-value first late end">8k</text></g><g class="cs-1"><text x="435.2" y="253" class="chart-value second late start">9.2k</text><text x="932" y="253.3" class="chart-ratio late">+15%</text></g></g>
 
 <line x1="168" x2="923.5" y1="277" y2="277" class="chart-axis"/><text x="168" y="294" class="chart-tick">1k</text><text x="419.8" y="294" class="chart-tick">10k</text><text x="671.6" y="294" class="chart-tick">100k</text><text x="923.5" y="294" class="chart-tick">1M</text><text x="923.5" y="311" class="chart-unit">토큰(로그 눈금)</text>
 </g>
-<text x="480" y="360" opacity="0" class="steplabel a4">기억 없음</text>
-<text x="480" y="360" opacity="0" class="steplabel a5">기억 붙임</text>
-<g opacity="0" class="a4"><text x="480" y="386" class="caption">기억 없이 쓴 토큰이다</text></g>
-<g opacity="0" class="a6"><text x="480" y="386" class="caption">같은 작업에서 기억을 붙이면 토큰이 준다</text></g>
-<g opacity="0" class="a7"><text x="480" y="386" class="caption">사내 에이전트만 15% 늘었다</text></g>
+<text x="480" y="360" opacity="0" class="steplabel a6">기억 없음</text>
+<text x="480" y="360" opacity="0" class="steplabel a7">기억 붙임</text>
+<g opacity="0" class="a6"><text x="480" y="386" class="caption">기억 없이 쓴 토큰이다</text></g>
+<g opacity="0" class="a8"><text x="480" y="386" class="caption">같은 작업에서 기억을 붙이면 토큰이 준다</text></g>
+<g opacity="0" class="a9"><text x="480" y="386" class="caption">사내 에이전트만 15% 늘었다</text></g>
 </svg>

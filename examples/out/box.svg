@@ -184,6 +184,7 @@
   --opacity-tag: 0.15;
   --opacity-halo: 0.2;
   --opacity-dim: 0.3;
+  --opacity-dim-ink: 0.65;
   --opacity-band: 0.22;
   --opacity-range: 0.4;
   --z-raised: 2;
@@ -540,14 +541,24 @@
 }
 
 .fl .chart-cell {
+  --ink: var(--color-data-heat-ink);
   font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   text-anchor: middle;
-  fill: var(--color-data-heat-ink);
+  fill: var(--ink);
 }
 
 .fl .chart-cell.on {
-  fill: var(--color-data-heat-ink-on);
+  --ink: var(--color-data-heat-ink-on);
+}
+
+/* 흐린 칸은 면이 바탕 쪽으로 옅어져 진한 칸의 밝은 글자가 묻힌다. 흐린 동안은 모든 칸이 어두운 글자(다크는 같은 밝은 글자)다. */
+.fl .chart-cell.dim {
+  fill: var(--color-data-heat-ink);
+}
+
+.fl .chart-cell.ink {
+  transition: opacity var(--duration-fast), fill var(--duration-fast);
 }
 
 .fl .chart-axis,
@@ -645,6 +656,11 @@
   opacity: var(--opacity-dim);
 }
 
+/* 글자는 면보다 덜 흐려, 흐린 행에서도 글자가 바탕과 대비 4.5 이상이다. */
+.fl .ink.dim {
+  opacity: var(--opacity-dim-ink);
+}
+
 .fl .cs-0,
 .fl .cs-1,
 .fl [class*="cr-"] {
@@ -678,9 +694,9 @@
 <g transform="translate(0 0)">
 <text x="28" y="43" class="chart-title">응답 지연 분포</text>
 <text x="28" y="63" class="chart-sub">예시 데이터. 요청 1,000개</text>
-<g class="cs-0"><text x="28" y="109.7" class="chart-label cr-0">캐시 적중</text><g class="cr-0"><line x1="174" x2="197.1" y1="105" y2="105" class="chart-whisker"/><rect x="177" y="93" width="6.5" height="24" rx="4" class="chart-box grow"/><line x1="179" x2="179" y1="93" y2="117" class="chart-median"/><text x="203.1" y="109" class="chart-value late">22</text></g>
-<text x="28" y="149.7" class="chart-label cr-1">캐시 없음</text><g class="cr-1"><line x1="228.2" x2="479" y1="145" y2="145" class="chart-whisker"/><rect x="258.3" y="133" width="65.2" height="24" rx="4" class="chart-box grow"/><line x1="283.4" x2="283.4" y1="133" y2="157" class="chart-median"/><text x="485" y="149" class="chart-value late">230</text></g>
-<text x="28" y="189.7" class="chart-label cr-2">콜드 스타트</text><g class="cr-2"><line x1="368.6" x2="870.2" y1="185" y2="185" class="chart-whisker"/><rect x="428.8" y="173" width="130.4" height="24" rx="4" class="chart-box grow"/><line x1="474" x2="474" y1="173" y2="197" class="chart-median"/><text x="876.2" y="189" class="chart-value late">610</text></g>
+<g class="cs-0"><g class="cr-0"><line x1="174" x2="197.1" y1="105" y2="105" class="chart-whisker"/><rect x="177" y="93" width="6.5" height="24" rx="4" class="chart-box grow"/><line x1="179" x2="179" y1="93" y2="117" class="chart-median"/></g><g class="cr-0 ink"><text x="28" y="109.7" class="chart-label">캐시 적중</text><text x="203.1" y="109" class="chart-value late">22</text></g>
+<g class="cr-1"><line x1="228.2" x2="479" y1="145" y2="145" class="chart-whisker"/><rect x="258.3" y="133" width="65.2" height="24" rx="4" class="chart-box grow"/><line x1="283.4" x2="283.4" y1="133" y2="157" class="chart-median"/></g><g class="cr-1 ink"><text x="28" y="149.7" class="chart-label">캐시 없음</text><text x="485" y="149" class="chart-value late">230</text></g>
+<g class="cr-2"><line x1="368.6" x2="870.2" y1="185" y2="185" class="chart-whisker"/><rect x="428.8" y="173" width="130.4" height="24" rx="4" class="chart-box grow"/><line x1="474" x2="474" y1="173" y2="197" class="chart-median"/></g><g class="cr-2 ink"><text x="28" y="189.7" class="chart-label">콜드 스타트</text><text x="876.2" y="189" class="chart-value late">610</text></g>
 
 <line x1="168" x2="920.4" y1="213" y2="213" class="chart-axis"/><text x="168" y="230" class="chart-tick">0</text><text x="418.8" y="230" class="chart-tick">500</text><text x="669.6" y="230" class="chart-tick">1k</text><text x="920.4" y="230" class="chart-tick">1.5k</text><text x="920.4" y="247" class="chart-unit">지연(ms)</text></g>
 </g>

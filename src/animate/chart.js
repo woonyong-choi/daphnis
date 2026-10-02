@@ -19,12 +19,12 @@ const GROWS = [
  * 차트 keyframes를 css에 쌓는다.
  * @param ctx { clock, segs, growMs, css, windows, fadeFrames }. 움직이는 SVG가 한 그림에 하나 쓰는 묶음
  * @param seriesIds 시간표가 다루는 계열 id 목록
- * @param drawn 차트 그리기 결과(dotAts, rowKeys)
+ * @param drawn 차트 그리기 결과(dotAts, rowKeys, dimsInkColor)
  */
 export function animateChart(ctx, seriesIds, drawn) {
   seriesIds.forEach((id, s) => animateSeries(ctx, id, s, drawn.dotAts));
   animateLabelShifts(ctx, drawn.rowKeys);
-  animateDimming(ctx, drawn.rowKeys);
+  animateDimming(ctx, drawn);
 }
 
 // cost: time O(b + a), heap O(a), stack O(1)
@@ -80,10 +80,13 @@ function animateLabelShifts({ clock, segs, css, fadeFrames }, rowKeys) {
 // cost: time O(r·b), heap O(r), stack O(1)
 // vars: r = 행 수, b = 박자 수
 // basis: estimate
-// 밝히지 않은 행은 흐린다.
-function animateDimming({ clock, segs, css, windows }, rowKeys) {
-  rowKeys.forEach((key, k) => {
-    const dim = windows(segs.map((g) => g.lights.length > 0 && !g.lights.includes(key)), { on: `opacity: ${values.opacity.dim}`, off: 'opacity: 1' });
-    css.push(`.fl .cr-${k} { animation: ${dim} ${clock.duration} infinite linear; }`);
+// 밝히지 않은 행은 면을 흐리고(`opacity.dim`), 글자(`.ink`)는 덜 흐린다(`opacity.dim-ink`). 히트맵 칸 글자는 색도 어두운 글자로 바뀐다(chart.css `.chart-cell.dim`).
+function animateDimming({ clock, segs, css, windows }, drawn) {
+  const inkColor = drawn.dimsInkColor ? { on: '; fill: var(--color-data-heat-ink)', off: '; fill: var(--ink)' } : { on: '', off: '' };
+  drawn.rowKeys.forEach((key, k) => {
+    const isDim = segs.map((g) => g.lights.length > 0 && !g.lights.includes(key));
+    const face = windows(isDim, { on: `opacity: ${values.opacity.dim}`, off: 'opacity: 1' });
+    const ink = windows(isDim, { on: `opacity: ${values.opacity['dim-ink']}${inkColor.on}`, off: `opacity: 1${inkColor.off}` });
+    css.push(`.fl .cr-${k} { animation: ${face} ${clock.duration} infinite linear; }`, `.fl .cr-${k}.ink { animation: ${ink} ${clock.duration} infinite linear; }`);
   });
 }

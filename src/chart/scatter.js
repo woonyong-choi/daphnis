@@ -3,6 +3,7 @@ import { measure } from '../measure/fonts.js';
 import { centerBaseline, renderRich, roundCoord as r } from '../text.js';
 import { values } from '../tokens.js';
 import { drawRules } from './axis.js';
+import { inkGroup } from './labels.js';
 import { DOT, NAME_OFFSET, PAD, SIZE, SPACE, TEXT, seriesColor } from './metrics.js';
 import { plotFrame } from './plot-frame.js';
 
@@ -64,7 +65,7 @@ function pointMark(ctx, { p, toLeft }, k) {
   const { x, y } = at.get(p.label);
   const i = Math.max(0, chart.series.findIndex((s) => s.id === p.values.series));
   const name = `<text x="${r(toLeft ? x - NAME_OFFSET : x + NAME_OFFSET)}" y="${r(centerBaseline(y, TEXT['11']))}" class="chart-name late${toLeft ? ' end' : ''}">${renderRich(p.label)}</text>`;
-  return `<g class="cr-${k}"><g class="cs-${i}"><circle cx="${r(x)}" cy="${r(y)}" r="${DOT}" fill="${seriesColor(chart, i)}" class="pop"/>${name}</g></g>`;
+  return `<g class="cr-${k}"><g class="cs-${i}"><circle cx="${r(x)}" cy="${r(y)}" r="${DOT}" fill="${seriesColor(chart, i)}" class="pop"/></g></g>${inkGroup(k, name, i)}`;
 }
 
 // cost: time O(p²·n + t), heap O(out), stack O(1)

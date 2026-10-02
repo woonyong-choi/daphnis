@@ -237,6 +237,7 @@ export const tokens = freeze({
     "tag": "var(--opacity-tag)",
     "halo": "var(--opacity-halo)",
     "dim": "var(--opacity-dim)",
+    "dim-ink": "var(--opacity-dim-ink)",
     "band": "var(--opacity-band)",
     "range": "var(--opacity-range)"
   },
@@ -501,6 +502,7 @@ export const values = freeze({
     "tag": 0.15,
     "halo": 0.2,
     "dim": 0.3,
+    "dim-ink": 0.65,
     "band": 0.22,
     "range": 0.4
   },

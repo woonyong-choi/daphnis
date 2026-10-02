@@ -218,7 +218,7 @@ test('loadChartData_interval_keys_match_inline_rows_for_line_and_dumbbell', asyn
 
 test('drawDumbbells_every_row_ends_in_the_same_main_dot_and_close_rows_only_lose_the_arrow', async () => {
   const close = await bodyOf('chart dumbbell\nscale log\nseries a "A" role=compare\nseries b "B" role=main\nrow "r" a=8000 b=9200\nrow "s" a=100000 b=1000');
-  const [near, far] = close.split('class="chart-label cr-1"');
+  const [near, far] = close.split('<g class="cr-1 ink"><text');
   const textX = (svg, cls) => Number(new RegExp(`<text x="([\\d.]+)"[^>]*class="chart-value ${cls} late`).exec(svg)[1]);
 
   const dots = (svg) => [...svg.matchAll(/<circle [^>]*r="(\d+)" fill="([^"]+)" class="chart-after pop"/g)].map((m) => m.slice(1).join(' '));
@@ -341,7 +341,7 @@ test('toSvg_heatmap_cell_color_follows_css_variables_so_dark_mode_applies', asyn
   assert.match(svg, /<rect [^>]*class="chart-heat" style="--s:0.5"/);
   assert.match(svg, /\.fl \.chart-heat \{\s*fill: color-mix\(in srgb, var\(--color-data-heat-high\) calc\(var\(--s\) \* 100%\), var\(--color-data-heat-low\)\)/);
   assert.match(svg, /prefers-color-scheme: dark[^}]*--color-data-heat-low: var\(--color-palette-blue-850\)[^}]*--color-data-heat-high: var\(--color-palette-blue-600\)/s);
-  assert.match(svg, /\.fl \.chart-cell\.on \{\s*fill: var\(--color-data-heat-ink-on\)/);
+  assert.match(svg, /\.fl \.chart-cell\.on \{\s*--ink: var\(--color-data-heat-ink-on\)/);
 });
 
 // cost: time O(build), heap O(m), stack O(1)
@@ -402,4 +402,21 @@ test('drawChart_bar_label_of_a_row_with_a_missing_series_is_centered_on_its_only
   // r 행은 두 막대 가운데(첫 막대 가운데 + 8), m 행은 하나뿐인 막대(둘째 슬롯) 가운데
   assert.ok(Math.abs(labels[0] - (bars[0] + 8)) < 0.2, `${labels[0]} ${bars[0]}`);
   assert.ok(Math.abs(labels[1] - bars[2]) < 0.2, `${labels[1]} ${bars[2]}`);
+});
+
+test('toSvg_light_dims_the_face_more_than_the_text_and_heat_text_turns_to_the_dark_ink', async () => {
+  const { toSvg } = await import('../src/svg.js');
+  const { values } = await import('../src/tokens.js');
+  const dim = values.opacity.dim;
+  const dimInk = values.opacity['dim-ink'];
+  const heat = await toSvg(await buildFigure('chart heatmap\ncell "a" "x" 10\ncell "a" "y" 5\nstep "s"\n  light "a" "x"'));
+  const bar = await toSvg(await buildFigure('chart bar\nseries a "A"\nrow "r" a=1\nrow "s" a=2\nstep "s"\n  light "r"'));
+
+  assert.ok(dimInk > dim);
+  assert.match(heat, new RegExp(`opacity: ${dim}[^}]*\\}`));
+  assert.match(heat, new RegExp(`opacity: ${dimInk}; fill: var\\(--color-data-heat-ink\\)`));
+  assert.match(heat, /opacity: 1; fill: var\(--ink\)/);
+  assert.match(bar, new RegExp(`opacity: ${dimInk}[^;}]*\\}`));
+  assert.doesNotMatch(bar, /opacity: 1; fill: var\(--ink\)/);
+  assert.match(bar, /\.fl \.cr-1\.ink \{ animation: a\d+ /);
 });

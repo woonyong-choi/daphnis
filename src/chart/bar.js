@@ -3,7 +3,7 @@ import { measure } from '../measure/fonts.js';
 import { renderRich, centerBaseline, roundCoord as r } from '../text.js';
 import { values } from '../tokens.js';
 import { finishRowChart, rowValueScale } from './axis.js';
-import { labelText, valueText } from './labels.js';
+import { inkGroup, labelText, valueText } from './labels.js';
 import { BAR, SPACE, TEXT, seriesColor } from './metrics.js';
 import { formatNumber } from './scale.js';
 import { presentSlots, slotMiddle } from './slots.js';
@@ -36,7 +36,7 @@ function barScale(chart) {
 // basis: estimate
 // 값이 없는 계열 슬롯: 막대 없이 안내 글만 둔다.
 function missingMark(chart, plotX, { k, i, cy }) {
-  return `<g class="cr-${k}"><g class="cs-${i}"><text x="${r(plotX)}" y="${r(centerBaseline(cy, TEXT['11']))}" class="chart-missing">${renderRich(chart.missing ?? '비교 없음')}</text></g></g>`;
+  return inkGroup(k, `<text x="${r(plotX)}" y="${r(centerBaseline(cy, TEXT['11']))}" class="chart-missing">${renderRich(chart.missing ?? '비교 없음')}</text>`, i);
 }
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -63,7 +63,7 @@ function barMark(ctx, row, at) {
   const ci = high !== undefined ? confidenceLine({ x1: scale.at(low), x2: reach, cy }) : '';
   const rect = `<rect x="${r(plotX)}" y="${r(by)}" width="${r(Math.max(SPACE['1'], end - plotX))}" height="${BAR}" rx="${values.radius.sm}" fill="${seriesColor(chart, i)}" class="grow"/>`;
   const text = valueText({ x: Math.max(end, reach) + SPACE['3'], cy }, formatNumber(v), `chart-value${i === 0 ? ' ours' : ''} late`);
-  return { mark: `<g class="cr-${k}"><g class="cs-${i}">${rect}${ci}</g></g>`, value: `<g class="cr-${k}"><g class="cs-${i}">${text}</g></g>` };
+  return { mark: `<g class="cr-${k}"><g class="cs-${i}">${rect}${ci}</g></g>`, value: inkGroup(k, text, i) };
 }
 
 // cost: time O(s), heap O(s), stack O(1)
@@ -75,7 +75,7 @@ function barRow(ctx, row, k) {
   const { chart, top } = ctx;
   const y = top + k * ctx.pitch;
   const middle = BAR / 2 + slotMiddle(presentSlots(row, chart.series));
-  const label = `<g class="cr-${k}">${labelText(row.label, y + middle, 'chart-label shift')}</g>`;
+  const label = inkGroup(k, labelText(row.label, y + middle, 'chart-label shift'));
   const bars = chart.series.map((_, i) => barMark(ctx, row, { k, i, by: y + i * (BAR + SPACE['2']) }));
   return { marks: [label, ...bars.map((b) => b.mark)], values: bars.flatMap((b) => (b.value ? [b.value] : [])) };
 }

@@ -23,15 +23,15 @@ function heatColor(strength) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 칸 하나: 면과 값 글자
+// 칸 하나: 면과 값 글자. 밝히지 않은 칸은 면이 `opacity.dim`으로, 글자가 `opacity.dim-ink`로 흐려진다(글자 색도 바뀐다. docs/design/charts.md 흐림).
 function heatCell(grid, c, k) {
   const { rows, cols, plotX, cellW, cellH, top, max } = grid;
   const [x, y] = [plotX + cols.indexOf(c.col) * cellW, top + rows.indexOf(c.row) * cellH];
   const strength = max ? c.values.value / max : 0;
   const isOn = pickInk(heatColor(strength), HEAT_INK, HEAT_INK_ON) === HEAT_INK_ON;
   return (
-    `<g class="cr-${k}"><rect x="${r(x)}" y="${r(y)}" width="${r(cellW - SPACE['1'])}" height="${r(cellH - SPACE['1'])}" rx="${values.radius.sm}" class="chart-heat" style="--s:${Math.round(strength * 1000) / 1000}" fill="${heatColor(strength)}"/>` +
-    `<text x="${r(x + cellW / 2)}" y="${r(centerBaseline(y + cellH / 2, TEXT['11']))}" class="chart-cell${isOn ? ' on' : ''}">${formatNumber(c.values.value)}</text></g>`
+    `<g class="cr-${k}"><rect x="${r(x)}" y="${r(y)}" width="${r(cellW - SPACE['1'])}" height="${r(cellH - SPACE['1'])}" rx="${values.radius.sm}" class="chart-heat" style="--s:${Math.round(strength * 1000) / 1000}" fill="${heatColor(strength)}"/></g>` +
+    `<text x="${r(x + cellW / 2)}" y="${r(centerBaseline(y + cellH / 2, TEXT['11']))}" class="cr-${k} ink chart-cell${isOn ? ' on' : ''}">${formatNumber(c.values.value)}</text>`
   );
 }
 
@@ -58,5 +58,5 @@ export function drawHeatmap(figure, top) {
   const parts = cols.map((c, j) => `<text x="${r(plotX + j * cellW + cellW / 2)}" y="${r(top + TEXT['11'])}" class="chart-tick">${renderRich(c)}</text>`);
   rows.forEach((row, i) => parts.push(labelText(row, grid.top + i * grid.cellH + grid.cellH / 2, 'chart-label')));
   chart.rows.forEach((c, k) => parts.push(heatCell(grid, c, k)));
-  return { svg: parts.join('\n'), bottom: grid.top + rows.length * grid.cellH, rowKeys: chart.rows.map((c) => `${c.row}\u0000${c.col}`), fits: headerFits(chart, grid) };
+  return { svg: parts.join('\n'), bottom: grid.top + rows.length * grid.cellH, rowKeys: chart.rows.map((c) => `${c.row}\u0000${c.col}`), fits: headerFits(chart, grid), dimsInkColor: true };
 }

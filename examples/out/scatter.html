@@ -204,6 +204,7 @@
   --opacity-tag: 0.15;
   --opacity-halo: 0.2;
   --opacity-dim: 0.3;
+  --opacity-dim-ink: 0.65;
   --opacity-band: 0.22;
   --opacity-range: 0.4;
   --z-raised: 2;
@@ -877,14 +878,24 @@ html.embedded .fl-canvas svg {
 }
 
 .fl .chart-cell {
+  --ink: var(--color-data-heat-ink);
   font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   text-anchor: middle;
-  fill: var(--color-data-heat-ink);
+  fill: var(--ink);
 }
 
 .fl .chart-cell.on {
-  fill: var(--color-data-heat-ink-on);
+  --ink: var(--color-data-heat-ink-on);
+}
+
+/* 흐린 칸은 면이 바탕 쪽으로 옅어져 진한 칸의 밝은 글자가 묻힌다. 흐린 동안은 모든 칸이 어두운 글자(다크는 같은 밝은 글자)다. */
+.fl .chart-cell.dim {
+  fill: var(--color-data-heat-ink);
+}
+
+.fl .chart-cell.ink {
+  transition: opacity var(--duration-fast), fill var(--duration-fast);
 }
 
 .fl .chart-axis,
@@ -982,6 +993,11 @@ html.embedded .fl-canvas svg {
   opacity: var(--opacity-dim);
 }
 
+/* 글자는 면보다 덜 흐려, 흐린 행에서도 글자가 바탕과 대비 4.5 이상이다. */
+.fl .ink.dim {
+  opacity: var(--opacity-dim-ink);
+}
+
 .fl .cs-0,
 .fl .cs-1,
 .fl [class*="cr-"] {
@@ -1019,10 +1035,10 @@ html.embedded .fl-canvas svg {
 <line x1="76" x2="923.4" y1="396" y2="396" class="chart-grid"/><text x="70" y="400" class="chart-tick end">0</text><line x1="76" x2="923.4" y1="309.3" y2="309.3" class="chart-grid"/><text x="70" y="313.3" class="chart-tick end">0.5</text><line x1="76" x2="923.4" y1="222.7" y2="222.7" class="chart-grid"/><text x="70" y="226.6" class="chart-tick end">1</text><line x1="76" x2="923.4" y1="136" y2="136" class="chart-grid"/><text x="70" y="140" class="chart-tick end">1.5</text><text x="76" y="413" class="chart-tick">0</text><text x="358.5" y="413" class="chart-tick">0.5</text><text x="640.9" y="413" class="chart-tick">1</text><text x="923.4" y="413" class="chart-tick">1.5</text><text x="923.4" y="430" class="chart-unit">작업당 비용(달러)</text><text x="28" y="120" class="chart-unit start">작업당 수정 횟수(회)</text>
 <g class="cr-0"><g class="cs-0"><line x1="548.3" y1="168" x2="296.9" y2="305" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
 <g class="cr-2"><g class="cs-0"><line x1="745.3" y1="190.6" x2="560.4" y2="247.4" pathLength="1" class="chart-link draw" marker-end="url(#fl-arrow)"/></g></g>
-<g class="cr-0"><g class="cs-1"><circle cx="556.2" cy="163.7" r="5" fill="var(--color-data-compare)" class="pop"/><text x="567.2" y="167.7" class="chart-name late">A 없음</text></g></g>
-<g class="cr-1"><g class="cs-0"><circle cx="279.4" cy="314.5" r="5" fill="var(--color-data-main)" class="pop"/><text x="290.4" y="318.5" class="chart-name late">A 붙음</text></g></g>
-<g class="cr-2"><g class="cs-1"><circle cx="753.9" cy="188" r="5" fill="var(--color-data-compare)" class="pop"/><text x="764.9" y="192" class="chart-name late">B 없음</text></g></g>
-<g class="cr-3"><g class="cs-0"><circle cx="527.9" cy="257.3" r="5" fill="var(--color-data-main)" class="pop"/><text x="538.9" y="261.3" class="chart-name late">B 붙음</text></g></g>
+<g class="cr-0"><g class="cs-1"><circle cx="556.2" cy="163.7" r="5" fill="var(--color-data-compare)" class="pop"/></g></g><g class="cr-0 ink"><g class="cs-1"><text x="567.2" y="167.7" class="chart-name late">A 없음</text></g></g>
+<g class="cr-1"><g class="cs-0"><circle cx="279.4" cy="314.5" r="5" fill="var(--color-data-main)" class="pop"/></g></g><g class="cr-1 ink"><g class="cs-0"><text x="290.4" y="318.5" class="chart-name late">A 붙음</text></g></g>
+<g class="cr-2"><g class="cs-1"><circle cx="753.9" cy="188" r="5" fill="var(--color-data-compare)" class="pop"/></g></g><g class="cr-2 ink"><g class="cs-1"><text x="764.9" y="192" class="chart-name late">B 없음</text></g></g>
+<g class="cr-3"><g class="cs-0"><circle cx="527.9" cy="257.3" r="5" fill="var(--color-data-main)" class="pop"/></g></g><g class="cr-3 ink"><g class="cs-0"><text x="538.9" y="261.3" class="chart-name late">B 붙음</text></g></g>
 <g class="fl-packets"></g></svg></div>
 <figcaption class="fl-foot">
 <div class="fl-bar"><button type="button" class="fl-round fl-pause"><svg class="fl-ring" viewBox="0 0 30 30" aria-hidden="true"><circle class="fl-ring-fill" cx="15" cy="15" r="14.125" stroke-width="1.75" transform="rotate(-90 15 15)"/></svg><span class="fl-pause-icon"></span></button><div class="fl-tabs" role="tablist"></div><button type="button" class="fl-round fl-rate" aria-label="배속">1×</button></div>

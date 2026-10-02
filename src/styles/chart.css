@@ -99,14 +99,24 @@
 }
 
 .fl .chart-cell {
+  --ink: var(--color-data-heat-ink);
   font-variant-numeric: tabular-nums;
   font-size: var(--size-text-11);
   text-anchor: middle;
-  fill: var(--color-data-heat-ink);
+  fill: var(--ink);
 }
 
 .fl .chart-cell.on {
-  fill: var(--color-data-heat-ink-on);
+  --ink: var(--color-data-heat-ink-on);
+}
+
+/* 흐린 칸은 면이 바탕 쪽으로 옅어져 진한 칸의 밝은 글자가 묻힌다. 흐린 동안은 모든 칸이 어두운 글자(다크는 같은 밝은 글자)다. */
+.fl .chart-cell.dim {
+  fill: var(--color-data-heat-ink);
+}
+
+.fl .chart-cell.ink {
+  transition: opacity var(--duration-fast), fill var(--duration-fast);
 }
 
 .fl .chart-axis,
@@ -202,6 +212,11 @@
 
 .fl .dim {
   opacity: var(--opacity-dim);
+}
+
+/* 글자는 면보다 덜 흐려, 흐린 행에서도 글자가 바탕과 대비 4.5 이상이다. */
+.fl .ink.dim {
+  opacity: var(--opacity-dim-ink);
 }
 
 .fl .cs-0,

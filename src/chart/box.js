@@ -3,7 +3,7 @@ import { measure } from '../measure/fonts.js';
 import { roundCoord as r } from '../text.js';
 import { values } from '../tokens.js';
 import { finishRowChart, rowValueScale } from './axis.js';
-import { labelText, valueText } from './labels.js';
+import { inkGroup, labelText, valueText } from './labels.js';
 import { BAR, ROW, SPACE, TEXT } from './metrics.js';
 import { formatNumber } from './scale.js';
 
@@ -20,17 +20,17 @@ function boxScale(chart) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 행 k의 SVG: 이름, 수염, 상자, 가운데 값 선, 가운데 값 글자
+// 행 k의 SVG: 수염, 상자, 가운데 값 선, 그리고 이름과 가운데 값 글자
 function boxRow(ctx, row, k) {
   const { scale, cy } = ctx;
   const v = row.values;
   const [a, q1, m, q3, b] = [v.min, v.q1, v.median, v.q3, v.max].map(scale.at);
+  const texts = inkGroup(k, labelText(row.label, cy, 'chart-label') + valueText({ x: b + SPACE['3'], cy }, formatNumber(v.median), 'chart-value late'));
   return (
-    labelText(row.label, cy, `chart-label cr-${k}`) +
     `<g class="cr-${k}"><line x1="${r(a)}" x2="${r(b)}" y1="${r(cy)}" y2="${r(cy)}" class="chart-whisker"/>` +
     `<rect x="${r(q1)}" y="${r(cy - BAR)}" width="${r(Math.max(1, q3 - q1))}" height="${BAR * 2}" rx="${values.radius.sm}" class="chart-box grow"/>` +
-    `<line x1="${r(m)}" x2="${r(m)}" y1="${r(cy - BAR)}" y2="${r(cy + BAR)}" class="chart-median"/>` +
-    `${valueText({ x: b + SPACE['3'], cy }, formatNumber(v.median), 'chart-value late')}</g>`
+    `<line x1="${r(m)}" x2="${r(m)}" y1="${r(cy - BAR)}" y2="${r(cy + BAR)}" class="chart-median"/></g>` +
+    texts
   );
 }
 

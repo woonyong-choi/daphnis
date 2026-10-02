@@ -106,6 +106,26 @@ for (const theme of THEMES) {
     expectAtLeast(theme, GRAPHIC, [['fg', 'bg']]);
   });
 
+  test(`contrast_${theme}_dimmed_row_text_keeps_value_text_at_4_5_and_helper_text_at_3`, () => {
+    // 밝히지 않은 행의 글자는 opacity.dim-ink로 바탕에 얹힌다. 값 글자(fg)는 읽혀야 하고, 보조 글자(muted)는 흐린 상태에서도 3 이상이다.
+    const bg = color(theme, 'bg');
+    for (const [role, minimum] of [['fg', TEXT], ['muted', GRAPHIC]]) {
+      const ratio = contrast(mixHex(bg, color(theme, role), opacity('dim-ink')), bg);
+      assert.ok(ratio >= minimum, `${theme} dimmed ${role}: ${ratio.toFixed(2)} < ${minimum}`);
+    }
+  });
+
+  test(`contrast_${theme}_dimmed_heat_text_reaches_4_5_on_every_cell_strength`, () => {
+    // 흐린 칸: 면은 opacity.dim으로 바탕 쪽으로 옅어지고, 글자는 어두운 글자(heat-ink)가 opacity.dim-ink로 얹힌다.
+    const [bg, low, high] = ['bg', 'data.heat-low', 'data.heat-high'].map((name) => color(theme, name));
+    const ink = color(theme, 'data.heat-ink');
+    for (let step = 0; step <= 1000; step++) {
+      const face = mixHex(bg, mixHex(low, high, step / 1000), opacity('dim'));
+      const ratio = contrast(mixHex(face, ink, opacity('dim-ink')), face);
+      assert.ok(ratio >= TEXT, `${theme} dimmed heat strength ${step / 1000}: ${ratio.toFixed(2)}`);
+    }
+  });
+
   test(`decorative_${theme}_figure_plate_edge_reaches_1_3_on_the_document_ground`, () => {
     // 판 테두리는 흰 문서 위 판 모양만 잡는 꾸밈이다. 판 안 도형은 각자 3을 맞춘다.
     expectAtLeast(theme, DECORATIVE_PLATE_EDGE, [['plate-border', 'page']]);
@@ -138,7 +158,7 @@ test('buildFigure_heatmap_cells_pick_the_ink_with_the_larger_contrast', async ()
   const source = 'chart heatmap\ncell "a" "x" 1\ncell "a" "y" 50\ncell "b" "x" 100\ncell "b" "y" 0\n';
   const { chart } = await buildFigure(source);
   const [low, high] = [color('light', 'data.heat-low'), color('light', 'data.heat-high')];
-  const picked = [...chart.body.matchAll(/class="chart-heat" style="--s:([\d.]+)"[^]*?class="chart-cell( on)?"/g)];
+  const picked = [...chart.body.matchAll(/class="chart-heat" style="--s:([\d.]+)"[^]*?class="cr-\d+ ink chart-cell( on)?"/g)];
 
   assert.equal(picked.length, 4);
   for (const [, strength, on] of picked) {

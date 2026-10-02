@@ -2,7 +2,7 @@
 import { measure } from '../measure/fonts.js';
 import { centerBaseline, roundCoord as r } from '../text.js';
 import { finishRowChart, rowValueScale } from './axis.js';
-import { labelText, valueText } from './labels.js';
+import { inkGroup, labelText, valueText } from './labels.js';
 import { DOT, ROW, SIZE, SPACE, TEXT, WIDTH, PAD, seriesColor } from './metrics.js';
 import { formatChange, formatNumber } from './scale.js';
 
@@ -79,7 +79,7 @@ function valueTextEdges(ctx, row, [x1, x2]) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 행 k의 SVG: 이름, 첫 계열(범위, 점, 값), 둘째 계열(범위, 화살표, 값, 바뀐 비율)
+// 행 k의 SVG: 이름, 두 계열의 도형(범위, 점, 화살표), 두 계열의 글자(값, 바뀐 비율). 글자가 도형 위에 얹힌다.
 function dumbbellRow(ctx, row, k) {
   const { chart, scale, cy } = ctx;
   const [first, second] = chart.series;
@@ -89,12 +89,9 @@ function dumbbellRow(ctx, row, k) {
   const [firstX, secondX] = xs[0] < xs[1] ? [left, right] : [right, left];
   const side = (x) => (x === left ? 'end' : 'start');
   const ratio = `<text x="${WIDTH - PAD}" y="${r(centerBaseline(cy, TEXT['12']))}" class="chart-ratio late">${formatChange(before, after)}</text>`;
-  return (
-    labelText(row.label, cy, `chart-label cr-${k}`) +
-    `<g class="cr-${k}"><g class="cs-0">${rangeBar(ctx, row, 0)}<circle cx="${r(xs[0])}" cy="${r(cy)}" r="${DOT}" class="chart-before pop"/>${valueText({ x: firstX, cy }, formatNumber(before), `chart-value first late ${side(firstX)}`)}</g>` +
-    `<g class="cs-1">${rangeBar(ctx, row, 1)}${endMark(ctx, xs)}` +
-    `${valueText({ x: secondX, cy }, formatNumber(after), `chart-value second late ${side(secondX)}`)}${ratio}</g></g>`
-  );
+  const marks = `<g class="cr-${k}"><g class="cs-0">${rangeBar(ctx, row, 0)}<circle cx="${r(xs[0])}" cy="${r(cy)}" r="${DOT}" class="chart-before pop"/></g><g class="cs-1">${rangeBar(ctx, row, 1)}${endMark(ctx, xs)}</g></g>`;
+  const texts = `<g class="cr-${k} ink"><g class="cs-0">${valueText({ x: firstX, cy }, formatNumber(before), `chart-value first late ${side(firstX)}`)}</g><g class="cs-1">${valueText({ x: secondX, cy }, formatNumber(after), `chart-value second late ${side(secondX)}`)}${ratio}</g></g>`;
+  return inkGroup(k, labelText(row.label, cy, 'chart-label')) + marks + texts;
 }
 
 // cost: time O(r + t), heap O(out), stack O(1)
