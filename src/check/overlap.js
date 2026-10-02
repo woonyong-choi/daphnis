@@ -1,5 +1,5 @@
 // 2번과 6번: 글과 도형이 겹치지 않는다.
-import { labelOf, overlaps } from './geometry.js';
+import { labelOf, overlaps, segmentHits, THROUGH_INSET } from './geometry.js';
 
 // cost: time O((l + t)² + (l + t)·s), heap O(1), stack O(1)
 // vars: l = 선 라벨 수, t = 그룹 제목 수, s = 도형 수
@@ -40,4 +40,18 @@ export function checkNodes({ boxes, scene, family }, problems) {
       problems.error(a.line, `[check 6] internal: ${a.kind} "${a.id}" overlaps ${b.kind} "${b.id}". Please report this`);
     }
   });
+}
+
+// cost: time O(e·p·t), heap O(1), stack O(1)
+// vars: e = 선 수, p = 경로 점 수, t = 그룹 제목 수
+// basis: estimate
+// 13번: 선이 그룹 제목 줄(아이콘, 제목, 배지, 개수와 반복 알약)을 지나지 않는다. 그 그룹 경계에서 끝나는 선도 제목 줄 안으로 들어오지 못한다.
+export function checkTitleLines({ edges, titles }, problems) {
+  for (const e of edges) {
+    const segments = e.points.slice(1).map((q, i) => [e.points[i], q]);
+    for (const t of titles) {
+      const box = { x: t.x + THROUGH_INSET, y: t.y + THROUGH_INSET, w: t.w - THROUGH_INSET * 2, h: t.h - THROUGH_INSET * 2 };
+      if (segments.some(([p, q]) => segmentHits(p, q, box))) problems.error(e.line, `[check 13] edge ${e.from} -> ${e.to} passes through the title of group "${t.group.id}" (line ${t.group.line}). Change a group direction or widen the group with a longer title`);
+    }
+  }
 }

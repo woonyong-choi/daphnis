@@ -5,7 +5,7 @@ import { LayoutError } from './error.js';
 import { withLeads } from './cell-ports.js';
 import { placeTitles } from './titles.js';
 import { ROOT, decorOf } from './model.js';
-import { regionFrames } from './region.js';
+import { regionFrames, straightLayerEdges } from './region.js';
 
 const SETTLE = values.space['4'];
 // 두 좌표가 같다고 보는 거리
@@ -35,8 +35,9 @@ export function readElk(laid, model) {
     const points = dropCollinear(settleEnd(start.reverse(), freeRect(edge.to, rects), crowd.get(edge.to)?.filter(near('end'))).reverse());
     return { ...edge, points, labelAt: labels.get(`label::${edge.index}`) ?? (edge.quiet && hasPill(edge) ? besideLabel(points, sizePill(edge.label, edge.no), laid.width) : undefined) };
   });
-  placeTitles(groups, edges);
-  return { items, groups, edges, width: laid.width, height: laid.height };
+  const straight = straightLayerEdges(edges, items);
+  placeTitles(groups, straight);
+  return { items, groups, edges: straight, width: laid.width, height: laid.height };
 }
 
 // cost: time O(p), heap O(1), stack O(1)

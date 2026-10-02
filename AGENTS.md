@@ -34,7 +34,7 @@ npm run check
 - 동작, 계약, 설정 변경은 같은 PR에서 설계 문서 갱신
 - 새 문서는 `docs/README.md` 문서 목록 안에서만 추가
 - 배치에 넘긴 도형 크기와 연결점은 그리는 도형과 동일
-- elkjs 경로 점 수정 금지. 예외는 `docs/design/layout.md` 선 그리기 절의 선 끝 계단 펴기 하나
+- elkjs 경로 점 수정 금지. 예외는 `docs/design/layout.md` 선 그리기 절의 선 끝 계단 펴기와, elkjs를 거치지 않는 자체 경로(칸 안 선, 층 묶음의 곧은 선)
 - 오류가 있으면 결과 파일을 쓰지 않음
 - `src/player/`는 시간표를 읽기만 하고 상태를 다시 계산하지 않음
 - 화면 값은 `src/tokens.json` 토큰만 사용

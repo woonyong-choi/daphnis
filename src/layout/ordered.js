@@ -10,14 +10,14 @@
  */
 export function orderedOptions(c, model) {
   const align = c.align ?? 'center';
-  const strategy = align === 'end' && model.first ? 'INTERACTIVE' : 'SIMPLE';
+  const strategy = (align === 'end' && model.first) || align === 'start' ? 'INTERACTIVE' : 'SIMPLE';
   // 안전 배치(처음 배치가 실패한 뒤)는 구분 번호를 쓰지 않는다. 거꾸로 가는 선이 있으면 elkjs가 층 제약 충돌로 배치를 거부하기 때문이다. 순서는 모델 순서에 맡긴다.
   if (model.isSafe) return {};
   return {
     'elk.partitioning.activate': 'true',
     // 선이 없는 자식이 서로 다른 덩어리로 보여 다시 포장되지 않게 한다.
     'elk.separateConnectedComponents': 'false',
-    ...(align === 'start' ? {} : { 'elk.layered.nodePlacement.strategy': strategy }),
+    'elk.layered.nodePlacement.strategy': strategy,
   };
 }
 
@@ -36,7 +36,8 @@ export function orderChildren(c, children, model) {
   const crossMax = Math.max(...sizes.map((s) => (isRow ? s.h : s.w)));
   children.forEach((child, i) => {
     child.layoutOptions = { ...child.layoutOptions, 'elk.partitioning.partition': String(i) };
-    if (c.align === 'end' && model.first) Object.assign(child, isRow ? { x: 0, y: crossMax - sizes[i].h } : { x: crossMax - sizes[i].w, y: 0 });
+    if (c.align === 'start') Object.assign(child, { x: 0, y: 0 });
+    else if (c.align === 'end' && model.first) Object.assign(child, isRow ? { x: 0, y: crossMax - sizes[i].h } : { x: crossMax - sizes[i].w, y: 0 });
   });
   return children;
 }

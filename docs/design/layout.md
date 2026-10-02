@@ -130,6 +130,9 @@
 
 - `layout=ordered` 그룹의 자식은 선언 순서가 놓는 순서다. elkjs 구분(partition) 번호를 자식마다 줘 층 하나에 자식 하나가 놓이고, 숨은 노드나 가짜 선을 쓰지 않는다. 형제 사이 선은 흐름 방향으로 그대로 이어진다. `align=center`는 단순 배치(SIMPLE), `start`는 기본 배치, `end`는 첫 배치로 잰 자식 크기에 끝을 맞춰 자리를 직접 준다(INTERACTIVE, elkjs를 두 번 돈다).
 - 층 묶음: 순서 묶음 R의 자식이 모두 순서 묶음 G이고 G가 도형뿐이며 G의 방향이 R의 반대 축이고 선이 G에 직접 닿지 않으면, G 안 도형을 R의 elkjs 층으로 펴서 한 번에 배치한다. 그룹마다 따로 배치하면 층 사이 선이 그룹 경계 연결점을 거치며 구불구불해지기 때문이다. G는 층 번호 하나(구분 번호)이고 층 안 도형은 반대 축으로 선언 순서대로 쌓인다(자리를 직접 줌, 층 순서는 교차 최소화 INTERACTIVE로 고정). G의 틀은 안쪽 도형 덩어리에 옆 `space.12`, 아래 `space.12`, 위 제목 줄을 더한 사각형이고, 제목이 더 넓으면 가운데에서 넓힌다. 틀이 R 안쪽에 들어가고 이웃 틀이 겹치지 않도록 R의 안쪽 여백과 층 사이 간격이 틀 너비만큼 늘어난다. 층 안 원(`shape=circle`)의 선은 모두 흐름 방향 면 하나에 닿고, 선마다 `space.3`씩 면 가운데에서 비껴 간 원 둘레 점을 쓴다.
+- 층 묶음의 층 사이 선(양 끝이 서로 다른 층 도형)은 도형 가운데에서 가운데로 향하는 곧은 선(끝은 도형 테두리)으로 그린다. elkjs 층 배치는 층 순서와 자리만 정하고, 전연결이 꺾은선 레일로 겹치고 화살촉이 한 점에 몰리는 것을 곧은 선이 푼다. 이것은 elkjs 경로를 고친 것이 아니라 쓰지 않는 자체 경로다. 그림 검사 3번은 비스듬한 선분을 사각형과의 실제 교차로 본다.
+- 순서 묶음 안에서 양 끝이 이어진 선은 `head`를 생략하면 `none`이다(묶음 밖 선과 `head`를 적은 선은 그대로). 화살표가 필요하면 `head=end`를 적는다.
+- 한 층 안 도형끼리 잇는 선이 있는 층은 층 묶음으로 펴지 않는다(같은 층에 놓이는 선을 층 배치가 받지 못한다). 그 묶음은 그룹 배치(elkjs 계층 배치)를 쓴다. `align=start`는 elkjs가 선을 곧게 맞추는 기본 배치를 쓰지 않고 모든 자식을 반대 축 시작에 놓는다(INTERACTIVE).
 - 층 묶음 조건을 채우지 못하는 순서 묶음은 그룹 배치(elkjs 계층 배치)를 그대로 쓴다.
 - 개수 요약으로 생기는 생략 표식은 순서 묶음 맨 뒤 자식이다. 이름이 `__more-그룹`이라 원본 이름과 부딪히지 않는다.
 
@@ -143,6 +146,10 @@
 - 기본 세트는 IBM Carbon icons(Apache-2.0) 29개이고 `src/icons/carbon/`에 있다. 개념 이름(`server`, `lb`, `db` …)과 파일 이름은 `src/icons/names.json` 표 하나에만 있다. 상표 로고(`logo--*`)와 쿠버네티스는 넣지 않는다. 라이선스 전문은 `src/icons/LICENSE`, 출처와 "modified: color only"(루트 요소에 `fill="currentColor"`만 더함)는 `NOTICE`와 `LICENSE`에 적는다.
 - 색은 `currentColor`가 정하고 그림은 `.fl-icon { color: color.muted }`다. 파일 안 색은 없다.
 - 사용자 세트: `icons 이름 "폴더"`로 등록하고 `icon=이름:파일이름`으로 쓴다. 저장소에는 넣지 않는다(라이선스가 불명확한 세트를 사용자가 직접 쓰는 경우). 렌더 때 파일을 읽어 `g`, `path`, `circle`, `ellipse`, `rect`, `line`, `polyline`, `polygon`과 좌표, 변환, 칠하기 속성만 다시 쓰고(색은 모두 `currentColor`나 `none`) 나머지(script, image, style, use, 그라디언트 등)는 오류다. 64KB, 요소 600개 상한이다.
+
+### 그룹 제목 줄
+
+- 선은 그룹 제목 줄(아이콘, 제목, 배지, 개수와 반복 알약)을 지나지 못한다. 선이 제목 자리를 지나면 제목 덩어리가 기본 자리, 선분 오른쪽 바로 너머, 선분 왼쪽 바로 앞 가운데 가장 왼쪽으로 맞는 자리로 비킨다. 위 면으로 선이 들어오는 그룹은 제목이 선 한쪽에 들어가도록 최소 너비가 제목 덩어리의 두 배다. 그래도 맞지 않으면 그림 검사 13번이 오류로 알린다.
 
 ### 되돌아가는 선
 
@@ -218,6 +225,8 @@
 |---|---|
 | 순서 묶음은 선언 순서로 놓이고 `align`이 반대 축을 맞춘다. | `test/layout.test.js`의 `buildFigure_ordered_group_places_children_in_declared_order_and_aligns_the_other_axis`. start, center, end와 두 방향 |
 | 층 묶음은 선언 순서로 층을 놓고 틀이 안쪽 도형을 감싸며, 개수 요약은 생략 표식을 하나 더한다. | `test/layout.test.js`의 `buildFigure_layer_groups_follow_declared_order_wrap_their_nodes_and_count_adds_one_omission_mark` |
+| 층 사이 선은 곧고 순서 묶음 안 선의 기본 머리는 none이다. | `test/layout.test.js`의 `buildFigure_layer_edges_are_straight_and_headless_unless_a_head_is_written` |
+| 선은 그룹 제목 줄을 지나지 않는다. | `test/check.test.js`의 `checkFigure_each_item_reports_its_code_for_a_scene_that_breaks_it`(13번 행) |
 | 선 번호는 라벨 알약의 일부이고 라벨이 없으면 번호 원만 있다. | `test/layout.test.js`의 `sizePill_number_adds_a_badge_before_the_label_and_stands_alone_without_a_label` |
 | 기본 아이콘 세트는 표와 파일이 맞고 로고와 고정 색이 없다. 사용자 세트는 안전한 SVG만 쓴다. | `test/icons.test.js`의 세 시험 |
 | 배치에 넘긴 도형 크기와 그린 도형 크기가 같다. | `test/layout.test.js`의 `layoutGraph_box_sizes_equal_measured_sizes`. 상자와 저장소 원본에서 두 값 비교 |

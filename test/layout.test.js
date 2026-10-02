@@ -749,3 +749,13 @@ test('sizePill_number_adds_a_badge_before_the_label_and_stands_alone_without_a_l
   assert.equal(alone.h, plain.h);
   assert.ok(alone.w >= alone.h && alone.w < numbered.w);
 });
+
+// 근거: 설계 layout.md 순서 묶음 "층 사이 선은 곧은 선이고, 순서 묶음 안 선은 head를 생략하면 none이며 head=end를 적으면 그대로다"
+test('buildFigure_layer_edges_are_straight_and_headless_unless_a_head_is_written', async () => {
+  const plain = (await buildFigure(LAYERS, { strict: true })).scene;
+  const written = (await buildFigure(LAYERS.replace('a -> y', 'a -> y head=end'), { strict: true })).scene;
+  const straight = (scene) => scene.edges.every((e) => e.points.length === 2);
+
+  assert.ok(straight(plain) && plain.edges.every((e) => e.head === 'none'));
+  assert.deepEqual(written.edges.map((e) => e.head), ['end', 'none']);
+});

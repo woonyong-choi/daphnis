@@ -44,8 +44,9 @@ export function fits(size, room) {
   return size <= room + FIT_SLACK;
 }
 
-/** 선분 p-q가 사각형 r 안쪽과 만나는지 */
+/** 선분 p-q가 사각형 r 안쪽과 만나는지. 비스듬한 선분(층 그래프의 곧은 선)은 사각형을 실제로 지나는지 본다. */
 export function segmentHits(p, q, r) {
+  if (Math.abs(p.x - q.x) > TOUCH && Math.abs(p.y - q.y) > TOUCH) return diagonalHits(p, q, r);
   const [x1, x2] = [Math.min(p.x, q.x), Math.max(p.x, q.x)];
   const [y1, y2] = [Math.min(p.y, q.y), Math.max(p.y, q.y)];
   return x1 < r.x + r.w && r.x < x2 + TOUCH_SLACK && y1 < r.y + r.h && r.y < y2 + TOUCH_SLACK;
@@ -79,4 +80,19 @@ export function createFamily(scene) {
   // 배치를 바꾸라는 안내. 그룹이 없으면 그룹 방향을 바꿀 수 없어 선언 순서를 권한다.
   const hint = scene.groups.length ? 'change a group direction' : 'change the declaration order';
   return { contains, isRelated: (a, b) => a === b || contains(a, b) || contains(b, a), hint };
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 비스듬한 선분이 사각형 안쪽을 지나는지(Liang-Barsky). 사각형 변에 닿기만 하는 것은 지난 것으로 세지 않는다.
+function diagonalHits(p, q, r) {
+  let [lo, hi] = [0, 1];
+  const [dx, dy] = [q.x - p.x, q.y - p.y];
+  for (const [d, edge] of [[-dx, p.x - r.x], [dx, r.x + r.w - p.x], [-dy, p.y - r.y], [dy, r.y + r.h - p.y]]) {
+    if (d === 0) {
+      if (edge <= 0) return false;
+    } else if (d < 0) lo = Math.max(lo, edge / d);
+    else hi = Math.min(hi, edge / d);
+  }
+  return hi - lo > TOUCH_SLACK;
 }

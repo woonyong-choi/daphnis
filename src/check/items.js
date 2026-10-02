@@ -4,7 +4,7 @@ import { checkEnds, checkCrowding, checkThrough } from './edges.js';
 import { checkChartFits, checkFits } from './fit.js';
 import { checkChips } from './moving.js';
 import { checkNotes } from './notes.js';
-import { checkLabels, checkNodes } from './overlap.js';
+import { checkLabels, checkNodes, checkTitleLines } from './overlap.js';
 import { checkAspect, checkReadable } from './proportion.js';
 
 /**
@@ -27,4 +27,5 @@ export const CHECKS = [
   { number: 10, code: 'check-10', severity: ['warning'], stage: 'scene', judge: checkReadable, title: '문서 폭에서 읽힘', criterion: '그림을 표준 캔버스 폭(토큰 `size.figure-canvas`)으로 줄였을 때 가장 작은 글이 가장 작은 글 토큰(`size.text`의 최솟값, 9px) 미만. 내용이 캔버스보다 넓으면 줄이는 비율이 곧 글자 비율이다' },
   { number: 11, code: 'check-11', severity: ['warning'], stage: 'source', title: '쓰지 않는 조용한 선', criterion: '시간 흐름에서 한 번도 지나지 않는 `quiet` 선' },
   { number: 12, code: 'check-12', severity: ['error', 'warning'], stage: 'scene', judge: checkNotes, title: '순서 그림 메모가 겹치지 않는다', criterion: '메모가 그림 안에 있고 같은 행 메시지의 화살표와 라벨을 가리지 않으면 통과한다(오류). 다른 참여자의 생명선에 걸치면 경고' },
+  { number: 13, code: 'check-13', severity: ['error'], stage: 'scene', judge: checkTitleLines, title: '선이 그룹 제목 줄을 지나지 않는다', criterion: '경로 선분이 그룹 제목 줄(제목 글, 아이콘, 배지, 개수와 반복 알약을 감싼 사각형) 안쪽을 지나지 않음' },
 ];

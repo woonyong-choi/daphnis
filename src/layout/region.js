@@ -24,6 +24,9 @@ const TURNED = { right: 'down', down: 'right' };
  */
 export function flattenRegions(model, edges) {
   const ended = new Set(edges.flatMap((e) => [e.from, e.to]));
+  const owner = new Map([...model.nodes.values()].map((n) => [n.id, n.parent]));
+  // 한 층 안 도형끼리 잇는 선은 같은 층에 놓이는 선이라 층 배치가 받지 못한다. 그런 층이 있으면 층 묶음으로 펴지 않는다.
+  for (const e of edges) if (owner.get(e.from) !== undefined && owner.get(e.from) === owner.get(e.to)) ended.add(owner.get(e.from));
   for (const r of model.containers.values()) {
     const groups = r.children.map((id) => model.containers.get(id));
     if (r.layout !== 'ordered' || !groups.length || !groups.every((g) => isLayer(g, r, { ended, model }))) continue;
@@ -134,5 +137,36 @@ export function regionFrames(c, items, model) {
     const [y0, y1] = [Math.min(...mine.map((it) => it.y - it.marginTop)), Math.max(...mine.map((it) => it.y + it.h + it.marginBottom))];
     const w = Math.max(x1 - x0 + FRAME.side * 2, titleWidth(model.containers.get(id)));
     return { id, x: (x0 + x1) / 2 - w / 2, y: y0 - FRAME.top, w, h: y1 - y0 + FRAME.top + FRAME.bottom };
+  });
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 도형 가운데에서 목표 점 쪽으로 나가는 반직선이 도형 테두리(원은 둘레, 그 밖은 사각형)와 만나는 점
+function borderToward(it, target) {
+  const [cx, cy] = [it.x + it.w / 2, it.y + it.h / 2];
+  const [dx, dy] = [target.x - cx, target.y - cy];
+  const len = Math.hypot(dx, dy) || 1;
+  if (it.shape === 'circle') return { x: cx + (dx / len) * (it.w / 2), y: cy + (dy / len) * (it.w / 2) };
+  const t = Math.min(dx ? it.w / 2 / Math.abs(dx) : Infinity, dy ? it.h / 2 / Math.abs(dy) : Infinity);
+  return { x: cx + dx * t, y: cy + dy * t };
+}
+
+// cost: time O(e), heap O(e), stack O(1)
+// vars: e = 선 수
+// basis: estimate
+/**
+ * 층 묶음의 층 사이 선은 도형 가운데에서 가운데로 향하는 곧은 선으로 그린다(선 끝은 도형 테두리). elkjs 층 배치는 층 순서와 자리를 정하고, 전연결 다발이 꺾은선 레일로 겹쳐 읽기 어려운 것을 곧은 선이 푼다.
+ * 이 곧은 선은 elkjs 경로를 고친 것이 아니라 elkjs 경로를 쓰지 않는 자체 경로다. 라벨은 선 가운데에 놓는다.
+ * @returns 다시 쓴 선 목록(같은 순서). 층 도형 둘을 잇는 선만 바뀐다
+ */
+export function straightLayerEdges(edges, items) {
+  const byId = new Map(items.map((it) => [it.id, it]));
+  const isLayered = (e) => byId.get(e.from)?.group !== undefined && byId.get(e.to)?.group !== undefined && byId.get(e.from).parent !== byId.get(e.to).parent;
+  return edges.map((e) => {
+    if (!isLayered(e)) return e;
+    const [a, b] = [byId.get(e.from), byId.get(e.to)];
+    const [ca, cb] = [{ x: a.x + a.w / 2, y: a.y + a.h / 2 }, { x: b.x + b.w / 2, y: b.y + b.h / 2 }];
+    return { ...e, points: [borderToward(a, cb), borderToward(b, ca)], labelAt: e.label === undefined ? undefined : { x: (ca.x + cb.x) / 2, y: (ca.y + cb.y) / 2 } };
   });
 }

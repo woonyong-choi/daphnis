@@ -121,9 +121,10 @@ function rootOptions(figure) {
 // basis: estimate
 function groupOptions(c, ctx) {
   return {
-    'elk.padding': `[top=${SIZE.group.title + SPACE['6']},left=${SPACE['12']},bottom=${SPACE['12']},right=${SPACE['12']}]`,
+    // 제목이 선을 비킬 자리가 없던 그룹은 오른쪽 안쪽 여백을 제목 덩어리만큼 넓혀, 선 오른쪽 끝 너머에 제목이 설 자리를 만든다.
+    'elk.padding': `[top=${SIZE.group.title + SPACE['6']},left=${SPACE['12']},bottom=${SPACE['12']},right=${SPACE['12'] + (ctx.figure.wideGroups?.has(c.id) ? groupTitleWidth(c) : 0)}]`,
     'elk.nodeSize.constraints': 'MINIMUM_SIZE',
-    'elk.nodeSize.minimum': `(${groupTitleWidth(c)}, ${SIZE.group.title})`,
+    'elk.nodeSize.minimum': `(${minGroupWidth(c)}, ${SIZE.group.title})`,
     ...alignOf(c.parent, ctx),
   };
 }
@@ -145,4 +146,13 @@ function wrapOptions(aspect) {
 
 function sizeOf({ w, h }) {
   return { width: w, height: h };
+}
+
+// cost: time O(p), heap O(1), stack O(1)
+// vars: p = 그룹 연결점 수
+// basis: estimate
+// 그룹 최소 너비. 위 면으로 선이 들어오는 그룹은 제목 줄 위로 선이 내려오므로, 제목이 선 한쪽에 들어가도록 제목 덩어리의 두 배 너비로 시작한다(선은 대개 가운데로 들어온다).
+function minGroupWidth(c) {
+  const head = groupTitleWidth(c);
+  return c.ports.some((p) => p.side === 'NORTH') ? head * 2 : head;
 }
