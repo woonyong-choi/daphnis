@@ -31,7 +31,7 @@ export function createTones(tagOrder = []) {
 // vars: k = 카드 내용 수, r = 줄 수, n = 줄 글자 수, out = 만든 SVG 글자 수
 // basis: estimate
 /**
- * 카드 틀, 빈 표시, 내용 층을 그린다.
+ * 카드 틀과 내용 층을 그린다. 내용이 없는 카드는 점선 틀만 보인다.
  * @param place { box, i }. box는 { x, y, w, h } 카드 자리, i는 도형 번호
  * @param paint { toneOf, decorate }. decorate는 움직이는 SVG가 박자별 class를 넣는 함수
  */
@@ -41,7 +41,6 @@ export function drawCard(card, { box, i }, { toneOf, decorate }) {
     .join('');
   return (
     `<rect x="${r(box.x)}" y="${r(box.y)}" width="${r(box.w)}" height="${r(box.h)}" rx="${RADIUS.md}" fill="${tokens.color.surface}" stroke="${tokens.color.border}" stroke-dasharray="${values.dash.card} ${values.dash.card}" class="fl-card ${decorate('card', i)}"/>` +
-    `<text x="${r(box.x + CARD.side)}" y="${r(box.y + CARD.pad + STYLE.row.size)}" class="row muted fl-empty ${decorate('empty', i)}">—</text>` +
     layers
   );
 }
@@ -147,7 +146,7 @@ export function cardGlyphs(layouts, glyphs) {
     for (const { row, graph } of layout.rows) {
       if (graph) glyphs.add(graph.nodes.map((n) => n.name).join(''), 'regular');
       else {
-        glyphs.add(row.text + (row.meta !== undefined ? ` · ${row.meta}` : '') + '—', row.isMono ? 'mono' : 'regular');
+        glyphs.add(row.text + (row.meta !== undefined ? ` · ${row.meta}` : ''), row.isMono ? 'mono' : 'regular');
         if (row.tag) glyphs.add(row.tag.toUpperCase(), 'semibold');
         if (row.mark) glyphs.add(row.mark, 'semibold');
       }

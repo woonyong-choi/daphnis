@@ -1516,7 +1516,6 @@ function showCards(stage, cards, only) {
     if (!count || (only !== undefined && only !== n)) return;
     const shown = cards[n];
     for (let k = 0; k < count; k++) stage.svg.querySelector(`#n-${n}-c${k}`).setAttribute('opacity', shown === k ? 1 : 0);
-    stage.nodes[n].querySelector('.fl-empty').setAttribute('opacity', shown === undefined ? 1 : 0);
     stage.nodes[n].querySelector('.fl-card').classList.toggle('on', shown !== undefined);
   });
 }

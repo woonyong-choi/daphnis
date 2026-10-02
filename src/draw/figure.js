@@ -16,7 +16,7 @@ const INNER_Y = SPACE['6'];
 // basis: estimate
 /**
  * 장면을 그린다. 순서는 그룹, 생명선, 도형, 선, 메모다.
- * @param decorate (kind, index, extra) => class. 움직이는 SVG가 박자별 class를 넣는다. kind: node, edge, pill, pilltext, quiet, card, layer, empty, column
+ * @param decorate (kind, index, extra) => class. 움직이는 SVG가 박자별 class를 넣는다. kind: node, edge, pill, pilltext, quiet, card, layer, column
  * @param glyphs 쓴 글자를 모으는 그릇(createGlyphSet)
  */
 export function drawScene(scene, decorate, glyphs) {

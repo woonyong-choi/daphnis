@@ -264,3 +264,13 @@ test('player_reads_the_same_caption_fade_token_the_animated_svg_uses', () => {
   assert.match(player, /'--duration-caption-fade'/);
   assert.match(tokensCss, new RegExp(`--duration-caption-fade: ${values.duration['caption-fade']}ms;`));
 });
+
+test('toSvg_card_without_content_keeps_dashed_frame_and_draws_no_placeholder_text', async () => {
+  const result = await buildFigure('flow right\nbox a "A"\nbox b "B"\na -> b\nstep "s"\n  a -> b\n  show b "도착"');
+  const svg = await toSvg(result, { name: 'card.muto' });
+
+  assert.match(svg, /class="fl-card[^"]*"/);
+  assert.match(svg, /stroke-dasharray=/);
+  assert.ok(!svg.includes('—'));
+  assert.ok(!svg.includes('fl-empty'));
+});

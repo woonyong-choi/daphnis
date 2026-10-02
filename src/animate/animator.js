@@ -53,8 +53,6 @@ function decorateElement(kind, { id, i, extra, scene }, { segs, toggle, lit, car
       return toggle(cardState(id, (v) => v !== undefined), `stroke: ${c.state.active}; fill: ${c['card-on']}`, `stroke: ${c.border}; fill: ${c.surface}`);
     case 'layer':
       return toggle(cardState(id, (v) => v === extra), 'opacity: 1', 'opacity: 0');
-    case 'empty':
-      return toggle(cardState(id, (v) => v === undefined), 'opacity: 1', 'opacity: 0');
     default:
       return '';
   }
