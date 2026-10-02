@@ -57,7 +57,7 @@ for (const theme of THEMES) {
 
   test(`contrast_${theme}_card_tag_text_reaches_4_5_on_every_tone_band`, () => {
     for (const face of ['node', 'surface', 'card-on']) {
-      for (const tone of ['blue', 'purple', 'green', 'orange', 'gray']) {
+      for (const tone of ['purple', 'green', 'teal', 'gray']) {
         const band = mixHex(color(theme, face), color(theme, `tag.${tone}`), opacity('tag'));
         const ratio = contrast(color(theme, 'fg'), band);
         assert.ok(ratio >= TEXT, `${theme} tag ${tone} on ${face}: ${ratio.toFixed(2)}`);

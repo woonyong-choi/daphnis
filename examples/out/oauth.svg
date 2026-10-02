@@ -47,6 +47,7 @@
   --color-palette-purple-500: #8b5cf6;
   --color-palette-green-500: #10b981;
   --color-palette-slate-500: #8b949e;
+  --color-palette-teal-500: #11a6b0;
   --color-state-active: var(--color-palette-blue-550);
   --color-state-active-fill: var(--color-palette-blue-600);
   --color-state-active-text: var(--color-palette-blue-600);
@@ -75,10 +76,9 @@
   --color-plate-border: var(--color-palette-gray-200);
   --color-page: var(--color-palette-gray-0);
   --color-gallery: var(--color-palette-gray-0);
-  --color-tag-blue: var(--color-palette-blue-500);
   --color-tag-purple: var(--color-palette-purple-500);
   --color-tag-green: var(--color-palette-green-500);
-  --color-tag-orange: var(--color-palette-orange-500);
+  --color-tag-teal: var(--color-palette-teal-500);
   --color-tag-gray: var(--color-palette-slate-500);
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace;

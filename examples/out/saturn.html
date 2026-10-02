@@ -66,6 +66,7 @@
   --color-palette-purple-500: #8b5cf6;
   --color-palette-green-500: #10b981;
   --color-palette-slate-500: #8b949e;
+  --color-palette-teal-500: #11a6b0;
   --color-state-active: var(--color-palette-blue-550);
   --color-state-active-fill: var(--color-palette-blue-600);
   --color-state-active-text: var(--color-palette-blue-600);
@@ -94,10 +95,9 @@
   --color-plate-border: var(--color-palette-gray-200);
   --color-page: var(--color-palette-gray-0);
   --color-gallery: var(--color-palette-gray-0);
-  --color-tag-blue: var(--color-palette-blue-500);
   --color-tag-purple: var(--color-palette-purple-500);
   --color-tag-green: var(--color-palette-green-500);
-  --color-tag-orange: var(--color-palette-orange-500);
+  --color-tag-teal: var(--color-palette-teal-500);
   --color-tag-gray: var(--color-palette-slate-500);
   --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -992,7 +992,7 @@ html.embedded .fl-canvas svg {
 <button type="button" class="fl-round fl-full"></button><div class="fl-zoom"><button type="button" class="fl-round" data-zoom="in" aria-label="확대"></button><button type="button" class="fl-round" data-zoom="out" aria-label="축소"></button><button type="button" class="fl-round" data-zoom="fit" aria-label="전체 보기"></button></div>
 <div class="fl-canvas"><svg xmlns="http://www.w3.org/2000/svg" class="fl" width="960" height="708.7" style="aspect-ratio: 960 / 708.7" viewBox="-4.8 0 960 708.7" role="img"><title>Saturn 구성</title><defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-main)"/></marker></defs><g id="g-0" class="fl-group" data-id="system"><rect x="238.2" y="28.7" width="356" height="652" rx="14" class="frame-box fl-stroke "/><text x="256.2" y="46.6" class="frame">Saturn</text></g>
 <g id="n-0" class="fl-node" data-id="cli"><rect x="262.2" y="172.7" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="312.2" y="200.7" class="label">명령</text></g>
-<g id="n-1" class="fl-node" data-id="tui"><rect x="394.2" y="148.7" width="176" height="94" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="482.2" y="174.7" class="label">화면</text><text x="482.2" y="190.5" class="sub">하나의 대화</text><rect x="404.2" y="205.7" width="156" height="27" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card "/><text x="412.2" y="222.7" class="row muted fl-empty ">—</text><g id="n-1-c0" opacity="0" class="fl-layer "><rect x="412.2" y="212.7" width="27.6" height="14" rx="4" fill="var(--color-tag-blue)" fill-opacity="0.15"/><text x="426" y="222.9" class="tag">YOU</text><text x="444.8" y="222.7" class="row">이 테스트 왜 깨져?</text></g></g>
+<g id="n-1" class="fl-node" data-id="tui"><rect x="394.2" y="148.7" width="176" height="94" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="482.2" y="174.7" class="label">화면</text><text x="482.2" y="190.5" class="sub">하나의 대화</text><rect x="404.2" y="205.7" width="156" height="27" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card "/><text x="412.2" y="222.7" class="row muted fl-empty ">—</text><g id="n-1-c0" opacity="0" class="fl-layer "><rect x="412.2" y="212.7" width="27.6" height="14" rx="4" fill="var(--color-tag-purple)" fill-opacity="0.15"/><text x="426" y="222.9" class="tag">YOU</text><text x="444.8" y="222.7" class="row">이 테스트 왜 깨져?</text></g></g>
 <g id="n-2" class="fl-node" data-id="engine"><rect x="411.8" y="380.7" width="105.6" height="57" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="464.6" y="406.7" class="label">엔진</text><text x="464.6" y="422.5" class="sub">사용자당 하나</text></g>
 <g id="n-3" class="fl-node" data-id="db"><path d="M395 587.7 a 52.1 12 0 0 1 104.1 0 v 57 a 52.1 12 0 0 1 -104.1 0 z" fill="var(--color-node)" class="fl-stroke "/><path d="M395 587.7 a 52.1 12 0 0 0 104.1 0" fill="none" class="fl-stroke "/><text x="447" y="613.7" class="label">기록 저장소</text><text x="447" y="629.5" class="sub">sqlite</text></g>
 <g id="n-4" class="fl-node" data-id="user"><circle cx="56" cy="38" r="10" fill="var(--color-node)" class="fl-stroke "/><path d="M28 86 V 64 A 28 14 0 0 1 84 64 V 86 Z" fill="var(--color-node)" class="fl-stroke "/><text x="56" y="106" class="label">개발자</text></g>

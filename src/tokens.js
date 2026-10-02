@@ -61,6 +61,9 @@ export const tokens = freeze({
       },
       "slate": {
         "500": "var(--color-palette-slate-500)"
+      },
+      "teal": {
+        "500": "var(--color-palette-teal-500)"
       }
     },
     "state": {
@@ -98,10 +101,9 @@ export const tokens = freeze({
     "page": "var(--color-page)",
     "gallery": "var(--color-gallery)",
     "tag": {
-      "blue": "var(--color-tag-blue)",
       "purple": "var(--color-tag-purple)",
       "green": "var(--color-tag-green)",
-      "orange": "var(--color-tag-orange)",
+      "teal": "var(--color-tag-teal)",
       "gray": "var(--color-tag-gray)"
     }
   },
@@ -324,6 +326,9 @@ export const values = freeze({
       },
       "slate": {
         "500": "#8b949e"
+      },
+      "teal": {
+        "500": "#11a6b0"
       }
     },
     "state": {
@@ -361,10 +366,9 @@ export const values = freeze({
     "page": "#ffffff",
     "gallery": "#ffffff",
     "tag": {
-      "blue": "#2b96ed",
       "purple": "#8b5cf6",
       "green": "#10b981",
-      "orange": "#dc6e22",
+      "teal": "#11a6b0",
       "gray": "#8b949e"
     }
   },

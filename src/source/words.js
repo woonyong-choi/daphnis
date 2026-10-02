@@ -3,7 +3,10 @@
 export const KINDS = ['flow', 'sequence', 'state', 'data', 'chart'];
 export const CHART_TYPES = ['bar', 'dumbbell', 'box', 'scatter', 'line', 'heatmap'];
 export const DIRECTIONS = ['right', 'down'];
-export const TONES = ['blue', 'purple', 'green', 'orange', 'gray'];
+// 카드 태그 범주색. 파랑(지금)과 주황(비교)은 다른 뜻이라 쓰지 않는다.
+export const TONES = ['purple', 'green', 'teal', 'gray'];
+// 옛 값과 안내. 새 이름을 알려 주는 오류에 쓴다.
+export const RETIRED_TONES = ['blue', 'orange'];
 export const SHAPES = ['person', 'box', 'external', 'store', 'decision'];
 
 export const HEADER_WORDS = ['title', 'subtitle', 'speed', 'aspect', 'x', 'y', 'scale'];

@@ -1,7 +1,7 @@
 // 시간 흐름 문장(step과 박자 줄)을 읽는다. 이름이 선언됐는지는 validate.js가 확인한다.
 import { parseMiniGraph } from './minigraph.js';
 import { parseTime } from './values.js';
-import { NUMBER_PATTERN, TONES } from './words.js';
+import { NUMBER_PATTERN, RETIRED_TONES, TONES } from './words.js';
 
 const ROW_OPTIONS = ['tag', 'tone', 'meta', 'mark'];
 
@@ -114,7 +114,8 @@ function readRowOption(t, row, line, ctx) {
   if (t.type === 'word' && t.value === 'mono' && !row.isMono) row.isMono = true;
   else if (t.type === 'option' && ROW_OPTIONS.includes(t.key) && row[t.key] === undefined) {
     const isTone = t.key === 'tone';
-    if (isTone && (t.valueType !== 'word' || !TONES.includes(t.value))) ctx.problems.error(line, `tone is one of ${TONES.join(', ')}`);
+    if (isTone && t.valueType === 'word' && RETIRED_TONES.includes(t.value)) ctx.problems.error(line, `tone ${t.value} is retired. Blue means the active state and orange means compare, so tags use ${TONES.join(', ')}`);
+    else if (isTone && (t.valueType !== 'word' || !TONES.includes(t.value))) ctx.problems.error(line, `tone is one of ${TONES.join(', ')}`);
     else if (!isTone && t.valueType !== 'text') ctx.problems.error(line, `write ${t.key} as quoted text: ${t.key}="..."`);
     else row[t.key] = t.value;
   } else ctx.problems.error(line, `a card row takes tag=, tone=, meta=, mark=, and mono once each. Found "${t.key ?? t.value}"`);

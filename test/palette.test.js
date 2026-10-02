@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { contrast, mixHex } from '../src/contrast.js';
-import { themeColor as color } from './helpers.js';
+import { linearChannelsOf as channelsOf, linearToOklab, oklchOf, themeColor as color } from './helpers.js';
 
 const THEMES = ['light', 'dark'];
 const ORANGE_HUE = 50;
@@ -20,27 +20,6 @@ const CVD = {
   protanopia: [[0.152286, 1.052583, -0.204868], [0.114503, 0.786281, 0.099216], [-0.003882, -0.048116, 1.051998]],
   deuteranopia: [[0.367322, 0.860646, -0.227968], [0.280085, 0.672501, 0.047413], [-0.011820, 0.042940, 0.968881]],
 };
-
-const toLinear = (v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
-const channelsOf = (hex) => [1, 3, 5].map((i) => toLinear(Number.parseInt(hex.slice(i, i + 2), 16) / 255));
-
-// cost: time O(1), heap O(1), stack O(1)
-// basis: estimate
-// 선형 sRGB를 OKLab [L, a, b]로 바꾼다.
-function linearToOklab([r, g, b]) {
-  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
-  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
-  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
-  return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s];
-}
-
-// cost: time O(1), heap O(1), stack O(1)
-// basis: estimate
-// `#rrggbb`의 OKLCH [L, C, h(도)].
-function oklchOf(hex) {
-  const [L, a, b] = linearToOklab(channelsOf(hex));
-  return [L, Math.hypot(a, b), ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360];
-}
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -65,7 +44,6 @@ test('palette_light_and_dark_orange_keep_the_blue_lightness_and_chroma_and_only_
 test('palette_orange_series_color_follows_the_theme_graphic_orange', () => {
   assert.equal(color('light', 'data.compare'), color('light', 'palette.orange.550'));
   assert.equal(color('dark', 'data.compare'), color('dark', 'palette.orange.400'));
-  assert.equal(color('light', 'tag.orange'), color('light', 'palette.orange.500'));
 });
 
 for (const hue of ['blue', 'orange']) {
@@ -104,3 +82,17 @@ for (const theme of THEMES) {
     });
   }
 }
+
+test('tagColors_keep_their_hue_away_from_the_active_blue_and_the_compare_orange', () => {
+  const MIN_HUE_GAP = 40;
+  const NEUTRAL_CHROMA = 0.03;
+  for (const theme of THEMES) {
+    for (const [tag, role] of [['purple', 'state.active'], ['green', 'state.active'], ['teal', 'state.active'], ['purple', 'data.compare'], ['green', 'data.compare'], ['teal', 'data.compare']]) {
+      const [, tagChroma, tagHue] = oklchOf(color(theme, `tag.${tag}`));
+      const [, , roleHue] = oklchOf(color(theme, role));
+      const gap = Math.min(Math.abs(tagHue - roleHue), 360 - Math.abs(tagHue - roleHue));
+      assert.ok(tagChroma < NEUTRAL_CHROMA || gap >= MIN_HUE_GAP, `${theme} tag.${tag} vs ${role}: ${gap.toFixed(0)} degrees`);
+    }
+    assert.ok(oklchOf(color(theme, 'tag.gray'))[1] < NEUTRAL_CHROMA, 'tag.gray is a neutral, not a hue that can read as blue');
+  }
+});

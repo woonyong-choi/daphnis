@@ -110,7 +110,7 @@ test('parseFigure_table_column_may_use_reserved_word', () => {
 });
 
 test('parseFigure_card_tone_without_tag_and_first_clear_are_errors', () => {
-  assert.match(errorsOf('flow right\nbox a "A"\nstep "s"\n  show a "x" tone=blue')[0], /tone colors a tag/);
+  assert.match(errorsOf('flow right\nbox a "A"\nstep "s"\n  show a "x" tone=teal')[0], /tone colors a tag/);
   assert.match(errorsOf('flow right\nbox a "A"\nstep "s"\n  clear a').join(), /cannot start with clear/);
 });
 
@@ -196,4 +196,14 @@ test('validateFigure_rejected_name_adds_no_unknown_name_errors', () => {
 test('check_unpaired_backtick_reports_line', async () => {
   const { buildFigure } = await import('../src/build.js');
   await assert.rejects(buildFigure('flow\nbox a "가 `x"\n', {}), /line 2.*not paired|2.*backtick/s);
+});
+
+test('parseFigure_retired_tag_tones_blue_and_orange_point_to_the_new_names', () => {
+  for (const tone of ['blue', 'orange']) {
+    const [message] = errorsOf(`flow right\nbox a "A"\nstep "s"\n  show a "x" tag="t" tone=${tone}`);
+
+    assert.match(message, new RegExp(`tone ${tone} is retired.*purple, green, teal, gray`));
+  }
+  assert.deepEqual(errorsOf('flow right\nbox a "A"\nstep "s"\n  show a "x" tag="t" tone=teal'), []);
+  assert.match(errorsOf('flow right\nbox a "A"\nstep "s"\n  show a "x" tag="t" tone=pink')[0], /tone is one of purple, green, teal, gray/);
 });

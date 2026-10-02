@@ -8,7 +8,7 @@ import { tokens, values } from '../tokens.js';
 const SPACE = values.space;
 const RADIUS = values.radius;
 // tone 없는 태그에 돌아가며 붙이는 색. gray는 tone으로 고를 때만 쓴다.
-const TONE_ORDER = ['blue', 'purple', 'green', 'orange'];
+const TONE_ORDER = ['purple', 'green', 'teal'];
 
 // cost: time O(t), heap O(t), stack O(1)
 // vars: t = 태그 종류 수
