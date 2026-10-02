@@ -63,3 +63,12 @@ test('buildFigure_edge_without_a_route_is_reported_at_the_edge_line', async () =
     stub.mock.restore();
   }
 });
+
+// 줄 바꿈(aspect)이 선을 도형 위로 지나가게 하던 원본. 안전 배치로 그리고 aspect를 무시했다고 경고한다.
+const WRAPPED = ['flow right', 'aspect 1', 'box n0 "n0"', 'store n1 "n1"', 'box n2 "n2"', 'box n3 "n3"', 'group g0 "그룹0" direction=right {', '  box n4 "n4"', '  external n5 "n5"', '  store n6 "n6"', '}', 'n1 -> n5', 'n4 -> n6', 'n3 -> n6 "l3"', 'n6 -> n5', 'n0 -> n6 "l5"', 'n3 -> n2', 'n3 -> n0 "l8"', 'n2 -> n5 "l9"', ''].join('\n');
+
+test('buildFigure_wrapped_layout_that_crosses_a_shape_falls_back_and_warns_about_aspect', async () => {
+  const { warnings, scene } = await buildFigure(WRAPPED);
+  assert.ok(warnings.some((w) => /ignored "aspect"/.test(w.message)), warnings.map((w) => w.message).join('\n'));
+  assert.equal(scene.edges.length, 8);
+});

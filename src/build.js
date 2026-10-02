@@ -46,14 +46,51 @@ export async function buildFigure(source, { baseDir = '.', strict = false, noDep
     return finish({ figure, chart, timeline }, problems, { strict, noDeprecated });
   }
   const sizes = new Map(figure.nodes.map((n) => [n.id, sizeNode(n, cards.contents.get(n.id), figure.kind === 'sequence' ? undefined : countLines(figure, n.id))]));
-  const scene = figure.kind === 'sequence' ? layoutSequence(figure, sizes) : await layoutOrFail(figure, sizes, problems);
+  const { scene, timeline } = await placeScene(figure, { sizes, cards, source }, problems);
+  return finish({ figure, scene, timeline }, problems, { strict, noDeprecated });
+}
+
+// 선이 도형을 뚫거나 선 끝이 연결점을 벗어나는 그림 검사(3번, 4번). 줄 바꿈(aspect) 배치에서 elkjs가 낸다.
+const LAYOUT_CHECKS = new Set(['check-3', 'check-4']);
+
+// cost: time O(2·(elk + check)), heap O(s + e), stack O(1)
+// vars: elk = 배치 시간, check = 그림 검사 시간, s = 도형 수, e = 선 수
+// basis: estimate
+/**
+ * 배치, 시간표, 그림 검사를 한 번 하고 장면을 돌려준다. 구조 그림이 3번이나 4번 오류를 내면 안전 배치(줄 바꿈, 모델 순서 없음)로 한 번 더 하고,
+ * 그 오류가 줄면 그쪽을 쓴다. aspect를 적었는데 안전 배치를 쓰면 무시했다고 경고한다.
+ * @param inputs { sizes, cards, source }
+ */
+async function placeScene(figure, inputs, problems) {
+  const first = await attemptScene(figure, inputs);
+  const failures = (a) => a.local.errors.filter((d) => LAYOUT_CHECKS.has(d.code)).length;
+  let chosen = first;
+  if (figure.kind !== 'sequence' && failures(first) && !figure.safeLayout) {
+    const second = await attemptScene({ ...figure, aspect: undefined, safeLayout: true }, inputs);
+    if (failures(second) < failures(first)) {
+      chosen = second;
+      if (figure.aspect !== undefined) problems.warn(figure.line, 'the layout ignored "aspect" because wrapping drew an edge through a shape or off its connection point. Remove the aspect line or change a group direction');
+    }
+  }
+  problems.errors.push(...chosen.local.errors);
+  problems.warnings.push(...chosen.local.warnings);
+  return chosen;
+}
+
+// cost: time O(elk + check), heap O(s + e), stack O(1)
+// vars: elk = 배치 시간, check = 그림 검사 시간, s = 도형 수, e = 선 수
+// basis: estimate
+// 장면 한 번. 검사 결과는 따로 모은 진단 그릇(local)에 담는다.
+async function attemptScene(figure, { sizes, cards, source }) {
+  const local = createProblems(source);
+  const scene = figure.kind === 'sequence' ? layoutSequence(figure, sizes) : await layoutOrFail(figure, sizes, local);
   const timeline = buildTimeline(figure, cards, wrapChip, scene);
   widenForChips(scene, timeline);
   planChips(scene, timeline);
   // 태그 색은 원본에 처음 나온 순서로 정한다(docs/design/figure-syntax.md 카드 줄).
   scene.tagOrder = figure.steps.flatMap((s) => s.beats.flatMap((b) => b.ops.filter((o) => o.row?.tag && !o.row.tone).map((o) => o.row.tag)));
-  checkFigure(figure, scene, timeline, problems);
-  return finish({ figure, scene, timeline }, problems, { strict, noDeprecated });
+  checkFigure(figure, scene, timeline, local);
+  return { scene, timeline, local };
 }
 
 // cost: time O(elk), heap O(s + e), stack O(1)
