@@ -108,7 +108,7 @@ test('segmentedTabs_active_tab_is_a_solid_pill_with_semibold_label_and_no_progre
   const active = declarationsOf(PLAYER, '.fl-tabs button.on');
   const tab = declarationsOf(PLAYER, '.fl-tabs button');
 
-  assert.equal(active.background, 'var(--color-node)');
+  assert.equal(active.background, 'var(--color-control-on)');
   assert.equal(active['font-weight'], 'var(--weight-semibold)');
   assert.equal(active.color, 'var(--color-fg)');
   assert.equal(tab.color, 'var(--color-muted)');

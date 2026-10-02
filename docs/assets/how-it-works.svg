@@ -43,6 +43,7 @@
   --color-muted: var(--color-ink-600);
   --color-bg: var(--color-gray-25);
   --color-node: var(--color-gray-0);
+  --color-control-on: var(--color-gray-0);
   --color-surface: var(--color-gray-50);
   --color-border: var(--color-gray-400);
   --color-card-on: var(--color-blue-50);
@@ -206,6 +207,7 @@
     --color-muted: var(--color-neutral-400);
     --color-bg: var(--color-neutral-900);
     --color-node: var(--color-neutral-850);
+    --color-control-on: var(--color-neutral-750);
     --color-surface: var(--color-neutral-800);
     --color-border: var(--color-neutral-600);
     --color-card-on: var(--color-blue-900);
@@ -230,6 +232,7 @@
   --color-muted: var(--color-neutral-400);
   --color-bg: var(--color-neutral-900);
   --color-node: var(--color-neutral-850);
+  --color-control-on: var(--color-neutral-750);
   --color-surface: var(--color-neutral-800);
   --color-border: var(--color-neutral-600);
   --color-card-on: var(--color-blue-900);

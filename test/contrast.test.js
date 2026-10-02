@@ -10,6 +10,7 @@ const BORDER = 2;
 const SUBTLE = 1.5;
 const GRAPHIC = 3;
 const PLATE = 1.3;
+const PILL_EDGE = 1.25;
 const THEMES = ['light', 'dark'];
 
 // cost: time O(t), heap O(t), stack O(d)
@@ -83,6 +84,13 @@ for (const theme of THEMES) {
 
   test(`contrast_${theme}_node_face_is_brighter_than_the_figure_ground`, () => {
     assert.ok(contrast(color(theme, 'node'), color(theme, 'bg')) > 1.05);
+  });
+
+  test(`contrast_${theme}_active_tab_pill_is_distinct_from_the_tab_group_face_and_keeps_text_4_5`, () => {
+    expectAtLeast(theme, TEXT, [['fg', 'control-on'], ['muted', 'bg']]);
+    // 다크는 면 대비만으로 알약이 보인다. 라이트는 흰 알약에 옅은 테두리(plate-border)를 두른다.
+    if (theme === 'dark') expectAtLeast(theme, PLATE, [['control-on', 'bg']]);
+    else expectAtLeast(theme, PILL_EDGE, [['plate-border', 'bg']]);
   });
 
   test(`contrast_${theme}_subsidiary_graphics_reach_1_5_on_the_figure_ground`, () => {

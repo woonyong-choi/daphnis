@@ -19,6 +19,9 @@
     "node": {
       "$value": "{color.neutral.850}"
     },
+    "control-on": {
+      "$value": "{color.neutral.750}"
+    },
     "surface": {
       "$value": "{color.neutral.800}"
     },
