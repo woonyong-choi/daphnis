@@ -38,7 +38,8 @@ test('grammar_flags_have_no_deprecated_alias_because_names_share_their_place', (
   for (const [key, option] of Object.entries(OPTIONS)) if (option.type === 'flag') assert.equal(option.deprecated, undefined, key);
 });
 
-test('grammar_current_value_names_exclude_retired_and_deprecated_values', () => {
+test('grammar_current_value_names_exclude_deprecated_values', () => {
   assert.deepEqual(valueNames('role'), ['main', 'compare']);
+  assert.deepEqual(valueNames('tone'), ['purple', 'green', 'teal', 'gray']);
   assert.deepEqual(Object.keys(optionsOf('series')), ['role', 'key']);
 });

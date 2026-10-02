@@ -1,7 +1,7 @@
 // 시간 흐름 문장(step과 박자 줄)을 읽는다. 이름이 선언됐는지는 validate.js가 확인한다.
 import { parseMiniGraph } from './minigraph.js';
 import { parseTime } from './values.js';
-import { VALUES, flagNames, optionsOf, valueNames } from './grammar.js';
+import { flagNames, optionsOf, valueNames } from './grammar.js';
 import { NUMBER_PATTERN } from './words.js';
 
 // cost: time O(t), heap O(t), stack O(1)
@@ -133,11 +133,9 @@ function readRowOption(t, row, line, ctx) {
 // cost: time O(v), heap O(v), stack O(1)
 // vars: v = 값 목록의 값 수
 // basis: estimate
-// 카드 줄 선택 사항의 값. 값 목록이 있으면 그 안의 값만 받고, 막은 값은 바꿀 값을 안내한다.
+// 카드 줄 선택 사항의 값. 값 목록이 있으면 그 안의 값만 받는다. 옛 값은 normalize.js가 이미 바꿔 놓았다.
 function readRowValue(t, spec, row, line, ctx) {
-  const retired = spec.values && t.valueType === 'word' ? VALUES[spec.values].items[t.value]?.retired : undefined;
-  if (retired) ctx.problems.error(line, `${t.key} ${t.value} is retired. ${retired.note}`);
-  else if (spec.values && (t.valueType !== 'word' || !valueNames(spec.values).includes(t.value))) ctx.problems.error(line, `${t.key} is one of ${valueNames(spec.values).join(', ')}`);
+  if (spec.values && (t.valueType !== 'word' || !valueNames(spec.values).includes(t.value))) ctx.problems.error(line, `${t.key} is one of ${valueNames(spec.values).join(', ')}`);
   else if (!spec.values && t.valueType !== 'text') ctx.problems.error(line, `write ${t.key} as quoted text: ${t.key}="..."`);
   else row[t.key] = t.value;
 }

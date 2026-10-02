@@ -198,11 +198,13 @@ test('check_unpaired_backtick_reports_line', async () => {
   await assert.rejects(buildFigure('flow\nbox a "가 `x"\n', {}), /line 2.*not paired|2.*backtick/s);
 });
 
-test('parseFigure_retired_tag_tones_blue_and_orange_point_to_the_new_names', () => {
-  for (const tone of ['blue', 'orange']) {
-    const [message] = errorsOf(`flow right\nbox a "A"\nstep "s"\n  show a "x" tag="t" tone=${tone}`);
+test('parseFigure_old_tag_tones_blue_and_orange_still_read_as_aliases_with_a_deprecated_diagnostic', () => {
+  for (const [tone, alias] of [['blue', 'teal'], ['orange', 'purple']]) {
+    const { figure, deprecations } = parseFigure(`flow right\nbox a "A"\nstep "s"\n  show a "x" tag="t" tone=${tone}`);
 
-    assert.match(message, new RegExp(`tone ${tone} is retired.*purple, green, teal, gray`));
+    assert.equal(figure.steps[0].beats[0].ops[0].row.tone, alias);
+    assert.deepEqual(deprecations.map((d) => [d.severity, d.code, d.line, d.fix.text]), [['deprecated', 'deprecated-value', 4, alias]]);
+    assert.match(deprecations[0].message, new RegExp(`tone value "${tone}" is deprecated.*Use "${alias}"`));
   }
   assert.deepEqual(errorsOf('flow right\nbox a "A"\nstep "s"\n  show a "x" tag="t" tone=teal'), []);
   assert.match(errorsOf('flow right\nbox a "A"\nstep "s"\n  show a "x" tag="t" tone=pink')[0], /tone is one of purple, green, teal, gray/);

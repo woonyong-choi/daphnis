@@ -27,9 +27,9 @@ const ALL_KINDS = Object.keys(KINDS);
 const FLOW_SEQUENCE = ['flow', 'sequence'];
 
 /**
- * 값 목록. items의 항목마다 { since, retired?, deprecated? }를 둘 수 있다.
+ * 값 목록. items의 항목마다 { since, deprecated? }를 둘 수 있다.
+ * 차트 종류의 firstRole은 계열을 보이는 순서에서 먼저 오는 역할이다(기본 main). role을 생략한 계열은 선언 순서대로 이 순서의 역할을 받는다.
  * deprecated: { since, replace, note? }는 옛 이름이다. 문장 낱말, 선택 사항 키, 값, 그림 종류 어디에 있든 같다. 계속 읽고, replace로 바꿔 읽고, 폐기 진단과 고칠 글(fix)을 낸다.
- * retired: { replace, note }는 이미 막은 값이다. 오류로 알리며 replace를 안내한다(문법 호환 단계가 deprecated로 되돌린다).
  */
 export const VALUES = {
   direction: { default: 'right', items: table({ right: V1, down: V1 }) },
@@ -37,7 +37,7 @@ export const VALUES = {
   chartType: {
     items: table({
       bar: { ...V1, rowWord: 'row', seriesRange: [1, 2], isInterval: true },
-      dumbbell: { ...V1, rowWord: 'row', seriesRange: [2, 2], isInterval: true },
+      dumbbell: { ...V1, rowWord: 'row', seriesRange: [2, 2], isInterval: true, firstRole: 'compare' },
       box: { ...V1, rowWord: 'row', seriesRange: [0, 0], valueKeys: ['min', 'q1', 'median', 'q3', 'max'] },
       scatter: { ...V1, rowWord: 'point', seriesRange: [0, 2] },
       line: { ...V1, rowWord: 'point', seriesRange: [1, 2], isInterval: true },
@@ -50,8 +50,8 @@ export const VALUES = {
       green: V1,
       teal: V1,
       gray: V1,
-      blue: { ...V1, retired: { replace: 'teal', note: 'Blue means the active state and orange means compare, so tags use purple, green, teal, gray' } },
-      orange: { ...V1, retired: { replace: 'purple', note: 'Blue means the active state and orange means compare, so tags use purple, green, teal, gray' } },
+      blue: { ...V1, deprecated: { since: 1, replace: 'teal', note: 'Tag colors are categories now. Blue means the active state and orange means compare' } },
+      orange: { ...V1, deprecated: { since: 1, replace: 'purple', note: 'Tag colors are categories now. Blue means the active state and orange means compare' } },
     }),
   },
   role: { items: table({ main: V1, compare: V1 }) },
@@ -146,7 +146,7 @@ export function flagNames(scope) {
 // cost: time O(v), heap O(v), stack O(1)
 // vars: v = 값 목록의 값 수
 // basis: estimate
-/** 값 목록에서 지금 쓸 수 있는 값(막은 값과 폐기 값을 뺀다). */
+/** 값 목록에서 지금 쓸 수 있는 값(폐기 값을 뺀다). */
 export function valueNames(list) {
-  return Object.entries(VALUES[list].items).filter(([, item]) => !item.retired && !item.deprecated).map(([name]) => name);
+  return Object.entries(VALUES[list].items).filter(([, item]) => !item.deprecated).map(([name]) => name);
 }

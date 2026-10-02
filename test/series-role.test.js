@@ -28,12 +28,35 @@ test('parseFigure_series_role_is_read_with_or_without_key', () => {
 test('parseFigure_series_role_errors_name_the_rule', () => {
   const two = (a, b) => errorsOf(`chart bar\nx "값(%)"\nseries a "A"${a}\nseries b "B"${b}\nrow "r" a=1 b=2\n`).join('\n');
 
-  assert.match(two(' role=main', ''), /write role=main or role=compare on both series/);
+  assert.deepEqual(errorsOf(`chart bar\nx "값(%)"\nseries a "A" role=main\nseries b "B"\nrow "r" a=1 b=2\n`), []);
   assert.match(two(' role=main', ' role=main'), /one role=main and one role=compare/);
   assert.match(two(' role=compare', ' role=compare'), /one role=main and one role=compare/);
   assert.match(two(' role=other', ' role=compare'), /role is one of main, compare. Found "other"/);
   assert.match(errorsOf('chart bar\nx "값(%)"\nseries a "A" role=compare\nrow "r" a=1\n').join(), /one series shows it as main/);
   assert.deepEqual(errorsOf('chart bar\nx "값(%)"\nseries a "A"\nrow "r" a=1\n'), []);
+});
+
+test('parseFigure_series_without_role_take_the_roles_in_declaration_order_as_before_roles_existed', () => {
+  const roles = (type, rows) => parseFigure(`chart ${type}\nx "값(%)"\nseries a "A"\nseries b "B"\n${rows}\n`).figure.chart.series.map((s) => [s.id, s.role]);
+
+  assert.deepEqual(roles('bar', 'row "r" a=1 b=2'), [['a', 'main'], ['b', 'compare']]);
+  assert.deepEqual(roles('line', 'point x=1 a=1 b=2'), [['a', 'main'], ['b', 'compare']]);
+  assert.deepEqual(roles('dumbbell', 'row "r" a=1 b=2'), [['a', 'compare'], ['b', 'main']]);
+});
+
+test('parseFigure_one_series_with_a_role_leaves_the_other_the_remaining_role', () => {
+  const roles = (a, b) => parseFigure(`chart bar\nx "값(%)"\nseries a "A"${a}\nseries b "B"${b}\nrow "r" a=1 b=2\n`).figure.chart.series.map((s) => [s.id, s.role]);
+
+  assert.deepEqual(roles(' role=compare', ''), [['b', 'main'], ['a', 'compare']]);
+  assert.deepEqual(roles('', ' role=main'), [['b', 'main'], ['a', 'compare']]);
+});
+
+test('buildFigure_old_dumbbell_without_roles_reveals_the_first_series_first_without_error', async () => {
+  const source = 'chart dumbbell\nx "값(%)"\nseries base "전"\nseries ours "후"\nrow "r" base=9 ours=2\nstep "s"\n  reveal base\nstep "t"\n  reveal ours\n';
+
+  const { chart } = await buildFigure(source);
+
+  assert.match(chart.body, /chart-before/);
 });
 
 test('parseFigure_single_series_without_role_is_main', () => {

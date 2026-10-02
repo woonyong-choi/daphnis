@@ -1,5 +1,5 @@
 // 차트 규칙. docs/design/charts.md의 "종류와 행 줄", "머리와 선언 줄", "시간 흐름" 절을 확인한다.
-import { VALUES } from './grammar.js';
+import { VALUES, valueNames } from './grammar.js';
 import { unknownName } from './problems.js';
 
 const CHART_TYPES = VALUES.chartType.items;
@@ -40,7 +40,7 @@ export function checkChart(figure, problems) {
 // cost: time O(s), heap O(1), stack O(1)
 // vars: s = 계열 수
 // basis: estimate
-// 계열 역할: 하나면 main(role 생략 가능), 둘이면 main 하나와 compare 하나. 맞으면 true다.
+// 계열 역할: 하나면 main(role 생략 가능), 둘이면 적은 역할만 검사한다. 둘 다 적었으면 main 하나와 compare 하나여야 한다. 맞으면 true다.
 function checkSeriesRoles(figure, problems) {
   const { series } = figure.chart;
   if (series.length === 1) {
@@ -48,28 +48,24 @@ function checkSeriesRoles(figure, problems) {
     problems.error(series[0].line, 'a chart with one series shows it as main. Use role=main or remove role');
     return false;
   }
-  if (series.length !== 2) return true;
-  const missing = series.find((s) => s.role === undefined);
-  if (missing) {
-    problems.error(missing.line, `write role=main or role=compare on both series of a two-series chart. "${missing.id}" has no role`);
-    return false;
-  }
-  if (series.filter((s) => s.role === 'main').length !== 1) {
-    problems.error(series[1].line, `two series need one role=main and one role=compare. Found ${series.map((s) => `${s.id} role=${s.role}`).join(', ')}`);
-    return false;
-  }
-  return true;
+  const given = series.filter((s) => s.role !== undefined);
+  if (series.length !== 2 || given.length < 2 || given.filter((s) => s.role === 'main').length === 1) return true;
+  problems.error(series[1].line, `two series need one role=main and one role=compare. Found ${series.map((s) => `${s.id} role=${s.role}`).join(', ')}`);
+  return false;
 }
 
 // cost: time O(s log s), heap O(s), stack O(1)
 // vars: s = 계열 수
 // basis: estimate
-// 계열을 보이는 순서로 세운다. 범례, 막대, 점 이름 칸은 main이 먼저다. 덤벨은 화살표가 compare에서 main으로 가서 compare가 먼저다(범례는 그리는 쪽이 main 먼저로 다시 세운다).
+// role을 생략한 계열에 역할을 주고 계열을 보이는 순서로 세운다. 보이는 순서는 차트 종류의 firstRole이 먼저다(grammar.js).
+// 생략한 계열은 다른 계열이 쓰지 않은 역할을 선언 순서대로 받는다. 덤벨은 시작점(compare)이 먼저라 옛 파일의 "첫 계열이 시작점" 뜻이 그대로다.
 function orderSeriesByRole(figure) {
   const { series } = figure.chart;
-  for (const s of series) s.role ??= 'main';
-  const first = figure.chartType === 'dumbbell' ? 'compare' : 'main';
-  series.sort((a, b) => Number(b.role === first) - Number(a.role === first));
+  const first = CHART_TYPES[figure.chartType].firstRole ?? valueNames('role')[0];
+  const order = [first, ...valueNames('role').filter((role) => role !== first)];
+  const open = order.filter((role) => !series.some((s) => s.role === role));
+  for (const s of series) s.role ??= series.length === 1 ? valueNames('role')[0] : (open.shift() ?? valueNames('role')[0]);
+  series.sort((a, b) => order.indexOf(a.role) - order.indexOf(b.role));
 }
 
 // 값 축 종류. 히트맵은 값 축이 없다.
