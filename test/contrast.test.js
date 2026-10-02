@@ -129,13 +129,13 @@ test('contrast_heat_cell_text_reaches_4_5_on_every_strength_lit_and_dimmed', () 
   assert.equal(color('dark', 'data.heat-ink'), color('dark', 'data.heat-ink-on'), '다크는 글자색이 하나라 빌드 때 라이트로 고른 글자색이 다크에서도 맞다');
 });
 
-// 근거: 규칙 docs-integration.md 대비 기준 표: 밝히지 않은 행의 값 글자(fg)는 4.5, 보조 글자(muted)는 흐린 상태에서도 3 이상
-test('contrast_dimmed_row_text_keeps_value_text_at_4_5_and_helper_text_at_3', () => {
+// 근거: 규칙 docs-integration.md 대비 기준 표 "글자 4.5 예외 없음": 밝히지 않은 행의 값 글자(fg)와 보조 글자(muted)는 흐린 상태에서도 4.5 이상. 버그: dim-ink 0.65에서 muted가 라이트 3.18, 다크 3.51
+test('contrast_dimmed_row_text_keeps_value_and_helper_text_at_4_5', () => {
   for (const theme of THEMES) {
     const bg = color(theme, 'bg');
-    for (const [role, minimum] of [['fg', TEXT], ['muted', GRAPHIC]]) {
+    for (const role of ['fg', 'muted']) {
       const ratio = contrast(mixHex(bg, color(theme, role), opacity('dim-ink')), bg);
-      assert.ok(ratio >= minimum, `${theme} dimmed ${role}: ${ratio.toFixed(2)} < ${minimum}`);
+      assert.ok(ratio >= TEXT, `${theme} dimmed ${role}: ${ratio.toFixed(2)} < ${TEXT}`);
     }
   }
 });
@@ -149,6 +149,8 @@ test('figureGround_light_bg_is_gray_group_is_slightly_darker_and_node_face_is_br
   assert.ok(sum(bg) <= sum('#f8f9fb') && sum(bg) < sum(node), bg);
   assert.ok(sum(group) < sum(bg) && sum(bg) - sum(group) <= 24, group);
   for (const theme of THEMES) assert.ok(contrast(color(theme, 'node'), color(theme, 'bg')) > 1.05, `${theme} node on bg`);
+  // 그룹과 그 안 노드는 두 테마 모두 다른 면이다(다크 그룹이 노드와 같은 색이던 문제)
+  for (const theme of THEMES) assert.notEqual(color(theme, 'group'), color(theme, 'node'), `${theme} group face equals node face`);
 });
 
 // 근거: 결정 docs-integration.md "대비 규칙이 색 선택보다 우선: 같은 색상에서 기준을 넘는 가장 밝은 단계를 그 자리에만 쓴다"

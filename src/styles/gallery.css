@@ -52,7 +52,7 @@ section {
   overflow: hidden;
   background: var(--color-bg);
   border-radius: var(--radius-2xl);
-  box-shadow: 0 0 0 var(--border-thin) var(--color-frame);
+  box-shadow: 0 0 0 var(--border-thin) var(--color-plate-border);
 }
 
 header {
@@ -60,7 +60,7 @@ header {
   grid-template-columns: 1fr auto;
   gap: var(--space-1) var(--space-8);
   padding: var(--space-7) var(--space-9);
-  border-bottom: var(--border-thin) solid var(--color-frame);
+  border-bottom: var(--border-thin) solid var(--color-plate-border);
 }
 
 h2 {
