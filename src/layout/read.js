@@ -1,0 +1,110 @@
+// elkjs 결과를 그림 좌표로 바꾼다. 그룹 경계 연결점에서 끊긴 선 조각은 이어 붙인다(docs/design/layout.md 선 그리기).
+import { values } from '../tokens.js';
+
+const SETTLE = values.space['4'];
+
+// cost: time O(s + e·(d + p)), heap O(s + e·p), stack O(d)
+// vars: s = 도형 수, e = 선 수, d = 그룹 깊이, p = 경로 점 수
+// basis: estimate
+/** @returns { items, groups, edges, width, height }. items는 몸통 사각형, edges는 이어 붙인 경로 점과 라벨 자리 */
+export function readElk(laid, model) {
+  laid.x = 0;
+  laid.y = 0;
+  const { items, groups, offsets } = readNodes(laid, model);
+  const { sections, labels } = readEdges(laid, model, offsets);
+  const rects = new Map(items.map((it) => [it.id, it]));
+  const edges = model.edges.map((edge) => {
+    const parts = model.pieces.get(edge.index).map((_, k) => sections.get(`${edge.index}::${k}`) ?? []);
+    const joined = parts.flatMap((p, k) => (k === 0 ? p : p.slice(1)));
+    const points = settleEnd(settleEnd(joined, freeRect(edge.from, rects)).reverse(), freeRect(edge.to, rects)).reverse();
+    return { ...edge, points, labelAt: labels.get(`label::${edge.index}`) };
+  });
+  return { items, groups, edges, width: laid.width, height: laid.height };
+}
+
+// cost: time O(s), heap O(s + d), stack O(d)
+// vars: s = 도형과 그룹 수, d = 그룹 깊이
+// basis: estimate
+// 도형 사각형과 그룹 사각형을 절대 좌표로 모은다. offsets는 그룹마다 안쪽 좌표의 원점이다.
+function readNodes(laid, model) {
+  const items = [];
+  const groups = [];
+  const offsets = new Map([['root', { x: 0, y: 0 }]]);
+  // cost: time O(s), heap O(d), stack O(d)
+  // vars: s = 도형과 그룹 수, d = 그룹 깊이
+  // basis: estimate
+  const walk = (node, ox, oy) => {
+    for (const child of node.children ?? []) {
+      const x = ox + node.x + child.x;
+      const y = oy + node.y + child.y;
+      if (model.containers.has(child.id)) {
+        const c = model.containers.get(child.id);
+        groups.push({ id: child.id, label: c.label, line: c.line, parent: c.parent, x, y, w: child.width, h: child.height });
+        offsets.set(child.id, { x, y });
+      } else {
+        const n = model.nodes.get(child.id);
+        // 배치 사각형에서 바깥 여백을 빼서 몸통 사각형으로 되돌린다.
+        items.push({ ...n, ...n.size, x: x + (n.size.marginSide ?? 0), y: y + n.size.marginTop, w: n.size.w, h: n.size.h });
+      }
+      walk(child, ox + node.x, oy + node.y);
+    }
+  };
+  walk(laid, 0, 0);
+  return { items, groups, offsets };
+}
+
+// cost: time O(e + l), heap O(e·p + l), stack O(d)
+// vars: e = 선 조각 수, l = 라벨 수, p = 경로 점 수, d = 그룹 깊이
+// basis: estimate
+// 선 조각 경로와 라벨 자리를 절대 좌표로 모은다. 라벨은 가운데 점이다.
+function readEdges(laid, model, offsets) {
+  const sections = new Map();
+  const labels = new Map();
+  // cost: time O(e + l), heap O(d), stack O(d)
+  // vars: e = 선 조각 수, l = 라벨 수, d = 그룹 깊이
+  // basis: estimate
+  const collect = (node, ox, oy) => {
+    for (const e of node.edges ?? []) {
+      const base = offsets.get(e.container ?? node.id) ?? { x: ox, y: oy };
+      const s = e.sections?.[0];
+      if (s) sections.set(e.id, [s.startPoint, ...(s.bendPoints ?? []), s.endPoint].map((p) => ({ x: base.x + p.x, y: base.y + p.y })));
+      for (const l of e.labels ?? []) labels.set(l.id, { x: base.x + l.x + l.width / 2, y: base.y + l.y + l.height / 2 });
+    }
+    for (const child of node.children ?? []) if (model.containers.has(child.id)) collect(child, ox + node.x + child.x, oy + node.y + child.y);
+  };
+  collect(laid, 0, 0);
+  return { sections, labels };
+}
+
+// 연결점 제약이 없는 도형만 선 끝을 옮길 수 있다. 사람(세로), 갈림길, 원통(세로), 테이블 열은 연결점이 정해져 있다.
+function freeRect(id, rects) {
+  const it = rects.get(id);
+  return it && !it.ports.length ? it : undefined;
+}
+
+// cost: time O(p), heap O(p), stack O(1)
+// vars: p = 경로 점 수
+// basis: estimate
+/**
+ * 선 끝에서 시작해 가로지르는 방향으로 SETTLE 미만만 흔들리는 구간을, 구간 끝의 높이로 편다.
+ * 그룹 경계 연결점 높이는 안쪽 배치가, 선 끝은 바깥 배치가 정해 몇 px 어긋나는 계단이 남기 때문이다.
+ * 옮긴 선 끝이 도형 면 밖으로 나가면 펴지 않는다. 선 끝 쪽 한 구간만 다룬다.
+ */
+function settleEnd(points, rect) {
+  if (!rect || points.length < 3) return points;
+  const [start, next] = points;
+  const isHorizontal = Math.abs(start.y - next.y) < 0.5;
+  const along = isHorizontal ? 'x' : 'y';
+  const across = isHorizontal ? 'y' : 'x';
+  let end = 1;
+  while (end + 1 < points.length && Math.abs(points[end + 1][across] - start[across]) < SETTLE && Math.abs(points[end + 1][along] - points[end][along]) >= 0) {
+    const isStep = Math.abs(points[end + 1][along] - points[end][along]) < 0.5;
+    const isRun = Math.abs(points[end + 1][across] - points[end][across]) < 0.5;
+    if (!isStep && !isRun) break;
+    end++;
+  }
+  const target = points[end][across];
+  const [low, high] = isHorizontal ? [rect.y, rect.y + rect.h] : [rect.x, rect.x + rect.w];
+  if (end < 2 || target < low || target > high) return points;
+  return [{ ...start, [across]: target }, ...points.slice(end)];
+}
