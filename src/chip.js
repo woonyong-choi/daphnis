@@ -59,13 +59,13 @@ function overlapArea(a, b) {
  * 1. 그림 안에 있다. 2. 피할 사각형(글자, 도형 테두리, 선 라벨 알약)과 겹치지 않는다(겹치면 겹친 넓이가 작은 쪽). 3. 판 위아래 끝에서 CHIP_MARGIN 이상 떨어진다.
  * 4. 선택 순서는 점 위 그대로, 가리는 것을 비켜 조금 더 올린 자리, 선 반대쪽(점 아래)과 그것을 조금 더 내린 자리, 가리는 사각형의 양 끝에 붙게 옆으로 비킨 자리(점에서 글 상자 반 폭과 간격 안), 그보다 멀리 옆으로 비킨 자리다.
  * 멀리 비킨 자리는 글 상자가 점에서 떨어져 보이지만, 점이 노드 안에서 출발해 도형을 벗어날 때까지 글 상자를 선을 따라 노드 밖에 두어 점이 따라잡게 하는 마지막 수단이다. 그래도 겹치면 그림 검사(check.js)가 경고한다.
- * 옆으로는 그림 밖으로 나가지 않게 밀어 넣는다.
+ * 옆으로는 그림 밖으로 나가지 않게 밀어 넣는다. 가장자리 여백(CHIP_GAP)을 지킨 자리가 가리면 여백을 CHIP_CLEAR까지 줄인 자리를 쓴다. 가려지지 않는 자리가 여백보다 앞선다.
  * @param field { scene, avoid }. scene은 { width, height }, avoid는 { x, y, w, h, name }[]
  * @returns { dx, dy, box, isOutside, hits }. dx, dy는 점 위 기본 자리에서 옮긴 양, box는 그림 좌표의 글 상자 사각형이다. hits는 겹친 이름 목록이다
  */
 export function placeChip(point, chip, { scene, avoid = [] }) {
   const ctx = { point, chip, scene, avoid };
-  const candidates = rowsOf(ctx).flatMap((row) => centersOf(ctx, row.top).map((side) => candidateAt(ctx, row, side)));
+  const candidates = rowsOf(ctx).flatMap((row) => centersOf(ctx, row.top).flatMap((side) => insetsOf(ctx, side).map((x) => candidateAt(ctx, row, { x, order: side.order }))));
   const best = candidates.reduce((a, b) => (compare(a.rank, b.rank) <= 0 ? a : b));
   const { rank, ...placed } = best;
   return placed;
@@ -102,13 +102,20 @@ function centersOf({ point, chip, avoid }, top) {
   return [{ center: point.x, order: 0 }, ...ends.map((center) => ({ center, order: Math.abs(center - point.x) <= reach ? SIDE_NEAR : SIDE_FAR }))];
 }
 
+// cost: time O(1), heap O(1), stack O(1)
+// vars: 없음
+// basis: estimate
+// 가로 중심 후보 하나를 그림 안으로 밀어 넣는 자리. 가장자리 여백 CHIP_GAP을 지킨 자리가 먼저이고, 그 자리가 막히면 쓰라고 여백을 CHIP_CLEAR까지 줄인 자리를 더한다(서로 같으면 하나).
+function insetsOf({ chip, scene }, { center }) {
+  const fit = (inset) => Math.min(scene.width - chip.w / 2 - inset, Math.max(chip.w / 2 + inset, center));
+  return [...new Set([fit(CHIP_GAP), fit(CHIP_CLEAR)])];
+}
+
 // cost: time O(a), heap O(1), stack O(1)
 // vars: a = 피할 사각형 수
 // basis: estimate
 // 후보 하나의 자리와 순위
-function candidateAt({ point, chip, scene, avoid }, row, { center, order: sideOrder }) {
-  const half = chip.w / 2 + CHIP_GAP;
-  const x = Math.min(scene.width - half, Math.max(half, center));
+function candidateAt({ point, chip, scene, avoid }, row, { x, order: sideOrder }) {
   const box = { x: x - chip.w / 2, y: row.top, w: chip.w, h: chip.h };
   const hits = avoid.filter((o) => !o.soft && overlapArea(box, o) > OVERLAP_SLACK);
   const area = hits.reduce((sum, o) => sum + overlapArea(box, o), 0);
@@ -117,12 +124,13 @@ function candidateAt({ point, chip, scene, avoid }, row, { center, order: sideOr
   const nearArea = avoid.filter((o) => o.soft).reduce((sum, o) => sum + overlapArea(padded, o), 0);
   const isOutside = isOutsideFigure(box, scene);
   const isTight = row.top < CHIP_MARGIN - FIT_SLACK || row.top + chip.h > scene.height - CHIP_MARGIN + FIT_SLACK;
+  const isCrowded = Math.min(box.x, scene.width - box.x - box.w) < CHIP_GAP - FIT_SLACK;
   const order = row.order + sideOrder + (Math.abs(x - point.x) + Math.abs(row.dy)) * SHIFT_WEIGHT;
-  return { dx: x - point.x, dy: row.dy, box, isOutside, hits: hits.map((h) => h.name), rank: [Number(isOutside), area, nearArea, Number(isTight), order] };
+  return { dx: x - point.x, dy: row.dy, box, isOutside, hits: hits.map((h) => h.name), rank: [Number(isOutside), area, nearArea, Number(isTight), Number(isCrowded), order] };
 }
 
 // cost: time O(r), heap O(1), stack O(1)
-// vars: r = 순위 항목 수(5)
+// vars: r = 순위 항목 수(6)
 // basis: estimate
 function compare(a, b) {
   for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return a[i] - b[i];

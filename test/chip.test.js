@@ -200,3 +200,22 @@ test('buildFigure_examples_keep_moving_text_clear_of_other_lines_at_most_30_perc
   assert.ok(samples > 100);
   assert.ok(near / samples < 0.3, `선 가까이 ${near}/${samples}`);
 });
+
+test('placeChip_uses_the_narrower_edge_inset_when_the_roomy_spot_covers_a_shape_beside_the_dot', () => {
+  const shape = { x: 100, y: 100, w: 90, h: 100, name: '도형' };
+  const scene = { width: 300, height: 400 };
+
+  const placed = placeChip({ x: 290, y: 160 }, CHIP, { scene, avoid: [shape] });
+
+  assert.deepEqual(placed.hits, []);
+  assert.ok(!overlaps(placed.box, shape));
+  assert.ok(placed.box.x + placed.box.w <= scene.width - CHIP_CLEAR + 0.5);
+});
+
+test('buildFigure_chip_beside_shape_fixture_has_no_check_7_warning', async () => {
+  const source = readFileSync(new URL('./fixtures/layout/chip-beside-shape.muto', import.meta.url), 'utf8');
+
+  const { warnings } = await buildFigure(source, { strict: true });
+
+  assert.deepEqual(warnings, []);
+});
