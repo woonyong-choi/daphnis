@@ -154,7 +154,7 @@ function finish(result, problems, { strict, noDeprecated }) {
 }
 
 /** 글 상자 글을 토큰 `size.chip-max` 너비의 줄로 나눈다. HTML과 SVG가 같은 줄을 쓴다. */
-export function wrapChip(text) {
+function wrapChip(text) {
   return wrap(text, values.size['chip-max'], STYLE.chip);
 }
 

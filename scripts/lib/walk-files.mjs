@@ -35,7 +35,7 @@ export function* walkFiles(folder) {
 // vars: e = 폴더 항목 수
 // basis: estimate
 /** 폴더의 파일 이름과 하위 폴더 이름을 정렬해 돌려준다. */
-export function listFolder(folder) {
+function listFolder(folder) {
   const files = [];
   const dirs = [];
   for (const entry of readdirSync(folder, { withFileTypes: true })) {
@@ -68,7 +68,7 @@ export function findTokensFile(targets) {
 // vars: f = 폴더 아래 항목 수, d = 폴더 깊이
 // basis: estimate
 /** 폴더와 그 아래(건너뛰는 폴더 제외)에서 처음 만나는 tokens.json. */
-export function findBelow(folder) {
+function findBelow(folder) {
   if (!isDirectory(folder)) return null;
   const { files, dirs } = listFolder(folder);
   if (files.includes('tokens.json')) return join(folder, 'tokens.json');

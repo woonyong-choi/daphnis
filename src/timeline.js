@@ -46,7 +46,7 @@ export function collectCards(figure) {
 }
 
 /** 계열이 없는 차트(상자, 히트맵, 계열 없는 산점도)가 통째로 자랄 때 쓰는 계열 id */
-export const WHOLE_CHART = '*';
+const WHOLE_CHART = '*';
 
 // cost: time O(s), heap O(s), stack O(1)
 // vars: s = 계열 수

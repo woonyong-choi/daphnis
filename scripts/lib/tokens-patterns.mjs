@@ -17,7 +17,7 @@ export const THEMED_TYPES = new Set(['color', 'shadow']);
 export const WORD_CHARS = String.raw`\p{L}\p{N}_`;
 export const WORD_BOUNDARY = `(?:(?<=[${WORD_CHARS}])(?![${WORD_CHARS}])|(?<![${WORD_CHARS}])(?=[${WORD_CHARS}]))`;
 
-export const FONT_KEYWORDS = String.raw`(?:inherit|initial|unset|var\()`;
+const FONT_KEYWORDS = String.raw`(?:inherit|initial|unset|var\()`;
 export const HEX_COLOR = unicodePattern(String.raw`(?<![\w&/])#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})\b`);
 export const COLOR_FUNCTION = unicodePattern(String.raw`\b(?:rgba?|hsla?|oklch|oklab|lab|lch|hwb|color)\(`);
 export const FONT_FAMILY = unicodePattern(

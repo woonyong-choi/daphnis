@@ -14,7 +14,7 @@ export function readTimeline(word, statement, ctx) {
 }
 
 /** 빈 박자. 박자 줄마다 하나씩 만든다. */
-export function emptyBeat(line) {
+function emptyBeat(line) {
   return { line, hops: [], ops: [], light: [], chartLight: [], say: undefined, waitMs: 0, reveal: [], notes: [], isPause: false };
 }
 

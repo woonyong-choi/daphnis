@@ -106,7 +106,7 @@ function sizeTable(node, contents) {
 // vars: k = 카드 내용 수, r = 줄 수, n = 줄 글자 수
 // basis: estimate
 /** 카드 크기. 높이는 내용 가운데 가장 큰 것이다. */
-export function sizeCard(contents, width) {
+function sizeCard(contents, width) {
   const layouts = contents.map((rows) => layoutCard(rows, width));
   return { w: width, h: Math.max(...layouts.map((l) => l.height)), layouts };
 }
@@ -118,7 +118,7 @@ export function sizeCard(contents, width) {
  * 카드 줄을 너비에 맞게 나눈다. 태그가 세 글자를 넘으면 글 위에 따로 선다.
  * @returns { rows: { row, isHeading, tagW, lines, graph? }[], height }
  */
-export function layoutCard(rows, width) {
+function layoutCard(rows, width) {
   const inner = width - CARD.side * 2;
   if (!rows.length) return { rows: [], height: STYLE.row.line + CARD.pad * 2 };
   const laid = rows.map((row) => {

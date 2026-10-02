@@ -15,15 +15,12 @@ export const tokens = freeze({
         "50": "var(--color-palette-gray-50)",
         "100": "var(--color-palette-gray-100)",
         "200": "var(--color-palette-gray-200)",
-        "500": "var(--color-palette-gray-500)",
-        "600": "var(--color-palette-gray-600)",
-        "900": "var(--color-palette-gray-900)"
+        "500": "var(--color-palette-gray-500)"
       },
       "neutral": {
         "100": "var(--color-palette-neutral-100)",
         "400": "var(--color-palette-neutral-400)",
         "500": "var(--color-palette-neutral-500)",
-        "700": "var(--color-palette-neutral-700)",
         "750": "var(--color-palette-neutral-750)",
         "800": "var(--color-palette-neutral-800)",
         "850": "var(--color-palette-neutral-850)",
@@ -195,18 +192,13 @@ export const tokens = freeze({
     "14": "var(--space-14)",
     "15": "var(--space-15)",
     "16": "var(--space-16)",
-    "17": "var(--space-17)",
     "18": "var(--space-18)",
     "20": "var(--space-20)",
     "22": "var(--space-22)",
     "30": "var(--space-30)",
-    "32": "var(--space-32)",
     "0-5": "var(--space-0-5)",
     "1-5": "var(--space-1-5)",
-    "2-5": "var(--space-2-5)",
-    "3-5": "var(--space-3-5)",
-    "6-5": "var(--space-6-5)",
-    "8-5": "var(--space-8-5)"
+    "2-5": "var(--space-2-5)"
   },
   "radius": {
     "sm": "var(--radius-sm)",
@@ -281,15 +273,12 @@ export const values = freeze({
         "50": "#eef1f5",
         "100": "#e3e7ec",
         "200": "#d5dbe3",
-        "500": "#818b99",
-        "600": "#4b5563",
-        "900": "#111418"
+        "500": "#818b99"
       },
       "neutral": {
         "100": "#e3e3e3",
         "400": "#9aa0a6",
         "500": "#72767a",
-        "700": "#3a3b3c",
         "750": "#3c3e42",
         "800": "#2c2d30",
         "850": "#242526",
@@ -461,18 +450,13 @@ export const values = freeze({
     "14": 28,
     "15": 30,
     "16": 32,
-    "17": 34,
     "18": 36,
     "20": 40,
     "22": 44,
     "30": 60,
-    "32": 64,
     "0-5": 1,
     "1-5": 3,
-    "2-5": 5,
-    "3-5": 7,
-    "6-5": 13,
-    "8-5": 17
+    "2-5": 5
   },
   "radius": {
     "sm": 4,

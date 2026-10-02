@@ -5,7 +5,7 @@ import { AT_CONDITION, BARE_VALUE, COLOR_FUNCTION, COMMENT, CONDITION_VALUE, CSS
 // vars: n = 글자 수
 // basis: estimate
 /** 줄바꿈만 남기고 같은 길이의 공백으로 바꾼다. 줄 번호와 위치를 지키기 위해서다. */
-export function blank(text) {
+function blank(text) {
   return text.replace(/[^\n]/g, ' ');
 }
 
@@ -20,7 +20,7 @@ export function findSegments(text, ext) {
 }
 
 /** CSS나 마크업으로 보이거나 값 하나뿐인 문자열인지 본다. */
-export function isStyledString(literal) {
+function isStyledString(literal) {
   return LOOKS_STYLED.test(literal) || BARE_VALUE.test(literal);
 }
 
@@ -62,7 +62,7 @@ export function findHardcoded(segment, info, isStyled) {
 // vars: n = 조건 글자 수, f = 찾은 수
 // basis: estimate
 /** `@media`, `@container` 조건의 숫자. px가 아닌 단위와 breakpoint 토큰에 없는 px를 찾는다. */
-export function findConditionValues(condition, offset, breakpoints) {
+function findConditionValues(condition, offset, breakpoints) {
   return Array.from(condition.matchAll(CONDITION_VALUE))
     .filter((m) => m[2] !== 'px' || !breakpoints.has(m[1]))
     .map((m) => ({ position: offset + m.index, rule: 'condition not breakpoint token', snippet: m[0] }));
@@ -72,7 +72,7 @@ export function findConditionValues(condition, offset, breakpoints) {
 // vars: n = 값 글자 수
 // basis: estimate
 /** 토큰 참조만으로 만든 값이 아닌지 본다. `calc(var(--a) * 2)`의 계수 2는 허용한다. */
-export function isRawCustomValue(value) {
+function isRawCustomValue(value) {
   const rest = value.replace(/var\([^()]*\)/g, '');
   return /#|['"]|\d+(?:px|rem|em|ms|s|%)/.test(rest);
 }
@@ -89,7 +89,7 @@ export function isInside(position, spans) {
 // vars: n = 글자 수
 // basis: estimate
 /** 앞뒤 공백을 지운다. 구분 제어 문자(\x1c~\x1f)도 공백으로 본다. */
-export function trimSpace(text) {
+function trimSpace(text) {
   return text.replace(/^[\s\x1c-\x1f]+|[\s\x1c-\x1f]+$/g, '');
 }
 
@@ -126,7 +126,7 @@ export function findScriptValues(text, info) {
 // vars: n = 코드 글자 수, s = 스타일 객체 수
 // basis: estimate
 /** 스타일 객체 중괄호 구간. 여는 중괄호부터 짝이 맞는 닫는 중괄호까지. */
-export function findStyleObjects(code) {
+function findStyleObjects(code) {
   const spans = [];
   for (const m of code.matchAll(STYLE_OBJECT_START)) {
     const end = m.index + m[0].length;

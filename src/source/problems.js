@@ -73,7 +73,7 @@ export function createProblems(source = '') {
 // vars: a, b = 두 글자 수
 // basis: estimate
 /** 두 글의 편집 거리. 이름 오타에 가까운 이름을 고를 때 쓴다. */
-export function editDistance(a, b) {
+function editDistance(a, b) {
   let previous = Array.from({ length: b.length + 1 }, (_, j) => j);
   for (let i = 1; i <= a.length; i++) {
     const current = [i];

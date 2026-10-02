@@ -19,7 +19,7 @@ const oldLines = (d) => (d.line ? [d.line, ...[...d.message.matchAll(/\(line (\d
  * 필드마다 { since, deprecated?, value(file, diagnostic) }. 순서가 곧 출력 순서다.
  * deprecated: { since, until }은 `until` 판이 오를 때까지 함께 내는 옛 필드다. 옛 `level`에는 deprecated 종류가 없어 warning으로 낸다.
  */
-export const JSON_FIELDS = {
+const JSON_FIELDS = {
   file: { since: 1, value: (file) => file },
   line: { since: 1, value: (file, d) => d.line },
   lines: { since: 1, deprecated: { since: 1, until: 2 }, value: (file, d) => oldLines(d) },

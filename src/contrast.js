@@ -11,7 +11,7 @@ function linear(channel) {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /** `#rrggbb`의 채널 셋 */
-export function channels(hex) {
+function channels(hex) {
   const n = parseInt(hex.slice(1), 16);
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 }
@@ -19,7 +19,7 @@ export function channels(hex) {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /** `#rrggbb`의 상대 휘도(0~1) */
-export function luminance(hex) {
+function luminance(hex) {
   const [r, g, b] = channels(hex).map(linear);
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }

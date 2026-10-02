@@ -30,7 +30,7 @@ export function tickReach(unit) {
 // vars: r = 기준선 수
 // basis: estimate
 // 기준선 라벨은 기준선 오른쪽에서 시작한다.
-export function ruleReach(rules) {
+function ruleReach(rules) {
   return rules.map((rule) => ({ value: rule.value, extra: SPACE['2'] + measure(rule.label, TEXT['11']) }));
 }
 
