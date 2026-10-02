@@ -78,8 +78,8 @@
   --color-tag-green: var(--color-palette-green-500);
   --color-tag-teal: var(--color-palette-teal-500);
   --color-tag-gray: var(--color-palette-slate-500);
-  --font-sans: FigSans, FigSansKo, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
-  --font-mono: FigMono, FigSans, FigSansKo, ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: FigSans, FigSansKo, FigSansSym, FigSansMath, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+  --font-mono: FigMono, FigSans, FigSansKo, FigSansSym, FigSansMath, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
   --size-text-11: 11px;
   --size-text-12: 12px;
@@ -207,6 +207,7 @@
   --scale-zoom-max: 6;
   --scale-fold-aspect: 1.6;
   --scale-fold-step: 0.75;
+  --scale-aspect-max: 3;
   --scale-zoom-step: 1.25;
 }
 @media (prefers-color-scheme: dark) {
