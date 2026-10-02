@@ -7,6 +7,8 @@ const EPSILON_MS = 0.1;
 const FADE_MS = values.duration.fast;
 // 설명 글과 단계 이름이 바뀔 때 앞 글이 사라지는 시간이자 뒤 글이 나타나는 시간(ms). 재생기도 같은 토큰을 읽는다.
 const SWAP_MS = values.duration['caption-fade'];
+// 서서히 가지 않고 구간 시작에서 한꺼번에 바뀔 때의 전환 시간(ms)
+const STEP_MS = 0;
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -27,22 +29,28 @@ export function createWindows(clock, segs, css) {
   /**
    * states[i]는 박자 i의 켜짐이다. { before, after, at }이면 박자 안 at(ms)에서 before가 after로 바뀐다.
    * 켜짐 순서와 켜짐, 꺼짐 CSS가 같으면 같은 class 이름을 돌려준다.
-   * @param css { on, off, isSwap }. 켜짐일 때와 꺼짐일 때의 CSS 선언. isSwap이면 앞 글이 다 사라진 뒤 이 글이 나타난다(순차 페이드)
+   * @param css { on, off, isSwap, isStep }. 켜짐일 때와 꺼짐일 때의 CSS 선언. isSwap이면 앞 글이 다 사라진 뒤 이 글이 나타난다(순차 페이드). isStep이면 서서히 가지 않고 구간 시작에서 한꺼번에 바뀐다
    */
-  function windows(states, { on: onCss, off: offCss, isSwap = false }) {
+  function windows(states, { on: onCss, off: offCss, isSwap = false, isStep = false }) {
     const flat = spansOf(states, segs);
     const spans = isSwap ? delayEntrances(flat, SWAP_MS) : flat;
-    const key = `${isSwap ? 'swap|' : ''}${onCss}|${offCss}|${spans.map(([start, , on]) => `${Math.round(start)}${on ? 1 : 0}`).join('')}`;
+    const key = `${isSwap ? 'swap|' : ''}${isStep ? 'step|' : ''}${onCss}|${offCss}|${spans.map(([start, , on]) => `${Math.round(start)}${on ? 1 : 0}`).join('')}`;
     if (!names.has(key)) {
       const name = `a${names.size}`;
       names.set(key, name);
-      const frames = fadeFrames(spans.map(([start, end, on]) => [start, end, on ? onCss : offCss]), isSwap ? SWAP_MS : FADE_MS);
+      const frames = fadeFrames(spans.map(([start, end, on]) => [start, end, on ? onCss : offCss]), fadeOf({ isSwap, isStep }));
       css.push(`@keyframes ${name} { ${frames} }\n.fl .${name} { animation: ${name} ${clock.duration} infinite linear; }`);
     }
     return names.get(key);
   }
 
   return { windows, fadeFrames };
+}
+
+// 전환 방식에 따른 서서히 가는 시간(ms)
+function fadeOf({ isSwap, isStep }) {
+  if (isStep) return STEP_MS;
+  return isSwap ? SWAP_MS : FADE_MS;
 }
 
 // cost: time O(b), heap O(b), stack O(1)

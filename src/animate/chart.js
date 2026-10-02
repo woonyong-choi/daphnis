@@ -19,7 +19,7 @@ const GROWS = [
  * 차트 keyframes를 css에 쌓는다.
  * @param ctx { clock, segs, growMs, css, windows, fadeFrames }. 움직이는 SVG가 한 그림에 하나 쓰는 묶음
  * @param seriesIds 시간표가 다루는 계열 id 목록
- * @param drawn 차트 그리기 결과(dotAts, rowKeys, dimsInkColor)
+ * @param drawn 차트 그리기 결과(dotAts, rowKeys, dimsInkColor). dimsInkColor이면 흐림이 서서히 가지 않고 한꺼번에 바뀐다
  */
 export function animateChart(ctx, seriesIds, drawn) {
   seriesIds.forEach((id, s) => animateSeries(ctx, { id, s }, drawn.dotAts));
@@ -81,12 +81,14 @@ function animateLabelShifts({ clock, segs, css, fadeFrames }, rowKeys) {
 // vars: r = 행 수, b = 박자 수
 // basis: estimate
 // 밝히지 않은 행은 면을 흐리고(`opacity.dim`), 글자(`.ink`)는 덜 흐린다(`opacity.dim-ink`). 히트맵 칸 글자는 색도 어두운 글자로 바뀐다(chart.css `.chart-cell.dim`).
+// 히트맵은 칸 면과 글자가 구간 시작에서 한꺼번에 바뀐다. 면이 바탕 쪽으로 옅어지는 중간에는 밝은 글자와 어두운 글자 어느 쪽도 대비 4.5에 못 미친다.
 function animateDimming({ clock, segs, css, windows }, drawn) {
+  const isStep = drawn.dimsInkColor;
   const inkColor = drawn.dimsInkColor ? { on: '; fill: var(--color-data-heat-ink)', off: '; fill: var(--ink)' } : { on: '', off: '' };
   drawn.rowKeys.forEach((key, k) => {
     const isDim = segs.map((g) => g.lights.length > 0 && !g.lights.includes(key));
-    const face = windows(isDim, { on: `opacity: ${values.opacity.dim}`, off: 'opacity: 1' });
-    const ink = windows(isDim, { on: `opacity: ${values.opacity['dim-ink']}${inkColor.on}`, off: `opacity: 1${inkColor.off}` });
+    const face = windows(isDim, { on: `opacity: ${values.opacity.dim}`, off: 'opacity: 1', isStep });
+    const ink = windows(isDim, { on: `opacity: ${values.opacity['dim-ink']}${inkColor.on}`, off: `opacity: 1${inkColor.off}`, isStep });
     css.push(`.fl .cr-${k} { animation: ${face} ${clock.duration} infinite linear; }`, `.fl .cr-${k}.ink { animation: ${ink} ${clock.duration} infinite linear; }`);
   });
 }

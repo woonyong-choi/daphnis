@@ -29,13 +29,13 @@ export function heatLook(rawStrength, heat) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 칸 하나: 면과 값 글자. 밝히지 않은 칸은 면이 `opacity.dim`으로, 글자가 `opacity.dim-ink`로 흐려진다(글자 색도 바뀐다. docs/design/charts.md 흐림).
+// 칸 하나: 면과 값 글자. 밝히지 않은 칸은 면이 `opacity.dim`으로, 글자가 `opacity.dim-ink`로 흐려진다(글자 색도 바뀐다. 면과 글자는 서서히 가지 않고 한꺼번에 바뀐다. docs/design/charts.md 흐림).
 function heatCell(grid, c, k) {
   const { rows, cols, plotX, cellW, cellH, top, max, format } = grid;
   const [x, y] = [plotX + cols.indexOf(c.col) * cellW, top + rows.indexOf(c.row) * cellH];
   const { strength, fill, isOn } = heatLook(max ? c.values.value / max : 0, LIGHT_HEAT);
   return (
-    `<g class="cr-${k}"><rect x="${r(x)}" y="${r(y)}" width="${r(cellW - SPACE['1'])}" height="${r(cellH - SPACE['1'])}" rx="${values.radius.sm}" class="chart-heat" style="--s:${strength}" fill="${fill}"/></g>` +
+    `<g class="cr-${k} chart-heat-cell"><rect x="${r(x)}" y="${r(y)}" width="${r(cellW - SPACE['1'])}" height="${r(cellH - SPACE['1'])}" rx="${values.radius.sm}" class="chart-heat" style="--s:${strength}" fill="${fill}"/></g>` +
     `<text x="${r(x + cellW / 2)}" y="${r(centerBaseline(y + cellH / 2, TEXT['11']))}" class="cr-${k} ink chart-cell${isOn ? ' on' : ''}">${format(c.values.value)}</text>`
   );
 }
