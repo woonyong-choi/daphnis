@@ -3,8 +3,10 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 import { buildFigure } from '../src/build.js';
+import { checkFigure } from '../src/check.js';
 import { CHIP_CLEAR } from '../src/chip.js';
 import { sizePill } from '../src/measure/sizes.js';
+import { createProblems } from '../src/source/problems.js';
 
 const EXAMPLES = new URL('../examples/', import.meta.url);
 const FIXTURES = new URL('./fixtures/layout/', import.meta.url);
@@ -59,4 +61,42 @@ test('layoutSequence_note_beside_the_arrow_keeps_one_row_height', async () => {
   assert.deepEqual(collisions(scene), []);
   const [note] = scene.notes;
   assert.ok(note.y < scene.edges[0].points[0].y, '메모와 화살표가 같은 행에 놓인다');
+});
+
+const FIGURE = ['sequence', 'box a "호출"', 'box b "응답"', 'box c "저장"', 'step "s" "c"', '  a -> b "요청 라벨"', '  note a "메모"', '  b -> c "저장 요청"', ''].join('\n');
+
+// 장면의 메모를 옮겨 만든 겹침을 그림 검사가 알리는지 본다. 배치가 겹침을 만들지 않으므로 장면을 직접 고친다.
+async function checkMoved(move) {
+  const { figure, scene, timeline } = await buildFigure(FIGURE, { strict: true });
+  move(scene);
+  const problems = createProblems(FIGURE);
+  checkFigure(figure, scene, timeline, problems);
+  return [...problems.errors, ...problems.warnings].filter((d) => d.code === 'check-12');
+}
+
+test('checkFigure_note_laid_over_the_row_label_or_arrow_is_check_12_error', async () => {
+  const found = await checkMoved((scene) => {
+    const [label] = scene.edges;
+    Object.assign(scene.notes[0], { x: label.labelAt.x - scene.notes[0].w / 2, y: label.labelAt.y - scene.notes[0].h / 2 });
+  });
+  assert.ok(found.some((d) => d.severity === 'error' && /covers the label "요청 라벨"/.test(d.message)), JSON.stringify(found));
+  assert.ok(found.some((d) => d.severity === 'error' && /covers the arrow of message a -> b/.test(d.message)));
+});
+
+test('checkFigure_note_outside_the_figure_is_check_12_error_and_crossing_a_lifeline_is_a_warning', async () => {
+  const outside = await checkMoved((scene) => { scene.notes[0].x = -50; });
+  assert.ok(outside.some((d) => d.severity === 'error' && /leaves the figure/.test(d.message)));
+  const crossing = await checkMoved((scene) => {
+    const other = scene.lifelines.find((l) => l.id === 'c');
+    scene.notes[0].x = other.x - 10;
+    scene.notes[0].y = other.y1 + 1;
+  });
+  assert.ok(crossing.some((d) => d.severity === 'warning' && /crosses the lifeline of "c"/.test(d.message)), JSON.stringify(crossing));
+});
+
+test('layoutSequence_self_message_note_on_the_first_participant_stays_inside_the_figure', async () => {
+  const source = ['sequence', 'box a "A"', 'box b "B"', 'step "s"', '  a -> a "자기 호출"', '  note a "왼쪽 첫 참여자의 아주 긴 메모가 왼쪽으로 삐져나가는지 본다 이 글은 길다"', '  a -> b "요청"', ''].join('\n');
+  const { scene } = await buildFigure(source, { strict: true });
+  assert.ok(scene.notes[0].x >= 0);
+  assert.deepEqual(collisions(scene), []);
 });

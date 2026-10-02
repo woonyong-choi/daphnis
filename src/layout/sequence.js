@@ -66,7 +66,7 @@ function layoutRow(beat, rowNotes, { index, centers }, { m, y }) {
   const isSelf = a === b;
   const pill = sizePill(hop.data);
   const loop = Math.max(SPACE['20'], pill.w / 2 + SPACE['6']);
-  const placed = rowNotes.map((n) => ({ ...n, x: noteX(n, centers[index.get(n.node)], !(isSelf && index.get(n.node) === a)), y: y + SPACE['2'] }));
+  const placed = rowNotes.map((n) => ({ ...n, x: noteX(n, centers[index.get(n.node)], isRightNote(n, hop)), y: y + SPACE['2'] }));
   const mid = (centers[a] + centers[b]) / 2;
   const span = isSelf ? [centers[a], centers[a] + loop + pill.w / 2] : [Math.min(centers[a], centers[b], mid - pill.w / 2), Math.max(centers[a], centers[b], mid + pill.w / 2)];
   const isStacked = placed.some((n) => n.x < span[1] && n.x + n.w > span[0]);
@@ -82,6 +82,11 @@ function layoutRow(beat, rowNotes, { index, centers }, { m, y }) {
   return { height, notes: placed, edge: { index: m, from: hop.from, to: hop.to, label: hop.data, points, labelAt, quiet: false, dashed: hop.dashed, line: hop.line } };
 }
 
+// 메모는 참여자 선 오른쪽에 놓는다. 그 참여자의 자기 고리와 같은 행이면 고리가 오른쪽을 쓰므로 왼쪽에 놓는다.
+function isRightNote(note, hop) {
+  return !(hop.from === hop.to && hop.from === note.node);
+}
+
 // 메모 상자의 왼쪽 x. 참여자 선 오른쪽에 두거나, 자기 고리의 메모는 왼쪽에 둔다.
 function noteX(note, center, toRight) {
   return toRight ? center + SPACE['6'] : center - SPACE['6'] - note.w;
@@ -94,14 +99,19 @@ function noteX(note, center, toRight) {
 function placeColumns(participants, sizes, messages, noteBoxes, index) {
   const half = (i) => sizes.get(participants[i].id).w / 2;
   const rightNeed = participants.map(() => 0);
-  for (const n of noteBoxes) rightNeed[index.get(n.node)] = Math.max(rightNeed[index.get(n.node)], n.w + SPACE['12']);
+  const leftNeed = participants.map(() => 0);
+  for (const n of noteBoxes) {
+    const need = isRightNote(n, messages[n.m].hops[0]) ? rightNeed : leftNeed;
+    need[index.get(n.node)] = Math.max(need[index.get(n.node)], n.w + SPACE['12']);
+  }
   for (const beat of messages) {
     const hop = beat.hops[0];
     if (hop.from === hop.to) rightNeed[index.get(hop.from)] = Math.max(rightNeed[index.get(hop.from)], sizePill(hop.data).w + SPACE['20']);
   }
-  const centers = [PAD + half(0)];
+  // 첫 참여자의 왼쪽 메모는 그림 왼쪽 여백(PAD) 안에서 시작한다.
+  const centers = [Math.max(PAD + half(0), PAD + leftNeed[0] - SPACE['6'])];
   for (let i = 1; i < participants.length; i++) {
-    let c = centers[i - 1] + Math.max(half(i - 1) + half(i) + SPACE['16'], rightNeed[i - 1]);
+    let c = centers[i - 1] + Math.max(half(i - 1) + half(i) + SPACE['16'], rightNeed[i - 1], leftNeed[i]);
     for (const beat of messages) {
       const hop = beat.hops[0];
       const [a, b] = [index.get(hop.from), index.get(hop.to)].sort((x, y) => x - y);

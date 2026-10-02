@@ -31,6 +31,7 @@ export function checkFigure(figure, scene, timeline, problems) {
   checkCrowding(edges, family.hint, problems);
   checkNodes(boxes, scene.groups, family, problems);
   checkChips(scene, timeline, problems);
+  checkNotes(scene, problems);
   if (['flow', 'state', 'data'].includes(figure.kind)) checkAspect(figure, scene, problems);
   checkReadable(figure, scene, problems);
 }
@@ -88,6 +89,27 @@ function capitalize(text) {
 
 function overlaps(a, b) {
   return a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
+}
+
+// cost: time O(n·(e + l)), heap O(1), stack O(1)
+// vars: n = 메모 수, e = 선 수, l = 생명선 수
+// basis: estimate
+// 12번: 순서 그림 메모가 그림 안에 있고, 같은 행 메시지의 화살표와 라벨을 가리지 않으며(오류), 다른 참여자의 생명선에 걸치지 않는다(경고).
+function checkNotes(scene, problems) {
+  for (const note of scene.notes ?? []) {
+    const name = note.text.length > 24 ? `${note.text.slice(0, 24)}...` : note.text;
+    if (note.x < -FIT_SLACK || note.x + note.w > scene.width + FIT_SLACK) problems.error(note.line, `[check 12] note "${name}" leaves the figure. Shorten the note`);
+    for (const e of scene.edges.filter((edge) => edge.index === note.m)) {
+      const xs = e.points.map((p) => p.x);
+      const ys = e.points.map((p) => p.y);
+      const arrow = { x: Math.min(...xs), y: Math.min(...ys), w: Math.max(...xs) - Math.min(...xs), h: Math.max(...ys) - Math.min(...ys) };
+      if (overlaps(note, arrow)) problems.error(note.line, `[check 12] note "${name}" covers the arrow of message ${e.from} -> ${e.to} (line ${e.line}). Put the note on another participant or shorten the message`);
+      if (e.label && e.labelAt && overlaps(note, pillBox(e))) problems.error(note.line, `[check 12] note "${name}" covers the label "${e.label}" of message ${e.from} -> ${e.to} (line ${e.line}). Put the note on another participant or shorten the label`);
+    }
+    for (const life of scene.lifelines.filter((l) => l.id !== note.node)) {
+      if (life.x > note.x && life.x < note.x + note.w && life.y1 < note.y + note.h && note.y < life.y2) problems.warn(note.line, `[check 12] note "${name}" crosses the lifeline of "${life.id}". Shorten the note`);
+    }
+  }
 }
 
 // cost: time O(s·k·r·n + g + h·l), heap O(1), stack O(1)
