@@ -24,6 +24,8 @@ const MOVE = curveOf('move');
 const OVERLAP_SLACK = 0.5;
 // 잰 글 폭의 반올림 차이를 넘기 위한 여유
 const FIT_SLACK = 0.5;
+/** 글 상자가 도형, 글자, 알약, 다른 선, 그룹 틀에서 떨어져야 하는 최소 간격. 비켜 놓는 자리는 이만큼 띄운다. */
+export const CHIP_CLEAR = SPACE['2'];
 // 지점 사이 자리를 사각형과 견주는 시간 비율(구간을 8등분한 일곱 지점). 좁은 알약을 스치는 짧은 겹침을 놓치지 않으려는 촘촘함이다
 const BETWEEN_RATIOS = Array.from({ length: 7 }, (_, i) => (i + 1) / 8);
 // 가리는 것을 비켜 올리거나 내리는 최대 거리
@@ -80,11 +82,11 @@ function rowsOf({ point, chip, avoid }) {
   const rows = [{ top: above, order: 0, dy: 0 }, { top: below, order: ROW_BELOW, dy: below - above }];
   const covering = (top) => avoid.filter((o) => o.x < point.x + chip.w / 2 && point.x - chip.w / 2 < o.x + o.w && o.y < top + chip.h && top < o.y + o.h);
   for (const o of covering(above)) {
-    const top = o.y - chip.h - FIT_SLACK;
+    const top = o.y - chip.h - CHIP_CLEAR;
     if (above - top <= LIFT_MAX) rows.push({ top, order: ROW_LIFT, dy: top - above });
   }
   for (const o of covering(below)) {
-    const top = o.y + o.h + FIT_SLACK;
+    const top = o.y + o.h + CHIP_CLEAR;
     if (top - below <= LIFT_MAX) rows.push({ top, order: ROW_BELOW + ROW_LIFT, dy: top - above });
   }
   return rows;
@@ -97,7 +99,7 @@ function rowsOf({ point, chip, avoid }) {
 function centersOf({ point, chip, avoid }, top) {
   const reach = chip.w / 2 + CHIP_GAP;
   const near = avoid.filter((o) => o.y < top + chip.h && top < o.y + o.h);
-  const ends = near.flatMap((o) => [o.x + o.w + chip.w / 2 + FIT_SLACK, o.x - chip.w / 2 - FIT_SLACK]);
+  const ends = near.flatMap((o) => [o.x + o.w + chip.w / 2 + CHIP_CLEAR, o.x - chip.w / 2 - CHIP_CLEAR]);
   return [{ center: point.x, order: 0 }, ...ends.map((center) => ({ center, order: Math.abs(center - point.x) <= reach ? SIDE_NEAR : SIDE_FAR }))];
 }
 
@@ -109,16 +111,19 @@ function candidateAt({ point, chip, scene, avoid }, row, center, sideOrder) {
   const half = chip.w / 2 + CHIP_GAP;
   const x = Math.min(scene.width - half, Math.max(half, center));
   const box = { x: x - chip.w / 2, y: row.top, w: chip.w, h: chip.h };
-  const hits = avoid.filter((o) => overlapArea(box, o) > OVERLAP_SLACK);
+  const hits = avoid.filter((o) => !o.soft && overlapArea(box, o) > OVERLAP_SLACK);
   const area = hits.reduce((sum, o) => sum + overlapArea(box, o), 0);
+  // 선과 그룹 틀은 최소 간격 안에 들어와도 순위만 낮춘다.
+  const padded = { x: box.x - CHIP_CLEAR, y: box.y - CHIP_CLEAR, w: box.w + CHIP_CLEAR * 2, h: box.h + CHIP_CLEAR * 2 };
+  const nearArea = avoid.filter((o) => o.soft).reduce((sum, o) => sum + overlapArea(padded, o), 0);
   const isOutside = isOutsideFigure(box, scene);
   const isTight = row.top < CHIP_MARGIN - FIT_SLACK || row.top + chip.h > scene.height - CHIP_MARGIN + FIT_SLACK;
   const order = row.order + sideOrder + (Math.abs(x - point.x) + Math.abs(row.dy)) * SHIFT_WEIGHT;
-  return { dx: x - point.x, dy: row.dy, box, isOutside, hits: hits.map((h) => h.name), rank: [Number(isOutside), area, Number(isTight), order] };
+  return { dx: x - point.x, dy: row.dy, box, isOutside, hits: hits.map((h) => h.name), rank: [Number(isOutside), area, nearArea, Number(isTight), order] };
 }
 
 // cost: time O(r), heap O(1), stack O(1)
-// vars: r = 순위 항목 수(4)
+// vars: r = 순위 항목 수(5)
 // basis: estimate
 function compare(a, b) {
   for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return a[i] - b[i];
@@ -135,14 +140,15 @@ function compare(a, b) {
  */
 export function planChip(scene, hop, avoid) {
   const chip = sizeChip(hop.data);
+  const field = avoid.filter((o) => o.edge !== hop.edge);
   const route = flattenRoute(scene.edges[hop.edge].points);
-  const place = (fraction) => ({ at: hop.isBack ? 1 - fraction : fraction, fraction, ...placeChip(pointAlong(route, fraction), chip, scene, avoid) });
+  const place = (fraction) => ({ at: hop.isBack ? 1 - fraction : fraction, fraction, ...placeChip(pointAlong(route, fraction), chip, scene, field) });
   const base = Array.from({ length: SAMPLES + 1 }, (_, i) => place(i / SAMPLES));
   // 선형으로 이은 자리 검사는 진행 비율이 오르는 순서(isBack이면 경로 비율이 내려가는 순서)로 한다.
   if (hop.isBack) base.reverse();
   const isClean = (a, b, ratios = BETWEEN_RATIOS) => ratios.every((ratio) => {
     const { box } = chipBoxBetween(route, hop, chip, [a, b], ratio);
-    return !isOutsideFigure(box, scene) && !avoid.some((text) => overlapArea(box, text) > OVERLAP_SLACK);
+    return !isOutsideFigure(box, scene) && !field.some((text) => !text.soft && overlapArea(box, text) > OVERLAP_SLACK);
   });
   // cost: time O((p + a)·2^d), heap O(2^d), stack O(d)
   // vars: p = 경로 점 수, a = 피할 글자 사각형 수, d = 쪼갠 깊이

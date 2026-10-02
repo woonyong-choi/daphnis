@@ -85,3 +85,22 @@ function pillBoxes(scene) {
       return { x: e.labelAt.x - w / 2, y: e.labelAt.y - h / 2, w, h, name: plainText(e.label) };
     });
 }
+
+// cost: time O(e·p + g), heap O(e·p + g), stack O(1)
+// vars: e = 선 수, p = 경로 점 수, g = 그룹 수
+// basis: estimate
+/**
+ * 이동 글 상자가 되도록 떨어져야 하는 선: 모든 선의 마디와 그룹 틀의 네 변. 글자와 달리 가리면 읽을 수 없는 것이 아니라 붙어 보이는 것이라 순위만 낮춘다(soft).
+ * 선 마디는 어느 선의 것인지 edge에 적는다. 이동은 자기 선을 피하지 않는다(글 상자는 자기 선 위에 뜬다).
+ * @returns { x, y, w, h, soft: true, edge? }[]
+ */
+export function chipLines(scene) {
+  const half = SPACE['1'];
+  const bar = (a, b, extra) => ({ x: Math.min(a.x, b.x) - half, y: Math.min(a.y, b.y) - half, w: Math.abs(a.x - b.x) + half * 2, h: Math.abs(a.y - b.y) + half * 2, soft: true, ...extra });
+  const edges = scene.edges.flatMap((e, edge) => (e.points ?? []).slice(1).map((p, i) => bar(e.points[i], p, { edge })));
+  const frames = scene.groups.flatMap((g) => {
+    const [tl, tr, bl, br] = [{ x: g.x, y: g.y }, { x: g.x + g.w, y: g.y }, { x: g.x, y: g.y + g.h }, { x: g.x + g.w, y: g.y + g.h }];
+    return [bar(tl, tr), bar(bl, br), bar(tl, bl), bar(tr, br)];
+  });
+  return [...edges, ...frames];
+}

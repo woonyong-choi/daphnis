@@ -1,6 +1,6 @@
 // 그림 검사. 배치가 끝난 장면에서 화면 오류를 찾아 원본 줄 번호와 함께 알린다(docs/design/figure-check.md).
 import { CHIP_GAP, planChip, sizeChip } from './chip.js';
-import { chipObstacles } from './draw/boxes.js';
+import { chipLines, chipObstacles } from './draw/boxes.js';
 import { measure } from './measure/fonts.js';
 import { CARD, STYLE, groupTitleWidth, sizePill } from './measure/sizes.js';
 import { values } from './tokens.js';
@@ -307,7 +307,7 @@ function checkNodes(boxes, groups, family, problems) {
 // 7번: 이동 경로의 5% 지점마다 정한 글 상자(점 위, 안 되면 아래)가 그림 안에 있고 도형 이름, 열, 그룹 제목, 도형 테두리, 선 라벨 알약을 가리지 않는다.
 // 글 상자가 그림보다 넓거나 위아래 어디에도 들어가지 않으면 오류, 위아래 어디에 두어도 글자를 가리면 경고다.
 function checkChips(scene, timeline, problems) {
-  const avoid = chipObstacles(scene);
+  const avoid = [...chipObstacles(scene), ...chipLines(scene)];
   const reported = new Set();
   for (const seg of timeline.segs) {
     for (const hop of seg.hops) {
@@ -359,6 +359,13 @@ function checkReadable(figure, scene, problems) {
   const scale = Math.min(1, values.size['figure-canvas'] / scene.width);
   const smallest = values.size.text['9'] * scale;
   if (smallest >= MIN_READABLE - 0.01) return;
-  const fix = figure.kind === 'sequence' ? 'Use fewer participants or shorter messages' : scene.groups.length ? 'Make the figure narrower with aspect or group directions' : 'Make the figure narrower with aspect';
-  problems.warn(figure.line, `[check 10] at canvas width the smallest text is ${smallest.toFixed(1)}px. ${fix}`);
+  problems.warn(figure.line, `[check 10] at canvas width the smallest text is ${smallest.toFixed(1)}px. ${readableFix(figure, scene)}`);
 }
+
+// 10번 경고의 고치는 방법. aspect를 적으면 자동 맞춤(방향 돌리기, 접기)을 하지 않으므로 먼저 aspect를 지우라고 알린다.
+function readableFix(figure, scene) {
+  if (figure.kind === 'sequence') return 'Use fewer participants or shorter messages';
+  if (figure.aspect !== undefined) return 'Remove the aspect line so the tool can turn or fold the figure to fit, or set a smaller aspect';
+  return scene.groups.length ? 'Make the figure narrower with group directions, or write the flow as down' : 'Write the flow as down, or shorten the labels';
+}
+
