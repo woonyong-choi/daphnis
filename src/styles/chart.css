@@ -5,15 +5,10 @@
   fill: var(--color-fg);
 }
 
-.fl .chart-legend,
 .fl .chart-label {
   font-size: var(--size-text-13);
+  font-weight: var(--weight-medium);
   fill: var(--color-fg);
-}
-
-.fl .chart-legend {
-  font-size: var(--size-text-12);
-  fill: var(--color-muted);
 }
 
 .fl .chart-value,
@@ -71,22 +66,18 @@
 
 .fl .chart-ratio {
   font-variant-numeric: tabular-nums;
-  font-size: var(--size-text-12);
+  font-size: var(--size-text-13);
   font-weight: var(--weight-semibold);
   text-anchor: end;
   fill: var(--color-fg);
 }
 
+.fl .chart-legend,
 .fl .chart-sub,
 .fl .chart-name,
 .fl .chart-rule-label {
-  font-size: var(--size-text-12);
-  fill: var(--color-muted);
-}
-
-.fl .chart-name,
-.fl .chart-rule-label {
   font-size: var(--size-text-11);
+  fill: var(--color-muted);
 }
 
 .fl .chart-tick.end,

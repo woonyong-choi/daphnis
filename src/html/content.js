@@ -1,6 +1,7 @@
 // 재생기에 넘길 그림 내용: SVG 본문과 재생 데이터. 도형, 그룹, 계열은 번호로 바꿔 넘긴다.
 import { CHART_FACES, chartText } from '../chart/draw.js';
 import { drawScene } from '../draw/figure.js';
+import { STYLE } from '../measure/sizes.js';
 import { curveOf } from '../easing.js';
 import { chartSeriesIds, litIds } from '../timeline.js';
 import { tokens, values } from '../tokens.js';
@@ -13,7 +14,7 @@ const PLAYER_METRICS = Object.freeze({
   haloOpacity: values.opacity.halo,
   packet: values.size.packet.radius,
   chipRadius: values.radius.lg,
-  chipLine: values.size.line['15'],
+  chipLine: STYLE.chip.line,
   chipPadX: values.space['9'],
   chipPadY: values.space['4'],
   chipGap: values.space['6'],

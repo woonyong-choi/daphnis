@@ -137,9 +137,9 @@ html.embedded .fl-figure {
 
 .fl-caption {
   max-width: var(--size-player-caption-max);
-  min-height: calc(var(--size-text-14) * var(--leading-normal));
+  min-height: calc(var(--size-text-13) * var(--leading-normal));
   margin: 0;
-  font-size: var(--size-text-14);
+  font-size: var(--size-text-13);
   line-height: var(--leading-normal);
   text-align: center;
   color: var(--color-muted);

@@ -32,7 +32,7 @@ function arrowheadHits(end, dir, box) {
 function pointNames(chart, at, right) {
   return chart.rows.map((p) => {
     const { x, y } = at.get(p.label);
-    const nameW = measure(p.label, TEXT['12']);
+    const nameW = measure(p.label, TEXT['11']);
     const toLeft = x + NAME_OFFSET + nameW > right;
     const width = measure(p.label, TEXT['11']);
     return { p, nameW, toLeft, box: { x0: toLeft ? x - NAME_OFFSET - width : x + NAME_OFFSET, x1: toLeft ? x - NAME_OFFSET : x + NAME_OFFSET + width, y0: y - TEXT['11'] / 2, y1: y + TEXT['11'] / 2 } };

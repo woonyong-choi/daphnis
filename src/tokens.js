@@ -107,17 +107,9 @@ export const tokens = freeze({
     "text": {
       "9": "var(--size-text-9)",
       "11": "var(--size-text-11)",
-      "12": "var(--size-text-12)",
       "13": "var(--size-text-13)",
-      "14": "var(--size-text-14)",
       "15": "var(--size-text-15)",
       "22": "var(--size-text-22)"
-    },
-    "line": {
-      "15": "var(--size-line-15)",
-      "18": "var(--size-line-18)",
-      "20": "var(--size-line-20)",
-      "22": "var(--size-line-22)"
     },
     "control": {
       "outer": "var(--size-control-outer)",
@@ -195,7 +187,8 @@ export const tokens = freeze({
     "semibold": "var(--weight-semibold)"
   },
   "leading": {
-    "normal": "var(--leading-normal)"
+    "normal": "var(--leading-normal)",
+    "snug": "var(--leading-snug)"
   },
   "tracking": {
     "tag": "var(--tracking-tag)",
@@ -390,16 +383,8 @@ export const values = freeze({
     "text": {
       "9": 9,
       "11": 11,
-      "12": 12,
       "13": 13,
-      "14": 14,
       "15": 15,
-      "22": 22
-    },
-    "line": {
-      "15": 15,
-      "18": 18,
-      "20": 20,
       "22": 22
     },
     "control": {
@@ -478,7 +463,8 @@ export const values = freeze({
     "semibold": 600
   },
   "leading": {
-    "normal": 1.5
+    "normal": 1.5,
+    "snug": 1.35
   },
   "tracking": {
     "tag": 0.03,

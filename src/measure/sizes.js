@@ -5,21 +5,26 @@ import { layoutMiniGraph } from './minigraph.js';
 
 const SPACE = values.space;
 const TEXT = values.size.text;
-const LINE = values.size.line;
+const SNUG = values.leading.snug;
 const SIZE = values.size;
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+/** 글자 크기에 줄 높이 비율을 곱해 반올림한 줄 높이 */
+export const lineHeight = (size, leading) => Math.round(size * leading);
 
 /** 글 모양. 크기, 글꼴, 줄 높이 */
 export const STYLE = Object.freeze({
-  label: { size: TEXT['14'], face: 'medium', line: LINE['18'] },
-  sub: { size: TEXT['12'], face: 'regular', line: LINE['15'] },
-  row: { size: TEXT['11'], face: 'regular', line: LINE['15'] },
-  mono: { size: TEXT['11'], face: 'mono', line: LINE['15'] },
+  label: { size: TEXT['13'], face: 'medium', line: lineHeight(TEXT['13'], SNUG) },
+  sub: { size: TEXT['11'], face: 'regular', line: lineHeight(TEXT['11'], SNUG) },
+  row: { size: TEXT['11'], face: 'regular', line: lineHeight(TEXT['11'], SNUG) },
+  mono: { size: TEXT['11'], face: 'mono', line: lineHeight(TEXT['11'], SNUG) },
   tag: { size: TEXT['9'], face: 'semibold' },
   mark: { size: TEXT['11'], face: 'semibold' },
   pill: { size: TEXT['11'], face: 'regular' },
   group: { size: TEXT['11'], face: 'semibold' },
-  chip: { size: TEXT['12'], face: 'regular', line: LINE['15'] },
-  cell: { size: TEXT['12'], face: 'regular' },
+  chip: { size: TEXT['11'], face: 'regular', line: lineHeight(TEXT['11'], SNUG) },
+  cell: { size: TEXT['13'], face: 'regular' },
   type: { size: TEXT['11'], face: 'mono' },
 });
 

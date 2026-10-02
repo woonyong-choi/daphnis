@@ -36,6 +36,8 @@ const PERCENT = 100;
 const HEAT_STEPS = 1000;
 // 한 단계 위나 아래 색을 만드는 섞음 비율. 이보다 작은 차이는 같은 단계로 본다.
 const STEP_MIX = 0.01;
+// 글자 크기 이웃 단계의 최소 비율. 1px 차이 단계는 크기로 구분되지 않아 굵기와 색에만 기댄다.
+const MIN_STEP_RATIO = 1.15;
 
 const color = themeColor;
 const opacity = (name) => tokenValue(`opacity.${name}`);
@@ -250,12 +252,12 @@ test('tokens_color_literals_live_only_in_the_palette_layer_and_code_never_names_
   assert.deepEqual(dark.filter(([, value]) => HEX_VALUE.test(value)), []);
 });
 
-// 근거: 설계 layout.md 글자 크기 "토큰 size.text의 일곱 단계(9, 11, 12, 13, 14, 15, 22)뿐이고 0.5px 차이 단계는 없다"
-test('textScale_has_seven_steps_and_no_half_pixel_pairs', () => {
+// 근거: 설계 layout.md 글자 크기 "토큰 size.text의 다섯 단계(9, 11, 13, 15, 22)뿐이고 이웃 단계 비율이 1.15 이상이다"
+test('textScale_has_five_steps_each_at_least_15_percent_above_the_last', () => {
   const sizes = Object.values(values.size.text);
 
-  assert.deepEqual(sizes, [9, 11, 12, 13, 14, 15, 22]);
-  assert.ok(sizes.every((a, i) => i === 0 || a - sizes[i - 1] >= 1));
+  assert.deepEqual(sizes, [9, 11, 13, 15, 22]);
+  assert.ok(sizes.every((a, i) => i === 0 || a / sizes[i - 1] >= MIN_STEP_RATIO));
 });
 
 // 근거: 규칙 대비 "히트맵 칸 색과 글자색은 빌드 때 같은 강도 한 값에서 고른다". 문서 대비 표의 칸 숫자 대비를 SVG가 지킨다
