@@ -8,6 +8,20 @@ export const LANE_STEP = SPACE['5'];
 const TITLE_CLEAR = SPACE['6'];
 const SIDES = { out: ['EAST', 'SOUTH'], in: ['WEST', 'NORTH'] };
 
+// cost: time O(k), heap O(k), stack O(1)
+// vars: k = 목록 길이
+// basis: estimate
+// 목록을 키별로 묶은 Map(Node 20에는 Map.groupBy가 없다). 묶음 안 순서는 목록 순서다.
+function groupBy(list, keyOf) {
+  const groups = new Map();
+  for (const item of list) {
+    const key = keyOf(item);
+    if (groups.has(key)) groups.get(key).push(item);
+    else groups.set(key, [item]);
+  }
+  return groups;
+}
+
 // cost: time O(k·c), heap O(k), stack O(1)
 // vars: k = 칸에 이은 선 끝 수, c = 칸 수
 // basis: estimate
@@ -72,7 +86,7 @@ function northSpots(item, geo, links) {
 // basis: estimate
 // 칸 아래 면을 쓰는 선 끝(아래 면으로 바로 나가는 선과 통로로 도는 선)의 x. 한 칸의 이런 선 끝끼리 칸 폭을 고르게 나눠, 같은 면의 세로 조각이 붙지 않게 한다.
 function assignSouthX(items) {
-  const byCell = Map.groupBy(items.filter((i) => i.needsLane || i.direct.includes('SOUTH')), (i) => i.cell.id);
+  const byCell = groupBy(items.filter((i) => i.needsLane || i.direct.includes('SOUTH')), (i) => i.cell.id);
   for (const group of byCell.values()) {
     group.forEach((item, k) => {
       item.southX = item.box.x + ((k + 1) / (group.length + 1)) * item.box.w;
@@ -94,7 +108,7 @@ function assignTracks(items, { rows, w }) {
   const tracks = new Map();
   const counts = new Map();
   const span = (i) => (exitOf(i) === 'WEST' ? i.southX : w - i.southX);
-  const byGutter = Map.groupBy(items.filter((i) => i.needsLane), (i) => i.gutterRow);
+  const byGutter = groupBy(items.filter((i) => i.needsLane), (i) => i.gutterRow);
   for (const [row, group] of byGutter) {
     const ordered = [...group.filter((i) => exitOf(i) === 'WEST').sort((a, b) => span(a) - span(b)), ...group.filter((i) => exitOf(i) === 'EAST').sort((a, b) => span(a) - span(b))];
     ordered.forEach((item, k) => tracks.set(item, k));
@@ -153,7 +167,7 @@ function laneCandidate(item, { box, frame, track }) {
 // basis: estimate
 // 같은 격자의 두 칸을 잇는 선의 점. 두 칸의 통로를 오른쪽 여백의 세로 줄로 잇는다.
 function innerRoutes(items, frame) {
-  const byEdge = Map.groupBy(items.filter((i) => i.link.isInner), (i) => i.link.index);
+  const byEdge = groupBy(items.filter((i) => i.link.isInner), (i) => i.link.index);
   const routes = {};
   [...byEdge].forEach(([index, [from, to]], m) => {
     const x = frame.w - frame.padRight + ((m + 1) / (byEdge.size + 1)) * frame.padRight;
