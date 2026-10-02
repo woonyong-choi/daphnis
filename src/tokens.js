@@ -7,44 +7,57 @@ function freeze(node) {
 /** CSS에 넣을 토큰 참조. 값은 `var(--…)` 문자열이다. */
 export const tokens = freeze({
   "color": {
-    "gray": {
-      "0": "var(--color-gray-0)",
-      "25": "var(--color-gray-25)",
-      "40": "var(--color-gray-40)",
-      "50": "var(--color-gray-50)",
-      "100": "var(--color-gray-100)",
-      "200": "var(--color-gray-200)",
-      "400": "var(--color-gray-400)",
-      "600": "var(--color-gray-600)",
-      "900": "var(--color-gray-900)"
-    },
-    "neutral": {
-      "100": "var(--color-neutral-100)",
-      "400": "var(--color-neutral-400)",
-      "600": "var(--color-neutral-600)",
-      "700": "var(--color-neutral-700)",
-      "750": "var(--color-neutral-750)",
-      "800": "var(--color-neutral-800)",
-      "850": "var(--color-neutral-850)",
-      "900": "var(--color-neutral-900)",
-      "950": "var(--color-neutral-950)"
-    },
-    "blue": {
-      "50": "var(--color-blue-50)",
-      "200": "var(--color-blue-200)",
-      "400": "var(--color-blue-400)",
-      "500": "var(--color-blue-500)",
-      "600": "var(--color-blue-600)",
-      "900": "var(--color-blue-900)",
-      "850": "var(--color-blue-850)",
-      "800": "var(--color-blue-800)"
-    },
-    "tone": {
-      "blue": "var(--color-tone-blue)",
-      "purple": "var(--color-tone-purple)",
-      "green": "var(--color-tone-green)",
-      "orange": "var(--color-tone-orange)",
-      "gray": "var(--color-tone-gray)"
+    "palette": {
+      "gray": {
+        "0": "var(--color-palette-gray-0)",
+        "25": "var(--color-palette-gray-25)",
+        "40": "var(--color-palette-gray-40)",
+        "50": "var(--color-palette-gray-50)",
+        "100": "var(--color-palette-gray-100)",
+        "200": "var(--color-palette-gray-200)",
+        "400": "var(--color-palette-gray-400)",
+        "500": "var(--color-palette-gray-500)",
+        "600": "var(--color-palette-gray-600)",
+        "900": "var(--color-palette-gray-900)"
+      },
+      "neutral": {
+        "100": "var(--color-palette-neutral-100)",
+        "400": "var(--color-palette-neutral-400)",
+        "600": "var(--color-palette-neutral-600)",
+        "700": "var(--color-palette-neutral-700)",
+        "750": "var(--color-palette-neutral-750)",
+        "800": "var(--color-palette-neutral-800)",
+        "850": "var(--color-palette-neutral-850)",
+        "900": "var(--color-palette-neutral-900)",
+        "950": "var(--color-palette-neutral-950)"
+      },
+      "blue": {
+        "50": "var(--color-palette-blue-50)",
+        "200": "var(--color-palette-blue-200)",
+        "400": "var(--color-palette-blue-400)",
+        "500": "var(--color-palette-blue-500)",
+        "600": "var(--color-palette-blue-600)",
+        "800": "var(--color-palette-blue-800)",
+        "850": "var(--color-palette-blue-850)",
+        "900": "var(--color-palette-blue-900)"
+      },
+      "orange": {
+        "400": "var(--color-palette-orange-400)",
+        "500": "var(--color-palette-orange-500)"
+      },
+      "ink": {
+        "200": "var(--color-palette-ink-200)",
+        "600": "var(--color-palette-ink-600)",
+        "850": "var(--color-palette-ink-850)",
+        "900": "var(--color-palette-ink-900)",
+        "1000": "var(--color-palette-ink-1000)"
+      },
+      "purple": {
+        "500": "var(--color-palette-purple-500)"
+      },
+      "green": {
+        "500": "var(--color-palette-green-500)"
+      }
     },
     "accent": "var(--color-accent)",
     "accent-strong": "var(--color-accent-strong)",
@@ -70,17 +83,6 @@ export const tokens = freeze({
       "green": "var(--color-tag-green)",
       "orange": "var(--color-tag-orange)",
       "gray": "var(--color-tag-gray)"
-    },
-    "orange": {
-      "400": "var(--color-orange-400)",
-      "500": "var(--color-orange-500)"
-    },
-    "ink": {
-      "900": "var(--color-ink-900)",
-      "600": "var(--color-ink-600)",
-      "200": "var(--color-ink-200)",
-      "1000": "var(--color-ink-1000)",
-      "850": "var(--color-ink-850)"
     },
     "series-1": "var(--color-series-1)",
     "series-2": "var(--color-series-2)",
@@ -166,20 +168,14 @@ export const tokens = freeze({
     "frame": "var(--tracking-frame)"
   },
   "space": {
-    "0-5": "var(--space-0-5)",
     "1": "var(--space-1)",
-    "1-5": "var(--space-1-5)",
     "2": "var(--space-2)",
-    "2-5": "var(--space-2-5)",
     "3": "var(--space-3)",
-    "3-5": "var(--space-3-5)",
     "4": "var(--space-4)",
     "5": "var(--space-5)",
     "6": "var(--space-6)",
-    "6-5": "var(--space-6-5)",
     "7": "var(--space-7)",
     "8": "var(--space-8)",
-    "8-5": "var(--space-8-5)",
     "9": "var(--space-9)",
     "11": "var(--space-11)",
     "12": "var(--space-12)",
@@ -192,7 +188,13 @@ export const tokens = freeze({
     "20": "var(--space-20)",
     "22": "var(--space-22)",
     "30": "var(--space-30)",
-    "32": "var(--space-32)"
+    "32": "var(--space-32)",
+    "0-5": "var(--space-0-5)",
+    "1-5": "var(--space-1-5)",
+    "2-5": "var(--space-2-5)",
+    "3-5": "var(--space-3-5)",
+    "6-5": "var(--space-6-5)",
+    "8-5": "var(--space-8-5)"
   },
   "radius": {
     "sm": "var(--radius-sm)",
@@ -255,44 +257,57 @@ export const tokens = freeze({
 /** 배치 계산에 쓸 밝은 테마의 실제 값. 크기는 px 숫자, 시간은 ms 숫자다. */
 export const values = freeze({
   "color": {
-    "gray": {
-      "0": "#ffffff",
-      "25": "#f6f7f9",
-      "40": "#eef0f3",
-      "50": "#eef1f5",
-      "100": "#e3e7ec",
-      "200": "#d5dbe3",
-      "400": "#9ba6b4",
-      "600": "#4b5563",
-      "900": "#111418"
-    },
-    "neutral": {
-      "100": "#e3e3e3",
-      "400": "#9aa0a6",
-      "600": "#55585c",
-      "700": "#3a3b3c",
-      "750": "#3c3e42",
-      "800": "#2c2d30",
-      "850": "#242526",
-      "900": "#1b1b1d",
-      "950": "#111214"
-    },
-    "blue": {
-      "50": "#edf5fb",
-      "200": "#a9cdea",
-      "400": "#79c0ff",
-      "500": "#2b96ed",
-      "600": "#1072c2",
-      "900": "#1d2933",
-      "850": "#2b4254",
-      "800": "#1d5d91"
-    },
-    "tone": {
-      "blue": "#2b96ed",
-      "purple": "#8b5cf6",
-      "green": "#10b981",
-      "orange": "#dc6e22",
-      "gray": "#8b949e"
+    "palette": {
+      "gray": {
+        "0": "#ffffff",
+        "25": "#f6f7f9",
+        "40": "#eef0f3",
+        "50": "#eef1f5",
+        "100": "#e3e7ec",
+        "200": "#d5dbe3",
+        "400": "#9ba6b4",
+        "500": "#8b949e",
+        "600": "#4b5563",
+        "900": "#111418"
+      },
+      "neutral": {
+        "100": "#e3e3e3",
+        "400": "#9aa0a6",
+        "600": "#55585c",
+        "700": "#3a3b3c",
+        "750": "#3c3e42",
+        "800": "#2c2d30",
+        "850": "#242526",
+        "900": "#1b1b1d",
+        "950": "#111214"
+      },
+      "blue": {
+        "50": "#edf5fb",
+        "200": "#a9cdea",
+        "400": "#79c0ff",
+        "500": "#2b96ed",
+        "600": "#1072c2",
+        "800": "#1d5d91",
+        "850": "#2b4254",
+        "900": "#1d2933"
+      },
+      "orange": {
+        "400": "#f5a374",
+        "500": "#dc6e22"
+      },
+      "ink": {
+        "200": "#c6cacf",
+        "600": "#52514e",
+        "850": "#0d1117",
+        "900": "#0b0b0b",
+        "1000": "#000000"
+      },
+      "purple": {
+        "500": "#8b5cf6"
+      },
+      "green": {
+        "500": "#10b981"
+      }
     },
     "accent": "#2b96ed",
     "accent-strong": "#1072c2",
@@ -318,17 +333,6 @@ export const values = freeze({
       "green": "#10b981",
       "orange": "#dc6e22",
       "gray": "#8b949e"
-    },
-    "orange": {
-      "400": "#f5a374",
-      "500": "#dc6e22"
-    },
-    "ink": {
-      "900": "#0b0b0b",
-      "600": "#52514e",
-      "200": "#c6cacf",
-      "1000": "#000000",
-      "850": "#0d1117"
     },
     "series-1": "#2b96ed",
     "series-2": "#dc6e22",
@@ -414,20 +418,14 @@ export const values = freeze({
     "frame": 0.04
   },
   "space": {
-    "0-5": 1,
     "1": 2,
-    "1-5": 3,
     "2": 4,
-    "2-5": 5,
     "3": 6,
-    "3-5": 7,
     "4": 8,
     "5": 10,
     "6": 12,
-    "6-5": 13,
     "7": 14,
     "8": 16,
-    "8-5": 17,
     "9": 18,
     "11": 22,
     "12": 24,
@@ -440,7 +438,13 @@ export const values = freeze({
     "20": 40,
     "22": 44,
     "30": 60,
-    "32": 64
+    "32": 64,
+    "0-5": 1,
+    "1-5": 3,
+    "2-5": 5,
+    "3-5": 7,
+    "6-5": 13,
+    "8-5": 17
   },
   "radius": {
     "sm": 4,

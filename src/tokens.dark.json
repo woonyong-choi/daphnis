@@ -2,73 +2,73 @@
   "color": {
     "$type": "color",
     "accent": {
-      "$value": "{color.blue.400}"
+      "$value": "{color.palette.blue.400}"
     },
     "accent-strong": {
-      "$value": "{color.blue.400}"
+      "$value": "{color.palette.blue.400}"
     },
     "fg": {
-      "$value": "{color.neutral.100}"
+      "$value": "{color.palette.neutral.100}"
     },
     "muted": {
-      "$value": "{color.neutral.400}"
+      "$value": "{color.palette.neutral.400}"
     },
     "bg": {
-      "$value": "{color.neutral.900}"
+      "$value": "{color.palette.neutral.900}"
     },
     "node": {
-      "$value": "{color.neutral.850}"
+      "$value": "{color.palette.neutral.850}"
     },
     "control-on": {
-      "$value": "{color.neutral.750}"
+      "$value": "{color.palette.neutral.750}"
     },
     "surface": {
-      "$value": "{color.neutral.800}"
+      "$value": "{color.palette.neutral.800}"
     },
     "border": {
-      "$value": "{color.neutral.600}"
+      "$value": "{color.palette.neutral.600}"
     },
     "card-on": {
-      "$value": "{color.blue.900}"
+      "$value": "{color.palette.blue.900}"
     },
     "frame": {
-      "$value": "{color.neutral.800}"
+      "$value": "{color.palette.neutral.800}"
     },
     "page": {
-      "$value": "{color.neutral.950}"
+      "$value": "{color.palette.neutral.950}"
     },
     "gallery": {
-      "$value": "{color.neutral.950}"
+      "$value": "{color.palette.neutral.950}"
     },
     "group": {
-      "$value": "{color.neutral.850}"
+      "$value": "{color.palette.neutral.850}"
     },
     "group-border": {
-      "$value": "{color.neutral.600}"
+      "$value": "{color.palette.neutral.600}"
     },
     "heat-low": {
-      "$value": "{color.blue.850}"
+      "$value": "{color.palette.blue.850}"
     },
     "heat-high": {
-      "$value": "{color.blue.600}"
+      "$value": "{color.palette.blue.600}"
     },
     "heat-ink": {
-      "$value": "{color.gray.0}"
+      "$value": "{color.palette.gray.0}"
     },
     "heat-ink-on": {
-      "$value": "{color.gray.0}"
+      "$value": "{color.palette.gray.0}"
     },
     "series-2": {
-      "$value": "{color.orange.400}"
+      "$value": "{color.palette.orange.400}"
     },
     "grid": {
-      "$value": "{color.neutral.750}"
+      "$value": "{color.palette.neutral.750}"
     },
     "plate-border": {
-      "$value": "{color.neutral.800}"
+      "$value": "{color.palette.neutral.800}"
     },
     "on-accent": {
-      "$value": "{color.ink.850}"
+      "$value": "{color.palette.ink.850}"
     }
   }
 }

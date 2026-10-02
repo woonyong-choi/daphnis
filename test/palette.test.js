@@ -46,7 +46,7 @@ const distanceOf = (p, q) => Math.hypot(...p.map((v, i) => v - q[i]));
 const seenBy = (matrix, hex) => linearToOklab(matrix.map((row) => row.reduce((sum, weight, i) => sum + weight * channelsOf(hex)[i], 0)));
 
 test('palette_light_and_dark_orange_keep_the_blue_lightness_and_chroma_and_only_turn_the_hue', () => {
-  for (const [theme, blue, orange] of [['light', 'blue.500', 'orange.500'], ['dark', 'blue.400', 'orange.400']]) {
+  for (const [theme, blue, orange] of [['light', 'palette.blue.500', 'palette.orange.500'], ['dark', 'palette.blue.400', 'palette.orange.400']]) {
     const [blueL, blueC] = oklchOf(color(theme, blue));
     const [orangeL, orangeC, orangeHue] = oklchOf(color(theme, orange));
 
@@ -57,15 +57,15 @@ test('palette_light_and_dark_orange_keep_the_blue_lightness_and_chroma_and_only_
 });
 
 test('palette_orange_series_color_follows_the_theme_orange', () => {
-  assert.equal(color('light', 'series-2'), color('light', 'orange.500'));
-  assert.equal(color('dark', 'series-2'), color('dark', 'orange.400'));
-  assert.equal(color('light', 'tone.orange'), color('light', 'orange.500'));
+  assert.equal(color('light', 'series-2'), color('light', 'palette.orange.500'));
+  assert.equal(color('dark', 'series-2'), color('dark', 'palette.orange.400'));
+  assert.equal(color('light', 'tag.orange'), color('light', 'palette.orange.500'));
 });
 
 for (const theme of THEMES) {
   for (const [name, matrix] of Object.entries(CVD)) {
     test(`palette_${theme}_blue_and_orange_stay_apart_for_${name}`, () => {
-      const [blue, orange] = theme === 'light' ? ['blue.500', 'orange.500'] : ['blue.400', 'orange.400'];
+      const [blue, orange] = theme === 'light' ? ['palette.blue.500', 'palette.orange.500'] : ['palette.blue.400', 'palette.orange.400'];
       const distance = distanceOf(seenBy(matrix, color(theme, blue)), seenBy(matrix, color(theme, orange)));
 
       assert.ok(distance >= CVD_MIN_DISTANCE, `${theme} ${name}: ${distance.toFixed(3)}`);

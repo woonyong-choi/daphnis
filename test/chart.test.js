@@ -337,7 +337,7 @@ test('toSvg_heatmap_cell_color_follows_css_variables_so_dark_mode_applies', asyn
   assert.match(svg, /<rect [^>]*class="chart-heat" style="--s:1" fill="#[0-9a-f]{6}"/);
   assert.match(svg, /<rect [^>]*class="chart-heat" style="--s:0.5"/);
   assert.match(svg, /\.fl \.chart-heat \{\s*fill: color-mix\(in srgb, var\(--color-heat-high\) calc\(var\(--s\) \* 100%\), var\(--color-heat-low\)\)/);
-  assert.match(svg, /prefers-color-scheme: dark[^}]*--color-heat-low: var\(--color-blue-850\)[^}]*--color-heat-high: var\(--color-blue-600\)/s);
+  assert.match(svg, /prefers-color-scheme: dark[^}]*--color-heat-low: var\(--color-palette-blue-850\)[^}]*--color-heat-high: var\(--color-palette-blue-600\)/s);
   assert.match(svg, /\.fl \.chart-cell\.on \{\s*fill: var\(--color-heat-ink-on\)/);
 });
 
