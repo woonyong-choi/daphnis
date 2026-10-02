@@ -132,12 +132,22 @@ test('buildFigure_sequence_without_participants_is_error_not_crash', async () =>
 });
 
 test('checkFigure_tall_group_suggests_direction_right', async () => {
-  const chain = Array.from({ length: 16 }, (_, i) => `  box n${i} "N${i}"`).join('\n');
-  const edges = Array.from({ length: 15 }, (_, i) => `  n${i} -> n${i + 1}`).join('\n');
+  const chain = Array.from({ length: 30 }, (_, i) => `  box n${i} "N${i}"`).join('\n');
+  const edges = Array.from({ length: 29 }, (_, i) => `  n${i} -> n${i + 1}`).join('\n');
 
   const { warnings } = await buildFigure(`flow down\ngroup g "G" {\n${chain}\n${edges}\n}`);
 
   assert.ok(warnings.some((w) => w.message.includes('Set direction=right on group "g"')), JSON.stringify(warnings));
+});
+
+test('checkFigure_narrow_tall_figure_is_judged_by_the_canvas_width_it_is_shown_at', async () => {
+  const chain = Array.from({ length: 16 }, (_, i) => `  box n${i} "N${i}"`).join('\n');
+  const edges = Array.from({ length: 15 }, (_, i) => `  n${i} -> n${i + 1}`).join('\n');
+
+  const { scene, warnings } = await buildFigure(`flow down\ngroup g "G" {\n${chain}\n${edges}\n}`);
+
+  assert.ok(scene.width / scene.height < 1 / 3, '내용 비율은 1/3보다 작다');
+  assert.deepEqual(warnings.filter((w) => w.code === 'check-9'), []);
 });
 
 test('checkFigure_small_wide_figure_has_no_aspect_warning', async () => {

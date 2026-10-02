@@ -1,4 +1,5 @@
 // 9번과 10번: 그림 비율과 문서 폭에서 읽힘.
+import { displayRatio } from '../canvas.js';
 import { ROOT } from '../layout/model.js';
 import { values } from '../tokens.js';
 
@@ -12,9 +13,9 @@ const SIZE_SLACK = 0.01;
 // cost: time O(g log g), heap O(g), stack O(1)
 // vars: g = 그룹 수
 // basis: estimate
-// 9번: 가로세로 비율. 문서 폭 안에 드는 그림은 보지 않는다. 비율을 줄이는 쪽의 그룹 방향이 있으면 그것을, 없으면 aspect를 권한다.
+// 9번: 보이는 가로세로 비율(내용이 캔버스보다 좁으면 캔버스 폭 기준). 문서 폭 안에 드는 그림은 보지 않는다. 비율을 줄이는 쪽의 그룹 방향이 있으면 그것을, 없으면 aspect를 권한다.
 export function checkAspect({ figure, scene }, problems) {
-  const ratio = scene.width / scene.height;
+  const ratio = displayRatio(scene.width, scene.height);
   if (ratio <= ASPECT_MAX && ratio >= 1 / ASPECT_MAX) return;
   // 가로세로가 모두 표준 캔버스 폭 이하인 그림은 줄어들지 않고 그대로 보여 비율이 읽힘을 해치지 않는다.
   if (scene.width <= CANVAS && scene.height <= CANVAS) return;
