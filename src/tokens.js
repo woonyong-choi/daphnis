@@ -231,7 +231,6 @@ export const tokens = freeze({
   "duration": {
     "fast": "var(--duration-fast)",
     "hop": "var(--duration-hop)",
-    "chip-flip": "var(--duration-chip-flip)",
     "caption-fade": "var(--duration-caption-fade)",
     "hop-min": "var(--duration-hop-min)",
     "dwell": "var(--duration-dwell)",
@@ -480,7 +479,6 @@ export const values = freeze({
   "duration": {
     "fast": 200,
     "hop": 3750,
-    "chip-flip": 16,
     "caption-fade": 200,
     "hop-min": 500,
     "dwell": 700,

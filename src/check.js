@@ -1,6 +1,6 @@
 // 그림 검사. 배치가 끝난 장면에서 화면 오류를 찾아 원본 줄 번호와 함께 알린다(docs/design/figure-check.md).
 import { CHIP_GAP, planChip, sizeChip } from './chip.js';
-import { textBoxes } from './draw/boxes.js';
+import { chipObstacles } from './draw/boxes.js';
 import { measure } from './measure/fonts.js';
 import { CARD, STYLE, groupTitleWidth, sizePill } from './measure/sizes.js';
 import { values } from './tokens.js';
@@ -304,10 +304,10 @@ function checkNodes(boxes, groups, family, problems) {
 // cost: time O(h·(k·p + k·a)), heap O(a), stack O(1)
 // vars: h = 글 상자 있는 이동 수, k = 재는 지점 수(21), p = 경로 점 수, a = 글자 사각형 수
 // basis: estimate
-// 7번: 이동 경로의 5% 지점마다 정한 글 상자(점 위, 안 되면 아래)가 그림 안에 있고 도형 이름, 열, 그룹 제목을 가리지 않는다.
+// 7번: 이동 경로의 5% 지점마다 정한 글 상자(점 위, 안 되면 아래)가 그림 안에 있고 도형 이름, 열, 그룹 제목, 도형 테두리, 선 라벨 알약을 가리지 않는다.
 // 글 상자가 그림보다 넓거나 위아래 어디에도 들어가지 않으면 오류, 위아래 어디에 두어도 글자를 가리면 경고다.
 function checkChips(scene, timeline, problems) {
-  const avoid = textBoxes(scene);
+  const avoid = chipObstacles(scene);
   const reported = new Set();
   for (const seg of timeline.segs) {
     for (const hop of seg.hops) {
@@ -325,7 +325,7 @@ function checkChips(scene, timeline, problems) {
         continue;
       }
       const covered = issues.find((issue) => issue.hits.length);
-      if (covered) problems.warn(hop.line ?? 1, `[check 7] moving text "${text}" covers "${covered.hits[0]}" at ${percent(covered.at)}% of edge ${edge.from} -> ${edge.to}, above and below the dot. Shorten the moving text or move the edge away from the name`);
+      if (covered) problems.warn(hop.line ?? 1, `[check 7] moving text "${text}" covers "${covered.hits[0]}" at ${percent(covered.at)}% of edge ${edge.from} -> ${edge.to}, wherever it is placed (above, below, lifted, or beside the dot). Shorten the moving text or move the edge away from the shape or label`);
     }
   }
 }

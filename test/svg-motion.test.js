@@ -88,14 +88,16 @@ function isInsideGroup(svg, groupStart, index) {
   return depth > 0;
 }
 
-test('toSvg_packet_key_times_strictly_increase_and_counts_match', async () => {
+test('toSvg_packet_key_times_never_decrease_and_counts_match', async () => {
   for (const { name, svg } of await animatedExamples()) {
     for (const { opacity, motion, slide } of packetsOf(svg)) {
       const keyed = [opacity.times, motion.times, ...(slide.times ? [slide.times] : [])];
       for (const times of keyed) {
         assert.equal(times[0], 0, name);
         assert.ok(times.at(-1) <= 1, name);
-        times.slice(1).forEach((time, i) => assert.ok(time > times[i], `${name}: keyTimes ${times}`));
+        // 글 상자 옮김(slide)은 자리를 순간에 바꾸는 곳에서 같은 시각이 이어진다. 점의 보임과 이동은 늘어나기만 한다.
+        const isSlide = times === slide.times;
+        times.slice(1).forEach((time, i) => assert.ok(isSlide ? time >= times[i] : time > times[i], `${name}: keyTimes ${times}`));
       }
       assert.equal(motion.splines.length, motion.times.length - 1, name);
       assert.equal(motion.points.length, motion.times.length, name);

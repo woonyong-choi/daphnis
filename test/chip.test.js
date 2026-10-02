@@ -5,7 +5,7 @@ import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
 import { flattenRoute } from '../src/route.js';
 import { CHIP_GAP, CHIP_MARGIN, chipBoxBetween, placeChip, sizeChip } from '../src/chip.js';
-import { textBoxes } from '../src/draw/boxes.js';
+import { chipObstacles } from '../src/draw/boxes.js';
 import { curveOf, progressAt, timeAt } from '../src/easing.js';
 import { toHtml } from '../src/html.js';
 import { toSvg } from '../src/svg.js';
@@ -27,7 +27,7 @@ test('placeChip_keeps_the_chip_above_the_dot_when_nothing_is_in_the_way', () => 
 });
 
 test('placeChip_moves_below_the_dot_when_a_name_is_above_it', () => {
-  const name = { x: 280, y: 120, w: 40, h: 14, name: '이름' };
+  const name = { x: 280, y: 80, w: 40, h: 80, name: '이름' };
 
   const placed = placeChip({ x: 300, y: 150 }, CHIP, SCENE, [name]);
 
@@ -36,9 +36,18 @@ test('placeChip_moves_below_the_dot_when_a_name_is_above_it', () => {
   assert.ok(!overlaps(placed.box, name));
 });
 
+test('placeChip_lifts_the_chip_just_clear_of_a_small_obstacle_instead_of_flipping', () => {
+  const pill = { x: 280, y: 130, w: 40, h: 18, name: '알약' };
+
+  const placed = placeChip({ x: 300, y: 150 }, CHIP, SCENE, [pill]);
+
+  assert.ok(placed.dy < 0 && placed.dy >= -CHIP_GAP * 4);
+  assert.deepEqual(placed.hits, []);
+});
+
 test('placeChip_slides_aside_when_both_sides_of_the_dot_are_covered', () => {
-  const above = { x: 250, y: 120, w: 30, h: 14, name: '위' };
-  const below = { x: 250, y: 168, w: 30, h: 14, name: '아래' };
+  const above = { x: 250, y: 60, w: 30, h: 80, name: '위' };
+  const below = { x: 250, y: 168, w: 30, h: 80, name: '아래' };
 
   const placed = placeChip({ x: 300, y: 150 }, CHIP, SCENE, [above, below]);
 
@@ -47,7 +56,7 @@ test('placeChip_slides_aside_when_both_sides_of_the_dot_are_covered', () => {
 });
 
 test('placeChip_reports_the_name_it_cannot_avoid', () => {
-  const wall = [{ x: 0, y: 100, w: 600, h: 100, name: '벽' }];
+  const wall = [{ x: 0, y: 0, w: 600, h: 300, name: '벽' }];
 
   assert.deepEqual(placeChip({ x: 300, y: 150 }, CHIP, SCENE, wall).hits, ['벽']);
 });
@@ -72,7 +81,7 @@ test('buildFigure_example_moving_text_never_covers_a_name_between_plan_points_ei
     const result = await buildFigure(readFileSync(new URL(file, EXAMPLES), 'utf8'), { baseDir: 'examples', strict: true });
     if (result.chart) continue;
     const { scene, timeline } = result;
-    const names = textBoxes(scene);
+    const names = chipObstacles(scene);
     for (const hop of timeline.segs.flatMap((seg) => seg.hops).filter((h) => h.data)) {
       const chip = sizeChip(hop.data);
       const path = hop.chipPath.map(([at, dx, dy]) => ({ at, dx, dy }));
@@ -87,7 +96,7 @@ test('buildFigure_example_moving_text_never_covers_a_name_between_plan_points_ei
           assert.ok(box.x >= -0.5 && box.y >= -0.5 && box.x + box.w <= scene.width + 0.5 && box.y + box.h <= scene.height + 0.5, `${file}: 판 밖`);
         }
       }
-      assert.ok(path.every((p, k) => k === 0 || p.at > path[k - 1].at), `${file}: 진행 비율이 오르는 순서`);
+      assert.ok(path.every((p, k) => k === 0 || p.at >= path[k - 1].at), `${file}: 진행 비율이 줄지 않는 순서`);
       checked += 1;
     }
   }
@@ -102,7 +111,7 @@ test('buildFigure_example_moving_text_never_touches_a_name_in_any_60fps_frame', 
     const result = await buildFigure(readFileSync(new URL(file, EXAMPLES), 'utf8'), { baseDir: 'examples', strict: true });
     if (result.chart) continue;
     const { scene, timeline } = result;
-    const names = textBoxes(scene);
+    const names = chipObstacles(scene);
     for (const hop of timeline.segs.flatMap((seg) => seg.hops).filter((h) => h.data)) {
       const chip = sizeChip(hop.data);
       const route = flattenRoute(scene.edges[hop.edge].points);

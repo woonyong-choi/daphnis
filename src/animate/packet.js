@@ -56,7 +56,7 @@ function showWindow(clock, from, to) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 선을 따라 이동. 이동 전과 후에는 선의 시작과 끝에 머물고, 이동 구간만 이동 곡선을 쓴다. keyTimes는 늘어나기만 한다.
+// 선을 따라 이동. 이동 전과 후에는 선의 시작과 끝에 머물고, 이동 구간만 이동 곡선을 쓴다. keyTimes는 줄지 않는다.
 function moveMotion(clock, [from, to], hop) {
   const [start, end] = hop.isBack ? [1, 0] : [0, 1];
   const keys = [[0, start, LINEAR], [from, start, MOVE_SPLINE], [to, end, LINEAR], [1, end]].filter(([at], i, all) => i === 0 || at > all[i - 1][0]);
@@ -78,7 +78,12 @@ function pushChip(clock, seg, hop) {
   const path = hop.chipPath;
   if (path.every(([, dx, dy]) => dx === 0 && dy === 0)) return '';
   const at = (f) => clock.keyTime(seg.t0 + timeAt(MOVE, f) * hop.ms);
-  const keys = [[0, path[0]], ...path.map((p) => [at(p[0]), p]), [1, path.at(-1)]].filter(([time], i, all) => i === 0 || time > all[i - 1][0]);
+  const keys = [[0, path[0]], ...path.map((p) => [at(p[0]), p]), [1, path.at(-1)]].filter(([time, p], i, all) => i === 0 || time > all[i - 1][0] || (time === all[i - 1][0] && !isSameOffset(p, all[i - 1][1])));
   const moves = keys.map(([, [, dx, dy]]) => `${r(dx)} ${r(dy)}`);
   return `<animateTransform attributeName="transform" type="translate" dur="${clock.duration}" repeatCount="indefinite" calcMode="linear" keyTimes="${keys.map(([time]) => time).join(';')}" values="${moves.join(';')}"/>`;
+}
+
+// 두 경로 지점의 옮김이 같은지
+function isSameOffset(a, b) {
+  return a[1] === b[1] && a[2] === b[2];
 }
