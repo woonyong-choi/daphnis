@@ -73,8 +73,7 @@ export const tokens = freeze({
     },
     "orange": {
       "400": "var(--color-orange-400)",
-      "500": "var(--color-orange-500)",
-      "600": "var(--color-orange-600)"
+      "500": "var(--color-orange-500)"
     },
     "ink": {
       "900": "var(--color-ink-900)",
@@ -321,8 +320,7 @@ export const values = freeze({
     },
     "orange": {
       "400": "#f5a374",
-      "500": "#dc6e22",
-      "600": "#b45404"
+      "500": "#dc6e22"
     },
     "ink": {
       "900": "#0b0b0b",

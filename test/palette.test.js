@@ -1,11 +1,9 @@
 // 파랑 accent와 주황의 짝. 주황은 파랑과 같은 L·C에서 색상만 돌린 값이고, 색각 이상에서도 둘이 구분된다.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { contrast, mixHex } from '../src/contrast.js';
 import { themeColor as color } from './helpers.js';
 
 const THEMES = ['light', 'dark'];
-const TEXT = 4.5;
 const ORANGE_HUE = 50;
 const HUE_TOLERANCE = 1;
 const LIGHTNESS_TOLERANCE = 0.01;
@@ -62,18 +60,6 @@ test('palette_orange_series_color_follows_the_theme_orange', () => {
   assert.equal(color('light', 'series-2'), color('light', 'orange.500'));
   assert.equal(color('dark', 'series-2'), color('dark', 'orange.400'));
   assert.equal(color('light', 'tone.orange'), color('light', 'orange.500'));
-});
-
-test('palette_orange_strong_is_the_lightest_same_hue_that_reaches_4_5_on_text_faces', () => {
-  const strong = color('light', 'orange.600');
-  const faces = ['node', 'bg', 'card-on'].map((face) => color('light', face));
-  const [strongL, , strongHue] = oklchOf(strong);
-  const brighter = mixHex(strong, '#ffffff', 0.01);
-
-  assert.ok(Math.abs(strongHue - ORANGE_HUE) <= HUE_TOLERANCE, `h ${strongHue.toFixed(1)}`);
-  assert.ok(strongL < oklchOf(color('light', 'orange.500'))[0]);
-  assert.ok(Math.min(...faces.map((face) => contrast(strong, face))) >= TEXT);
-  assert.ok(Math.min(...faces.map((face) => contrast(brighter, face))) < TEXT);
 });
 
 for (const theme of THEMES) {
