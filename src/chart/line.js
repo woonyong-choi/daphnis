@@ -8,6 +8,8 @@ import { CAP, DOT, SPACE, seriesColor } from './metrics.js';
 import { plotFrame } from './plot-frame.js';
 
 const REVEAL = curveOf('reveal');
+// 점이 나타나는 시각 비율을 줄이는 자릿수 배율(소수 셋째 자리)
+const AT_PRECISION = 1000;
 
 // cost: time O(p·STEPS), heap O(p), stack O(1)
 // vars: p = 점 수, STEPS = timeAt의 이분 탐색 횟수
@@ -18,7 +20,7 @@ function arrivals(xy) {
   const lengths = [0];
   for (let k = 1; k < xy.length; k++) lengths.push(lengths[k - 1] + Math.hypot(xy[k][0] - xy[k - 1][0], xy[k][1] - xy[k - 1][1]));
   const total = lengths.at(-1) || 1;
-  return lengths.map((length) => Math.round(timeAt(REVEAL, length / total) * 1000) / 1000);
+  return lengths.map((length) => Math.round(timeAt(REVEAL, length / total) * AT_PRECISION) / AT_PRECISION);
 }
 
 // cost: time O(p), heap O(p), stack O(1)
@@ -73,7 +75,7 @@ function intervalMarks(ctx, s, i) {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 // 두 점 사이 계열 값(key가 value, low, high)을 x에서 보간한 값. 두 점 가운데 하나라도 값이 없으면 없다.
-function valueBetween([a, b], key, x, sx) {
+function valueBetween([a, b], key, { x, sx }) {
   const [va, vb] = [a.values[key], b.values[key]];
   if (va === undefined || vb === undefined) return undefined;
   const [xa, xb] = [sx.at(a.values.x), sx.at(b.values.x)];
@@ -92,7 +94,7 @@ function occupiedRects(ctx) {
     const pair = [points[k - 1], points[k]];
     for (let x = sx.at(pair[0].values.x); x < sx.at(pair[1].values.x); x += step) {
       for (const s of chart.series) {
-        const ys = ['', '.low', '.high'].map((suffix) => valueBetween(pair, `${s.id}${suffix}`, x, sx)).filter((v) => v !== undefined).map(sy.at);
+        const ys = ['', '.low', '.high'].map((suffix) => valueBetween(pair, `${s.id}${suffix}`, { x, sx })).filter((v) => v !== undefined).map(sy.at);
         rects.push({ x0: x, x1: x + step, y0: Math.min(...ys), y1: Math.max(...ys) });
       }
     }

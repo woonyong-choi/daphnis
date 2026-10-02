@@ -14,6 +14,8 @@ const HEAT_HIGH = values.color.data['heat-high'];
 // 칸 안 값 글자 후보. 칸마다 대비가 큰 쪽을 빌드 때 고른다. 다크는 두 후보가 같은 밝은 색이고 칸 색 범위가 그 글자와 4.5 이상이 되게 정했다(테스트가 모든 강도를 잰다).
 const HEAT_INK = values.color.data['heat-ink'];
 const HEAT_INK_ON = values.color.data['heat-ink-on'];
+// 칸 강도(0~1)를 `--s`에 담을 때 줄이는 자릿수 배율(소수 셋째 자리)
+const STRENGTH_PRECISION = 1000;
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -30,7 +32,7 @@ function heatCell(grid, c, k) {
   const strength = max ? c.values.value / max : 0;
   const isOn = pickInk(heatColor(strength), HEAT_INK, HEAT_INK_ON) === HEAT_INK_ON;
   return (
-    `<g class="cr-${k}"><rect x="${r(x)}" y="${r(y)}" width="${r(cellW - SPACE['1'])}" height="${r(cellH - SPACE['1'])}" rx="${values.radius.sm}" class="chart-heat" style="--s:${Math.round(strength * 1000) / 1000}" fill="${heatColor(strength)}"/></g>` +
+    `<g class="cr-${k}"><rect x="${r(x)}" y="${r(y)}" width="${r(cellW - SPACE['1'])}" height="${r(cellH - SPACE['1'])}" rx="${values.radius.sm}" class="chart-heat" style="--s:${Math.round(strength * STRENGTH_PRECISION) / STRENGTH_PRECISION}" fill="${heatColor(strength)}"/></g>` +
     `<text x="${r(x + cellW / 2)}" y="${r(centerBaseline(y + cellH / 2, TEXT['11']))}" class="cr-${k} ink chart-cell${isOn ? ' on' : ''}">${formatNumber(c.values.value)}</text>`
   );
 }
