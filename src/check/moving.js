@@ -26,7 +26,7 @@ export function checkChips({ scene, timeline }, problems) {
 // cost: time O(c), heap O(c), stack O(1)
 // vars: c = 겹침 수
 // basis: estimate
-// 보이는 글 상자끼리 겹침. 같은 글 쌍은 한 번만 알린다. 흐름은 겹치는 구간에서 나중에 출발한 점의 글 상자가 숨어 여기에 오지 않는다. 한 박자의 여러 이동(`&`)은 숨지 않아 알린다.
+// 보이는 글 상자끼리 겹침. 같은 글 쌍은 한 번만 알린다. 흐름은 겹치는 구간에서 나중에 출발한 점의 글 상자가 숨어 여기에 오지 않는다.
 function reportClashes(clashes, problems) {
   const reported = new Set();
   for (const { a, b, t } of clashes) {

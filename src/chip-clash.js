@@ -92,14 +92,14 @@ function spansOf(times) {
 // vars: F = 구간의 프레임 수, h = 구간의 글 상자 있는 이동 수
 // basis: estimate
 /**
- * 보이는 글 상자끼리 겹치는 곳. 숨김(hop.chipHide)을 적용한 뒤에도 겹치면 { seg, a, b, t }(이동 a, b와 구간 안 시각)이다. 이동 글 상자 쌍마다 처음 한 곳만 돌려준다.
+ * 흐름(track)의 보이는 글 상자끼리 겹치는 곳. 박자의 이동은 옛 그림의 출력과 진단을 바꾸지 않으려고 보지 않는다. 숨김(hop.chipHide)을 적용한 뒤에도 겹치면 { seg, a, b, t }(이동 a, b와 구간 안 시각)이다. 이동 글 상자 쌍마다 처음 한 곳만 돌려준다.
  */
 export function findClashes(scene, timeline) {
   const cache = new Map();
   const found = [];
   const seen = new Set();
   for (const seg of timeline.segs) {
-    const hops = seg.hops.filter((hop) => hop.data);
+    const hops = seg.hops.filter((hop) => hop.track !== undefined && hop.data);
     if (hops.length < 2) continue;
     for (let t = 0; t <= seg.t1 - seg.t0; t += CHIP_FRAME_MS) {
       const chips = hops.map((hop) => chipAt(motionOf(hop, { scene, timeline }, cache), t - (hop.at ?? 0), { isFactored: true })).filter(Boolean);

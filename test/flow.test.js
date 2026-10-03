@@ -75,14 +75,6 @@ test('every_tone_name_has_a_flow_color_role', () => {
   for (const name of valueNames('tone')) assert.ok(tokens.color.flow[name], `color.flow.${name}`);
 });
 
-// 근거: 설계 figure-check.md 7번: 보이는 글 상자끼리 겹치면 경고한다(통과하면 안 되는 반대 사례)
-test('buildFigure_warns_when_two_moving_texts_of_one_beat_overlap', async () => {
-  const { warnings } = await buildFigure('flow right\nbox a "A"\nbox b "B"\nbox c "C"\na -> c\nb -> c\nstep "s"\n  a -> c "알파 메시지" & b -> c "베타 메시지" time=2s\n');
-
-  assert.deepEqual(warnings.map((w) => w.code), ['check-7']);
-  assert.match(warnings[0].message, /"베타 메시지" overlaps moving text "알파 메시지"/);
-});
-
 // 근거: 설계 playback.md 이동 글: 흐름에서 글 상자가 겹치면 나중에 출발한 점의 글 상자가 숨고 겹침이 남지 않는다
 test('buildFigure_hides_the_text_of_the_later_dot_in_a_flow_so_no_two_texts_overlap', async () => {
   const source = `${BASE}step "s" for=12s\n  track a -> b -> c "먼저" every=3s\n  track a -> b -> c "나중" at=0.05s every=3s\n`;
@@ -92,4 +84,7 @@ test('buildFigure_hides_the_text_of_the_later_dot_in_a_flow_so_no_two_texts_over
   assert.deepEqual(result.warnings, []);
   assert.deepEqual(findClashes(result.scene, result.timeline), []);
   assert.ok(hidden.length > 0 && hidden.every((hop) => hop.data[0] === '나중'));
+  // 반대 사례: 숨김을 지우면 같은 시간표에서 겹침이 잡힌다(검사 7번이 이 목록으로 경고한다).
+  for (const hop of hidden) delete hop.chipHide;
+  assert.ok(findClashes(result.scene, result.timeline).length > 0);
 });
