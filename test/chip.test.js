@@ -147,7 +147,7 @@ test('buildFigure_every_example_and_demo_chip_stays_inside_clear_and_never_jumps
       for (let t = 0; t <= hop.ms; t += CHIP_FRAME_MS) {
         const { box, point, opacity } = chipStateAt(move, hop.chipPath, t);
         const isVisible = opacity >= CHIP_VISIBLE_MIN;
-        const hit = hop.track === undefined ? names.find((name) => overlaps(box, name)) : undefined;
+        const hit = names.find((name) => overlaps(box, name));
         if (hop.track !== undefined && !isInside(hop, t)) {
           const gap = Math.hypot(Math.max(box.x - point.x, 0, point.x - box.x - box.w), Math.max(box.y - point.y, 0, point.y - box.y - box.h));
           assert.ok(gap <= values.size.packet['chip-reach'] + 0.5, `${file}: ${Math.round(t)}ms에 흐름 글 상자가 점에서 ${gap.toFixed(1)}px 떨어진다`);

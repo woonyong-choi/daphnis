@@ -161,7 +161,7 @@ function createPacket(hop, stage) {
       if (chip) {
         const [dx, dy, opacity] = slide(p);
         chip.g.setAttribute('transform', `translate(${dx} ${dy})`);
-        chip.g.style.opacity = opacity;
+        chip.g.style.opacity = hop.chipHide ? opacity * chipHideFactor(hop.chipHide, t, metrics.chipFadeMs) : opacity;
       }
       const isInside = (hop.gaps ?? []).some(([from, to]) => eased > from && eased < to);
       g.style.opacity = t < 0 || p >= 1 || isInside ? 0 : 1;

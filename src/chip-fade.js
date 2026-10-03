@@ -18,12 +18,7 @@ const VERIFY_ROUNDS = 6;
 // basis: estimate
 // 겹치는 지점을 흐리게 하고, 프레임마다 다시 재서 지점 사이에 남은 겹침이 있으면 그 둘레 지점도 흐리게 한다.
 export function settle(ctx, rest) {
-  // 흐름(track)의 글 상자는 흐리지 않고 점 바로 옆에 둔다(겹치면 그림 검사가 알린다).
-  const points = rest.map((r) => ({ t: r.t, dx: r.slot.dx, dy: r.slot.dy, isFaded: !ctx.isAttached && !r.slot.isClean, slot: r.slot }));
-  if (ctx.isAttached) {
-    applyFade(points);
-    return points;
-  }
+  const points = rest.map((r) => ({ t: r.t, dx: r.slot.dx, dy: r.slot.dy, isFaded: !r.slot.isClean, slot: r.slot }));
   for (let round = 0; round < VERIFY_ROUNDS; round++) {
     applyFade(points);
     const bad = firstHit(ctx, points);

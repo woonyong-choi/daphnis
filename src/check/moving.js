@@ -1,5 +1,6 @@
 // 7번: 이동 글 상자가 그림 안에 있고 이름을 가리지 않는다.
 import { CHIP_GAP, sizeChip } from '../chip.js';
+import { findClashes } from '../chip-clash.js';
 import { issuesOfHop } from '../chip-plan.js';
 import { chipLines, chipObstacles } from '../draw/boxes.js';
 
@@ -18,6 +19,21 @@ export function checkChips({ scene, timeline }, problems) {
       reported.add(key);
       reportChip(hop, { path: pathName(hop, scene, timeline), issues: issuesOfHop(scene, hop, avoid), scene }, problems);
     }
+  }
+  reportClashes(findClashes(scene, timeline), problems);
+}
+
+// cost: time O(c), heap O(c), stack O(1)
+// vars: c = 겹침 수
+// basis: estimate
+// 보이는 글 상자끼리 겹침. 같은 글 쌍은 한 번만 알린다. 흐름은 겹치는 구간에서 나중에 출발한 점의 글 상자가 숨어 여기에 오지 않는다. 한 박자의 여러 이동(`&`)은 숨지 않아 알린다.
+function reportClashes(clashes, problems) {
+  const reported = new Set();
+  for (const { a, b, t } of clashes) {
+    const key = `${a.data.join(' ')}\u0000${b.data.join(' ')}`;
+    if (reported.has(key)) continue;
+    reported.add(key);
+    problems.warn(b.line ?? 1, `[check 7] moving text "${b.data.join(' ')}" overlaps moving text "${a.data.join(' ')}" at ${Math.round(t)}ms of the step. Change the move times so the dots are not on screen together, or shorten the texts`);
   }
 }
 

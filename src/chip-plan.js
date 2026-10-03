@@ -22,8 +22,6 @@ const ORDER_COST = 100;
 // 흐름(track)의 글 상자는 자기 점에서 이 거리(px, 상자 가장자리와 점 중심) 안에만 둔다. 이를 넘는 자리는 겹침(UNCLEAN_COST)보다 더 큰 비용이라 겹쳐도 점 옆을 고른다
 const ATTACH_MAX = values.size.packet['chip-reach'];
 const DETACH_HARD_COST = 1e9;
-// 흐름 점이 출발, 도착하거나 도형 안을 드나드는 곳 앞뒤로 글 상자 겹침을 알리지 않는 길이 비율
-const TRACK_END = 0.15;
 
 // 이동에 맞춘 계획의 문제 목록. 그림 검사가 같은 계획을 다시 세우지 않고 쓴다. { scene, issues }
 const plannedIssues = new WeakMap();
@@ -43,18 +41,17 @@ export function planHops(scene, timeline, avoid) {
       const key = `${hop.track === undefined ? hop.edge : `t${hop.track}`}\u0000${hop.ms}\u0000${hop.isBack}\u0000${hop.data.join('\u0000')}`;
       if (!plans.has(key)) plans.set(key, planChip(scene, hop.track === undefined ? hop : { ...hop, route: timeline.tracks[hop.track].route }, avoid));
       hop.chipPath = plans.get(key).path;
-      plannedIssues.set(hop, { scene, issues: hop.track === undefined ? plans.get(key).issues : plans.get(key).issues.filter(({ at }) => isReported(at, hop)) });
+      plannedIssues.set(hop, { scene, issues: hop.track === undefined ? plans.get(key).issues : reportedOf(plans.get(key).issues, hop) });
     }
   }
 }
 
-// cost: time O(g), heap O(1), stack O(1)
-// vars: g = 도형 안을 지나는 구간 수
+// cost: time O(i·g), heap O(i), stack O(1)
+// vars: i = 지점별 문제 수, g = 도형 안을 지나는 구간 수
 // basis: estimate
-// 흐름 글 상자의 문제 가운데 그림 검사가 알릴 것. 도형 안을 지나 점이 보이지 않는 구간과, 점이 막 도형에서 나오거나 닿는 앞뒤(길이 비율 TRACK_END)는 알리지 않는다. 그곳에서는 글 상자가 점 옆의 도형 글자 가까이에 있을 수밖에 없다.
-function isReported(at, hop) {
-  const ends = [[-TRACK_END, TRACK_END], [1 - TRACK_END, 1 + TRACK_END], ...hop.gaps.map(([from, to]) => [from - TRACK_END, to + TRACK_END])];
-  return !ends.some(([from, to]) => at > from && at < to);
+// 흐름 글 상자의 문제 가운데 그림 검사가 알릴 것. 글 상자는 가리는 곳에서 숨으므로(흐려짐) 가림은 알리지 않고, 그림 밖만 알린다. 점이 도형 안을 지나 보이지 않는 구간은 보지 않는다.
+function reportedOf(issues, hop) {
+  return issues.filter(({ at }) => !hop.gaps.some(([from, to]) => at > from && at < to)).map((issue) => ({ ...issue, hits: [] }));
 }
 
 // cost: time O(plan) 계획이 없을 때, O(1) 있을 때, heap O(n), stack O(1)

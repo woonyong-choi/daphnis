@@ -2,6 +2,7 @@
 // 점의 보임과 이동과 글 상자 옮김과 흐려짐은 모두 SMIL이라 한 시계로 돈다. 보임을 CSS에 두면 시계 둘이 따로 반복해, 한 바퀴가 돌아올 때 점이 끝 지점에 잠깐 보였다가 시작 지점으로 뛴다.
 import { CHIP_GAP, sizeChip } from '../chip.js';
 import { curveOf, keySpline, timeAt } from '../easing.js';
+import { CHIP_HIDE_FADE_MS } from '../chip-clash.js';
 import { discreteWindows } from './discrete.js';
 import { STYLE } from '../measure/sizes.js';
 import { renderRich, roundCoord as r } from '../text.js';
@@ -27,7 +28,7 @@ export function drawPacket(clock, { seg, hop, name }, glyphs) {
   const color = hop.tone ? tokens.color.flow[hop.tone] : tokens.color.state.active;
   const chip = hop.data ? drawChip(hop.data, { glyphs, color: hop.tone ? color : undefined }) + pushChip(clock, start, hop) : '';
   return (
-    `<g class="${name}" opacity="0"><circle r="${values.size.packet.halo}" fill="${color}" opacity="${values.opacity.halo}"/><circle r="${values.size.packet.radius}" fill="${color}"/>${chip ? `<g>${chip}</g>` : ''}` +
+    `<g class="${name}" opacity="0"><circle r="${values.size.packet.halo}" fill="${color}" opacity="${values.opacity.halo}"/><circle r="${values.size.packet.radius}" fill="${color}"/>${chip ? (hop.chipHide ? `<g>${hideChip(clock, start, hop.chipHide)}<g>${chip}</g></g>` : `<g>${chip}</g>`) : ''}` +
     (hop.gaps?.length ? discreteWindows(clock, visibleSpans(start, hop)) : showWindow(clock, from, to)) +
     moveMotion(clock, [from, to], hop) +
     `</g>`
@@ -46,6 +47,23 @@ function drawChip(lines, { glyphs, color }) {
     `<rect x="${r(-w / 2)}" y="${r(top)}" width="${r(w)}" height="${r(h)}" rx="${values.radius.lg}" fill="${color ?? tokens.color.state['active-fill']}"${color ? ` stroke="${color}" stroke-width="${values.border.edge}"` : ''}/>` +
     lines.map((line, li) => `<text x="0" y="${r(top + STYLE.chip.line * (li + 1))}" class="chip">${renderRich(line)}</text>`).join('')
   );
+}
+
+// cost: time O(s), heap O(s), stack O(1)
+// vars: s = 숨는 구간 수
+// basis: estimate
+// 다른 점의 글 상자와 겹치는 구간(spans, 이동 시작 뒤 ms)에서 글 상자를 숨기는 불투명도. 겹침 전에 숨는 시간만큼 앞서 흐려지고 끝난 뒤 같은 시간 동안 나타난다. hideFactor와 같은 값이다.
+function hideChip(clock, start, spans) {
+  const keys = [[0, 1]];
+  for (const [from, to] of spans) {
+    for (const [at, shown] of [[from - CHIP_HIDE_FADE_MS, 1], [from, 0], [to, 0], [to + CHIP_HIDE_FADE_MS, 1]]) {
+      const key = clock.keyTime(Math.max(0, start + at));
+      if (key > keys.at(-1)[0]) keys.push([key, shown]);
+      else keys.at(-1)[1] = shown;
+    }
+  }
+  if (keys.at(-1)[0] < 1) keys.push([1, 1]);
+  return `<animate attributeName="opacity" dur="${clock.duration}" repeatCount="indefinite" calcMode="linear" keyTimes="${keys.map(([at]) => at).join(';')}" values="${keys.map(([, shown]) => shown).join(';')}"/>`;
 }
 
 // cost: time O(g), heap O(g), stack O(1)

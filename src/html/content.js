@@ -29,7 +29,7 @@ const PLAYER_METRICS = Object.freeze({
 });
 
 // 갈래색(tone)이나 값 줄을 쓰는 그림에만 더하는 재생기 값. 쓰지 않는 그림의 재생기 파일은 그대로다.
-const FLOW_METRICS = Object.freeze({ tones: tokens.color.flow, flashMs: values.duration['value-flash'], chipStroke: values.border.edge });
+const FLOW_METRICS = Object.freeze({ tones: tokens.color.flow, flashMs: values.duration['value-flash'], chipStroke: values.border.edge, chipFadeMs: values.duration['chip-fade'] });
 
 // cost: time O(s + e + b·(e + k)), heap O(b·(e + k)), stack O(1)
 // vars: s = 도형 수, e = 선 수, b = 박자 수, k = 카드 있는 도형 수
