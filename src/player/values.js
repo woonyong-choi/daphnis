@@ -12,15 +12,14 @@ function createValueEls(svg, data) {
 // cost: time O(v·(c + n)), heap O(1), stack O(1)
 // vars: v = 값 줄 수, c = 값이 바뀌는 횟수, n = 값 글자 요소 수
 // basis: estimate
-// 그림 전체 시각 t(ms)의 값 줄을 그린다. 이 구간의 단계가 아닌 값 줄은 모두 숨기고, 단계의 값 줄은 t에 이른 마지막 변화의 글을 보인다.
-// 변화한 순간부터 value-flash 동안은 그 줄의 테두리를 밝힌다. 구간 처음(t = 구간 시작)에서도 앞 박자의 변화가 그대로 이어진다.
+// 그림 전체 시각 t(ms)의 값 줄을 그린다. 이 구간의 단계가 아닌 값 줄은 모두 숨기고, 단계의 값 줄은 t가 든 구간(periods)의 글을 보이고 밝힘 구간(flashes)에 들면 테두리를 밝힌다.
+// 구간은 시간표가 한 번 계산한 값이고 움직이는 SVG의 SMIL 이산 불투명도와 같다.
 function drawValueState(stage, seg, t) {
   stage.valueEls.forEach(({ texts, frame }, vi) => {
     const row = stage.values[vi];
     const isHere = row.si === seg.si;
-    const reached = isHere ? row.changes.filter(([at]) => at <= t) : [];
-    const text = reached.length ? reached.at(-1)[1] : row.initial;
+    const text = (row.periods.find(([from, to]) => t >= from && t < to) ?? row.periods.at(-1))[2];
     texts.forEach((el) => el.setAttribute('opacity', isHere && el.dataset.t === text ? 1 : 0));
-    frame?.setAttribute('opacity', isHere && reached.length && t < reached.at(-1)[0] + stage.metrics.flashMs ? 1 : 0);
+    frame?.setAttribute('opacity', isHere && row.flashes.some(([from, to]) => t >= from && t < to) ? 1 : 0);
   });
 }

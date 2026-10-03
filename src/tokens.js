@@ -301,7 +301,8 @@ export const tokens = freeze({
     "reveal": "var(--duration-reveal)",
     "value-flash": "var(--duration-value-flash)",
     "chip-frame": "var(--duration-chip-frame)",
-    "flow-step": "var(--duration-flow-step)"
+    "flow-step": "var(--duration-flow-step)",
+    "cut-fade": "var(--duration-cut-fade)"
   },
   "easing": {
     "move": "var(--easing-move)",
@@ -615,7 +616,8 @@ export const values = freeze({
     "reveal": 900,
     "value-flash": 700,
     "chip-frame": 16.666666666666668,
-    "flow-step": 12000
+    "flow-step": 12000,
+    "cut-fade": 600
   },
   "easing": {
     "move": "cubic-bezier(0.455, 0.03, 0.515, 0.955)",

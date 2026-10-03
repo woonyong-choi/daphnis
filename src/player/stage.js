@@ -161,12 +161,26 @@ function createPacket(hop, stage) {
       if (chip) {
         const [dx, dy, opacity] = slide(p);
         chip.g.setAttribute('transform', `translate(${dx} ${dy})`);
-        chip.g.style.opacity = hop.chipHide ? opacity * chipHideFactor(hop.chipHide, t, metrics.chipFadeMs) : opacity;
+        chip.g.style.opacity = opacity * chipFadeAt(hop.chipFade, t);
       }
       const isInside = (hop.gaps ?? []).some(([from, to]) => eased > from && eased < to);
-      g.style.opacity = t < 0 || p >= 1 || isInside ? 0 : 1;
+      g.style.opacity = isShown(hop, t, isInside) ? cutFade(hop, t, metrics) : 0;
     },
   };
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 점이 보이는 때인지. 이동 시작 전, 도형 안(isInside), 끝에 닿은 뒤, 단계 끝에서 잘린 뒤(hop.cut)는 보이지 않는다.
+function isShown(hop, t, isInside) {
+  return t >= 0 && t < (hop.cut ?? hop.ms) && !isInside;
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 단계 끝에서 잘리는 점(hop.cut)이 끝 앞 cutFadeMs 동안 서서히 사라지는 불투명도. 그 밖의 점은 1이다.
+function cutFade(hop, t, metrics) {
+  return hop.cut === undefined ? 1 : Math.min(1, (hop.cut - t) / metrics.cutFadeMs);
 }
 
 // cost: time O(l), heap O(l), stack O(1)

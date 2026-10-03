@@ -1,9 +1,9 @@
 // 점 하나가 한 박자 동안 선을 건너고, 실어 보내는 글은 점 위의 상자로 따라간다.
 // 점의 보임과 이동과 글 상자 옮김과 흐려짐은 모두 SMIL이라 한 시계로 돈다. 보임을 CSS에 두면 시계 둘이 따로 반복해, 한 바퀴가 돌아올 때 점이 끝 지점에 잠깐 보였다가 시작 지점으로 뛴다.
 import { CHIP_GAP, sizeChip } from '../chip.js';
-import { arrivalOffsetMs, curveOf, keySpline, timeAt } from '../easing.js';
-import { CHIP_HIDE_FADE_MS } from '../chip-clash.js';
+import { curveOf, keySpline, timeAt } from '../easing.js';
 import { discreteWindows } from './discrete.js';
+import { chipFadeAnimate, cutFadeAnimate, cutMotionKeys, visibleSpans } from './flow-packet.js';
 import { STYLE } from '../measure/sizes.js';
 import { renderRich, roundCoord as r } from '../text.js';
 import { tokens, values } from '../tokens.js';
@@ -27,12 +27,13 @@ export function drawPacket(clock, { seg, hop, name }, glyphs) {
   const [from, to] = [clock.keyTime(start), clock.keyTime(start + hop.ms)];
   const color = hop.tone ? tokens.color.flow[hop.tone] : tokens.color.state.active;
   const chip = hop.data ? drawChip(hop.data, { glyphs, color: hop.tone ? color : undefined }) + pushChip(clock, start, hop) : '';
-  return (
-    `<g class="${name}" opacity="0"><circle r="${values.size.packet.halo}" fill="${color}" opacity="${values.opacity.halo}"/><circle r="${values.size.packet.radius}" fill="${color}"/>${chip ? (hop.chipHide ? `<g>${hideChip(clock, start, hop.chipHide)}<g>${chip}</g></g>` : `<g>${chip}</g>`) : ''}` +
+  const chipMarkup = hop.chipFade ? `<g>${chipFadeAnimate(clock, start, hop.chipFade)}<g>${chip}</g></g>` : `<g>${chip}</g>`;
+  const body =
+    `<g class="${name}" opacity="0"><circle r="${values.size.packet.halo}" fill="${color}" opacity="${values.opacity.halo}"/><circle r="${values.size.packet.radius}" fill="${color}"/>${chip ? chipMarkup : ''}` +
     (hop.gaps?.length ? discreteWindows(clock, visibleSpans(start, hop)) : showWindow(clock, from, to)) +
-    moveMotion(clock, [from, to], hop) +
-    `</g>`
-  );
+    moveMotion(clock, [from, to], { hop, start }) +
+    `</g>`;
+  return hop.cut === undefined ? body : `<g>${cutFadeAnimate(clock, start, hop)}${body}</g>`;
 }
 
 // cost: time O(l·n), heap O(out), stack O(1)
@@ -49,33 +50,6 @@ function drawChip(lines, { glyphs, color }) {
   );
 }
 
-// cost: time O(s), heap O(s), stack O(1)
-// vars: s = 숨는 구간 수
-// basis: estimate
-// 다른 점의 글 상자와 겹치는 구간(spans, 이동 시작 뒤 ms)에서 글 상자를 숨기는 불투명도. 겹침 전에 숨는 시간만큼 앞서 흐려지고 끝난 뒤 같은 시간 동안 나타난다. hideFactor와 같은 값이다.
-function hideChip(clock, start, spans) {
-  const keys = [[0, 1]];
-  for (const [from, to] of spans) {
-    for (const [at, shown] of [[from - CHIP_HIDE_FADE_MS, 1], [from, 0], [to, 0], [to + CHIP_HIDE_FADE_MS, 1]]) {
-      const key = clock.keyTime(Math.max(0, start + at));
-      if (key > keys.at(-1)[0]) keys.push([key, shown]);
-      else keys.at(-1)[1] = shown;
-    }
-  }
-  if (keys.at(-1)[0] < 1) keys.push([1, 1]);
-  return `<animate attributeName="opacity" dur="${clock.duration}" repeatCount="indefinite" calcMode="linear" keyTimes="${keys.map(([at]) => at).join(';')}" values="${keys.map(([, shown]) => shown).join(';')}"/>`;
-}
-
-// cost: time O(g), heap O(g), stack O(1)
-// vars: g = 도형 안을 지나는 구간 수
-// basis: estimate
-// 흐름의 점이 보이는 시각 구간(ms). 도형 안을 지나는 구간(경로 길이 비율 gaps)에서는 도착 연결점에서 사라져 출발 연결점에서 다시 나타난다. 그 구간의 시간은 그대로 흐른다.
-function visibleSpans(start, hop) {
-  const at = (fraction) => start + arrivalOffsetMs(fraction, hop.ms);
-  const edges = [start, ...hop.gaps.flatMap(([from, to]) => [at(from), at(to)]), start + hop.ms];
-  return edges.reduce((spans, time, i) => (i % 2 === 0 ? [...spans, [time, edges[i + 1]]] : spans), []);
-}
-
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 // 보임 창. 이산 값이라 구간 끝에서 바로 바뀌고, 시작과 끝이 0이나 1이면 겹치는 keyTime을 만들지 않는다.
@@ -88,9 +62,10 @@ function showWindow(clock, from, to) {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 // 선을 따라 이동. 이동 전과 후에는 선의 시작과 끝에 머물고, 이동 구간만 이동 곡선을 쓴다. keyTimes는 줄지 않는다.
-function moveMotion(clock, [from, to], hop) {
+function moveMotion(clock, [from, to], { hop, start: departure }) {
   const [start, end] = hop.isBack ? [1, 0] : [0, 1];
   const pathId = hop.track === undefined ? `p-${hop.edge}` : `tp-${hop.track}`;
+  if (hop.cut !== undefined) return linearMotion(clock, pathId, cutMotionKeys(clock, departure, hop));
   const keys = [[0, start, LINEAR], [from, start, MOVE_SPLINE], [to, end, LINEAR], [1, end]].filter(([at], i, all) => i === 0 || at > all[i - 1][0]);
   // 앞 키가 같은 시각이라 지워졌으면 이동 구간의 곡선이 첫 키로 옮겨 가야 한다.
   if (from === 0) keys[0][2] = MOVE_SPLINE;
@@ -103,13 +78,24 @@ function moveMotion(clock, [from, to], hop) {
 }
 
 // cost: time O(k), heap O(k), stack O(1)
+// vars: k = 키 수
+// basis: estimate
+// 키 사이를 선형으로 잇는 이동(단계 끝에서 잘리는 점). 곡선 일부만 지나서 곡선 하나로 그릴 수 없다.
+function linearMotion(clock, pathId, keys) {
+  return (
+    `<animateMotion dur="${clock.duration}" repeatCount="indefinite" calcMode="linear" keyTimes="${keys.map(([at]) => at).join(';')}" keyPoints="${keys.map(([, point]) => point).join(';')}">` +
+    `<mpath href="#${pathId}" xlink:href="#${pathId}"/></animateMotion>`
+  );
+}
+
+// cost: time O(k), heap O(k), stack O(1)
 // vars: k = 경로 지점 수
 // basis: estimate
 // 글 상자가 점 위 기본 자리에서 벗어나거나 흐려지는 선이면, 시간표가 정해 둔 경로 지점별 옮김과 불투명도를 SMIL로 건다. 점이 그 지점에 닿는 시각은 이동 곡선을 거꾸로 풀어 구한다.
 function pushChip(clock, start, hop) {
   const path = hop.chipPath;
   const at = (f) => clock.keyTime(start + timeAt(MOVE, f) * hop.ms);
-  const keys = [[0, path[0]], ...path.map((p) => [at(p[0]), p]), [1, path.at(-1)]].filter(([time], i, all) => i === 0 || time > all[i - 1][0]);
+  const keys = [[0, path[0]], ...path.map((p) => [at(p[0]), p]), [1, path.at(-1)]].filter(([time], i, all) => i === 0 || (time > all[i - 1][0] && time <= 1));
   const keyTimes = keys.map(([time]) => time).join(';');
   const moves = path.some(([, dx, dy]) => dx !== 0 || dy !== 0) ? animateOf(clock, { name: 'transform', type: 'translate' }, { keyTimes, values: keys.map(([, [, dx, dy]]) => `${r(dx)} ${r(dy)}`) }) : '';
   const fades = path.some(([, , , opacity]) => opacity !== 1) ? animateOf(clock, { name: 'opacity' }, { keyTimes, values: keys.map(([, p]) => r(p[3])) }) : '';

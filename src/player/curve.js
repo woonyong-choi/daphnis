@@ -58,15 +58,15 @@ function chipSlide(hop, metrics) {
   };
 }
 
-// cost: time O(s), heap O(1), stack O(1)
-// vars: s = 숨는 구간 수
+// cost: time O(k), heap O(1), stack O(1)
+// vars: k = 키 수
 // basis: estimate
-// 다른 점의 글 상자와 겹치는 구간(spans, 이동 시작 뒤 ms)이 글 상자 불투명도에 곱하는 값. 시간표를 만들 때 정한 구간을 읽기만 한다. src/chip-clash.js의 hideFactor와 같은 값이다.
-function chipHideFactor(spans, t, fadeMs) {
-  for (const [start, end] of spans) {
-    if (t >= start && t <= end) return 0;
-    if (t < start && t > start - fadeMs) return (start - t) / fadeMs;
-    if (t > end && t < end + fadeMs) return (t - end) / fadeMs;
-  }
-  return 1;
+// 이동 시작 뒤 t(ms)의 글 상자 숨김 불투명도. 시간표가 한 번 계산한 키 [시각, 값]을 시간에 선형으로 읽기만 한다(src/chip-clash.js의 fadeAt과 같은 값이다). 키가 없으면 1이다.
+function chipFadeAt(keys, t) {
+  if (!keys?.length) return 1;
+  const k = keys.findLastIndex(([at]) => at <= t);
+  if (k < 0) return keys[0][1];
+  if (k === keys.length - 1) return keys[k][1];
+  const [[a, va], [b, vb]] = [keys[k], keys[k + 1]];
+  return va + ((vb - va) * (t - a)) / (b - a);
 }

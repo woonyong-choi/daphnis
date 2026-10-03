@@ -10,12 +10,11 @@
  */
 export function discreteWindows(clock, spans) {
   const keys = [[0, 0]];
-  for (const [start, end] of spans) {
-    for (const [at, on] of [[clock.keyTime(start), 1], [clock.keyTime(end), 0]]) {
-      const last = keys.at(-1);
-      if (at === last[0]) last[1] = on;
-      else keys.push([at, on]);
-    }
-  }
+  const add = ([at, on]) => {
+    const last = keys.at(-1);
+    if (at === last[0]) last[1] = on;
+    else keys.push([at, on]);
+  };
+  spans.flatMap(([start, end]) => [[clock.keyTime(start), 1], [clock.keyTime(end), 0]]).forEach(add);
   return `<animate attributeName="opacity" dur="${clock.duration}" repeatCount="indefinite" calcMode="discrete" keyTimes="${keys.map(([at]) => at).join(';')}" values="${keys.map(([, on]) => on).join(';')}"/>`;
 }

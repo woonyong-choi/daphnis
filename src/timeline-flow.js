@@ -5,7 +5,7 @@ import { flattenRoute, routeLength } from './route.js';
 import { createSeg } from './timeline-seg.js';
 import { values } from './tokens.js';
 
-const STEP_END = values.duration['step-end'];
+const FLOW_STEP_MS = values.duration['flow-step'];
 
 // cost: time O(l·p), heap O(l·p), stack O(1)
 // vars: l = 흐름의 구간(선) 수, p = 선의 경로 점 수
@@ -45,10 +45,10 @@ function planTrack(track, { scene, speed }) {
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 출발 수
 // basis: estimate
-// 흐름 하나의 출발 시각(단계 안 ms). at에서 시작해 every마다 되풀이하고, 단계 끝(forMs)을 넘기는 점은 그리지 않는다. every가 없으면 한 번이다.
-function departures(track, { ms, forMs }) {
+// 흐름 하나의 출발 시각(단계 안 ms). at에서 시작해 every마다 되풀이하고 단계 끝(lengthMs) 전에 출발한 점만 그린다. every가 없으면 한 번이다.
+function departures(track, lengthMs) {
   const starts = [];
-  for (let at = track.atMs; forMs === undefined || at + ms <= forMs; at += track.everyMs) {
+  for (let at = track.atMs; at < lengthMs; at += track.everyMs) {
     starts.push(at);
     if (track.everyMs === undefined) break;
   }
@@ -59,7 +59,7 @@ function departures(track, { ms, forMs }) {
 // vars: t = 흐름 수, d = 흐름의 출발 수, l = 흐름의 구간 수, e = 지나는 선 수
 // basis: estimate
 /**
- * 흐름 단계 하나의 구간. 구간 길이는 단계의 for=이고, 없으면 마지막 점이 도착하는 시각에 duration.step-end를 더한다.
+ * 흐름 단계 하나의 구간. 구간 길이는 단계의 for=이고, 없으면 토큰 duration.flow-step이다.
  * 선과 도형은 점이 처음 닿는 시각에 켜진다(edgesAt, nodesAt).
  * @param run 시간표를 지나며 이어지는 값 { figure, speed, t, tracks, ... }
  * @param deps { scene, cards, chips }
@@ -69,15 +69,16 @@ export function flowSeg({ step, si }, run, { scene, cards, chips }) {
   const plans = step.tracks.map((track) => planTrack(track, { scene, speed: run.speed }));
   const first = run.tracks.length;
   run.tracks.push(...plans.map((plan, i) => ({ parts: plan.parts, route: plan.route, names: plan.names, gaps: plan.gaps, line: step.tracks[i].line })));
+  const length = step.forMs ?? FLOW_STEP_MS;
   const hops = [];
   const edgesAt = {};
   plans.forEach((plan, i) => {
     const track = step.tracks[i];
-    const starts = departures(track, { ms: plan.ms, forMs: step.forMs });
-    for (const at of starts) hops.push({ track: first + i, edges: plan.edges, gaps: plan.gaps, isBack: false, at, ms: plan.ms, to: plan.nodes.at(-1), data: track.data === undefined ? undefined : chips(track.data), ...(track.tone ? { tone: track.tone } : {}), line: track.line });
+    const starts = departures(track, length);
+    // 단계 끝까지 도착하지 못하는 점은 끝에서 서서히 사라지고(cut은 그 점이 그려지는 시간), 그 점이 닿지 못한 도형의 값은 바뀌지 않는다.
+    for (const at of starts) hops.push({ track: first + i, edges: plan.edges, gaps: plan.gaps, isBack: false, at, ms: plan.ms, ...(at + plan.ms > length ? { cut: length - at } : {}), to: plan.nodes.at(-1), data: track.data === undefined ? undefined : chips(track.data), ...(track.tone ? { tone: track.tone } : {}), line: track.line });
     if (starts.length) plan.legEdges.forEach((edge, k) => (edgesAt[edge] = Math.min(edgesAt[edge] ?? Infinity, starts[0] + arrivalOffsetMs(plan.fracs[k], plan.ms))));
   });
-  const length = step.forMs ?? Math.max(0, ...hops.map((h) => h.at + h.ms)) + STEP_END;
   const start = cards.starts.get(step) ?? {};
   const seg = createSeg(run, {
     si,

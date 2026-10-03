@@ -33,9 +33,9 @@ export function collectCards(figure) {
     if (i < 0) i = list.push(rows) - 1;
     return i;
   };
+  const valueRows = valueRowsByNode(figure);
   for (const step of figure.steps) {
     const rows = new Map();
-    const valueRows = valueRowsByNode(figure, step);
     const stateOf = () => Object.fromEntries([...new Set([...valueRows.keys(), ...rows.keys()])].map((id) => [id, indexOf(id, [...(valueRows.get(id) ?? []), ...(rows.get(id) ?? [])])]));
     let state = stateOf();
     starts.set(step, state);
@@ -100,7 +100,7 @@ function stepSegs({ step, si }, run, deps) {
   const { segs, moves } = step.tracks.length ? flowSeg({ step, si }, run, deps) : beatSegs({ step, si }, run, deps);
   if (!figure.values.length) return segs;
   const first = segs[0];
-  const rows = valueRows(figure, step, { moves, span: { si, t0: first.t0, t1: segs.at(-1).t1 } });
+  const rows = valueRows(figure, { moves, span: { si, t0: first.t0, t1: segs.at(-1).t1 } });
   run.values.push(...rows.map((row) => ({ ...row, card: first.cards[row.node] ?? first.cardsBefore[row.node] })));
   return segs;
 }
@@ -113,7 +113,7 @@ function beatSegs({ step, si }, run, deps) {
   // 단계 안에서 쌓이는 값: 지나간 선, 밝힌 대상, 차트 밝히기, 마지막 설명
   const memory = { edgesOn: new Set(), lit: new Set(), lights: [], caption: step.caption ?? '' };
   const segs = step.beats.map((beat, bi) => beatSeg({ step, si, beat, bi }, { memory, run }, deps));
-  const moves = run.figure.values.length ? step.beats.flatMap((beat, bi) => beat.hops.map((hop, hi) => ({ start: segs[bi].t0, ms: segs[bi].hops[hi].ms, nodes: [hop.from, hop.to].map((id) => id.split('.')[0]), fracs: [0, 1], sets: hop.sets }))) : [];
+  const moves = step.beats.flatMap((beat, bi) => beat.hops.map((hop, hi) => ({ start: segs[bi].t0, ms: segs[bi].hops[hi].ms, nodes: [hop.from, hop.to].map((id) => id.split('.')[0]), fracs: [0, 1], sets: hop.sets })));
   return { segs, moves };
 }
 

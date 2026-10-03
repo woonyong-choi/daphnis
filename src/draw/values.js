@@ -5,31 +5,6 @@ import { tokens, values } from '../tokens.js';
 import { rowSlot } from './card.js';
 import { cardBox } from './figure.js';
 
-const FLASH_MS = values.duration['value-flash'];
-
-// cost: time O(c), heap O(c), stack O(1)
-// vars: c = 값이 바뀌는 횟수
-// basis: estimate
-// 값 줄이 보이는 동안 글이 바뀌는 구간 [시작, 끝, 글]. 단계가 시작할 때 initial이고 변화 시각마다 새 글이다.
-function periodsOf(row) {
-  const marks = [[row.t0, row.initial], ...row.changes];
-  return marks.map(([at, text], i) => [at, marks[i + 1]?.[0] ?? row.t1, text]);
-}
-
-// cost: time O(c), heap O(c), stack O(1)
-// vars: c = 값이 바뀌는 횟수
-// basis: estimate
-// 바뀌는 순간마다 FLASH_MS 동안 밝히는 구간. 변화가 겹치면 하나로 잇는다.
-function flashSpans(row) {
-  const spans = [];
-  for (const [at] of row.changes) {
-    const end = Math.min(at + FLASH_MS, row.t1);
-    if (spans.length && at <= spans.at(-1)[1]) spans.at(-1)[1] = end;
-    else spans.push([at, end]);
-  }
-  return spans;
-}
-
 // cost: time O(v·(c + n)), heap O(out), stack O(1)
 // vars: v = 값 줄 수, c = 값이 바뀌는 횟수, n = 값 글자 수, out = 만든 SVG 글자 수
 // basis: estimate
@@ -44,10 +19,9 @@ export function drawValues(scene, timeline, { glyphs, windows }) {
       const box = cardBox(item);
       const layout = item.card.layouts[row.card];
       const slot = rowSlot(layout, box, layout.rows.findIndex((laid) => laid.row.valueId === row.id));
-      const periods = periodsOf(row);
-      const texts = [...new Set(periods.map(([, , text]) => text))].map((text) => {
+      const texts = [...new Set(row.periods.map(([, , text]) => text))].map((text) => {
         glyphs.add(text, STYLE.mark.face);
-        const spans = periods.filter(([, , t]) => t === text).map(([start, end]) => [start, end]);
+        const spans = row.periods.filter(([, , t]) => t === text).map(([start, end]) => [start, end]);
         return `<text x="${r(box.x + box.w - CARD.side)}" y="${r(slot.y + STYLE.row.size)}" class="value" opacity="0" data-v="${vi}" data-t="${escapeXml(text)}">${escapeXml(text)}${windows(spans)}</text>`;
       });
       return `<g class="fl-value">${flashFrame(row, { box, slot, vi }, windows)}${texts.join('')}</g>`;
@@ -61,5 +35,5 @@ export function drawValues(scene, timeline, { glyphs, windows }) {
 // 값이 바뀔 때 그 카드 줄을 둘러싸는 테두리(면 칠 없음). 바뀐 줄이 눈에 들어오도록 밝힘 색(지금)을 쓴다.
 function flashFrame(row, { box, slot, vi }, windows) {
   const inset = CARD.side / 2;
-  return `<rect x="${r(box.x + inset)}" y="${r(slot.y - CARD.gap / 2)}" width="${r(box.w - inset * 2)}" height="${r(slot.h + CARD.gap)}" rx="${values.radius.sm}" fill="none" stroke="${tokens.color.state.active}" stroke-width="${values.border.edge}" opacity="0" data-vf="${vi}">${windows(flashSpans(row))}</rect>`;
+  return `<rect x="${r(box.x + inset)}" y="${r(slot.y - CARD.gap / 2)}" width="${r(box.w - inset * 2)}" height="${r(slot.h + CARD.gap)}" rx="${values.radius.sm}" fill="none" stroke="${tokens.color.state.active}" stroke-width="${values.border.edge}" opacity="0" data-vf="${vi}">${windows(row.flashes)}</rect>`;
 }

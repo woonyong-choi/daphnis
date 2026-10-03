@@ -11,11 +11,11 @@ const DOTS_MAX = values.scale['flow-dots-max'];
 export function checkFlow({ figure, timeline }, problems) {
   const dots = timeline.segs.flatMap((seg) => seg.hops.filter((hop) => hop.track !== undefined));
   (timeline.tracks ?? []).forEach((track, k) => {
-    if (!dots.some((hop) => hop.track === k)) problems.error(track.line, `[check 14] track ${track.names.join(' -> ')} draws no dot because its first dot would arrive after the step ends. Lengthen the step with for=, start earlier with at=, or shorten the path with time=`);
+    if (!dots.some((hop) => hop.track === k)) problems.error(track.line, `[check 14] track ${track.names.join(' -> ')} draws no dot because its first dot would start after the step ends. Lengthen the step with for=, or start earlier with at=`);
   });
   if (dots.length > DOTS_MAX) problems.warn(timeline.tracks[0].line, `[check 14] the flows draw ${dots.length} dots, over the limit of ${DOTS_MAX}. Raise every=, shorten for=, or remove a track`);
   for (const row of timeline.values ?? []) {
     const long = row.changes.find(([, text]) => [...text].length > VALUE_MAX);
-    if (long) problems.error(figure.values.find((v) => v.id === row.id).line, `[check 14] value "${row.id}" reaches "${long[1]}", over ${VALUE_MAX} characters. Its row has room for ${VALUE_MAX}. Change by= steps or set a smaller value`);
+    if (long) problems.error(figure.values.find((v) => v.id === row.id).line, `[check 14] value "${row.id}" reaches "${long[1]}", over ${VALUE_MAX} characters. Its row has room for ${VALUE_MAX}. Use smaller + or - steps or a shorter value`);
   }
 }
