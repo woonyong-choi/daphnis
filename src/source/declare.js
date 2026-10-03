@@ -3,6 +3,7 @@ import { STATEMENTS, flagNames, valueNames } from './grammar.js';
 import { readGroup } from './group.js';
 import { checkId, rejectName } from './names.js';
 import { readNode } from './node.js';
+import { readOptions } from './options.js';
 import { COLUMN_PATTERN, FK_PATTERN, TABLE_PATTERN } from './words.js';
 
 // cost: time O(t), heap O(t), stack O(1)
@@ -103,7 +104,7 @@ export function readEdge({ tokens, line }, ctx) {
     ctx.problems.error(line, 'write an edge as: a -> b "label"');
     return;
   }
-  const edge = { from: from.value, to: to.value, label: undefined, quiet: false, dashed: false, head: undefined, line };
+  const edge = { from: from.value, to: to.value, label: undefined, quiet: false, dashed: false, head: undefined, no: undefined, line };
   for (const t of rest) readEdgeWord(t, edge, { line, ctx });
   if (ctx.figure.kind === 'state' && edge.label === undefined) ctx.problems.error(line, 'a transition needs an event label: a -> b "event"');
   ctx.figure.edges.push(edge);
@@ -111,7 +112,7 @@ export function readEdge({ tokens, line }, ctx) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 선 줄의 낱말 하나: 글(라벨), quiet, dashed, head=. 같은 것을 두 번 쓰면 오류다.
+// 선 줄의 낱말 하나: 글(라벨), quiet, dashed, head=, no=. 같은 것을 두 번 쓰면 오류다.
 function readEdgeWord(t, edge, { line, ctx }) {
   if (t.type === 'text' && edge.label === undefined) edge.label = t.value;
   else if (t.type === 'word' && flagNames('edge').includes(t.value)) {
@@ -121,6 +122,9 @@ function readEdgeWord(t, edge, { line, ctx }) {
     if (edge.head !== undefined) ctx.problems.error(line, '"head" is written twice');
     else if (t.valueType !== 'word' || !valueNames('head').includes(t.value)) ctx.problems.error(line, `head is one of ${valueNames('head').join(', ')}`);
     else edge.head = t.value;
-  } else ctx.problems.error(line, `an edge takes a quoted label, quiet, dashed, and head=. Found "${t.value}"`);
+  } else if (t.type === 'option' && t.key === 'no') {
+    if (edge.no !== undefined) ctx.problems.error(line, '"no" is written twice');
+    else edge.no = readOptions([t], { scopes: ['edge'], what: 'an edge', line, ctx }).no;
+  } else ctx.problems.error(line, `an edge takes a quoted label, quiet, dashed, head=, and no=. Found "${t.value}"`);
 }
 

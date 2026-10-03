@@ -1,0 +1,17 @@
+mutoscope 1
+flow right
+title "번호, 배지, 아이콘, 복제 개수의 모든 낱말"
+subtitle "no, badge, icon, icons, count"
+
+icons mine "architecture-icons"
+group edge "엣지" badge="NET" icon=region {
+  box lb "로드 밸런서" icon=lb badge="LB"
+}
+group app "앱" direction=down {
+  box web "웹" icon=server badge="WEB" count=3
+  box chip "칩" icon=mine:chip
+  box vcs "저장소" icon=builtin:db
+}
+lb -> web "요청" no=1
+web -> chip no=2
+chip -> vcs "저장" no=3

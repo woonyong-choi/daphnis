@@ -1,0 +1,28 @@
+flow right
+title "클라우드 구성도"
+subtitle "사용자 요청이 로드 밸런서, 웹 서버, 앱 서버를 거쳐 저장소에 닿는 순서(1~5)"
+
+person user "사용자"
+box lb "로드 밸런서" icon=lb badge="LB"
+group priv "프라이빗" icon=subnet direction=down {
+  box web "웹 서버" icon=server count=3
+  box app "앱 서버" icon=server badge="APP"
+}
+group data "데이터" icon=subnet direction=down {
+  store db "DB" icon=db badge="DB"
+  store files "스토리지" icon=object badge="OBJ"
+}
+
+user -> lb no=1
+lb -> web no=2
+web -> app no=3
+app -> db no=4
+app -> files no=5
+
+step "들어오기" "요청이 로드 밸런서를 지나 웹 서버에 닿는다"
+  user -> lb
+  lb -> web
+step "처리" "웹 서버가 앱 서버를 부른다"
+  web -> app
+step "저장" "앱 서버가 데이터베이스와 스토리지를 쓴다"
+  app -> db & app -> files

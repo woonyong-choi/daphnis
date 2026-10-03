@@ -1,5 +1,5 @@
 // 배치 모형을 elkjs 그래프로 바꾼다. 선택 사항 값은 모두 토큰이다(docs/design/layout.md 간격과 결정성).
-import { groupTitleWidth, sizePill } from '../measure/sizes.js';
+import { groupTitleWidth, hasPill, sizePill } from '../measure/sizes.js';
 import { values } from '../tokens.js';
 import { ROOT } from './model.js';
 import { isBodyShape, outerBox, spreadBodyPorts } from './ports.js';
@@ -28,7 +28,7 @@ function edgesByContainer({ containers, pieces, edges }) {
   for (const [index, list] of pieces) {
     const edge = edges.find((e) => e.index === index);
     list.forEach((p, k) => {
-      const labels = p.hasLabel && edge.label && !isBeside(edge, containers.get(p.container)) ? [{ id: `label::${index}`, text: edge.label, ...sizeOf(sizePill(edge.label)), layoutOptions: LABEL_OPTIONS }] : [];
+      const labels = p.hasLabel && hasPill(edge) && !isBeside(edge, containers.get(p.container)) ? [{ id: `label::${index}`, text: edge.label ?? String(edge.no), ...sizeOf(sizePill(edge.label, edge.no)), layoutOptions: LABEL_OPTIONS }] : [];
       byContainer.get(p.container).push({ id: `${index}::${k}`, sources: [p.from], targets: [p.to], labels });
     });
   }
@@ -50,9 +50,10 @@ function alignOf(parent, ctx) {
 // vars: c = 자식 수, p = 연결점 수, d = 그룹 깊이
 // basis: estimate
 function containerToElk(c, ctx) {
+  const children = c.children.map((id) => (ctx.model.containers.has(id) ? containerToElk(ctx.model.containers.get(id), ctx) : nodeToElk(ctx.model.nodes.get(id), ctx)));
   return {
     id: c.id,
-    children: c.children.map((id) => (ctx.model.containers.has(id) ? containerToElk(ctx.model.containers.get(id), ctx) : nodeToElk(ctx.model.nodes.get(id), ctx))),
+    children,
     edges: ctx.byContainer.get(c.id),
     ports: c.ports.map((p) => ({ id: p.id, width: 0, height: 0, layoutOptions: { 'elk.port.side': p.side } })),
     layoutOptions: containerOptions(c, ctx),
@@ -117,9 +118,10 @@ function rootOptions(figure) {
 // basis: estimate
 function groupOptions(c, ctx) {
   return {
-    'elk.padding': `[top=${SIZE.group.title + SPACE['6']},left=${SPACE['12']},bottom=${SPACE['12']},right=${SPACE['12']}]`,
+    // 제목이 선을 비킬 자리가 없던 그룹은 오른쪽 안쪽 여백을 제목 덩어리만큼 넓혀, 선 오른쪽 끝 너머에 제목이 설 자리를 만든다.
+    'elk.padding': `[top=${SIZE.group.title + SPACE['6']},left=${SPACE['12']},bottom=${SPACE['12']},right=${SPACE['12'] + (ctx.figure.wideGroups?.has(c.id) ? groupTitleWidth(c) : 0)}]`,
     'elk.nodeSize.constraints': 'MINIMUM_SIZE',
-    'elk.nodeSize.minimum': `(${groupTitleWidth(c.label)}, ${SIZE.group.title})`,
+    'elk.nodeSize.minimum': `(${minGroupWidth(c)}, ${SIZE.group.title})`,
     ...alignOf(c.parent, ctx),
   };
 }
@@ -141,4 +143,13 @@ function wrapOptions(aspect) {
 
 function sizeOf({ w, h }) {
   return { width: w, height: h };
+}
+
+// cost: time O(p), heap O(1), stack O(1)
+// vars: p = 그룹 연결점 수
+// basis: estimate
+// 그룹 최소 너비. 위 면으로 선이 들어오는 그룹은 제목 줄 위로 선이 내려오므로, 제목이 선 한쪽에 들어가도록 제목 덩어리의 두 배 너비로 시작한다(선은 대개 가운데로 들어온다).
+function minGroupWidth(c) {
+  const head = groupTitleWidth(c);
+  return c.ports.some((p) => p.side === 'NORTH') ? head * 2 : head;
 }

@@ -126,6 +126,24 @@
 - 한 격자의 두 칸을 잇는 선은 elkjs를 거치지 않는다. 두 칸의 통로를 격자 오른쪽 여백의 세로 줄로 이은 경로가 전부이고, 이런 선이 있으면 오른쪽 여백이 `(n + 1) × space.5`로 넓어진다. 이 선은 라벨을 받지 않는다.
 - 테이블 열 연결점과 칸 연결점은 같은 장치다. 도형이 선 끝마다 `{ side, position, lead }`를 정하고(`layout/ports.js`의 `portSpec`), 연결점 `position`이 elkjs에, `lead`가 선 경로에 간다. 테이블 열은 lead가 없다.
 
+### 장식: 아이콘, 배지, 개수, 번호
+
+- 도형 윗줄(아이콘 `size.icon.node`, 글자 알약 높이 `size.pill.height`)과 그룹 제목 줄(아이콘 `size.icon.group`)의 장식 크기는 배치 전에 정하고 도형과 제목 너비에 넣는다. 윗줄은 이름 위에 서고 높이만큼 도형이 커진다. 복제 개수 상자는 뒤 윤곽 두 겹(`space.2`씩)만큼 크고 이름과 카드는 앞 상자 안에 놓인다.
+- 선 번호 원은 라벨 알약의 일부라 알약 크기에 들어가 배치와 검사가 같은 사각형을 쓴다.
+
+### 아이콘
+
+- 기본 세트 `builtin`은 두 묶음이고 이름은 `src/icons/names.json` 표 하나에서 찾는다. 한 표라 개념 이름과 브랜드 이름은 겹칠 수 없고 접두사 없이 쓴다.
+  - 범용 개념(`server`, `lb`, `db`, `igw` …): IBM Carbon icons(Apache-2.0) 29개, `src/icons/carbon/`. 상표 로고(`logo--*`)와 쿠버네티스는 넣지 않는다.
+  - 기술 브랜드(`git`, `postgresql`, `kubernetes` …): Simple Icons 16.33.0의 32개, `src/icons/simple-icons/`. 라이브러리는 CC0 1.0이지만 아이콘마다 라이선스가 따로 있을 수 있어, 공유 조건이 붙은 것(Rust, Jenkins)과 삭제됐거나 없는 것(Java, OpenAI, Apache HTTP Server), 공급자 서비스 아이콘(AWS, Azure, Google Cloud)은 넣지 않는다. 자기 라이선스가 있는 `git`(CC BY 3.0)과 `kafka`(Apache-2.0)는 `NOTICE`에 저작자를 적는다.
+  - 파일은 루트 요소에 `fill="currentColor"`만 더했고 모양은 그대로다(`NOTICE`와 `LICENSE`에 "modified: color only"). 브랜드 고유색은 쓰지 않는다. 상표는 각 소유자의 것이고 이 저장소는 식별 목적으로만 표시한다(`NOTICE`).
+- 색은 `currentColor`가 정하고 그림은 `.fl-icon { color: color.muted }`다. 파일 안 색은 없다. 켜진 도형도 이름 글자(`fg`)가 바뀌지 않고 테두리만 `state.active`가 되므로 아이콘도 켜져도 `muted` 그대로다. 파랑은 지금 일어나는 일에만 쓰기 때문이다.
+- 사용자 세트: `icons 이름 "폴더"`로 등록하고 `icon=이름:파일이름`으로 쓴다. 저장소에는 넣지 않는다(라이선스가 불명확한 세트를 사용자가 직접 쓰는 경우). 렌더 때 파일을 읽어 `g`, `path`, `circle`, `ellipse`, `rect`, `line`, `polyline`, `polygon`과 좌표, 변환, 칠하기 속성만 다시 쓰고(색은 모두 `currentColor`나 `none`) 나머지(script, image, style, use, 그라디언트 등)는 오류다. 64KB, 요소 600개 상한이다.
+
+### 그룹 제목 줄
+
+- 선은 그룹 제목 줄(아이콘, 제목, 배지)을 지나지 못한다. 선이 제목 자리를 지나면 제목 덩어리가 기본 자리, 선분 오른쪽 바로 너머, 선분 왼쪽 바로 앞 가운데 가장 왼쪽으로 맞는 자리로 비킨다. 위 면으로 선이 들어오는 그룹은 제목이 선 한쪽에 들어가도록 최소 너비가 제목 덩어리의 두 배다. 그래도 맞지 않으면 그림 검사 13번이 오류로 알린다.
+
 ### 되돌아가는 선
 
 - 순환이 있는 그룹(바깥 층 포함)에서만 되돌아가는 선을 따로 정한다. 원본에 적은 줄 순서대로 깊이 우선으로 선을 따라가다, 지금 따라가는 길 위의 도형으로 되돌아오는 선이 되돌아가는 선이다. 도형과 그룹은 그룹을 앞에 모으지 않고 원본 줄 순서로 섞어 둔다.
@@ -198,6 +216,9 @@
 
 | 요구사항 | 검증 계획 |
 |---|---|
+| 선은 그룹 제목 줄을 지나지 않는다. | `test/check.test.js`의 `checkFigure_each_item_reports_its_code_for_a_scene_that_breaks_it`(13번 행) |
+| 선 번호는 라벨 알약의 일부이고 라벨이 없으면 번호 원만 있다. | `test/layout.test.js`의 `sizePill_number_adds_a_badge_before_the_label_and_stands_alone_without_a_label` |
+| 기본 아이콘 세트는 표와 파일이 맞고 로고와 고정 색이 없다. 사용자 세트는 안전한 SVG만 쓴다. | `test/icons.test.js`의 세 시험 |
 | 배치에 넘긴 도형 크기와 그린 도형 크기가 같다. | `test/layout.test.js`의 `layoutGraph_box_sizes_equal_measured_sizes`. 상자와 저장소 원본에서 두 값 비교 |
 | 선 양 끝이 도형의 연결점 규칙 자리에 있다. | 모든 예제에서 선 끝과 도형 연결점 규칙 비교 |
 | 그룹의 `direction`이 안쪽 배치에 지켜진다. | `test/layout.test.js`의 `layoutGraph_group_direction_down_stacks_the_children`. 세로 그룹의 안쪽 도형 x가 같고 y가 커지는지 확인 |

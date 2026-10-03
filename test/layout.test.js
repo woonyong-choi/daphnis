@@ -695,3 +695,14 @@ test('buildFigure_state_figures_light_the_edges_their_move_lines_name', async ()
   assert.deepEqual(built.scene.edges.map((e) => `${e.from}>${e.to}`), ['a>b', 'b>c', '__start>a', 'c>__final0']);
   assert.ok(checked >= 3, `상태 그림 ${checked}개`);
 });
+
+// 근거: 설계 figure-syntax.md 번호 절 "번호는 라벨 알약의 일부이고 라벨이 없으면 번호 원만 있다"
+test('sizePill_number_adds_a_badge_before_the_label_and_stands_alone_without_a_label', () => {
+  const plain = sizePill('요청');
+  const numbered = sizePill('요청', 1);
+  const alone = sizePill(undefined, 12);
+
+  assert.ok(numbered.w > plain.w);
+  assert.equal(alone.h, plain.h);
+  assert.ok(alone.w >= alone.h && alone.w < numbered.w);
+});

@@ -1,0 +1,23 @@
+flow down
+title "배포 구성도"
+subtitle "빌드가 컨테이너 이미지를 만들고 클러스터의 API가 데이터 저장소를 쓰는 순서(1~4)"
+
+box ci "GitHub Actions" icon=githubactions
+box registry "Docker" icon=docker
+group cluster "Kubernetes" icon=kubernetes {
+  box api "API" icon=nodejs badge="API" count=3
+}
+store pg "PostgreSQL" icon=postgresql
+store cache "Redis" icon=redis
+
+ci -> registry no=1
+registry -> api no=2
+api -> pg no=3
+api -> cache no=4
+
+step "빌드" "빌드가 이미지를 만들어 보관한다"
+  ci -> registry
+step "배포" "클러스터가 이미지를 받는다"
+  registry -> api
+step "사용" "API가 데이터 저장소를 쓴다"
+  api -> pg & api -> cache

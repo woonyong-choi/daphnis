@@ -119,6 +119,10 @@ export const tokens = freeze({
     "pill": {
       "height": "var(--size-pill-height)"
     },
+    "icon": {
+      "node": "var(--size-icon-node)",
+      "group": "var(--size-icon-group)"
+    },
     "tag": {
       "height": "var(--size-tag-height)"
     },
@@ -398,6 +402,10 @@ export const values = freeze({
     },
     "pill": {
       "height": 18
+    },
+    "icon": {
+      "node": 20,
+      "group": 16
     },
     "tag": {
       "height": 14

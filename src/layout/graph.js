@@ -48,7 +48,10 @@ export async function layoutGraph(figure, sizes) {
 async function place(figure, sizes) {
   let best = await arrange(figure, sizes);
   if (best.laid.width > CANVAS && figure.aspect === undefined && !figure.safeLayout) best = await fitCanvas(figure, sizes, best);
-  return readElk(best.laid, best.model);
+  const scene = readElk(best.laid, best.model);
+  // 제목이 선을 비킬 자리가 없는 그룹은 너비를 넓혀 한 번 더 배치한다(그림 검사 13번).
+  const blocked = scene.groups.filter((g) => g.isTitleBlocked).map((g) => g.id);
+  return blocked.length && !figure.wideGroups ? place({ ...figure, wideGroups: new Set(blocked) }, sizes) : scene;
 }
 
 // cost: time O(elk(s + e) + e·d), heap O(s + e·d), stack O(d)

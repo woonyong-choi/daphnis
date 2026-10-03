@@ -36,11 +36,16 @@ export function buildModel(figure, sizes) {
 // basis: estimate
 function buildContainers(figure) {
   const containers = new Map([[ROOT, { id: ROOT, direction: figure.direction, parent: undefined, children: [], edges: [], ports: [] }]]);
-  for (const g of figure.groups) containers.set(g.id, { id: g.id, label: g.label, line: g.line, direction: undefined, own: g.direction, parent: g.parent ?? ROOT, children: [], edges: [], ports: [] });
+  for (const g of figure.groups) containers.set(g.id, { ...decorOf(g), id: g.id, label: g.label, line: g.line, direction: undefined, own: g.direction, parent: g.parent ?? ROOT, children: [], edges: [], ports: [] });
   for (const g of figure.groups) containers.get(g.parent ?? ROOT).children.push(g.id);
   for (const c of containers.values()) c.direction = c.own ?? directionOf(c.parent, containers, figure);
   for (const c of containers.values()) c.parentDirection = c.parent ? containers.get(c.parent).direction : undefined;
   return containers;
+}
+
+// 그룹의 배지, 아이콘 선택 사항. 배치와 그리기가 그룹 이름으로 찾는 값이다.
+export function decorOf({ badge, icon, iconData }) {
+  return { badge, icon, iconData };
 }
 
 // cost: time O(d), heap O(1), stack O(1)
