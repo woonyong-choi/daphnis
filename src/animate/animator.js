@@ -44,7 +44,7 @@ function decorateElement(kind, { id, i, extra, scene }, { segs, toggle, lit, car
   switch (kind) {
     case 'node':
     case 'group':
-      return toggle(segs.map((s) => litIds(s, scene.edges).has(id)), `stroke: ${c.state.active}`, `stroke: ${c.border}`);
+      return toggle(segs.map((s) => litIds(s, scene.edges).has(id)), `stroke: ${c.state.active}; stroke-width: ${tokens.border.strong}`, `stroke: ${c.border}; stroke-width: ${tokens.border.thin}`);
     case 'cell':
       return toggle(segs.map((s) => s.partsOn.includes(extra)), `fill: ${c['card-on']}; stroke: ${c.state.active}; stroke-width: ${tokens.border.edge}`, `fill: ${c.node}; stroke: ${c.border}; stroke-width: ${tokens.border.thin}`);
     case 'part':

@@ -115,6 +115,8 @@ const MALFORMED = [
   { rule: '배지는 8자 이하', source: 'flow right\nbox a "A" badge="123456789"', expect: /badge is at most 8 characters/ },
   { rule: '원은 배지와 아이콘이 없음', source: 'flow right\nbox a "A" shape=circle badge="X"', expect: /a circle takes a name only\. Remove the badge or icon/ },
   { rule: '배지와 아이콘은 흐름 그림에서만', source: 'sequence\nbox a "A" badge="X"', expect: /^2: badge belongs to flow figures only/ },
+  { rule: '타일은 아이콘이 있어야 함', source: 'flow right\nbox a "A" shape=tile', expect: /^2: a tile is an icon card\. Add icon=name/ },
+  { rule: '그룹 테두리는 solid나 dashed', source: 'flow right\ngroup g "G" border=dotted {\nbox a "A"\n}', expect: /border is one of solid, dashed/ },
   { rule: '아이콘: 모르는 이름은 가까운 이름을 제안', source: 'flow right\nbox a "A" icon=servr', expect: /^2: unknown icon "servr"\. Did you mean "server"\?/ },
   { rule: '아이콘: 등록하지 않은 세트', source: 'flow right\nbox a "A" icon=nhn:lb', expect: /unknown icon set "nhn"\. .*Register it first: icons nhn/ },
   { rule: '아이콘: 기본 세트 이름은 등록할 수 없음', source: 'flow right\nicons builtin "x"\nbox a "A"', expect: /"builtin" is the built-in icon set/ },
@@ -164,6 +166,7 @@ const VALID = [
   { form: '그룹 안 격자의 rows와 cols 생략', source: 'flow right\ngroup view "화면" {\n  grid g "한 칸" {\n    item only "칸"\n  }\n}' },
   // 설계 figure-syntax.md 번호, 배지, 아이콘, 복제 개수 절
   { form: '번호, 배지, 아이콘, 복제 개수', source: 'flow right\nicons mine "x"\ngroup g "G" badge="B" icon=region {\nbox a "A" icon=server\n}\nbox b "B" count=3 badge="BB" icon=mine:chip\na -> b "x" no=1' },
+  { form: '타일과 점선 테두리 그룹', source: 'flow right\ngroup g "G" border=dashed icon=region {\nbox a "A" shape=tile icon=server count=3\n}\nbox b "B"\na -> b no=2' },
   { form: '낱말 count, no를 이름으로', source: 'flow right\nbox count "L"\nbox no "N"\ncount -> no\n' },
   { form: '새 tone 이름', source: 'flow right\nbox a "A"\nstep "s"\n  show a "x" tag="t" tone=teal' },
 ];

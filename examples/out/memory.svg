@@ -26,8 +26,10 @@
   --color-palette-blue-50: #edf5fb;
   --color-palette-blue-200: #a9cdea;
   --color-palette-blue-400: #79c0ff;
+  --color-palette-blue-450: #6f9cf5;
   --color-palette-blue-550: #218fe5;
   --color-palette-blue-600: #1072c2;
+  --color-palette-blue-700: #125de6;
   --color-palette-blue-800: #1d5d91;
   --color-palette-blue-850: #2b4254;
   --color-palette-blue-900: #1d2933;
@@ -46,6 +48,7 @@
   --color-state-active-fill: var(--color-palette-blue-600);
   --color-state-active-text: var(--color-palette-blue-600);
   --color-state-on-active: var(--color-palette-gray-0);
+  --color-figure-icon: var(--color-palette-blue-700);
   --color-ui-link: var(--color-palette-blue-600);
   --color-ui-focus: var(--color-palette-blue-550);
   --color-ui-progress: var(--color-palette-blue-550);
@@ -84,6 +87,8 @@
   --size-pill-height: 18px;
   --size-icon-node: 20px;
   --size-icon-group: 16px;
+  --size-icon-tile: 28px;
+  --size-icon-chip-pad: 4px;
   --size-tag-height: 14px;
   --size-packet-radius: 4.5px;
   --size-packet-halo: 10px;
@@ -98,6 +103,7 @@
   --size-node-state-dot: 14px;
   --size-node-table-row: 26px;
   --size-node-circle: 40px;
+  --size-node-tile-width: 80px;
   --size-grid-cell: 32px;
   --size-figure-canvas: 960px;
   --size-chip-max-width: 210px;
@@ -203,6 +209,7 @@
     --color-state-active-fill: var(--color-palette-blue-400);
     --color-state-active-text: var(--color-palette-blue-400);
     --color-state-on-active: var(--color-palette-ink-850);
+    --color-figure-icon: var(--color-palette-blue-450);
     --color-ui-link: var(--color-palette-blue-400);
     --color-ui-focus: var(--color-palette-blue-400);
     --color-ui-progress: var(--color-palette-blue-400);
@@ -231,6 +238,7 @@
   --color-state-active-fill: var(--color-palette-blue-400);
   --color-state-active-text: var(--color-palette-blue-400);
   --color-state-on-active: var(--color-palette-ink-850);
+  --color-figure-icon: var(--color-palette-blue-450);
   --color-ui-link: var(--color-palette-blue-400);
   --color-ui-focus: var(--color-palette-blue-400);
   --color-ui-progress: var(--color-palette-blue-400);
@@ -358,6 +366,7 @@
 
 .fl .fl-stroke {
   stroke: var(--color-border);
+  stroke-width: var(--border-thin);
 }
 
 .fl .fl-path {
@@ -438,7 +447,16 @@
 }
 
 .fl .fl-icon {
-  color: var(--color-muted);
+  color: var(--color-figure-icon);
+}
+
+/* 그룹 제목 줄 아이콘 칩: 윤곽색 바탕에 노드 면 색 아이콘 */
+.fl .icon-chip {
+  fill: var(--color-muted);
+}
+
+.fl .fl-icon.on-chip {
+  color: var(--color-node);
 }
 
 /* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
@@ -467,11 +485,11 @@
   fill: var(--color-muted);
 }
 
-@keyframes a0 { 0%,12.377% { stroke: var(--color-border) } 12.377%,16.093% { stroke: var(--color-border) } 16.093%,23.91% { stroke: var(--color-border) } 23.911%,37.325% { stroke: var(--color-border) } 37.326%,41.042% { stroke: var(--color-border) } 41.042%,48.859% { stroke: var(--color-border) } 48.859%,51.166% { stroke: var(--color-border) } 51.166%,86.938% { stroke: var(--color-border) } 86.939%,100% { stroke: var(--color-border) } }
+@keyframes a0 { 0%,12.377% { stroke: var(--color-border); stroke-width: var(--border-thin) } 12.377%,16.093% { stroke: var(--color-border); stroke-width: var(--border-thin) } 16.093%,23.91% { stroke: var(--color-border); stroke-width: var(--border-thin) } 23.911%,37.325% { stroke: var(--color-border); stroke-width: var(--border-thin) } 37.326%,41.042% { stroke: var(--color-border); stroke-width: var(--border-thin) } 41.042%,48.859% { stroke: var(--color-border); stroke-width: var(--border-thin) } 48.859%,51.166% { stroke: var(--color-border); stroke-width: var(--border-thin) } 51.166%,86.938% { stroke: var(--color-border); stroke-width: var(--border-thin) } 86.939%,100% { stroke: var(--color-border); stroke-width: var(--border-thin) } }
 .fl .a0 { animation: a0 39.016s infinite linear; }
-@keyframes a1 { 0%,12.377% { stroke: var(--color-state-active) } 12.377%,16.093% { stroke: var(--color-state-active) } 16.093%,23.91% { stroke: var(--color-state-active) } 23.911%,37.325% { stroke: var(--color-state-active) } 37.326%,41.042% { stroke: var(--color-state-active) } 41.042%,48.859% { stroke: var(--color-state-active) } 48.859% { stroke: var(--color-state-active) } 49.372%,51.166% { stroke: var(--color-border) } 51.166% { stroke: var(--color-border) } 51.679%,86.938% { stroke: var(--color-state-active) } 86.939%,100% { stroke: var(--color-state-active) } }
+@keyframes a1 { 0%,12.377% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 12.377%,16.093% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 16.093%,23.91% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 23.911%,37.325% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 37.326%,41.042% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 41.042%,48.859% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 48.859% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 49.372%,51.166% { stroke: var(--color-border); stroke-width: var(--border-thin) } 51.166% { stroke: var(--color-border); stroke-width: var(--border-thin) } 51.679%,86.938% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 86.939%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
 .fl .a1 { animation: a1 39.016s infinite linear; }
-@keyframes a2 { 0%,12.377% { stroke: var(--color-state-active) } 12.377%,16.093% { stroke: var(--color-state-active) } 16.093%,23.91% { stroke: var(--color-state-active) } 23.911%,37.325% { stroke: var(--color-state-active) } 37.326%,41.042% { stroke: var(--color-state-active) } 41.042%,48.859% { stroke: var(--color-state-active) } 48.859% { stroke: var(--color-state-active) } 49.372%,51.166% { stroke: var(--color-border) } 51.166%,86.938% { stroke: var(--color-border) } 86.939%,100% { stroke: var(--color-border) } }
+@keyframes a2 { 0%,12.377% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 12.377%,16.093% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 16.093%,23.91% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 23.911%,37.325% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 37.326%,41.042% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 41.042%,48.859% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 48.859% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 49.372%,51.166% { stroke: var(--color-border); stroke-width: var(--border-thin) } 51.166%,86.938% { stroke: var(--color-border); stroke-width: var(--border-thin) } 86.939%,100% { stroke: var(--color-border); stroke-width: var(--border-thin) } }
 .fl .a2 { animation: a2 39.016s infinite linear; }
 @keyframes a3 { 0%,10.185% { opacity: 0 } 10.186% { opacity: 0 } 10.698%,12.377% { opacity: 1 } 12.377%,16.093% { opacity: 1 } 16.093%,23.91% { opacity: 1 } 23.911% { opacity: 1 } 24.423%,37.325% { opacity: 0 } 37.326%,41.042% { opacity: 0 } 41.042%,48.859% { opacity: 0 } 48.859%,51.166% { opacity: 0 } 51.166%,86.938% { opacity: 0 } 86.939%,100% { opacity: 0 } }
 .fl .a3 { animation: a3 39.016s infinite linear; }
@@ -479,13 +497,13 @@
 .fl .a4 { animation: a4 39.016s infinite linear; }
 @keyframes a5 { 0%,10.185% { stroke: var(--color-border); fill: var(--color-surface) } 10.186% { stroke: var(--color-border); fill: var(--color-surface) } 10.698%,12.377% { stroke: var(--color-state-active); fill: var(--color-card-on) } 12.377%,16.093% { stroke: var(--color-state-active); fill: var(--color-card-on) } 16.093%,23.91% { stroke: var(--color-state-active); fill: var(--color-card-on) } 23.911% { stroke: var(--color-state-active); fill: var(--color-card-on) } 24.423%,34.096% { stroke: var(--color-border); fill: var(--color-surface) } 34.096% { stroke: var(--color-border); fill: var(--color-surface) } 34.609%,37.325% { stroke: var(--color-state-active); fill: var(--color-card-on) } 37.326%,41.042% { stroke: var(--color-state-active); fill: var(--color-card-on) } 41.042%,48.859% { stroke: var(--color-state-active); fill: var(--color-card-on) } 48.859% { stroke: var(--color-state-active); fill: var(--color-card-on) } 49.372%,51.166% { stroke: var(--color-border); fill: var(--color-surface) } 51.166%,86.938% { stroke: var(--color-border); fill: var(--color-surface) } 86.939%,100% { stroke: var(--color-border); fill: var(--color-surface) } }
 .fl .a5 { animation: a5 39.016s infinite linear; }
-@keyframes a6 { 0%,12.377% { stroke: var(--color-border) } 12.377% { stroke: var(--color-border) } 12.89%,16.093% { stroke: var(--color-state-active) } 16.093%,23.91% { stroke: var(--color-state-active) } 23.911% { stroke: var(--color-state-active) } 24.423%,37.325% { stroke: var(--color-border) } 37.326% { stroke: var(--color-border) } 37.838%,41.042% { stroke: var(--color-state-active) } 41.042%,48.859% { stroke: var(--color-state-active) } 48.859% { stroke: var(--color-state-active) } 49.372%,51.166% { stroke: var(--color-border) } 51.166%,86.938% { stroke: var(--color-border) } 86.939%,100% { stroke: var(--color-border) } }
+@keyframes a6 { 0%,12.377% { stroke: var(--color-border); stroke-width: var(--border-thin) } 12.377% { stroke: var(--color-border); stroke-width: var(--border-thin) } 12.89%,16.093% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 16.093%,23.91% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 23.911% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 24.423%,37.325% { stroke: var(--color-border); stroke-width: var(--border-thin) } 37.326% { stroke: var(--color-border); stroke-width: var(--border-thin) } 37.838%,41.042% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 41.042%,48.859% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 48.859% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 49.372%,51.166% { stroke: var(--color-border); stroke-width: var(--border-thin) } 51.166%,86.938% { stroke: var(--color-border); stroke-width: var(--border-thin) } 86.939%,100% { stroke: var(--color-border); stroke-width: var(--border-thin) } }
 .fl .a6 { animation: a6 39.016s infinite linear; }
 @keyframes a7 { 0%,12.377% { opacity: 0 } 12.377%,16.093% { opacity: 0 } 16.093%,23.91% { opacity: 0 } 23.911%,37.325% { opacity: 0 } 37.326%,39.248% { opacity: 0 } 39.248% { opacity: 0 } 39.761%,41.042% { opacity: 1 } 41.042%,48.859% { opacity: 1 } 48.859% { opacity: 1 } 49.372%,51.166% { opacity: 0 } 51.166%,86.938% { opacity: 0 } 86.939%,100% { opacity: 0 } }
 .fl .a7 { animation: a7 39.016s infinite linear; }
 @keyframes a8 { 0%,12.377% { stroke: var(--color-border); fill: var(--color-surface) } 12.377%,16.093% { stroke: var(--color-border); fill: var(--color-surface) } 16.093%,23.91% { stroke: var(--color-border); fill: var(--color-surface) } 23.911%,37.325% { stroke: var(--color-border); fill: var(--color-surface) } 37.326%,39.248% { stroke: var(--color-border); fill: var(--color-surface) } 39.248% { stroke: var(--color-border); fill: var(--color-surface) } 39.761%,41.042% { stroke: var(--color-state-active); fill: var(--color-card-on) } 41.042%,48.859% { stroke: var(--color-state-active); fill: var(--color-card-on) } 48.859% { stroke: var(--color-state-active); fill: var(--color-card-on) } 49.372%,51.166% { stroke: var(--color-border); fill: var(--color-surface) } 51.166%,86.938% { stroke: var(--color-border); fill: var(--color-surface) } 86.939%,100% { stroke: var(--color-border); fill: var(--color-surface) } }
 .fl .a8 { animation: a8 39.016s infinite linear; }
-@keyframes a9 { 0%,12.377% { stroke: var(--color-border) } 12.377%,16.093% { stroke: var(--color-border) } 16.093% { stroke: var(--color-border) } 16.606%,23.91% { stroke: var(--color-state-active) } 23.911% { stroke: var(--color-state-active) } 24.423%,37.325% { stroke: var(--color-border) } 37.326%,41.042% { stroke: var(--color-border) } 41.042% { stroke: var(--color-border) } 41.555%,48.859% { stroke: var(--color-state-active) } 48.859%,51.166% { stroke: var(--color-state-active) } 51.166%,86.938% { stroke: var(--color-state-active) } 86.939%,100% { stroke: var(--color-state-active) } }
+@keyframes a9 { 0%,12.377% { stroke: var(--color-border); stroke-width: var(--border-thin) } 12.377%,16.093% { stroke: var(--color-border); stroke-width: var(--border-thin) } 16.093% { stroke: var(--color-border); stroke-width: var(--border-thin) } 16.606%,23.91% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 23.911% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 24.423%,37.325% { stroke: var(--color-border); stroke-width: var(--border-thin) } 37.326%,41.042% { stroke: var(--color-border); stroke-width: var(--border-thin) } 41.042% { stroke: var(--color-border); stroke-width: var(--border-thin) } 41.555%,48.859% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 48.859%,51.166% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 51.166%,86.938% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 86.939%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
 .fl .a9 { animation: a9 39.016s infinite linear; }
 @keyframes a10 { 0%,12.377% { opacity: 0 } 12.377%,16.093% { opacity: 0 } 16.093%,18.015% { opacity: 0 } 18.016% { opacity: 0 } 18.528%,23.91% { opacity: 1 } 23.911% { opacity: 1 } 24.423%,37.325% { opacity: 0 } 37.326%,41.042% { opacity: 0 } 41.042%,48.859% { opacity: 0 } 48.859%,51.166% { opacity: 0 } 51.166%,86.938% { opacity: 0 } 86.939%,100% { opacity: 0 } }
 .fl .a10 { animation: a10 39.016s infinite linear; }
@@ -493,7 +511,7 @@
 .fl .a11 { animation: a11 39.016s infinite linear; }
 @keyframes a12 { 0%,12.377% { stroke: var(--color-border); fill: var(--color-surface) } 12.377%,16.093% { stroke: var(--color-border); fill: var(--color-surface) } 16.093%,18.015% { stroke: var(--color-border); fill: var(--color-surface) } 18.016% { stroke: var(--color-border); fill: var(--color-surface) } 18.528%,23.91% { stroke: var(--color-state-active); fill: var(--color-card-on) } 23.911% { stroke: var(--color-state-active); fill: var(--color-card-on) } 24.423%,37.325% { stroke: var(--color-border); fill: var(--color-surface) } 37.326%,41.042% { stroke: var(--color-border); fill: var(--color-surface) } 41.042%,42.964% { stroke: var(--color-border); fill: var(--color-surface) } 42.964% { stroke: var(--color-border); fill: var(--color-surface) } 43.477%,48.859% { stroke: var(--color-state-active); fill: var(--color-card-on) } 48.859%,51.166% { stroke: var(--color-state-active); fill: var(--color-card-on) } 51.166%,86.938% { stroke: var(--color-state-active); fill: var(--color-card-on) } 86.939%,100% { stroke: var(--color-state-active); fill: var(--color-card-on) } }
 .fl .a12 { animation: a12 39.016s infinite linear; }
-@keyframes a13 { 0%,12.377% { stroke: var(--color-border) } 12.377%,16.093% { stroke: var(--color-border) } 16.093%,23.91% { stroke: var(--color-border) } 23.911%,37.325% { stroke: var(--color-border) } 37.326%,41.042% { stroke: var(--color-border) } 41.042%,48.859% { stroke: var(--color-border) } 48.859%,51.166% { stroke: var(--color-border) } 51.166% { stroke: var(--color-border) } 51.679%,86.938% { stroke: var(--color-state-active) } 86.939%,100% { stroke: var(--color-state-active) } }
+@keyframes a13 { 0%,12.377% { stroke: var(--color-border); stroke-width: var(--border-thin) } 12.377%,16.093% { stroke: var(--color-border); stroke-width: var(--border-thin) } 16.093%,23.91% { stroke: var(--color-border); stroke-width: var(--border-thin) } 23.911%,37.325% { stroke: var(--color-border); stroke-width: var(--border-thin) } 37.326%,41.042% { stroke: var(--color-border); stroke-width: var(--border-thin) } 41.042%,48.859% { stroke: var(--color-border); stroke-width: var(--border-thin) } 48.859%,51.166% { stroke: var(--color-border); stroke-width: var(--border-thin) } 51.166% { stroke: var(--color-border); stroke-width: var(--border-thin) } 51.679%,86.938% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 86.939%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
 .fl .a13 { animation: a13 39.016s infinite linear; }
 @keyframes a14 { 0%,12.377% { opacity: 0 } 12.377%,16.093% { opacity: 0 } 16.093%,23.91% { opacity: 0 } 23.911%,37.325% { opacity: 0 } 37.326%,41.042% { opacity: 0 } 41.042%,48.859% { opacity: 0 } 48.859%,51.166% { opacity: 0 } 51.166%,86.938% { opacity: 0 } 86.939%,94.105% { opacity: 0 } 94.105% { opacity: 0 } 94.618%,100% { opacity: 1 } }
 .fl .a14 { animation: a14 39.016s infinite linear; }

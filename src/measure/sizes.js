@@ -60,7 +60,7 @@ export function sizeNode(node, contents = [], lineCounts = { out: 0, in: 0 }) {
   const subLines = node.sub ? wrap(node.sub, maxInner, STYLE.sub) : [];
   const textW = Math.max(...labelLines.map((l) => measure(l, STYLE.label.size, STYLE.label.face)), ...subLines.map((l) => measure(l, STYLE.sub.size)));
   const decor = nodeDecor(node);
-  let w = Math.min(SIZE.node['max-width'], Math.max(SIZE.node['min-width'], textW + INNER_X * 2, (decor?.w ?? 0) + INNER_X * 2));
+  let w = Math.min(SIZE.node['max-width'], Math.max(node.tile ? SIZE.node['tile-width'] : SIZE.node['min-width'], textW + INNER_X * 2, (decor?.w ?? 0) + INNER_X * 2));
   if (contents.length) w = Math.max(w, SIZE.node['card-width']);
   const textH = labelLines.length * STYLE.label.line + subLines.length * STYLE.sub.line;
   if (node.shape === 'decision') {

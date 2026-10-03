@@ -1,10 +1,10 @@
-// 그룹 선언(`group id "이름" [direction=down] [badge="LB"] [icon=server] {`)과 닫는 `}`를 읽는다.
+// 그룹 선언(`group id "이름" [direction=down] [border=dashed] [badge="LB"] [icon=server] {`)과 닫는 `}`를 읽는다.
 import { checkId, currentGroup, rejectName } from './names.js';
 import { readOptions } from './options.js';
 import { ID_PATTERN } from './words.js';
 
 // 흐름 그림에서만 쓰는 선택 사항
-const FLOW_ONLY = ['badge', 'icon'];
+const FLOW_ONLY = ['badge', 'icon', 'border'];
 
 // cost: time O(t), heap O(1), stack O(1)
 // vars: t = 문장 낱말 수
@@ -24,8 +24,8 @@ export function readGroup({ tokens, line }, ctx) {
   else if (openAt < rest.length - 1) ctx.problems.error(line, 'end the group line with "{" and put the group contents on the next lines');
   const found = readOptions(openAt === -1 ? rest : rest.slice(0, openAt), { scopes: ['group'], what: 'a group', line, ctx });
   checkGroupOptions(found, line, ctx);
-  const { direction, badge, icon } = found;
-  const group = { id: id.value, label: label?.value ?? '', direction, badge, icon, parent: currentGroup(ctx), line, hasError: openAt !== rest.length - 1 };
+  const { direction, border, badge, icon } = found;
+  const group = { id: id.value, label: label?.value ?? '', direction, border, badge, icon, parent: currentGroup(ctx), line, hasError: openAt !== rest.length - 1 };
   ctx.figure.groups.push(group);
   ctx.groups.push(group);
 }

@@ -68,7 +68,8 @@ export const VALUES = {
   },
   role: { items: table({ main: V1, compare: V1 }) },
   head: { default: 'end', items: table({ end: V1, both: V1, none: V1 }) },
-  shape: { default: 'rect', items: table({ rect: V1, circle: V1 }) },
+  shape: { default: 'rect', items: table({ rect: V1, circle: V1, tile: V1 }) },
+  border: { default: 'solid', items: table({ solid: V1, dashed: V1 }) },
 };
 
 /**
@@ -126,6 +127,7 @@ export const STATEMENTS = table({
  */
 export const OPTIONS = table({
   'group.direction': { ...V1, type: 'word', values: 'direction' },
+  'group.border': { ...V1, type: 'word', values: 'border' },
   'group.badge': { ...TEXT, maxLength: BADGE_MAX },
   'group.icon': ICON,
   'node.badge': { ...TEXT, maxLength: BADGE_MAX },

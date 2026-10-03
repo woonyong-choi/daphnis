@@ -44,8 +44,10 @@
   --color-palette-blue-50: #edf5fb;
   --color-palette-blue-200: #a9cdea;
   --color-palette-blue-400: #79c0ff;
+  --color-palette-blue-450: #6f9cf5;
   --color-palette-blue-550: #218fe5;
   --color-palette-blue-600: #1072c2;
+  --color-palette-blue-700: #125de6;
   --color-palette-blue-800: #1d5d91;
   --color-palette-blue-850: #2b4254;
   --color-palette-blue-900: #1d2933;
@@ -64,6 +66,7 @@
   --color-state-active-fill: var(--color-palette-blue-600);
   --color-state-active-text: var(--color-palette-blue-600);
   --color-state-on-active: var(--color-palette-gray-0);
+  --color-figure-icon: var(--color-palette-blue-700);
   --color-ui-link: var(--color-palette-blue-600);
   --color-ui-focus: var(--color-palette-blue-550);
   --color-ui-progress: var(--color-palette-blue-550);
@@ -102,6 +105,8 @@
   --size-pill-height: 18px;
   --size-icon-node: 20px;
   --size-icon-group: 16px;
+  --size-icon-tile: 28px;
+  --size-icon-chip-pad: 4px;
   --size-tag-height: 14px;
   --size-packet-radius: 4.5px;
   --size-packet-halo: 10px;
@@ -116,6 +121,7 @@
   --size-node-state-dot: 14px;
   --size-node-table-row: 26px;
   --size-node-circle: 40px;
+  --size-node-tile-width: 80px;
   --size-grid-cell: 32px;
   --size-figure-canvas: 960px;
   --size-chip-max-width: 210px;
@@ -221,6 +227,7 @@
     --color-state-active-fill: var(--color-palette-blue-400);
     --color-state-active-text: var(--color-palette-blue-400);
     --color-state-on-active: var(--color-palette-ink-850);
+    --color-figure-icon: var(--color-palette-blue-450);
     --color-ui-link: var(--color-palette-blue-400);
     --color-ui-focus: var(--color-palette-blue-400);
     --color-ui-progress: var(--color-palette-blue-400);
@@ -249,6 +256,7 @@
   --color-state-active-fill: var(--color-palette-blue-400);
   --color-state-active-text: var(--color-palette-blue-400);
   --color-state-on-active: var(--color-palette-ink-850);
+  --color-figure-icon: var(--color-palette-blue-450);
   --color-ui-link: var(--color-palette-blue-400);
   --color-ui-focus: var(--color-palette-blue-400);
   --color-ui-progress: var(--color-palette-blue-400);
@@ -524,6 +532,7 @@ html.embedded .fl-figure {
 
 .fl .fl-node.on .fl-stroke {
   stroke: var(--color-state-active);
+  stroke-width: var(--border-strong);
 }
 
 .fl .fl-card.on {
@@ -560,7 +569,7 @@ html.embedded .fl-figure {
 .fl .fl-stroke,
 .fl .grid-cell,
 .fl .fl-pill rect {
-  transition: stroke var(--duration-fast), fill var(--duration-fast);
+  transition: stroke var(--duration-fast), stroke-width var(--duration-fast), fill var(--duration-fast);
 }
 
 .fl .fl-layer,
@@ -594,6 +603,7 @@ html.embedded .fl-figure {
 
 .fl .fl-group.on .fl-stroke {
   stroke: var(--color-state-active);
+  stroke-width: var(--border-strong);
 }
 
 .fl .fl-part.on .part-bg {
@@ -715,6 +725,7 @@ html.embedded .fl-figure {
 
 .fl .fl-stroke {
   stroke: var(--color-border);
+  stroke-width: var(--border-thin);
 }
 
 .fl .fl-path {
@@ -795,7 +806,16 @@ html.embedded .fl-figure {
 }
 
 .fl .fl-icon {
-  color: var(--color-muted);
+  color: var(--color-figure-icon);
+}
+
+/* 그룹 제목 줄 아이콘 칩: 윤곽색 바탕에 노드 면 색 아이콘 */
+.fl .icon-chip {
+  fill: var(--color-muted);
+}
+
+.fl .fl-icon.on-chip {
+  color: var(--color-node);
 }
 
 /* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */

@@ -129,7 +129,8 @@
 ### 장식: 아이콘, 배지, 개수, 번호
 
 - 도형 윗줄(아이콘 `size.icon.node`, 글자 알약 높이 `size.pill.height`)과 그룹 제목 줄(아이콘 `size.icon.group`)의 장식 크기는 배치 전에 정하고 도형과 제목 너비에 넣는다. 윗줄은 이름 위에 서고 높이만큼 도형이 커진다. 복제 개수 상자는 뒤 윤곽 두 겹(`space.2`씩)만큼 크고 이름과 카드는 앞 상자 안에 놓인다.
-- 선 번호 원은 라벨 알약의 일부라 알약 크기에 들어가 배치와 검사가 같은 사각형을 쓴다.
+- 선 번호 원은 라벨 알약의 일부라 알약 크기에 들어가 배치와 검사가 같은 사각형을 쓴다. 번호만 있고 라벨이 없는 알약은 elkjs에 자리를 요구하지 않고, 선을 다 그린 뒤 가장 긴 구간 가운데에 얹는다(이 알약이 층 사이 간격을 늘려 가로 구성도가 캔버스에 들지 않던 문제를 푼다).
+- 타일(`shape=tile`)은 윗줄 아이콘을 `size.icon.tile`로 키우고 최소 너비를 `size.node.tile-width`로 줄인 같은 상자다. 그룹 제목 줄 아이콘은 `size.icon.group`에 `size.icon.chip-pad`를 둘레로 더한 색 칩 안에 놓인다. 구성도는 층 하나가 `space.30` 간격과 그룹 안쪽 여백만큼 폭을 쓰므로, 캔버스(960)에 들려면 그룹 방향으로 열을 줄여 짜야 한다(cloud-architecture 예제는 한 열 묶음 `인터넷`과 한 줄 VPC로 943).
 
 ### 아이콘
 
@@ -137,7 +138,7 @@
   - 범용 개념(`server`, `lb`, `db`, `igw` …): IBM Carbon icons(Apache-2.0) 29개, `src/icons/carbon/`. 상표 로고(`logo--*`)와 쿠버네티스는 넣지 않는다.
   - 기술 브랜드(`git`, `postgresql`, `kubernetes` …): Simple Icons 16.33.0의 32개, `src/icons/simple-icons/`. 라이브러리는 CC0 1.0이지만 아이콘마다 라이선스가 따로 있을 수 있어, 공유 조건이 붙은 것(Rust, Jenkins)과 삭제됐거나 없는 것(Java, OpenAI, Apache HTTP Server), 공급자 서비스 아이콘(AWS, Azure, Google Cloud)은 넣지 않는다. 자기 라이선스가 있는 `git`(CC BY 3.0)과 `kafka`(Apache-2.0)는 `NOTICE`에 저작자를 적는다.
   - 파일은 루트 요소에 `fill="currentColor"`만 더했고 모양은 그대로다(`NOTICE`와 `LICENSE`에 "modified: color only"). 브랜드 고유색은 쓰지 않는다. 상표는 각 소유자의 것이고 이 저장소는 식별 목적으로만 표시한다(`NOTICE`).
-- 색은 `currentColor`가 정하고 그림은 `.fl-icon { color: color.muted }`다. 파일 안 색은 없다. 켜진 도형도 이름 글자(`fg`)가 바뀌지 않고 테두리만 `state.active`가 되므로 아이콘도 켜져도 `muted` 그대로다. 파랑은 지금 일어나는 일에만 쓰기 때문이다.
+- 색은 `currentColor`가 정하고 그림은 `.fl-icon { color: color.figure.icon }`다(단색 파랑, 라이트 `#125de6`, 다크 `#6f9cf5`). 파일 안 색은 없고 브랜드 고유색도 쓰지 않는다. 켜진 도형은 `state.active` 파랑이 테두리 색과 두께(`border.strong`)로 나타나고 아이콘은 그대로여서, 두 파랑은 색상과 두께로 갈린다([문서 연동](docs-integration.md) 색 역할 표).
 - 사용자 세트: `icons 이름 "폴더"`로 등록하고 `icon=이름:파일이름`으로 쓴다. 저장소에는 넣지 않는다(라이선스가 불명확한 세트를 사용자가 직접 쓰는 경우). 렌더 때 파일을 읽어 `g`, `path`, `circle`, `ellipse`, `rect`, `line`, `polyline`, `polygon`과 좌표, 변환, 칠하기 속성만 다시 쓰고(색은 모두 `currentColor`나 `none`) 나머지(script, image, style, use, 그라디언트 등)는 오류다. 64KB, 요소 600개 상한이다.
 
 ### 그룹 제목 줄

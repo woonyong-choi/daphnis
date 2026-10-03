@@ -7,6 +7,8 @@ import { placeTitles } from './titles.js';
 import { ROOT, decorOf } from './model.js';
 
 const SETTLE = values.space['4'];
+// 번호 알약을 얹을 구간 안 자리(구간 길이 비율). 가운데를 먼저 보고 양옆으로 간다.
+const RUN_FRACTIONS = [0.5, 0.35, 0.65, 0.2, 0.8];
 // 두 좌표가 같다고 보는 거리
 const TOUCH = 0.5;
 // 같은 면의 선 끝이 이보다 가까워지면 붙어 보인다(그림 검사 5번과 같은 값)
@@ -32,13 +34,26 @@ export function readElk(laid, model) {
     const near = (end) => (other) => other.at !== `${edge.index}:${end}`;
     const start = settleEnd(joined[i], freeRect(edge.from, rects), crowd.get(edge.from)?.filter(near('start')));
     const points = dropCollinear(settleEnd(start.reverse(), freeRect(edge.to, rects), crowd.get(edge.to)?.filter(near('end'))).reverse());
-    return { ...edge, points, labelAt: labels.get(`label::${edge.index}`) ?? (edge.quiet && hasPill(edge) ? besideLabel(points, sizePill(edge.label, edge.no), laid.width) : undefined) };
+    return { ...edge, points, labelAt: labels.get(`label::${edge.index}`) ?? (model.isSafe ? undefined : numberOnlyLabel(edge, points, items)) ?? (edge.quiet && hasPill(edge) ? besideLabel(points, sizePill(edge.label, edge.no), laid.width) : undefined) };
   });
   placeTitles(groups, edges);
   return { items, groups, edges, width: laid.width, height: laid.height };
 }
 
-// cost: time O(p), heap O(1), stack O(1)
+// cost: time O(p·f·s), heap O(p), stack O(1)
+// vars: p = 경로 구간 수, f = 후보 자리 수, s = 도형 수
+// basis: estimate
+// 번호만 있는 알약(라벨 없음)은 배치에 자리를 요구하지 않고 완성한 선의 구간 위에 얹는다. 긴 구간부터 가운데, 양옆 순으로 도형과 겹치지 않는 첫 자리를 쓴다. 없으면 가장 긴 구간 가운데를 쓰고 그림 검사 2번이 알려, 안전 배치(알약이 자리를 받는다)로 다시 그린다.
+// 선 사이 간격을 늘리지 않아 가로로 퍼진 구성도가 캔버스에 든다.
+function numberOnlyLabel(edge, points, items) {
+  if (edge.no === undefined || edge.label !== undefined || edge.quiet) return undefined;
+  const { w, h } = sizePill(undefined, edge.no);
+  const runs = points.slice(1).map((p, i) => [points[i], p]).sort((r, s) => Math.hypot(s[1].x - s[0].x, s[1].y - s[0].y) - Math.hypot(r[1].x - r[0].x, r[1].y - r[0].y));
+  const spots = runs.flatMap(([a, b]) => RUN_FRACTIONS.map((f) => ({ x: a.x + (b.x - a.x) * f, y: a.y + (b.y - a.y) * f })));
+  return spots.find((c) => !items.some((it) => c.x + w / 2 > it.x && it.x + it.w > c.x - w / 2 && c.y + h / 2 > it.y && it.y + it.h > c.y - h / 2)) ?? spots[0];
+}
+
+// cost: time O(p), heap O(p), stack O(1)
 // vars: p = 경로 점 수
 // basis: estimate
 // 선 옆에 두는 라벨 자리(알약 가운데). 가장 긴 곧은 구간이 세로면 그 가운데 옆, 가로면 그 위 가운데다.

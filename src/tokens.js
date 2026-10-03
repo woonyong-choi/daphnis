@@ -31,8 +31,10 @@ export const tokens = freeze({
         "50": "var(--color-palette-blue-50)",
         "200": "var(--color-palette-blue-200)",
         "400": "var(--color-palette-blue-400)",
+        "450": "var(--color-palette-blue-450)",
         "550": "var(--color-palette-blue-550)",
         "600": "var(--color-palette-blue-600)",
+        "700": "var(--color-palette-blue-700)",
         "800": "var(--color-palette-blue-800)",
         "850": "var(--color-palette-blue-850)",
         "900": "var(--color-palette-blue-900)"
@@ -66,6 +68,9 @@ export const tokens = freeze({
       "active-fill": "var(--color-state-active-fill)",
       "active-text": "var(--color-state-active-text)",
       "on-active": "var(--color-state-on-active)"
+    },
+    "figure": {
+      "icon": "var(--color-figure-icon)"
     },
     "ui": {
       "link": "var(--color-ui-link)",
@@ -121,7 +126,9 @@ export const tokens = freeze({
     },
     "icon": {
       "node": "var(--size-icon-node)",
-      "group": "var(--size-icon-group)"
+      "group": "var(--size-icon-group)",
+      "tile": "var(--size-icon-tile)",
+      "chip-pad": "var(--size-icon-chip-pad)"
     },
     "tag": {
       "height": "var(--size-tag-height)"
@@ -143,7 +150,8 @@ export const tokens = freeze({
       "store-cap": "var(--size-node-store-cap)",
       "state-dot": "var(--size-node-state-dot)",
       "table-row": "var(--size-node-table-row)",
-      "circle": "var(--size-node-circle)"
+      "circle": "var(--size-node-circle)",
+      "tile-width": "var(--size-node-tile-width)"
     },
     "grid": {
       "cell": "var(--size-grid-cell)"
@@ -315,8 +323,10 @@ export const values = freeze({
         "50": "#edf5fb",
         "200": "#a9cdea",
         "400": "#79c0ff",
+        "450": "#6f9cf5",
         "550": "#218fe5",
         "600": "#1072c2",
+        "700": "#125de6",
         "800": "#1d5d91",
         "850": "#2b4254",
         "900": "#1d2933"
@@ -350,6 +360,9 @@ export const values = freeze({
       "active-fill": "#1072c2",
       "active-text": "#1072c2",
       "on-active": "#ffffff"
+    },
+    "figure": {
+      "icon": "#125de6"
     },
     "ui": {
       "link": "#1072c2",
@@ -405,7 +418,9 @@ export const values = freeze({
     },
     "icon": {
       "node": 20,
-      "group": 16
+      "group": 16,
+      "tile": 28,
+      "chip-pad": 4
     },
     "tag": {
       "height": 14
@@ -427,7 +442,8 @@ export const values = freeze({
       "store-cap": 12,
       "state-dot": 14,
       "table-row": 26,
-      "circle": 40
+      "circle": 40,
+      "tile-width": 80
     },
     "grid": {
       "cell": 32

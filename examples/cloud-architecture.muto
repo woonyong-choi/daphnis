@@ -1,28 +1,46 @@
 flow right
 title "클라우드 구성도"
-subtitle "사용자 요청이 로드 밸런서, 웹 서버, 앱 서버를 거쳐 저장소에 닿는 순서(1~5)"
+subtitle "사용자 요청이 DNS와 CDN을 거쳐 로드 밸런서, 웹 서버, 앱 서버를 지나 데이터베이스에 닿는 순서(1~7)"
 
-person user "사용자"
-box lb "로드 밸런서" icon=lb badge="LB"
-group priv "프라이빗" icon=subnet direction=down {
-  box web "웹 서버" icon=server count=3
-  box app "앱 서버" icon=server badge="APP"
+group net "인터넷" icon=cdn border=dashed direction=down {
+  box client "웹 사용자" shape=tile icon=desktop
+  box dns "DNS" shape=tile icon=dns
+  box cdn "CDN" shape=tile icon=cdn
+  box storage "스토리지" shape=tile icon=object
 }
-group data "데이터" icon=subnet direction=down {
-  store db "DB" icon=db badge="DB"
-  store files "스토리지" icon=object badge="OBJ"
+group cloud "클라우드" icon=region {
+  group vpc "VPC" icon=vpc border=dashed direction=right {
+    group pub "퍼블릭 서브넷" icon=subnet {
+      box lb "로드 밸런서" shape=tile icon=lb
+    }
+    group scaling "스케일링 그룹" icon=scaling border=dashed {
+      box web "웹 서버" shape=tile icon=server count=3
+    }
+    group priv "프라이빗 서브넷" icon=subnet direction=down {
+      box app "앱 서버" shape=tile icon=server
+      store db "DB 주" icon=db badge="RW"
+      store replica "DB 복제" icon=db badge="RO"
+    }
+  }
 }
 
-user -> lb no=1
-lb -> web no=2
-web -> app no=3
-app -> db no=4
-app -> files no=5
+client -> dns no=1
+dns -> cdn no=2
+cdn -> lb no=3
+lb -> web no=4
+web -> app no=5
+app -> db no=6
+db -> replica no=7
+cdn -> storage
 
-step "들어오기" "요청이 로드 밸런서를 지나 웹 서버에 닿는다"
-  user -> lb
+step "해석" "도메인이 DNS에서 CDN으로 풀린다"
+  client -> dns
+  dns -> cdn
+step "분산" "CDN이 로드 밸런서로, 로드 밸런서가 웹 서버로 요청을 나눈다"
+  cdn -> lb
   lb -> web
 step "처리" "웹 서버가 앱 서버를 부른다"
   web -> app
-step "저장" "앱 서버가 데이터베이스와 스토리지를 쓴다"
-  app -> db & app -> files
+step "저장" "앱 서버가 DB 주에 쓰고 복제본이 따라간다"
+  app -> db
+  db -> replica

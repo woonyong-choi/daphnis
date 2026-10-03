@@ -23,12 +23,13 @@ export function toElk(model, figure) {
 // cost: time O(e·k), heap O(e·k), stack O(1)
 // vars: e = 선 수, k = 선의 조각 수
 // basis: estimate
-function edgesByContainer({ containers, pieces, edges }) {
+function edgesByContainer({ containers, pieces, edges, isSafe }) {
   const byContainer = new Map([...containers.keys()].map((k) => [k, []]));
   for (const [index, list] of pieces) {
     const edge = edges.find((e) => e.index === index);
     list.forEach((p, k) => {
-      const labels = p.hasLabel && hasPill(edge) && !isBeside(edge, containers.get(p.container)) ? [{ id: `label::${index}`, text: edge.label ?? String(edge.no), ...sizeOf(sizePill(edge.label, edge.no)), layoutOptions: LABEL_OPTIONS }] : [];
+      // 번호만 있는 알약은 선을 다 그린 뒤 얹으므로(read.js) 자리를 요구하지 않는다. 안전 배치는 얹을 자리가 없을 때의 대비라 알약도 자리를 받는다.
+      const labels = p.hasLabel && (edge.label !== undefined || (isSafe && hasPill(edge))) && !isBeside(edge, containers.get(p.container)) ? [{ id: `label::${index}`, text: edge.label ?? String(edge.no), ...sizeOf(sizePill(edge.label, edge.no)), layoutOptions: LABEL_OPTIONS }] : [];
       byContainer.get(p.container).push({ id: `${index}::${k}`, sources: [p.from], targets: [p.to], labels });
     });
   }

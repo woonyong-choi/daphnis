@@ -26,7 +26,7 @@ export function buildModel(figure, sizes) {
   const edges = [...marks.filter((e) => e.isStart), ...figure.edges.map((e, i) => ({ ...e, index: i })), ...marks.filter((e) => !e.isStart)];
   const pieces = new Map();
   for (const edge of edges) pieces.set(edge.index, splitEdge(edge, nodes, containers));
-  const model = { containers, nodes, edges, pieces };
+  const model = { containers, nodes, edges, pieces, isSafe: figure.safeLayout === true };
   orderByFlow(model);
   return model;
 }
@@ -43,9 +43,9 @@ function buildContainers(figure) {
   return containers;
 }
 
-// 그룹의 배지, 아이콘 선택 사항. 배치와 그리기가 그룹 이름으로 찾는 값이다.
-export function decorOf({ badge, icon, iconData }) {
-  return { badge, icon, iconData };
+// 그룹의 테두리 모양, 배지, 아이콘 선택 사항. 배치와 그리기가 그룹 이름으로 찾는 값이다.
+export function decorOf({ border, badge, icon, iconData }) {
+  return { border, badge, icon, iconData };
 }
 
 // cost: time O(d), heap O(1), stack O(1)

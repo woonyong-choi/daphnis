@@ -13,6 +13,8 @@ const SIZE = values.size;
 const RADIUS = values.radius;
 const EDGE_DASH = `${values.dash.line} ${values.dash.gap}`;
 const INNER_Y = SPACE['6'];
+// 점선 경계 그룹(border=dashed)의 점선
+const GROUP_DASH = `${values.dash.line} ${values.dash.gap}`;
 // 이름을 도형 안에서 따로 그리는 도형(테이블 머리, 격자 제목)
 const HAS_OWN_LABELS = new Set(['table', 'grid']);
 
@@ -40,9 +42,9 @@ function drawGroup(g, j, { decorate, glyphs }) {
   glyphs.add(g.label, 'semibold');
   const head = groupHead(g);
   const left = g.x + g.titleDx;
-  const decor = head.decor ? drawDecor(head.decor, { x: left, y: g.y + (SIZE.group.title - head.decor.h) / 2, iconData: g.iconData }, glyphs) : '';
+  const decor = head.decor ? drawDecor(head.decor, { x: left, y: g.y + (SIZE.group.title - head.decor.h) / 2, iconData: g.iconData, hasChip: true }, glyphs) : '';
   return (
-    `<g id="g-${j}" class="fl-group" data-id="${escapeXml(g.id)}"><rect x="${r(g.x)}" y="${r(g.y)}" width="${r(g.w)}" height="${r(g.h)}" rx="${RADIUS['2xl']}" class="frame-box fl-stroke ${decorate('group', j)}"/>` +
+    `<g id="g-${j}" class="fl-group" data-id="${escapeXml(g.id)}"><rect x="${r(g.x)}" y="${r(g.y)}" width="${r(g.w)}" height="${r(g.h)}" rx="${RADIUS['2xl']}" class="frame-box fl-stroke ${decorate('group', j)}"${g.border === 'dashed' ? ` stroke-dasharray="${GROUP_DASH}"` : ''}/>` +
     `<text x="${r(left + head.textDx)}" y="${r(centerBaseline(g.y + SIZE.group.title / 2, STYLE.group.size))}" class="frame">${renderRich(g.label)}</text>${decor}</g>`
   );
 }

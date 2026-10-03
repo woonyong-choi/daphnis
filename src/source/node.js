@@ -1,4 +1,4 @@
-// 도형 선언(`box id "이름" ["부제"] [shape=circle] [badge="LB"] [icon=server] [count=3]`)을 읽는다.
+// 도형 선언(`box id "이름" ["부제"] [shape=circle|tile] [badge="LB"] [icon=server] [count=3]`)을 읽는다.
 import { STATEMENTS, optionsOf } from './grammar.js';
 import { checkId, currentGroup, rejectName } from './names.js';
 import { readOptions } from './options.js';
@@ -27,19 +27,21 @@ export function readNode({ tokens, line }, ctx) {
   if (sub && (sub.type !== 'text' || !takesSub)) ctx.problems.error(line, takesSub ? 'the subtitle must be quoted text' : `${shape} takes no subtitle`);
   if (rest.length) ctx.problems.error(line, `${shape} takes no more words or options`);
   const found = readOptions(options, { scopes, what: `a ${shape}`, line, ctx });
-  const form = found.shape === 'rect' ? undefined : found.shape;
+  const isTile = found.shape === 'tile';
+  const form = found.shape === 'rect' || isTile ? undefined : found.shape;
   checkNodeOptions({ found, form, sub, line }, ctx);
   const { badge, icon, count } = found;
-  ctx.figure.nodes.push({ id: id.value, shape: form ?? shape, label: label.value, sub: sub?.type === 'text' ? sub.value : undefined, badge, icon, count, parent: currentGroup(ctx), line });
+  ctx.figure.nodes.push({ id: id.value, shape: form ?? shape, label: label.value, sub: sub?.type === 'text' ? sub.value : undefined, badge, icon, count, tile: isTile || undefined, parent: currentGroup(ctx), line });
 }
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 선택 사항끼리 맞는지 본다. 원은 이름만 받고, 꾸밈 선택 사항은 흐름 그림에서만 쓴다.
+// 선택 사항끼리 맞는지 본다. 원은 이름만 받고, 타일은 아이콘이 있어야 하고, 꾸밈 선택 사항은 흐름 그림에서만 쓴다.
 function checkNodeOptions({ found, form, sub, line }, ctx) {
   const { problems, figure } = ctx;
   if (form === 'circle' && sub) problems.error(line, 'a circle takes a name only. Remove the subtitle or shape=circle');
   if (form === 'circle' && (found.badge !== undefined || found.icon !== undefined)) problems.error(line, 'a circle takes a name only. Remove the badge or icon, or use a rectangle');
+  if (found.shape === 'tile' && found.icon === undefined) problems.error(line, 'a tile is an icon card. Add icon=name or use a rectangle');
   const outside = FLOW_ONLY.filter((key) => found[key] !== undefined);
   if (figure.kind !== 'flow' && outside.length) problems.error(line, `${outside.join(', ')} belongs to flow figures only`);
 }

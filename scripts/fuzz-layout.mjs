@@ -100,7 +100,7 @@ function cellLine(id, { row, col, rows, cols }, rnd) {
 // 도형 선언 한 줄. circle은 box의 shape 선택 사항이다. 원은 배지와 아이콘을 받지 않는다.
 function nodeLine(shape, id, decor = '') {
   if (shape === 'circle') return `box ${id} "${id}" shape=circle`;
-  const allowed = shape === 'person' ? '' : shape === 'box' ? decor : decor.replace(/ count=\S+/g, '');
+  const allowed = shape === 'person' ? '' : shape === 'box' ? decor : decor.replace(/ (count|shape)=\S+/g, '');
   return `${shape} ${id} "${id}"${allowed}`;
 }
 
@@ -110,12 +110,13 @@ function nodeDecor(rnd) {
   const badge = rnd.next() < 0.5 ? ` badge="${rnd.pick(['LB', 'DB', 'API', 'WEB'])}"` : '';
   const icon = rnd.next() < 0.5 ? ` icon=${rnd.pick(ICONS)}` : '';
   const count = rnd.next() < 0.2 ? ' count=3' : '';
-  return `${badge}${icon}${count}`;
+  const tile = icon && rnd.next() < 0.3 ? ' shape=tile' : '';
+  return `${tile}${badge}${icon}${count}`;
 }
 
 // 그룹 선택 사항: 배지와 아이콘
 function groupDecor(rnd) {
-  return rnd.next() < DECOR_CHANCE ? ` badge="G" icon=${rnd.pick(ICONS)}` : '';
+  return rnd.next() < DECOR_CHANCE ? ` badge="G" icon=${rnd.pick(ICONS)}${rnd.next() < 0.5 ? ' border=dashed' : ''}` : '';
 }
 
 // cost: time O(n), heap O(n), stack O(1)

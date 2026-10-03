@@ -103,6 +103,7 @@
 
 .fl .fl-stroke {
   stroke: var(--color-border);
+  stroke-width: var(--border-thin);
 }
 
 .fl .fl-path {
@@ -183,7 +184,16 @@
 }
 
 .fl .fl-icon {
-  color: var(--color-muted);
+  color: var(--color-figure-icon);
+}
+
+/* 그룹 제목 줄 아이콘 칩: 윤곽색 바탕에 노드 면 색 아이콘 */
+.fl .icon-chip {
+  fill: var(--color-muted);
+}
+
+.fl .fl-icon.on-chip {
+  color: var(--color-node);
 }
 
 /* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
