@@ -51,16 +51,24 @@ export const tokens = freeze({
         "1000": "var(--color-palette-ink-1000)"
       },
       "purple": {
-        "500": "var(--color-palette-purple-500)"
+        "500": "var(--color-palette-purple-500)",
+        "400": "var(--color-palette-purple-400)",
+        "600": "var(--color-palette-purple-600)"
       },
       "green": {
-        "500": "var(--color-palette-green-500)"
+        "500": "var(--color-palette-green-500)",
+        "400": "var(--color-palette-green-400)",
+        "700": "var(--color-palette-green-700)"
       },
       "slate": {
-        "500": "var(--color-palette-slate-500)"
+        "500": "var(--color-palette-slate-500)",
+        "400": "var(--color-palette-slate-400)",
+        "600": "var(--color-palette-slate-600)"
       },
       "teal": {
-        "500": "var(--color-palette-teal-500)"
+        "500": "var(--color-palette-teal-500)",
+        "400": "var(--color-palette-teal-400)",
+        "700": "var(--color-palette-teal-700)"
       }
     },
     "state": {
@@ -68,6 +76,12 @@ export const tokens = freeze({
       "active-fill": "var(--color-state-active-fill)",
       "active-text": "var(--color-state-active-text)",
       "on-active": "var(--color-state-on-active)"
+    },
+    "flow": {
+      "purple": "var(--color-flow-purple)",
+      "green": "var(--color-flow-green)",
+      "teal": "var(--color-flow-teal)",
+      "gray": "var(--color-flow-gray)"
     },
     "figure": {
       "icon": "var(--color-figure-icon)"
@@ -282,7 +296,8 @@ export const tokens = freeze({
     "dwell-max": "var(--duration-dwell-max)",
     "step-end": "var(--duration-step-end)",
     "chart-cycle": "var(--duration-chart-cycle)",
-    "reveal": "var(--duration-reveal)"
+    "reveal": "var(--duration-reveal)",
+    "value-flash": "var(--duration-value-flash)"
   },
   "easing": {
     "move": "var(--easing-move)",
@@ -294,7 +309,8 @@ export const tokens = freeze({
     "fold-aspect": "var(--scale-fold-aspect)",
     "fold-step": "var(--scale-fold-step)",
     "aspect-max": "var(--scale-aspect-max)",
-    "zoom-step": "var(--scale-zoom-step)"
+    "zoom-step": "var(--scale-zoom-step)",
+    "flow-dots-max": "var(--scale-flow-dots-max)"
   }
 });
 
@@ -345,16 +361,24 @@ export const values = freeze({
         "1000": "#000000"
       },
       "purple": {
-        "500": "#8b5cf6"
+        "500": "#8b5cf6",
+        "400": "#a78bfa",
+        "600": "#7c3aed"
       },
       "green": {
-        "500": "#10b981"
+        "500": "#10b981",
+        "400": "#34d399",
+        "700": "#047857"
       },
       "slate": {
-        "500": "#8b949e"
+        "500": "#8b949e",
+        "400": "#94a3b8",
+        "600": "#475569"
       },
       "teal": {
-        "500": "#11a6b0"
+        "500": "#11a6b0",
+        "400": "#22d3ee",
+        "700": "#0e7490"
       }
     },
     "state": {
@@ -362,6 +386,12 @@ export const values = freeze({
       "active-fill": "#1072c2",
       "active-text": "#1072c2",
       "on-active": "#ffffff"
+    },
+    "flow": {
+      "purple": "#7c3aed",
+      "green": "#047857",
+      "teal": "#0e7490",
+      "gray": "#475569"
     },
     "figure": {
       "icon": "#125de6"
@@ -576,7 +606,8 @@ export const values = freeze({
     "dwell-max": 3200,
     "step-end": 1600,
     "chart-cycle": 7000,
-    "reveal": 900
+    "reveal": 900,
+    "value-flash": 700
   },
   "easing": {
     "move": "cubic-bezier(0.455, 0.03, 0.515, 0.955)",
@@ -588,6 +619,7 @@ export const values = freeze({
     "fold-aspect": 1.6,
     "fold-step": 0.75,
     "aspect-max": 3,
-    "zoom-step": 1.25
+    "zoom-step": 1.25,
+    "flow-dots-max": 80
   }
 });
