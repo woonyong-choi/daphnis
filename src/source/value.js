@@ -33,6 +33,10 @@ export function readValue({ tokens, line }, ctx) {
 // basis: estimate
 /** 값 글자 하나(숫자나 공백 없는 낱말)를 확인하고 숫자는 간단한 꼴로 돌려준다. 어긋나면 오류를 내고 undefined다. */
 export function readLiteral(text, { line, key, ctx }) {
+  if (/\s/.test(text)) {
+    ctx.problems.error(line, `${key} is a number or a word without spaces. Found "${text}"`);
+    return undefined;
+  }
   if ([...text].length > VALUE_MAX) {
     ctx.problems.error(line, `${key} is at most ${VALUE_MAX} characters. Found "${text}"`);
     return undefined;
@@ -49,8 +53,8 @@ export function roundNumber(number) {
 // vars: e = 식 수, v = 값 수
 // basis: estimate
 /**
- * `set="식, 식"`을 식 목록으로 읽는다. 식은 `id+N`, `id-N`, `id=N`, `id=낱말`, `id=다른id`(복사)이고 뒤에 `@도형`을 붙일 수 있다.
- * @returns { id, op, operand, isCopy, at, line }[]. op는 `+`, `-`, `=`다. 어긋난 식은 오류를 내고 뺀다
+ * `set="식, 식"`을 식 목록으로 읽는다. 식은 `id+N`, `id-N`, `id=N`, `id=낱말`이고 뒤에 `@도형`을 붙일 수 있다. `=` 뒤는 언제나 값 글자(숫자나 공백 없는 낱말)이고 다른 값의 이름이어도 그 글자다. 다른 값을 따라가는 것은 `ref`가 맡는다.
+ * @returns { id, op, operand, at, line }[]. op는 `+`, `-`, `=`다. 어긋난 식은 오류를 내고 뺀다
  */
 export function readSets(text, { line, ctx }) {
   const ids = ctx.figure.values.map((v) => v.id).sort((a, b) => b.length - a.length);
@@ -75,9 +79,8 @@ function readExpression(raw, { ids, line, ctx }) {
   }
   const op = body[id.length];
   const operand = body.slice(id.length + 1);
-  const expression = { id, op, operand, isCopy: false, at, line };
+  const expression = { id, op, operand, at, line };
   if (op !== '=') return SIGNED_STEP.test(operand) ? { ...expression, operand: String(Number(operand)) } : fail(`"${raw}" needs a number after ${op}`, { line, ctx });
-  if (ids.includes(operand)) return { ...expression, isCopy: true };
   if (operand === '') return fail(`"${raw}" needs a value after =`, { line, ctx });
   const literal = readLiteral(operand, { line, key: 'a set value', ctx });
   return literal === undefined ? undefined : { ...expression, operand: literal };
@@ -86,4 +89,20 @@ function readExpression(raw, { ids, line, ctx }) {
 function fail(message, { line, ctx }) {
   ctx.problems.error(line, message);
   return undefined;
+}
+
+// cost: time O(t + e·v), heap O(t + e), stack O(1)
+// vars: t = 문장 낱말 수, e = 식 수, v = 값 수
+// basis: estimate
+/** `on 도형 식, 식`: 어떤 점이든 그 도형에 닿을 때 적용하는 값 바꾸기. 식은 set=과 같고 `@도형`은 쓰지 않는다. */
+export function readOn({ tokens, line }, ctx) {
+  const [, node, ...rest] = tokens;
+  if (node?.type !== 'word' || !rest.length) {
+    ctx.problems.error(line, 'write on as: on node id+1, id-1, id=word');
+    return;
+  }
+  const raw = rest.map((t) => (t.type === 'option' ? `${t.key}=${t.valueType === 'text' ? `"${t.value}"` : t.value}` : t.value)).join(' ');
+  const sets = readSets(raw, { line, ctx });
+  if (sets.some((e) => e.at !== undefined)) ctx.problems.error(line, 'on applies where a dot reaches the node, so it takes no @node. Put @node in a set= of a move or track');
+  ctx.figure.arrivals.push({ node: node.value, sets, line });
 }

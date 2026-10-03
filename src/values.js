@@ -21,24 +21,12 @@ export function rootOf(byId, id) {
   return ref === undefined ? id : rootOf(byId, ref);
 }
 
-// cost: time O(v·(s + c)), heap O(s), stack O(c)
-// vars: v = 값 수, s = 단계의 식 수, c = 참조 사슬 길이
-// basis: estimate
-/** 한 단계가 보여 주는 값(선언 순서). 그 단계의 식이 쓰는 값과, 그 값을 참조 사슬로 가리키는 값이다. 식이 건드리지 않는 값은 카드에 올리지 않는다. */
-export function usedValues(figure, step) {
-  if (!figure.values.length) return [];
-  const byId = valueTable(figure);
-  const targets = new Set([...step.beats.flatMap((b) => b.hops), ...step.tracks].flatMap((move) => move.sets.map((e) => e.id)));
-  const isUsed = (v) => targets.has(v.id) || (v.ref !== undefined && isUsed(byId.get(v.ref)));
-  return figure.values.filter(isUsed);
-}
-
 // cost: time O(v), heap O(v), stack O(1)
 // vars: v = 값 수
 // basis: estimate
-/** 단계의 값 카드 줄을 도형별로. 줄은 `이름` 글과 오른쪽 끝 자리(mark)이고, 값 글자는 시간표의 변화 목록이 따로 그린다. */
-export function valueRowsByNode(figure, step) {
+/** 값 카드 줄을 도형별로. 선언한 값은 모든 단계의 카드에 늘 올라 있다. 줄은 `이름` 글과 오른쪽 끝 자리(mark)이고, 값 글자는 시간표의 변화 목록이 따로 그린다. */
+export function valueRowsByNode(figure) {
   const rows = new Map();
-  for (const v of usedValues(figure, step)) rows.set(v.on, [...(rows.get(v.on) ?? []), { text: v.label, mark: VALUE_SAMPLE, isValue: true, valueId: v.id }]);
+  for (const v of figure.values) rows.set(v.on, [...(rows.get(v.on) ?? []), { text: v.label, mark: VALUE_SAMPLE, isValue: true, valueId: v.id }]);
   return rows;
 }
