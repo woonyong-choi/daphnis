@@ -1,10 +1,9 @@
 // 시간 흐름을 시간표로 편다. 박자마다 상태를 완전히 적어서, 탭으로 건너뛰어도 앞 박자를 다시 계산하지 않는다(docs/design/playback.md).
 import { presentSlots, slotMiddle } from './chart/slots.js';
-import { flattenRoute, routeLength } from './route.js';
+import { hopMs } from './hop-ms.js';
 import { values } from './tokens.js';
 
 const DWELL = values.duration;
-const HOP_REF = values.size.packet['hop-ref'];
 // 행 이름 세로 옮김(px)을 반올림하는 단위의 역수(소수 둘째 자리)
 const SHIFT_PRECISION = 100;
 
@@ -54,17 +53,6 @@ const WHOLE_CHART = '*';
 /** 시간표가 다루는 차트 계열 id. 계열이 없으면 차트 전체를 계열 하나로 본다. */
 export function chartSeriesIds(figure) {
   return figure.chart.series.length ? figure.chart.series.map((s) => s.id) : [WHOLE_CHART];
-}
-
-// cost: time O(p), heap O(1), stack O(1)
-// vars: p = 경로 점 수
-// basis: estimate
-// 이동 시간은 선 길이에 비례한다. 기준 길이를 speed(기본 duration.hop)에 지나되, 아주 짧은 선만 최소 시간으로 올린다. 최대는 없다. 같은 속도로 보이게 하려는 것이다.
-// 최소는 speed를 기본값에서 바꾼 비율만큼 같이 늘고 줄어, 빠르게 한 그림이 최소 시간에 막히지 않는다.
-function hopMs(points, speed) {
-  const scale = speed / DWELL.hop;
-  const ms = (routeLength(flattenRoute(points)) / HOP_REF) * speed;
-  return Math.round(Math.max(DWELL['hop-min'] * scale, ms));
 }
 
 // cost: time O(b·(h + e + k)), heap O(b·(e + k)), stack O(1)
