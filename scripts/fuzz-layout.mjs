@@ -6,6 +6,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Worker } from 'node:worker_threads';
+import { randomChart } from './lib/fuzz-chart.mjs';
 
 const LCG_MUL = 1664525;
 const LCG_ADD = 1013904223;
@@ -46,19 +47,6 @@ const NUMBER_CHANCE = 0.25;
 const ICONS = ['server', 'db', 'lb', 'user', 'region', 'cdn'];
 const ASPECTS = ['0.6', '1', '1.4', '1.6', '2.4'];
 const DIRECTIONS = ['right', 'down'];
-// 차트: 행 수, 값의 크기(소수에서 수만까지), 새 문법을 쓰는 확률
-const CHART_ROWS_MIN = 2;
-const CHART_ROWS_SPREAD = 6;
-const MAGNITUDES = [0.05, 5, 95, 1200, 45000];
-const CHART_TYPES = ['bar', 'bar', 'difference', 'difference', 'line'];
-const ROW_RULE_CHANCE = 0.6;
-const ZERO_OFF_CHANCE = 0.6;
-const ALL_ZERO_CHANCE = 0.15;
-const INTERVAL_CHANCE = 0.7;
-const SHARED_RULE_CHANCE = 0.4;
-const NEGATIVE_BASE_CHANCE = 0.3;
-const TWO_SERIES_CHANCE = 0.3;
-const VALUE_DIGITS = 3;
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -228,62 +216,6 @@ function randomSource(rnd, { kind, isAspectOff }) {
   lines.push(...parts, ...declareEdges(ids, rnd, { kind, cells: cellsOf(parts) }));
   if (kind === 'state') lines.push(`start ${ids[0]}`, `final ${rnd.pick(ids)}`);
   return lines.join('\n');
-}
-
-// 값 하나. 크기는 MAGNITUDES에서 고르고 소수 VALUE_DIGITS자리로 줄인다.
-const amount = (rnd, scale) => Number((rnd.next() * scale).toFixed(VALUE_DIGITS));
-
-// 값 하나의 신뢰구간 낱말. low ≤ 값 ≤ high를 지키고, low는 floor 아래로 내려가지 않는다(막대는 0).
-function intervalWords(id, value, spec, rnd) {
-  const spread = amount(rnd, spec.scale / 10);
-  const [low, high] = [Math.max(spec.floor ?? -Infinity, value - spread), value + spread].map((v) => Number(v.toFixed(VALUE_DIGITS)));
-  return rnd.next() < INTERVAL_CHANCE ? ` ${id}.low=${Math.min(low, value)} ${id}.high=${Math.max(high, value)}` : '';
-}
-
-// 막대 차트: 행마다 값, 신뢰구간, 가끔 행 기준(`rule=값`)과 공통 기준선을 섞는다. 계열은 가끔 둘이다.
-function randomBar(rnd, scale) {
-  const ids = rnd.next() < TWO_SERIES_CHANCE ? ['a', 'b'] : ['a'];
-  const lines = ['chart bar', 'x "비율(%)"', ...ids.map((id) => `series ${id} "계열 ${id}"`)];
-  if (rnd.next() < SHARED_RULE_CHANCE) lines.push(`rule ${amount(rnd, scale)} "공통"`);
-  for (let i = 0; i < CHART_ROWS_MIN + rnd.int(CHART_ROWS_SPREAD); i++) {
-    const values = ids.map((id) => ({ id, value: amount(rnd, scale) }));
-    const rule = rnd.next() < ROW_RULE_CHANCE ? ` rule=${amount(rnd, scale)}` : '';
-    lines.push(`row "행${i}" ${values.map(({ id, value }) => `${id}=${value}${intervalWords(id, value, { scale, floor: 0 }, rnd)}`).join(' ')}${rule}`);
-  }
-  return lines;
-}
-
-// 차이 차트: 부호가 섞인 값과 신뢰구간, 가끔 모두 0인 값과 음수 기준선
-function randomDifference(rnd, scale) {
-  const isFlat = rnd.next() < ALL_ZERO_CHANCE;
-  const lines = ['chart difference', 'x "차이(%p)"', 'series d "차이"'];
-  if (rnd.next() < SHARED_RULE_CHANCE) lines.push(`rule ${-amount(rnd, scale)} "기준선"`);
-  for (let i = 0; i < CHART_ROWS_MIN + rnd.int(CHART_ROWS_SPREAD); i++) {
-    const value = isFlat ? 0 : Number((amount(rnd, scale) - amount(rnd, scale)).toFixed(VALUE_DIGITS));
-    lines.push(`row "행${i}" d=${value}${isFlat ? ' d.low=0 d.high=0' : intervalWords('d', value, { scale }, rnd)}`);
-  }
-  return lines;
-}
-
-// 선 차트: 가끔 `zero off`를 쓰고, 값 범위를 0 근처 밖(음수 포함)에 둔다. 기준선은 값 범위 안팎을 오간다.
-function randomLine(rnd, scale) {
-  const base = amount(rnd, scale) * (rnd.next() < NEGATIVE_BASE_CHANCE ? -1 : 1);
-  const lines = ['chart line', 'y "값(%)"', ...(rnd.next() < ZERO_OFF_CHANCE ? ['zero off'] : []), 'series a "A"'];
-  if (rnd.next() < SHARED_RULE_CHANCE) lines.push(`rule ${Number((base + amount(rnd, scale / 10)).toFixed(VALUE_DIGITS))} "목표"`);
-  for (let i = 0; i < CHART_ROWS_MIN + rnd.int(CHART_ROWS_SPREAD * 5); i++) {
-    const value = Number((base + amount(rnd, scale / 10)).toFixed(VALUE_DIGITS));
-    lines.push(`point x=${(i + 1) * 100} a=${value}${intervalWords('a', value, { scale }, rnd)}`);
-  }
-  return lines;
-}
-
-// cost: time O(r), heap O(r), stack O(1)
-// vars: r = 행 수
-// basis: estimate
-// 차트 원본 하나. 종류와 값 크기를 섞어 행 기준, 차이 차트, 0 시작 해제와 기준선 라벨 자리를 시험한다.
-function randomChart(rnd) {
-  const builders = { bar: randomBar, difference: randomDifference, line: randomLine };
-  return builders[rnd.pick(CHART_TYPES)](rnd, rnd.pick(MAGNITUDES)).join('\n');
 }
 
 // cost: time O(1), heap O(1), stack O(1)
