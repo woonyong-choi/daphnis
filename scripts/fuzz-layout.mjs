@@ -1,5 +1,5 @@
 // 무작위 구조 그림을 만들어 배치와 검사가 올바른 입력을 오류로 돌려보내는지 센다.
-// 사용: node scripts/fuzz-layout.mjs [--count 1500] [--seed 1] [--kind flow|state|data] [--no-aspect] [--show] [--hang-dir 폴더]
+// 사용: node scripts/fuzz-layout.mjs [--count 1500] [--seed 1] [--kind flow|state|data|chart] [--no-aspect] [--show] [--hang-dir 폴더]
 // 출력: 실패 종류마다 `{건수} {메시지 앞부분}`, 마지막에 `kinds, failed, aspect` 합계. 실패가 있으면 종료 코드 1.
 // 같은 씨앗은 같은 그림을 만든다. --show는 실패한 원본을 모두 `---`로 나눠 쓴다.
 // 그림 하나가 FIGURE_TIME_LIMIT_MS를 넘으면 멈춘 것으로 보고 실패로 세며, 원본을 --hang-dir(기본 .local/fuzz-hang)에 파일로 남긴다.
@@ -14,7 +14,7 @@ const KEY_LENGTH = 90;
 // 그림 하나를 만드는 데 허용하는 시간. 보통 수십 ms라 이를 넘으면 배치가 멈춘 것이다.
 const FIGURE_TIME_LIMIT_MS = 5000;
 const HANG_DIR = '.local/fuzz-hang';
-const KINDS = ['flow', 'state', 'data'];
+const KINDS = ['flow', 'state', 'data', 'chart'];
 const BUILD_WORKER = new URL('./lib/fuzz-build-worker.mjs', import.meta.url);
 const HANG_MESSAGE = `HANG over ${FIGURE_TIME_LIMIT_MS}ms`;
 const ASPECT_CHANCE = 0.4;
@@ -46,6 +46,19 @@ const NUMBER_CHANCE = 0.25;
 const ICONS = ['server', 'db', 'lb', 'user', 'region', 'cdn'];
 const ASPECTS = ['0.6', '1', '1.4', '1.6', '2.4'];
 const DIRECTIONS = ['right', 'down'];
+// 차트: 행 수, 값의 크기(소수에서 수만까지), 새 문법을 쓰는 확률
+const CHART_ROWS_MIN = 2;
+const CHART_ROWS_SPREAD = 6;
+const MAGNITUDES = [0.05, 5, 95, 1200, 45000];
+const CHART_TYPES = ['bar', 'bar', 'difference', 'difference', 'line'];
+const ROW_RULE_CHANCE = 0.6;
+const ZERO_OFF_CHANCE = 0.6;
+const ALL_ZERO_CHANCE = 0.15;
+const INTERVAL_CHANCE = 0.7;
+const SHARED_RULE_CHANCE = 0.4;
+const NEGATIVE_BASE_CHANCE = 0.3;
+const TWO_SERIES_CHANCE = 0.3;
+const VALUE_DIGITS = 3;
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -205,6 +218,7 @@ function declareTables(count, rnd) {
 // vars: n = 도형 수, m = 선 수
 // basis: estimate
 function randomSource(rnd, { kind, isAspectOff }) {
+  if (kind === 'chart') return randomChart(rnd);
   const ids = Array.from({ length: NODE_MIN + rnd.int(NODE_SPREAD) }, (_, i) => `n${i}`);
   const lines = [`${kind} ${rnd.pick(DIRECTIONS)}`];
   if (rnd.next() < ASPECT_CHANCE && !isAspectOff) lines.push(`aspect ${rnd.pick(ASPECTS)}`);
@@ -214,6 +228,62 @@ function randomSource(rnd, { kind, isAspectOff }) {
   lines.push(...parts, ...declareEdges(ids, rnd, { kind, cells: cellsOf(parts) }));
   if (kind === 'state') lines.push(`start ${ids[0]}`, `final ${rnd.pick(ids)}`);
   return lines.join('\n');
+}
+
+// 값 하나. 크기는 MAGNITUDES에서 고르고 소수 VALUE_DIGITS자리로 줄인다.
+const amount = (rnd, scale) => Number((rnd.next() * scale).toFixed(VALUE_DIGITS));
+
+// 값 하나의 신뢰구간 낱말. low ≤ 값 ≤ high를 지키고, low는 floor 아래로 내려가지 않는다(막대는 0).
+function intervalWords(id, value, spec, rnd) {
+  const spread = amount(rnd, spec.scale / 10);
+  const [low, high] = [Math.max(spec.floor ?? -Infinity, value - spread), value + spread].map((v) => Number(v.toFixed(VALUE_DIGITS)));
+  return rnd.next() < INTERVAL_CHANCE ? ` ${id}.low=${Math.min(low, value)} ${id}.high=${Math.max(high, value)}` : '';
+}
+
+// 막대 차트: 행마다 값, 신뢰구간, 가끔 행 기준(`rule=값`)과 공통 기준선을 섞는다. 계열은 가끔 둘이다.
+function randomBar(rnd, scale) {
+  const ids = rnd.next() < TWO_SERIES_CHANCE ? ['a', 'b'] : ['a'];
+  const lines = ['chart bar', 'x "비율(%)"', ...ids.map((id) => `series ${id} "계열 ${id}"`)];
+  if (rnd.next() < SHARED_RULE_CHANCE) lines.push(`rule ${amount(rnd, scale)} "공통"`);
+  for (let i = 0; i < CHART_ROWS_MIN + rnd.int(CHART_ROWS_SPREAD); i++) {
+    const values = ids.map((id) => ({ id, value: amount(rnd, scale) }));
+    const rule = rnd.next() < ROW_RULE_CHANCE ? ` rule=${amount(rnd, scale)}` : '';
+    lines.push(`row "행${i}" ${values.map(({ id, value }) => `${id}=${value}${intervalWords(id, value, { scale, floor: 0 }, rnd)}`).join(' ')}${rule}`);
+  }
+  return lines;
+}
+
+// 차이 차트: 부호가 섞인 값과 신뢰구간, 가끔 모두 0인 값과 음수 기준선
+function randomDifference(rnd, scale) {
+  const isFlat = rnd.next() < ALL_ZERO_CHANCE;
+  const lines = ['chart difference', 'x "차이(%p)"', 'series d "차이"'];
+  if (rnd.next() < SHARED_RULE_CHANCE) lines.push(`rule ${-amount(rnd, scale)} "기준선"`);
+  for (let i = 0; i < CHART_ROWS_MIN + rnd.int(CHART_ROWS_SPREAD); i++) {
+    const value = isFlat ? 0 : Number((amount(rnd, scale) - amount(rnd, scale)).toFixed(VALUE_DIGITS));
+    lines.push(`row "행${i}" d=${value}${isFlat ? ' d.low=0 d.high=0' : intervalWords('d', value, { scale }, rnd)}`);
+  }
+  return lines;
+}
+
+// 선 차트: 가끔 `zero off`를 쓰고, 값 범위를 0 근처 밖(음수 포함)에 둔다. 기준선은 값 범위 안팎을 오간다.
+function randomLine(rnd, scale) {
+  const base = amount(rnd, scale) * (rnd.next() < NEGATIVE_BASE_CHANCE ? -1 : 1);
+  const lines = ['chart line', 'y "값(%)"', ...(rnd.next() < ZERO_OFF_CHANCE ? ['zero off'] : []), 'series a "A"'];
+  if (rnd.next() < SHARED_RULE_CHANCE) lines.push(`rule ${Number((base + amount(rnd, scale / 10)).toFixed(VALUE_DIGITS))} "목표"`);
+  for (let i = 0; i < CHART_ROWS_MIN + rnd.int(CHART_ROWS_SPREAD * 5); i++) {
+    const value = Number((base + amount(rnd, scale / 10)).toFixed(VALUE_DIGITS));
+    lines.push(`point x=${(i + 1) * 100} a=${value}${intervalWords('a', value, { scale }, rnd)}`);
+  }
+  return lines;
+}
+
+// cost: time O(r), heap O(r), stack O(1)
+// vars: r = 행 수
+// basis: estimate
+// 차트 원본 하나. 종류와 값 크기를 섞어 행 기준, 차이 차트, 0 시작 해제와 기준선 라벨 자리를 시험한다.
+function randomChart(rnd) {
+  const builders = { bar: randomBar, difference: randomDifference, line: randomLine };
+  return builders[rnd.pick(CHART_TYPES)](rnd, rnd.pick(MAGNITUDES)).join('\n');
 }
 
 // cost: time O(1), heap O(1), stack O(1)

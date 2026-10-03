@@ -108,6 +108,13 @@ const REJECTED = [
   { rule: '덤벨 계열 수', source: 'chart dumbbell\nseries a "A"\nrow "r" a=1', expect: /takes 2 series/ },
   { rule: '상자 차트의 값 없음 표기', source: 'chart box\nrow "r" min=- q1=1 median=2 q3=3 max=4', expect: /only for bar series/ },
   { rule: '음수 기준선', source: 'chart bar\nseries a "A"\nrule -10 "neg"\nrow "p" a=5', expect: /a rule cannot be negative/ },
+  { rule: '막대 행 기준 음수', source: 'chart bar\nseries a "A"\nrow "r" a=5 rule=-1', expect: /a row rule cannot be negative/ },
+  { rule: '막대가 아닌 종류의 행 기준', source: 'chart dumbbell\nseries a "A" role=compare\nseries b "B" role=main\nrow "r" a=5 b=3 rule=4', expect: /"rule" is not a value of a dumbbell chart/ },
+  { rule: '차이 차트에 log', source: 'chart difference\nscale log\nseries a "A"\nrow "r" a=1', expect: /scale log is not allowed/ },
+  { rule: '차이 차트 계열 수', source: 'chart difference\nseries a "A"\nseries b "B"\nrow "r" a=1 b=2', expect: /takes 1 series. Found 2/ },
+  { rule: '0 시작 해제는 선 차트만(막대)', source: 'chart bar\nzero off\nseries a "A"\nrow "r" a=1', expect: /zero off is only for line charts/ },
+  { rule: '0 시작 해제는 선 차트만(산점도)', source: 'chart scatter\nzero off\npoint "p" x=1 y=2', expect: /zero off is only for line charts/ },
+  { rule: '0 시작 값 모양', source: 'chart line\nzero maybe\nseries a "A"\npoint x=1 a=2', expect: /zero is "on" or "off"/ },
   { rule: '히트맵의 값 축', source: 'chart heatmap\nscale linear\ncell "a" "b" 1', expect: /^2: a heatmap has no value axis/m },
   { rule: '소수 자릿수 범위(7)', source: 'chart heatmap\ndecimals 7\ncell "a" "x" 1\n', expect: /whole number from 0 to 6/ },
   { rule: '소수 자릿수 범위(-1)', source: 'chart heatmap\ndecimals -1\ncell "a" "x" 1\n', expect: /whole number from 0 to 6/ },
@@ -325,6 +332,66 @@ test('drawLine_rule_label_moves_to_the_free_side_when_dots_touch_the_rule_at_the
   assert.equal(label[3], undefined, 'the free side is the left end');
 });
 
+// 근거: 이슈 #41 완료 조건 "다른 행에는 그 기준선이 그려지지 않음", 설계 charts.md 요구사항 "행마다 다른 기준", 호환 규칙 "생략하면 옛 뜻"
+test('drawBars_row_rule_is_drawn_only_beside_its_own_row_and_widens_the_axis', async () => {
+  const rows = [['r', 70, 80], ['s', 40, 90]];
+  const source = `chart bar\nx "비율(%)"\nseries a "A"\nrule 50 "공통"\n${rows.map(([name, v, rule]) => `row "${name}" a=${v} rule=${rule}`).join('\n')}`;
+  const body = await bodyOf(source);
+  const lines = [...body.matchAll(/<line x1="([\d.]+)" x2="[\d.]+" y1="([\d.]+)" y2="([\d.]+)" class="chart-rule"\/>/g)].map((m) => m.slice(1).map(Number));
+  const bars = [...body.matchAll(/<rect x="[\d.]+" y="([\d.]+)" width="[\d.]+" height="12"[^>]*class="grow"/g)].map((m) => Number(m[1]));
+  const [first, second, shared] = lines;
+  const rowOf = (line) => bars.findIndex((top) => top > line[1] && top < line[2]);
+
+  assert.equal(lines.length, 3, 'one shared rule and one rule per row');
+  assert.deepEqual([rowOf(first), rowOf(second)], [0, 1], 'each row rule spans only its own row');
+  assert.ok(first[0] < second[0], 'rule=80 sits left of rule=90');
+  assert.ok(shared[2] - shared[1] > second[2] - second[1], 'the shared rule still crosses every row');
+  assert.deepEqual(textsOf(body, 'chart-rule-label'), ['80', '90', '공통']);
+  assert.ok(Math.max(...textsOf(body, 'chart-tick').map(Number)) >= 90, 'the axis covers the row rules');
+
+  await withFolder(async (folder) => {
+    writeFileSync(join(folder, 'rows.json'), JSON.stringify(rows.map(([label, a, rule]) => ({ label, a, rule }))));
+    const fromData = await bodyOf('chart bar\nx "비율(%)"\nseries a "A"\nrule 50 "공통"\ndata "rows.json"', { baseDir: folder });
+
+    assert.equal(fromData, body, 'a data element key "rule" reads the same row rule');
+  });
+  // 계열 이름이 rule이면 옛 뜻(계열 값)이 우선이라 행 기준을 그리지 않는다.
+  assert.equal((await bodyOf('chart bar\nx "값(%)"\nseries rule "R"\nrow "r" rule=5')).includes('chart-rule-casing'), false);
+});
+
+// 근거: 이슈 #42 완료 조건 "차이가 음수인 행과 0인 행이 읽힘", 설계 charts.md 요구사항 "차이 차트가 음수 값, 음수 기준선, 모두 0인 값을 그린다"
+test('drawDifferences_negative_values_negative_rule_and_all_zero_are_drawn_around_a_zero_line', async () => {
+  const dotsOf = (body) => [...body.matchAll(/<circle cx="([\d.]+)"[^>]*class="chart-after pop"/g)].map((m) => Number(m[1]));
+  const zeroOf = (body) => Number(/<line x1="([\d.]+)" x2="[\d.]+" [^>]*class="chart-zero"/.exec(body)[1]);
+  const mixed = await bodyOf('chart difference\nx "차이(%p)"\ndecimals 1\nseries d "차이"\nrule -10 "기준선"\nrow "음수" d=-6.4 d.low=-9.8 d.high=-3\nrow "양수" d=3.2 d.low=-0.4 d.high=6.8\nrow "영" d=0 d.low=0 d.high=0');
+  const flat = await bodyOf('chart difference\nx "차이(%p)"\nseries d "차이"\nrow "a" d=0 d.low=0 d.high=0\nrow "b" d=0 d.low=0 d.high=0');
+  const [negative, positive, zero] = dotsOf(mixed);
+
+  assert.ok(negative < zeroOf(mixed) && zeroOf(mixed) < positive, 'negative left of the zero line, positive right of it');
+  assert.equal(zero, zeroOf(mixed), 'a zero difference sits on the zero line');
+  assert.deepEqual(textsOf(mixed, 'chart-value'), ['−6.4', '+3.2', '0.0']);
+  assert.deepEqual(textsOf(mixed, 'chart-rule-label'), ['기준선']);
+  assert.deepEqual(textsOf(mixed, 'chart-tick').map(Number).filter((t) => t === 0), [0]);
+  assert.deepEqual(dotsOf(flat), [zeroOf(flat), zeroOf(flat)]);
+  assert.deepEqual(textsOf(flat, 'chart-tick'), ['-1', '-0.5', '0', '0.5', '1']);
+});
+
+// 근거: 이슈 #43 완료 조건 "축이 값 범위에 맞춤", "생략하면 지금 뜻"(호환 규칙), 설계 charts.md "잘린 축은 잘림이 보인다"
+test('drawLine_zero_off_fits_the_value_range_and_marks_a_cut_axis', async () => {
+  const rows = [0.76, 0.758, 0.812, 0.815].map((v, k) => `point x=${k + 1} a=${v}`).join('\n');
+  const head = (zero) => `chart line\ny "비율(%)"\n${zero}series a "A"`;
+  const yTicks = (body) => textsOf(body, 'chart-tick end').map(Number);
+  const kept = await bodyOf(`${head('')}\n${rows}`);
+  const cut = await bodyOf(`${head('zero off\n')}\n${rows}`);
+  const crossing = await bodyOf(`${head('zero off\n')}\npoint x=1 a=-2\npoint x=2 a=3`);
+
+  assert.equal(yTicks(kept)[0], 0, 'omitting zero keeps the old axis from 0');
+  assert.equal(kept.includes('chart-break'), false);
+  assert.ok(yTicks(cut)[0] > 0.7 && yTicks(cut).at(-1) < 0.9, `fits the data: ${yTicks(cut)}`);
+  assert.equal(cut.split('class="chart-break"').length - 1, 1, 'a cut axis shows one break mark');
+  assert.equal(crossing.includes('chart-break'), false, 'an axis that still contains 0 is not cut');
+});
+
 const STEPPED_BAR = 'chart bar\nx "정확도(%)"\nseries a "A" role=main\nseries b "B" role=compare\nrow "r" a=5 b=3\nstep "하나" "첫째"\n  reveal a\nstep "둘" "둘째"\n  reveal b';
 const MISSING_BAR = 'chart bar\nx "정확도(%)"\nseries a "A" role=main\nseries b "B" role=compare\nrow "r" a=5 b=3\nrow "m" a=- b=4\nstep "하나" "첫째"\n  reveal a\nstep "둘" "둘째"\n  reveal b';
 
@@ -361,7 +428,7 @@ test('drawChart_content_has_equal_left_and_right_margins_and_the_pad_below_the_l
     ...charts.map(([file, source]) => ({ file, source, baseDir: new URL('.', EXAMPLES).pathname })),
     { file: 'scatter without titles', source: 'chart scatter\npoint "p" x=1 y=2\npoint "q" x=3 y=5\n' },
   ];
-  assert.equal(charts.length, 6, '예제는 여섯 차트 종류를 모두 갖는다');
+  assert.equal(charts.length, 7, '예제는 일곱 차트 종류를 모두 갖는다');
 
   for (const { file, source, baseDir } of sources) {
     const { chart } = await buildFigure(source, { baseDir });
