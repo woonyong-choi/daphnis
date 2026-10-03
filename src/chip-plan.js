@@ -18,6 +18,10 @@ const DETACH_COST_PER_PX = 2e4;
 const NEAR_COST = 300;
 const MARGIN_COST = 500;
 const ORDER_COST = 100;
+// 흐름의 글 상자가 도형 안 구간 앞뒤에서 흐려지는 길이 비율
+const HIDE_EDGE = 0.004;
+// 숨기는 구간을 도형 안 구간 앞뒤로 더 넓히는 길이 비율. 이어 붙인 경로의 모서리가 둥글어 점 자리가 구간 비율과 조금 어긋나기 때문이다
+const HIDE_PAD = 0.06;
 
 // 이동에 맞춘 계획의 문제 목록. 그림 검사가 같은 계획을 다시 세우지 않고 쓴다. { scene, issues }
 const plannedIssues = new WeakMap();
@@ -34,12 +38,32 @@ export function planHops(scene, timeline, avoid) {
   for (const seg of timeline.segs) {
     for (const hop of seg.hops) {
       if (!hop.data) continue;
-      const key = `${hop.edge}\u0000${hop.ms}\u0000${hop.isBack}\u0000${hop.data.join('\u0000')}`;
-      if (!plans.has(key)) plans.set(key, planChip(scene, hop, avoid));
-      hop.chipPath = plans.get(key).path;
+      const key = `${hop.track === undefined ? hop.edge : `t${hop.track}`}\u0000${hop.ms}\u0000${hop.isBack}\u0000${hop.data.join('\u0000')}`;
+      if (!plans.has(key)) plans.set(key, planChip(scene, hop.track === undefined ? hop : { ...hop, points: timeline.tracks[hop.track].points }, avoid));
+      hop.chipPath = hop.track === undefined ? plans.get(key).path : hideInGaps(plans.get(key).path, timeline.tracks[hop.track].gaps);
       plannedIssues.set(hop, { scene, issues: plans.get(key).issues });
     }
   }
+}
+
+// cost: time O(n·g), heap O(n + g), stack O(1)
+// vars: n = 계획 지점 수, g = 도형 안을 지나는 구간 수
+// basis: estimate
+// 흐름의 점이 도형 안을 지나는 구간(gaps, 경로 길이 비율)에서는 글 상자를 숨긴다. 도형 안에는 글 상자가 앉을 깨끗한 자리가 없어 점에서 떨어져 보이기 때문이다. 구간 앞뒤로 아주 짧게(HIDE_EDGE) 흐려진다.
+function hideInGaps(path, gaps) {
+  // cost: time O(n), heap O(1), stack O(1)
+  // vars: n = 계획 지점 수
+  // basis: estimate
+  const at = (f) => {
+    const k = Math.max(0, path.findLastIndex((p) => p[0] <= f));
+    const [a, b] = [path[k], path[Math.min(k + 1, path.length - 1)]];
+    const r = b[0] > a[0] ? Math.min(1, Math.max(0, (f - a[0]) / (b[0] - a[0]))) : 0;
+    return [1, 2, 3].map((i) => a[i] + (b[i] - a[i]) * r);
+  };
+  const hidden = gaps.map(([a, b]) => [Math.max(0, a - HIDE_PAD), Math.min(1, b + HIDE_PAD)]);
+  const keep = path.filter(([f]) => hidden.every(([a, b]) => f < a - HIDE_EDGE || f > b + HIDE_EDGE));
+  const extra = hidden.flatMap(([a, b]) => [[Math.max(0, a - HIDE_EDGE), 1], [a, 0], [b, 0], [Math.min(1, b + HIDE_EDGE), 1]].map(([f, shown]) => [f, ...at(f).slice(0, 2), shown ? at(f)[2] : 0]));
+  return [...keep, ...extra].sort((p, q) => p[0] - q[0]).filter(([f], i, all) => i === 0 || f > all[i - 1][0]);
 }
 
 // cost: time O(plan) 계획이 없을 때, O(1) 있을 때, heap O(n), stack O(1)
@@ -58,10 +82,12 @@ export function issuesOfHop(scene, hop, avoid) {
  * 이동 하나의 글 상자 계획. 계획 지점마다 후보를 재고, 자리 바꿈 횟수를 가장 적게 하는 후보 열을 동적 계획으로 고른다.
  * 바꿔야 하면 두 자리 사이를 시간에 선형으로 미끄러지고(중간 프레임이 모두 깨끗한 때만), 깨끗한 길이 없으면 바꾸지 않고 겹치는 구간만 흐리게 한다.
  * 움직이는 SVG와 재생기가 이 목록을 그대로 쓴다.
+ * 흐름(track) 이동은 이어 붙인 경로 hop.points를 따라가고, 지나는 선 모두(hop.edges)를 피할 대상에서 뺀다.
  * @returns { path, issues }. path는 이동 진행 비율 at(오름차순)마다 [at, dx, dy, opacity]이고, issues는 지점마다 { at, isOutside, hits }다
  */
 export function planChip(scene, hop, avoid) {
-  const ctx = { scene, hop, chip: sizeChip(hop.data), field: avoid.filter((o) => o.edge !== hop.edge), route: flattenRoute(scene.edges[hop.edge].points), dots: new Map(), frames: new Map() };
+  const own = hop.edges ?? [hop.edge];
+  const ctx = { scene, hop, chip: sizeChip(hop.data), field: avoid.filter((o) => !own.includes(o.edge)), route: flattenRoute(hop.points ?? scene.edges[hop.edge].points), dots: new Map(), frames: new Map() };
   ctx.hard = ctx.field.filter((o) => !o.soft);
   ctx.hardIndex = gridOf(ctx.hard);
   ctx.index = gridOf(ctx.field);

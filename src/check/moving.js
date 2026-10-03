@@ -13,27 +13,32 @@ export function checkChips({ scene, timeline }, problems) {
   const reported = new Set();
   for (const seg of timeline.segs) {
     for (const hop of seg.hops) {
-      const key = `${hop.edge}\u0000${hop.data?.join('\u0000')}`;
+      const key = `${hop.track === undefined ? hop.edge : `t${hop.track}`}\u0000${hop.data?.join('\u0000')}`;
       if (!hop.data || reported.has(key)) continue;
       reported.add(key);
-      reportChip(hop, { scene, issues: issuesOfHop(scene, hop, avoid) }, problems);
+      reportChip(hop, { path: pathName(hop, scene, timeline), issues: issuesOfHop(scene, hop, avoid), scene }, problems);
     }
   }
+}
+
+// 글 상자가 따라가는 길의 이름. 이동은 선이고 흐름은 지나는 도형 이름을 잇는다.
+function pathName(hop, scene, timeline) {
+  if (hop.track !== undefined) return `track ${timeline.tracks[hop.track].names.join(' -> ')}`;
+  return `edge ${scene.edges[hop.edge].from} -> ${scene.edges[hop.edge].to}`;
 }
 
 // cost: time O(i), heap O(1), stack O(1)
 // vars: i = 지점별 문제 수
 // basis: estimate
-function reportChip(hop, { scene, issues }, problems) {
-  const edge = scene.edges[hop.edge];
+function reportChip(hop, { scene, issues, path }, problems) {
   const text = hop.data.join(' ');
   const percent = (at) => Math.round((hop.isBack ? 1 - at : at) * 100);
   const outside = issues.find((issue) => issue.isOutside);
   if (outside) {
     const fix = sizeChip(hop.data).w + CHIP_GAP * 2 > scene.width ? 'Shorten the moving text' : 'Shorten the moving text or move the edge away from the figure edge';
-    problems.error(hop.line ?? 1, `[check 7] moving text "${text}" leaves the figure at ${percent(outside.at)}% of edge ${edge.from} -> ${edge.to}. ${fix}`);
+    problems.error(hop.line ?? 1, `[check 7] moving text "${text}" leaves the figure at ${percent(outside.at)}% of ${path}. ${fix}`);
     return;
   }
   const covered = issues.find((issue) => issue.hits.length);
-  if (covered) problems.warn(hop.line ?? 1, `[check 7] moving text "${text}" covers "${covered.hits[0]}" at ${percent(covered.at)}% of edge ${edge.from} -> ${edge.to}, wherever it is placed (above, below, lifted, or beside the dot). Shorten the moving text or move the edge away from the shape or label`);
+  if (covered) problems.warn(hop.line ?? 1, `[check 7] moving text "${text}" covers "${covered.hits[0]}" at ${percent(covered.at)}% of ${path}, wherever it is placed (above, below, lifted, or beside the dot). Shorten the moving text or move the edge away from the shape or label`);
 }

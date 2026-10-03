@@ -45,6 +45,16 @@ export function drawCard(card, { box, i }, { toneOf, decorate }) {
   );
 }
 
+// cost: time O(r), heap O(1), stack O(1)
+// vars: r = 줄 수
+// basis: estimate
+/** 카드의 줄 하나가 차지한 자리: 맨 위 y와 높이. 값 글자(draw/values.js)가 줄 오른쪽 끝에 얹힐 자리를 찾는 데 쓴다. 그리는 쪽(drawRows)과 같은 쌓임이다. */
+export function rowSlot(layout, box, index) {
+  const heightOf = ({ isHeading, lines, graph }) => (isHeading ? STYLE.row.line : 0) + lines.length * STYLE.row.line + (graph?.height ?? 0);
+  const above = layout.rows.slice(0, index).reduce((sum, row) => sum + heightOf(row) + CARD.gap, 0);
+  return { y: box.y + CARD.pad + above, h: heightOf(layout.rows[index]) };
+}
+
 // cost: time O(r·n), heap O(out), stack O(1)
 // vars: r = 줄 수, n = 줄 글자 수, out = 만든 SVG 글자 수
 // basis: estimate
@@ -90,8 +100,9 @@ function measureTag(tag) {
   return measureTagWidth(tag) + SPACE['4'];
 }
 
+// 값 줄(isValue)의 오른쪽 끝은 값이 바뀔 때마다 새 글을 보이는 자리라 mark 본보기 글을 그리지 않는다. 값 글자는 draw/values.js가 따로 그린다.
 function drawMark(row, right, y) {
-  return row.mark ? `<text x="${r(right)}" y="${r(y + STYLE.row.size)}" class="mark">${renderRich(row.mark)}</text>` : '';
+  return row.mark && !row.isValue ? `<text x="${r(right)}" y="${r(y + STYLE.row.size)}" class="mark">${renderRich(row.mark)}</text>` : '';
 }
 
 // cost: time O(r·n), heap O(n), stack O(1)
