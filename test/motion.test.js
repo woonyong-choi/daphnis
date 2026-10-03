@@ -181,7 +181,8 @@ test('toSvg_moving_packets_match_the_timeline_at_every_example', async () => {
 
     packets.forEach(({ opacity, motion, slide }, k) => {
       const { seg, hop } = hops[k];
-      const [from, to] = [seg.t0 / total, (seg.t0 + hop.ms) / total];
+      const start = seg.t0 + (hop.at ?? 0);
+      const [from, to] = [start / total, (start + hop.ms) / total];
       for (const times of [opacity.times, motion.times, ...(slide.times ? [slide.times] : [])]) {
         assert.equal(times[0], 0, name);
         assert.ok(times.at(-1) <= 1, name);
@@ -200,18 +201,18 @@ test('toSvg_moving_packets_match_the_timeline_at_every_example', async () => {
       if (from > 0) assert.ok(motion.times.some((time) => Math.abs(time - from) < 1e-5), `${name} hop ${k}: 이동 시작이 보임 창 시작과 다르다`);
       if (slide.times) assert.ok(slide.times.every((time) => time === 0 || time === 1 || (time >= from - 1e-5 && time <= to + 1e-5)), `${name} hop ${k}: 글 상자 keyTimes가 이동 구간 밖이다`);
 
-      const probes = [...Array.from({ length: Math.ceil(total / 25) }, (_, i) => i * 25), seg.t0, seg.t0 + 1, seg.t0 + hop.ms - 1, seg.t0 + hop.ms + 1, total - 1];
+      const probes = [...Array.from({ length: Math.ceil(total / 25) }, (_, i) => i * 25), start, start + 1, start + hop.ms - 1, start + hop.ms + 1, total - 1];
       for (const t of probes) {
-        const progress = Math.min(1, Math.max(0, (t - seg.t0) / hop.ms));
+        const progress = Math.min(1, Math.max(0, (t - start) / hop.ms));
         const expected = hop.isBack ? 1 - ease(MOVE, progress) : ease(MOVE, progress);
         const actual = pathFractionAt(motion, t / total);
         assert.ok(Math.abs(actual - expected) < TOLERANCE, `${name} hop ${k} t=${t}ms: 경로 비율 ${actual.toFixed(4)}, 기대 ${expected.toFixed(4)}`);
-        const isOn = t >= seg.t0 && t < seg.t0 + hop.ms;
-        if (Math.abs(t - seg.t0) > 1 && Math.abs(t - seg.t0 - hop.ms) > 1) assert.equal(discreteAt(opacity, t / total), isOn ? 1 : 0, `${name} hop ${k} t=${t}ms: 보임`);
+        const isOn = t >= start && t < start + hop.ms;
+        if (Math.abs(t - start) > 1 && Math.abs(t - start - hop.ms) > 1) assert.equal(discreteAt(opacity, t / total), isOn ? 1 : 0, `${name} hop ${k} t=${t}ms: 보임`);
       }
     });
     for (const m of svg.matchAll(/<g class="p\d+-\d+" opacity="0">/g)) {
-      const href = svg.slice(m.index).match(/<mpath href="#(p-\d+)"/)[1];
+      const href = svg.slice(m.index).match(/<mpath href="#(t?p-\d+)"/)[1];
       const pathAt = svg.indexOf(`id="${href}"`);
       assert.ok(pathAt > groupStart && isInsideGroup(svg, groupStart, pathAt), `${name}: ${href} 경로가 이동한 그룹 밖에 있다`);
       assert.ok(isInsideGroup(svg, groupStart, m.index), `${name}: 점이 이동한 그룹 밖에 있다`);

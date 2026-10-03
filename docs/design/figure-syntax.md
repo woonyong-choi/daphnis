@@ -136,6 +136,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `group id "이름" [direction=right\|down] [badge="글"] [icon=이름] {`, `}` | 그룹. 두 줄 사이에 도형과 그룹을 둔다. 제목 줄에 배지와 아이콘을 달 수 있다 |
 | `icons 이름 "폴더"` | 사용자 아이콘 세트 등록. 폴더의 `<이름>.svg`를 `icon=세트:이름`으로 쓴다 |
 | `grid id "제목" [rows=N] [cols=N] {`, `}` | 칸 격자. 두 줄 사이에 `item`과 `gap` 칸을 둔다. 도형 하나로 배치된다([칸 격자](grid.md)) |
+| `value id "이름" on=도형 [from=값 \| ref=값id]` | 값. 도형 카드에 `이름  값` 줄로 보인다. 값은 숫자나 공백 없는 낱말(8자 이하)이다 |
 | `a -> b ["라벨"] [quiet] [dashed] [head=end\|both\|none] [no=N]` | 선. 끝은 격자 칸 `격자.칸`도 된다 |
 
 - 도형 크기, 색, 굵기는 적지 않는다. 크기는 글과 카드 내용으로, 모양과 색은 토큰으로 정한다. 아이콘은 `icon=`으로 고르되 모양과 색은 정하지 않는다([배치](layout.md#아이콘)).
@@ -159,14 +160,22 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 - `count=N`(2 이상, `box`만)은 같은 역할 복제 개수다. 상자 뒤에 윤곽 두 겹이 겹쳐 보이고 윗줄에 `(N)` 알약이 붙는다. 복제는 이름으로 가리킬 수 없고 선은 상자 하나에 닿는다.
 - `badge`, `icon`, `count`는 흐름 그림에서만 쓴다.
 
+#### 값
+
+- `value id "이름" on=도형 [from=값]`은 `on` 도형 카드에 `이름  값` 줄을 만든다. `from`은 처음 값이고 생략하면 `0`이다. `on`은 카드를 쓰는 도형(`box`, `external`, `store`, `person`)이다. 값 이름은 파일 전체에서 도형, 그룹 이름과 겹치지 못한다.
+- `value id "이름" on=도형 ref=다른값id`는 참조다. 가리키는 값이 바뀌면 참조 값 줄도 같은 순간 같은 값으로 바뀐다. 참조의 참조는 된다. 순환은 오류이고, `from`과 `ref`를 함께 쓰는 것도 오류다. 참조 값에 `set`으로 직접 쓰면 오류다.
+- 값은 단계가 시작할 때 `from`으로 돌아간다. 단계는 그 단계의 `set`이 쓰는 값과 그 값을 참조하는 값만 카드에 올린다. 값 줄은 카드의 `show` 줄 앞에 놓인다.
+- 값 글자는 `VALUE_MAX`(8)자 이하다. 계산으로 이보다 길어지면 [그림 검사](figure-check.md) 14번이 오류로 알린다.
+
 ### 시간 흐름
 
 시간 흐름은 단계(step)의 목록이고, 단계는 박자(beat)의 목록이다. 탭 하나가 단계 하나다.
 
 | 줄 | 뜻 |
 |---|---|
-| `step "이름" ["설명"]` | 단계 시작 |
-| `a -> b ["실어 보낼 글"] [time=3s]` | 이동 박자. 점 하나가 선 하나를 지난다 |
+| `step "이름" ["설명"] [for=12s]` | 단계 시작. `for`는 흐름 단계의 길이다 |
+| `a -> b ["실어 보낼 글"] [time=3s] [tone=purple] [set="식, 식"]` | 이동 박자. 점 하나가 선 하나를 지난다 |
+| `track a -> b -> c ["글"] [at=0s] [every=2s] [time=6s] [tone=teal] [set="식"]` | 흐름. 점 하나가 선언된 선들을 멈춤 없이 잇는다 |
 | `a -> b "글" & c -> d time=2s` | 한 박자 안의 여러 이동 |
 | `show id "글" [tag="태그"] [tone=teal] [meta="덧붙임"] [mark="표시"] [mono]` | 카드 줄 하나를 바로 앞 박자에 더한다 |
 | `show id graph "가 -> 나; 가 -> 다" [lit="가, 나"]` | 카드에 작은 관계 그래프 줄 하나를 더한다 |
@@ -199,6 +208,21 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 - 박자 줄이 하나도 없는 단계는 오류다.
 - 한 단계 안에서 지나간 선, 밝힌 도형, 카드 내용은 남는다. 다음 단계가 시작하면 모두 꺼진다. 차트의 단계 규칙은 [차트](charts.md)에 있다.
 
+흐름 단계:
+
+- 흐름은 박자와 따로 돈다. 한 단계에 `track` 줄을 두면 그 단계는 길이가 `for`인 구간 하나이고, 흐름끼리 서로 기다리지 않는다. 한 단계에 박자 줄(이동, `show`, `clear`, `light`, `say`, `wait`)과 `track` 줄을 섞으면 오류다. 한 그림에는 두 종류의 단계가 함께 있어도 된다. 구조 그림에서만 쓴다.
+- `track a -> b -> c`의 구간마다 이동과 같은 규칙으로 선을 고른다(같은 방향 선, 없으면 거꾸로, 둘 다 없으면 오류). 점은 구간 사이에서 멈추지 않고 이어 붙인 경로를 지나며, 도형 안은 직선으로 지난다. 이동 시간은 구간 시간(선 길이 비례)의 합이고 `time=`은 경로 전체의 시간이다. 출발과 도착이 느린 곡선(`easing.move`)은 경로 전체에 한 번 건다.
+- `at`은 처음 출발 시각(기본 `0`, `0s`도 된다). `every`가 있으면 단계 끝까지 그 간격으로 되풀이해 출발하고, 단계 끝을 넘겨 도착하는 점은 그리지 않는다. `every`가 있는데 단계에 `for`가 없으면 오류다. 점이 하나도 그려지지 않는 흐름은 [그림 검사](figure-check.md) 14번 오류다.
+- `for`가 없으면 단계 길이는 마지막 점이 도착한 시각에 `duration.step-end`를 더한 값이다. `for`는 `track`이 없는 단계에 쓰면 오류다.
+- 글은 이동 글 상자처럼 점과 함께 간다. 흐름이 지나는 선과 도형은 점이 처음 닿는 시각에 밝아지고 단계 끝까지 남는다.
+
+점 색과 값 바꾸기:
+
+- `tone=`은 점과 글 상자의 색이다. 값 목록은 카드 태그의 `tone`과 같아서(`purple`, `green`, `teal`, `gray`) 문법 표의 값 목록 한 곳이 이름을 정한다. 생략하면 지금 색(`state.active`)이다. 색은 토큰 `color.flow.*`이고 글 상자 면과 테두리가 같은 색이다([색 역할](docs-integration.md#색-역할)).
+- `set="식, 식"`은 이동이나 흐름의 점이 도형에 닿을 때 값을 바꾼다. 식은 `id+N`, `id-N`, `id=N`, `id=낱말`, `id=다른id`(복사)다. 뒤에 `@도형`을 붙이면 점이 그 도형에 닿을 때, 없으면 이동이나 흐름의 도착 도형에 닿을 때 적용한다. `@도형`은 경로 위 도형이어야 한다. 낱말을 담는 값에 `+`, `-`를 쓰면 오류다. 식은 점이 닿는 시각 순서로, 같은 시각이면 적은 순서로 적용한다.
+- 값이 바뀌는 순간 그 카드 줄과 그 값을 참조하는 줄이 `duration.value-flash` 동안 밝은 테두리(면 칠 없음)로 보이고, 값 글자는 새 글로 바뀐다. 글이 그대로면 바뀐 것이 아니다.
+- 박자 단계에서도 `a -> b set=`는 같은 규칙으로 동작해, 단계별 설명과 상태 변화를 함께 쓴다.
+
 ### 글 줄 나누기
 
 - 도형 이름, 부제, 카드 글은 도형 너비 상한(토큰 `size.node.max-width`)에서 띄어쓰기 자리로 줄을 나눈다. 띄어쓰기 없는 긴 낱말은 글자 단위로 나눈다. 그래서 글이 도형을 넘는 일은 원본 오류가 아니다.
@@ -227,7 +251,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `warning` | 품질 문제 | 씀 | `--strict` |
 | `deprecated` | 옛 형식이고 계속 동작한다 | 씀 | `--no-deprecated` |
 
-- 진단 하나의 모양은 `{ severity, code, line, column, message, fix? }`이고 모든 진단이 쓴다. `--json`은 여기에 `file`을 더하고, 옛 필드 `lines`, `check`, `level`도 함께 내(폐기, 다음 판까지) 진단마다 한 줄을 표준 출력에 쓴다. `code`는 `syntax`(문법), `check-1`~`check-13`([그림 검사](figure-check.md) 번호), `deprecated-statement`, `deprecated-option`, `deprecated-value`, `deprecated-kind`, `unsupported-version`, `invalid-version`, `version-required`, `layout`(배치 실패, [배치](layout.md#배치-실패)), `io`, `internal`이다. `column`은 줄 안 1부터 센 자리다. `fix`는 `{ line, column, length, text }`로, 그 줄의 `column`부터 `length`글자를 `text`로 바꾼다.
+- 진단 하나의 모양은 `{ severity, code, line, column, message, fix? }`이고 모든 진단이 쓴다. `--json`은 여기에 `file`을 더하고, 옛 필드 `lines`, `check`, `level`도 함께 내(폐기, 다음 판까지) 진단마다 한 줄을 표준 출력에 쓴다. `code`는 `syntax`(문법), `check-1`~`check-14`([그림 검사](figure-check.md) 번호), `deprecated-statement`, `deprecated-option`, `deprecated-value`, `deprecated-kind`, `unsupported-version`, `invalid-version`, `version-required`, `layout`(배치 실패, [배치](layout.md#배치-실패)), `io`, `internal`이다. `column`은 줄 안 1부터 센 자리다. `fix`는 `{ line, column, length, text }`로, 그 줄의 `column`부터 `length`글자를 `text`로 바꾼다.
 - `mutoscope migrate 원본... [--write]`는 진단의 `fix`를 그대로 적용한다. 기본은 바뀔 줄만 `-`, `+`로 보여 주고, `--write`일 때만 파일을 고친다. 원본에 오류가 있거나 고친 글에 오류나 폐기가 남으면 아무것도 쓰지 않는다. 새 폐기 항목은 표에 `replace`만 적으면 된다.
 
 - CLI 출력과 옵션도 같은 규칙이다. 명령과 옵션 이름, 종료 코드, `--json` 필드는 추가만 하고, 옛 `--json` 필드(`lines`, `check`, `level`)는 `src/diagnostics.js` 표에 deprecated로 표시해 다음 판까지 함께 낸다.
@@ -244,12 +268,13 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | 머리 | `aspect`, `width` | flow, state, data | 판 1 |  |
 | 머리 | `x`, `y`, `scale`, `zero`, `decimals` | chart | 판 1 |  |
 | 선언 | `person`, `box`, `external`, `store` | flow, sequence | 판 1 |  |
-| 선언 | `decision`, `grid`, `icons`, `item`, `gap` | flow | 판 1 |  |
+| 선언 | `decision`, `grid`, `icons`, `item`, `value`, `gap` | flow | 판 1 |  |
 | 선언 | `state`, `start`, `final` | state | 판 1 |  |
 | 선언 | `group`, `a -> b` | flow, state | 판 1 |  |
 | 선언 | `table` | data | 판 1 |  |
 | 선언 | `series`, `rule`, `missing`, `data`, `row`, `point`, `cell`, `link` | chart | 판 1 |  |
 | 시간 흐름 | `a -> b` | flow, sequence, state, data | 판 1 |  |
+| 시간 흐름 | `track a -> b -> c` | flow | 판 1 |  |
 | 시간 흐름 | `step`, `say`, `wait` | 모든 그림 | 판 1 |  |
 | 시간 흐름 | `show`, `clear` | flow, data | 판 1 |  |
 | 시간 흐름 | `light` | flow, state, data, chart | 판 1 |  |
@@ -266,7 +291,18 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `node.icon` | 이름 또는 세트:이름 | 판 1 |  |
 | `box.count` | 2 이상 정수 | 판 1 |  |
 | `edge.no` | 양의 정수 | 판 1 |  |
+| `step.for` | 시간 | 판 1 |  |
 | `hop.time` | 시간 | 판 1 |  |
+| `hop.tone` | `purple`, `green`, `teal`, `gray` | 판 1 |  |
+| `hop.set` | 글 | 판 1 |  |
+| `track.at` | 시간(0 가능) | 판 1 |  |
+| `track.every` | 시간 | 판 1 |  |
+| `track.time` | 시간 | 판 1 |  |
+| `track.tone` | `purple`, `green`, `teal`, `gray` | 판 1 |  |
+| `track.set` | 글 | 판 1 |  |
+| `value.on` | 도형 이름 | 판 1 |  |
+| `value.from` | 숫자 또는 낱말 | 판 1 |  |
+| `value.ref` | 값 이름 | 판 1 |  |
 | `hop.dashed` | 값 없음(낱말만) | 판 1 |  |
 | `edge.quiet` | 값 없음(낱말만) | 판 1 |  |
 | `edge.dashed` | 값 없음(낱말만) | 판 1 |  |
@@ -299,7 +335,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `scale` | `scale 값` | `linear`, `log` | `linear` | 없음 |
 | `zero` | `zero 값` | `on`, `off` | `on` | 없음 |
 | `chartType` | `chart 뒤` | `bar`, `dumbbell`, `box`, `scatter`, `line`, `difference`, `heatmap` | 없음 | 없음 |
-| `tone` | `show.tone` | `purple`, `green`, `teal`, `gray` | 없음 | `blue` → `teal`, `orange` → `purple` |
+| `tone` | `hop.tone`, `track.tone`, `show.tone` | `purple`, `green`, `teal`, `gray` | 없음 | `blue` → `teal`, `orange` → `purple` |
 | `role` | `series.role` | `main`, `compare` | 선언 순서대로 main, compare(`dumbbell`은 compare, main) | 없음 |
 | `head` | `edge.head` | `end`, `both`, `none` | `end` | 없음 |
 | `shape` | `box.shape` | `rect`, `circle`, `tile` | `rect` | 없음 |

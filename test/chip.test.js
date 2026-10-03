@@ -120,7 +120,7 @@ async function chipFigures() {
   for (const { file, source } of [...sources, ...EDGE_SOURCES.map((source, i) => ({ file: `edge-${i}`, source }))]) {
     const result = await buildFigure(source, { baseDir: 'examples' });
     const hops = result.chart ? [] : result.timeline.segs.flatMap((seg) => seg.hops).filter((h) => h.data);
-    if (hops.length) figures.push({ file, scene: result.scene, hops });
+    if (hops.length) figures.push({ file, scene: result.scene, hops, tracks: result.timeline.tracks ?? [] });
   }
   return figures;
 }
@@ -128,10 +128,10 @@ async function chipFigures() {
 // 근거: 설계 playback.md 요구사항 "60fps 프레임마다 보이는 동안 이름, 열, 그룹 제목, 알약을 가리지 않고 그림 안에 있다. 한 프레임에 CHIP_STEP_MAX 넘게 더 움직이지 않는다". 버그 #20, #4 증상 3
 test('buildFigure_every_example_and_demo_chip_stays_inside_clear_and_never_jumps_in_any_60fps_frame', async () => {
   let frames = 0;
-  for (const { file, scene, hops } of await chipFigures()) {
+  for (const { file, scene, hops, tracks } of await chipFigures()) {
     const names = chipObstacles(scene);
     for (const hop of hops) {
-      const move = { route: flattenRoute(scene.edges[hop.edge].points), hop, chip: sizeChip(hop.data) };
+      const move = { route: flattenRoute(hop.track === undefined ? scene.edges[hop.edge].points : tracks[hop.track].points), hop, chip: sizeChip(hop.data) };
       let before;
       for (let t = 0; t <= hop.ms; t += CHIP_FRAME_MS) {
         const { box, point, opacity } = chipStateAt(move, hop.chipPath, t);
