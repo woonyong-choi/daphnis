@@ -150,7 +150,8 @@ export const tokens = freeze({
     "packet": {
       "radius": "var(--size-packet-radius)",
       "halo": "var(--size-packet-halo)",
-      "hop-ref": "var(--size-packet-hop-ref)"
+      "hop-ref": "var(--size-packet-hop-ref)",
+      "chip-reach": "var(--size-packet-chip-reach)"
     },
     "arrow": {
       "head": "var(--size-arrow-head)",
@@ -362,23 +363,23 @@ export const values = freeze({
       },
       "purple": {
         "500": "#8b5cf6",
-        "400": "#a78bfa",
-        "600": "#7c3aed"
+        "400": "#9b90ff",
+        "600": "#483c95"
       },
       "green": {
         "500": "#10b981",
-        "400": "#34d399",
-        "700": "#047857"
+        "400": "#b6da70",
+        "700": "#517000"
       },
       "slate": {
         "500": "#8b949e",
-        "400": "#94a3b8",
-        "600": "#475569"
+        "400": "#b0a0a4",
+        "600": "#57494d"
       },
       "teal": {
         "500": "#11a6b0",
-        "400": "#22d3ee",
-        "700": "#0e7490"
+        "400": "#87f3f6",
+        "700": "#008084"
       }
     },
     "state": {
@@ -388,10 +389,10 @@ export const values = freeze({
       "on-active": "#ffffff"
     },
     "flow": {
-      "purple": "#7c3aed",
-      "green": "#047857",
-      "teal": "#0e7490",
-      "gray": "#475569"
+      "purple": "#483c95",
+      "green": "#517000",
+      "teal": "#008084",
+      "gray": "#57494d"
     },
     "figure": {
       "icon": "#125de6"
@@ -460,7 +461,8 @@ export const values = freeze({
     "packet": {
       "radius": 4.5,
       "halo": 10,
-      "hop-ref": 300
+      "hop-ref": 300,
+      "chip-reach": 12
     },
     "arrow": {
       "head": 5,

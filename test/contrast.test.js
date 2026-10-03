@@ -230,6 +230,21 @@ test('palette_blue_and_orange_stay_apart_for_protanopia_and_deuteranopia_in_both
   }
 });
 
+// 근거: 규칙 docs-integration.md 갈래색: 흐름 점 색은 서로, 그리고 파랑(지금)과 주황(비교)과 OKLab 거리 0.1 이상이고 적록 색각 이상 눈에도 같다
+test('flow_tone_colors_stay_apart_from_each_other_for_normal_protan_and_deutan_sight_and_from_blue_and_orange_for_normal_sight', () => {
+  const NORMAL = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+  for (const theme of THEMES) {
+    for (const [name, matrix] of Object.entries({ normal: NORMAL, ...CVD })) {
+      const pairs = FLOW_ROLES.flatMap((a, i) => [...FLOW_ROLES.slice(i + 1), ...(name === 'normal' ? ['state.active', 'data.compare'] : [])].map((b) => [a, b]));
+      for (const [a, b] of pairs) {
+        const distance = distanceOf(seenBy(matrix, color(theme, a)), seenBy(matrix, color(theme, b)));
+
+        assert.ok(distance >= CVD_MIN_DISTANCE, `${theme} ${name} ${a} vs ${b}: ${distance.toFixed(3)}`);
+      }
+    }
+  }
+});
+
 // 근거: 규칙 docs-integration.md "카드 태그 색상이 state.active, data.compare와 40도 이상 떨어진다"
 test('tagColors_keep_their_hue_away_from_the_active_blue_and_the_compare_orange', () => {
   for (const theme of THEMES) {

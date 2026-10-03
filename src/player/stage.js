@@ -149,6 +149,9 @@ function createPacket(hop, stage) {
   const slide = chipSlide(hop, metrics);
   return {
     remove: () => g.remove(),
+    // cost: time O(g + l), heap O(1), stack O(1)
+    // vars: g = 도형 안을 지나는 구간 수, l = 글 상자 경로 지점 수
+    // basis: estimate
     move(elapsed) {
       const t = elapsed - (hop.at ?? 0);
       const p = Math.min(1, Math.max(0, t / hop.ms));
@@ -160,7 +163,8 @@ function createPacket(hop, stage) {
         chip.g.setAttribute('transform', `translate(${dx} ${dy})`);
         chip.g.style.opacity = opacity;
       }
-      g.style.opacity = t < 0 || p >= 1 ? 0 : 1;
+      const isInside = (hop.gaps ?? []).some(([from, to]) => eased > from && eased < to);
+      g.style.opacity = t < 0 || p >= 1 || isInside ? 0 : 1;
     },
   };
 }

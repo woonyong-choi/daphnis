@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
-import { curveOf } from '../src/easing.js';
+import { curveOf, timeAt } from '../src/easing.js';
 import { flattenRoute, routeLength } from '../src/route.js';
 import { toSvg } from '../src/svg.js';
 import { values } from '../src/tokens.js';
@@ -182,7 +182,10 @@ test('toSvg_moving_packets_match_the_timeline_at_every_example', async () => {
     packets.forEach(({ opacity, motion, slide }, k) => {
       const { seg, hop } = hops[k];
       const start = seg.t0 + (hop.at ?? 0);
-      const [from, to] = [start / total, (start + hop.ms) / total];
+      // 흐름의 점은 도형 안을 지나는 구간(gaps)에서 보이지 않는다. 보임 창은 첫 구간 끝까지다.
+      const inside = (hop.gaps ?? []).map(([a, b]) => [start + timeAt(MOVE, a) * hop.ms, start + timeAt(MOVE, b) * hop.ms]);
+      const [from, to] = [start / total, (inside[0]?.[0] ?? start + hop.ms) / total];
+      const end = (start + hop.ms) / total;
       for (const times of [opacity.times, motion.times, ...(slide.times ? [slide.times] : [])]) {
         assert.equal(times[0], 0, name);
         assert.ok(times.at(-1) <= 1, name);
@@ -197,9 +200,9 @@ test('toSvg_moving_packets_match_the_timeline_at_every_example', async () => {
       const shown = opacity.times[opacity.values.indexOf(1)];
       const hidden = opacity.times[opacity.values.indexOf(1) + 1] ?? 1;
       assert.ok(Math.abs(shown - from) < 1e-5 && Math.abs(hidden - to) < 1e-5, `${name} hop ${k}: 보임 창 ${shown}-${hidden}, 시간표 ${from}-${to}`);
-      assert.ok(motion.times.some((time) => Math.abs(time - to) < 1e-5), `${name} hop ${k}: 이동 끝이 보임 창 끝과 다르다`);
+      assert.ok(motion.times.some((time) => Math.abs(time - end) < 1e-5), `${name} hop ${k}: 이동 끝이 시간표 이동 끝과 다르다`);
       if (from > 0) assert.ok(motion.times.some((time) => Math.abs(time - from) < 1e-5), `${name} hop ${k}: 이동 시작이 보임 창 시작과 다르다`);
-      if (slide.times) assert.ok(slide.times.every((time) => time === 0 || time === 1 || (time >= from - 1e-5 && time <= to + 1e-5)), `${name} hop ${k}: 글 상자 keyTimes가 이동 구간 밖이다`);
+      if (slide.times) assert.ok(slide.times.every((time) => time === 0 || time === 1 || (time >= from - 1e-5 && time <= end + 1e-5)), `${name} hop ${k}: 글 상자 keyTimes가 이동 구간 밖이다`);
 
       const probes = [...Array.from({ length: Math.ceil(total / 25) }, (_, i) => i * 25), start, start + 1, start + hop.ms - 1, start + hop.ms + 1, total - 1];
       for (const t of probes) {
@@ -207,8 +210,8 @@ test('toSvg_moving_packets_match_the_timeline_at_every_example', async () => {
         const expected = hop.isBack ? 1 - ease(MOVE, progress) : ease(MOVE, progress);
         const actual = pathFractionAt(motion, t / total);
         assert.ok(Math.abs(actual - expected) < TOLERANCE, `${name} hop ${k} t=${t}ms: 경로 비율 ${actual.toFixed(4)}, 기대 ${expected.toFixed(4)}`);
-        const isOn = t >= start && t < start + hop.ms;
-        if (Math.abs(t - start) > 1 && Math.abs(t - start - hop.ms) > 1) assert.equal(discreteAt(opacity, t / total), isOn ? 1 : 0, `${name} hop ${k} t=${t}ms: 보임`);
+        const isOn = t >= start && t < start + hop.ms && !inside.some(([a, b]) => t > a && t < b);
+        if (Math.abs(t - start) > 1 && Math.abs(t - start - hop.ms) > 1 && inside.every(([a, b]) => Math.abs(t - a) > 1 && Math.abs(t - b) > 1)) assert.equal(discreteAt(opacity, t / total), isOn ? 1 : 0, `${name} hop ${k} t=${t}ms: 보임`);
       }
     });
     for (const m of svg.matchAll(/<g class="p\d+-\d+" opacity="0">/g)) {

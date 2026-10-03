@@ -11,7 +11,7 @@ const STEP_END = values.duration['step-end'];
 // vars: l = 흐름의 구간(선) 수, p = 선의 경로 점 수
 // basis: estimate
 // 흐름 하나가 지나는 길. 구간마다 선 경로를(거꾸로 선이면 뒤집어) 이어 붙이고, 이동 시간은 구간 시간(선 길이 비례)의 합이다. time=이 있으면 경로 전체의 시간이다.
-// 도형을 지나는 곳은 구간이 끝나는 점과 다음 구간이 시작하는 점을 잇는 직선이고, 그 길이도 경로 길이에 센다. fracs[k]는 k번째 도형 경계에 닿는 길이 비율, gaps는 도형 안을 지나는 비율 구간이다.
+// 도형을 지나는 곳은 구간이 끝나는 점과 다음 구간이 시작하는 점을 잇는 직선이고(모서리를 둥글리지 않는다), 그 길이도 경로 길이에 센다. route는 그려지는 길을 편 점 목록이다. fracs[k]는 k번째 도형 경계에 닿는 길이 비율, gaps는 도형 안을 지나는 비율 구간이다.
 function planTrack(track, { scene, speed }) {
   const parts = track.legs.map((leg) => (leg.isBack ? [...scene.edges[leg.edge].points].reverse() : scene.edges[leg.edge].points));
   const lengths = parts.map((part) => routeLength(flattenRoute(part)));
@@ -30,7 +30,8 @@ function planTrack(track, { scene, speed }) {
   });
   fracs[fracs.length - 1] = 1;
   return {
-    points: parts.flat(),
+    parts,
+    route: parts.flatMap((part) => flattenRoute(part)),
     edges: [...new Set(track.legs.map((leg) => leg.edge))],
     legEdges: track.legs.map((leg) => leg.edge),
     names: track.path,
@@ -72,13 +73,13 @@ const offsetOf = (fraction, ms) => (fraction <= 0 ? 0 : fraction >= 1 ? ms : tim
 export function flowSeg({ step, si }, run, { scene, cards, chips }) {
   const plans = step.tracks.map((track) => planTrack(track, { scene, speed: run.speed }));
   const first = run.tracks.length;
-  run.tracks.push(...plans.map((plan, i) => ({ points: plan.points, names: plan.names, gaps: plan.gaps, line: step.tracks[i].line })));
+  run.tracks.push(...plans.map((plan, i) => ({ parts: plan.parts, route: plan.route, names: plan.names, gaps: plan.gaps, line: step.tracks[i].line })));
   const hops = [];
   const edgesAt = {};
   plans.forEach((plan, i) => {
     const track = step.tracks[i];
     const starts = departures(track, { ms: plan.ms, forMs: step.forMs });
-    for (const at of starts) hops.push({ track: first + i, edges: plan.edges, isBack: false, at, ms: plan.ms, to: plan.nodes.at(-1), data: track.data === undefined ? undefined : chips(track.data), ...(track.tone ? { tone: track.tone } : {}), line: track.line });
+    for (const at of starts) hops.push({ track: first + i, edges: plan.edges, gaps: plan.gaps, isBack: false, at, ms: plan.ms, to: plan.nodes.at(-1), data: track.data === undefined ? undefined : chips(track.data), ...(track.tone ? { tone: track.tone } : {}), line: track.line });
     if (starts.length) plan.legEdges.forEach((edge, k) => (edgesAt[edge] = Math.min(edgesAt[edge] ?? Infinity, starts[0] + offsetOf(plan.fracs[k], plan.ms))));
   });
   const length = step.forMs ?? Math.max(0, ...hops.map((h) => h.at + h.ms)) + STEP_END;

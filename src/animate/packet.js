@@ -2,6 +2,7 @@
 // 점의 보임과 이동과 글 상자 옮김과 흐려짐은 모두 SMIL이라 한 시계로 돈다. 보임을 CSS에 두면 시계 둘이 따로 반복해, 한 바퀴가 돌아올 때 점이 끝 지점에 잠깐 보였다가 시작 지점으로 뛴다.
 import { CHIP_GAP, sizeChip } from '../chip.js';
 import { curveOf, keySpline, timeAt } from '../easing.js';
+import { discreteWindows } from './discrete.js';
 import { STYLE } from '../measure/sizes.js';
 import { renderRich, roundCoord as r } from '../text.js';
 import { tokens, values } from '../tokens.js';
@@ -27,7 +28,7 @@ export function drawPacket(clock, { seg, hop, name }, glyphs) {
   const chip = hop.data ? drawChip(hop.data, { glyphs, color: hop.tone ? color : undefined }) + pushChip(clock, start, hop) : '';
   return (
     `<g class="${name}" opacity="0"><circle r="${values.size.packet.halo}" fill="${color}" opacity="${values.opacity.halo}"/><circle r="${values.size.packet.radius}" fill="${color}"/>${chip ? `<g>${chip}</g>` : ''}` +
-    showWindow(clock, from, to) +
+    (hop.gaps?.length ? discreteWindows(clock, visibleSpans(start, hop)) : showWindow(clock, from, to)) +
     moveMotion(clock, [from, to], hop) +
     `</g>`
   );
@@ -45,6 +46,16 @@ function drawChip(lines, { glyphs, color }) {
     `<rect x="${r(-w / 2)}" y="${r(top)}" width="${r(w)}" height="${r(h)}" rx="${values.radius.lg}" fill="${color ?? tokens.color.state['active-fill']}"${color ? ` stroke="${color}" stroke-width="${values.border.edge}"` : ''}/>` +
     lines.map((line, li) => `<text x="0" y="${r(top + STYLE.chip.line * (li + 1))}" class="chip">${renderRich(line)}</text>`).join('')
   );
+}
+
+// cost: time O(g), heap O(g), stack O(1)
+// vars: g = 도형 안을 지나는 구간 수
+// basis: estimate
+// 흐름의 점이 보이는 시각 구간(ms). 도형 안을 지나는 구간(경로 길이 비율 gaps)에서는 도착 연결점에서 사라져 출발 연결점에서 다시 나타난다. 그 구간의 시간은 그대로 흐른다.
+function visibleSpans(start, hop) {
+  const at = (fraction) => start + timeAt(MOVE, fraction) * hop.ms;
+  const edges = [start, ...hop.gaps.flatMap(([from, to]) => [at(from), at(to)]), start + hop.ms];
+  return edges.reduce((spans, time, i) => (i % 2 === 0 ? [...spans, [time, edges[i + 1]]] : spans), []);
 }
 
 // cost: time O(1), heap O(1), stack O(1)
