@@ -310,6 +310,21 @@ test('drawLine_dot_appears_when_the_line_reaches_it_along_the_reveal_curve', asy
   assert.deepEqual(chart.dotAts, reach);
 });
 
+// 근거: 버그 #44(선 차트 기준선 라벨이 끝 점들과 겹침), 설계 charts.md 그리기 "그 자리를 데이터가 가리면 왼쪽 끝으로 옮긴다"
+test('drawLine_rule_label_moves_to_the_free_side_when_dots_touch_the_rule_at_the_right_end', async () => {
+  const rows = Array.from({ length: 10 }, (_, k) => `point x=${k + 1} a=${k < 5 ? 0.76 : 0.8142 + (k % 2) * 0.003}`).join('\n');
+  const { chart } = await buildFigure(`chart line\ny "비율(%)"\nseries a "A"\nrule 0.8142 "목표"\n${rows}`);
+  const label = /<text x="([\d.]+)" y="([\d.]+)" class="chart-rule-label( end)?">목표<\/text>/.exec(chart.body);
+  const [x, baseline, width] = [Number(label[1]), Number(label[2]), measure('목표', 11)];
+  const box = { x0: label[3] ? x - width : x, x1: label[3] ? x : x + width, y0: baseline - 11 - 2, y1: baseline };
+  const dots = [...chart.body.matchAll(/<circle cx="([\d.]+)" cy="([\d.]+)" r="(\d+)"[^>]*class="dot"/g)].map((m) => ({ x: Number(m[1]), y: Number(m[2]), r: Number(m[3]) }));
+  const covered = dots.filter((d) => d.x + d.r > box.x0 && d.x - d.r < box.x1 && d.y + d.r > box.y0 && d.y - d.r < box.y1);
+
+  assert.equal(dots.length, 10);
+  assert.deepEqual(covered, []);
+  assert.equal(label[3], undefined, 'the free side is the left end');
+});
+
 const STEPPED_BAR = 'chart bar\nx "정확도(%)"\nseries a "A" role=main\nseries b "B" role=compare\nrow "r" a=5 b=3\nstep "하나" "첫째"\n  reveal a\nstep "둘" "둘째"\n  reveal b';
 const MISSING_BAR = 'chart bar\nx "정확도(%)"\nseries a "A" role=main\nseries b "B" role=compare\nrow "r" a=5 b=3\nrow "m" a=- b=4\nstep "하나" "첫째"\n  reveal a\nstep "둘" "둘째"\n  reveal b';
 
