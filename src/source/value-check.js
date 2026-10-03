@@ -1,8 +1,8 @@
 // 값 선언과 값 바꾸기 식을 파일을 다 읽은 뒤 확인한다. 도형 이름, 참조 사슬, 식이 가리키는 값과 도형이 맞는지 본다.
+import { CARD_SHAPES } from './grammar.js';
 import { unknownName } from './problems.js';
 import { NUMBER_PATTERN } from './words.js';
 
-const CARD_SHAPES = ['box', 'external', 'store', 'person'];
 
 // cost: time O(v² + e·v), heap O(v), stack O(1)
 // vars: v = 값 수, e = 식 수
@@ -21,7 +21,7 @@ export function checkValues(figure, names, problems) {
 function checkDeclaration(value, { byId, names, figure }, problems) {
   const target = names.get(value.on);
   if (value.on !== undefined && !target && !figure.rejectedNames.has(value.on)) problems.error(value.line, unknownName('node', value.on, figure.nodes.map((n) => n.id)));
-  else if (target && !CARD_SHAPES.includes(target.shape)) problems.error(value.line, `a ${target.shape} has no card. Put a value on ${CARD_SHAPES.join(', ')}`);
+  else if (target && !CARD_SHAPES.includes(target.shape)) problems.error(value.line, `a ${target.shape} has no card. Put a value on ${CARD_SHAPES.slice(0, 4).join(', ')}`);
   if (value.ref === undefined) return;
   if (!byId.has(value.ref)) {
     problems.error(value.line, unknownName('value', value.ref, byId.keys()));

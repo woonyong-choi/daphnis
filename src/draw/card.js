@@ -45,14 +45,9 @@ export function drawCard(card, { box, i }, { toneOf, decorate }) {
   );
 }
 
-// cost: time O(r), heap O(1), stack O(1)
-// vars: r = 줄 수
-// basis: estimate
-/** 카드의 줄 하나가 차지한 자리: 맨 위 y와 높이. 값 글자(draw/values.js)가 줄 오른쪽 끝에 얹힐 자리를 찾는 데 쓴다. 그리는 쪽(drawRows)과 같은 쌓임이다. */
+/** 카드의 줄 하나가 차지한 자리: 맨 위 y와 높이. 값 글자(draw/values.js)가 줄 오른쪽 끝에 얹힐 자리를 찾는 데 쓴다. 자리는 layoutCard가 정한 그대로다. */
 export function rowSlot(layout, box, index) {
-  const heightOf = ({ isHeading, lines, graph }) => (isHeading ? STYLE.row.line : 0) + lines.length * STYLE.row.line + (graph?.height ?? 0);
-  const above = layout.rows.slice(0, index).reduce((sum, row) => sum + heightOf(row) + CARD.gap, 0);
-  return { y: box.y + CARD.pad + above, h: heightOf(layout.rows[index]) };
+  return { y: box.y + layout.rows[index].top, h: layout.rows[index].height };
 }
 
 // cost: time O(r·n), heap O(out), stack O(1)
@@ -60,25 +55,19 @@ export function rowSlot(layout, box, index) {
 // basis: estimate
 // 줄마다 태그 알약, 오른쪽 표시, 나눈 글 줄. 세 글자를 넘는 태그는 글 위에 따로 선다.
 function drawRows(layout, box, toneOf) {
-  let y = box.y + CARD.pad;
   const left = box.x + CARD.side;
   return layout.rows
-    .map(({ row, isHeading, tagW, lines, graph }) => {
-      if (graph) {
-        const drawn = drawMiniGraph(graph, left, y);
-        y += graph.height + CARD.gap;
-        return drawn;
-      }
-      const parts = [drawTag(row, { x: left, y }, toneOf), drawMark(row, box.x + box.w - CARD.side, y)];
-      if (isHeading) y += STYLE.row.line;
+    .map(({ row, isHeading, tagW, lines, graph, top }) => {
+      const rowTop = box.y + top;
+      if (graph) return drawMiniGraph(graph, left, rowTop);
+      const parts = [drawTag(row, { x: left, y: rowTop }, toneOf), drawMark(row, box.x + box.w - CARD.side, rowTop)];
+      const first = rowTop + (isHeading ? STYLE.row.line : 0);
       const indent = !isHeading && tagW ? tagW : 0;
       const body = row.text + (row.meta !== undefined ? ` · ${row.meta}` : '');
       const texts = row.meta !== undefined ? splitMeta(lines, body, plainText(row.text).length) : lines.map((line) => renderRich(line));
       lines.forEach((_, li) => {
-        parts.push(`<text x="${r(left + (li === 0 ? indent : 0))}" y="${r(y + STYLE.row.size)}" class="row${row.isMono ? ' mono' : ''}">${texts[li]}</text>`);
-        y += STYLE.row.line;
+        parts.push(`<text x="${r(left + (li === 0 ? indent : 0))}" y="${r(first + li * STYLE.row.line + STYLE.row.size)}" class="row${row.isMono ? ' mono' : ''}">${texts[li]}</text>`);
       });
-      y += CARD.gap;
       return parts.join('');
     })
     .join('');

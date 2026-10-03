@@ -279,7 +279,8 @@ export const tokens = freeze({
     "dim": "var(--opacity-dim)",
     "dim-ink": "var(--opacity-dim-ink)",
     "band": "var(--opacity-band)",
-    "range": "var(--opacity-range)"
+    "range": "var(--opacity-range)",
+    "chip-visible-min": "var(--opacity-chip-visible-min)"
   },
   "z": {
     "raised": "var(--z-raised)",
@@ -298,7 +299,9 @@ export const tokens = freeze({
     "step-end": "var(--duration-step-end)",
     "chart-cycle": "var(--duration-chart-cycle)",
     "reveal": "var(--duration-reveal)",
-    "value-flash": "var(--duration-value-flash)"
+    "value-flash": "var(--duration-value-flash)",
+    "chip-frame": "var(--duration-chip-frame)",
+    "flow-step": "var(--duration-flow-step)"
   },
   "easing": {
     "move": "var(--easing-move)",
@@ -590,7 +593,8 @@ export const values = freeze({
     "dim": 0.3,
     "dim-ink": 0.82,
     "band": 0.22,
-    "range": 0.4
+    "range": 0.4,
+    "chip-visible-min": 0.1
   },
   "z": {
     "raised": 2,
@@ -609,7 +613,9 @@ export const values = freeze({
     "step-end": 1600,
     "chart-cycle": 7000,
     "reveal": 900,
-    "value-flash": 700
+    "value-flash": 700,
+    "chip-frame": 16.666666666666668,
+    "flow-step": 12000
   },
   "easing": {
     "move": "cubic-bezier(0.455, 0.03, 0.515, 0.955)",

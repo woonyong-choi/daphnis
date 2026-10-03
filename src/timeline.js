@@ -2,6 +2,7 @@
 import { presentSlots, slotMiddle } from './chart/slots.js';
 import { hopMs } from './hop-ms.js';
 import { flowSeg } from './timeline-flow.js';
+import { createSeg } from './timeline-seg.js';
 import { valueRows } from './timeline-values.js';
 import { values } from './tokens.js';
 import { valueRowsByNode } from './values.js';
@@ -137,27 +138,21 @@ function beatSeg({ step, si, beat, bi }, { memory, run }, { cards, chips, scene 
   const said = beat.say ?? (bi === 0 ? step.caption : undefined);
   const hold = dwellOf(said) + (bi === step.beats.length - 1 ? DWELL['step-end'] : 0);
   const card = cards.beats.get(beat) ?? { before: {}, after: {} };
-  const seg = {
+  return createSeg(run, {
     si,
     bi,
-    t0: run.t,
-    t1: run.t + Math.max(move, grow) + beat.waitMs + hold,
+    length: Math.max(move, grow) + beat.waitMs + hold,
     labelShifts: run.hasReveal ? labelShiftsOf(figure, [...run.revealed]) : [],
     move,
     hops,
     edgesOn: [...memory.edgesOn],
     nodesOn: [...memory.lit].filter((id) => !id.includes('.')),
     partsOn: [...memory.lit].filter((id) => id.includes('.')),
-    cards: card.after,
-    cardsBefore: card.before,
-    cardsAt: cardTimes(hops, card),
+    card: { before: card.before, after: card.after, at: cardTimes(hops, card) },
     caption: memory.caption,
-    series: run.hasReveal ? [...run.revealed] : run.seriesIds,
     growing,
     lights: [...memory.lights],
-  };
-  run.t = seg.t1;
-  return seg;
+  });
 }
 
 // cost: time O(r·s), heap O(r), stack O(1)

@@ -19,9 +19,8 @@ const DETACH_COST_PER_PX = 2e4;
 const NEAR_COST = 300;
 const MARGIN_COST = 500;
 const ORDER_COST = 100;
-// 흐름(track)의 글 상자는 자기 점에서 이 거리(px, 상자 가장자리와 점 중심) 안에만 둔다. 이를 넘는 자리는 겹침(UNCLEAN_COST)보다 더 큰 비용이라 겹쳐도 점 옆을 고른다
+// 흐름(track)의 글 상자는 자기 점에서 이 거리(px, 상자 가장자리와 점 중심) 안에만 둔다. 이를 넘는 후보는 비용을 재지 않고 제외한다(점 옆 기본 자리는 늘 이 안이다)
 const ATTACH_MAX = values.size.packet['chip-reach'];
-const DETACH_HARD_COST = 1e9;
 
 // 이동에 맞춘 계획의 문제 목록. 그림 검사가 같은 계획을 다시 세우지 않고 쓴다. { scene, issues }
 const plannedIssues = new WeakMap();
@@ -133,7 +132,7 @@ function slotsAt(ctx, t, { descs, known }) {
     const c = known.get(key) ?? chipCandidateAt(point, ctx.chip, { scene: ctx.scene, avoid: ctx.field, desc, index: ctx.index });
     // c는 이 이동 계획만 쓰는 후보라 그대로 고쳐 쓴다.
     c.point = point;
-    c.cost = unaryCost(c, point, ctx.isAttached);
+    c.cost = ctx.isAttached && !isWithinReach(c.box, point) ? Infinity : unaryCost(c, point);
     c.isClean = !c.isOutside && c.hits.length === 0;
     slots.set(key, c);
   });
@@ -142,12 +141,21 @@ function slotsAt(ctx, t, { descs, known }) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
+// 글 상자 사각형과 점 중심 사이 거리(px)
+function gapOf(box, point) {
+  return Math.hypot(Math.max(box.x - point.x, 0, point.x - box.x - box.w), Math.max(box.y - point.y, 0, point.y - box.y - box.h));
+}
+
+// 글 상자가 점에 붙어 있다고 볼 거리 안인지(흐름의 글 상자 후보 분류)
+const isWithinReach = (box, point) => gapOf(box, point) <= ATTACH_MAX;
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
 // 후보 하나의 한 지점 비용. 겹침이나 그림 밖은 흐려져야 하므로 가장 크다.
-function unaryCost({ rank: [, area, near, tight, crowded, order], box, isOutside, hits }, point, isAttached) {
+function unaryCost({ rank: [, area, near, tight, crowded, order], box, isOutside, hits }, point) {
   const unclean = isOutside || hits.length ? UNCLEAN_COST + area : 0;
-  const gap = Math.hypot(Math.max(box.x - point.x, 0, point.x - box.x - box.w), Math.max(box.y - point.y, 0, point.y - box.y - box.h));
-  const detach = isAttached && gap > ATTACH_MAX ? DETACH_HARD_COST : 0;
-  return detach + unclean + near * NEAR_COST + (tight + crowded) * MARGIN_COST + order * ORDER_COST + Math.max(0, gap - DETACH_GAP) * DETACH_COST_PER_PX;
+  const gap = gapOf(box, point);
+  return unclean + near * NEAR_COST + (tight + crowded) * MARGIN_COST + order * ORDER_COST + Math.max(0, gap - DETACH_GAP) * DETACH_COST_PER_PX;
 }
 
 // cost: time O(n·k), heap O(n), stack O(1)

@@ -1,7 +1,7 @@
 // 점 하나가 한 박자 동안 선을 건너고, 실어 보내는 글은 점 위의 상자로 따라간다.
 // 점의 보임과 이동과 글 상자 옮김과 흐려짐은 모두 SMIL이라 한 시계로 돈다. 보임을 CSS에 두면 시계 둘이 따로 반복해, 한 바퀴가 돌아올 때 점이 끝 지점에 잠깐 보였다가 시작 지점으로 뛴다.
 import { CHIP_GAP, sizeChip } from '../chip.js';
-import { curveOf, keySpline, timeAt } from '../easing.js';
+import { arrivalOffsetMs, curveOf, keySpline, timeAt } from '../easing.js';
 import { CHIP_HIDE_FADE_MS } from '../chip-clash.js';
 import { discreteWindows } from './discrete.js';
 import { STYLE } from '../measure/sizes.js';
@@ -71,7 +71,7 @@ function hideChip(clock, start, spans) {
 // basis: estimate
 // 흐름의 점이 보이는 시각 구간(ms). 도형 안을 지나는 구간(경로 길이 비율 gaps)에서는 도착 연결점에서 사라져 출발 연결점에서 다시 나타난다. 그 구간의 시간은 그대로 흐른다.
 function visibleSpans(start, hop) {
-  const at = (fraction) => start + timeAt(MOVE, fraction) * hop.ms;
+  const at = (fraction) => start + arrivalOffsetMs(fraction, hop.ms);
   const edges = [start, ...hop.gaps.flatMap(([from, to]) => [at(from), at(to)]), start + hop.ms];
   return edges.reduce((spans, time, i) => (i % 2 === 0 ? [...spans, [time, edges[i + 1]]] : spans), []);
 }

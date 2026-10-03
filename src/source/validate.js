@@ -1,11 +1,10 @@
 // 파일을 다 읽은 뒤 이름, 선, 이동, 카드, 밝히기 대상을 확인한다. 이동마다 따라갈 선(edge 번호, 거꾸로 여부)을 정한다.
 import { checkChart } from './chart-rules.js';
 import { checkFlowStep } from './flow-check.js';
+import { CARD_SHAPES } from './grammar.js';
 import { checkIcons } from './icons.js';
 import { unknownName } from './problems.js';
 import { checkValues } from './value-check.js';
-
-const CARD_SHAPES = ['box', 'external', 'store', 'person', 'table'];
 
 // cost: time O(s·k + e² + h·e), heap O(k + e), stack O(1)
 // vars: s = 문장 수, k = 이름 수, e = 선 수, h = 이동 수

@@ -1,18 +1,15 @@
 // 값 바꾸기(`set=`)를 시각 순서로 적용해 값 줄마다 값이 바뀌는 시각과 새 값을 구한다. 박자 단계와 흐름 단계가 같은 규칙을 쓴다(docs/design/playback.md 값 변화).
-import { curveOf, timeAt } from './easing.js';
+import { arrivalOffsetMs } from './easing.js';
 import { NUMBER_PATTERN } from './source/words.js';
 import { roundNumber } from './source/value.js';
 import { rootOf, usedValues, valueTable } from './values.js';
-
-const MOVE = curveOf('move');
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 // 식이 적용되는 시각(ms). 점이 그 도형에 닿는 시각이다. `@도형`이 없으면 경로의 마지막 도형이다.
 function reachAt(move, expression) {
   const k = expression.at === undefined ? move.nodes.length - 1 : move.nodes.indexOf(expression.at);
-  const fraction = move.fracs[k];
-  return move.start + (fraction <= 0 ? 0 : fraction >= 1 ? move.ms : timeAt(MOVE, fraction) * move.ms);
+  return move.start + arrivalOffsetMs(move.fracs[k], move.ms);
 }
 
 // cost: time O(1), heap O(1), stack O(1)

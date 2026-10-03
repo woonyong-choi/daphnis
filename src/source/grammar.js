@@ -25,6 +25,9 @@ export const BADGE_MAX = 8;
 /** 값(`value`)이 보이는 글자 수 상한. 카드 오른쪽 끝에 들어갈 자리가 정해져 있어 `mark`와 같다. */
 export const VALUE_MAX = 8;
 
+/** 카드를 쓰는 도형(`show`, `value`가 놓이는 곳). 이름 순서는 오류 안내 글에 그대로 나온다. */
+export const CARD_SHAPES = ['box', 'external', 'store', 'person', 'table'];
+
 /** 그림 종류 문장. argument는 둘째 낱말이 읽는 값 목록 이름이다. */
 export const KINDS = table({
   flow: { ...V1, argument: 'direction' },

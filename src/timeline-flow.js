@@ -1,10 +1,10 @@
 // 흐름 단계(`track`)를 시간표 구간 하나로 만든다. 박자가 끝나야 다음 박자가 시작하는 시계와 달리, 흐름은 단계 길이 안에서 서로 기다리지 않고 각자 출발한다(docs/design/playback.md 흐름 단계).
-import { curveOf, timeAt } from './easing.js';
+import { arrivalOffsetMs } from './easing.js';
 import { hopMs } from './hop-ms.js';
 import { flattenRoute, routeLength } from './route.js';
+import { createSeg } from './timeline-seg.js';
 import { values } from './tokens.js';
 
-const MOVE = curveOf('move');
 const STEP_END = values.duration['step-end'];
 
 // cost: time O(l·p), heap O(l·p), stack O(1)
@@ -55,11 +55,6 @@ function departures(track, { ms, forMs }) {
   return starts;
 }
 
-// cost: time O(1), heap O(1), stack O(1)
-// basis: estimate
-// 경로 길이의 비율 fraction에 점이 닿는 시각(출발 뒤 ms). 이동 곡선을 따른다.
-const offsetOf = (fraction, ms) => (fraction <= 0 ? 0 : fraction >= 1 ? ms : timeAt(MOVE, fraction) * ms);
-
 // cost: time O(t·(d + l)), heap O(t·d + e), stack O(1)
 // vars: t = 흐름 수, d = 흐름의 출발 수, l = 흐름의 구간 수, e = 지나는 선 수
 // basis: estimate
@@ -80,32 +75,26 @@ export function flowSeg({ step, si }, run, { scene, cards, chips }) {
     const track = step.tracks[i];
     const starts = departures(track, { ms: plan.ms, forMs: step.forMs });
     for (const at of starts) hops.push({ track: first + i, edges: plan.edges, gaps: plan.gaps, isBack: false, at, ms: plan.ms, to: plan.nodes.at(-1), data: track.data === undefined ? undefined : chips(track.data), ...(track.tone ? { tone: track.tone } : {}), line: track.line });
-    if (starts.length) plan.legEdges.forEach((edge, k) => (edgesAt[edge] = Math.min(edgesAt[edge] ?? Infinity, starts[0] + offsetOf(plan.fracs[k], plan.ms))));
+    if (starts.length) plan.legEdges.forEach((edge, k) => (edgesAt[edge] = Math.min(edgesAt[edge] ?? Infinity, starts[0] + arrivalOffsetMs(plan.fracs[k], plan.ms))));
   });
   const length = step.forMs ?? Math.max(0, ...hops.map((h) => h.at + h.ms)) + STEP_END;
   const start = cards.starts.get(step) ?? {};
-  const seg = {
+  const seg = createSeg(run, {
     si,
     bi: 0,
-    t0: run.t,
-    t1: run.t + length,
+    length,
     labelShifts: [],
     move: length,
     hops,
     edgesOn: [],
     nodesOn: [],
     partsOn: [],
-    cards: start,
-    cardsBefore: start,
-    cardsAt: {},
+    card: { before: start, after: start, at: {} },
     caption: step.caption ?? '',
-    series: run.hasReveal ? [...run.revealed] : run.seriesIds,
     growing: run.hasReveal || si > 0 ? [] : run.seriesIds,
     lights: [],
-    edgesAt,
-    nodesAt: nodesAtOf(edgesAt, scene.edges),
-  };
-  run.t = seg.t1;
+    extra: { edgesAt, nodesAt: nodesAtOf(edgesAt, scene.edges) },
+  });
   const moves = hops.map((hop) => ({ ...plans[hop.track - first], start: seg.t0 + hop.at, sets: step.tracks[hop.track - first].sets }));
   return { segs: [seg], moves };
 }
