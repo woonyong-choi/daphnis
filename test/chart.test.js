@@ -376,6 +376,25 @@ test('drawDifferences_negative_values_negative_rule_and_all_zero_are_drawn_aroun
   assert.deepEqual(textsOf(flat, 'chart-tick'), ['-1', '-0.5', '0', '0.5', '1']);
 });
 
+// 근거: 이슈 #42 재현 원본(값이 모두 0이고 기준선이 -10), 설계 charts.md "차이 차트의 0은 값 축 안쪽에 선다"
+test('drawDifferences_zero_stays_a_tick_step_inside_the_axis_and_texts_stay_in_the_frame', async () => {
+  const sources = [
+    'chart difference\nx "차이(%p)"\nseries d "차이"\nrule -10 "기준선"\nrow "a" d=0 d.low=0 d.high=0',
+    'chart difference\nx "차이(%p)"\nseries d "차이"\nrow "a" d=3 d.low=1 d.high=6',
+    'chart difference\nx "차이(%p)"\nseries d "차이"\nrow "a" d=-3 d.low=-6 d.high=-1',
+  ];
+  for (const source of sources) {
+    const { chart } = await buildFigure(source);
+    const ticks = [...chart.body.matchAll(/<text x="([\d.]+)"[^>]*class="chart-tick">([^<]*)</g)].map((m) => [Number(m[1]), m[2]]);
+    const zero = ticks.find(([, label]) => label === '0')[0];
+    const step = ticks[1][0] - ticks[0][0];
+    const texts = [...chart.body.matchAll(/<text x="([\d.]+)"[^>]*class="chart-value[^"]*">([^<]*)</g)];
+
+    assert.ok(zero - ticks[0][0] >= step - 1 && ticks.at(-1)[0] - zero >= step - 1, `${source}: ticks ${ticks.map((t) => t[1])}`);
+    for (const [, x, text] of texts) assert.ok(Number(x) + measure(text, 11, 'numSemibold') <= chart.width - PAD + TOLERANCE, text);
+  }
+});
+
 // 근거: 이슈 #43 완료 조건 "축이 값 범위에 맞춤", "생략하면 지금 뜻"(호환 규칙), 설계 charts.md "잘린 축은 잘림이 보인다"
 test('drawLine_zero_off_fits_the_value_range_and_marks_a_cut_axis', async () => {
   const rows = [0.76, 0.758, 0.812, 0.815].map((v, k) => `point x=${k + 1} a=${v}`).join('\n');

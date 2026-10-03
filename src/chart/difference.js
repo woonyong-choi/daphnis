@@ -10,6 +10,8 @@ import { valueFormat } from './scale.js';
 
 // 모두 0일 때 0이 가운데에 오도록 잡는 값 축 범위의 한쪽 길이
 const FLAT_SPAN = 1;
+// 값이 0의 한쪽에만 있을 때 반대쪽에 더하는 여백(값 범위 대비). 0이 축 끝에 붙지 않고 눈금 한 칸 이상 안쪽에 서게 한다.
+const ZERO_MARGIN = 0.15;
 
 // cost: time O(r), heap O(r), stack O(1)
 // vars: r = 행 수
@@ -33,8 +35,9 @@ function differenceScale(chart, format) {
   const id = chart.series[0].id;
   const all = chart.rows.flatMap((row) => [row.values[id], row.values[`${id}.low`], row.values[`${id}.high`]]).filter((v) => v !== undefined);
   const ruled = [...all, ...chart.rules.map((x) => x.value)];
-  const isFlat = Math.min(...ruled) === 0 && Math.max(...ruled) === 0;
-  const [min, max] = isFlat ? [-FLAT_SPAN, FLAT_SPAN] : [Math.min(...ruled), Math.max(...ruled)];
+  const [low, high] = [Math.min(0, ...ruled), Math.max(0, ...ruled)];
+  const margin = (high - low) * ZERO_MARGIN;
+  const [min, max] = high === low ? [-FLAT_SPAN, FLAT_SPAN] : [low === 0 ? -margin : low, high === 0 ? margin : high];
   const reaches = () => chart.rows.map((row) => ({ value: Math.max(row.values[id], row.values[`${id}.high`] ?? row.values[id]), extra: DOT + SPACE['3'] + measure(format(row.values[id]), TEXT['11'], 'numSemibold') }));
   return rowValueScale(chart, { kind: 'linear', min, max, reaches });
 }
