@@ -98,6 +98,8 @@ function emptyFigure() {
     subtitle: undefined,
     speedMs: undefined,
     aspect: undefined,
+    // 캔버스 폭 선택: standard(생략과 같음)나 wide
+    width: undefined,
     nodes: [],
     // 이름 오류로 버린 선언의 이름. 그 이름을 가리키는 줄에 "모르는 이름" 오류를 덧붙이지 않기 위해 둔다.
     rejectedNames: new Set(),
@@ -258,6 +260,9 @@ function readHeader({ tokens, line }, { figure, problems }) {
     const ratio = Number(value?.value);
     if (value?.type !== 'word' || !NUMBER_PATTERN.test(value.value) || !(ratio > 0)) problems.error(line, 'write aspect as a positive number such as 1.6');
     else figure.aspect = ratio;
+  } else if (key === 'width') {
+    if (!valueNames('width').includes(value?.value)) problems.error(line, `width is ${valueNames('width').map((v) => `"${v}"`).join(' or ')}`);
+    else figure.width = value.value;
   } else if (key === 'decimals') {
     const places = Number(value?.value);
     if (value?.type !== 'word' || !Number.isInteger(places) || places < 0 || places > DECIMALS_MAX) problems.error(line, `write decimals as a whole number from 0 to ${DECIMALS_MAX}, such as decimals 2`);

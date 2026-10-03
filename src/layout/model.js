@@ -86,14 +86,15 @@ function splitEdge(edge, nodes, containers) {
   const down = chain(edge.to, nodes, containers);
   const common = up.find((c) => down.includes(c)) ?? ROOT;
   const pieces = [];
-  let from = endpoint(edge.from, { way: 'out', edge }, nodes);
+  const flowOf = (id) => ({ direction: containers.get(common).direction, isCrossing: nodes.get(id)?.parent !== common });
+  let from = endpoint(edge.from, { way: 'out', edge, flow: flowOf(edge.from) }, nodes);
   for (const g of up.slice(0, up.indexOf(common))) {
     const port = addPort(containers.get(g), 'out', edge);
     pieces.push({ container: g, from, to: port });
     from = port;
   }
   const inner = [];
-  let to = endpoint(edge.to, { way: 'in', edge }, nodes);
+  let to = endpoint(edge.to, { way: 'in', edge, flow: flowOf(edge.to) }, nodes);
   for (const g of down.slice(0, down.indexOf(common))) {
     const port = addPort(containers.get(g), 'in', edge);
     inner.unshift({ container: g, from: port, to });

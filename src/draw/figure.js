@@ -5,7 +5,7 @@ import { routePolyline } from '../route.js';
 import { centerBaseline, escapeXml, renderRich, roundCoord as r } from '../text.js';
 import { tokens, values } from '../tokens.js';
 import { cardGlyphs, createTones, drawCard } from './card.js';
-import { drawDecor } from './decor.js';
+import { drawDecor, drawGroupTab } from './decor.js';
 import { drawShape } from './shape.js';
 
 const SPACE = values.space;
@@ -42,10 +42,10 @@ function drawGroup(g, j, { decorate, glyphs }) {
   glyphs.add(g.label, 'semibold');
   const head = groupHead(g);
   const left = g.x + g.titleDx;
-  const decor = head.decor ? drawDecor(head.decor, { x: left, y: g.y + (SIZE.group.title - head.decor.h) / 2, iconData: g.iconData, hasChip: true }, glyphs) : '';
+  const decor = head.decor ? drawDecor(head.decor, { x: left, y: g.y + (SIZE.group.title - head.decor.h) / 2, iconData: g.iconData }, glyphs) : '';
   return (
-    `<g id="g-${j}" class="fl-group" data-id="${escapeXml(g.id)}"><rect x="${r(g.x)}" y="${r(g.y)}" width="${r(g.w)}" height="${r(g.h)}" rx="${RADIUS['2xl']}" class="frame-box fl-stroke ${decorate('group', j)}"${g.border === 'dashed' ? ` stroke-dasharray="${GROUP_DASH}"` : ''}/>` +
-    `<text x="${r(left + head.textDx)}" y="${r(centerBaseline(g.y + SIZE.group.title / 2, STYLE.group.size))}" class="frame">${renderRich(g.label)}</text>${decor}</g>`
+    `<g id="g-${j}" class="fl-group${g.iconData ? ' tabbed' : ''}" data-id="${escapeXml(g.id)}"><rect x="${r(g.x)}" y="${r(g.y)}" width="${r(g.w)}" height="${r(g.h)}" rx="${RADIUS['2xl']}" class="frame-box fl-stroke ${decorate('group', j)}"${g.border === 'dashed' ? ` stroke-dasharray="${GROUP_DASH}"` : ''}/>` +
+    `${g.iconData ? drawGroupTab(g) : ''}<text x="${r(left + head.textDx)}" y="${r(centerBaseline(g.y + SIZE.group.title / 2, STYLE.group.size))}" class="frame">${renderRich(g.label)}</text>${decor}</g>`
   );
 }
 

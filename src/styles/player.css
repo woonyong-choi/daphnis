@@ -17,7 +17,7 @@ html.embedded body {
 
 .fl-figure {
   position: relative;
-  max-width: var(--size-figure-canvas);
+  max-width: var(--figure-canvas, var(--size-figure-canvas));
   margin: 0 auto;
   overflow: clip;
   color: var(--color-fg);
@@ -45,7 +45,7 @@ html.embedded .fl-figure {
   display: block;
   width: auto;
   height: auto;
-  min-width: var(--size-figure-canvas);
+  min-width: var(--figure-canvas, var(--size-figure-canvas));
   margin: 0 auto;
 }
 

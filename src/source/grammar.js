@@ -69,6 +69,7 @@ export const VALUES = {
   role: { items: table({ main: V1, compare: V1 }) },
   head: { default: 'end', items: table({ end: V1, both: V1, none: V1 }) },
   shape: { default: 'rect', items: table({ rect: V1, circle: V1, tile: V1 }) },
+  width: { default: 'standard', items: table({ standard: V1, wide: V1 }) },
   border: { default: 'solid', items: table({ solid: V1, dashed: V1 }) },
 };
 
@@ -83,6 +84,7 @@ export const STATEMENTS = table({
   subtitle: { ...V1, section: 'header', kinds: ALL_KINDS },
   speed: { ...V1, section: 'header', kinds: ALL_KINDS },
   aspect: { ...V1, section: 'header', kinds: ['flow', 'state', 'data'] },
+  width: { ...V1, section: 'header', kinds: ['flow', 'state', 'data'], positional: ['width'] },
   x: { ...V1, section: 'header', kinds: ['chart'] },
   y: { ...V1, section: 'header', kinds: ['chart'] },
   scale: { ...V1, section: 'header', kinds: ['chart'], positional: ['scale'] },

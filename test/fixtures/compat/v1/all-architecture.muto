@@ -1,5 +1,6 @@
 mutoscope 1
 flow right
+width wide
 title "번호, 배지, 아이콘, 복제 개수, 타일, 점선 테두리의 모든 낱말"
 subtitle "no, badge, icon, icons, count, shape=tile, border"
 

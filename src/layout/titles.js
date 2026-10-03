@@ -14,7 +14,7 @@ const TITLE_CLEAR = values.space['2'];
 /** 그룹마다 제목 글의 왼쪽 끝 거리 titleDx를 정한다. 비킬 자리가 없으면 기본 거리를 둔다. */
 export function placeTitles(groups, edges) {
   for (const g of groups) {
-    g.titleDx = g.label ? titleDx(g, edges) : TITLE_INSET;
+    g.titleDx = g.label ? titleDx(g, edges) : TITLE_INSET + groupHead(g).lead;
     g.isTitleBlocked = g.label ? crossesTitle(g, edges) : false;
   }
 }
@@ -25,12 +25,13 @@ export function placeTitles(groups, edges) {
 // 제목 덩어리가 선분을 지나지 않는 가장 왼쪽 자리. 후보는 기본 거리, 선분 오른쪽 끝 바로 너머, 선분 왼쪽 끝 바로 앞이다(덩어리가 선분 사이 틈에 들어가는 자리도 찾는다).
 // 어느 후보도 맞지 않으면 기본 거리를 둔다(그림 검사 13번이 알린다).
 function titleDx(g, edges) {
-  const w = groupHead(g).w;
+  const head = groupHead(g);
+  const [w, inset] = [head.w, TITLE_INSET + head.lead];
   const limit = g.w - TITLE_INSET - w;
   const segments = edges.flatMap((e) => e.points.slice(1).map((p, i) => [e.points[i], p]));
-  const candidates = [TITLE_INSET, ...segments.flatMap(([a, b]) => [Math.max(a.x, b.x) - g.x + TITLE_CLEAR, Math.min(a.x, b.x) - g.x - TITLE_CLEAR - w])].filter((dx) => dx >= TITLE_INSET && dx <= limit).sort((x, y) => x - y);
+  const candidates = [inset, ...segments.flatMap(([a, b]) => [Math.max(a.x, b.x) - g.x + TITLE_CLEAR, Math.min(a.x, b.x) - g.x - TITLE_CLEAR - w])].filter((dx) => dx >= inset && dx <= limit).sort((x, y) => x - y);
   const fits = (dx) => !segments.some(([a, b]) => crosses(a, b, { x: g.x + dx - TITLE_CLEAR, y: g.y, w: w + TITLE_CLEAR * 2, h: SIZE.group.title }));
-  return candidates.find(fits) ?? TITLE_INSET;
+  return candidates.find(fits) ?? inset;
 }
 
 // 가로 또는 세로 선분이 사각형 안쪽과 만나는가

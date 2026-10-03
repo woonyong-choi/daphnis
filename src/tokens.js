@@ -128,7 +128,7 @@ export const tokens = freeze({
       "node": "var(--size-icon-node)",
       "group": "var(--size-icon-group)",
       "tile": "var(--size-icon-tile)",
-      "chip-pad": "var(--size-icon-chip-pad)"
+      "tile-gap": "var(--size-icon-tile-gap)"
     },
     "tag": {
       "height": "var(--size-tag-height)"
@@ -151,12 +151,14 @@ export const tokens = freeze({
       "state-dot": "var(--size-node-state-dot)",
       "table-row": "var(--size-node-table-row)",
       "circle": "var(--size-node-circle)",
-      "tile-width": "var(--size-node-tile-width)"
+      "tile-width": "var(--size-node-tile-width)",
+      "tile-pad": "var(--size-node-tile-pad)"
     },
     "grid": {
       "cell": "var(--size-grid-cell)"
     },
     "figure-canvas": "var(--size-figure-canvas)",
+    "figure-canvas-wide": "var(--size-figure-canvas-wide)",
     "chip": {
       "max-width": "var(--size-chip-max-width)"
     },
@@ -418,9 +420,9 @@ export const values = freeze({
     },
     "icon": {
       "node": 20,
-      "group": 16,
-      "tile": 28,
-      "chip-pad": 4
+      "group": 18,
+      "tile": 32,
+      "tile-gap": 6
     },
     "tag": {
       "height": 14
@@ -443,12 +445,14 @@ export const values = freeze({
       "state-dot": 14,
       "table-row": 26,
       "circle": 40,
-      "tile-width": 80
+      "tile-width": 80,
+      "tile-pad": 8
     },
     "grid": {
       "cell": 32
     },
     "figure-canvas": 960,
+    "figure-canvas-wide": 1440,
     "chip": {
       "max-width": 210
     },

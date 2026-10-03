@@ -121,6 +121,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `title "글"` | 그림 제목. SVG `<title>`, 차트는 그림 안 제목, 그 밖 그림은 목록 쪽 머리 제목 | 파일 이름 |
 | `subtitle "글"` | 그림 아래 한 줄 설명 | 없음 |
 | `speed 3s` | 점이 기준 길이 `size.packet.hop-ref`의 선을 지나는 시간. 선 길이에 비례해 이동 시간이 정해져 모든 이동이 같은 속도로 보인다(아래 이동 시간). 차트에서는 계열이 자라는 시간([차트](charts.md)) | 토큰 `duration.hop`과 `size.packet.hop-ref`, 차트는 `duration.reveal` |
+| `width wide` | 캔버스 폭. `wide`는 `size.figure-canvas-wide`(1440)이고 `standard`는 표준 폭(960)이다. `flow`, `state`, `data`에서만. 구성도처럼 열이 많은 그림이 글자를 줄이지 않고 한 줄로 퍼지게 한다. [배치](layout.md) | 생략하면 표준 폭 |
 | `aspect 1.6` | 목표 가로세로 비율. `flow`, `state`, `data`에서만, 그룹이 있어도 된다. [배치](layout.md) | 없음(캔버스 폭보다 넓으면 도구가 자동으로 접는다) |
 
 ### 구조 그림 선언
@@ -152,8 +153,8 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 
 - `no=N`(1 이상 정수)은 선 번호다. 라벨 알약 왼쪽에 번호 원이 붙고(라벨이 없으면 번호 원만), 정지 SVG와 문서에서도 순서가 읽힌다. 재생 단계 번호와 독립이고 같은 번호를 여러 선에 써도 된다.
 - `badge="글"`(8자 이하)은 도형 윗줄과 그룹 제목 줄에 글자 알약을 단다. 흑백에서도 구성 요소의 종류가 글자로 남는다. 도형과 그룹의 면, 테두리 색은 그대로이고 범주를 색으로 나누지 않는다. 원(`shape=circle`)은 배지와 아이콘이 오류다.
-- `shape=tile`(`box`만, `icon=` 필수)은 아이콘 카드다. 같은 흰 카드에 아이콘을 크게(`size.icon.tile`) 위에 놓고 이름을 아래에 두며, 최소 너비가 작아(`size.node.tile-width`) 가로로 퍼진 구성도가 캔버스 폭 안에 든다.
-- 그룹 `border=dashed`는 경계 그룹의 점선 테두리다. 실선(기본)은 서브넷 같은 안쪽 구역, 점선은 VPC, 스케일링 그룹, 외부 묶음 같은 논리 경계에 쓴다. 그룹 아이콘은 제목 줄 왼쪽의 색 칩(`color.muted` 바탕, 흰 아이콘)이고 면은 칠하지 않는다.
+- `shape=tile`(`box`만, `icon=` 필수)은 아이콘 카드다. 같은 흰 카드에 아이콘을 크게(`size.icon.tile`) 위에 놓고 이름을 아래에 두며, 최소 너비와 이름 양옆 간격이 작아(`size.node.tile-width`, `size.node.tile-pad`) 가로로 퍼진 구성도가 캔버스 폭 안에 든다.
+- 그룹 `border=dashed`는 경계 그룹의 점선 테두리다. 실선(기본)은 서브넷 같은 안쪽 구역, 점선은 VPC, 스케일링 그룹, 외부 묶음 같은 논리 경계에 쓴다. 그룹 아이콘은 틀 왼쪽 위 모서리에 딱 붙는 정사각 탭(`size.group.title`)이다. 탭 면은 `color.figure.icon`, 아이콘은 `color.node`(NHN box_type)이고, 아이콘이 있는 그룹의 틀도 같은 파랑이다. 그룹 면은 칠하지 않는다.
 - `icon=이름`은 기본 세트의 이름이다. 범용 개념(`server`, `db`)과 기술 브랜드(`git`, `postgresql`)가 한 표에 있다. 등록한 세트는 `icon=세트:이름`이다. 아이콘은 단색 파랑(`color.figure.icon`)이고 브랜드 고유색은 쓰지 않는다. 이름이 없거나 파일이 없으면 오류이고, 아이콘 없이 배지로 같은 뜻을 낸다.
 - `count=N`(2 이상, `box`만)은 같은 역할 복제 개수다. 상자 뒤에 윤곽 두 겹이 겹쳐 보이고 윗줄에 `(N)` 알약이 붙는다. 복제는 이름으로 가리킬 수 없고 선은 상자 하나에 닿는다.
 - `badge`, `icon`, `count`는 흐름 그림에서만 쓴다.
@@ -240,7 +241,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 |---|---|---|---|---|
 | 판 표기 | `mutoscope` | 모든 그림 | 판 1 |  |
 | 머리 | `title`, `subtitle`, `speed` | 모든 그림 | 판 1 |  |
-| 머리 | `aspect` | flow, state, data | 판 1 |  |
+| 머리 | `aspect`, `width` | flow, state, data | 판 1 |  |
 | 머리 | `x`, `y`, `scale`, `decimals` | chart | 판 1 |  |
 | 선언 | `person`, `box`, `external`, `store` | flow, sequence | 판 1 |  |
 | 선언 | `decision`, `grid`, `icons`, `item`, `gap` | flow | 판 1 |  |
@@ -301,6 +302,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `role` | `series.role` | `main`, `compare` | 선언 순서대로 main, compare(`dumbbell`은 compare, main) | 없음 |
 | `head` | `edge.head` | `end`, `both`, `none` | `end` | 없음 |
 | `shape` | `box.shape` | `rect`, `circle`, `tile` | `rect` | 없음 |
+| `width` | `width 값` | `standard`, `wide` | `standard` | 없음 |
 | `border` | `group.border` | `solid`, `dashed` | `solid` | 없음 |
 <!-- grammar-table:end -->
 

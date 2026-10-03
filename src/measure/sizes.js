@@ -60,7 +60,8 @@ export function sizeNode(node, contents = [], lineCounts = { out: 0, in: 0 }) {
   const subLines = node.sub ? wrap(node.sub, maxInner, STYLE.sub) : [];
   const textW = Math.max(...labelLines.map((l) => measure(l, STYLE.label.size, STYLE.label.face)), ...subLines.map((l) => measure(l, STYLE.sub.size)));
   const decor = nodeDecor(node);
-  let w = Math.min(SIZE.node['max-width'], Math.max(node.tile ? SIZE.node['tile-width'] : SIZE.node['min-width'], textW + INNER_X * 2, (decor?.w ?? 0) + INNER_X * 2));
+  const padX = node.tile ? SIZE.node['tile-pad'] : INNER_X;
+  let w = Math.min(SIZE.node['max-width'], Math.max(node.tile ? SIZE.node['tile-width'] : SIZE.node['min-width'], textW + padX * 2, (decor?.w ?? 0) + padX * 2));
   if (contents.length) w = Math.max(w, SIZE.node['card-width']);
   const textH = labelLines.length * STYLE.label.line + subLines.length * STYLE.sub.line;
   if (node.shape === 'decision') {
@@ -70,7 +71,7 @@ export function sizeNode(node, contents = [], lineCounts = { out: 0, in: 0 }) {
   const card = contents.length ? sizeCard(contents, w - CARD.margin * 2) : undefined;
   const cap = node.shape === 'store' ? SIZE.node['store-cap'] : 0;
   // 윗줄(아이콘, 배지, 개수)은 이름 위에 놓는다. 원통은 뚜껑 곡선 아래에서 시작한다.
-  const head = decor ? { ...decor, x: (w - decor.w) / 2, y: INNER_Y + cap, room: cap + decor.h + DECOR.rowGap } : undefined;
+  const head = decor ? { ...decor, x: (w - decor.w) / 2, y: INNER_Y + cap, room: cap + decor.h + (node.tile ? SIZE.icon['tile-gap'] : DECOR.rowGap) } : undefined;
   const h = Math.max(SIZE.node['min-height'], INNER_Y * 2 + (head?.room ?? 0) + textH + (card ? card.h + CARD.margin : 0));
   // 개수 요약 상자는 뒤 윤곽 두 겹이 오른쪽 아래로 비쳐 보이도록 그만큼 크고, 이름과 카드는 앞 상자(몸통) 안에 놓인다.
   const stack = node.count === undefined ? 0 : STACK_STEP * 2;
@@ -220,6 +221,12 @@ export function numberBadgeWidth(no) {
   return Math.max(SIZE.pill.height - SPACE['1'] * 2, measure(String(no), BADGE_STYLE.size, BADGE_STYLE.face) + SPACE['4']);
 }
 
+/**
+ * 번호만 있는 알약(라벨 없음)을 배치에 자리를 요구하지 않고 선 위에 얹는 선인가. 격자 칸에 이은 선은 끝 구간이 격자 안이라 얹을 자리를 고를 수 없어 배치가 자리를 준다.
+ * quiet 선은 선 옆에 두는 자리(besideLabel)를 쓴다.
+ */
+export const isOnLinePill = (edge) => edge.no !== undefined && edge.label === undefined && !edge.quiet && !edge.fromCell && !edge.toCell;
+
 /** 라벨이나 번호가 있어 알약을 그리는 선인가 */
 export const hasPill = (edge) => edge.label !== undefined || edge.no !== undefined;
 
@@ -228,18 +235,20 @@ export const hasPill = (edge) => edge.label !== undefined || edge.no !== undefin
 // basis: estimate
 /** 그룹 제목 줄 너비. 그룹이 제목보다 좁아지지 않게 배치에 넘긴다. */
 export function groupTitleWidth(group) {
-  return groupHead(group).w + INNER_X * 2;
+  const head = groupHead(group);
+  return head.lead + head.w + INNER_X * 2;
 }
 
 // cost: time O(n), heap O(1), stack O(1)
 // vars: n = 그룹 제목 글자 수
 // basis: estimate
 /**
- * 그룹 제목 줄의 한 덩어리: 아이콘, 제목 글, 배지, 개수와 반복 알약. 덩어리 왼쪽 끝이 제목 글 기본 자리(titleDx)이고 선이 가리면 덩어리째 비킨다.
- * @returns { w, textDx, decor }. textDx는 덩어리 왼쪽에서 제목 글까지 거리, decor는 장식 자리(없으면 undefined)다
+ * 그룹 제목 줄의 한 덩어리: 제목 글, 배지, 개수 알약. 덩어리 왼쪽 끝이 제목 글 기본 자리(titleDx)이고 선이 가리면 덩어리째 비킨다.
+ * 아이콘이 있으면 왼쪽 모서리에 정사각 탭(너비 lead)이 붙고 덩어리는 그 오른쪽에서 시작한다. 탭은 비키지 않는다.
+ * @returns { w, textDx, decor, lead }. textDx는 덩어리 왼쪽에서 제목 글까지 거리, decor는 장식 자리(없으면 undefined), lead는 탭 너비(없으면 0)다
  */
 export function groupHead(group) {
   const titleW = measure(group.label, STYLE.group.size, STYLE.group.face);
   const decor = groupDecor(group, titleW);
-  return { w: decor?.w ?? titleW, textDx: decor?.items.find((i) => i.kind === 'title').x ?? 0, decor };
+  return { w: decor?.w ?? titleW, textDx: decor?.items.find((i) => i.kind === 'title').x ?? 0, decor, lead: group.iconData ? SIZE.group.title : 0 };
 }

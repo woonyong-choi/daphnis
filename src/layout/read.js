@@ -1,5 +1,5 @@
 // elkjs 결과를 그림 좌표로 바꾼다. 그룹 경계 연결점에서 끊긴 선 조각은 이어 붙인다(docs/design/layout.md 선 그리기).
-import { hasPill, sizePill } from '../measure/sizes.js';
+import { hasPill, isOnLinePill, sizePill } from '../measure/sizes.js';
 import { values } from '../tokens.js';
 import { LayoutError } from './error.js';
 import { withLeads } from './cell-ports.js';
@@ -46,7 +46,7 @@ export function readElk(laid, model) {
 // 번호만 있는 알약(라벨 없음)은 배치에 자리를 요구하지 않고 완성한 선의 구간 위에 얹는다. 긴 구간부터 가운데, 양옆 순으로 도형과 겹치지 않는 첫 자리를 쓴다. 없으면 가장 긴 구간 가운데를 쓰고 그림 검사 2번이 알려, 안전 배치(알약이 자리를 받는다)로 다시 그린다.
 // 선 사이 간격을 늘리지 않아 가로로 퍼진 구성도가 캔버스에 든다.
 function numberOnlyLabel(edge, points, items) {
-  if (edge.no === undefined || edge.label !== undefined || edge.quiet) return undefined;
+  if (!isOnLinePill(edge)) return undefined;
   const { w, h } = sizePill(undefined, edge.no);
   const runs = points.slice(1).map((p, i) => [points[i], p]).sort((r, s) => Math.hypot(s[1].x - s[0].x, s[1].y - s[0].y) - Math.hypot(r[1].x - r[0].x, r[1].y - r[0].y));
   const spots = runs.flatMap(([a, b]) => RUN_FRACTIONS.map((f) => ({ x: a.x + (b.x - a.x) * f, y: a.y + (b.y - a.y) * f })));

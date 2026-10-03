@@ -86,9 +86,9 @@
   --size-control-icon: 12px;
   --size-pill-height: 18px;
   --size-icon-node: 20px;
-  --size-icon-group: 16px;
-  --size-icon-tile: 28px;
-  --size-icon-chip-pad: 4px;
+  --size-icon-group: 18px;
+  --size-icon-tile: 32px;
+  --size-icon-tile-gap: 6px;
   --size-tag-height: 14px;
   --size-packet-radius: 4.5px;
   --size-packet-halo: 10px;
@@ -104,8 +104,10 @@
   --size-node-table-row: 26px;
   --size-node-circle: 40px;
   --size-node-tile-width: 80px;
+  --size-node-tile-pad: 8px;
   --size-grid-cell: 32px;
   --size-figure-canvas: 960px;
+  --size-figure-canvas-wide: 1440px;
   --size-chip-max-width: 210px;
   --size-player-caption-max: 720px;
   --size-player-embedded-chrome: 150px;
@@ -450,13 +452,17 @@
   color: var(--color-figure-icon);
 }
 
-/* 그룹 제목 줄 아이콘 칩: 윤곽색 바탕에 노드 면 색 아이콘 */
-.fl .icon-chip {
-  fill: var(--color-muted);
+/* 그룹 제목 줄 탭(NHN box_type): 틀 왼쪽 위 모서리의 정사각 면. 아이콘 색 파랑 면에 노드 면 색 아이콘이고, 아이콘이 있는 그룹의 틀도 같은 파랑이다. */
+.fl .group-tab {
+  fill: var(--color-figure-icon);
 }
 
-.fl .fl-icon.on-chip {
+.fl .fl-icon.on-tab {
   color: var(--color-node);
+}
+
+.fl .fl-group.tabbed:not(.on) .frame-box {
+  stroke: var(--color-figure-icon);
 }
 
 /* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */

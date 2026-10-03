@@ -83,9 +83,9 @@
   --size-control-icon: 12px;
   --size-pill-height: 18px;
   --size-icon-node: 20px;
-  --size-icon-group: 16px;
-  --size-icon-tile: 28px;
-  --size-icon-chip-pad: 4px;
+  --size-icon-group: 18px;
+  --size-icon-tile: 32px;
+  --size-icon-tile-gap: 6px;
   --size-tag-height: 14px;
   --size-packet-radius: 4.5px;
   --size-packet-halo: 10px;
@@ -101,8 +101,10 @@
   --size-node-table-row: 26px;
   --size-node-circle: 40px;
   --size-node-tile-width: 80px;
+  --size-node-tile-pad: 8px;
   --size-grid-cell: 32px;
   --size-figure-canvas: 960px;
+  --size-figure-canvas-wide: 1440px;
   --size-chip-max-width: 210px;
   --size-player-caption-max: 720px;
   --size-player-embedded-chrome: 150px;
@@ -447,13 +449,17 @@
   color: var(--color-figure-icon);
 }
 
-/* 그룹 제목 줄 아이콘 칩: 윤곽색 바탕에 노드 면 색 아이콘 */
-.fl .icon-chip {
-  fill: var(--color-muted);
+/* 그룹 제목 줄 탭(NHN box_type): 틀 왼쪽 위 모서리의 정사각 면. 아이콘 색 파랑 면에 노드 면 색 아이콘이고, 아이콘이 있는 그룹의 틀도 같은 파랑이다. */
+.fl .group-tab {
+  fill: var(--color-figure-icon);
 }
 
-.fl .fl-icon.on-chip {
+.fl .fl-icon.on-tab {
   color: var(--color-node);
+}
+
+.fl .fl-group.tabbed:not(.on) .frame-box {
+  stroke: var(--color-figure-icon);
 }
 
 /* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
@@ -486,15 +492,15 @@
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-main)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="524" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
-<g transform="translate(61.1 0)">
-<g id="g-0" class="fl-group" data-id="system"><rect x="251.5" y="35" width="224" height="462" rx="14" class="frame-box fl-stroke "/><text x="269.5" y="53" class="frame">Saturn</text></g>
+<g transform="translate(53.1 0)">
+<g id="g-0" class="fl-group" data-id="system"><rect x="251.5" y="35" width="240" height="462" rx="14" class="frame-box fl-stroke "/><text x="269.5" y="53" class="frame">Saturn</text></g>
 <g id="n-0" class="fl-node" data-id="user"><circle cx="59.7" cy="38" r="10" fill="var(--color-node)" class="fl-stroke "/><path d="M31.7 86 V 64 A 28 14 0 0 1 87.7 64 V 86 Z" fill="var(--color-node)" class="fl-stroke "/><text x="59.7" y="105.7" class="label">Developer</text></g>
-<g id="n-1" class="fl-node" data-id="tui"><rect x="275.5" y="135" width="176" height="94" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="363.5" y="160.7" class="label">Screen</text><rect x="285.5" y="177" width="156" height="42" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card "/><g id="n-1-c0" opacity="0" class="fl-layer "><rect x="293.5" y="184" width="27.6" height="14" rx="4" fill="var(--color-tag-purple)" fill-opacity="0.15"/><text x="307.3" y="194.2" class="tag">YOU</text><text x="326.1" y="194" class="row">why does this test</text><text x="293.5" y="209" class="row">fail?</text></g></g>
-<g id="n-2" class="fl-node" data-id="engine"><rect x="313.5" y="367" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="363.5" y="394.7" class="label">Engine</text></g>
-<g id="n-3" class="fl-node" data-id="codex"><rect x="709.7" y="450" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke " stroke-dasharray="5 4"/><text x="759.7" y="477.7" class="label">Codex CLI</text></g>
-<g id="e-0" class="fl-edge"><path id="p-0" d="M 87.728759765625 75 L 341.5 75 Q 363.5 75, 363.5 97 L 363.5 135" class="fl-path " marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="151.5" y="65.5" width="40" height="18" rx="9" class="pill "/><text x="171.5" y="78.5" class="edgelabel ">input</text></g></g>
-<g id="e-1" class="fl-edge"><path id="p-1" d="M 363.458984375 229 L 363.5 367" class="fl-path " marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="327.5" y="289" width="71.2" height="18" rx="9" class="pill "/><text x="363.1" y="302" class="edgelabel ">JSON-RPC</text></g></g>
-<g id="e-2" class="fl-edge"><path id="p-2" d="M 363.458984375 413 L 363.5 451 Q 363.5 473, 385.5 473 L 709.7 473" class="fl-path " marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="535.5" y="463.5" width="114.3" height="18" rx="9" class="pill "/><text x="592.6" y="476.5" class="edgelabel ">app-server request</text></g></g>
+<g id="n-1" class="fl-node" data-id="tui"><rect x="291.5" y="135" width="176" height="94" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="379.5" y="160.7" class="label">Screen</text><rect x="301.5" y="177" width="156" height="42" rx="6" fill="var(--color-surface)" stroke="var(--color-border)" stroke-dasharray="3 3" class="fl-card "/><g id="n-1-c0" opacity="0" class="fl-layer "><rect x="309.5" y="184" width="27.6" height="14" rx="4" fill="var(--color-tag-purple)" fill-opacity="0.15"/><text x="323.3" y="194.2" class="tag">YOU</text><text x="342.1" y="194" class="row">why does this test</text><text x="309.5" y="209" class="row">fail?</text></g></g>
+<g id="n-2" class="fl-node" data-id="engine"><rect x="329.5" y="367" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke "/><text x="379.5" y="394.7" class="label">Engine</text></g>
+<g id="n-3" class="fl-node" data-id="codex"><rect x="725.7" y="450" width="100" height="46" rx="10" fill="var(--color-node)" class="fl-stroke " stroke-dasharray="5 4"/><text x="775.7" y="477.7" class="label">Codex CLI</text></g>
+<g id="e-0" class="fl-edge"><path id="p-0" d="M 87.728759765625 75 L 253.5 75 Q 275.5 75, 275.5 97 L 275.5 174 Q 275.5 182, 283.5 182 L 291.5 182" class="fl-path " marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="151.5" y="65.5" width="40" height="18" rx="9" class="pill "/><text x="171.5" y="78.5" class="edgelabel ">input</text></g></g>
+<g id="e-1" class="fl-edge"><path id="p-1" d="M 379.458984375 229 L 379.5 367" class="fl-path " marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="343.5" y="289" width="71.2" height="18" rx="9" class="pill "/><text x="379.1" y="302" class="edgelabel ">JSON-RPC</text></g></g>
+<g id="e-2" class="fl-edge"><path id="p-2" d="M 429.458984375 390 L 437.5 390 Q 445.5 390, 445.5 398 L 445.5 451 Q 445.5 473, 467.5 473 L 725.7 473" class="fl-path " marker-end="url(#fl-arrow)"/><g class="fl-pill"><rect x="551.5" y="463.5" width="114.3" height="18" rx="9" class="pill "/><text x="608.6" y="476.5" class="edgelabel ">app-server request</text></g></g>
 
 
 
