@@ -174,7 +174,7 @@ rule 5 "채택 기준"
 - 막대에서 `scale log`와 음수 기준선(행의 `rule=`도)은 오류다. 문서 스킬이 막대 축을 0에서 시작하게 하기 때문이다. 이 뜻은 바뀌지 않는다. 음수 차이는 `chart difference`로 쓴다.
 - 차이 차트에서 `scale log`는 오류다. 0이 기준이라 로그 눈금에 놓을 수 없기 때문이다.
 - `zero off`인 선 차트의 값 축은 값 범위에서 시작해 0을 포함하지 않아도 된다. 0 시작은 막대, 덤벨, 상자가 길이로 값을 보이기 때문에 필요하고, 선 차트는 위치로 보여서 끌 수 있다. 막대, 덤벨, 상자, 산점도, 히트맵에 쓰면 오류다. 생략하면 지금처럼 0 시작이다.
-- `scale linear`의 값 축은 0과 가장 작은 값 가운데 작은 쪽에서 시작한다. `scale log`의 값 축은 가장 작은 값 이하의 10의 거듭제곱에서 시작한다. `scale log`에서 값 축의 0 이하 값과 0 이하 기준선은 오류다. 막대, 덤벨, 상자에서 값이 모두 0이면 오류다. 길이로 값을 보이는 차트라 그릴 것이 없기 때문이다. 선 차트와 산점도는 위치로 보이므로 모두 0이어도 그리고, 눈금은 0에서 1이다. 차이 차트도 위치로 보여서 모두 0이어도 그리고, 눈금은 −1에서 1이라 0이 가운데에 선다.
+- `scale linear`의 값 축은 0과 가장 작은 값 가운데 작은 쪽에서 시작한다. `scale log`의 값 축은 가장 작은 값 이하의 10의 거듭제곱에서 시작한다. `scale log`에서 값 축의 0 이하 값과 0 이하 기준선은 오류다. 막대, 덤벨, 상자에서 값이 모두 0이면 오류다. 막대에서 모든 값이 빠진 값(`-`, `null`, 키 없음)이어서 숫자가 하나도 없는 것도 오류다(메시지 `every value is missing, so a chart needs at least one number to draw`, 첫 행 줄). 길이로 값을 보이는 차트라 그릴 것이 없기 때문이다. 일부만 빠졌거나 0이 섞인 것은 그린다. 선 차트와 산점도는 위치로 보이므로 모두 0이어도 그리고, 눈금은 0에서 1이다. 차이 차트도 위치로 보여서 모두 0이어도 그리고, 눈금은 −1에서 1이라 0이 가운데에 선다.
 - 선언한 계열마다 행 줄에 값이 하나씩 있어야 한다. 값이 없으면 빠진 값 `-`를 적는다. 빠진 값 `-`는 막대 계열 값에만 쓴다. 그 밖의 자리에서는 오류다.
 
 ### 값 출처
@@ -265,7 +265,7 @@ rule 5 "채택 기준"
 |---|---|
 | 문서의 모든 예시 원본이 오류와 경고 없이 읽힌다. | `test/grammar.test.js`의 `docExamples_every_design_doc_example_builds_without_errors_or_warnings`. 예시 원본을 뽑아 strict로 읽는다. `data` 예시는 `test/fixtures/summary.json`으로 읽는다 |
 | 여섯 종류를 행 줄과 `data` JSON에서 같은 결과로 그린다. | `test/chart.test.js`의 `buildFigure_rows_from_data_match_inline_rows_for_bar_line_and_dumbbell`. 같은 값을 두 방식으로 적은 원본의 결과 비교(막대, 선, 덤벨만). 테스트 없음: 산점도, 상자, 히트맵은 같은 `data` 읽기 경로를 쓰지만 같은 결과 비교는 아직 없다 |
-| 그릴 수 없는 값과 계열 수를 줄 번호와 함께 막는다. | `test/chart.test.js`의 `buildFigure_chart_numbers_that_overflow_or_pass_1e15_are_line_errors_for_every_input_kind`(입력 종류별 거대한 숫자, 시험 표), `parseFigure_time_and_ratio_that_overflow_to_infinity_are_syntax_errors`, `buildFigure_chart_rules_reject_values_that_cannot_be_drawn`. 음수, log 눈금, 모두 0, 덤벨 계열 수, 상자 값 없음, 소수 자릿수 범위 원본의 오류 확인. data 원소 오류는 `loadChartData_non_number_value_missing_name_and_pointer_without_slash_are_errors` |
+| 그릴 수 없는 값과 계열 수를 줄 번호와 함께 막는다. | `test/chart.test.js`의 `buildFigure_chart_numbers_that_overflow_or_pass_1e15_are_line_errors_for_every_input_kind`(입력 종류별 거대한 숫자, 시험 표), `parseFigure_time_and_ratio_that_overflow_to_infinity_are_syntax_errors`, `buildFigure_chart_rules_reject_values_that_cannot_be_drawn`. 음수, log 눈금, 모두 0, 모두 빠진 값(`buildFigure_bar_with_every_value_missing_is_an_error_and_partial_missing_or_zero_still_draw_finite_coordinates`), 덤벨 계열 수, 상자 값 없음, 소수 자릿수 범위 원본의 오류 확인. data 원소 오류는 `loadChartData_non_number_value_missing_name_and_pointer_without_slash_are_errors` |
 | 드러내지 않는 계열과 거꾸로 된 드러내기를 막는다. | 두 원본의 오류 확인. 거꾸로 드러내기는 `test/chart.test.js`의 `buildFigure_chart_rules_reject_values_that_cannot_be_drawn`(덤벨 행). 테스트 없음: 처음부터 대응 테스트를 두지 않았고 눈으로 확인한다(드러내지 않는 계열) |
 | 계열 역할이 겹치거나 맞지 않으면 막고, 빠졌으면 선언 순서대로 받는다. | `test/chart.test.js`의 `buildFigure_chart_rules_reject_values_that_cannot_be_drawn`(main 둘, compare 둘, 모르는 역할, main 없음 행), `parseFigure_series_roles_follow_the_written_role_then_the_declaration_order`(역할을 생략하면 선언 순서의 기본 역할과 정렬) |
 | 숫자와 비율 글자가 반올림 규칙을 따른다. | `test/chart.test.js`의 `formatNumber_and_formatChange_round_half_away_and_use_k_and_M`(`120000`, `1250`, `−74%` 경우), `buildFigure_chart_value_text_keeps_equal_decimal_places` |

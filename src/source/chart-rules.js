@@ -127,9 +127,10 @@ export function checkChartRows(figure, problems) {
   const negativeRule = chart.rows.find((r) => hasRule && r.values.rule < 0);
   if (negativeRule) problems.error(negativeRule.line, 'a bar chart starts at 0, so a row rule cannot be negative');
   if (chart.scale === 'log' && numbers.some((v) => v <= 0)) problems.error(chart.rows.find((r) => Object.entries(r.values).some(([k, v]) => isValue(k) && v !== null && v <= 0)).line, 'log scale needs values above 0');
-  // 막대, 덤벨, 상자는 길이로 값을 보여서 모두 0이면 그릴 것이 없다. 선과 산점도는 위치로 보여서 0도 그린다.
+  // 막대, 덤벨, 상자는 길이로 값을 보여서 숫자가 없거나 모두 0이면 그릴 것이 없다. 선과 산점도는 위치로 보여서 0도 그린다.
   const hasLength = ['bar', 'dumbbell', 'box'].includes(chartType);
-  if (hasLength && numbers.length && numbers.every((v) => v === 0)) problems.error(chart.rows[0].line, 'all values are 0, so lengths cannot be set');
+  if (hasLength && !numbers.length) problems.error(chart.rows[0].line, 'every value is missing, so a chart needs at least one number to draw');
+  else if (hasLength && numbers.every((v) => v === 0)) problems.error(chart.rows[0].line, 'all values are 0, so lengths cannot be set');
   for (const link of chart.links) {
     for (const name of [link.from, link.to]) if (!labels.has(name)) problems.error(link.line, unknownName('point', name, [...labels.keys()]));
   }
