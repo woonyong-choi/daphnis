@@ -92,7 +92,7 @@ describe('pages', { skip: SKIP }, () => {
 
   // 근거: 설계 playback.md 요구사항 "조작 막대와 설명이 한 가운데 축", "탭 묶음과 둥근 단추의 높이가 같다", "탭은 segmented 방식", "진행 표시는 일시정지 단추 고리"(사용자 결정)
   test('player_controls_share_one_axis_and_height_and_the_ring_and_active_tab_show_state', async () => {
-    const html = await toHtml(await buildFigure(readFileSync(new URL('../examples/memory.muto', import.meta.url), 'utf8'), { baseDir: 'examples' }), 'memory');
+    const html = await toHtml(await buildFigure(readFileSync(new URL('../examples/memory.dap', import.meta.url), 'utf8'), { baseDir: 'examples' }), 'memory');
     await withPage(browser, html, async (page) => {
       await page.evaluate((text) => { document.querySelector('.fl-caption').textContent = text;
         document.querySelector('.fl-rate').textContent = '0.25×';
@@ -162,7 +162,7 @@ describe('pages', { skip: SKIP }, () => {
 
   // 근거: 버그 "격자 칸을 밝히면 파랑 테두리가 일부만 보인다"(pte-fields). 밝힌 칸 테두리의 네 변 어디에서도 맨 위에 보이는 것은 그 칸 자신의 테두리이고, 뒤에 그린 이웃 칸의 선이 아니다
   test('grid_lit_cell_border_is_topmost_on_all_four_sides_over_neighbor_cell_lines', async () => {
-    const source = readFileSync(new URL('../examples/pte-fields.muto', import.meta.url), 'utf8');
+    const source = readFileSync(new URL('../examples/pte-fields.dap', import.meta.url), 'utf8');
     const html = await toHtml(await buildFigure(source, { baseDir: 'examples' }), 'pte-fields');
     await withPage(browser, html, async (page) => {
       for (const tab of [0, 1]) {

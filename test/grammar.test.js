@@ -288,5 +288,5 @@ test('readme_example_equals_the_source_of_the_rendered_asset', () => {
   const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
   const block = /```text\n(flow right[\s\S]*?)```/.exec(read('../README.md'))[1];
 
-  assert.equal(block, read('../docs/assets/how-it-works.muto'));
+  assert.equal(block, read('../docs/assets/how-it-works.dap'));
 });

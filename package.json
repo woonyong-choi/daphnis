@@ -1,7 +1,7 @@
 {
   "name": "daphnis",
   "version": "0.1.0",
-  "description": "Turn .muto sources into animated documentation diagrams and charts as SVG, and keep the figures in Markdown documents up to date",
+  "description": "Turn .dap sources into animated documentation diagrams and charts as SVG, and keep the figures in Markdown documents up to date",
   "license": "MIT",
   "keywords": [
     "diagram",

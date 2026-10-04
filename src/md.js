@@ -1,8 +1,8 @@
-// 마크다운 안의 ```muto 블록 찾기와 블록 아래 이미지 줄 넣기. 파일은 다루지 않는다(계약은 docs/design/markdown.md).
+// 마크다운 안의 ```dap 블록 찾기와 블록 아래 이미지 줄 넣기. 파일은 다루지 않는다(계약은 docs/design/markdown.md).
 
 /** 이미지 줄 끝의 표시. 이 표시가 붙은 줄만 이 도구가 만든 줄로 보고 갱신하거나 지운다. */
-export const IMAGE_MARK = '<!-- muto -->';
-const MARKED_IMAGE = /^\s*!\[.*\]\(.*\)<!-- muto -->\s*$/;
+export const IMAGE_MARK = '<!-- dap -->';
+const MARKED_IMAGE = /^\s*!\[.*\]\(.*\)<!-- dap -->\s*$/;
 const FENCE_OPEN = /^(\s*)(`{3,}|~{3,})(.*)$/;
 const BLOCK_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -26,14 +26,14 @@ function closesFence(line, open) {
 // cost: time O(t), heap O(t), stack O(1)
 // vars: t = 설명 글자의 낱말 수
 // basis: estimate
-// `muto name=flow` 설명 글자를 읽는다. muto 울타리가 아니면 undefined, 형식이 틀리면 { error }다.
+// `dap name=flow` 설명 글자를 읽는다. dap 울타리가 아니면 undefined, 형식이 틀리면 { error }다.
 function parseInfo(info) {
   const [first, ...options] = info.split(/\s+/);
-  if (first !== 'muto') return undefined;
+  if (first !== 'dap') return undefined;
   let name;
   for (const option of options) {
     const value = /^name=(.+)$/.exec(option)?.[1];
-    if (value === undefined) return { error: `unknown option "${option}" in the muto fence. Use name=<id>` };
+    if (value === undefined) return { error: `unknown option "${option}" in the dap fence. Use name=<id>` };
     if (!BLOCK_NAME.test(value)) return { error: `block name "${value}" must be lowercase letters, digits, and "-"` };
     name = value;
   }
@@ -50,7 +50,7 @@ const dedent = (lines, indent) => lines.map((line) => (line.startsWith(indent) ?
 // vars: n = 문서 줄 수
 // basis: estimate
 /**
- * 문서에서 muto 코드 블록을 찾는다. 다른 울타리(`text` 등) 안의 muto 줄은 블록이 아니다.
+ * 문서에서 dap 코드 블록을 찾는다. 다른 울타리(`text` 등) 안의 dap 줄은 블록이 아니다.
  * @returns { blocks, errors, fenced }. blocks는 { name?, source, open, close, indent }(open, close는 0부터 센 줄 번호),
  *   errors는 { line, message }(1부터 센 줄), fenced는 울타리에 든 줄 번호 집합이다
  */
@@ -74,7 +74,7 @@ export function findBlocks(lines) {
     else if (info) blocks.push({ name: info.name, source: dedent(lines.slice(openAt + 1, index), open.indent), open: openAt, close: index, indent: open.indent });
     open = undefined;
   });
-  if (open && parseInfo(open.info)) errors.push({ line: openAt + 1, message: 'the muto fence is never closed' });
+  if (open && parseInfo(open.info)) errors.push({ line: openAt + 1, message: 'the dap fence is never closed' });
   return { blocks, errors, fenced };
 }
 

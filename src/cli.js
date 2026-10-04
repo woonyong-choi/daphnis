@@ -13,10 +13,10 @@ import { toSvg } from './svg.js';
 
 const USAGE = [
   'usage:',
-  '  daphnis render <file.muto ...> [--out dir] [--html] [--static] [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
-  '  daphnis check <file.muto ...> [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
+  '  daphnis render <file.dap ...> [--out dir] [--html] [--static] [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
+  '  daphnis check <file.dap ...> [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
   '  daphnis gallery <dir> [--out dir] [--title "text"] [--strict] [--no-deprecated] [--require-data] [--require-ci]',
-  '  daphnis migrate <file.muto ...> [--write] [--json]',
+  '  daphnis migrate <file.dap ...> [--write] [--json]',
   '  daphnis md <file.md ...> [--check] [--out-dir dir] [--static] [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
 ].join('\n');
 // gallery가 받는 옵션. --html은 gallery가 늘 HTML을 쓰므로 받기만 한다(옛 호출이 깨지지 않게).
@@ -114,7 +114,7 @@ async function buildInput(input, args) {
 // 만든 그림의 SVG(--html이면 HTML도)를 쓴다.
 async function writeFigure(input, result, args) {
   const json = args.flags.has('json');
-  const name = basename(input).replace(/\.muto$/, '');
+  const name = basename(input).replace(/\.dap$/, '');
   const folder = args.out ?? dirname(input);
   mkdirSync(folder, { recursive: true });
   writeOutput(join(folder, `${name}.svg`), await toSvg(result, { isStatic: args.flags.has('static'), name }), json);
@@ -164,9 +164,9 @@ async function writeGallery(args) {
     process.stderr.write(`${folder}: cannot read the folder: ${error.code ?? error.message}\n`);
     return 1;
   }
-  const files = names.filter((f) => f.endsWith('.muto')).sort();
+  const files = names.filter((f) => f.endsWith('.dap')).sort();
   if (!files.length) {
-    process.stderr.write(`${folder}: no .muto files\n`);
+    process.stderr.write(`${folder}: no .dap files\n`);
     return 1;
   }
   const galleryArgs = { ...args, command: 'render', out, flags: new Set([...args.flags, 'html']) };
@@ -176,7 +176,7 @@ async function writeGallery(args) {
   const figures = [];
   for (const { file, input, result } of built) {
     await writeFigure(input, result, galleryArgs);
-    figures.push({ name: file.replace(/\.muto$/, ''), ...describe(readFileSync(input, 'utf8')), href: relative(out, join(out, file.replace(/\.muto$/, ''))) });
+    figures.push({ name: file.replace(/\.dap$/, ''), ...describe(readFileSync(input, 'utf8')), href: relative(out, join(out, file.replace(/\.dap$/, ''))) });
   }
   const heading = args.title ?? basename(folder);
   writeOutput(join(out, 'index.html'), toGallery(figures, heading), false);
