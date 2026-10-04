@@ -73,7 +73,7 @@ export const VALUES = {
       gray: V1,
       red: V1,
       teal: { ...V1, deprecated: { since: 1, replace: 'purple', note: 'Tone names are the colors they draw now: brand is the brand blue, purple, green, gray, and red for errors. Teal has no color of its own' } },
-      blue: { ...V1, deprecated: { since: 1, replace: 'purple', note: 'Tag colors are categories now. Blue means the active state and orange means compare. Use brand for the brand blue' } },
+      blue: { ...V1, deprecated: { since: 1, replace: 'brand', note: 'Tone names are the colors they draw now. Blue reads as brand, the brand blue' } },
       orange: { ...V1, deprecated: { since: 1, replace: 'purple', note: 'Tag colors are categories now. Blue means the active state and orange means compare' } },
     }),
   },

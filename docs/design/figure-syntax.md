@@ -210,7 +210,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 - `show`, `clear`는 바로 앞 박자에 붙고, 적은 순서대로 적용한다. 단계의 첫 줄이 `show`면 멈추는 박자를 하나 만든다. 단계의 첫 줄이 `clear`면 오류다. 비울 카드가 없기 때문이다.
 - 내용이 없는 카드는 점선 틀만 보이고 글자는 없다. 정보 없는 표시가 카드마다 반복되면 화면이 어수선해지기 때문이다. 카드에 읽을 글이 없으므로 대체 글도 두지 않는다.
 - 도착 규칙: 그 박자에 점이 도착하는 도형의 카드는 그 도형에 도착하는 이동 가운데 가장 늦은 도착 때 바뀐다. 나머지 도형의 카드는 박자 시작에 바뀐다.
-- 태그는 대문자로 그린다. `tone`이 있는 줄은 그 색이다. `tone`이 없는 줄은, `tone` 없이 처음 나온 태그 순서대로 보라, 초록, 진한 회색을 돌아가며 붙인 색을 그림 전체에서 같은 태그에 쓴다. 파랑(`brand`, 지금)과 빨강(`red`, 오류)은 `tone`으로 고를 때만 쓰고, 주황은 비교 계열을 뜻해서 태그 색이 아니다. 옛 값 `tone=teal`, `tone=blue`, `tone=orange`는 보라(`purple`)로 읽고 폐기 진단으로 새 이름을 알린다([호환 규칙](#호환-규칙)).
+- 태그는 대문자로 그린다. `tone`이 있는 줄은 그 색이다. `tone`이 없는 줄은, `tone` 없이 처음 나온 태그 순서대로 보라, 초록, 진한 회색을 돌아가며 붙인 색을 그림 전체에서 같은 태그에 쓴다. 파랑(`brand`, 지금)과 빨강(`red`, 오류)은 `tone`으로 고를 때만 쓰고, 주황은 비교 계열을 뜻해서 태그 색이 아니다. 옛 값 `tone=blue`는 브랜드 파랑(`brand`)으로, `tone=teal`과 `tone=orange`는 보라(`purple`)로 읽고 폐기 진단으로 새 이름을 알린다([호환 규칙](#호환-규칙)).
 - `mark`는 8자 이하다. 카드 오른쪽 끝에 들어갈 자리가 정해져 있기 때문이다.
 - 관계 그래프 글은 `;`로 관계를 나누고, 관계는 `이름 -> 이름` 또는 이름 하나다. 이름은 앞뒤 공백을 빼고 `;`, `,`, `->`를 쓰지 않는다. 관계가 돌아 제자리로 오거나, `lit`의 이름이 그래프에 없으면 오류다.
 - 구조 그림에서 카드를 쓰는 도형은 `box`, `external`, `store`, `person`이다. `decision`, 격자, 그룹에 `show`를 쓰면 오류다. 다른 그림 종류는 [그림 종류](figure-kinds.md)를 따른다.
@@ -354,7 +354,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `scale` | `scale 값` | `linear`, `log` | `linear` | 없음 |
 | `zero` | `zero 값` | `on`, `off` | `on` | 없음 |
 | `chartType` | `chart 뒤` | `bar`, `dumbbell`, `box`, `scatter`, `line`, `difference`, `heatmap` | 없음 | 없음 |
-| `tone` | `hop.tone`, `track.tone`, `show.tone` | `brand`, `purple`, `green`, `gray`, `red` | 없음 | `teal` → `purple`, `blue` → `purple`, `orange` → `purple` |
+| `tone` | `hop.tone`, `track.tone`, `show.tone` | `brand`, `purple`, `green`, `gray`, `red` | 없음 | `teal` → `purple`, `blue` → `brand`, `orange` → `purple` |
 | `role` | `series.role` | `main`, `compare` | 선언 순서대로 main, compare(`dumbbell`은 compare, main) | 없음 |
 | `paint` | `group.fill`, `group.stroke`, `node.fill`, `node.stroke`, `show.card` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray`, `sky` | 없음 | 없음 |
 | `head` | `edge.head` | `end`, `both`, `none` | `end` | 없음 |
