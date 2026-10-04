@@ -273,7 +273,7 @@ function readHeader({ tokens, line }, { figure, problems }) {
     else figure.speedMs = ms;
   } else if (key === 'aspect') {
     const ratio = Number(value?.value);
-    if (value?.type !== 'word' || !NUMBER_PATTERN.test(value.value) || !(ratio > 0)) problems.error(line, 'write aspect as a positive number such as 1.6');
+    if (value?.type !== 'word' || !NUMBER_PATTERN.test(value.value) || !Number.isFinite(ratio) || !(ratio > 0)) problems.error(line, 'write aspect as a positive number such as 1.6');
     else figure.aspect = ratio;
   } else if (key === 'width') {
     if (!valueNames('width').includes(value?.value)) problems.error(line, `width is ${valueNames('width').map((v) => `"${v}"`).join(' or ')}`);

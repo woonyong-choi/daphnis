@@ -1,6 +1,7 @@
 // 차트 선언 문장을 읽는다. 값의 규칙(계열 수, 음수, log)은 validate.js가 모든 행을 읽은 뒤 확인한다.
 import { VALUES, optionsOf, valueNames } from './grammar.js';
-import { parseNumber } from './values.js';
+import { RANGE_MESSAGE } from './chart-rules.js';
+import { isOverflowNumber, parseNumber } from './values.js';
 import { ID_PATTERN } from './words.js';
 
 // cost: time O(t), heap O(t), stack O(1)
@@ -76,7 +77,7 @@ function readRule({ tokens, line }, { figure, problems }) {
   const [, value, label, extra] = tokens;
   const number = parseNumber(value?.value);
   if (value?.type !== 'word' || number === undefined || label?.type !== 'text' || extra) {
-    problems.error(line, 'write a rule as: rule 5 "label"');
+    problems.error(line, isOverflowNumber(value?.value) ? RANGE_MESSAGE : 'write a rule as: rule 5 "label"');
     return;
   }
   figure.chart.rules.push({ value: number, label: label.value, line });
@@ -141,7 +142,7 @@ function readCell({ tokens, line }, { figure, problems }) {
   const [, row, col, value, extra] = tokens;
   const number = parseNumber(value?.value);
   if (row?.type !== 'text' || col?.type !== 'text' || value?.type !== 'word' || number === undefined || extra) {
-    problems.error(line, 'write a cell as: cell "row" "column" 12');
+    problems.error(line, isOverflowNumber(value?.value) ? RANGE_MESSAGE : 'write a cell as: cell "row" "column" 12');
     figure.chart.hasRejectedRow = true;
     return;
   }
@@ -185,7 +186,7 @@ function readValues(tokens, { line, problems }, textKeys = []) {
     }
     const number = t.value === '-' ? null : parseNumber(t.value);
     if (number === undefined) {
-      problems.error(line, `"${t.key}" needs a number or "-". Found "${t.value}"`);
+      problems.error(line, isOverflowNumber(t.value) ? RANGE_MESSAGE : `"${t.key}" needs a number or "-". Found "${t.value}"`);
       return undefined;
     }
     values[t.key] = number;
