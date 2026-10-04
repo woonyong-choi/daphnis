@@ -18,8 +18,10 @@ const RATIO_TOLERANCE = 0.2;
 
 // 차트 움직임(CSS 애니메이션)과 진행 고리의 지금 상태. 고리는 박자 시계(player clock)를 그대로 그린다.
 const snapshot = (page) =>
-  page.evaluate(() => {
+  page.evaluate(async () => {
     const animations = [...document.querySelector('svg.fl').getAnimations({ subtree: true })].filter((a) => a.animationName?.startsWith('chart-'));
+    // pause()와 play()는 다음 프레임에 적용되므로 보류가 끝난 뒤에 잰다.
+    await Promise.all(animations.map((a) => a.ready));
     const fill = document.querySelector('.fl-ring-fill');
     const ring = 1 - parseFloat(fill.style.strokeDashoffset) / parseFloat(fill.style.strokeDasharray);
     return { count: animations.length, times: animations.map((a) => a.currentTime), states: animations.map((a) => a.playState), rates: animations.map((a) => a.playbackRate), ring, rate: document.querySelector('.fl-rate').textContent };
