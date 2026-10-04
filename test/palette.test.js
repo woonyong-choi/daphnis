@@ -27,7 +27,8 @@ test('paint_every_color_stage_reaches_its_contrast_floor_in_both_themes', () => 
     for (const name of NAMES) {
       const [fill, stroke, ink] = ['fill', 'stroke', 'ink'].map((s) => paint(theme, name, s));
       for (const text of ['fg', 'muted']) assert.ok(contrast(themeColor(theme, text), fill) >= TEXT, `${theme} ${text} on ${name} fill`);
-      assert.ok(contrast(themeColor(theme, 'border'), fill) >= GRAPHIC, `${theme} border on ${name} fill`);
+      assert.ok(contrast(paint(theme, name, 'outline'), fill) >= GRAPHIC, `${theme} outline on ${name} fill`);
+      for (const face of ['bg', 'node']) assert.ok(contrast(paint(theme, name, 'outline'), themeColor(theme, face)) >= GRAPHIC, `${theme} ${name} outline on ${face}`);
       for (const face of [...faces(theme), ...fills(theme)]) {
         assert.ok(contrast(stroke, face) >= GRAPHIC, `${theme} ${name} stroke on ${face}`);
         assert.ok(contrast(ink, face) >= TEXT, `${theme} ${name} ink on ${face}`);
@@ -52,15 +53,16 @@ test('paint_dark_fills_stay_visible_against_the_figure_ground_and_the_node_face'
 
 // 근거: 색 역할 "이웃한 색은 갈린다". 보통 시각과 적록 색각 이상 시뮬레이션의 OKLab 거리, 색상 순서 이웃 쌍
 test('paint_hue_neighbors_stay_apart_for_normal_protan_and_deutan_sight', () => {
-  const order = ['red', 'amber', 'green', 'teal', 'navy', 'purple', 'pink'];
+  // 새 색 역할에서 teal은 초록, pink는 보라, navy는 파랑과 같은 색이라 이웃 쌍은 서로 다른 색 다섯으로 센다
+  const order = ['red', 'amber', 'green', 'navy', 'purple'];
   for (const theme of THEMES) {
     for (const [a, b] of order.map((n, i) => [n, order[(i + 1) % order.length]])) {
       const [x, y] = [a, b].map((n) => paint(theme, n, 'stroke'));
       assert.ok(closestDistance(x, y, ['normal']) >= tokenValue('distance.neighbor'), `${theme} ${a}/${b} normal`);
       assert.ok(closestDistance(x, y, ['protanopia', 'deuteranopia']) >= tokenValue('distance.neighbor-cvd'), `${theme} ${a}/${b} cvd`);
     }
-    // 지금(파랑)과 비교(주황)로 읽히지 않는다
-    for (const name of order) for (const role of ['state.active', 'data.compare']) assert.ok(closestDistance(paint(theme, name, 'stroke'), themeColor(theme, role), ['normal']) >= tokenValue('distance.neighbor'), `${theme} ${name} vs ${role}`);
+    // 지금(파랑)과 비교(주황)로 읽히지 않는다. 새 색 역할에서 navy는 브랜드 파랑(지금)이고 amber는 주의 주황(비교와 같은 주황)이라 자기 계열과는 같아도 된다
+    for (const name of order) for (const role of ['state.active', 'data.compare'].filter((r) => !(name === 'navy' && r === 'state.active') && !(name === 'amber' && r === 'data.compare'))) assert.ok(closestDistance(paint(theme, name, 'stroke'), themeColor(theme, role), ['normal']) >= tokenValue('distance.neighbor'), `${theme} ${name} vs ${role}`);
   }
 });
 
@@ -102,15 +104,16 @@ test('toSvg_lit_shape_keeps_its_stroke_color_and_gets_a_halo_while_unpainted_sha
   assert.ok(svg.includes('fill="var(--color-paint-red-fill)"'), 'red fill');
   assert.ok(svg.includes('fill="var(--color-paint-pink-fill)"'), 'pink card');
   const plain = await toSvg(await buildFigure('flow right\nbox a "A"\nbox b "B"\na -> b\nstep "s"\n  light a\n'));
-  assert.ok(!/fl-halo|ps-/.test(plain), 'unpainted');
+  assert.ok(/fl-halo/.test(plain) && !/ps-|ph-/.test(plain), 'unpainted shapes keep the blue halo and get no paint classes');
 });
 
 // 근거: HTML 재생기도 같은 규칙. 켜진 도형의 테두리는 고른 색이 이기고 후광은 켜질 때 보인다
 test('toHtml_painted_stroke_rules_beat_the_lit_blue_and_show_the_halo_when_on', async () => {
   const html = await toHtml(await buildFigure(SOURCE), 'x');
   assert.ok(html.includes('.fl .fl-node.on .fl-stroke.ps-amber'));
-  assert.ok(html.includes('.fl .fl-group.on .fl-halo'));
-  assert.ok(html.includes('.fl .fl-group .frame-box.ps-teal'));
+  assert.ok(html.includes('.fl .fl-halo.ph-amber'));
+  assert.ok(html.includes('.fl .fl-group.on .fl-stroke.ps-green'));
+  assert.ok(html.includes('.fl .fl-group .frame-box.ps-green'));
 });
 
 // 근거: 사용자 결정 "강조 그룹 안의 중첩 그룹은 같은 색상각 틴트를 깊이마다 한 단계씩 진하게, 강조 밖은 회색 위계 그대로". 강조 그룹이 틴트 1, 그 안은 2, 3에서 멈추고 밖의 그룹은 틴트가 없다

@@ -98,11 +98,11 @@ test('contrast_text_pairs_reach_4_5_in_both_themes', () => {
   }
 });
 
-// 근거: 규칙 docs-integration.md 대비 기준 표: 강조 그래픽, 계열 막대와 점, 경계, 켜진 탭 고리, 신뢰구간 선은 3 이상(WCAG 그래픽, 예외 없음)
+// 근거: 규칙 docs-integration.md 대비 기준 표: 강조 그래픽, 계열 막대와 점, 도형 외곽선(color.outline), 켜진 탭 고리, 신뢰구간 선은 3 이상(WCAG 그래픽, 예외 없음). 머리카락 테두리(border)는 꾸밈 요소라 이 표가 아니라 아래 꾸밈 기준을 따른다
 test('contrast_graphic_pairs_reach_3_in_both_themes', () => {
   for (const theme of THEMES) {
     expectAtLeast(theme, GRAPHIC, ALL_FACES.flatMap((face) => GRAPHIC_ROLES.map((role) => [role, face])));
-    expectAtLeast(theme, GRAPHIC, BORDER_FACES.flatMap((face) => [['border', face]]));
+    expectAtLeast(theme, GRAPHIC, BORDER_FACES.flatMap((face) => [['outline', face]]));
     expectAtLeast(theme, GRAPHIC, [['fg', 'bg'], ['node', 'figure.icon']]);
   }
 });
@@ -165,8 +165,8 @@ test('figureGround_light_bg_is_gray_group_is_slightly_darker_and_node_face_is_br
   for (const theme of THEMES) assert.notEqual(color(theme, 'group-1'), color(theme, 'node'), `${theme} group face equals node face`);
 });
 
-// 근거: 결정 docs-integration.md "대비 규칙이 색 선택보다 우선: 원색이 기준을 넘으면 원색, 못 넘으면 같은 색상에서 기준을 넘는 가장 가까운 단계를 쓴다"
-test('palette_graphic_text_and_border_colors_are_the_closest_step_that_reaches_their_floor', () => {
+// 근거: 결정 docs-integration.md "대비 규칙이 색 선택보다 우선: 원색이 기준을 넘으면 원색, 못 넘으면 같은 색상에서 기준을 넘는 가장 가까운 단계를 쓴다". 새 규칙(NHN 색 역할)에서도 파랑과 주황의 선(stroke)은 원색이거나 기준을 넘는 가장 가까운 단계이고, 글자 단계(ink)는 글자가 놓이는 면 위 4.5를 넘는 가장 가까운 단계이며, 외곽선(outline)은 면 위 3을 넘는 가장 어두운(다크는 밝은) 값이다
+test('palette_graphic_text_and_outline_colors_are_the_closest_step_that_reaches_their_floor', () => {
   const graphicFaces = ['bg', 'group-1', 'group-2', 'group-3', 'card-on', 'node', 'page'];
   const lowest = (value, faces, theme = 'light') => Math.min(...faces.map((face) => contrast(value, color(theme, face))));
   for (const hue of ['blue', 'orange']) {
@@ -180,18 +180,21 @@ test('palette_graphic_text_and_border_colors_are_the_closest_step_that_reaches_t
       assert.ok(stroke === ANCHORS[hue][theme] || !reachesFloor(back), `${theme} ${hue} stroke is the anchor or the closest step`);
     }
   }
-  // 글자 단계(ink)는 모든 그림 면과 모든 색의 fill 위에서 4.5를 맞추는 가장 가까운 단계다.
-  const textFaces = [...['bg', 'node', 'group-1', 'group-2', 'group-3', 'surface', 'card', 'card-on', 'page'].map((face) => color('light', face)), ...valueNames('paint').map((name) => color('light', `paint.${name}.fill`))];
-  const strong = color('light', 'state.active-text');
-  const [strongL, strongC, strongH] = oklchOf(strong);
-  const lighter = oklchToHex(strongL + STROKE_STEP, strongC, strongH);
-  assert.ok(Math.min(...textFaces.map((face) => contrast(strong, face))) >= TEXT && Math.min(...textFaces.map((face) => contrast(lighter, face))) < TEXT, 'light active text step');
-  assert.ok(contrast(color('light', 'state.active'), color('light', 'node')) < TEXT, 'state.active itself is a graphic color, not a text color');
-  // 경계는 바탕 쪽으로 한 단계 가면(라이트는 흰색, 다크는 검정 쪽) 3 아래로 떨어져야 최소 값이다.
+  // 글자 단계(ink)는 그림 면(판, 도형, 그룹 셋, 카드 바탕)과 자기 면, 켜진 글 상자 글자 위에서 4.5를 맞추는 가장 가까운 단계다.
+  for (const theme of THEMES) {
+    const textFaces = ['bg', 'node', 'group-1', 'group-2', 'group-3', 'card', 'card-on', 'state.on-active'].map((face) => color(theme, face));
+    const strong = color(theme, 'state.active-text');
+    const [strongL, strongC, strongH] = oklchOf(strong);
+    const back = oklchToHex(strongL + (theme === 'light' ? STROKE_STEP : -STROKE_STEP), strongC, strongH);
+    assert.ok(Math.min(...textFaces.map((face) => contrast(strong, face))) >= TEXT && Math.min(...textFaces.map((face) => contrast(back, face))) < TEXT, `${theme} active text step`);
+  }
+  assert.ok(contrast(color('light', 'state.active'), color('light', 'group-3')) < TEXT, 'state.active itself is a graphic color, not a text color');
+  // 외곽선은 바탕 쪽으로 한 단계 가면(라이트는 흰색, 다크는 검정 반대인 흰색 쪽이 아니라 면 쪽) 3 아래로 떨어져야 최소 값이다.
   for (const [theme, toward] of [['light', '#ffffff'], ['dark', '#000000']]) {
-    const border = color(theme, 'border');
+    const outline = color(theme, 'outline');
+    const outlineFaces = ['bg', 'node', 'group-1', 'group-2', 'group-3', 'card'];
 
-    assert.ok(lowest(border, BORDER_FACES, theme) >= GRAPHIC && lowest(mixHex(border, toward, STEP_MIX), BORDER_FACES, theme) < GRAPHIC, `${theme} border step`);
+    assert.ok(lowest(outline, outlineFaces, theme) >= GRAPHIC && lowest(mixHex(outline, theme === 'light' ? '#ffffff' : '#000000', STEP_MIX), outlineFaces, theme) < GRAPHIC, `${theme} outline step`);
   }
 });
 
