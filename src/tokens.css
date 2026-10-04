@@ -13,6 +13,8 @@
   --color-palette-gray-50: #f2f4f6;
   --color-palette-gray-150: #e1e4e8;
   --color-palette-gray-300: #b0b8c1;
+  --color-palette-neutral-sky-875: #171d21;
+  --color-palette-neutral-sky-800: #1e262c;
   --color-palette-neutral-outline-a: #484b53;
   --color-palette-neutral-outline-b: #565961;
   --color-palette-neutral-100: #eef0f3;
@@ -426,10 +428,10 @@
     --color-border: var(--color-palette-neutral-750);
     --color-card-on: var(--color-palette-blue-dark-fill);
     --color-page: var(--color-palette-neutral-950);
-    --color-group: var(--color-palette-neutral-875);
+    --color-group: var(--color-palette-neutral-sky-875);
     --color-plate-border: var(--color-palette-neutral-800);
     --color-line: var(--color-palette-neutral-600);
-    --color-group-deep: var(--color-palette-neutral-800);
+    --color-group-deep: var(--color-palette-neutral-sky-800);
   }
 }
 [data-theme='dark'] {
@@ -499,8 +501,8 @@
   --color-border: var(--color-palette-neutral-750);
   --color-card-on: var(--color-palette-blue-dark-fill);
   --color-page: var(--color-palette-neutral-950);
-  --color-group: var(--color-palette-neutral-875);
+  --color-group: var(--color-palette-neutral-sky-875);
   --color-plate-border: var(--color-palette-neutral-800);
   --color-line: var(--color-palette-neutral-600);
-  --color-group-deep: var(--color-palette-neutral-800);
+  --color-group-deep: var(--color-palette-neutral-sky-800);
 }

@@ -226,7 +226,7 @@
       "$value": "{color.palette.neutral.950}"
     },
     "group": {
-      "$value": "{color.palette.neutral.875}"
+      "$value": "{color.palette.neutral.sky-875}"
     },
     "plate-border": {
       "$value": "{color.palette.neutral.800}"
@@ -235,7 +235,7 @@
       "$value": "{color.palette.neutral.600}"
     },
     "group-deep": {
-      "$value": "{color.palette.neutral.800}"
+      "$value": "{color.palette.neutral.sky-800}"
     }
   }
 }

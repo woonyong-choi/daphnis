@@ -24,7 +24,8 @@ export function createAnimator({ segs, total, growMs }) {
     segs,
     toggle: (states, on, off) => windows(states, { on, off }),
     lit: (j) => segs.map((s) => timed(s.edgesAt?.[j], s.edgesOn.includes(j))),
-    litNode: (id, scene) => segs.map((s) => timed(s.nodesAt?.[id], litIds(s, scene.edges).has(id))),
+    // 흐름 단계의 도형은 켜 두지 않는다(점이 닿을 때의 후광 깜빡임은 재생기만 그린다).
+    litNode: (id, scene) => segs.map((s) => (s.pulses ? false : timed(s.nodesAt?.[id], litIds(s, scene.edges).has(id)))),
     cardState: (n, test) => segs.map((s) => ({ before: test(s.cardsBefore[n]), after: test(s.cards[n]), at: s.cardsAt[n] ?? 0 })),
   };
   const decorate = (scene) => (kind, i, extra) => decorateElement(kind, { id: (kind.startsWith('group') ? scene?.groups[i] : scene?.items[i])?.id, i, extra, scene }, motion);

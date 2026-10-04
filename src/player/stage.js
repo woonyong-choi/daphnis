@@ -60,6 +60,7 @@ function highlightOnHover(stage) {
 // basis: estimate
 // 박자 seg의 상태를 그린다. 점이 도착하는 도형의 카드는 cardsAt 시각에 바뀐다.
 function drawSegmentState(stage, seg) {
+  stage.isFlow = Boolean(seg.pulses);
   stage.nodes.forEach((g, n) => g?.classList.toggle('on', seg.nodesOn.includes(n)));
   stage.groups.forEach((g, n) => g.classList.toggle('on', seg.groupsOn.includes(n)));
   stage.edges.forEach((e, j) => e?.classList.toggle('on', seg.edgesOn.includes(j)));
@@ -89,7 +90,7 @@ function showCards(stage, cards, only) {
     if (!count || (only !== undefined && only !== n)) return;
     const shown = cards[n];
     for (let k = 0; k < count; k++) stage.svg.querySelector(`#n-${n}-c${k}`).setAttribute('opacity', shown === k ? 1 : 0);
-    stage.nodes[n].querySelector('.fl-card').classList.toggle('on', shown !== undefined);
+    stage.nodes[n].querySelector('.fl-card').classList.toggle('on', shown !== undefined && !stage.isFlow);
   });
 }
 

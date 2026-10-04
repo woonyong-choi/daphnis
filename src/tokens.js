@@ -24,6 +24,8 @@ export const tokens = freeze({
         "300": "var(--color-palette-gray-300)"
       },
       "neutral": {
+        "sky-875": "var(--color-palette-neutral-sky-875)",
+        "sky-800": "var(--color-palette-neutral-sky-800)",
         "outline-a": "var(--color-palette-neutral-outline-a)",
         "outline-b": "var(--color-palette-neutral-outline-b)",
         "100": "var(--color-palette-neutral-100)",
@@ -513,6 +515,8 @@ export const values = freeze({
         "300": "#b0b8c1"
       },
       "neutral": {
+        "sky-875": "#171d21",
+        "sky-800": "#1e262c",
         "outline-a": "#484b53",
         "outline-b": "#565961",
         "100": "#eef0f3",
