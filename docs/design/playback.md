@@ -151,6 +151,8 @@
 ### 목록 쪽
 
 - `gallery` 명령은 HTML 결과를 iframe으로 모은 `index.html`을 쓴다.
+- 갤러리의 예약 파일은 목록 쪽 `index.html`과 문서 미리보기 `document.html`이고 이름은 그대로 둔다(이미 공유한 주소와 README가 가리키는 `index.html`을 깨지 않으려고 예약 이름을 바꾸지 않는다). 원본 이름이 `index`나 `document`(대소문자 무시, 대소문자를 가리지 않는 파일 시스템에서 같은 파일이므로)면 그 원본의 재생 화면만 `{이름}-player.html`로 쓰고 목록 카드가 그 파일을 가리킨다. SVG는 `{이름}.svg`로 겹치지 않아 그대로다. 그 밖의 원본 출력은 늘 `{이름}.html`이라 기존 결과와 같다.
+- 쓰기 전에 모든 출력 이름(`{이름}.svg`, 재생 화면, 예약 파일 둘)을 대소문자 없이 겹치는지 확인한다. 겹치면(예: `index.dap`와 `index-player.dap`) `{파일} would be written twice: for ... Rename one of the sources`를 stderr에 알리고 종료 1이며 아무 파일도 쓰지 않아 출력 폴더의 기존 파일이 그대로다.
 - 원본 파일 이름은 링크에서 늘 상대 경로로만 쓰인다. 목록 쪽과 문서 미리보기의 `href`, `src`는 경로 조각마다 `encodeURIComponent`(괄호도 인코딩)를 거친 뒤 `./`를 앞에 붙이고 HTML 속성 이스케이프를 한다. 그래서 `javascript:...` 같은 이름이 URL 스킴으로 읽혀 실행되지 않고, `#`, `?`, 공백, 한글이 든 이름도 그 이름의 출력 파일을 연다. 마크다운 이미지 줄도 같은 함수(`src/href.js`)로 조각을 인코딩한다(이미지 줄은 `:`가 인코딩되어 스킴이 될 수 없어 기존 주소 모양을 지키려고 `./`를 붙이지 않는다).
 - `gallery`가 받는 선택 사항은 `--out`, `--title`, `--strict`, `--no-deprecated`, `--require-data`, `--require-ci`이고 `--html`은 받기만 한다(늘 HTML을 쓴다). 그 밖의 선택 사항(`--static`, `--json`)은 사용법 오류(종료 2)다. `--strict`는 폴더의 모든 원본에 걸리고, 경고가 있는 원본이 하나라도 있으면 전체가 실패한다.
 - iframe 높이는 그림 쪽이 알린 본문 높이에 맞추고, 카드는 줄에서 가장 긴 카드 높이로 늘이지 않는다.
@@ -172,6 +174,7 @@
 | 목록 쪽 테마 단추가 목록과 iframe 그림을 함께 바꾼다. | `test/pages.test.js`의 `gallery_theme_buttons_set_the_root_color_scheme_and_remember_the_choice`(Chrome이 있을 때). 시스템을 다크로 둔 브라우저에서 실제 자식 HTML을 iframe으로 연 목록 쪽의 라이트 단추를 눌러, 목록 루트와 자식 문서의 테마가 모두 라이트로 바뀌고 자식 문서가 로드를 마쳐 그림을 그렸는지 확인. 카드 전체가 그림과 같은 한 톤인지는 캡처로 본다 |
 | 재생기 안에는 그림 바탕 판이 없고, SVG 파일에만 있다. | `test/cli.test.js`의 `main_render_svg_keeps_the_rounded_plate_and_the_html_player_has_none` |
 | gallery가 통과하면 안 되는 입력(경고 있는 원본의 `--strict`, 오류 원본 섞임, 원본 없음, 받지 않는 선택 사항)에서 실패하고 파일을 쓰지 않는다. | `test/cli.test.js`의 `main_gallery_fails_without_writing_any_file_when_the_input_must_not_pass`. 반대로 경고만 있는 원본은 `--strict` 없이 통과한다(`main_gallery_still_writes_the_files_for_a_warning_without_strict_and_accepts_its_options`) |
+| `index`, `document`라는 원본이 목록과 문서 미리보기를 덮어쓰지 않고 자기 재생 화면을 연다. 출력 이름이 겹치면 쓰기 전에 실패하고 기존 파일이 남는다. | `test/cli.test.js`의 `main_gallery_keeps_a_source_named_index_or_document_apart_from_the_list_and_preview_files`, `main_gallery_refuses_clashing_output_names_before_writing_and_keeps_existing_files`, `main_gallery_treats_reserved_names_case_insensitively` |
 | gallery가 문서 미리보기를 쓴다. | `test/cli.test.js`의 `main_gallery_writes_the_index_and_the_document_preview_with_each_figure_and_a_card_head` |
 | 흐름 점이 한도(`scale.flow-dots-max`의 열 배)를 넘으면 출발 시각 배열을 만들기 전에 오류로 끝나고, 정상 예제는 그대로 그려진다. | `test/flow.test.js`의 `buildFigure_rejects_a_track_with_billions_of_departures_with_an_error_before_allocating_them`(시간 제한), `flowSeg_counts_departures_from_for_and_every_and_refuses_over_the_injected_limit_before_listing_them`(주입한 작은 한도) |
 | 차트 계열은 단계가 바뀌어도 남고, 탭으로 건너뛰어도 보인다. | `test/motion.test.js`의 `buildTimeline_revealed_chart_series_stay_across_steps`. 둘째 탭 상태의 계열 목록 확인 |
