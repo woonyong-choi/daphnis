@@ -53,7 +53,7 @@ app -> api
 api -> db
 
 step "동시 주문" "웹과 앱의 주문이 겹쳐 들어오면 값이 연달아 바뀝니다" for=6s
-  track web, app -> api -> db "주문" every=1.5s
+  track web, app -> api -> db every=1.5s
 ```
 
 ![주문이 몰릴 때](flow-motion.svg)<!-- dap -->

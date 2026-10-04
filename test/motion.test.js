@@ -74,6 +74,9 @@ function pathFractionAt({ times, splines, points }, x) {
   return points[i] + (points[i + 1] - points[i]) * (splines ? ease(splines[i], u) : u);
 }
 
+// cost: time O(k), heap O(1), stack O(1)
+// vars: k = 키 수
+// basis: estimate
 // 글 상자 옮김(animateTransform translate, linear) 값 [dx, dy]를 한 바퀴 비율 x에서 푼다.
 function slideAt({ times, values: levels }, x) {
   const i = Math.min(times.length - 2, times.findLastIndex((time) => time <= x));

@@ -492,6 +492,9 @@ test('drawChart_scatter_arrowhead_stays_clear_of_every_point_name', async () => 
   }
 });
 
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = 점 수
+// basis: estimate
 // 점 이름 글자 상자 목록 { label, x0, x1, y0, y1 }. 점 오른쪽 이름과 왼쪽(end) 이름을 모두 읽는다.
 function nameBoxes(body) {
   return [...body.matchAll(/<text x="([\d.-]+)" y="([\d.-]+)" class="chart-name late( end)?">(.*?)<\/text>/g)].map((m) => {
