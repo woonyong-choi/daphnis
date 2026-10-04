@@ -13,12 +13,42 @@ import { plainText } from './text.js';
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 경로 글자 수
 // basis: estimate
-// 문서를 가리키는 이름. SVG 폴더에서 문서까지의 상대 경로(구분자 `/`)다. 같은 SVG 폴더를 쓰는 문서끼리는 경로가 늘 달라 소유를 가르고, 실행 위치와 무관하다. 문서가 SVG 폴더 안에 있으면 파일 이름만이라 옛 표시와 같다. XML 주석에 `--`가 들 수 없어 `-`가 이어지면 앞의 `-`를 인코딩한다.
-const ownerOf = (file, outDir) => relative(outDir, file).split(sep).join('/').replace(/-(?=-)/g, '%2D');
-// 이 문서에서 만든 SVG라는 표시. 이름이 바뀌어 안 쓰는 SVG를 찾아 지울 때 이 표시가 든 파일만 지운다.
+// 문서를 가리키는 이름. SVG 폴더에서 문서까지의 상대 경로(구분자 `/`)다. 같은 SVG 폴더를 쓰는 문서끼리는 경로가 늘 달라 소유를 가르고, 실행 위치와 무관하다. 문서가 SVG 폴더 안에 있으면 파일 이름만이다. 경로로 되돌릴 수 있게 `%`를 먼저 `%25`로, 줄바꿈을 `%0A`, `%0D`로, 그다음 XML 주석에 `--`가 들 수 없어 이어지는 `-`의 앞쪽을 `%2D`로 바꾼다. `%`와 줄바꿈이 없는 경로는 글자가 그대로다.
+const ownerOf = (file, outDir) => relative(outDir, file).split(sep).join('/').replace(/%/g, '%25').replace(/\n/g, '%0A').replace(/\r/g, '%0D').replace(/-(?=-)/g, '%2D');
+// 이 문서에서 만든 SVG라는 표시. 이름이 바뀌어 안 쓰는 SVG를 찾아 지울 때와 쓸 SVG가 이미 있을 때 이 표시로 소유를 판정한다.
 const svgMark = (file, outDir) => `<!-- daphnis md ${ownerOf(file, outDir)} -->`;
-// 옛 이름의 표시. 옛 표시가 든 SVG도 이 문서가 만든 것으로 보고 안 쓰게 되면 지운다.
-const legacySvgMark = (file, outDir) => `<!-- mutoscope md ${ownerOf(file, outDir)} -->`;
+const MARK = /^<!-- (daphnis|mutoscope) md (.+) -->$/;
+
+// cost: time O(n), heap O(n), stack O(1), io 1
+// vars: n = 파일 글자 수
+// basis: estimate
+// 이미 있는 SVG의 소유 표시 { name, owner }. 앞 세 줄에서 찾고, 표시가 없거나 읽지 못하면 undefined다.
+function markOf(path) {
+  let head;
+  try {
+    head = readFileSync(path, 'utf8').split('\n', 3);
+  } catch {
+    return undefined;
+  }
+  for (const line of head) {
+    const found = MARK.exec(line.replace(/\r$/, ''));
+    if (found) return { name: found[1], owner: found[2] };
+  }
+  return undefined;
+}
+
+// cost: time O(n), heap O(n), stack O(1), io 1
+// vars: n = 파일 글자 수
+// basis: estimate
+// 이 문서가 만든 SVG인지 판정한다. 쓰기와 낡은 SVG 삭제가 같은 판정을 쓴다. 'mine' 이 문서 것, 'other' 다른 문서 것(owner를 함께 돌려줌), 'unmarked' 표시 없는 파일이다.
+// 옛 이름(`mutoscope md`)의 표시는 옛 인코딩이 `%`를 그대로 두어 `%`가 든 경로에서 하나로 정해지지 않으므로, `%`가 없고 새 표시와 글자가 같을 때만 이 문서 것이다. 아니면 다른 문서 것으로 보아 쓰지도 지우지도 않는다.
+function ownership(path, file, outDir) {
+  const mark = markOf(path);
+  if (!mark) return { kind: 'unmarked' };
+  const mine = ownerOf(file, outDir);
+  const same = mark.owner === mine && (mark.name === 'daphnis' || !mine.includes('%'));
+  return same ? { kind: 'mine' } : { kind: 'other', owner: mark.owner };
+}
 const problem = (message, code = 'md') => makeDiagnostic({ severity: 'error', line: 0, message }, { code });
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -51,6 +81,23 @@ function claimTargets(file, targets, { claimed, json }) {
   return ok;
 }
 
+// cost: time O(b), heap O(b), stack O(1), io b
+// vars: b = 블록 수
+// basis: estimate
+// 쓸 SVG가 이미 있으면 이 문서 것인지 확인한다. 다른 문서 것이거나 표시 없는 파일이면 그 블록 줄에 오류를 알린다. 오류가 있으면 false다.
+function checkOwners(file, targets, outDir, json) {
+  let ok = true;
+  for (const { block, svg } of targets) {
+    if (!existsSync(svg)) continue;
+    const found = ownership(svg, file, outDir);
+    if (found.kind === 'mine') continue;
+    const who = found.kind === 'other' ? `was made for another document (${found.owner})` : 'has no daphnis md mark, so it is not a figure made by this tool';
+    report(file, [{ ...problem(`${svg} already exists and ${who}. Give the block a different name=, or write this document to a different --out-dir`), line: block.open + 1 }], json);
+    ok = false;
+  }
+  return ok;
+}
+
 // cost: time O(b·build), heap O(b·out), stack O(1), io b
 // vars: b = 블록 수, build = 블록 하나를 만드는 비용, out = SVG 글자 수
 // basis: estimate
@@ -77,15 +124,14 @@ async function svgText(file, { result, svg }, { args, outDir }) {
 // cost: time O(n), heap O(n), stack O(1), io n
 // vars: n = 폴더 안 파일 수
 // basis: estimate
-// 이 문서가 예전에 만들었지만 지금은 안 쓰는 SVG. `{문서}-*.svg` 중 앞 줄에 이 문서의 표시가 든 파일만이다. 표시는 SVG 폴더 기준 문서 경로라 다른 폴더의 같은 이름 문서가 만든 파일은 소유로 보지 않는다.
+// 이 문서가 예전에 만들었지만 지금은 안 쓰는 SVG. `{문서}-*.svg` 중 ownership이 이 문서 것으로 판정한 파일만이다. 표시는 SVG 폴더 기준 문서 경로라 다른 폴더의 같은 이름 문서가 만든 파일은 소유로 보지 않는다.
 function staleSvgs(file, outDir, keep) {
-  const marks = [svgMark(file, outDir), legacySvgMark(file, outDir)];
   const prefix = `${basename(file, extname(file))}-`;
   if (!existsSync(outDir)) return [];
   return readdirSync(outDir)
     .filter((name) => name.startsWith(prefix) && name.endsWith('.svg') && !keep.has(join(outDir, name)))
     .map((name) => join(outDir, name))
-    .filter((path) => readFileSync(path, 'utf8').split('\n', 3).some((line) => marks.includes(line.trimEnd())));
+    .filter((path) => ownership(path, file, outDir).kind === 'mine');
 }
 
 // cost: time O(b·build + n), heap O(b·out), stack O(1), io 2b + n
@@ -110,7 +156,8 @@ async function planDocument(file, args, claimed) {
   const outDir = args['out-dir'] ?? dirname(file);
   const targets = targetsOf(file, found.blocks, outDir);
   const unique = claimTargets(file, targets, { claimed, json });
-  const built = found.errors.length || !unique ? undefined : await buildTargets(file, targets, args);
+  const owned = checkOwners(file, targets, outDir, json);
+  const built = found.errors.length || !unique || !owned ? undefined : await buildTargets(file, targets, args);
   if (!built) return undefined;
   const images = built.map(({ label, svg, result }) => ({ alt: plainText(result.figure.title ?? label), href: hrefOf(file, svg) }));
   const files = [];
