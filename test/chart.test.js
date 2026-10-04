@@ -564,3 +564,22 @@ test('parseFigure_time_and_ratio_that_overflow_to_infinity_are_syntax_errors', (
   assert.throws(() => parseFigure(`chart bar\nspeed ${NINES}s\nseries a "A"\nrow "r" a=1`), (e) => e.problems[0].line === 2);
   assert.throws(() => parseFigure(`flow right\naspect ${NINES}\nbox a "A"`), (e) => e.problems[0].line === 2);
 });
+
+// 근거: 설계 charts.md 값 축 "막대, 덤벨, 상자에서 값이 모두 0이면 오류": 숫자가 하나도 없는 막대도 길이로 보일 것이 없어 오류다. 일부 누락과 값 0은 그린다
+test('buildFigure_bar_with_every_value_missing_is_an_error_and_partial_missing_or_zero_still_draw_finite_coordinates', async () => {
+  const head = 'chart bar\nx "Value(ms)"\nseries s "S"\n';
+  const allMissing = await problemsOf(`${head}row "A" s=-`, { strict: true });
+  const withRule = await problemsOf(`${head}rule 5 "R"\nrow "A" s=-\nrow "B" s=-`, { strict: true });
+  const fromData = await problemsOf('chart bar\nx "Value(ms)"\nseries s "S"\ndata "nulls.json"', { strict: true, baseDir: FIXTURES });
+
+  assert.match(allMissing.join('\n'), /^4: .*at least one number/);
+  assert.match(withRule.join('\n'), /^5: .*at least one number/);
+  assert.match(fromData.join('\n'), /at least one number/);
+  for (const rows of ['row "A" s=-\nrow "B" s=3', 'row "A" s=0\nrow "B" s=3', 'row "A" s=0\nrow "B" s=-\nrow "C" s=2']) {
+    const result = await buildFigure(`${head}${rows}`, { strict: true });
+    const svg = await toSvg(result, { isStatic: true });
+
+    assert.deepEqual(result.warnings, [], rows);
+    assert.doesNotMatch(svg, /NaN|Infinity/, rows);
+  }
+});
