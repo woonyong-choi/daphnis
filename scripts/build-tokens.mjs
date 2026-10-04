@@ -24,24 +24,38 @@ class TokenError extends Error {}
 function main(argv) {
   const args = parseArgs(argv);
   const out = args.out ?? dirname(resolve(args.source));
-  const tokens = flattenTokens(readJson(args.source));
-  const darkPath = join(dirname(args.source), 'tokens.dark.json');
-  const darkTokens = existsSync(darkPath) ? flattenTokens(readJson(darkPath)) : [];
-  const table = new Map(tokens.map((token) => [pathKey(token.path), token]));
-  let css;
-  let js;
+  let outputs;
   try {
-    checkReferences(tokens, table, 'tokens.json');
-    checkReferences(darkTokens, table, 'tokens.dark.json');
-    css = buildCss(basename(args.source), tokens, darkTokens);
-    js = buildJs(basename(args.source), tokens, table);
+    outputs = buildOutputs(args.source);
   } catch (error) {
     if (!(error instanceof TokenError)) throw error;
     console.error(error.message);
     return 1;
   }
+  return writeOutputs(out, outputs);
+}
+
+// cost: time O(t·c² + n), heap O(t + n), stack O(d + c), io 2
+// vars: t = 토큰 수, c = 참조 사슬 길이, n = 정본 글자 수, d = 묶음 깊이
+// basis: estimate
+/** 정본을 읽어 `[파일 이름, 글]` 목록을 만든다. 참조 오류는 TokenError. */
+function buildOutputs(source) {
+  const tokens = flattenTokens(readJson(source));
+  const darkPath = join(dirname(source), 'tokens.dark.json');
+  const darkTokens = existsSync(darkPath) ? flattenTokens(readJson(darkPath)) : [];
+  const table = new Map(tokens.map((token) => [pathKey(token.path), token]));
+  checkReferences(tokens, table, 'tokens.json');
+  checkReferences(darkTokens, table, 'tokens.dark.json');
+  return [['tokens.css', buildCss(basename(source), tokens, darkTokens)], ['tokens.js', buildJs(basename(source), tokens, table)]];
+}
+
+// cost: time O(n), heap O(1), stack O(1), io 3
+// vars: n = 생성물 글자 수
+// basis: estimate
+/** 생성물을 폴더에 쓰고 경로를 출력한다. */
+function writeOutputs(out, outputs) {
   mkdirSync(out, { recursive: true });
-  for (const [name, text] of [['tokens.css', css], ['tokens.js', js]]) {
+  for (const [name, text] of outputs) {
     const path = joinPath(out, name);
     writeFileSync(path, text, 'utf8');
     console.log(path);
