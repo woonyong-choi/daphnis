@@ -10,7 +10,7 @@ import { ID_PATTERN } from './words.js';
 export function readChartDeclaration(statement, ctx) {
   const word = statement.tokens[0].value;
   const handlers = { series: readSeries, rule: readRule, missing: readMissing, data: readData, row: readRow, point: readPoint, cell: readCell, link: readLink };
-  if (!handlers[word]) {
+  if (!Object.hasOwn(handlers, word)) {
     ctx.problems.error(statement.line, `unknown chart statement "${word}"`);
     return;
   }
@@ -65,7 +65,7 @@ function readSeriesOptions(options) {
   const given = {};
   for (const t of options) {
     const isKnown = t.type === 'option' && t.valueType === specs[t.key]?.type;
-    if (!isKnown || t.key in given) return undefined;
+    if (!isKnown || Object.hasOwn(given, t.key)) return undefined;
     given[t.key] = t.value;
   }
   return given;
@@ -175,7 +175,7 @@ function readValues(tokens, { line, problems }, textKeys = []) {
       problems.error(line, `write values as key=number. Found "${t.value}"`);
       return undefined;
     }
-    if (t.key in values) {
+    if (Object.hasOwn(values, t.key)) {
       problems.error(line, `"${t.key}" is written twice`);
       return undefined;
     }
