@@ -5,6 +5,7 @@ import { animateChart } from './chart.js';
 import { drawValues } from '../draw/values.js';
 import { createClock } from './clock.js';
 import { discreteWindows } from './discrete.js';
+import { paintOf } from '../draw/paint.js';
 import { drawPacket } from './packet.js';
 import { createWindows } from './windows.js';
 
@@ -53,10 +54,12 @@ function decorateElement(kind, { id, i, extra, scene }, { segs, toggle, lit, lit
     case 'group': {
       // 아이콘이 있는 그룹의 틀은 꺼졌을 때 아이콘 파랑이다(탭과 같은 색).
       const box = (kind === 'group' ? scene.groups : scene.items)?.[i];
-      // 켜지면 파랑 테두리와 옅은 파랑 후광이다. 꺼진 그룹은 테두리가 없고(점선 경계만 선 색), 색을 고른 도형도 면으로만 알린다.
+      // 켜지면 굵은 테두리와 옅은 후광이다. 색을 고른 도형은 그 색의 진한 선, 아니면 파랑이다. 꺼진 그룹은 테두리가 없다(점선 경계만 선 색).
       const dashed = kind === 'group' ? box?.border === 'dashed' : box?.shape === 'external';
-      const off = box?.stroke || (kind === 'group' && !dashed) ? 'none' : dashed ? c.line : c.border;
-      return toggle(litNode(id, scene), `stroke: ${c.state.active}; stroke-width: ${tokens.border.strong}`, `stroke: ${off}; stroke-width: ${tokens.border.thin}`);
+      const paint = kind === 'group' ? box?.stroke : paintOf(box ?? {});
+      const off = kind === 'group' ? (box?.stroke || !dashed ? 'none' : c.line) : paint ? c.paint[paint].outline : c.outline;
+      const on = paint ? c.paint[paint].stroke : c.state.active;
+      return toggle(litNode(id, scene), `stroke: ${on}; stroke-width: ${tokens.border.strong}`, `stroke: ${off}; stroke-width: ${tokens.border.thin}`);
     }
     case 'halo':
     case 'group-halo':

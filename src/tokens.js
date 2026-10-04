@@ -68,6 +68,8 @@ export const tokens = freeze({
         "dark-fill": "var(--color-palette-red-dark-fill)",
         "dark-stroke": "var(--color-palette-red-dark-stroke)",
         "dark-ink": "var(--color-palette-red-dark-ink)",
+        "light-dot": "var(--color-palette-red-light-dot)",
+        "dark-dot": "var(--color-palette-red-dark-dot)",
         "light-outline": "var(--color-palette-red-light-outline)",
         "dark-outline": "var(--color-palette-red-dark-outline)"
       },
@@ -174,7 +176,8 @@ export const tokens = freeze({
       "purple": "var(--color-flow-purple)",
       "green": "var(--color-flow-green)",
       "teal": "var(--color-flow-teal)",
-      "gray": "var(--color-flow-gray)"
+      "gray": "var(--color-flow-gray)",
+      "red": "var(--color-flow-red)"
     },
     "figure": {
       "icon": "var(--color-figure-icon)",
@@ -185,7 +188,8 @@ export const tokens = freeze({
         "fill": "var(--color-paint-red-fill)",
         "stroke": "var(--color-paint-red-stroke)",
         "outline": "var(--color-paint-red-outline)",
-        "ink": "var(--color-paint-red-ink)"
+        "ink": "var(--color-paint-red-ink)",
+        "dot": "var(--color-paint-red-dot)"
       },
       "amber": {
         "fill": "var(--color-paint-amber-fill)",
@@ -468,6 +472,7 @@ export const tokens = freeze({
     "chart-cycle": "var(--duration-chart-cycle)",
     "reveal": "var(--duration-reveal)",
     "value-flash": "var(--duration-value-flash)",
+    "pulse": "var(--duration-pulse)",
     "chip-frame": "var(--duration-chip-frame)",
     "flow-step": "var(--duration-flow-step)",
     "cut-fade": "var(--duration-cut-fade)"
@@ -552,6 +557,8 @@ export const values = freeze({
         "dark-fill": "#3d1e24",
         "dark-stroke": "#ff6b77",
         "dark-ink": "#ff6b77",
+        "light-dot": "#da2c41",
+        "dark-dot": "#ff6b77",
         "light-outline": "#ffa0a0",
         "dark-outline": "#98434c"
       },
@@ -658,7 +665,8 @@ export const values = freeze({
       "purple": "#3a7bd5",
       "green": "#e65200",
       "teal": "#4e5968",
-      "gray": "#4e5968"
+      "gray": "#4e5968",
+      "red": "#da2c41"
     },
     "figure": {
       "icon": "#3a7bd5",
@@ -669,7 +677,8 @@ export const values = freeze({
         "fill": "#ffeef0",
         "stroke": "#f04452",
         "outline": "#ffa0a0",
-        "ink": "#f04452"
+        "ink": "#f04452",
+        "dot": "#da2c41"
       },
       "amber": {
         "fill": "#fff1e8",
@@ -952,6 +961,7 @@ export const values = freeze({
     "chart-cycle": 7000,
     "reveal": 900,
     "value-flash": 700,
+    "pulse": 450,
     "chip-frame": 16.666666666666668,
     "flow-step": 12000,
     "cut-fade": 600

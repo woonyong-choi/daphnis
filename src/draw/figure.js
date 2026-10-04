@@ -62,7 +62,7 @@ function drawGroup(g, j, { decorate, glyphs, scene }) {
 function drawItem(it, i, paint) {
   const { decorate, glyphs, scene } = paint;
   const stroke = `class="fl-stroke${paintOf(it) ? ` ps-${paintOf(it)}` : ''}${it.shape === 'external' ? ' ext' : ''} ${decorate('node', i)}"`;
-  const halo = drawHalo(outlineOf(it), { cls: decorate('halo', i) });
+  const halo = drawHalo(outlineOf(it), { cls: decorate('halo', i), paint: paintOf(it) });
   const open = `<g id="n-${i}" class="fl-node" data-id="${escapeXml(it.id)}">`;
   for (const l of it.labelLines ?? []) glyphs.add(l, 'medium');
   for (const l of it.subLines ?? []) glyphs.add(l, 'regular');

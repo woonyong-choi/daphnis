@@ -16,6 +16,7 @@ const PLAYER_METRICS = Object.freeze({
   haloOpacity: values.opacity.halo,
   packet: values.size.packet.radius,
   chipRadius: values.radius.lg,
+  pulseMs: values.duration.pulse,
   chipLine: STYLE.chip.line,
   chipPadX: values.space['9'],
   chipPadY: values.space['4'],
@@ -81,7 +82,8 @@ export function figureContent(result, glyphs) {
 function timedLights(seg, { itemIndex, groupIndex }) {
   if (!seg.edgesAt) return {};
   const pick = (map) => Object.fromEntries(Object.entries(seg.nodesAt).filter(([id]) => map.has(id)).map(([id, at]) => [map.get(id), at]));
-  return { edgesAt: seg.edgesAt, nodesAt: pick(itemIndex), groupsAt: pick(groupIndex) };
+  const pulses = seg.pulses.filter(({ id }) => itemIndex.has(id)).map(({ id, at }) => ({ n: itemIndex.get(id), at })).sort((a, b) => a.at - b.at);
+  return { edgesAt: seg.edgesAt, nodesAt: pick(itemIndex), groupsAt: pick(groupIndex), pulses };
 }
 
 // cost: time O(r·c), heap O(r·c), stack O(1)

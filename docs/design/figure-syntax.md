@@ -227,7 +227,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 - 구간마다 이동과 같은 규칙으로 선을 고른다(같은 방향 선, 없으면 거꾸로, 둘 다 없으면 오류). 점은 구간 사이에서 멈추지 않고 이어 붙인 경로를 지나며, 도형 안을 지나는 동안은 보이지 않는다. 이동 시간은 구간 시간(선 길이 비례)의 합이고 `time=`은 경로 전체의 시간이다. 출발과 도착이 느린 곡선(`easing.move`)은 경로 전체에 한 번 건다.
 - `at`은 처음 출발 시각이다(`0s`도 된다). `every`가 있으면 단계 끝 전까지 그 간격으로 되풀이해 출발한다. 단계 끝까지 도착하지 못하는 점은 단계 끝에서 서서히 사라지게 그리고(`duration.cut-fade`), 그 점이 닿지 못한 도형의 값은 바뀌지 않는다. 출발 수와 잘린 점 수는 배치가 정하는 이동 시간에 따라 달라지므로 횟수가 중요한 그림은 `time=`을 적는다. 점이 하나도 그려지지 않는 흐름은 [그림 검사](figure-check.md) 14번 오류다.
 - `for`는 `track`이 없는 단계에 쓰면 오류다.
-- 글은 이동 글 상자처럼 점과 함께 간다. 흐름이 지나는 선과 도형은 점이 처음 닿는 시각에 밝아지고 단계 끝까지 남는다.
+- 글은 이동 글 상자처럼 점과 함께 간다. 흐름이 지나는 선은 점이 처음 닿는 시각에 밝아지고 단계 끝까지 남는다. 도형은 켜 두지 않고, 점이 닿을 때마다 후광만 `duration.pulse` 동안 한 번 깜빡인다.
 
 점 색과 값 바꾸기:
 
@@ -311,12 +311,12 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `edge.no` | 양의 정수 | 판 1 |  |
 | `step.for` | 시간 | 판 1 |  |
 | `hop.time` | 시간 | 판 1 |  |
-| `hop.tone` | `purple`, `green`, `teal`, `gray` | 판 1 |  |
+| `hop.tone` | `purple`, `green`, `teal`, `gray`, `red` | 판 1 |  |
 | `hop.set` | 글 | 판 1 |  |
 | `track.at` | 시간(0 가능) | 판 1 |  |
 | `track.every` | 시간 | 판 1 |  |
 | `track.time` | 시간 | 판 1 |  |
-| `track.tone` | `purple`, `green`, `teal`, `gray` | 판 1 |  |
+| `track.tone` | `purple`, `green`, `teal`, `gray`, `red` | 판 1 |  |
 | `track.set` | 글 | 판 1 |  |
 | `value.on` | 도형 이름 | 판 1 |  |
 | `value.from` | 숫자 또는 낱말 | 판 1 |  |
@@ -327,7 +327,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `edge.head` | `end`, `both`, `none` | 판 1 |  |
 | `box.shape` | `rect`, `circle`, `tile` | 판 1 |  |
 | `show.tag` | 글 | 판 1 |  |
-| `show.tone` | `purple`, `green`, `teal`, `gray` | 판 1 |  |
+| `show.tone` | `purple`, `green`, `teal`, `gray`, `red` | 판 1 |  |
 | `show.card` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray` | 판 1 |  |
 | `show.meta` | 글 | 판 1 |  |
 | `show.mark` | 글, 최대 8자 | 판 1 |  |
@@ -354,7 +354,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `scale` | `scale 값` | `linear`, `log` | `linear` | 없음 |
 | `zero` | `zero 값` | `on`, `off` | `on` | 없음 |
 | `chartType` | `chart 뒤` | `bar`, `dumbbell`, `box`, `scatter`, `line`, `difference`, `heatmap` | 없음 | 없음 |
-| `tone` | `hop.tone`, `track.tone`, `show.tone` | `purple`, `green`, `teal`, `gray` | 없음 | `blue` → `teal`, `orange` → `purple` |
+| `tone` | `hop.tone`, `track.tone`, `show.tone` | `purple`, `green`, `teal`, `gray`, `red` | 없음 | `blue` → `teal`, `orange` → `purple` |
 | `role` | `series.role` | `main`, `compare` | 선언 순서대로 main, compare(`dumbbell`은 compare, main) | 없음 |
 | `paint` | `group.fill`, `group.stroke`, `node.fill`, `node.stroke`, `show.card` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray` | 없음 | 없음 |
 | `head` | `edge.head` | `end`, `both`, `none` | `end` | 없음 |

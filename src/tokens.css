@@ -51,6 +51,8 @@
   --color-palette-red-dark-fill: #3d1e24;
   --color-palette-red-dark-stroke: #ff6b77;
   --color-palette-red-dark-ink: #ff6b77;
+  --color-palette-red-light-dot: #da2c41;
+  --color-palette-red-dark-dot: #ff6b77;
   --color-palette-red-light-outline: #ffa0a0;
   --color-palette-red-dark-outline: #98434c;
   --color-palette-amber-light-fill: #fff1e8;
@@ -137,12 +139,14 @@
   --color-flow-green: var(--color-data-compare);
   --color-flow-teal: var(--color-paint-gray-dot);
   --color-flow-gray: var(--color-paint-gray-dot);
+  --color-flow-red: var(--color-paint-red-dot);
   --color-figure-icon: var(--color-palette-blue-light-icon);
   --color-figure-icon-tile: var(--color-palette-blue-light-fill);
   --color-paint-red-fill: var(--color-palette-red-light-fill);
   --color-paint-red-stroke: var(--color-palette-red-light-stroke);
   --color-paint-red-outline: var(--color-palette-red-light-outline);
   --color-paint-red-ink: var(--color-palette-red-light-ink);
+  --color-paint-red-dot: var(--color-palette-red-light-dot);
   --color-paint-amber-fill: var(--color-palette-amber-light-fill);
   --color-paint-amber-stroke: var(--color-palette-amber-light-stroke);
   --color-paint-amber-outline: var(--color-palette-amber-light-outline);
@@ -339,6 +343,7 @@
   --duration-chart-cycle: 7000ms;
   --duration-reveal: 900ms;
   --duration-value-flash: 700ms;
+  --duration-pulse: 450ms;
   --duration-chip-frame: 16.666666666666668ms;
   --duration-flow-step: 12000ms;
   --duration-cut-fade: 600ms;
@@ -366,6 +371,7 @@
     --color-paint-red-stroke: var(--color-palette-red-dark-stroke);
     --color-paint-red-outline: var(--color-palette-red-dark-outline);
     --color-paint-red-ink: var(--color-palette-red-dark-ink);
+    --color-paint-red-dot: var(--color-palette-red-dark-dot);
     --color-paint-amber-fill: var(--color-palette-amber-dark-fill);
     --color-paint-amber-stroke: var(--color-palette-amber-dark-stroke);
     --color-paint-amber-outline: var(--color-palette-amber-dark-outline);
@@ -438,6 +444,7 @@
   --color-paint-red-stroke: var(--color-palette-red-dark-stroke);
   --color-paint-red-outline: var(--color-palette-red-dark-outline);
   --color-paint-red-ink: var(--color-palette-red-dark-ink);
+  --color-paint-red-dot: var(--color-palette-red-dark-dot);
   --color-paint-amber-fill: var(--color-palette-amber-dark-fill);
   --color-paint-amber-stroke: var(--color-palette-amber-dark-stroke);
   --color-paint-amber-outline: var(--color-palette-amber-dark-outline);

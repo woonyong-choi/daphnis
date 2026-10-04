@@ -71,6 +71,7 @@ export const VALUES = {
       green: V1,
       teal: V1,
       gray: V1,
+      red: V1,
       blue: { ...V1, deprecated: { since: 1, replace: 'teal', note: 'Tag colors are categories now. Blue means the active state and orange means compare' } },
       orange: { ...V1, deprecated: { since: 1, replace: 'purple', note: 'Tag colors are categories now. Blue means the active state and orange means compare' } },
     }),

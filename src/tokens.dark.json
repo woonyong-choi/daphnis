@@ -39,6 +39,9 @@
         },
         "ink": {
           "$value": "{color.palette.red.dark-ink}"
+        },
+        "dot": {
+          "$value": "{color.palette.red.dark-dot}"
         }
       },
       "amber": {

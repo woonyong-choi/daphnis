@@ -18,8 +18,10 @@ const ROLE = {
 };
 // 세 번째 이후 흐름 점은 진한 회색이다.
 const FLOW_DOT = { 'light-dot': '#4e5968', 'dark-dot': '#c3c8cf' };
+// 오류(red) 흐름 점. 글 상자 글자(on-active)와 대비 4.5 이상인 같은 색상의 진한 값(라이트 4.75), 다크는 선과 같다.
+const RED_DOT = { 'light-dot': '#da2c41', 'dark-dot': '#ff6b77' };
 const PROPOSAL_TABLE = {
-  blue: ROLE.blue, orange: ROLE.orange, red: ROLE.red,
+  blue: ROLE.blue, orange: ROLE.orange, red: { ...ROLE.red, ...RED_DOT },
   amber: ROLE.orange, pink: ROLE.orange,
   green: { ...ROLE.green, ...FLOW_DOT }, teal: { ...ROLE.green, ...FLOW_DOT },
   navy: { ...ROLE.blue }, purple: { ...ROLE.blue, ...FLOW_DOT },

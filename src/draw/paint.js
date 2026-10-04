@@ -27,13 +27,14 @@ function usedPaints(scene) {
 // vars: c = 고른 색 수, out = 만든 CSS 글자 수
 // basis: estimate
 /**
- * 고른 색의 CSS. 외곽선 색 클래스(`ps-이름`, 면 색의 outline 단계)는 켜진 도형과 그룹에서도, 아이콘 탭이 있는 그룹에서도 그대로여서 밝힘은 색이 아니라 굵은 테두리와 후광(`fl-halo`)이 알린다.
+ * 고른 색의 CSS. 외곽선 색 클래스(`ps-이름`)는 평소 그 색의 outline 단계이고, 켜지면 같은 색의 진한 선(stroke) 단계로 굵어진다. 후광(`fl-halo`, 클래스 `ph-이름`)도 그 색의 옅은 면(fill) 단계다. 밝힘은 색을 바꾸지 않고 굵기와 후광만 더한다.
  * 그룹 면 클래스는 `pf-이름`이다. 쓴 색이 없으면 빈 글이다.
  */
 export function paintCss(scene) {
   if (!scene) return '';
   const { stroke, groupFill } = usedPaints(scene);
-  const rules = stroke.map((name) => `.fl .fl-node .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-outline);\n}\n.fl .fl-node.on .fl-stroke.ps-${name} {\n  stroke: var(--color-state-active);\n}`);
+  const rules = stroke.map((name) => `.fl .fl-node .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-outline);\n}\n.fl .fl-node.on .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-stroke);\n}\n.fl .fl-halo.ph-${name} > * {\n  stroke: var(--color-paint-${name}-fill);\n}`);
+  for (const name of new Set(scene.groups.map((g) => g.stroke).filter(Boolean))) rules.push(`.fl .fl-group.on .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-stroke);\n}`);
   for (const name of groupFill) rules.push(`.fl .frame-box.pf-${name} {\n  fill: var(--color-paint-${name}-fill);\n}`);
   return rules.length ? `\n${rules.join('\n')}\n` : '';
 }
@@ -44,9 +45,9 @@ export function paintCss(scene) {
 /**
  * 후광: 켜졌을 때만 보이는 옅은 파랑 면. 도형 윤곽을 굵은 선으로 한 번 더 그려 테두리 바깥으로 번지게 한다.
  * @param pieces 도형 윤곽 조각. 닫지 않은 `<rect ...` 같은 글이다
- * @param option { cls }. cls는 켜짐 class다
+ * @param option { cls, paint }. cls는 켜짐 class이고 paint는 도형이 칠한 색 이름(없으면 파랑 후광)이다
  */
-export function drawHalo(pieces, { cls }) {
+export function drawHalo(pieces, { cls, paint }) {
   const ring = pieces.map((p) => `${p} stroke="${tokens.color.state.glow}" stroke-width="${GLOW_WIDTH}" stroke-linejoin="round"/>`).join('');
-  return `<g class="fl-halo ${cls}" fill="none" opacity="0">${ring}</g>`;
+  return `<g class="fl-halo ${cls}${paint ? ` ph-${paint}` : ''}" fill="none" opacity="0">${ring}</g>`;
 }
