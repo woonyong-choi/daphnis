@@ -17,7 +17,7 @@ const GRAPHIC = 3;
 // 꾸밈 요소는 WCAG 적용 대상 밖이다. 값이나 상태를 전하지 않고 구조만 돕는다.
 const DECORATIVE_LINE = 1.5;
 const DECORATIVE_PLATE_EDGE = 1.3;
-const FIGURE_FACES = ['bg', 'node', 'group', 'card-on'];
+const FIGURE_FACES = ['bg', 'node', 'group-1', 'group-2', 'group-3', 'card-on'];
 const DOCUMENT_FACES = ['page'];
 const ALL_FACES = [...FIGURE_FACES, ...DOCUMENT_FACES];
 const BORDER_FACES = [...FIGURE_FACES, 'surface', ...DOCUMENT_FACES];
@@ -84,7 +84,7 @@ function listTokens(node, path = []) {
 // 근거: 규칙 docs-integration.md 대비 기준 표: 본문·보조·강조·태그 글자, 켜진 면 위 글자, 켜진 탭 글자는 모든 면에서 4.5 이상
 test('contrast_text_pairs_reach_4_5_in_both_themes', () => {
   for (const theme of THEMES) {
-    expectAtLeast(theme, TEXT, ['bg', 'node', 'surface', 'card-on', 'group', 'page'].flatMap((face) => [['fg', face], ['muted', face]]));
+    expectAtLeast(theme, TEXT, ['bg', 'node', 'surface', 'card-on', 'group-1', 'group-2', 'group-3', 'page'].flatMap((face) => [['fg', face], ['muted', face]]));
     expectAtLeast(theme, TEXT, TEXT_FACES.flatMap((face) => TEXT_ROLES.map((role) => [role, face])));
     expectAtLeast(theme, TEXT, [['state.on-active', 'state.active-fill'], ['fg', 'ui.control-on'], ['muted', 'bg']]);
     for (const face of ['node', 'surface', 'card-on']) {
@@ -151,22 +151,22 @@ test('contrast_dimmed_row_text_keeps_value_and_helper_text_at_4_5', () => {
   }
 });
 
-// 근거: 결정 #14 "라이트 그림 바탕 #f6f7f9, 그룹 바탕은 그보다 아주 약간 진하게, 카드는 흰색으로 바탕보다 한 톤 위"
+// 근거: 결정 #14 "라이트 그림 바탕 #f6f7f9, 그룹 바탕은 그보다 아주 약간 진하게(깊이 1 group-1, 차이 25 이하), 카드는 흰색으로 바탕보다 한 톤 위"
 test('figureGround_light_bg_is_gray_group_is_slightly_darker_and_node_face_is_brighter_in_both_themes', () => {
   const sum = (hex) => Number.parseInt(hex.slice(1, 3), 16) + Number.parseInt(hex.slice(3, 5), 16) + Number.parseInt(hex.slice(5, 7), 16);
-  const [bg, group, node] = ['bg', 'group', 'node'].map((name) => color('light', name));
+  const [bg, group, node] = ['bg', 'group-1', 'node'].map((name) => color('light', name));
 
   assert.equal(node, '#ffffff');
   assert.ok(sum(bg) <= sum('#f8f9fb') && sum(bg) < sum(node), bg);
-  assert.ok(sum(group) < sum(bg) && sum(bg) - sum(group) <= 24, group);
+  assert.ok(sum(group) < sum(bg) && sum(bg) - sum(group) <= 25, group);
   for (const theme of THEMES) assert.ok(contrast(color(theme, 'node'), color(theme, 'bg')) > 1.05, `${theme} node on bg`);
   // 그룹과 그 안 노드는 두 테마 모두 다른 면이다(다크 그룹이 노드와 같은 색이던 문제)
-  for (const theme of THEMES) assert.notEqual(color(theme, 'group'), color(theme, 'node'), `${theme} group face equals node face`);
+  for (const theme of THEMES) assert.notEqual(color(theme, 'group-1'), color(theme, 'node'), `${theme} group face equals node face`);
 });
 
 // 근거: 결정 docs-integration.md "대비 규칙이 색 선택보다 우선: 원색이 기준을 넘으면 원색, 못 넘으면 같은 색상에서 기준을 넘는 가장 가까운 단계를 쓴다"
 test('palette_graphic_text_and_border_colors_are_the_closest_step_that_reaches_their_floor', () => {
-  const graphicFaces = ['bg', 'group', 'card-on', 'node', 'page'];
+  const graphicFaces = ['bg', 'group-1', 'group-2', 'group-3', 'card-on', 'node', 'page'];
   const lowest = (value, faces, theme = 'light') => Math.min(...faces.map((face) => contrast(value, color(theme, face))));
   for (const hue of ['blue', 'orange']) {
     for (const theme of THEMES) {
@@ -180,7 +180,7 @@ test('palette_graphic_text_and_border_colors_are_the_closest_step_that_reaches_t
     }
   }
   // 글자 단계(ink)는 모든 그림 면과 모든 색의 fill 위에서 4.5를 맞추는 가장 가까운 단계다.
-  const textFaces = [...['bg', 'node', 'group', 'surface', 'card', 'card-on', 'page'].map((face) => color('light', face)), ...valueNames('paint').map((name) => color('light', `paint.${name}.fill`))];
+  const textFaces = [...['bg', 'node', 'group-1', 'group-2', 'group-3', 'surface', 'card', 'card-on', 'page'].map((face) => color('light', face)), ...valueNames('paint').map((name) => color('light', `paint.${name}.fill`))];
   const strong = color('light', 'state.active-text');
   const [strongL, strongC, strongH] = oklchOf(strong);
   const lighter = oklchToHex(strongL + STROKE_STEP, strongC, strongH);

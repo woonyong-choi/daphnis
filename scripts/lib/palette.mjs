@@ -22,31 +22,19 @@ const FLOW_DOT = { 'light-dot': '#4e5968', 'dark-dot': '#c3c8cf' };
 const RED_DOT = { 'light-dot': '#da2c41', 'dark-dot': '#ff6b77' };
 const PROPOSAL_TABLE = {
   blue: ROLE.blue, orange: ROLE.orange, red: { ...ROLE.red, ...RED_DOT },
-  amber: ROLE.orange, pink: ROLE.orange,
+  amber: { ...ROLE.orange, 'light-ink': '#bb4400' }, pink: ROLE.orange,
   green: { ...ROLE.green, ...FLOW_DOT }, teal: { ...ROLE.green, ...FLOW_DOT },
   navy: { ...ROLE.blue }, purple: { ...ROLE.blue, ...FLOW_DOT },
+  // 하늘: 그룹 강조 면. 파랑과 같은 색상각의 옅은 면이고 선과 글자는 파랑 단계다.
+  sky: { ...ROLE.blue, 'light-fill': '#e8f1fe', 'light-ink': '#2563b8', 'dark-fill': '#1c232d' },
   slate: { ...ROLE.gray, ...FLOW_DOT },
 };
-for (const name of ['navy', 'purple']) for (const k of ['light-heat-low', 'light-heat-high', 'light-icon', 'dark-heat-low', 'dark-heat-high', 'dark-icon']) delete PROPOSAL_TABLE[name][k];
-
-// 외곽선 단계: 면(fill)과 진한 선(stroke)을 OKLab에서 섞은 값. 면보다 진하고 진한 선보다는 옅다.
-const OUTLINE_MIX = 0.5;
-function outlineBetween(fill, stroke) {
-  const [fromL, fromC, fromHue] = oklchOf(fill);
-  const [toL, toC, toHue] = oklchOf(stroke);
-  const lab = (C, hue) => [C * Math.cos((hue * Math.PI) / 180), C * Math.sin((hue * Math.PI) / 180)];
-  const [fromA, fromB] = lab(fromC, fromHue);
-  const [toA, toB] = lab(toC, toHue);
-  const mix = (from, to) => from + (to - from) * OUTLINE_MIX;
-  const a = mix(fromA, toA);
-  const b = mix(fromB, toB);
-  return oklchToHex(mix(fromL, toL), Math.hypot(a, b), ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360);
-}
-for (const steps of Object.values(PROPOSAL_TABLE)) {
-  for (const theme of ['light', 'dark']) steps[`${theme}-outline`] = outlineBetween(steps[`${theme}-fill`], steps[`${theme}-stroke`]);
-}
+for (const name of ['navy', 'purple', 'sky']) for (const k of ['light-heat-low', 'light-heat-high', 'light-icon', 'dark-heat-low', 'dark-heat-high', 'dark-icon']) delete PROPOSAL_TABLE[name][k];
 
 const TEXT = 4.5;
+// 외곽선(대비 3 실험): 면(fill)과 진한 선(stroke)을 OKLab에서 반씩 섞은 값에서 시작해, 같은 색상과 채도로 밝기만 옮겨(라이트는 어둡게, 다크는 밝게) 그 면과 판, 도형 바탕 위 대비가 OUTLINE_FLOOR 이상이 되는 첫 값이다.
+const OUTLINE_MIX = 0.5;
+const OUTLINE_FLOOR = 3;
 const GRAPHIC = 3;
 const STEP = 0.002;
 const MAX_STEPS = 400;
@@ -199,6 +187,29 @@ function addDots(out, theme, { surfaces, fills, onActive, anchors, flowMin }) {
   return out;
 }
 
+// cost: time O(h·s), heap O(h), stack O(1)
+// vars: h = 색 수, s = 찾는 걸음 수
+// basis: estimate
+// 색마다 테마별 외곽선 단계(`<테마>-outline`)를 더한다. 면과 진한 선 사이 OKLab 값에서 시작해 밝기만 옮겨 면, 판(bg), 도형 바탕(node) 위 대비 OUTLINE_FLOOR를 맞춘다.
+function withOutlines(table, tokens) {
+  for (const steps of Object.values(table)) {
+    for (const theme of ['light', 'dark']) {
+      const faces = [steps[`${theme}-fill`], resolve(tokens[theme], 'color.bg'), resolve(tokens[theme], 'color.node')];
+      const [fromL, fromC, fromHue] = oklchOf(steps[`${theme}-fill`]);
+      const [toL, toC, toHue] = oklchOf(steps[`${theme}-stroke`]);
+      const lab = (C, hue) => [C * Math.cos((hue * Math.PI) / 180), C * Math.sin((hue * Math.PI) / 180)];
+      const [fromA, fromB] = lab(fromC, fromHue);
+      const [toA, toB] = lab(toC, toHue);
+      const mix = (from, to) => from + (to - from) * OUTLINE_MIX;
+      const a = mix(fromA, toA);
+      const b = mix(fromB, toB);
+      const hue = ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360;
+      steps[`${theme}-outline`] = search({ start: mix(fromL, toL), step: theme === 'light' ? -STEP : STEP, chroma: Math.hypot(a, b), hue }, (hex) => reaches(hex, faces, OUTLINE_FLOOR));
+    }
+  }
+  return table;
+}
+
 // cost: time O(t), heap O(t), stack O(d)
 // vars: t = 토큰 수, d = 묶음 깊이
 // basis: estimate
@@ -232,9 +243,9 @@ const SURFACES = ['bg', 'node', 'group', 'card', 'page', 'surface'];
  * @returns { 색이름: { 'light-fill', 'light-stroke', 'light-ink', 'dark-fill', 'dark-stroke', 'dark-ink' } }. blue는 heat-low, heat-high 단계가 더 있다
  */
 export function generatePalette(light, dark) {
-  if (PROPOSAL) return structuredClone(PROPOSAL_TABLE);
   const lightTable = flatten(light, [], new Map());
   const darkTable = new Map([...lightTable, ...flatten(dark, [], new Map())]);
+  if (PROPOSAL) return withOutlines(structuredClone(PROPOSAL_TABLE), { light: lightTable, dark: darkTable });
   const result = Object.fromEntries(Object.keys(ANCHORS).map((name) => [name, {}]));
   for (const [theme, table] of [['light', lightTable], ['dark', darkTable]]) {
     const faces = {

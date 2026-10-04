@@ -14,6 +14,8 @@ const SIZE = values.size;
 const RADIUS = values.radius;
 const EDGE_DASH = `${values.dash.line} ${values.dash.gap}`;
 const INNER_Y = SPACE['6'];
+// 그룹 면 단계는 깊이 0, 1, 2 이상 셋(color.group-1, group-2, group-3)이다. 깊이를 이 값으로 막는다.
+const MAX_GROUP_STEP = 2;
 // 점선 경계 그룹(border=dashed)의 점선
 const GROUP_DASH = `${values.dash.line} ${values.dash.gap}`;
 // 이름을 도형 안에서 따로 그리는 도형(테이블 머리, 격자 제목)
@@ -46,12 +48,14 @@ function drawGroup(g, j, { decorate, glyphs, scene }) {
   const head = groupHead(g);
   const left = g.x + g.titleDx;
   const decor = head.decor ? drawDecor(head.decor, { x: left, y: g.y + (SIZE.group.title - head.decor.h) / 2, iconData: g.iconData }, glyphs) : '';
-  const colors = `${g.stroke ? ` ps-${g.stroke}` : ''}${g.fill ?? g.stroke ? ` pf-${g.fill ?? g.stroke}` : ''}`;
-  const deep = depthOf(g, scene) % 2 === 1 ? ' deep' : '';
+  const paint = paintOf(g);
+  const colors = paint ? ` ps-${paint} pf-${paint}` : '';
+  const depth = Math.min(depthOf(g, scene), MAX_GROUP_STEP);
+  const deep = depth ? ` d${depth + 1}` : '';
   const dashed = g.border === 'dashed';
   return (
     `<g id="g-${j}" class="fl-group${g.iconData ? ' tabbed' : ''}" data-id="${escapeXml(g.id)}"><rect x="${r(g.x)}" y="${r(g.y)}" width="${r(g.w)}" height="${r(g.h)}" rx="${RADIUS['2xl']}" class="frame-box fl-stroke${deep}${dashed ? ' dashed' : ''}${colors} ${decorate('group', j)}"${dashed ? ` stroke-dasharray="${GROUP_DASH}"` : ''}/>` +
-    `${g.iconData ? drawGroupTab(g) : ''}<text x="${r(left + head.textDx)}" y="${r(centerBaseline(g.y + SIZE.group.title / 2, STYLE.group.size))}" class="frame">${renderRich(g.label)}</text>${decor}</g>`
+    `${g.iconData ? drawGroupTab(g) : ''}<text x="${r(left + head.textDx)}" y="${r(centerBaseline(g.y + SIZE.group.title / 2, STYLE.group.size))}" class="frame${paint ? ` gt-${paint}` : ''}">${renderRich(g.label)}</text>${decor}</g>`
   );
 }
 
@@ -76,7 +80,7 @@ function drawItem(it, i, paint) {
 // cost: time O(g), heap O(1), stack O(1)
 // vars: g = 그룹 수
 // basis: estimate
-// 그룹이 안긴 깊이. 바깥 그룹이 0이고 안으로 들어갈수록 1씩 늘며, 홀수 깊이는 더 진한 면으로 겹친다.
+// 그룹이 안긴 깊이. 바깥 그룹이 0이고 안으로 들어갈수록 1씩 늘며, 면은 깊이 0(group-1), 1(group-2), 2 이상(group-3) 셋 중 하나다.
 function depthOf(group, scene) {
   let depth = 0;
   for (let up = scene.groups.find((g) => g.id === group.parent); up; up = scene.groups.find((g) => g.id === up.parent)) depth += 1;

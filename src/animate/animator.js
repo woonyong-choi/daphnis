@@ -57,8 +57,9 @@ function decorateElement(kind, { id, i, extra, scene }, { segs, toggle, lit, lit
       const box = (kind === 'group' ? scene.groups : scene.items)?.[i];
       // 켜지면 굵은 테두리와 옅은 후광이다. 색을 고른 도형은 그 색의 진한 선, 아니면 파랑이다. 꺼진 그룹은 테두리가 없다(점선 경계만 선 색).
       const dashed = kind === 'group' ? box?.border === 'dashed' : box?.shape === 'external';
-      const paint = kind === 'group' ? box?.stroke : paintOf(box ?? {});
-      const off = kind === 'group' ? (box?.stroke || !dashed ? 'none' : c.line) : paint ? c.paint[paint].outline : c.outline;
+      const paint = paintOf(box ?? {});
+      const plain = kind === 'group' ? (dashed ? c.line : 'none') : c.outline;
+      const off = paint ? c.paint[paint].outline : plain;
       const on = paint ? c.paint[paint].stroke : c.state.active;
       return toggle(litNode(id, scene), `stroke: ${on}; stroke-width: ${tokens.border.strong}`, `stroke: ${off}; stroke-width: ${tokens.border.thin}`);
     }

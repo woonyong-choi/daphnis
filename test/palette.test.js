@@ -15,7 +15,7 @@ const TEXT = 4.5;
 const GRAPHIC = 3;
 const THEMES = ['light', 'dark'];
 const NAMES = valueNames('paint');
-const SURFACES = ['bg', 'node', 'group', 'card', 'card-on', 'page', 'surface'];
+const SURFACES = ['bg', 'node', 'group-1', 'group-2', 'group-3', 'card', 'card-on', 'page', 'surface'];
 const paint = (theme, name, stage) => themeColor(theme, `paint.${name}.${stage}`);
 const faces = (theme) => SURFACES.map((s) => themeColor(theme, s));
 const fills = (theme) => NAMES.map((n) => paint(theme, n, 'fill'));

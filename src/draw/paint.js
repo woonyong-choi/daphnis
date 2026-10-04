@@ -20,7 +20,7 @@ export const paintOf = (item) => item.fill ?? item.stroke;
 // basis: estimate
 /** 그림이 고른 색 이름 목록. { stroke, groupFill }은 도형 외곽선과 그룹 면에 쓴 이름이다. */
 function usedPaints(scene) {
-  return { stroke: [...new Set(scene.items.map(paintOf).filter(Boolean))], groupFill: [...new Set(scene.groups.map((g) => g.fill ?? g.stroke).filter(Boolean))] };
+  return { stroke: [...new Set(scene.items.map(paintOf).filter(Boolean))], groupFill: [...new Set(scene.groups.map(paintOf).filter(Boolean))] };
 }
 
 // cost: time O(c), heap O(out), stack O(1)
@@ -34,8 +34,12 @@ export function paintCss(scene) {
   if (!scene) return '';
   const { stroke, groupFill } = usedPaints(scene);
   const rules = stroke.map((name) => `.fl .fl-node .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-outline);\n}\n.fl .fl-node.on .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-stroke);\n}\n.fl .fl-halo.ph-${name} > * {\n  stroke: var(--color-paint-${name}-fill);\n}`);
-  for (const name of new Set(scene.groups.map((g) => g.stroke).filter(Boolean))) rules.push(`.fl .fl-group.on .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-stroke);\n}`);
-  for (const name of groupFill) rules.push(`.fl .frame-box.pf-${name} {\n  fill: var(--color-paint-${name}-fill);\n}`);
+  for (const name of groupFill) {
+    rules.push(`.fl .frame-box.pf-${name} {\n  fill: var(--color-paint-${name}-fill);\n}`);
+    rules.push(`.fl .fl-group .frame-box.ps-${name} {\n  stroke: var(--color-paint-${name}-outline);\n}`);
+    rules.push(`.fl .fl-group.on .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-stroke);\n}`);
+    rules.push(`.fl .frame.gt-${name} {\n  fill: var(--color-paint-${name}-ink);\n}`);
+  }
   return rules.length ? `\n${rules.join('\n')}\n` : '';
 }
 

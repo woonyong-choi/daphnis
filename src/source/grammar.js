@@ -79,7 +79,7 @@ export const VALUES = {
   role: { items: table({ main: V1, compare: V1 }) },
   paint: {
     hint: 'Colors are names, not hex, so the contrast rules hold. Blue marks the active state and orange marks compare, so they are not choices',
-    items: table({ red: V1, amber: V1, green: V1, teal: V1, navy: V1, purple: V1, pink: V1, gray: V1 }),
+    items: table({ red: V1, amber: V1, green: V1, teal: V1, navy: V1, purple: V1, pink: V1, gray: V1, sky: V1 }),
   },
   head: { default: 'end', items: table({ end: V1, both: V1, none: V1 }) },
   shape: { default: 'rect', items: table({ rect: V1, circle: V1, tile: V1 }) },

@@ -131,12 +131,16 @@
 }
 
 .fl .frame-box {
-  fill: var(--color-group);
+  fill: var(--color-group-1);
   stroke: none;
 }
 
-.fl .frame-box.deep {
-  fill: var(--color-group-deep);
+.fl .frame-box.d2 {
+  fill: var(--color-group-2);
+}
+
+.fl .frame-box.d3 {
+  fill: var(--color-group-3);
 }
 
 .fl .frame-box.dashed {

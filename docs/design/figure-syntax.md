@@ -156,7 +156,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 - `no=N`(1 이상 정수)은 선 번호다. 라벨 알약 왼쪽에 번호 원이 붙고(라벨이 없으면 번호 원만), 정지 SVG와 문서에서도 순서가 읽힌다. 재생 단계 번호와 독립이고 같은 번호를 여러 선에 써도 된다.
 - `badge="글"`(8자 이하)은 도형 윗줄과 그룹 제목 줄에 글자 알약을 단다. 흑백에서도 구성 요소의 종류가 글자로 남는다. 배지는 면과 테두리 색을 바꾸지 않는다. 범주를 색으로 나누려면 아래 도형 색을 쓴다. 원(`shape=circle`)은 배지와 아이콘이 오류다.
 - `shape=tile`(`box`만, `icon=` 필수)은 아이콘 카드다. 같은 흰 카드에 아이콘을 크게(`size.icon.tile`) 위에 놓고 이름을 아래에 두며, 최소 너비와 이름 양옆 간격이 작아(`size.node.tile-width`, `size.node.tile-pad`) 가로로 퍼진 구성도가 캔버스 폭 안에 든다.
-- 그룹 `border=dashed`는 경계 그룹의 점선 테두리다. 실선(기본)은 서브넷 같은 안쪽 구역, 점선은 VPC, 스케일링 그룹, 외부 묶음 같은 논리 경계에 쓴다. 그룹 아이콘은 틀 왼쪽 위 모서리에 딱 붙는 정사각 탭(`size.group.title`)이다. 탭 면은 `color.figure.icon`, 아이콘은 `color.node`이고, 아이콘이 있는 그룹의 틀도 같은 파랑이다. 그룹 면은 `fill`을 적지 않으면 칠하지 않는다.
+- 그룹 `border=dashed`는 경계 그룹의 점선 테두리다. 실선(기본)은 서브넷 같은 안쪽 구역, 점선은 VPC, 스케일링 그룹, 외부 묶음 같은 논리 경계에 쓴다. 그룹 아이콘은 틀 왼쪽 위 모서리에 딱 붙는 정사각 탭(`size.group.title`)이다. 탭 면은 `color.figure.icon`, 아이콘은 `color.node`이고, 아이콘이 있는 그룹의 틀도 같은 파랑이다. 그룹 면은 `fill`을 적지 않으면 중첩 깊이에 따른 회색(깊이 1, 2, 3 이상 세 단계)이고, 강조는 `fill=sky`나 `fill=amber`로 고른다. 강조 그룹은 같은 색 계열의 외곽선과 제목 글자를 쓰고, 안의 그룹은 다시 깊이 규칙의 회색이다.
 - `icon=이름`은 기본 세트의 이름이다. 범용 개념(`server`, `db`)과 기술 브랜드(`git`, `postgresql`)가 한 표에 있다. 등록한 세트는 `icon=세트:이름`이다. 아이콘은 단색 파랑(`color.figure.icon`)이고 브랜드 고유색은 쓰지 않는다. 이름이 없거나 파일이 없으면 오류이고, 아이콘 없이 배지로 같은 뜻을 낸다.
 - `count=N`(2 이상, `box`만)은 같은 역할 복제 개수다. 상자 뒤에 윤곽 두 겹이 겹쳐 보이고 윗줄에 `(N)` 알약이 붙는다. 복제는 이름으로 가리킬 수 없고 선은 상자 하나에 닿는다.
 - `badge`, `icon`, `count`는 흐름 그림에서만 쓴다.
@@ -164,7 +164,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 #### 도형 색
 
 - `fill=색`은 도형과 그룹의 면, `stroke=색`은 테두리, `show`의 `card=색`은 그 내용이 보일 때의 카드 바탕이다. 모두 생략할 수 있고 생략하면 면을 칠하지 않은 지금 그림과 같다(카드 기본 바탕은 `color.card`).
-- 색 이름은 문법 표의 `paint` 값 목록이 정한다: `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray`. hex와 따옴표 글은 오류다. 대비 규칙(글자 4.5, 그래픽 3)을 원본이 깨지 못하게 하기 위해서다. `blue`는 지금, `orange`는 비교를 뜻해 고를 수 없다. 값 없이 `fill=#ff0000`처럼 쓰면 `#`부터 주석이라는 안내가 붙는다.
+- 색 이름은 문법 표의 `paint` 값 목록이 정한다: `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray`, `sky`. hex와 따옴표 글은 오류다. 대비 규칙(글자 4.5, 그래픽 3)을 원본이 깨지 못하게 하기 위해서다. `blue`는 지금, `orange`는 비교를 뜻해 고를 수 없다. 값 없이 `fill=#ff0000`처럼 쓰면 `#`부터 주석이라는 안내가 붙는다.
 - `box`, `external`, `store`, `person`, `group`에 쓴다. `decision`, 상태, 테이블, 격자에는 없다. 사람과 원통도 같은 윤곽을 칠한다.
 - 색은 팔레트 단계다. 면은 옅은 단계 `fill`이라 이름과 부제 글자(`fg`, `muted`)가 그대로 4.5 이상이고, 테두리는 그림 면과 모든 색의 면 위에서 3 이상인 `stroke`다. 카드 바탕도 같은 `fill`이라 카드 줄 글자와 태그 띠가 4.5 이상이다. 한 내용의 줄 가운데 처음 `card=`를 쓴 줄이 그 내용의 바탕이다.
 - 밝힘은 색이 아니라 굵은 테두리(`border.strong`)와 후광으로 알린다. `stroke`를 고른 도형은 켜져도 그 색을 유지하고 후광도 그 색이다. 후광은 테두리 바깥으로 틈을 두고 두른 고리 한 겹이며 그 도형이 놓인 바탕(그룹 안이면 그 그룹 면) 위에서 3 이상이다. `stroke`를 고르지 않은 도형은 지금처럼 `state.active` 파랑 굵은 테두리이고 후광이 없다. 색 선택이 파랑(지금)을 쓰지 못하므로 켜진 도형과 같은 색인 테두리가 생기지 않는다.
@@ -301,12 +301,12 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `group.border` | `solid`, `dashed` | 판 1 |  |
 | `group.badge` | 글, 최대 8자 | 판 1 |  |
 | `group.icon` | 이름 또는 세트:이름 | 판 1 |  |
-| `group.fill` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray` | 판 1 |  |
-| `group.stroke` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray` | 판 1 |  |
+| `group.fill` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray`, `sky` | 판 1 |  |
+| `group.stroke` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray`, `sky` | 판 1 |  |
 | `node.badge` | 글, 최대 8자 | 판 1 |  |
 | `node.icon` | 이름 또는 세트:이름 | 판 1 |  |
-| `node.fill` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray` | 판 1 |  |
-| `node.stroke` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray` | 판 1 |  |
+| `node.fill` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray`, `sky` | 판 1 |  |
+| `node.stroke` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray`, `sky` | 판 1 |  |
 | `box.count` | 2 이상 정수 | 판 1 |  |
 | `edge.no` | 양의 정수 | 판 1 |  |
 | `step.for` | 시간 | 판 1 |  |
@@ -328,7 +328,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `box.shape` | `rect`, `circle`, `tile` | 판 1 |  |
 | `show.tag` | 글 | 판 1 |  |
 | `show.tone` | `purple`, `green`, `teal`, `gray`, `red` | 판 1 |  |
-| `show.card` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray` | 판 1 |  |
+| `show.card` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray`, `sky` | 판 1 |  |
 | `show.meta` | 글 | 판 1 |  |
 | `show.mark` | 글, 최대 8자 | 판 1 |  |
 | `show.mono` | 값 없음(낱말만) | 판 1 |  |
@@ -356,7 +356,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `chartType` | `chart 뒤` | `bar`, `dumbbell`, `box`, `scatter`, `line`, `difference`, `heatmap` | 없음 | 없음 |
 | `tone` | `hop.tone`, `track.tone`, `show.tone` | `purple`, `green`, `teal`, `gray`, `red` | 없음 | `blue` → `teal`, `orange` → `purple` |
 | `role` | `series.role` | `main`, `compare` | 선언 순서대로 main, compare(`dumbbell`은 compare, main) | 없음 |
-| `paint` | `group.fill`, `group.stroke`, `node.fill`, `node.stroke`, `show.card` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray` | 없음 | 없음 |
+| `paint` | `group.fill`, `group.stroke`, `node.fill`, `node.stroke`, `show.card` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray`, `sky` | 없음 | 없음 |
 | `head` | `edge.head` | `end`, `both`, `none` | `end` | 없음 |
 | `shape` | `box.shape` | `rect`, `circle`, `tile` | `rect` | 없음 |
 | `width` | `width 값` | `standard`, `wide` | `standard` | 없음 |

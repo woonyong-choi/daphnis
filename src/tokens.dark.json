@@ -137,6 +137,20 @@
           "$value": "{color.palette.pink.dark-ink}"
         }
       },
+      "sky": {
+        "fill": {
+          "$value": "{color.palette.sky.dark-fill}"
+        },
+        "stroke": {
+          "$value": "{color.palette.sky.dark-stroke}"
+        },
+        "outline": {
+          "$value": "{color.palette.sky.dark-outline}"
+        },
+        "ink": {
+          "$value": "{color.palette.sky.dark-ink}"
+        }
+      },
       "gray": {
         "fill": {
           "$value": "{color.palette.slate.dark-fill}"
@@ -214,7 +228,7 @@
       "$value": "{color.palette.neutral.800}"
     },
     "outline": {
-      "$value": "{color.palette.neutral.outline-b}"
+      "$value": "{color.palette.neutral.outline}"
     },
     "border": {
       "$value": "{color.palette.neutral.750}"
@@ -225,8 +239,8 @@
     "page": {
       "$value": "{color.palette.neutral.950}"
     },
-    "group": {
-      "$value": "{color.palette.neutral.sky-875}"
+    "group-1": {
+      "$value": "{color.palette.neutral.group-1}"
     },
     "plate-border": {
       "$value": "{color.palette.neutral.800}"
@@ -234,8 +248,11 @@
     "line": {
       "$value": "{color.palette.neutral.600}"
     },
-    "group-deep": {
-      "$value": "{color.palette.neutral.sky-800}"
+    "group-2": {
+      "$value": "{color.palette.neutral.group-2}"
+    },
+    "group-3": {
+      "$value": "{color.palette.neutral.group-3}"
     }
   }
 }
