@@ -1,6 +1,7 @@
 // 팔레트와 도형 색 선택(fill, stroke, card). 근거: docs/design/docs-integration.md 색 역할과 대비 기준, docs/design/figure-syntax.md 도형 색.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { tintOf } from '../src/draw/paint.js';
 import { buildFigure } from '../src/build.js';
 import { contrast, mixHex } from '../src/contrast.js';
 import { generatePalette } from '../scripts/lib/palette.mjs';
@@ -110,4 +111,12 @@ test('toHtml_painted_stroke_rules_beat_the_lit_blue_and_show_the_halo_when_on', 
   assert.ok(html.includes('.fl .fl-node.on .fl-stroke.ps-amber'));
   assert.ok(html.includes('.fl .fl-group.on .fl-halo'));
   assert.ok(html.includes('.fl .fl-group .frame-box.ps-teal'));
+});
+
+// 근거: 사용자 결정 "강조 그룹 안의 중첩 그룹은 같은 색상각 틴트를 깊이마다 한 단계씩 진하게, 강조 밖은 회색 위계 그대로". 강조 그룹이 틴트 1, 그 안은 2, 3에서 멈추고 밖의 그룹은 틴트가 없다
+test('tintOf_gives_the_emphasized_group_tint_1_its_nested_groups_steps_up_to_3_and_none_outside', async () => {
+  const source = 'flow right\ngroup a "A" fill=sky {\n  group b "B" {\n    group c "C" {\n      group d "D" {\n        box x "X"\n      }\n    }\n  }\n}\ngroup e "E" {\n  box y "Y"\n}\n';
+  const { scene } = await buildFigure(source);
+
+  assert.deepEqual(Object.fromEntries(scene.groups.map((g) => [g.id, tintOf(g, scene)?.level])), { a: 1, b: 2, c: 3, d: 3, e: undefined });
 });

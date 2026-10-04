@@ -124,10 +124,16 @@ export const tokens = freeze({
         "light-stroke": "var(--color-palette-purple-light-stroke)",
         "light-ink": "var(--color-palette-purple-light-ink)",
         "light-dot": "var(--color-palette-purple-light-dot)",
+        "light-tint-1": "var(--color-palette-purple-light-tint-1)",
+        "light-tint-2": "var(--color-palette-purple-light-tint-2)",
+        "light-tint-3": "var(--color-palette-purple-light-tint-3)",
         "dark-fill": "var(--color-palette-purple-dark-fill)",
         "dark-stroke": "var(--color-palette-purple-dark-stroke)",
         "dark-ink": "var(--color-palette-purple-dark-ink)",
         "dark-dot": "var(--color-palette-purple-dark-dot)",
+        "dark-tint-1": "var(--color-palette-purple-dark-tint-1)",
+        "dark-tint-2": "var(--color-palette-purple-dark-tint-2)",
+        "dark-tint-3": "var(--color-palette-purple-dark-tint-3)",
         "light-outline": "var(--color-palette-purple-light-outline)",
         "dark-outline": "var(--color-palette-purple-dark-outline)"
       },
@@ -167,9 +173,15 @@ export const tokens = freeze({
         "light-fill": "var(--color-palette-sky-light-fill)",
         "light-stroke": "var(--color-palette-sky-light-stroke)",
         "light-ink": "var(--color-palette-sky-light-ink)",
+        "light-tint-1": "var(--color-palette-sky-light-tint-1)",
+        "light-tint-2": "var(--color-palette-sky-light-tint-2)",
+        "light-tint-3": "var(--color-palette-sky-light-tint-3)",
         "dark-fill": "var(--color-palette-sky-dark-fill)",
         "dark-stroke": "var(--color-palette-sky-dark-stroke)",
         "dark-ink": "var(--color-palette-sky-dark-ink)",
+        "dark-tint-1": "var(--color-palette-sky-dark-tint-1)",
+        "dark-tint-2": "var(--color-palette-sky-dark-tint-2)",
+        "dark-tint-3": "var(--color-palette-sky-dark-tint-3)",
         "light-outline": "var(--color-palette-sky-light-outline)",
         "dark-outline": "var(--color-palette-sky-dark-outline)"
       }
@@ -234,7 +246,10 @@ export const tokens = freeze({
         "stroke": "var(--color-paint-purple-stroke)",
         "outline": "var(--color-paint-purple-outline)",
         "ink": "var(--color-paint-purple-ink)",
-        "dot": "var(--color-paint-purple-dot)"
+        "dot": "var(--color-paint-purple-dot)",
+        "group-1": "var(--color-paint-purple-group-1)",
+        "group-2": "var(--color-paint-purple-group-2)",
+        "group-3": "var(--color-paint-purple-group-3)"
       },
       "pink": {
         "fill": "var(--color-paint-pink-fill)",
@@ -246,7 +261,10 @@ export const tokens = freeze({
         "fill": "var(--color-paint-sky-fill)",
         "stroke": "var(--color-paint-sky-stroke)",
         "outline": "var(--color-paint-sky-outline)",
-        "ink": "var(--color-paint-sky-ink)"
+        "ink": "var(--color-paint-sky-ink)",
+        "group-1": "var(--color-paint-sky-group-1)",
+        "group-2": "var(--color-paint-sky-group-2)",
+        "group-3": "var(--color-paint-sky-group-3)"
       },
       "gray": {
         "fill": "var(--color-paint-gray-fill)",
@@ -630,24 +648,30 @@ export const values = freeze({
       },
       "purple": {
         "light-fill": "#f7f0ff",
-        "light-stroke": "#8d6baa",
-        "light-ink": "#8361a0",
-        "light-dot": "#8361a0",
+        "light-stroke": "#8c6aaa",
+        "light-ink": "#7f5d9b",
+        "light-dot": "#7f5d9b",
+        "light-tint-1": "#f1eaf9",
+        "light-tint-2": "#e6ddf0",
+        "light-tint-3": "#dcd1e8",
         "dark-fill": "#31233d",
         "dark-stroke": "#b693d6",
         "dark-ink": "#be9ade",
         "dark-dot": "#9c7abb",
-        "light-outline": "#9884ab",
+        "dark-tint-1": "#231d28",
+        "dark-tint-2": "#2e2635",
+        "dark-tint-3": "#393042",
+        "light-outline": "#9884ac",
         "dark-outline": "#977eae"
       },
       "pink": {
         "light-fill": "#f7f0ff",
-        "light-stroke": "#8d6baa",
-        "light-ink": "#8361a0",
+        "light-stroke": "#8c6aaa",
+        "light-ink": "#7f5d9b",
         "dark-fill": "#31233d",
         "dark-stroke": "#b693d6",
         "dark-ink": "#be9ade",
-        "light-outline": "#9884ab",
+        "light-outline": "#9884ac",
         "dark-outline": "#977eae"
       },
       "slate": {
@@ -676,9 +700,15 @@ export const values = freeze({
         "light-fill": "#e9f1fe",
         "light-stroke": "#125de6",
         "light-ink": "#125de6",
+        "light-tint-1": "#e5eefc",
+        "light-tint-2": "#d7e2f4",
+        "light-tint-3": "#cad7ed",
         "dark-fill": "#1d232e",
         "dark-stroke": "#70a3ff",
         "dark-ink": "#78a9ff",
+        "dark-tint-1": "#1a202b",
+        "dark-tint-2": "#222a38",
+        "dark-tint-3": "#2a3446",
         "light-outline": "#628ad3",
         "dark-outline": "#6c89bc"
       }
@@ -695,7 +725,7 @@ export const values = freeze({
     },
     "flow": {
       "brand": "#125de6",
-      "purple": "#8361a0",
+      "purple": "#7f5d9b",
       "green": "#008218",
       "gray": "#585858",
       "red": "#8b0002"
@@ -740,22 +770,28 @@ export const values = freeze({
       },
       "purple": {
         "fill": "#f7f0ff",
-        "stroke": "#8d6baa",
-        "outline": "#9884ab",
-        "ink": "#8361a0",
-        "dot": "#8361a0"
+        "stroke": "#8c6aaa",
+        "outline": "#9884ac",
+        "ink": "#7f5d9b",
+        "dot": "#7f5d9b",
+        "group-1": "#f1eaf9",
+        "group-2": "#e6ddf0",
+        "group-3": "#dcd1e8"
       },
       "pink": {
         "fill": "#f7f0ff",
-        "stroke": "#8d6baa",
-        "outline": "#9884ab",
-        "ink": "#8361a0"
+        "stroke": "#8c6aaa",
+        "outline": "#9884ac",
+        "ink": "#7f5d9b"
       },
       "sky": {
         "fill": "#e9f1fe",
         "stroke": "#125de6",
         "outline": "#628ad3",
-        "ink": "#125de6"
+        "ink": "#125de6",
+        "group-1": "#e5eefc",
+        "group-2": "#d7e2f4",
+        "group-3": "#cad7ed"
       },
       "gray": {
         "fill": "#e7e7e7",
@@ -794,7 +830,7 @@ export const values = freeze({
     "plate-border": "#dadada",
     "page": "#ffffff",
     "tag": {
-      "purple": "#8d6baa",
+      "purple": "#8c6aaa",
       "green": "#008c1a",
       "gray": "#5d5d5d",
       "red": "#ef0f0f",

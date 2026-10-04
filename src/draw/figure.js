@@ -6,7 +6,7 @@ import { centerBaseline, escapeXml, renderRich, roundCoord as r } from '../text.
 import { tokens, values } from '../tokens.js';
 import { cardGlyphs, createTones, drawCard } from './card.js';
 import { drawDecor, drawGroupTab } from './decor.js';
-import { drawHalo, paintOf } from './paint.js';
+import { drawHalo, paintOf, tintOf } from './paint.js';
 import { drawShape, outlineOf } from './shape.js';
 
 const SPACE = values.space;
@@ -49,7 +49,8 @@ function drawGroup(g, j, { decorate, glyphs, scene }) {
   const left = g.x + g.titleDx;
   const decor = head.decor ? drawDecor(head.decor, { x: left, y: g.y + (SIZE.group.title - head.decor.h) / 2, iconData: g.iconData }, glyphs) : '';
   const paint = paintOf(g);
-  const colors = paint ? ` ps-${paint}` : '';
+  const tint = tintOf(g, scene);
+  const colors = `${paint ? ` ps-${paint}` : ''}${tint ? ` tint-${tint.name}-${tint.level}` : ''}`;
   const depth = Math.min(depthOf(g, scene), MAX_GROUP_STEP);
   const deep = depth ? ` d${depth + 1}` : '';
   const dashed = g.border === 'dashed';

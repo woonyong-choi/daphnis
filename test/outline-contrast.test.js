@@ -64,3 +64,29 @@ test('group_emphasis_border_ink_reaches_contrast_3_on_every_gray_group_step_and_
     }
   }
 });
+
+// 근거: 사용자 결정 "강조 그룹은 면도 그 색의 옅은 틴트로 칠하고, 안의 그룹은 같은 색상각 틴트를 깊이마다 진하게(다크는 밝게). 도형 면은 그대로, 외곽선 대비 3, 제목 4.5, 테두리 3". 틴트 면 여섯(sky, purple 깊이 셋) 위에서 회색 외곽선은 3, 그룹 제목은 4.5 이상이다
+test('group_tint_faces_keep_the_gray_outline_at_3_and_the_group_title_at_4_5_in_both_themes', () => {
+  for (const theme of THEMES) {
+    for (const name of ['sky', 'purple']) {
+      for (const level of [1, 2, 3]) {
+        const face = themeColor(theme, `paint.${name}.group-${level}`);
+        const outline = contrast(themeColor(theme, 'outline'), face);
+        const title = contrast(themeColor(theme, 'group-title'), face);
+        assert.ok(outline >= OUTLINE_MIN, `${theme} outline on ${name} tint ${level}: ${outline.toFixed(2)}`);
+        assert.ok(title >= TITLE_MIN, `${theme} group-title on ${name} tint ${level}: ${title.toFixed(2)}`);
+      }
+    }
+  }
+});
+
+// 근거: 같은 결정의 강조 그룹 제목(그 색의 ink)은 자기 틴트 첫 단계 위에서 4.5, 테두리는 틴트 세 단계 위에서 3 이상이다
+test('group_emphasis_ink_reaches_4_5_on_its_tint_1_and_3_on_every_tint_step_in_both_themes', () => {
+  for (const theme of THEMES) {
+    for (const name of ['sky', 'purple']) {
+      const ink = themeColor(theme, `paint.${name}.ink`);
+      assert.ok(contrast(ink, themeColor(theme, `paint.${name}.group-1`)) >= TITLE_MIN, `${theme} ${name} title on tint 1`);
+      for (const level of [1, 2, 3]) assert.ok(contrast(ink, themeColor(theme, `paint.${name}.group-${level}`)) >= OUTLINE_MIN, `${theme} ${name} border on tint ${level}`);
+    }
+  }
+});

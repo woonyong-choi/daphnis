@@ -24,6 +24,8 @@ const DARK_MIN_L = 0.72;
 const DARK_MAX_C = 0.17;
 // 다크 흐름 점을 찾기 시작하는 밝기(이보다 어두운 값은 면 위 대비 3에 못 미친다)
 const DARK_DOT_START = 0.5;
+// 강조 그룹의 틴트 면(깊이 셋). 회색 그룹 면과 같은 밝기(L)에 강조 색의 색상각으로 채도만 얹어 위계가 같은 리듬으로 읽히게 한다.
+const TINT_CHROMA = [0.022, 0.028, 0.034];
 // 흐름 점을 옮기는 색(L, 라이트는 어둡게, 다크는 밝게). 빨강이 비교 주황과, 초록과 색각 이상 눈에서도 OKLab 거리 0.1 이상 벌어지게 한다.
 const DOT_SHIFT = { light: { red: 0.17 }, dark: { green: 0.14 } };
 // 다크 흐름 점의 색상각을 옮기는 색(도). 빨강을 마젠타 쪽으로 돌려 주황과 벌린다.
@@ -66,12 +68,12 @@ const reaches = (hex, faces, floor) => faces.every((face) => contrast(hex, face)
 // vars: s = 찾는 걸음 수
 // basis: estimate
 // 한 테마의 색 하나. fill은 옅은(라이트) 또는 어두운(다크) 면, stroke는 그래픽(면 위 대비 3), ink는 글자(대비 4.5, 켜진 글 상자 글자 onActive와도), dot은 흐름 점(ink와 같다).
-function colorSteps(anchor, theme, { surfaces, onActive, dotShift, hueShift }) {
+function colorSteps(anchor, theme, { surfaces, onActive, dotShift, hueShift, tints }) {
   const [L, C, hue] = oklchOf(anchor);
   const away = theme === 'light' ? -STEP : STEP;
   const fill = oklchToHex(FILL[theme].L, Math.min(FILL[theme].C, C), hue);
-  const stroke = search({ anchor, start: L, step: away, chroma: C, hue }, (hex) => reaches(hex, [...surfaces, fill], GRAPHIC));
-  const ink = search({ anchor: stroke, start: oklchOf(stroke)[0], step: away, chroma: C, hue }, (hex) => reaches(hex, [surfaces[0], surfaces[1], fill, onActive], TEXT));
+  const stroke = search({ anchor, start: L, step: away, chroma: C, hue }, (hex) => reaches(hex, [...surfaces, fill, ...tints], GRAPHIC));
+  const ink = search({ anchor: stroke, start: oklchOf(stroke)[0], step: away, chroma: C, hue }, (hex) => reaches(hex, [surfaces[0], surfaces[1], fill, onActive, ...tints.slice(0, 1)], TEXT));
   // 흐름 점: 라이트는 ink이고, 다크는 면 위 그래픽 3과 글 상자 글자 4.5를 넘는 가장 어두운 값이다(DOT_SHIFT로 옮기는 색은 그만큼 더 옮긴다).
   const found = theme === 'light' ? ink : search({ start: DARK_DOT_START, step: STEP, chroma: C, hue: hue + hueShift }, (hex) => reaches(hex, surfaces, GRAPHIC) && contrast(hex, onActive) >= TEXT);
   const dot = dotShift ? oklchToHex(oklchOf(found)[0] + (theme === 'light' ? -dotShift : dotShift), oklchOf(found)[1], hue) : found;
@@ -152,11 +154,14 @@ export function generatePalette(light, dark) {
   const table = {};
   for (const [theme, tokens] of [['light', lightTable], ['dark', darkTable]]) {
     const faces = { surfaces: SURFACES.map((name) => resolve(tokens, `color.${name}`)), onActive: resolve(tokens, 'color.state.on-active') };
-    const steps = Object.fromEntries(Object.entries(ANCHORS).map(([name, pair]) => [name, colorSteps(pair[theme], theme, { ...faces, dotShift: DOT_SHIFT[theme][name] ?? 0, hueShift: theme === 'dark' ? DOT_HUE_SHIFT[name] ?? 0 : 0 })]));
+    const grayL = ['group-1', 'group-2', 'group-3'].map((name) => oklchOf(resolve(tokens, `color.${name}`))[0]);
+    const tintsOf = (name) => (['blue', 'purple'].includes(name) ? grayL.map((L, i) => oklchToHex(L, TINT_CHROMA[i], oklchOf(ANCHORS[name][theme])[2])) : []);
+    const steps = Object.fromEntries(Object.entries(ANCHORS).map(([name, pair]) => [name, { ...colorSteps(pair[theme], theme, { ...faces, dotShift: DOT_SHIFT[theme][name] ?? 0, hueShift: theme === 'dark' ? DOT_HUE_SHIFT[name] ?? 0 : 0, tints: tintsOf(name) }), ...Object.fromEntries(tintsOf(name).map((hex, i) => [`tint-${i + 1}`, hex])) }]));
     const white = resolve(tokens, 'color.data.heat-ink-on');
     steps.blue = { ...steps.blue, ...blueExtras({ steps: steps.blue, anchor: ANCHORS.blue[theme], theme }, { bg: faces.surfaces[0], white }) };
     const [, blueC, blueHue] = oklchOf(ANCHORS.blue[theme]);
-    steps.sky = { fill: oklchToHex(SKY_FILL[theme].L, Math.min(SKY_FILL[theme].C, blueC), blueHue), stroke: steps.blue.stroke, ink: steps.blue.ink };
+    steps.sky = { fill: oklchToHex(SKY_FILL[theme].L, Math.min(SKY_FILL[theme].C, blueC), blueHue), stroke: steps.blue.stroke, ink: steps.blue.ink, 'tint-1': steps.blue['tint-1'], 'tint-2': steps.blue['tint-2'], 'tint-3': steps.blue['tint-3'] };
+    for (const key of ['tint-1', 'tint-2', 'tint-3']) delete steps.blue[key];
     for (const [name, step] of Object.entries(steps)) for (const [stage, hex] of Object.entries(step)) (table[name] ??= {})[`${theme}-${stage}`] = hex;
   }
   // 파랑에서 갈라진 이름: navy는 파랑 그대로(히트맵과 아이콘 단계 없이), sky는 그룹 강조용 옅은 면. amber와 pink는 주황과 보라, teal은 초록을 쓰고, 회색(slate)은 무채색이다.

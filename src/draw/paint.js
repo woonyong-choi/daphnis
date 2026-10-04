@@ -12,6 +12,25 @@ export const fillOf = (name) => tokens.color.paint[name].fill;
 /** 색 이름의 테두리 색 토큰 참조 */
 export const strokeOf = (name) => tokens.color.paint[name].stroke;
 
+// 그룹 강조로 면까지 틴트로 칠하는 색 이름과, 강조 그룹 안에서 깊이마다 한 단계씩 진해지는 틴트 단계 수 한계
+const TINTED = new Set(['sky', 'purple']);
+const MAX_TINT_STEP = 2;
+
+// cost: time O(d·g), heap O(1), stack O(1)
+// vars: d = 그룹 중첩 깊이, g = 그룹 수
+// basis: estimate
+/**
+ * 그룹 면을 칠하는 강조 틴트. 그룹 자신이나 가장 가까운 바깥 그룹이 sky나 purple을 골랐으면 { name, level }이다. 강조 그룹이 level 1이고 그 안으로 깊이마다 1씩 늘어 3에서 멈춘다. 강조 밖의 그룹은 undefined라 깊이 규칙의 회색을 쓴다.
+ */
+export function tintOf(group, scene) {
+  let steps = 0;
+  for (let up = group; up; up = scene.groups.find((g) => g.id === up.parent)) {
+    if (TINTED.has(paintOf(up))) return { name: paintOf(up), level: Math.min(steps, MAX_TINT_STEP) + 1 };
+    steps += 1;
+  }
+  return undefined;
+}
+
 /** 도형이 칠한 색 이름. 면을 먼저 보고, 없으면 테두리 색 이름이다. 외곽선은 이 색의 outline 단계다. */
 export const paintOf = (item) => item.fill ?? item.stroke;
 
@@ -20,7 +39,7 @@ export const paintOf = (item) => item.fill ?? item.stroke;
 // basis: estimate
 /** 그림이 고른 색 이름 목록. { stroke, groupFill }은 도형 외곽선과 그룹 면에 쓴 이름이다. */
 function usedPaints(scene) {
-  return { stroke: [...new Set(scene.items.map(paintOf).filter(Boolean))], groupFill: [...new Set(scene.groups.map(paintOf).filter(Boolean))] };
+  return { stroke: [...new Set(scene.items.map(paintOf).filter(Boolean))], groupFill: [...new Set(scene.groups.map(paintOf).filter(Boolean))], tints: [...new Set(scene.groups.map((g) => tintOf(g, scene)).filter(Boolean).map(({ name, level }) => `${name}-${level}`))] };
 }
 
 // cost: time O(c), heap O(out), stack O(1)
@@ -28,17 +47,18 @@ function usedPaints(scene) {
 // basis: estimate
 /**
  * 고른 색의 CSS. 외곽선 색 클래스(`ps-이름`)는 평소 그 색의 outline 단계이고, 켜지면 같은 색의 진한 선(stroke) 단계로 굵어진다. 후광(`fl-halo`, 클래스 `ph-이름`)도 그 색의 옅은 면(fill) 단계다. 밝힘은 색을 바꾸지 않고 굵기와 후광만 더한다.
- * 강조 그룹(fill=이나 stroke=로 색을 고른 그룹)은 면을 칠하지 않고(면은 깊이 규칙의 회색 하나) 그 색의 진한 단계(ink, 회색 면 셋 위 대비 3 이상) 1.5px 테두리와 같은 색 제목 글자만 쓴다. 쓴 색이 없으면 빈 글이다.
+ * 강조 그룹(fill=이나 stroke=로 색을 고른 그룹)은 그 색의 진한 단계(ink, 면 위 대비 3 이상) 1.5px 테두리와 같은 색 제목 글자를 쓴다. sky와 purple 강조는 면도 그 색의 옅은 틴트(`tint-이름-단계`)로 칠하고, 그 안의 그룹은 같은 색상각 틴트를 깊이마다 한 단계씩 진하게(다크는 밝게) 칠한다. 그 밖의 색은 면이 깊이 규칙의 회색이다. 쓴 색이 없으면 빈 글이다.
  */
 export function paintCss(scene) {
   if (!scene) return '';
-  const { stroke, groupFill } = usedPaints(scene);
+  const { stroke, groupFill, tints } = usedPaints(scene);
   const rules = stroke.map((name) => `.fl .fl-node .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-outline);\n}\n.fl .fl-node.on .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-stroke);\n}\n.fl .fl-halo.ph-${name} > * {\n  stroke: var(--color-paint-${name}-fill);\n}`);
   for (const name of groupFill) {
     rules.push(`.fl .fl-group .frame-box.ps-${name} {\n  stroke: var(--color-paint-${name}-ink);\n  stroke-width: var(--border-tag);\n}`);
     rules.push(`.fl .fl-group.on .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-ink);\n  stroke-width: var(--border-strong);\n}`);
     rules.push(`.fl .frame.gt-${name} {\n  fill: var(--color-paint-${name}-ink);\n}`);
   }
+  for (const key of tints) rules.push(`.fl .frame-box.tint-${key} {\n  fill: var(--color-paint-${key.split('-')[0]}-group-${key.split('-')[1]});\n}`);
   return rules.length ? `\n${rules.join('\n')}\n` : '';
 }
 

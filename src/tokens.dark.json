@@ -121,6 +121,15 @@
         },
         "dot": {
           "$value": "{color.palette.purple.dark-dot}"
+        },
+        "group-1": {
+          "$value": "{color.palette.purple.dark-tint-1}"
+        },
+        "group-2": {
+          "$value": "{color.palette.purple.dark-tint-2}"
+        },
+        "group-3": {
+          "$value": "{color.palette.purple.dark-tint-3}"
         }
       },
       "pink": {
@@ -149,6 +158,15 @@
         },
         "ink": {
           "$value": "{color.palette.sky.dark-ink}"
+        },
+        "group-1": {
+          "$value": "{color.palette.sky.dark-tint-1}"
+        },
+        "group-2": {
+          "$value": "{color.palette.sky.dark-tint-2}"
+        },
+        "group-3": {
+          "$value": "{color.palette.sky.dark-tint-3}"
         }
       },
       "gray": {
