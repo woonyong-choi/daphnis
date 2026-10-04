@@ -152,7 +152,7 @@ test('md_out_dir_writes_svgs_there_and_links_them_relative_to_the_document', () 
 });
 
 // 근거: 요구사항 "dap 블록만 대상이다". 다른 울타리 안의 dap 줄과 목록 안 들여쓴 블록
-test('md_ignores_muto_inside_other_fences_and_renders_an_indented_block_in_a_list', () => {
+test('md_ignores_dap_inside_other_fences_and_renders_an_indented_block_in_a_list', () => {
   withFolder((folder) => {
     const nested = '````text\n```dap\nflow right\nbox a "A"\n```\n````\n';
     const listed = '- item\n\n  ```dap\n  flow right\n  box a "A"\n  ```\n';
