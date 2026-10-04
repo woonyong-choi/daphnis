@@ -1,7 +1,8 @@
 // md 명령: 문서 안 ```dap 블록의 SVG와 이미지 줄(docs/design/markdown.md). 멱등, 이름 안정, 오류 시 미기록, --check 종료 코드는 그 문서의 요구사항 표다.
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, symlinkSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, symlinkSync, writeFileSync } from 'node:fs';
+import { hostname } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import { runCli as run, withFolder } from './helpers.js';
@@ -353,19 +354,21 @@ test('md_refuses_to_overwrite_an_existing_svg_without_a_mark_and_writes_no_file_
 // 근거: 이슈 #102 삭제 재현 "x--y/readme.md와 x%2D-y/readme.md를 차례로 반영하면 두 번째가 첫 문서의 그림을 지운다"
 test('md_documents_at_x_dash_dash_y_and_x_percent_2d_dash_y_do_not_remove_each_others_svg', () => {
   withFolder((folder) => {
-    for (const [dir, name] of [['x--y', 'first'], ['x%2D-y', 'second']]) {
-      mkdirSync(join(folder, dir), { recursive: true });
-      put(folder, `${dir}/readme.md`, doc(block(`name=${name}`, FLOW)));
+    for (const [i, [left, right]] of [['x--y', 'x%2D-y'], ['a--', 'a%2D-']].entries()) {
+      for (const [dir, name] of [[left, `first${i}`], [right, `second${i}`]]) {
+        mkdirSync(join(folder, dir), { recursive: true });
+        put(folder, `${dir}/readme.md`, doc(block(`name=${name}`, FLOW)));
+      }
+
+      const first = run(['md', `${left}/readme.md`, '--out-dir', 'out'], folder);
+      const second = run(['md', `${right}/readme.md`, '--out-dir', 'out'], folder);
+
+      assert.equal(first.status, 0, first.stderr);
+      assert.equal(second.status, 0, second.stderr);
+      assert.doesNotMatch(second.stdout, /removed/);
+      assert.ok(existsSync(join(folder, `out/readme-first${i}.svg`)) && existsSync(join(folder, `out/readme-second${i}.svg`)));
+      assert.equal(run(['md', `${left}/readme.md`, `${right}/readme.md`, '--out-dir', 'out', '--check'], folder).status, 0);
     }
-
-    const first = run(['md', 'x--y/readme.md', '--out-dir', 'out'], folder);
-    const second = run(['md', 'x%2D-y/readme.md', '--out-dir', 'out'], folder);
-
-    assert.equal(first.status, 0, first.stderr);
-    assert.equal(second.status, 0, second.stderr);
-    assert.doesNotMatch(second.stdout, /removed/);
-    assert.ok(existsSync(join(folder, 'out/readme-first.svg')) && existsSync(join(folder, 'out/readme-second.svg')));
-    assert.equal(run(['md', 'x--y/readme.md', 'x%2D-y/readme.md', '--out-dir', 'out', '--check'], folder).status, 0);
   });
 });
 
@@ -373,7 +376,7 @@ test('md_documents_at_x_dash_dash_y_and_x_percent_2d_dash_y_do_not_remove_each_o
 test('md_marks_of_paths_mixing_percent_double_dash_hangul_and_relative_segments_differ_and_stay_valid_xml_comments', () => {
   withFolder((folder) => {
     mkdirSync(join(folder, 'a'));
-    const dirs = ['x--y', 'x%2D-y', 'x%252D-y', 'x---y', '한글--문서', '100%', 'plain', 'a/../b-'];
+    const dirs = ['x--y', 'x%2D-y', 'x%252D-y', 'x---y', '한글--문서', '100%', 'plain', 'a/../b-', 'a--', 'a%2D-'];
     for (const [i, dir] of dirs.entries()) {
       mkdirSync(join(folder, dir), { recursive: true });
       put(folder, `${dir}/readme.md`, doc(block(`name=n${i}`, FLOW)));
@@ -527,60 +530,118 @@ test('md_treats_a_document_and_an_out_dir_opened_through_symlinks_as_the_same_ow
   });
 });
 
-// 이 시험 파일이 쥐는 잠금: 별도 프로세스가 출력 폴더 잠금을 잡고 입력이 닫힐 때까지 놓지 않는다
-const HOLDER = "import { acquireLocks } from '" + new URL('../src/md-lock.js', import.meta.url).href + "'; const l = acquireLocks([process.argv[1]]); process.stdout.write(l.busy ? 'busy\\n' : 'held\\n'); process.stdin.resume(); process.stdin.on('end', () => { l.release?.(); });";
-const hold = (folder, dir) => new Promise((resolve, reject) => {
-  const child = spawn(process.execPath, ['--input-type=module', '-e', HOLDER, join(folder, dir)], { stdio: ['pipe', 'pipe', 'inherit'] });
-  child.on('error', reject);
-  child.stdout.once('data', (data) => resolve({ child, line: String(data).trim() }));
-});
-const release = (child) => new Promise((resolve) => {
-  child.on('exit', resolve);
-  child.stdin.end();
-});
+// 마크다운 쓰기가 일어나는 구간을 고정하는 훅. 첫 rename 직전에 준비 표시 파일을 만들고 해제 파일이 생길 때까지 멈춘다
+const PAUSE = new URL('./fixtures/pause-first-rename.mjs', import.meta.url).pathname;
+const CLI = new URL('../src/cli.js', import.meta.url).pathname;
+const exists = (path) => existsSync(path);
+// 조건이 참이 될 때까지 기다린다(최대 60초). 고정 시간 sleep이 아니라 조건을 확인하며 돈다
+const until = async (condition, what) => {
+  for (const start = Date.now(); !condition() && Date.now() - start < 60000;) await new Promise((resolve) => { setTimeout(resolve, 10); });
+  assert.ok(condition(), what);
+};
+const startPaused = (args, folder) => {
+  const child = spawn(process.execPath, ['--import', PAUSE, CLI, ...args], { cwd: folder, env: { ...process.env, DAPHNIS_TEST_READY: join(folder, 'ready'), DAPHNIS_TEST_RELEASE: join(folder, 'release') }, stdio: ['ignore', 'pipe', 'pipe'] });
+  const done = new Promise((resolve) => {
+    let stdout = '';
+    let stderr = '';
+    child.stdout.on('data', (data) => { stdout += data; });
+    child.stderr.on('data', (data) => { stderr += data; });
+    child.on('exit', (status) => resolve({ status, stdout, stderr }));
+  });
+  return { child, done };
+};
 
-// 근거: 이슈 #102 "같은 출력 폴더에 두 프로세스가 동시에 쓰면 하나만 쓰고 다른 하나는 파일을 바꾸기 전에 오류로 끝난다". 잠금은 수정 전 코드에 없는 기능이라 잠금을 잡는 프로세스를 띄우는 부분은 수정 전에 시험할 수 없다
-test('md_fails_before_changing_any_file_while_another_process_holds_the_out_dir_lock_and_works_after_it_lets_go', () => withFolder(async (folder) => {
-  put(folder, 'doc.md', doc(block('name=one', FLOW)));
-  mkdirSync(join(folder, 'out'));
-  const { child, line } = await hold(folder, 'out');
-  assert.equal(line, 'held');
+// 근거: 이슈 #102 "같은 출력 폴더에 두 프로세스가 동시에 쓰면 하나만 쓰고 다른 하나는 파일을 바꾸기 전에 오류로 끝난다". 공개 명령 두 개를 실제로 띄우고, 첫 프로세스를 첫 rename 직전에 훅으로 멈춘 채 두 번째를 돌린다
+test('md_second_process_on_the_same_out_dir_fails_before_changing_files_while_the_first_is_writing', () => withFolder(async (folder) => {
+  twinDocs(folder, ['one', 'one']);
+  mkdirSync(join(folder, 'c'));
+  put(folder, 'c/readme.md', doc(block('name=other', FLOW)));
+  assert.equal(run(['md', 'c/readme.md', '--out-dir', 'out'], folder).status, 0);
+  const other = snapshot(folder, 'out');
+  const second = read(folder, 'b/readme.md');
+  const first = startPaused(['md', 'a/readme.md', '--out-dir', 'out'], folder);
+  await until(() => exists(join(folder, 'ready')), '첫 프로세스가 쓰기 직전에 멈춘다');
 
-  const blocked = run(['md', 'doc.md', '--out-dir', 'out'], folder);
-  const check = run(['md', 'doc.md', '--out-dir', 'out', '--check'], folder);
-  const during = snapshot(folder);
-  await release(child);
-  const after = run(['md', 'doc.md', '--out-dir', 'out'], folder);
+  const blocked = run(['md', 'b/readme.md', '--out-dir', 'out'], folder);
+  const during = snapshot(folder, 'out');
+  writeFileSync(join(folder, 'release'), '');
+  const result = await first.done;
 
-  assert.equal(blocked.status, 1);
-  assert.ok(blocked.stderr.includes(`.daphnis-md.lock: is held by daphnis md (pid ${child.pid}) that is writing to this folder`), blocked.stderr);
-  assert.equal(check.status, 1, '--check는 잠그지 않아 갱신 필요로 끝난다');
-  assert.deepEqual(Object.keys(during).sort(), ['doc.md', 'out/.daphnis-md.lock']);
-  assert.equal(during['doc.md'], Buffer.from(doc(block('name=one', FLOW))).toString('hex'), '막힌 실행은 문서를 바꾸지 않는다');
-  assert.equal(after.status, 0, after.stderr);
+  assert.equal(blocked.status, 1, blocked.stdout + blocked.stderr);
+  assert.match(blocked.stderr, /\.daphnis-md\.lock: another daphnis md is writing to this folder \(pid \d+ on host /);
+  assert.equal(read(folder, 'b/readme.md'), second, '막힌 실행은 문서를 바꾸지 않는다');
+  assert.ok(!('out/readme-one.svg' in during), '막힌 실행이 끝난 시점에 첫 프로세스의 SVG는 아직 놓이기 전이다');
+  for (const [name, hex] of Object.entries(other)) assert.equal(during[name], hex, `${name}: 다른 문서의 출력은 그대로다`);
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(read(folder, 'out/readme-one.svg'), /<!-- daphnis md v2 \.\.\/a\/readme\.md -->/);
+  assert.match(read(folder, 'a/readme.md'), /\(\.\.\/out\/readme-one\.svg\)/);
+  assert.equal(read(folder, 'b/readme.md'), second);
+  for (const [name, hex] of Object.entries(other)) assert.equal(snapshot(folder, 'out')[name], hex, `${name}: 끝난 뒤에도 그대로다`);
   assert.ok(!existsSync(join(folder, 'out/.daphnis-md.lock')), '끝나면 잠금을 푼다');
 }));
 
-// 근거: 이슈 #102 "잠금 주인 pid가 살아 있지 않으면 낡은 잠금으로 보고 정리한 뒤 다시 잡는다". 끝난 자기 자식 프로세스의 번호를 쓴다
-test('md_clears_a_stale_lock_whose_owner_process_is_gone_and_releases_the_lock_after_a_failed_run', () => withFolder(async (folder) => {
+// 잠금 파일을 손으로 만든다. 공개 명령이 이 잠금을 어떻게 다루는지 본다
+const lockText = (over = {}) => `${JSON.stringify({ pid: process.pid, host: hostname(), created: '2026-01-01T00:00:00.000Z', nonce: 'n1', ...over })}\n`;
+const LOCK = 'out/.daphnis-md.lock';
+const lockSetup = (folder, text) => {
   put(folder, 'doc.md', doc(block('name=one', FLOW)));
   mkdirSync(join(folder, 'out'));
-  const { child } = await hold(folder, 'out');
-  const gone = child.pid;
-  await release(child);
-  put(folder, 'out/.daphnis-md.lock', `${gone}\n`);
+  put(folder, LOCK, text);
+  return { markdown: read(folder, 'doc.md'), lock: text };
+};
+const deadPid = () => new Promise((resolve) => {
+  const child = spawn(process.execPath, ['-e', '']);
+  child.on('exit', () => resolve(child.pid));
+});
 
-  const result = run(['md', 'doc.md', '--out-dir', 'out'], folder);
+// 근거: 이슈 #102 "EPERM, 다른 호스트, 읽을 수 없거나 형식이 틀린 잠금, pid가 살아 있는 경우는 자동 삭제하지 않고 진단으로 끝낸다"
+test('md_does_not_clear_a_lock_that_is_alive_foreign_unreadable_or_unverifiable_and_names_the_file_and_owner', () => withFolder(async (folder) => {
+  const cases = [
+    ['살아 있는 주인', lockText(), /another daphnis md is writing to this folder \(pid \d+ on host .*, created 2026-01-01T00:00:00\.000Z\)\. If no daphnis md is running, delete this file by hand/],
+    ['다른 호스트', lockText({ host: 'another-host.invalid', pid: await deadPid() }), /belongs to another host, so it is not cleared automatically \(pid \d+ on host another-host\.invalid/],
+    ['형식이 틀림', 'not json\n', /cannot be read or has an unknown format \(owner unknown\)/],
+    ['필드 없음', '{"pid":1}\n', /cannot be read or has an unknown format/],
+  ];
+  let eperm = false;
+  try {
+    process.kill(1, 0);
+  } catch (error) {
+    eperm = error.code === 'EPERM';
+  }
+  if (eperm) cases.push(['권한 오류(pid 1)', lockText({ pid: 1 }), /cannot be checked \(permission denied\)/]);
+  for (const [name, text, message] of cases) {
+    const { markdown } = lockSetup(folder, text);
 
-  assert.equal(result.status, 0, result.stderr);
-  assert.ok(!existsSync(join(folder, 'out/.daphnis-md.lock')));
+    const result = run(['md', 'doc.md', '--out-dir', 'out'], folder);
 
-  put(folder, 'out/doc-one.svg', '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n');
-  const conflict = run(['md', 'doc.md', '--out-dir', 'out', '--check'], folder);
-  assert.equal(conflict.status, 1);
+    assert.equal(result.status, 1, name);
+    assert.match(result.stderr, message, name);
+    assert.ok(result.stderr.includes('out/.daphnis-md.lock'), name);
+    assert.equal(read(folder, LOCK), text, `${name}: 잠금 파일은 그대로다`);
+    assert.equal(read(folder, 'doc.md'), markdown, name);
+    assert.ok(!existsSync(join(folder, 'out/doc-one.svg')), name);
+    rmSync(join(folder, LOCK));
+    rmSync(join(folder, 'out'), { recursive: true });
+  }
+}));
+
+// 근거: 이슈 #102 "같은 호스트이고 pid 조회가 ESRCH일 때만 자동 정리한다". 끝난 자기 자식 프로세스의 번호를 쓴다
+test('md_clears_a_lock_of_a_dead_process_on_the_same_host_and_a_normal_or_failed_run_leaves_no_lock', () => withFolder(async (folder) => {
+  lockSetup(folder, lockText({ pid: await deadPid() }));
+
+  const cleared = run(['md', 'doc.md', '--out-dir', 'out'], folder);
+
+  assert.equal(cleared.status, 0, cleared.stderr);
+  assert.ok(!existsSync(join(folder, LOCK)), '성공한 실행 뒤 잠금이 없다');
+  const leftovers = readdirSync(join(folder, 'out')).filter((name) => name.includes('lock'));
+  assert.deepEqual(leftovers, [], '치운 낡은 잠금 파일도 남지 않는다');
+
   put(folder, 'doc.md', doc(block('name=one', FLOW), block('name=one', FLOW)));
   const failed = run(['md', 'doc.md', '--out-dir', 'out'], folder);
 
   assert.equal(failed.status, 1);
-  assert.ok(!existsSync(join(folder, 'out/.daphnis-md.lock')), '실패한 실행도 잠금을 푼다');
+  assert.ok(!existsSync(join(folder, LOCK)), '오류로 끝난 실행 뒤에도 잠금이 없다');
+  assert.equal(run(['md', 'doc.md', '--out-dir', 'out', '--check'], folder).status, 1);
+  put(folder, 'doc.md', doc(block('name=one', FLOW)));
+  assert.equal(run(['md', 'doc.md', '--out-dir', 'out'], folder).status, 0, '다시 돌리면 된다');
 }));

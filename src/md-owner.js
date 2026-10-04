@@ -27,6 +27,9 @@ export function realPath(path) {
 // 경로를 XML 주석 안에 넣을 수 있고 되돌릴 수 있게 쓴다. `%`를 먼저 `%25`로, 줄바꿈을 `%0A`, `%0D`로, 그다음 `--`가 될 `-`의 앞쪽을 `%2D`로 바꾼다. `%`, 줄바꿈, 연속 `-`가 없는 경로는 글자가 그대로다.
 const encode = (raw) => raw.replace(/%/g, '%25').replace(/\n/g, '%0A').replace(/\r/g, '%0D').replace(/-(?=-)/g, '%2D');
 
+// cost: time O(d + n), heap O(n), stack O(1), io d
+// vars: d = 경로 깊이, n = 경로 글자 수
+// basis: estimate
 /**
  * 문서의 소유 이름 { raw, text }. SVG 폴더에서 문서까지의 상대 경로(구분자 `/`)이고 둘 다 실제 경로로 푼 뒤 잰다.
  * 같은 SVG 폴더를 쓰는 문서끼리는 경로가 늘 달라 소유가 갈리고, 실행 위치와 링크 별칭에 영향받지 않는다.
@@ -58,6 +61,9 @@ function markOf(path) {
   return undefined;
 }
 
+// cost: time O(n), heap O(n), stack O(1), io 1
+// vars: n = 파일 글자 수
+// basis: estimate
 /**
  * 이미 있는 SVG가 이 문서 것인지 판정한다. kind는 'mine', 'other'(다른 문서나 소유를 정할 수 없는 옛 표시, text를 함께 돌려줌), 'unmarked'(표시 없는 파일)다.
  * 판 번호가 있는 표시는 표시 글이 이 문서의 표시 글과 같을 때만 이 문서 것이다.

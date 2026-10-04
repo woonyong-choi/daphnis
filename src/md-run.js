@@ -95,7 +95,7 @@ async function svgText({ result, svg }, { args, owner }) {
 // vars: n = 폴더 안 파일 수
 // basis: estimate
 // 이 문서가 예전에 만들었지만 지금은 안 쓰는 SVG. `{문서}-*.svg` 중 ownership이 이 문서 것으로 판정한 파일만이다. 표시는 SVG 폴더 기준 문서 경로라 다른 폴더의 같은 이름 문서가 만든 파일은 소유로 보지 않는다.
-function staleSvgs(file, outDir, owner, keep) {
+function staleSvgs({ file, outDir, owner }, keep) {
   const prefix = `${basename(file, extname(file))}-`;
   if (!existsSync(outDir)) return [];
   return readdirSync(outDir)
@@ -135,7 +135,7 @@ async function planDocument(file, args, claimed) {
   for (const item of built) files.push({ path: item.svg, text: await svgText(item, { args, owner }) });
   // 문서는 SVG 뒤에 쓴다. 문서가 가리키는 SVG가 먼저 놓여 있어야 중간에 멈춰도 깨진 링크가 없다.
   files.push({ path: file, text: applyImages(lines, found, images).join(eol), isDocument: true });
-  return { files, stale: staleSvgs(file, outDir, owner, new Set(built.map((item) => item.svg))) };
+  return { files, stale: staleSvgs({ file, outDir, owner }, new Set(built.map((item) => item.svg))) };
 }
 
 // cost: time O(f), heap O(f), stack O(1), io f
@@ -194,8 +194,7 @@ export async function runMd(args, io = FILE_IO) {
   // --check는 아무것도 쓰지 않으므로 잠그지 않는다. 쓰는 실행은 검사부터 쓰기까지 출력 폴더를 잠가 두 프로세스의 경쟁을 막는다.
   const locks = args.flags.has('check') ? { release() {} } : acquireLocks(args.inputs.map((input) => args['out-dir'] ?? dirname(input)));
   if (locks.busy) {
-    const owner = locks.busy.pid === undefined ? 'another daphnis md' : `daphnis md (pid ${locks.busy.pid})`;
-    report(locks.busy.path, [problem(`is held by ${owner} that is writing to this folder. Run again after it finishes`, 'md-locked')], json);
+    report(locks.busy.path, [problem(locks.busy.message, 'md-locked')], json);
     return 1;
   }
   try {
