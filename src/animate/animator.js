@@ -67,7 +67,9 @@ function decorateElement(kind, { id, i, extra, scene }, { segs, toggle, lit, lit
     case 'group-halo':
       return toggle(litNode(id, scene), 'opacity: 1', 'opacity: 0');
     case 'cell':
-      return toggle(segs.map((s) => s.partsOn.includes(extra)), `fill: ${c['card-on']}; stroke: ${c.state.active}; stroke-width: ${tokens.border.edge}`, `fill: ${c.node}; stroke: ${c.border}; stroke-width: ${tokens.border.thin}`);
+      return toggle(segs.map((s) => s.partsOn.includes(extra)), `fill: ${c['card-on']}`, `fill: ${c.node}`);
+    case 'ring':
+      return toggle(segs.map((s) => s.partsOn.includes(extra)), `stroke: ${c.state.active}; stroke-width: ${tokens.border.edge}`, 'stroke: none');
     case 'part':
       return toggle(segs.map((s) => s.partsOn.includes(extra)), `fill: ${c['card-on']}`, 'fill: transparent');
     case 'edge':

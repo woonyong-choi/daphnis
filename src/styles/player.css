@@ -288,6 +288,9 @@ html.embedded .fl-figure {
 
 .fl .fl-part.on .grid-cell {
   fill: var(--color-card-on);
+}
+
+.fl .fl-part.on .grid-ring {
   stroke: var(--color-state-active);
   stroke-width: var(--border-edge);
 }
