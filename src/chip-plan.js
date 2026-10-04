@@ -19,7 +19,7 @@ const DETACH_COST_PER_PX = 2e4;
 const NEAR_COST = 300;
 const MARGIN_COST = 500;
 const ORDER_COST = 100;
-// 흐름(track)의 글 상자는 자기 점에서 이 거리(px, 상자 가장자리와 점 중심) 안에만 둔다. 이를 넘는 후보는 비용을 재지 않고 제외한다(점 옆 기본 자리는 늘 이 안이다)
+// 글 상자(흐름과 박자 이동 모두)는 자기 점에서 이 거리(px, 상자 가장자리와 점 중심) 안에만 둔다. 이를 넘는 후보는 비용을 재지 않고 제외한다(점 옆 기본 자리는 늘 이 안이다)
 const ATTACH_MAX = values.size.packet['chip-reach'];
 
 // 이동에 맞춘 계획의 문제 목록. 그림 검사가 같은 계획을 다시 세우지 않고 쓴다. { scene, issues }
@@ -74,7 +74,7 @@ export function issuesOfHop(scene, hop, avoid) {
  */
 export function planChip(scene, hop, avoid) {
   const own = hop.edges ?? [hop.edge];
-  const ctx = { scene, hop, chip: sizeChip(hop.data), field: avoid.filter((o) => !own.includes(o.edge)), route: hop.route ?? flattenRoute(scene.edges[hop.edge].points), dots: new Map(), frames: new Map(), isAttached: hop.track !== undefined };
+  const ctx = { scene, hop, chip: sizeChip(hop.data), field: avoid.filter((o) => !own.includes(o.edge)), route: hop.route ?? flattenRoute(scene.edges[hop.edge].points), dots: new Map(), frames: new Map() };
   ctx.hard = ctx.field.filter((o) => !o.soft);
   ctx.hardIndex = gridOf(ctx.hard);
   ctx.index = gridOf(ctx.field);
@@ -132,7 +132,7 @@ function slotsAt(ctx, t, { descs, known }) {
     const c = known.get(key) ?? chipCandidateAt(point, ctx.chip, { scene: ctx.scene, avoid: ctx.field, desc, index: ctx.index });
     // c는 이 이동 계획만 쓰는 후보라 그대로 고쳐 쓴다.
     c.point = point;
-    c.cost = ctx.isAttached && !isWithinReach(c.box, point) ? Infinity : unaryCost(c, point);
+    c.cost = isWithinReach(c.box, point) ? unaryCost(c, point) : Infinity;
     c.isClean = !c.isOutside && c.hits.length === 0;
     slots.set(key, c);
   });

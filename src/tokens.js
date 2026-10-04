@@ -680,7 +680,7 @@ export const values = freeze({
       "radius": 4.5,
       "halo": 10,
       "hop-ref": 300,
-      "chip-reach": 12
+      "chip-reach": 16
     },
     "arrow": {
       "head": 5,

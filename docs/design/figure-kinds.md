@@ -59,7 +59,7 @@ table payments "payments" {
 
 step "결제" "결제 행은 주문 행을 외래 키로 가리킨다"
   light payments.order_id orders.id
-  payments -> orders "order_id 1042"
+  payments -> orders "1042"
 ```
 
 1. 외래 키 `payments.order_id`에서 `orders.id`로 가는 선이 열과 열을 잇는다.
