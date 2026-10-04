@@ -11,6 +11,8 @@ export const tokens = freeze({
       "gray": {
         "0": "var(--color-palette-gray-0)",
         "25": "var(--color-palette-gray-25)",
+        "outline-a": "var(--color-palette-gray-outline-a)",
+        "outline-b": "var(--color-palette-gray-outline-b)",
         "sky-50": "var(--color-palette-gray-sky-50)",
         "sky-100": "var(--color-palette-gray-sky-100)",
         "40": "var(--color-palette-gray-40)",
@@ -22,6 +24,8 @@ export const tokens = freeze({
         "300": "var(--color-palette-gray-300)"
       },
       "neutral": {
+        "outline-a": "var(--color-palette-neutral-outline-a)",
+        "outline-b": "var(--color-palette-neutral-outline-b)",
         "100": "var(--color-palette-neutral-100)",
         "400": "var(--color-palette-neutral-400)",
         "500": "var(--color-palette-neutral-500)",
@@ -45,7 +49,9 @@ export const tokens = freeze({
         "dark-ink": "var(--color-palette-blue-dark-ink)",
         "dark-heat-low": "var(--color-palette-blue-dark-heat-low)",
         "dark-heat-high": "var(--color-palette-blue-dark-heat-high)",
-        "dark-icon": "var(--color-palette-blue-dark-icon)"
+        "dark-icon": "var(--color-palette-blue-dark-icon)",
+        "light-outline": "var(--color-palette-blue-light-outline)",
+        "dark-outline": "var(--color-palette-blue-dark-outline)"
       },
       "ink": {
         "200": "var(--color-palette-ink-200)",
@@ -61,7 +67,9 @@ export const tokens = freeze({
         "light-ink": "var(--color-palette-red-light-ink)",
         "dark-fill": "var(--color-palette-red-dark-fill)",
         "dark-stroke": "var(--color-palette-red-dark-stroke)",
-        "dark-ink": "var(--color-palette-red-dark-ink)"
+        "dark-ink": "var(--color-palette-red-dark-ink)",
+        "light-outline": "var(--color-palette-red-light-outline)",
+        "dark-outline": "var(--color-palette-red-dark-outline)"
       },
       "amber": {
         "light-fill": "var(--color-palette-amber-light-fill)",
@@ -69,7 +77,9 @@ export const tokens = freeze({
         "light-ink": "var(--color-palette-amber-light-ink)",
         "dark-fill": "var(--color-palette-amber-dark-fill)",
         "dark-stroke": "var(--color-palette-amber-dark-stroke)",
-        "dark-ink": "var(--color-palette-amber-dark-ink)"
+        "dark-ink": "var(--color-palette-amber-dark-ink)",
+        "light-outline": "var(--color-palette-amber-light-outline)",
+        "dark-outline": "var(--color-palette-amber-dark-outline)"
       },
       "green": {
         "light-fill": "var(--color-palette-green-light-fill)",
@@ -79,7 +89,9 @@ export const tokens = freeze({
         "dark-stroke": "var(--color-palette-green-dark-stroke)",
         "dark-ink": "var(--color-palette-green-dark-ink)",
         "light-dot": "var(--color-palette-green-light-dot)",
-        "dark-dot": "var(--color-palette-green-dark-dot)"
+        "dark-dot": "var(--color-palette-green-dark-dot)",
+        "light-outline": "var(--color-palette-green-light-outline)",
+        "dark-outline": "var(--color-palette-green-dark-outline)"
       },
       "teal": {
         "light-fill": "var(--color-palette-teal-light-fill)",
@@ -89,7 +101,9 @@ export const tokens = freeze({
         "dark-stroke": "var(--color-palette-teal-dark-stroke)",
         "dark-ink": "var(--color-palette-teal-dark-ink)",
         "light-dot": "var(--color-palette-teal-light-dot)",
-        "dark-dot": "var(--color-palette-teal-dark-dot)"
+        "dark-dot": "var(--color-palette-teal-dark-dot)",
+        "light-outline": "var(--color-palette-teal-light-outline)",
+        "dark-outline": "var(--color-palette-teal-dark-outline)"
       },
       "navy": {
         "light-fill": "var(--color-palette-navy-light-fill)",
@@ -97,7 +111,9 @@ export const tokens = freeze({
         "light-ink": "var(--color-palette-navy-light-ink)",
         "dark-fill": "var(--color-palette-navy-dark-fill)",
         "dark-stroke": "var(--color-palette-navy-dark-stroke)",
-        "dark-ink": "var(--color-palette-navy-dark-ink)"
+        "dark-ink": "var(--color-palette-navy-dark-ink)",
+        "light-outline": "var(--color-palette-navy-light-outline)",
+        "dark-outline": "var(--color-palette-navy-dark-outline)"
       },
       "purple": {
         "light-fill": "var(--color-palette-purple-light-fill)",
@@ -107,7 +123,9 @@ export const tokens = freeze({
         "dark-stroke": "var(--color-palette-purple-dark-stroke)",
         "dark-ink": "var(--color-palette-purple-dark-ink)",
         "light-dot": "var(--color-palette-purple-light-dot)",
-        "dark-dot": "var(--color-palette-purple-dark-dot)"
+        "dark-dot": "var(--color-palette-purple-dark-dot)",
+        "light-outline": "var(--color-palette-purple-light-outline)",
+        "dark-outline": "var(--color-palette-purple-dark-outline)"
       },
       "pink": {
         "light-fill": "var(--color-palette-pink-light-fill)",
@@ -115,7 +133,9 @@ export const tokens = freeze({
         "light-ink": "var(--color-palette-pink-light-ink)",
         "dark-fill": "var(--color-palette-pink-dark-fill)",
         "dark-stroke": "var(--color-palette-pink-dark-stroke)",
-        "dark-ink": "var(--color-palette-pink-dark-ink)"
+        "dark-ink": "var(--color-palette-pink-dark-ink)",
+        "light-outline": "var(--color-palette-pink-light-outline)",
+        "dark-outline": "var(--color-palette-pink-dark-outline)"
       },
       "slate": {
         "light-fill": "var(--color-palette-slate-light-fill)",
@@ -125,7 +145,9 @@ export const tokens = freeze({
         "dark-stroke": "var(--color-palette-slate-dark-stroke)",
         "dark-ink": "var(--color-palette-slate-dark-ink)",
         "light-dot": "var(--color-palette-slate-light-dot)",
-        "dark-dot": "var(--color-palette-slate-dark-dot)"
+        "dark-dot": "var(--color-palette-slate-dark-dot)",
+        "light-outline": "var(--color-palette-slate-light-outline)",
+        "dark-outline": "var(--color-palette-slate-dark-outline)"
       },
       "orange": {
         "light-fill": "var(--color-palette-orange-light-fill)",
@@ -133,7 +155,9 @@ export const tokens = freeze({
         "light-ink": "var(--color-palette-orange-light-ink)",
         "dark-fill": "var(--color-palette-orange-dark-fill)",
         "dark-stroke": "var(--color-palette-orange-dark-stroke)",
-        "dark-ink": "var(--color-palette-orange-dark-ink)"
+        "dark-ink": "var(--color-palette-orange-dark-ink)",
+        "light-outline": "var(--color-palette-orange-light-outline)",
+        "dark-outline": "var(--color-palette-orange-dark-outline)"
       }
     },
     "state": {
@@ -160,44 +184,52 @@ export const tokens = freeze({
       "red": {
         "fill": "var(--color-paint-red-fill)",
         "stroke": "var(--color-paint-red-stroke)",
+        "outline": "var(--color-paint-red-outline)",
         "ink": "var(--color-paint-red-ink)"
       },
       "amber": {
         "fill": "var(--color-paint-amber-fill)",
         "stroke": "var(--color-paint-amber-stroke)",
+        "outline": "var(--color-paint-amber-outline)",
         "ink": "var(--color-paint-amber-ink)"
       },
       "green": {
         "fill": "var(--color-paint-green-fill)",
         "stroke": "var(--color-paint-green-stroke)",
+        "outline": "var(--color-paint-green-outline)",
         "ink": "var(--color-paint-green-ink)",
         "dot": "var(--color-paint-green-dot)"
       },
       "teal": {
         "fill": "var(--color-paint-teal-fill)",
         "stroke": "var(--color-paint-teal-stroke)",
+        "outline": "var(--color-paint-teal-outline)",
         "ink": "var(--color-paint-teal-ink)",
         "dot": "var(--color-paint-teal-dot)"
       },
       "navy": {
         "fill": "var(--color-paint-navy-fill)",
         "stroke": "var(--color-paint-navy-stroke)",
+        "outline": "var(--color-paint-navy-outline)",
         "ink": "var(--color-paint-navy-ink)"
       },
       "purple": {
         "fill": "var(--color-paint-purple-fill)",
         "stroke": "var(--color-paint-purple-stroke)",
+        "outline": "var(--color-paint-purple-outline)",
         "ink": "var(--color-paint-purple-ink)",
         "dot": "var(--color-paint-purple-dot)"
       },
       "pink": {
         "fill": "var(--color-paint-pink-fill)",
         "stroke": "var(--color-paint-pink-stroke)",
+        "outline": "var(--color-paint-pink-outline)",
         "ink": "var(--color-paint-pink-ink)"
       },
       "gray": {
         "fill": "var(--color-paint-gray-fill)",
         "stroke": "var(--color-paint-gray-stroke)",
+        "outline": "var(--color-paint-gray-outline)",
         "ink": "var(--color-paint-gray-ink)",
         "dot": "var(--color-paint-gray-dot)"
       }
@@ -224,6 +256,7 @@ export const tokens = freeze({
     "node": "var(--color-node)",
     "surface": "var(--color-surface)",
     "card": "var(--color-card)",
+    "outline": "var(--color-outline)",
     "border": "var(--color-border)",
     "card-on": "var(--color-card-on)",
     "group": "var(--color-group)",
@@ -462,6 +495,8 @@ export const values = freeze({
       "gray": {
         "0": "#ffffff",
         "25": "#f7f8fa",
+        "outline-a": "#c4c7cb",
+        "outline-b": "#b4b7bb",
         "sky-50": "#e9f4fc",
         "sky-100": "#deedf8",
         "40": "#eef0f3",
@@ -473,6 +508,8 @@ export const values = freeze({
         "300": "#b0b8c1"
       },
       "neutral": {
+        "outline-a": "#484b53",
+        "outline-b": "#565961",
         "100": "#eef0f3",
         "400": "#9aa1ab",
         "500": "#72767a",
@@ -496,7 +533,9 @@ export const values = freeze({
         "dark-ink": "#6aa1ff",
         "dark-heat-low": "#223a5c",
         "dark-heat-high": "#3f74c8",
-        "dark-icon": "#8fb6ff"
+        "dark-icon": "#8fb6ff",
+        "light-outline": "#92b7eb",
+        "dark-outline": "#40629d"
       },
       "ink": {
         "200": "#c6cacf",
@@ -512,7 +551,9 @@ export const values = freeze({
         "light-ink": "#f04452",
         "dark-fill": "#3d1e24",
         "dark-stroke": "#ff6b77",
-        "dark-ink": "#ff6b77"
+        "dark-ink": "#ff6b77",
+        "light-outline": "#ffa0a0",
+        "dark-outline": "#98434c"
       },
       "amber": {
         "light-fill": "#fff1e8",
@@ -520,7 +561,9 @@ export const values = freeze({
         "light-ink": "#e65200",
         "dark-fill": "#3a2417",
         "dark-stroke": "#ff8a3d",
-        "dark-ink": "#ff8a3d"
+        "dark-ink": "#ff8a3d",
+        "light-outline": "#f9a686",
+        "dark-outline": "#97552b"
       },
       "green": {
         "light-fill": "#e8f7ef",
@@ -530,7 +573,9 @@ export const values = freeze({
         "dark-stroke": "#3ed598",
         "dark-ink": "#3ed598",
         "light-dot": "#4e5968",
-        "dark-dot": "#c3c8cf"
+        "dark-dot": "#c3c8cf",
+        "light-outline": "#8fcea8",
+        "dark-outline": "#297d5e"
       },
       "teal": {
         "light-fill": "#e8f7ef",
@@ -540,7 +585,9 @@ export const values = freeze({
         "dark-stroke": "#3ed598",
         "dark-ink": "#3ed598",
         "light-dot": "#4e5968",
-        "dark-dot": "#c3c8cf"
+        "dark-dot": "#c3c8cf",
+        "light-outline": "#8fcea8",
+        "dark-outline": "#297d5e"
       },
       "navy": {
         "light-fill": "#eaf2fd",
@@ -548,7 +595,9 @@ export const values = freeze({
         "light-ink": "#3a7bd5",
         "dark-fill": "#1b2a45",
         "dark-stroke": "#6aa1ff",
-        "dark-ink": "#6aa1ff"
+        "dark-ink": "#6aa1ff",
+        "light-outline": "#92b7eb",
+        "dark-outline": "#40629d"
       },
       "purple": {
         "light-fill": "#eaf2fd",
@@ -558,7 +607,9 @@ export const values = freeze({
         "dark-stroke": "#6aa1ff",
         "dark-ink": "#6aa1ff",
         "light-dot": "#4e5968",
-        "dark-dot": "#c3c8cf"
+        "dark-dot": "#c3c8cf",
+        "light-outline": "#92b7eb",
+        "dark-outline": "#40629d"
       },
       "pink": {
         "light-fill": "#fff1e8",
@@ -566,7 +617,9 @@ export const values = freeze({
         "light-ink": "#e65200",
         "dark-fill": "#3a2417",
         "dark-stroke": "#ff8a3d",
-        "dark-ink": "#ff8a3d"
+        "dark-ink": "#ff8a3d",
+        "light-outline": "#f9a686",
+        "dark-outline": "#97552b"
       },
       "slate": {
         "light-fill": "#e4e7eb",
@@ -576,7 +629,9 @@ export const values = freeze({
         "dark-stroke": "#9aa1ab",
         "dark-ink": "#9aa1ab",
         "light-dot": "#4e5968",
-        "dark-dot": "#c3c8cf"
+        "dark-dot": "#c3c8cf",
+        "light-outline": "#a6adb6",
+        "dark-outline": "#5b5f67"
       },
       "orange": {
         "light-fill": "#fff1e8",
@@ -584,7 +639,9 @@ export const values = freeze({
         "light-ink": "#e65200",
         "dark-fill": "#3a2417",
         "dark-stroke": "#ff8a3d",
-        "dark-ink": "#ff8a3d"
+        "dark-ink": "#ff8a3d",
+        "light-outline": "#f9a686",
+        "dark-outline": "#97552b"
       }
     },
     "state": {
@@ -611,44 +668,52 @@ export const values = freeze({
       "red": {
         "fill": "#ffeef0",
         "stroke": "#f04452",
+        "outline": "#ffa0a0",
         "ink": "#f04452"
       },
       "amber": {
         "fill": "#fff1e8",
         "stroke": "#e65200",
+        "outline": "#f9a686",
         "ink": "#e65200"
       },
       "green": {
         "fill": "#e8f7ef",
         "stroke": "#03a564",
+        "outline": "#8fcea8",
         "ink": "#03a564",
         "dot": "#4e5968"
       },
       "teal": {
         "fill": "#e8f7ef",
         "stroke": "#03a564",
+        "outline": "#8fcea8",
         "ink": "#03a564",
         "dot": "#4e5968"
       },
       "navy": {
         "fill": "#eaf2fd",
         "stroke": "#3a7bd5",
+        "outline": "#92b7eb",
         "ink": "#3a7bd5"
       },
       "purple": {
         "fill": "#eaf2fd",
         "stroke": "#3a7bd5",
+        "outline": "#92b7eb",
         "ink": "#3a7bd5",
         "dot": "#4e5968"
       },
       "pink": {
         "fill": "#fff1e8",
         "stroke": "#e65200",
+        "outline": "#f9a686",
         "ink": "#e65200"
       },
       "gray": {
         "fill": "#e4e7eb",
         "stroke": "#6b7684",
+        "outline": "#a6adb6",
         "ink": "#6b7684",
         "dot": "#4e5968"
       }
@@ -675,6 +740,7 @@ export const values = freeze({
     "node": "#ffffff",
     "surface": "#eef0f3",
     "card": "#f2f4f6",
+    "outline": "#c4c7cb",
     "border": "#e1e4e8",
     "card-on": "#eaf2fd",
     "group": "#e9f4fc",

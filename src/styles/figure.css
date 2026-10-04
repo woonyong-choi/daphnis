@@ -114,12 +114,8 @@
 }
 
 .fl .fl-stroke {
-  stroke: var(--color-border);
+  stroke: var(--color-outline);
   stroke-width: var(--border-thin);
-}
-
-.fl .fl-stroke.ext {
-  stroke: var(--color-line);
 }
 
 .fl .fl-path {
@@ -161,7 +157,7 @@
 
 .fl .pill {
   fill: var(--color-node);
-  stroke: var(--color-border);
+  stroke: var(--color-outline);
 }
 
 .fl .part-bg {
@@ -169,13 +165,13 @@
 }
 
 .fl .col-line {
-  stroke: var(--color-border);
+  stroke: var(--color-outline);
   stroke-width: var(--border-hair);
 }
 
 .fl .grid-cell {
   fill: var(--color-node);
-  stroke: var(--color-border);
+  stroke: var(--color-outline);
   stroke-width: var(--border-thin);
 }
 
@@ -205,7 +201,7 @@
 
 .fl .badge-pill {
   fill: var(--color-node);
-  stroke: var(--color-border);
+  stroke: var(--color-outline);
   stroke-width: var(--border-thin);
 }
 

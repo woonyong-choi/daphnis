@@ -27,6 +27,23 @@ const PROPOSAL_TABLE = {
 };
 for (const name of ['navy', 'purple']) for (const k of ['light-heat-low', 'light-heat-high', 'light-icon', 'dark-heat-low', 'dark-heat-high', 'dark-icon']) delete PROPOSAL_TABLE[name][k];
 
+// 외곽선 단계: 면(fill)과 진한 선(stroke)을 OKLab에서 섞은 값. 면보다 진하고 진한 선보다는 옅다.
+const OUTLINE_MIX = 0.5;
+function outlineBetween(fill, stroke) {
+  const [fromL, fromC, fromHue] = oklchOf(fill);
+  const [toL, toC, toHue] = oklchOf(stroke);
+  const lab = (C, hue) => [C * Math.cos((hue * Math.PI) / 180), C * Math.sin((hue * Math.PI) / 180)];
+  const [fromA, fromB] = lab(fromC, fromHue);
+  const [toA, toB] = lab(toC, toHue);
+  const mix = (from, to) => from + (to - from) * OUTLINE_MIX;
+  const a = mix(fromA, toA);
+  const b = mix(fromB, toB);
+  return oklchToHex(mix(fromL, toL), Math.hypot(a, b), ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360);
+}
+for (const steps of Object.values(PROPOSAL_TABLE)) {
+  for (const theme of ['light', 'dark']) steps[`${theme}-outline`] = outlineBetween(steps[`${theme}-fill`], steps[`${theme}-stroke`]);
+}
+
 const TEXT = 4.5;
 const GRAPHIC = 3;
 const STEP = 0.002;

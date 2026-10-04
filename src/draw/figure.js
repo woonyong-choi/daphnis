@@ -6,7 +6,7 @@ import { centerBaseline, escapeXml, renderRich, roundCoord as r } from '../text.
 import { tokens, values } from '../tokens.js';
 import { cardGlyphs, createTones, drawCard } from './card.js';
 import { drawDecor, drawGroupTab } from './decor.js';
-import { drawHalo } from './paint.js';
+import { drawHalo, paintOf } from './paint.js';
 import { drawShape, outlineOf } from './shape.js';
 
 const SPACE = values.space;
@@ -61,7 +61,7 @@ function drawGroup(g, j, { decorate, glyphs, scene }) {
 // 도형 하나: 윤곽, 이름, 부제, 카드. 사람과 원통의 머리, 어깨, 뚜껑은 배치 사각형 바깥 여백에 그린다.
 function drawItem(it, i, paint) {
   const { decorate, glyphs, scene } = paint;
-  const stroke = `class="fl-stroke${it.stroke ? ` ps-${it.stroke}` : ''}${it.shape === 'external' ? ' ext' : ''} ${decorate('node', i)}"`;
+  const stroke = `class="fl-stroke${paintOf(it) ? ` ps-${paintOf(it)}` : ''}${it.shape === 'external' ? ' ext' : ''} ${decorate('node', i)}"`;
   const halo = drawHalo(outlineOf(it), { cls: decorate('halo', i) });
   const open = `<g id="n-${i}" class="fl-node" data-id="${escapeXml(it.id)}">`;
   for (const l of it.labelLines ?? []) glyphs.add(l, 'medium');

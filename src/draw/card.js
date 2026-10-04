@@ -41,7 +41,7 @@ export function drawCard(card, { box, i }, { toneOf, decorate }) {
     .map((layout, k) => `<g id="n-${i}-c${k}" opacity="0" class="fl-layer ${decorate('layer', i, k)}">${drawFace(layout, box)}${drawRows(layout, box, toneOf)}</g>`)
     .join('');
   return (
-    `<rect x="${r(box.x)}" y="${r(box.y)}" width="${r(box.w)}" height="${r(box.h)}" rx="${RADIUS.md}" fill="${tokens.color.card}" stroke="${tokens.color.border}" stroke-dasharray="${values.dash.card} ${values.dash.card}" class="fl-card ${decorate('card', i)}"/>` +
+    `<rect x="${r(box.x)}" y="${r(box.y)}" width="${r(box.w)}" height="${r(box.h)}" rx="${RADIUS.md}" fill="${tokens.color.card}" stroke="${tokens.color.outline}" stroke-dasharray="${values.dash.card} ${values.dash.card}" class="fl-card ${decorate('card', i)}"/>` +
     layers
   );
 }
@@ -140,7 +140,7 @@ function drawMiniGraph(laid, x, y) {
   });
   const pills = laid.nodes.map((n) => {
     const fill = n.isLit ? tokens.color.state['active-fill'] : tokens.color.node;
-    const stroke = n.isLit ? tokens.color.state['active-fill'] : tokens.color.border;
+    const stroke = n.isLit ? tokens.color.state['active-fill'] : tokens.color.outline;
     return (
       `<rect x="${r(x + n.x)}" y="${r(y + n.y)}" width="${r(n.w)}" height="${n.h}" rx="${n.h / 2}" fill="${fill}" stroke="${stroke}" stroke-width="${values.border.thin}"/>` +
       `<text x="${r(x + n.x + n.w / 2)}" y="${r(centerBaseline(y + n.y + n.h / 2, MINI_TEXT))}" class="mini${n.isLit ? ' on' : ''}">${renderRich(n.name)}</text>`

@@ -12,26 +12,28 @@ export const fillOf = (name) => tokens.color.paint[name].fill;
 /** 색 이름의 테두리 색 토큰 참조 */
 export const strokeOf = (name) => tokens.color.paint[name].stroke;
 
+/** 도형이 칠한 색 이름. 면을 먼저 보고, 없으면 테두리 색 이름이다. 외곽선은 이 색의 outline 단계다. */
+export const paintOf = (item) => item.fill ?? item.stroke;
+
 // cost: time O(s + g), heap O(c), stack O(1)
 // vars: s = 도형 수, g = 그룹 수, c = 고른 색 수
 // basis: estimate
-/** 그림이 고른 색 이름 목록. { stroke, groupFill }은 테두리와 그룹 면에 쓴 이름이다. */
+/** 그림이 고른 색 이름 목록. { stroke, groupFill }은 도형 외곽선과 그룹 면에 쓴 이름이다. */
 function usedPaints(scene) {
-  const boxes = [...scene.items, ...scene.groups];
-  return { stroke: [...new Set(boxes.map((b) => b.stroke).filter(Boolean))], groupFill: [...new Set(scene.groups.map((g) => g.fill ?? g.stroke).filter(Boolean))] };
+  return { stroke: [...new Set(scene.items.map(paintOf).filter(Boolean))], groupFill: [...new Set(scene.groups.map((g) => g.fill ?? g.stroke).filter(Boolean))] };
 }
 
 // cost: time O(c), heap O(out), stack O(1)
 // vars: c = 고른 색 수, out = 만든 CSS 글자 수
 // basis: estimate
 /**
- * 고른 색의 CSS. 테두리 색 클래스(`ps-이름`)는 켜진 도형과 그룹에서도, 아이콘 탭이 있는 그룹에서도 그대로여서 밝힘은 색이 아니라 굵은 테두리와 후광(`fl-halo`)이 알린다.
+ * 고른 색의 CSS. 외곽선 색 클래스(`ps-이름`, 면 색의 outline 단계)는 켜진 도형과 그룹에서도, 아이콘 탭이 있는 그룹에서도 그대로여서 밝힘은 색이 아니라 굵은 테두리와 후광(`fl-halo`)이 알린다.
  * 그룹 면 클래스는 `pf-이름`이다. 쓴 색이 없으면 빈 글이다.
  */
 export function paintCss(scene) {
   if (!scene) return '';
   const { stroke, groupFill } = usedPaints(scene);
-  const rules = stroke.map((name) => `.fl .fl-stroke.ps-${name} {\n  stroke: none;\n}\n.fl .fl-node.on .fl-stroke.ps-${name} {\n  stroke: var(--color-state-active);\n}`);
+  const rules = stroke.map((name) => `.fl .fl-node .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-outline);\n}\n.fl .fl-node.on .fl-stroke.ps-${name} {\n  stroke: var(--color-state-active);\n}`);
   for (const name of groupFill) rules.push(`.fl .frame-box.pf-${name} {\n  fill: var(--color-paint-${name}-fill);\n}`);
   return rules.length ? `\n${rules.join('\n')}\n` : '';
 }

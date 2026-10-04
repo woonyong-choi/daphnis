@@ -34,6 +34,9 @@
         "stroke": {
           "$value": "{color.palette.red.dark-stroke}"
         },
+        "outline": {
+          "$value": "{color.palette.red.dark-outline}"
+        },
         "ink": {
           "$value": "{color.palette.red.dark-ink}"
         }
@@ -45,6 +48,9 @@
         "stroke": {
           "$value": "{color.palette.amber.dark-stroke}"
         },
+        "outline": {
+          "$value": "{color.palette.amber.dark-outline}"
+        },
         "ink": {
           "$value": "{color.palette.amber.dark-ink}"
         }
@@ -55,6 +61,9 @@
         },
         "stroke": {
           "$value": "{color.palette.green.dark-stroke}"
+        },
+        "outline": {
+          "$value": "{color.palette.green.dark-outline}"
         },
         "ink": {
           "$value": "{color.palette.green.dark-ink}"
@@ -70,6 +79,9 @@
         "stroke": {
           "$value": "{color.palette.teal.dark-stroke}"
         },
+        "outline": {
+          "$value": "{color.palette.teal.dark-outline}"
+        },
         "ink": {
           "$value": "{color.palette.teal.dark-ink}"
         },
@@ -84,6 +96,9 @@
         "stroke": {
           "$value": "{color.palette.navy.dark-stroke}"
         },
+        "outline": {
+          "$value": "{color.palette.navy.dark-outline}"
+        },
         "ink": {
           "$value": "{color.palette.navy.dark-ink}"
         }
@@ -94,6 +109,9 @@
         },
         "stroke": {
           "$value": "{color.palette.purple.dark-stroke}"
+        },
+        "outline": {
+          "$value": "{color.palette.purple.dark-outline}"
         },
         "ink": {
           "$value": "{color.palette.purple.dark-ink}"
@@ -109,6 +127,9 @@
         "stroke": {
           "$value": "{color.palette.pink.dark-stroke}"
         },
+        "outline": {
+          "$value": "{color.palette.pink.dark-outline}"
+        },
         "ink": {
           "$value": "{color.palette.pink.dark-ink}"
         }
@@ -119,6 +140,9 @@
         },
         "stroke": {
           "$value": "{color.palette.slate.dark-stroke}"
+        },
+        "outline": {
+          "$value": "{color.palette.slate.dark-outline}"
         },
         "ink": {
           "$value": "{color.palette.slate.dark-ink}"
@@ -185,6 +209,9 @@
     },
     "card": {
       "$value": "{color.palette.neutral.800}"
+    },
+    "outline": {
+      "$value": "{color.palette.neutral.outline-a}"
     },
     "border": {
       "$value": "{color.palette.neutral.750}"
