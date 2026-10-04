@@ -9,7 +9,7 @@
         "$value": "{color.palette.blue.dark-stroke}"
       },
       "active-text": {
-        "$value": "{color.palette.blue.dark-stroke}"
+        "$value": "{color.palette.blue.dark-ink}"
       },
       "on-active": {
         "$value": "{color.palette.ink.850}"
@@ -171,7 +171,7 @@
     },
     "ui": {
       "link": {
-        "$value": "{color.palette.blue.dark-stroke}"
+        "$value": "{color.palette.blue.dark-ink}"
       },
       "focus": {
         "$value": "{color.palette.blue.dark-stroke}"

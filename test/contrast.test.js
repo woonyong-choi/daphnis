@@ -28,9 +28,10 @@ const FLOW_ROLES = ['flow.purple', 'flow.green', 'flow.teal', 'flow.gray'];
 const GRAPHIC_ROLES = ['state.active', 'ui.focus', 'ui.progress', 'data.main', 'data.compare', 'figure.icon', ...FLOW_ROLES];
 const THEMES = ['light', 'dark'];
 const STROKE_STEP = 0.004;
-const ORANGE_HUE = 50;
+const ORANGE_HUE = 41;
 const ORANGE_HUE_TOLERANCE = 6;
-const CHROMA_TOLERANCE = 0.01;
+// NHN 브랜드 파랑이 채도가 더 높아(C 0.22) 주황 채도 차이를 0.04까지 둔다
+const CHROMA_TOLERANCE = 0.04;
 const CVD_MIN_DISTANCE = 0.1;
 const MIN_TAG_HUE_GAP = 40;
 const NEUTRAL_CHROMA = 0.03;
@@ -194,9 +195,9 @@ test('palette_graphic_text_and_border_colors_are_the_closest_step_that_reaches_t
   }
 });
 
-// 근거: 결정 docs-integration.md "기본 파랑은 참고 이력서 #3a7bd5, 주황은 같은 톤의 원색 하나에서 대비 규칙으로 계산한다(색상 50도 근처)"
-test('palette_blue_is_the_resume_blue_and_orange_stays_near_hue_50_with_the_blue_chroma', () => {
-  const RESUME_BLUE = '#3a7bd5';
+// 근거: 사용자 결정 "NHN 아키텍처 자료처럼 간다": 기준 파랑은 NHN 브랜드 파랑 #125DE6이고, 주황은 NHN에 없어 비교와 주의에만 남는다(색상 50도 근처)
+test('palette_blue_is_the_nhn_brand_blue_and_orange_stays_near_hue_50_with_the_blue_chroma', () => {
+  const RESUME_BLUE = '#125de6';
   const [, blueC] = oklchOf(RESUME_BLUE);
   const [, orangeC, orangeHue] = oklchOf(color('light', 'palette.orange.light-stroke'));
 
@@ -237,12 +238,13 @@ test('palette_blue_and_orange_stay_apart_for_protanopia_and_deuteranopia_in_both
   }
 });
 
-// 근거: 규칙 docs-integration.md 갈래색: 흐름 점 색은 서로, 그리고 파랑(지금)과 주황(비교)과 OKLab 거리 0.1 이상이고 적록 색각 이상 눈에도 같다
+// 근거: 규칙 docs-integration.md 갈래색: 흐름 점 색은 서로, 그리고 주황(비교)과 OKLab 거리 0.1 이상이고 적록 색각 이상 눈에도 같다. NHN 방식에서 첫째 흐름은 브랜드 파랑(state.active)이고 진한 회색은 두 이름(teal, gray)이 같은 값이라, 같은 색을 가리키는 이름은 한 색으로 센다
 test('flow_tone_colors_stay_apart_from_each_other_for_normal_protan_and_deutan_sight_and_from_blue_and_orange_for_normal_sight', () => {
   const NORMAL = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
   for (const theme of THEMES) {
+    const distinct = FLOW_ROLES.filter((role, i) => FLOW_ROLES.findIndex((other) => color(theme, other) === color(theme, role)) === i);
     for (const [name, matrix] of Object.entries({ normal: NORMAL, ...CVD })) {
-      const pairs = FLOW_ROLES.flatMap((a, i) => [...FLOW_ROLES.slice(i + 1), ...(name === 'normal' ? ['state.active', 'data.compare'] : [])].map((b) => [a, b]));
+      const pairs = distinct.flatMap((a, i) => [...distinct.slice(i + 1), ...(name === 'normal' ? ['data.compare'] : [])].map((b) => [a, b]));
       for (const [a, b] of pairs) {
         const distance = distanceOf(seenBy(matrix, color(theme, a)), seenBy(matrix, color(theme, b)));
 
@@ -398,14 +400,14 @@ test('toSvg_heat_cell_text_keeps_contrast_4_5_on_the_cell_face_in_every_60fps_fr
 });
 
 
-// 근거: 결정 docs-integration.md "파랑은 지금 일어나는 것에만 쓴다" 속 figure.icon 행: 아이콘 파랑은 켜진 도형(state.active)과 색상이 달라 아이콘이 지금으로 읽히지 않는다
-test('palette_figure_icon_blue_differs_in_hue_from_the_active_blue_in_both_themes', () => {
-  const ICON_HUE_GAP = 8;
+// 근거: 사용자 결정 "NHN 아키텍처 자료처럼 간다": NHN 컬러 아이콘은 브랜드 파랑이라 figure.icon은 지금(state.active)과 같은 파랑 계열이다(색상각 차이 1도 이내). 지금은 굵은 테두리와 후광으로 알린다. 이전 규칙은 아이콘 색상각이 지금과 8도 이상 달라야 했다
+test('palette_figure_icon_is_the_brand_blue_of_the_active_blue_in_both_themes', () => {
+  const ICON_HUE_TOLERANCE = 1;
 
   for (const theme of THEMES) {
     const [, , iconHue] = oklchOf(color(theme, 'figure.icon'));
     const [, , activeHue] = oklchOf(color(theme, 'state.active'));
 
-    assert.ok(Math.abs(iconHue - activeHue) >= ICON_HUE_GAP, `${theme} icon ${iconHue.toFixed(1)} / active ${activeHue.toFixed(1)}`);
+    assert.ok(Math.abs(iconHue - activeHue) <= ICON_HUE_TOLERANCE, `${theme} icon ${iconHue.toFixed(1)} / active ${activeHue.toFixed(1)}`);
   }
 });

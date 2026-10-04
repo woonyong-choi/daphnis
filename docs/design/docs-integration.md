@@ -74,14 +74,14 @@
 
 | 역할 | 뜻 | 라이트 | 다크 | 맞닿는 면 | 대비 |
 |---|---|---|---|---|---|
-| `state.active` | 지금 일어나는 것: 밝힌 선, 점, 켜진 도형과 그룹과 카드 테두리 | `#3a7bd5` | `#6aa1ff` | 그림 바탕, 그룹, 카드 바탕, 노드, 문서 바탕 | 3.70 / 5.33 |
-| `state.active-fill`, `state.on-active` | 지금 일어나는 것의 면(밝힌 알약, 이동 글 상자)과 그 위 글자 | `#2b6cc5` / `#ffffff` | `#6aa1ff` / `#0d1117` | 서로 | 5.18 / 7.35 |
-| `state.active-text` | 지금 일어나는 것을 가리키는 글자(카드 표시 ✓) | `#2b6cc5` | `#6aa1ff` | 그림 바탕, 노드, 카드 바탕, 문서 바탕 | 4.54 / 5.33 |
-| `ui.link` | 링크 글자 | `#2b6cc5` | `#6aa1ff` | 그림 바탕, 노드, 카드 바탕, 문서 바탕 | 4.54 / 5.33 |
-| `ui.focus`, `ui.progress` | 초점 고리, 재생기 진행 고리 | `#3a7bd5` | `#6aa1ff` | 그림 바탕, 그룹, 카드 바탕, 노드, 문서 바탕 | 3.70 / 5.33 |
+| `state.active` | 지금 일어나는 것: 밝힌 선, 점, 켜진 도형과 그룹과 카드 테두리 | `#125de6` | `#70a3ff` | 그림 바탕, 그룹, 카드 바탕, 노드, 문서 바탕 | 3.0 이상 |
+| `state.active-fill`, `state.on-active` | 지금 일어나는 것의 면(밝힌 알약, 이동 글 상자)과 그 위 글자 | `#125de6` / `#ffffff` | `#70a3ff` / `#111111` | 서로 | 4.5 이상 |
+| `state.active-text` | 지금 일어나는 것을 가리키는 글자(카드 표시 ✓) | `#125de6` | `#78a9ff` | 그림 바탕, 노드, 카드 바탕, 문서 바탕 | 4.5 이상 |
+| `ui.link` | 링크 글자 | `#125de6` | `#78a9ff` | 그림 바탕, 노드, 카드 바탕, 문서 바탕 | 4.5 이상 |
+| `ui.focus`, `ui.progress` | 초점 고리, 재생기 진행 고리 | `#125de6` | `#70a3ff` | 그림 바탕, 그룹, 카드 바탕, 노드, 문서 바탕 | 3.0 이상 |
 | `figure.icon` | 도형과 그룹의 아이콘(단색 파랑, 지금 파랑보다 색상을 10도 보랏빛으로 돌린 값). 켜져도 바뀌지 않는다 | `#3458e7` | `#7d98f5` | 그림 바탕, 그룹, 카드 바탕, 노드, 문서 바탕 | 4.98 / 5.02 |
 | `ui.control-on` | 켜진 탭 알약 면. 켜짐 표시는 `border` 색 고리가 맡는다 | `#ffffff` | `#3c3e42` | 글자 `fg` | 4.5 이상 |
-| `data.main` | 차트에서 그림이 주장하는 계열(새 것, 개선) | `#3a7bd5` | `#6aa1ff` | 그림 바탕, 그룹, 카드 바탕, 노드 | 3.70 / 5.33 |
+| `data.main` | 차트에서 그림이 주장하는 계열(새 것, 개선) | `#125de6` | `#70a3ff` | 그림 바탕, 그룹, 카드 바탕, 노드 | 3.0 이상 |
 | `data.compare` | 비교 기준 계열(기존) | `#d36f2b` | `#e87e42` | 같음 | 3.03 / 4.90 |
 | `data.grid`, `data.heat-low` | 격자와 축, 히트맵 값 0 칸(꾸밈) | `#c6cacf` / `#b3cdf3` | `#3c3e42` / `#2a3a54` | 그림 바탕 | 1.54, 1.55 이상 / 1.60, 1.5 이상 |
 | `flow.purple`, `flow.green`, `flow.teal`, `flow.gray` | 흐름 점과 이동 글 상자의 갈래색(`tone=`). 점, 글 상자 면과 테두리. 팔레트 점 단계(`paint.*.dot`) | `#864cdb`, `#008634`, `#007a78`, `#474e54` | `#be95ff`, `#42be65`, `#009d9b`, `#aeb5bc` | 그림 바탕, 그룹, 카드 바탕, 노드, 문서 바탕. 글 상자 글자는 `state.on-active` | 4.12 / 4.12 이상 |
@@ -95,17 +95,17 @@
 - `flow.*`는 점이 한눈에 갈리도록 이름끼리 OKLab 거리 0.10 이상이고 적록 색각 이상(protanopia, deuteranopia) 시뮬레이션에서도 같다. 파랑(지금)과 주황(비교)과도 OKLab 거리 0.10 이상이다. `test/contrast.test.js`의 `flow_tone_colors_stay_apart_from_each_other_for_normal_protan_and_deutan_sight_and_from_blue_and_orange_for_normal_sight`가 잰다. 이름은 카드 태그 `tone`과 같은 집합이고 이름을 늘리면 `flow.*` 색도 같은 기준으로 더한다.
 - 표 열의 PK, FK 표시는 항상 있는 스키마 표시라 파랑이 아니라 `color.muted`다.
 - 칸 격자의 칸([칸 격자](grid.md))은 새 색 역할이 없다. 칸 면 `node`와 윤곽 `border`, 글 `fg`, 생략 칸 면 `surface`와 글 `muted`, 밝힌 칸 면 `card-on`과 윤곽 `state.active`가 위 기준의 기존 짝이다.
-- 파랑은 "지금"(`state`)과 "주장하는 계열"(`data.main`)을 뜻하고, 조작부(`ui`)도 같은 파랑을 쓴다. 그 밖의 뜻으로는 쓰지 않는다. 한 가지 예외가 아이콘 색 `figure.icon`이다. 아이콘은 모든 그림에서 늘 파랑으로 칠해 구성 요소의 종류를 알리는 장식 단색이다(브랜드 고유색은 쓰지 않는다). 지금과 섞이지 않게 둘을 두 방법으로 가른다. 색상이 10도 달라(라이트 `#3458e7` 대 `#3a7bd5`, 다크 `#7d98f5` 대 `#6aa1ff`, `test/contrast.test.js`의 `palette_figure_icon_blue_differs_in_hue_from_the_active_blue_in_both_themes`) 아이콘은 짙고 보랏빛이다. 켜진 도형과 그룹은 테두리 색뿐 아니라 두께도 `border.thin`에서 `border.strong`으로 바뀌고 아이콘은 그대로다. 카드 태그는 파랑과 주황을 쓰지 않는다. 태그 색상이 `state.active`, `data.compare`와 40도 이상 떨어진다는 것을 `test/contrast.test.js`의 `tagColors_keep_their_hue_away_from_the_active_blue_and_the_compare_orange`가 잰다.
+- 파랑은 "지금"(`state`)과 "주장하는 계열"(`data.main`)을 뜻하고, 조작부(`ui`)도 같은 파랑을 쓴다. 그 밖의 뜻으로는 쓰지 않는다. 아이콘 색 `figure.icon`도 같은 브랜드 파랑이다(NHN 컬러 아이콘처럼, 색상각 차이 1도 이내, `test/contrast.test.js`의 `palette_figure_icon_is_the_brand_blue_of_the_active_blue_in_both_themes`). 지금은 색이 아니라 켜진 도형과 그룹의 테두리 두께(`border.thin`에서 `border.strong`)와 후광이 알리고 아이콘은 그대로다. 카드 태그는 파랑과 주황을 쓰지 않는다. 태그 색상이 `state.active`, `data.compare`와 40도 이상 떨어진다는 것을 `test/contrast.test.js`의 `tagColors_keep_their_hue_away_from_the_active_blue_and_the_compare_orange`가 잰다.
 - `data.main`, `data.compare`는 선언 순서가 아니라 계열의 `role`이 정한다([차트](charts.md)). 같은 계열 이름은 모든 예제에서 같은 역할이다. `test/chart.test.js`의 `examples_same_series_label_and_id_have_the_same_role_in_every_source`가 잰다.
-- 파랑은 참고 이력서(hyunseob.github.io/resume)의 `#3a7bd5`이고 다크는 같은 색상의 밝은 `#6aa1ff`다. 원색이 대비 규칙을 넘으면 그대로 쓰고 못 넘으면 같은 색상과 채도에서 밝기만 옮긴다. 라이트 `#3a7bd5`는 모든 그림 면 위 3.70이라 그대로 `palette.blue.light-stroke`이고, 글자와 글자가 놓이는 면은 4.5를 넘는 가장 가까운 `palette.blue.light-ink`(`#2b6cc5`)다.
-- 주황은 `scripts/lib/palette.mjs`의 원색 표(`ANCHORS`)에서 파랑과 같은 방식으로 계산한다. 원색은 라이트 `#e07b39`(OKLCH L 0.685, C 0.148, h 50.8), 다크 `#e87e42`다. 색상 50도는 red(26도)와 amber(85도 근처)의 가운데이고 채도는 파랑(0.153) 수준이라 톤이 같다. 다크는 amber와 OKLab 거리 0.06을 넘기려고 밝기와 채도를 정했다. 라이트는 3을 넘는 가장 가까운 값(`#d36f2b`)이다. 파랑과 주황은 적록 색각 이상(protanopia, deuteranopia) 시뮬레이션에서도 OKLab 거리 0.1 이상으로 구분된다. 글자, 보조 글자는 스킬 값이다.
+- 색 사용은 NHN Cloud 아키텍처 자료(github.com/nhn-cloud/Icons)를 따른다. 그림은 무채색 회색이 대부분이고, 브랜드 파랑 `#125DE6`은 핵심 자리(지금 밝힘, 흐르는 선과 점과 글 상자, 차트 주 계열, 구성도 아이콘, 재생기 진행 고리)에만 쓴다. 다크는 같은 색상각에서 다크 면 위 대비를 넘는 밝은 단계(선 `#70a3ff`, 글자 `#78a9ff`)다. 보라 `#B28FD1`, 빨강 `#EF0F0F`(오류), 초록 `#09C72C`(정상)는 드문 강조이고, 주황은 NHN에 없어 비교(`data.compare`)와 주의(`state.warning`)에만 남는다. 흐름 색은 첫째가 브랜드 파랑, 둘째가 보라, 셋째 이후가 진한 회색, 오류가 빨강이다. 이름은 옛 이름을 지켜 `tone=purple`이 파랑, `tone=green`이 보라, `tone=teal`과 `tone=gray`가 진한 회색, `tone=red`가 빨강을 그린다.
+- 주황은 NHN 자료에 없어 비교(`data.compare`)와 주의(`state.warning`)에만 남고 `ANCHORS`에서 같은 방식으로 계산한다. 원색은 라이트 `#e65200`이다. 색상 50도는 red(26도)와 amber(85도 근처)의 가운데이고 채도는 파랑(0.153) 수준이라 톤이 같다. 다크는 amber와 OKLab 거리 0.06을 넘기려고 밝기와 채도를 정했다. 라이트는 3을 넘는 가장 가까운 값(`#d36f2b`)이다. 파랑과 주황은 적록 색각 이상(protanopia, deuteranopia) 시뮬레이션에서도 OKLab 거리 0.1 이상으로 구분된다. 글자, 보조 글자는 스킬 값이다.
 - 라이트 모드 그림 바탕(`color.bg`)은 흰 문서 안에서 그림 경계가 보이도록 아주 옅은 회색(`palette.gray.25`)이고, 판 테두리(`color.plate-border`)가 경계를 더한다. 재생기와 목록 카드의 바깥 선, 조작 막대 선도 같은 `plate-border`다(예전 `color.frame`을 합쳤다. 라이트 `palette.gray.200`, 다크 `palette.neutral.800`). 상자, 원통, 사람, 테이블 채우기(`color.node`)는 라이트에서 흰색이라 바탕 위에 떠 보이고, 다크에서는 바탕(`palette.neutral.900`)보다 한 단계 밝은 `palette.neutral.850`이다. 구조 그림의 그룹은 중첩 깊이로 무채색 회색 면을 한 단계씩 진하게 고르고, 일반 그룹은 외곽선 없이 면 밝기 차이로만 구분한다. 깊이 1(판 바로 위)은 `color.group-1`(라이트 `#ededed`, 다크 `#202020`), 깊이 2는 `color.group-2`(라이트 `#e1e1e1`, 다크 `#2a2a2a`), 깊이 3 이상은 `color.group-3`(라이트 `#d6d6d6`, 다크 `#343434`)이다. 판은 라이트 `#f8f8f8`, 다크 `#171717`이고 도형 바탕은 라이트 `#ffffff`, 다크 `#3e3e3e`다. 점선 경계 그룹만 점선을 그리고 면은 같은 규칙이다. 강조 그룹(`fill=sky`, `fill=amber`)은 면을 칠하지 않아 면 색은 언제나 이 회색 위계 하나다. 강조는 그 색의 진한 단계(`paint.<색>.ink`, 회색 면 셋 위 대비 3 이상) 1.5px 테두리(`border.tag`)와 같은 색 제목 글자뿐이고, 강조 그룹 안의 그룹은 깊이 규칙의 회색이다. 그룹 제목은 `color.group-title`로 세 회색 면 위에서 4.5 이상이다. 면을 칠한 도형(`fill=`, `stroke=`)의 외곽선은 그 색의 `paint.<색>.outline`이다. 면과 진한 선을 OKLab에서 반씩 섞은 값에서 같은 색상으로 밝기만 옮겨 그 면, 판, 도형 바탕 위 대비 3을 맞춘다. 이 회색 판은 문서에 넣는 SVG 파일에만 있다. 재생기와 목록 쪽 카드 안에서는 카드 전체가 같은 `color.bg` 한 톤이다.
 - 9px 태그 글자는 범주색으로 쓰면 대비가 1.7~3.4라 읽기 어려워서, 글자는 `color.fg`로 쓰고 범주색은 글자 뒤의 옅은 바탕 띠로만 전한다. 태그 색은 갈래를 나누는 색이고 판정을 뜻하지 않는다. 스킬의 상태 색 금지는 차트 판정에 대한 규칙이라 태그 색과 부딪치지 않는다.
 
 
 #### 팔레트
 
-팔레트는 색마다 사람이 정한 원색 하나(라이트와 다크)에서 대비 규칙으로 단계를 계산한 값이다. 원색 표는 `scripts/lib/palette.mjs`의 `ANCHORS` 한 곳이다. 파랑(`#3a7bd5`, `#6aa1ff`)과 주황은 직접 적고, 나머지 일곱 색은 IBM Carbon 색 체계(`@carbon/colors`, Apache-2.0)에서 읽는다. 색마다 Carbon 계열(red, yellow, green, teal, purple, magenta, coolGray)의 10~100 단계 가운데 OKLCH 밝기가 파랑에 가장 가까운 단계를 원색으로 쓴다. teal은 cyan이 파랑과 너무 가까워 쓰지 않는다. navy는 파랑과 구별이 먼저라 Carbon blue에서 파랑과 OKLab 거리 0.1 이상 떨어진 가장 가까운 단계(라이트 70, 다크 60)를 쓰고, purple 라이트는 60이 카드 태그 색상 규칙(파랑과 40도)을 못 지켜 이웃 단계 50을 쓴다. 값은 `scripts/build-palette.mjs`가 토큰 정본의 면 값에서 계산해 `color.palette.*`에 쓰고(`npm run palette`, 이어 `npm run tokens`), `test/palette.test.js`가 다시 계산한 값과 같은지 본다. 색마다 단계는 셋이다. `fill`은 옅은 면(`fg`, `muted` 글자 4.5, `border` 3 이상, 다크는 그림 바탕과 도형 바탕에서 `distance.fill-dark` 이상), `stroke`는 원색이 모든 그림 면과 모든 색의 `fill` 위 3을 넘으면 원색 그대로, 아니면 같은 색상에서 가장 가까운 값(라이트는 어둡게, 다크는 밝게), `ink`는 같은 조건에서 4.5를 넘는 값이다. 갈래색(`flow.*`)은 원색과 같은 색상에 밝기만 달리한 `dot` 단계다. 같은 밝기의 색은 색각 이상 시뮬레이션에서 가까워지기 때문이다.
+팔레트는 색마다 사람이 정한 원색 하나에서 대비 규칙으로 단계를 계산한 값이다. 원색 표는 `scripts/lib/palette.mjs`의 `ANCHORS` 한 곳이고 NHN 자료의 색(파랑 `#125DE6`, 보라 `#B28FD1`, 빨강 `#EF0F0F`, 초록 `#09C72C`)과 주황(비교, 주의용) 다섯이다. 다크 원색은 라이트와 같은 색상각에서 밝기를 올린 값이다. 단계는 fill(옅은 면), stroke(그래픽, 면 위 대비 3), ink(글자와 켜진 면, 대비 4.5), dot(흐름 점), outline(외곽선, 대비 3)이고, 파랑은 히트맵 두 끝과 아이콘 단계가 더 있다. 범주 이름 `navy`는 파랑, `pink`는 보라, `teal`은 초록, `amber`는 주황(주의), `sky`는 파랑 강조용 옅은 면을 쓴다.
 
 | 색 | 라이트 fill, stroke, ink | 다크 fill, stroke, ink |
 |---|---|---|
