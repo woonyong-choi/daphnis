@@ -47,7 +47,7 @@ function arrowheads(head, marker) {
 // cost: time O(b), heap O(b), stack O(1)
 // vars: b = 박자 수
 // basis: estimate
-// 요소 종류별 켜짐과 꺼짐 스타일. target은 { id, i, extra, scene }(i는 요소 번호, extra는 열 이름이나 카드 층)다.
+// 요소 종류별 켜짐과 꺼짐 스타일. 강조 그룹은 평소 그 색의 진한 선 1.5px 테두리이고, 색을 고른 도형은 그 색의 outline 단계 1px이다. target은 { id, i, extra, scene }(i는 요소 번호, extra는 열 이름이나 카드 층)다.
 function decorateElement(kind, { id, i, extra, scene }, { segs, toggle, lit, litNode, cardState }) {
   const c = tokens.color;
   switch (kind) {
@@ -59,9 +59,9 @@ function decorateElement(kind, { id, i, extra, scene }, { segs, toggle, lit, lit
       const dashed = kind === 'group' ? box?.border === 'dashed' : box?.shape === 'external';
       const paint = paintOf(box ?? {});
       const plain = kind === 'group' ? (dashed ? c.line : 'none') : c.outline;
-      const off = paint ? c.paint[paint].outline : plain;
+      const off = paint ? `stroke: ${kind === 'group' ? c.paint[paint].stroke : c.paint[paint].outline}; stroke-width: ${kind === 'group' ? tokens.border.tag : tokens.border.thin}` : `stroke: ${plain}; stroke-width: ${tokens.border.thin}`;
       const on = paint ? c.paint[paint].stroke : c.state.active;
-      return toggle(litNode(id, scene), `stroke: ${on}; stroke-width: ${tokens.border.strong}`, `stroke: ${off}; stroke-width: ${tokens.border.thin}`);
+      return toggle(litNode(id, scene), `stroke: ${on}; stroke-width: ${tokens.border.strong}`, off);
     }
     case 'halo':
     case 'group-halo':

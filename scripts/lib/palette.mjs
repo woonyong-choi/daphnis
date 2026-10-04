@@ -14,7 +14,7 @@ const ROLE = {
   orange: { 'light-fill': '#fff1e8', 'light-stroke': '#e65200', 'light-ink': '#e65200', 'dark-fill': '#3a2417', 'dark-stroke': '#ff8a3d', 'dark-ink': '#ff8a3d' },
   red: { 'light-fill': '#ffeef0', 'light-stroke': '#f04452', 'light-ink': '#f04452', 'dark-fill': '#3d1e24', 'dark-stroke': '#ff6b77', 'dark-ink': '#ff6b77' },
   green: { 'light-fill': '#e8f7ef', 'light-stroke': '#03a564', 'light-ink': '#03a564', 'dark-fill': '#13302a', 'dark-stroke': '#3ed598', 'dark-ink': '#3ed598' },
-  gray: { 'light-fill': '#e7e7e7', 'light-stroke': '#646464', 'light-ink': '#646464', 'dark-fill': '#282828', 'dark-stroke': '#a0a0a0', 'dark-ink': '#a0a0a0' },
+  gray: { 'light-fill': '#e7e7e7', 'light-stroke': '#5d5d5d', 'light-ink': '#5d5d5d', 'dark-fill': '#363636', 'dark-stroke': '#aaaaaa', 'dark-ink': '#aaaaaa' },
 };
 // 세 번째 이후 흐름 점은 진한 회색이다.
 const FLOW_DOT = { 'light-dot': '#585858', 'dark-dot': '#c7c7c7' };

@@ -49,7 +49,7 @@ function drawGroup(g, j, { decorate, glyphs, scene }) {
   const left = g.x + g.titleDx;
   const decor = head.decor ? drawDecor(head.decor, { x: left, y: g.y + (SIZE.group.title - head.decor.h) / 2, iconData: g.iconData }, glyphs) : '';
   const paint = paintOf(g);
-  const colors = paint ? ` ps-${paint} pf-${paint}` : '';
+  const colors = paint ? ` ps-${paint}` : '';
   const depth = Math.min(depthOf(g, scene), MAX_GROUP_STEP);
   const deep = depth ? ` d${depth + 1}` : '';
   const dashed = g.border === 'dashed';

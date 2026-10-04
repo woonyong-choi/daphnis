@@ -109,5 +109,5 @@ test('toHtml_painted_stroke_rules_beat_the_lit_blue_and_show_the_halo_when_on', 
   const html = await toHtml(await buildFigure(SOURCE), 'x');
   assert.ok(html.includes('.fl .fl-node.on .fl-stroke.ps-amber'));
   assert.ok(html.includes('.fl .fl-group.on .fl-halo'));
-  assert.ok(html.includes('.fl .frame-box.pf-teal'));
+  assert.ok(html.includes('.fl .fl-group .frame-box.ps-teal'));
 });

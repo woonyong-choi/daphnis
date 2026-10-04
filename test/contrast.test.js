@@ -151,14 +151,14 @@ test('contrast_dimmed_row_text_keeps_value_and_helper_text_at_4_5', () => {
   }
 });
 
-// 근거: 결정 #14 "라이트 그림 바탕 #f6f7f9, 그룹 바탕은 그보다 아주 약간 진하게(깊이 1 group-1, 차이 25 이하), 카드는 흰색으로 바탕보다 한 톤 위"
+// 근거: 결정 #14 "라이트 그림 바탕 #f6f7f9, 그룹 바탕은 그보다 아주 약간 진하게(깊이 1 group-1, 단계 간격을 넓혀 차이 33 이하), 카드는 흰색으로 바탕보다 한 톤 위"
 test('figureGround_light_bg_is_gray_group_is_slightly_darker_and_node_face_is_brighter_in_both_themes', () => {
   const sum = (hex) => Number.parseInt(hex.slice(1, 3), 16) + Number.parseInt(hex.slice(3, 5), 16) + Number.parseInt(hex.slice(5, 7), 16);
   const [bg, group, node] = ['bg', 'group-1', 'node'].map((name) => color('light', name));
 
   assert.equal(node, '#ffffff');
   assert.ok(sum(bg) <= sum('#f8f9fb') && sum(bg) < sum(node), bg);
-  assert.ok(sum(group) < sum(bg) && sum(bg) - sum(group) <= 25, group);
+  assert.ok(sum(group) < sum(bg) && sum(bg) - sum(group) <= 33, group);
   for (const theme of THEMES) assert.ok(contrast(color(theme, 'node'), color(theme, 'bg')) > 1.05, `${theme} node on bg`);
   // 그룹과 그 안 노드는 두 테마 모두 다른 면이다(다크 그룹이 노드와 같은 색이던 문제)
   for (const theme of THEMES) assert.notEqual(color(theme, 'group-1'), color(theme, 'node'), `${theme} group face equals node face`);
