@@ -409,3 +409,17 @@ test('main_render_of_the_endless_departure_source_ends_with_a_time_limit_diagnos
     assert.ok(!existsSync(join(folder, 'endless.svg')) && !existsSync(join(folder, 'endless.html')));
   });
 });
+
+// 근거: 이슈 #103 완료 조건 "정밀도 원본은 내부 오류가 아니라 6번 줄의 시간 정밀도 입력 진단". 원본 그대로 힙 200MB와 제한 시간에서 실행한다
+test('main_render_of_the_precision_source_reports_a_time_precision_diagnostic_on_line_6_and_no_file', () => {
+  const source = 'flow right\nbox a "A"\nbox b "B"\na -> b\nstep "T" for=3599999.0000000005ms\n  track a -> b time=1ms at=3599999ms every=0.000000000001ms\n';
+  withFolder((folder) => {
+    writeFileSync(join(folder, 'precision.dap'), source);
+
+    const result = spawnSync(process.execPath, ['--max-old-space-size=200', CLI, 'render', 'precision.dap', '--html'], { cwd: folder, encoding: 'utf8', timeout: 20000 });
+
+    assert.equal(result.status, 1, `${result.signal} ${result.stderr.slice(-300)}`);
+    assert.match(result.stderr, /^precision\.dap:6: time precision is not supported: .* Raise every= or lower at=$/m);
+    assert.ok(!existsSync(join(folder, 'precision.svg')) && !existsSync(join(folder, 'precision.html')));
+  });
+});
