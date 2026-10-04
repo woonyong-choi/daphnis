@@ -324,6 +324,7 @@
   --scale-aspect-max: 3;
   --scale-zoom-step: 1.25;
   --scale-flow-dots-max: 80;
+  --scale-chip-visible-share: 0.6;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
@@ -2011,7 +2012,7 @@ function drawValueState(stage, seg, t) {
   });
 }
 
-figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":4740,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"partsOn":["payments.order_id","orders.id"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제 행은 주문 행을 외래 키로 가리킨다","series":[],"growing":[],"lights":[]},{"si":0,"t0":4740,"t1":7790,"hops":[{"edge":0,"isBack":false,"ms":750,"to":"orders","data":["1042"],"line":16,"chipPath":[[0,25.61401366936039,0,1],[0.005964783915087195,25.256126636969753,0,1],[0.018437560239978185,24.507760057476276,0,1],[0.03811187083526059,23.32730142175933,0,1],[0.06570096117429003,21.671956001417584,0,1],[0.10187787646557456,19.501341083940503,0,1],[0.1471694540672311,16.783846427841127,0,1],[0.20178945770550127,13.506646209544897,0,1],[0.2654118923904264,9.689300128449418,0,1],[0.336927964018532,5.398335830763074,0,1],[0.41429543374262523,0.7562876473174924,0,1],[0.5745912671782765,-8.861462358821598,0,1],[0.6510007925372481,-13.446033880359892,0,1],[0.7213290129396324,-17.665727104502935,0,1],[1,-25.614013668103155,0,1]]}],"edgesOn":[0],"nodesOn":[0,1],"groupsOn":[],"partsOn":["payments.order_id","orders.id"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제 행은 주문 행을 외래 키로 가리킨다","series":[],"growing":[],"lights":[]}],"steps":["결제"],"cardCounts":[0,0],"edgeEnds":[[0,1]],"seriesCount":0,"rowCount":0,"metrics":{"active":"var(--color-state-active)","chipFill":"var(--color-state-active-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
+figurePlay(document.querySelector('.fl-figure'), {"segs":[{"si":0,"t0":0,"t1":4740,"hops":[],"edgesOn":[],"nodesOn":[],"groupsOn":[],"partsOn":["payments.order_id","orders.id"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제 행은 주문 행을 외래 키로 가리킨다","series":[],"growing":[],"lights":[]},{"si":0,"t0":4740,"t1":7790,"hops":[{"edge":0,"isBack":false,"ms":750,"to":"orders","data":["order_id 1042"],"line":16,"chipPath":[[0,30.47607421623539,0.5,1],[0.005964783915087195,30.118187183844753,0.5,1],[0.018437560239978185,29.369820604351276,0.5,1],[0.9721901497987274,-27.855334769173623,0,1],[0.9877253322178113,-28.787445714318665,0,1],[0.9972839607967611,-29.360963429055687,0,1],[1,-29.523925777478155,0,1]]}],"edgesOn":[0],"nodesOn":[0,1],"groupsOn":[],"partsOn":["payments.order_id","orders.id"],"cards":{},"cardsBefore":{},"cardsAt":{},"caption":"결제 행은 주문 행을 외래 키로 가리킨다","series":[],"growing":[],"lights":[]}],"steps":["결제"],"cardCounts":[0,0],"edgeEnds":[[0,1]],"seriesCount":0,"rowCount":0,"metrics":{"active":"var(--color-state-active)","chipFill":"var(--color-state-active-fill)","halo":10,"haloOpacity":0.2,"packet":4.5,"chipRadius":8,"chipLine":15,"chipPadX":18,"chipPadY":8,"chipGap":12,"icon":12,"iconStroke":1.75,"pauseStroke":2.5,"zoomMax":6,"zoomStep":1.25,"move":[0.455,0.03,0.515,0.955]}});
 </script>
 </body>
 </html>
