@@ -146,7 +146,7 @@ test('buildFigure_every_example_and_demo_chip_stays_inside_clear_and_never_jumps
     for (const hop of hops) {
       const move = { route: hop.track === undefined ? flattenRoute(scene.edges[hop.edge].points) : tracks[hop.track].route, hop, chip: sizeChip(hop.data) };
       let before;
-      for (let t = 0; t <= hop.ms; t += CHIP_FRAME_MS) {
+      for (let t = 0; t <= (hop.cut ?? hop.ms); t += CHIP_FRAME_MS) {
         const { box, point, opacity } = chipStateAt(move, hop.chipPath, t);
         const isVisible = opacity >= CHIP_VISIBLE_MIN;
         const hit = names.find((name) => overlaps(box, name));

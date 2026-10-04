@@ -2,7 +2,7 @@
 import { CHIP_GAP, chipCandidateAt, chipCandidates, descOf, sizeChip } from './chip.js';
 import { gridOf } from './chip-grid.js';
 import { issuesOf, settle, simplify } from './chip-fade.js';
-import { dotAt, MOVE, NODE_MS, visibleShare } from './chip-motion.js';
+import { cutPath, dotAt, MOVE, NODE_MS, visibleShare } from './chip-motion.js';
 import { addSlides, SWITCH_COST } from './chip-slide.js';
 import { progressAt } from './easing.js';
 import { flattenRoute } from './route.js';
@@ -43,7 +43,7 @@ export function planHops(scene, timeline, avoid) {
       if (!hop.data) continue;
       const key = `${hop.track === undefined ? hop.edge : `t${hop.track}`}\u0000${hop.ms}\u0000${hop.isBack}\u0000${hop.data.join('\u0000')}`;
       if (!plans.has(key)) plans.set(key, planChip(scene, hop.track === undefined ? hop : { ...hop, route: timeline.tracks[hop.track].route }, avoid));
-      hop.chipPath = plans.get(key).path;
+      hop.chipPath = hop.cut === undefined ? plans.get(key).path : cutPath(plans.get(key).path, hop);
       plannedIssues.set(hop, { scene, issues: hop.track === undefined ? plans.get(key).issues : reportedOf(plans.get(key).issues, hop) });
     }
   }
