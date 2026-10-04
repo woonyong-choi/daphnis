@@ -696,7 +696,7 @@ export const values = freeze({
     "control": {
       "outer": 30,
       "inner": 22,
-      "icon": 12
+      "icon": 16
     },
     "pill": {
       "height": 18
