@@ -50,11 +50,11 @@
   --color-palette-red-light-fill: #ffefed;
   --color-palette-red-light-stroke: #ef0f0f;
   --color-palette-red-light-ink: #e00006;
-  --color-palette-red-light-dot: #e00006;
+  --color-palette-red-light-dot: #8b0002;
   --color-palette-red-dark-fill: #40201c;
   --color-palette-red-dark-stroke: #fd7464;
   --color-palette-red-dark-ink: #ff8575;
-  --color-palette-red-dark-dot: #e35c4e;
+  --color-palette-red-dark-dot: #e25971;
   --color-palette-red-light-outline: #d46f62;
   --color-palette-red-dark-outline: #c67065;
   --color-palette-amber-light-fill: #fff0ea;
@@ -72,7 +72,7 @@
   --color-palette-green-dark-fill: #1a301a;
   --color-palette-green-dark-stroke: #58bf5a;
   --color-palette-green-dark-ink: #58bf5a;
-  --color-palette-green-dark-dot: #319c37;
+  --color-palette-green-dark-dot: #62c963;
   --color-palette-green-light-outline: #629a61;
   --color-palette-green-dark-outline: #5a9659;
   --color-palette-teal-light-fill: #eaf8e9;
@@ -82,7 +82,7 @@
   --color-palette-teal-dark-fill: #1a301a;
   --color-palette-teal-dark-stroke: #58bf5a;
   --color-palette-teal-dark-ink: #58bf5a;
-  --color-palette-teal-dark-dot: #319c37;
+  --color-palette-teal-dark-dot: #62c963;
   --color-palette-teal-light-outline: #629a61;
   --color-palette-teal-dark-outline: #5a9659;
   --color-palette-navy-light-fill: #edf4ff;
@@ -145,9 +145,9 @@
   --color-state-success: var(--color-paint-green-stroke);
   --color-state-warning: var(--color-paint-amber-stroke);
   --color-state-glow: var(--color-palette-blue-light-fill);
-  --color-flow-purple: var(--color-state-active);
-  --color-flow-green: var(--color-paint-purple-dot);
-  --color-flow-teal: var(--color-paint-gray-dot);
+  --color-flow-brand: var(--color-state-active);
+  --color-flow-purple: var(--color-paint-purple-dot);
+  --color-flow-green: var(--color-paint-green-dot);
   --color-flow-gray: var(--color-paint-gray-dot);
   --color-flow-red: var(--color-paint-red-dot);
   --color-figure-icon: var(--color-palette-blue-light-icon);
@@ -219,8 +219,9 @@
   --color-page: var(--color-palette-gray-0);
   --color-tag-purple: var(--color-paint-purple-stroke);
   --color-tag-green: var(--color-paint-green-stroke);
-  --color-tag-teal: var(--color-paint-teal-stroke);
   --color-tag-gray: var(--color-paint-gray-stroke);
+  --color-tag-red: var(--color-paint-red-stroke);
+  --color-tag-brand: var(--color-state-active);
   --color-line: var(--color-palette-gray-300);
   --color-group-2: var(--color-palette-gray-group-2);
   --color-group-3: var(--color-palette-gray-group-3);

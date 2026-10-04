@@ -187,9 +187,9 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 |---|---|
 | `step "이름" ["설명"] [for=12s]` | 단계 시작. `for`는 흐름 단계의 길이이고 생략하면 토큰 `duration.flow-step`이다 |
 | `a -> b ["실어 보낼 글"] [time=3s] [tone=purple] [set="식, 식"]` | 이동 박자. 점 하나가 선 하나를 지난다 |
-| `track a, b -> c -> d ["글"] [at=0s] [every=2s] [time=6s] [tone=teal] [set="식"]` | 흐름. 출발지마다 점이 선언된 선들을 멈춤 없이 잇는다 |
+| `track a, b -> c -> d ["글"] [at=0s] [every=2s] [time=6s] [tone=brand] [set="식"]` | 흐름. 출발지마다 점이 선언된 선들을 멈춤 없이 잇는다 |
 | `a -> b "글" & c -> d time=2s` | 한 박자 안의 여러 이동 |
-| `show id "글" [tag="태그"] [tone=teal] [card=색] [meta="덧붙임"] [mark="표시"] [mono]` | 카드 줄 하나를 바로 앞 박자에 더한다 |
+| `show id "글" [tag="태그"] [tone=purple] [card=색] [meta="덧붙임"] [mark="표시"] [mono]` | 카드 줄 하나를 바로 앞 박자에 더한다 |
 | `show id graph "가 -> 나; 가 -> 다" [lit="가, 나"]` | 카드에 작은 관계 그래프 줄 하나를 더한다 |
 | `clear id` | 바로 앞 박자에서 카드를 비운다 |
 | `light id id` | 점 없이 도형과 그룹을 밝히는 박자. 이름은 하나 이상이고, 격자 칸은 `격자.칸`으로 적는다 |
@@ -210,7 +210,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 - `show`, `clear`는 바로 앞 박자에 붙고, 적은 순서대로 적용한다. 단계의 첫 줄이 `show`면 멈추는 박자를 하나 만든다. 단계의 첫 줄이 `clear`면 오류다. 비울 카드가 없기 때문이다.
 - 내용이 없는 카드는 점선 틀만 보이고 글자는 없다. 정보 없는 표시가 카드마다 반복되면 화면이 어수선해지기 때문이다. 카드에 읽을 글이 없으므로 대체 글도 두지 않는다.
 - 도착 규칙: 그 박자에 점이 도착하는 도형의 카드는 그 도형에 도착하는 이동 가운데 가장 늦은 도착 때 바뀐다. 나머지 도형의 카드는 박자 시작에 바뀐다.
-- 태그는 대문자로 그린다. `tone`이 있는 줄은 그 색이다. `tone`이 없는 줄은, `tone` 없이 처음 나온 태그 순서대로 보라, 초록, 청록을 돌아가며 붙인 색을 그림 전체에서 같은 태그에 쓴다. 파랑은 "지금", 주황은 비교 계열을 뜻해서 태그 색이 아니다. 옛 값 `tone=blue`는 청록(`teal`), `tone=orange`는 보라(`purple`)로 그리고 폐기 진단으로 새 이름을 알린다([호환 규칙](#호환-규칙)). 색은 [색 역할 표](docs-integration.md#색-역할)를 따른다. `tag` 없이 `tone`만 쓰면 오류다.
+- 태그는 대문자로 그린다. `tone`이 있는 줄은 그 색이다. `tone`이 없는 줄은, `tone` 없이 처음 나온 태그 순서대로 보라, 초록, 진한 회색을 돌아가며 붙인 색을 그림 전체에서 같은 태그에 쓴다. 파랑(`brand`, 지금)과 빨강(`red`, 오류)은 `tone`으로 고를 때만 쓰고, 주황은 비교 계열을 뜻해서 태그 색이 아니다. 옛 값 `tone=teal`, `tone=blue`, `tone=orange`는 보라(`purple`)로 읽고 폐기 진단으로 새 이름을 알린다([호환 규칙](#호환-규칙)).
 - `mark`는 8자 이하다. 카드 오른쪽 끝에 들어갈 자리가 정해져 있기 때문이다.
 - 관계 그래프 글은 `;`로 관계를 나누고, 관계는 `이름 -> 이름` 또는 이름 하나다. 이름은 앞뒤 공백을 빼고 `;`, `,`, `->`를 쓰지 않는다. 관계가 돌아 제자리로 오거나, `lit`의 이름이 그래프에 없으면 오류다.
 - 구조 그림에서 카드를 쓰는 도형은 `box`, `external`, `store`, `person`이다. `decision`, 격자, 그룹에 `show`를 쓰면 오류다. 다른 그림 종류는 [그림 종류](figure-kinds.md)를 따른다.
@@ -223,7 +223,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 흐름 단계:
 
 - 흐름은 박자와 따로 돈다. 한 단계에 `track` 줄을 두면 그 단계는 길이가 `for`인 구간 하나이고, 흐름끼리 서로 기다리지 않는다. 한 단계에 박자 줄(이동, `show`, `clear`, `light`, `say`, `wait`)과 `track` 줄을 섞으면 오류다. 한 그림에는 두 종류의 단계가 함께 있어도 된다. 구조 그림에서만 쓴다.
-- `track a, b, c -> x -> y`는 출발지마다 흐름 하나로 펼친다. `at`을 적지 않으면 출발지 i의 첫 출발은 `every × i / n`(n은 출발지 수)이라 출발이 엇갈린다. `tone`을 적지 않으면 출발지 이름마다 문법 표의 점 색 순서대로 색이 하나씩 배정되고, 같은 출발지 이름은 그림 전체에서 같은 색이다. 적으면 그 값이다.
+- `track a, b, c -> x -> y`는 출발지마다 흐름 하나로 펼친다. `at`을 적지 않으면 출발지 i의 첫 출발은 `every × i / n`(n은 출발지 수)이라 출발이 엇갈린다. `tone`을 적지 않으면 출발지 이름마다 브랜드 파랑(`brand`), 보라(`purple`) 순으로 색이 하나씩 배정되고 셋째 출발지부터는 모두 진한 회색(`gray`)이며, 같은 출발지 이름은 그림 전체에서 같은 색이다. 적으면 그 값이다.
 - 구간마다 이동과 같은 규칙으로 선을 고른다(같은 방향 선, 없으면 거꾸로, 둘 다 없으면 오류). 점은 구간 사이에서 멈추지 않고 이어 붙인 경로를 지나며, 도형 안을 지나는 동안은 보이지 않는다. 이동 시간은 구간 시간(선 길이 비례)의 합이고 `time=`은 경로 전체의 시간이다. 출발과 도착이 느린 곡선(`easing.move`)은 경로 전체에 한 번 건다.
 - `at`은 처음 출발 시각이다(`0s`도 된다). `every`가 있으면 단계 끝 전까지 그 간격으로 되풀이해 출발한다. 단계 끝까지 도착하지 못하는 점은 단계 끝에서 서서히 사라지게 그리고(`duration.cut-fade`), 그 점이 닿지 못한 도형의 값은 바뀌지 않는다. 출발 수와 잘린 점 수는 배치가 정하는 이동 시간에 따라 달라지므로 횟수가 중요한 그림은 `time=`을 적는다. 점이 하나도 그려지지 않는 흐름은 [그림 검사](figure-check.md) 14번 오류다.
 - `for`는 `track`이 없는 단계에 쓰면 오류다.
@@ -231,7 +231,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 
 점 색과 값 바꾸기:
 
-- `tone=`은 점과 글 상자의 색이다. 값 목록은 카드 태그의 `tone`과 같아서(`purple`, `green`, `teal`, `gray`) 문법 표의 값 목록 한 곳이 이름을 정한다. 생략한 이동은 지금 색(`state.active`)이고, 생략한 흐름은 위 자동 배정 색이다. 색은 토큰 `color.flow.*`이고 글 상자 면과 테두리가 같은 색이다([색 역할](docs-integration.md#색-역할)).
+- `tone=`은 점과 글 상자의 색이다. tone 이름은 그 색을 그린다. 값 목록은 카드 태그의 `tone`과 같아서(`brand`는 브랜드 파랑, `purple`, `green`, `gray`, `red`는 오류) 문법 표의 값 목록 한 곳이 이름을 정한다. 생략한 이동은 지금 색(`state.active`)이고, 생략한 흐름은 위 자동 배정 색이다. 색은 토큰 `color.flow.*`이고 글 상자 면과 테두리가 같은 색이다([색 역할](docs-integration.md#색-역할)).
 - `set="식, 식"`은 이동이나 흐름의 점이 도형에 닿을 때 값을 바꾼다. `@도형`을 붙이면 점이 그 도형에 닿을 때, 없으면 이동이나 흐름의 도착 도형에 닿을 때 적용한다. `@도형`은 경로 위 도형이어야 하고, 경로가 그 도형을 두 번 지나면 어느 쪽인지 알 수 없어 오류다(방문 순번은 없다. 그 도형의 변화는 `on` 줄로 쓴다). 낱말을 담는 값에 `+`, `-`를 쓰면 오류다.
 - 같은 순간에 적용할 식의 순서: 시각이 앞선 것, 같은 시각이면 `on` 줄이 모두 `set=`보다 앞, 같은 종류면 이동과 흐름의 선언 순서, 같은 줄이면 적은 순서다.
 - 값이 바뀌는 순간 그 카드 줄과 그 값을 참조하는 줄이 `duration.value-flash` 동안 밝은 테두리(면 칠 없음)로 보이고, 값 글자는 새 글로 바뀐다. 글이 그대로면 바뀐 것이 아니다.
@@ -311,12 +311,12 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `edge.no` | 양의 정수 | 판 1 |  |
 | `step.for` | 시간 | 판 1 |  |
 | `hop.time` | 시간 | 판 1 |  |
-| `hop.tone` | `purple`, `green`, `teal`, `gray`, `red` | 판 1 |  |
+| `hop.tone` | `brand`, `purple`, `green`, `gray`, `red` | 판 1 |  |
 | `hop.set` | 글 | 판 1 |  |
 | `track.at` | 시간(0 가능) | 판 1 |  |
 | `track.every` | 시간 | 판 1 |  |
 | `track.time` | 시간 | 판 1 |  |
-| `track.tone` | `purple`, `green`, `teal`, `gray`, `red` | 판 1 |  |
+| `track.tone` | `brand`, `purple`, `green`, `gray`, `red` | 판 1 |  |
 | `track.set` | 글 | 판 1 |  |
 | `value.on` | 도형 이름 | 판 1 |  |
 | `value.from` | 숫자 또는 낱말 | 판 1 |  |
@@ -327,7 +327,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `edge.head` | `end`, `both`, `none` | 판 1 |  |
 | `box.shape` | `rect`, `circle`, `tile` | 판 1 |  |
 | `show.tag` | 글 | 판 1 |  |
-| `show.tone` | `purple`, `green`, `teal`, `gray`, `red` | 판 1 |  |
+| `show.tone` | `brand`, `purple`, `green`, `gray`, `red` | 판 1 |  |
 | `show.card` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray`, `sky` | 판 1 |  |
 | `show.meta` | 글 | 판 1 |  |
 | `show.mark` | 글, 최대 8자 | 판 1 |  |
@@ -354,7 +354,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `scale` | `scale 값` | `linear`, `log` | `linear` | 없음 |
 | `zero` | `zero 값` | `on`, `off` | `on` | 없음 |
 | `chartType` | `chart 뒤` | `bar`, `dumbbell`, `box`, `scatter`, `line`, `difference`, `heatmap` | 없음 | 없음 |
-| `tone` | `hop.tone`, `track.tone`, `show.tone` | `purple`, `green`, `teal`, `gray`, `red` | 없음 | `blue` → `teal`, `orange` → `purple` |
+| `tone` | `hop.tone`, `track.tone`, `show.tone` | `brand`, `purple`, `green`, `gray`, `red` | 없음 | `teal` → `purple`, `blue` → `purple`, `orange` → `purple` |
 | `role` | `series.role` | `main`, `compare` | 선언 순서대로 main, compare(`dumbbell`은 compare, main) | 없음 |
 | `paint` | `group.fill`, `group.stroke`, `node.fill`, `node.stroke`, `show.card` | `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray`, `sky` | 없음 | 없음 |
 | `head` | `edge.head` | `end`, `both`, `none` | `end` | 없음 |

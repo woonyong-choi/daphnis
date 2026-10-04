@@ -8,8 +8,8 @@ import { fillOf } from './paint.js';
 
 const SPACE = values.space;
 const RADIUS = values.radius;
-// tone 없는 태그에 돌아가며 붙이는 색. gray는 tone으로 고를 때만 쓴다.
-const TONE_ORDER = ['purple', 'green', 'teal'];
+// tone 없는 태그에 돌아가며 붙이는 색. brand(지금의 파랑)와 red(오류)는 tone으로 고를 때만 쓴다.
+const TONE_ORDER = ['purple', 'green', 'gray'];
 
 // cost: time O(t), heap O(t), stack O(1)
 // vars: t = 태그 종류 수

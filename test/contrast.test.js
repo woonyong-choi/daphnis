@@ -24,7 +24,7 @@ const BORDER_FACES = [...FIGURE_FACES, 'surface', ...DOCUMENT_FACES];
 // 강조 글자는 그룹 바탕 위에 놓이지 않는다. 카드 표시는 내용이 찬 카드 바탕(card-on)에, 링크는 문서 면에 놓인다.
 const TEXT_FACES = ['bg', 'node', 'card-on', ...DOCUMENT_FACES];
 const TEXT_ROLES = ['state.active-text', 'ui.link'];
-const FLOW_ROLES = ['flow.purple', 'flow.green', 'flow.teal', 'flow.gray'];
+const FLOW_ROLES = ['flow.brand', 'flow.purple', 'flow.green', 'flow.gray', 'flow.red'];
 const GRAPHIC_ROLES = ['state.active', 'ui.focus', 'ui.progress', 'data.main', 'data.compare', 'figure.icon', ...FLOW_ROLES];
 const THEMES = ['light', 'dark'];
 const STROKE_STEP = 0.004;
@@ -89,7 +89,7 @@ test('contrast_text_pairs_reach_4_5_in_both_themes', () => {
     expectAtLeast(theme, TEXT, TEXT_FACES.flatMap((face) => TEXT_ROLES.map((role) => [role, face])));
     expectAtLeast(theme, TEXT, [['state.on-active', 'state.active-fill'], ['fg', 'ui.control-on'], ['muted', 'bg']]);
     for (const face of ['node', 'surface', 'card-on']) {
-      for (const tone of ['purple', 'green', 'teal', 'gray']) {
+      for (const tone of ['purple', 'green', 'gray', 'red', 'brand']) {
         const band = mixHex(color(theme, face), color(theme, `tag.${tone}`), opacity('tag'));
         const ratio = contrast(color(theme, 'fg'), band);
         assert.ok(ratio >= TEXT, `${theme} tag ${tone} on ${face}: ${ratio.toFixed(2)}`);
@@ -257,7 +257,7 @@ test('flow_tone_colors_stay_apart_from_each_other_for_normal_protan_and_deutan_s
 // 근거: 규칙 docs-integration.md "카드 태그 색상이 state.active, data.compare와 40도 이상 떨어진다"
 test('tagColors_keep_their_hue_away_from_the_active_blue_and_the_compare_orange', () => {
   for (const theme of THEMES) {
-    for (const tag of ['purple', 'green', 'teal']) {
+    for (const tag of ['purple', 'green']) {
       for (const role of ['state.active', 'data.compare']) {
         const [, tagChroma, tagHue] = oklchOf(color(theme, `tag.${tag}`));
         const [, , roleHue] = oklchOf(color(theme, role));

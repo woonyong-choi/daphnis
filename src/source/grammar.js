@@ -67,12 +67,13 @@ export const VALUES = {
   },
   tone: {
     items: table({
+      brand: V1,
       purple: V1,
       green: V1,
-      teal: V1,
       gray: V1,
       red: V1,
-      blue: { ...V1, deprecated: { since: 1, replace: 'teal', note: 'Tag colors are categories now. Blue means the active state and orange means compare' } },
+      teal: { ...V1, deprecated: { since: 1, replace: 'purple', note: 'Tone names are the colors they draw now: brand is the brand blue, purple, green, gray, and red for errors. Teal has no color of its own' } },
+      blue: { ...V1, deprecated: { since: 1, replace: 'purple', note: 'Tag colors are categories now. Blue means the active state and orange means compare. Use brand for the brand blue' } },
       orange: { ...V1, deprecated: { since: 1, replace: 'purple', note: 'Tag colors are categories now. Blue means the active state and orange means compare' } },
     }),
   },

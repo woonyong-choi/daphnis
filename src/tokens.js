@@ -185,9 +185,9 @@ export const tokens = freeze({
       "glow": "var(--color-state-glow)"
     },
     "flow": {
+      "brand": "var(--color-flow-brand)",
       "purple": "var(--color-flow-purple)",
       "green": "var(--color-flow-green)",
-      "teal": "var(--color-flow-teal)",
       "gray": "var(--color-flow-gray)",
       "red": "var(--color-flow-red)"
     },
@@ -287,8 +287,9 @@ export const tokens = freeze({
     "tag": {
       "purple": "var(--color-tag-purple)",
       "green": "var(--color-tag-green)",
-      "teal": "var(--color-tag-teal)",
-      "gray": "var(--color-tag-gray)"
+      "gray": "var(--color-tag-gray)",
+      "red": "var(--color-tag-red)",
+      "brand": "var(--color-tag-brand)"
     },
     "line": "var(--color-line)",
     "group-2": "var(--color-group-2)",
@@ -575,11 +576,11 @@ export const values = freeze({
         "light-fill": "#ffefed",
         "light-stroke": "#ef0f0f",
         "light-ink": "#e00006",
-        "light-dot": "#e00006",
+        "light-dot": "#8b0002",
         "dark-fill": "#40201c",
         "dark-stroke": "#fd7464",
         "dark-ink": "#ff8575",
-        "dark-dot": "#e35c4e",
+        "dark-dot": "#e25971",
         "light-outline": "#d46f62",
         "dark-outline": "#c67065"
       },
@@ -601,7 +602,7 @@ export const values = freeze({
         "dark-fill": "#1a301a",
         "dark-stroke": "#58bf5a",
         "dark-ink": "#58bf5a",
-        "dark-dot": "#319c37",
+        "dark-dot": "#62c963",
         "light-outline": "#629a61",
         "dark-outline": "#5a9659"
       },
@@ -613,7 +614,7 @@ export const values = freeze({
         "dark-fill": "#1a301a",
         "dark-stroke": "#58bf5a",
         "dark-ink": "#58bf5a",
-        "dark-dot": "#319c37",
+        "dark-dot": "#62c963",
         "light-outline": "#629a61",
         "dark-outline": "#5a9659"
       },
@@ -693,11 +694,11 @@ export const values = freeze({
       "glow": "#edf4ff"
     },
     "flow": {
-      "purple": "#125de6",
-      "green": "#8361a0",
-      "teal": "#585858",
+      "brand": "#125de6",
+      "purple": "#8361a0",
+      "green": "#008218",
       "gray": "#585858",
-      "red": "#e00006"
+      "red": "#8b0002"
     },
     "figure": {
       "icon": "#125de6",
@@ -709,7 +710,7 @@ export const values = freeze({
         "stroke": "#ef0f0f",
         "outline": "#d46f62",
         "ink": "#e00006",
-        "dot": "#e00006"
+        "dot": "#8b0002"
       },
       "amber": {
         "fill": "#fff0ea",
@@ -795,8 +796,9 @@ export const values = freeze({
     "tag": {
       "purple": "#8d6baa",
       "green": "#008c1a",
-      "teal": "#008c1a",
-      "gray": "#5d5d5d"
+      "gray": "#5d5d5d",
+      "red": "#ef0f0f",
+      "brand": "#125de6"
     },
     "line": "#b7b7b7",
     "group-2": "#e1e1e1",
