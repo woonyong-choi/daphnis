@@ -3,6 +3,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, unlinkSync } from 'node:fs';
 import { basename, dirname, extname, join, relative, sep } from 'node:path';
 import { buildReported, report, writeOutput } from './build-reported.js';
+import { fileHref } from './href.js';
 import { applyImages, findBlocks } from './md.js';
 import { makeDiagnostic } from './source/problems.js';
 import { toSvg } from './svg.js';
@@ -19,7 +20,7 @@ const problem = (message, code = 'md') => makeDiagnostic({ severity: 'error', li
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 // 문서에 쓸 이미지 주소. 문서 폴더 기준 상대 경로, 구분자는 `/`, 이미지 문법을 깨는 글자는 퍼센트 인코딩이다.
-const hrefOf = (file, svg) => relative(dirname(file), svg).split(sep).map((part) => encodeURIComponent(part).replace(/[()]/g, (c) => `%${c.charCodeAt(0).toString(16)}`)).join('/');
+const hrefOf = (file, svg) => fileHref(relative(dirname(file), svg).split(sep), { explicit: false });
 
 // cost: time O(b), heap O(b), stack O(1)
 // vars: b = 블록 수

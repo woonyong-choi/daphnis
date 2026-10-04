@@ -152,11 +152,11 @@ test('main_gallery_writes_the_index_and_the_document_preview_with_each_figure_an
     const page = (name) => readFileSync(join(folder, 'out', `${name}.html`), 'utf8');
 
     assert.equal(result.status, 0, result.stderr);
-    assert.match(page('index'), /src="a\.html"/);
-    assert.match(page('index'), /src="b\.html"/);
+    assert.match(page('index'), /src="\.\/a\.html"/);
+    assert.match(page('index'), /src="\.\/b\.html"/);
     assert.match(page('index'), /href="document\.html"/);
-    assert.match(page('document'), /<img src="a\.svg"/);
-    assert.match(page('document'), /<img src="b\.svg"/);
+    assert.match(page('document'), /<img src="\.\/a\.svg"/);
+    assert.match(page('document'), /<img src="\.\/b\.svg"/);
     for (const name of ['index', 'document']) {
       assert.match(page(name), /<h2><span class="title">흐름 제목<\/span><code class="name">a\.dap<\/code><span class="kind">flow<\/span><\/h2>/);
       assert.match(page(name), /<h2><code class="name">b\.dap<\/code><span class="kind">bar<\/span><\/h2>/);
@@ -278,7 +278,7 @@ test('gallery_links_a_scheme_like_file_name_only_as_an_encoded_explicit_relative
       assert.ok(links.length > 0, page);
       assert.deepEqual(links.filter((url) => !url.startsWith('./')), [], `${page}: 모든 파일 링크는 ./로 시작한다`);
       assert.ok(!/(?:href|src)="javascript/i.test(html), `${page}: 스킴으로 시작하는 링크가 없다`);
-      assert.ok(html.includes('./javascript%3Aparent.__daphnisAudit%3D1%3Bvoid(0)') && html.includes('./javascript%3Aparent.__daphnisAudit%3D2%3Bvoid(0)'), `${page}: 경로 조각은 퍼센트 인코딩이다`);
+      assert.ok(html.includes('./javascript%3Aparent.__daphnisAudit%3D1%3Bvoid%280%29') && html.includes('./javascript%3Aparent.__daphnisAudit%3D2%3Bvoid%280%29'), `${page}: 경로 조각은 퍼센트 인코딩이다`);
     }
   });
 });
