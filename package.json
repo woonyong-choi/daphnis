@@ -27,6 +27,7 @@
   "type": "module",
   "files": [
     "src",
+    "docs/assets/daphnis-*.svg",
     "LICENSE",
     "NOTICE"
   ],

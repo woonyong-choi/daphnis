@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/daphnis-dark.svg">
+    <img src="docs/assets/daphnis-light.svg" alt="daphnis" width="160">
+  </picture>
+</p>
+
 # daphnis
 
 [English](README.md) | 한국어

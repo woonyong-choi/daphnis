@@ -1,6 +1,7 @@
 // 여러 그림을 한 쪽에서 보는 목록과 문서 안 모습 미리보기.
 import { STYLES } from '../styles.js';
 import { escapeXml, plainText, renderRichHtml } from '../text.js';
+import { faviconLinks } from './favicon.js';
 import { THEME_BUTTONS, THEME_SCRIPT } from './theme.js';
 
 // cost: time O(n), heap O(n), stack O(1)
@@ -33,6 +34,7 @@ export function toGallery(figures, heading) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeXml(heading)}</title>
+${faviconLinks()}
 <style>${STYLES.tokens}${STYLES.control}${STYLES.gallery}</style>
 <script>${THEME_SCRIPT}</script>
 </head>
@@ -76,6 +78,7 @@ export function toDocument(figures, heading) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeXml(heading)} 문서 미리보기</title>
+${faviconLinks()}
 <style>${STYLES.tokens}${STYLES.control}${STYLES.document}</style>
 <script>${THEME_SCRIPT}</script>
 </head>
