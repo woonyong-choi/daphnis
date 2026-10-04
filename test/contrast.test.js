@@ -7,7 +7,10 @@ import { heatLook } from '../src/chart/heatmap.js';
 import { contrast, mixHex, pickInk } from '../src/contrast.js';
 import { toSvg } from '../src/svg.js';
 import { values } from '../src/tokens.js';
-import { linearChannelsOf as channelsOf, linearToOklab, oklchOf, RESUME_ACCENT, RESUME_ORANGE, themeColor, tokenValue } from './helpers.js';
+import { oklchToHex } from '../scripts/lib/oklch.mjs';
+import { valueNames } from '../src/source/grammar.js';
+import { ANCHORS } from '../scripts/lib/palette.mjs';
+import { linearChannelsOf as channelsOf, linearToOklab, oklchOf, themeColor, tokenValue } from './helpers.js';
 
 const TEXT = 4.5;
 const GRAPHIC = 3;
@@ -24,9 +27,9 @@ const TEXT_ROLES = ['state.active-text', 'ui.link'];
 const FLOW_ROLES = ['flow.purple', 'flow.green', 'flow.teal', 'flow.gray'];
 const GRAPHIC_ROLES = ['state.active', 'ui.focus', 'ui.progress', 'data.main', 'data.compare', 'figure.icon', ...FLOW_ROLES];
 const THEMES = ['light', 'dark'];
+const STROKE_STEP = 0.004;
 const ORANGE_HUE = 50;
-const HUE_TOLERANCE = 1;
-const LIGHTNESS_TOLERANCE = 0.01;
+const ORANGE_HUE_TOLERANCE = 6;
 const CHROMA_TOLERANCE = 0.01;
 const CVD_MIN_DISTANCE = 0.1;
 const MIN_TAG_HUE_GAP = 40;
@@ -161,21 +164,27 @@ test('figureGround_light_bg_is_gray_group_is_slightly_darker_and_node_face_is_br
   for (const theme of THEMES) assert.notEqual(color(theme, 'group'), color(theme, 'node'), `${theme} group face equals node face`);
 });
 
-// 근거: 결정 docs-integration.md "대비 규칙이 색 선택보다 우선: 같은 색상에서 기준을 넘는 가장 밝은 단계를 그 자리에만 쓴다"
-test('palette_graphic_text_and_border_colors_are_the_lightest_step_that_reaches_their_floor', () => {
+// 근거: 결정 docs-integration.md "대비 규칙이 색 선택보다 우선: 원색이 기준을 넘으면 원색, 못 넘으면 같은 색상에서 기준을 넘는 가장 가까운 단계를 쓴다"
+test('palette_graphic_text_and_border_colors_are_the_closest_step_that_reaches_their_floor', () => {
   const graphicFaces = ['bg', 'group', 'card-on', 'node', 'page'];
   const lowest = (value, faces, theme = 'light') => Math.min(...faces.map((face) => contrast(value, color(theme, face))));
-  for (const [hue, base] of [['blue', RESUME_ACCENT], ['orange', RESUME_ORANGE]]) {
-    const graphic = color('light', `palette.${hue}.550`);
-    const [, baseC, baseHue] = oklchOf(base);
-    const [, graphicC, graphicHue] = oklchOf(graphic);
+  for (const hue of ['blue', 'orange']) {
+    for (const theme of THEMES) {
+      const stroke = color(theme, `palette.${hue}.${theme}-stroke`);
+      const [L, C, h] = oklchOf(stroke);
+      const back = oklchToHex(L + (theme === 'light' ? STROKE_STEP : -STROKE_STEP), C, h);
+      const reachesFloor = (value) => lowest(value, graphicFaces, theme) >= GRAPHIC;
 
-    assert.ok(Math.abs(graphicHue - baseHue) <= HUE_TOLERANCE && Math.abs(graphicC - baseC) <= CHROMA_TOLERANCE, `${hue} hue/chroma`);
-    assert.ok(lowest(graphic, graphicFaces) >= GRAPHIC && lowest(mixHex(graphic, '#ffffff', STEP_MIX), graphicFaces) < GRAPHIC, `${hue} graphic step`);
+      assert.ok(reachesFloor(stroke), `${theme} ${hue} stroke reaches 3`);
+      assert.ok(stroke === ANCHORS[hue][theme] || !reachesFloor(back), `${theme} ${hue} stroke is the anchor or the closest step`);
+    }
   }
-  const textFaces = ['node', 'bg', 'card-on', 'page'];
+  // 글자 단계(ink)는 모든 그림 면과 모든 색의 fill 위에서 4.5를 맞추는 가장 가까운 단계다.
+  const textFaces = [...['bg', 'node', 'group', 'surface', 'card', 'card-on', 'page'].map((face) => color('light', face)), ...valueNames('paint').map((name) => color('light', `paint.${name}.fill`))];
   const strong = color('light', 'state.active-text');
-  assert.ok(lowest(strong, textFaces) >= TEXT && lowest(mixHex(strong, '#ffffff', STEP_MIX), textFaces) < TEXT, 'light active text step');
+  const [strongL, strongC, strongH] = oklchOf(strong);
+  const lighter = oklchToHex(strongL + STROKE_STEP, strongC, strongH);
+  assert.ok(Math.min(...textFaces.map((face) => contrast(strong, face))) >= TEXT && Math.min(...textFaces.map((face) => contrast(lighter, face))) < TEXT, 'light active text step');
   assert.ok(contrast(color('light', 'state.active'), color('light', 'node')) < TEXT, 'state.active itself is a graphic color, not a text color');
   // 경계는 바탕 쪽으로 한 단계 가면(라이트는 흰색, 다크는 검정 쪽) 3 아래로 떨어져야 최소 값이다.
   for (const [theme, toward] of [['light', '#ffffff'], ['dark', '#000000']]) {
@@ -185,21 +194,19 @@ test('palette_graphic_text_and_border_colors_are_the_lightest_step_that_reaches_
   }
 });
 
-// 근거: 결정 docs-integration.md "accent 파랑은 이력서 색(라이트 #2b96ed에서 3을 넘는 가장 밝은 단계, 다크 #79c0ff), 주황은 같은 L·C로 만든다"
-test('palette_orange_keeps_the_blue_lightness_and_chroma_and_only_turns_the_hue', () => {
-  for (const [theme, blue, orange] of [['light', RESUME_ACCENT, RESUME_ORANGE], ['dark', color('dark', 'palette.blue.400'), color('dark', 'palette.orange.400')]]) {
-    const [blueL, blueC] = oklchOf(blue);
-    const [orangeL, orangeC, orangeHue] = oklchOf(orange);
+// 근거: 결정 docs-integration.md "기본 파랑은 참고 이력서 #3a7bd5, 주황은 같은 톤의 원색 하나에서 대비 규칙으로 계산한다(색상 50도 근처)"
+test('palette_blue_is_the_resume_blue_and_orange_stays_near_hue_50_with_the_blue_chroma', () => {
+  const RESUME_BLUE = '#3a7bd5';
+  const [, blueC] = oklchOf(RESUME_BLUE);
+  const [, orangeC, orangeHue] = oklchOf(color('light', 'palette.orange.light-stroke'));
 
-    assert.ok(Math.abs(blueL - orangeL) <= LIGHTNESS_TOLERANCE, `${theme} L ${blueL.toFixed(3)} / ${orangeL.toFixed(3)}`);
-    assert.ok(Math.abs(blueC - orangeC) <= CHROMA_TOLERANCE, `${theme} C ${blueC.toFixed(3)} / ${orangeC.toFixed(3)}`);
-    assert.ok(Math.abs(orangeHue - ORANGE_HUE) <= HUE_TOLERANCE, `${theme} h ${orangeHue.toFixed(1)}`);
-  }
-  assert.equal(color('light', 'data.compare'), color('light', 'palette.orange.550'));
-  assert.equal(color('dark', 'data.compare'), color('dark', 'palette.orange.400'));
-  assert.equal(color('light', 'state.active'), color('light', 'palette.blue.550'));
-  assert.equal(color('dark', 'state.active'), '#79c0ff');
-  assert.ok(contrast(RESUME_ACCENT, color('light', 'bg')) < GRAPHIC, 'the resume accent itself misses 3 on the figure ground');
+  assert.equal(color('light', 'state.active'), RESUME_BLUE);
+  assert.equal(color('light', 'data.main'), RESUME_BLUE);
+  assert.ok(Math.abs(orangeHue - ORANGE_HUE) <= ORANGE_HUE_TOLERANCE, `orange h ${orangeHue.toFixed(1)}`);
+  assert.ok(Math.abs(orangeC - blueC) <= CHROMA_TOLERANCE, `orange C ${orangeC.toFixed(3)} / blue C ${blueC.toFixed(3)}`);
+  assert.equal(color('light', 'data.compare'), color('light', 'palette.orange.light-stroke'));
+  assert.equal(color('dark', 'data.compare'), color('dark', 'palette.orange.dark-stroke'));
+  assert.equal(color('dark', 'state.active'), color('dark', 'palette.blue.dark-stroke'));
 });
 
 // 색각 이상 시뮬레이션(Machado 2009, 심한 정도 1.0). 선형 sRGB에 곱한다.
@@ -221,7 +228,7 @@ const seenBy = (matrix, hex) => linearToOklab(matrix.map((row) => row.reduce((su
 // 근거: 규칙 docs-integration.md "파랑과 주황은 적록 색각 이상(protanopia, deuteranopia) 시뮬레이션에서도 OKLab 거리 0.1 이상"
 test('palette_blue_and_orange_stay_apart_for_protanopia_and_deuteranopia_in_both_themes', () => {
   for (const theme of THEMES) {
-    const [blue, orange] = theme === 'light' ? ['palette.blue.550', 'palette.orange.550'] : ['palette.blue.400', 'palette.orange.400'];
+    const [blue, orange] = [`palette.blue.${theme}-stroke`, `palette.orange.${theme}-stroke`];
     for (const [name, matrix] of Object.entries(CVD)) {
       const distance = distanceOf(seenBy(matrix, color(theme, blue)), seenBy(matrix, color(theme, orange)));
 

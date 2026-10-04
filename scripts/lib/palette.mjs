@@ -1,23 +1,44 @@
-// 같은 톤 팔레트 계산. 이력서 파랑(라이트 #2b96ed, 다크 palette.blue.400)의 OKLCH 밝기와 채도는 두고 색상만 돌려 색마다 세 단계를 만든다.
-// fill은 옅은 면, stroke는 그래픽(3 이상), ink는 글자(4.5 이상)다. sRGB 밖이면 채도만 줄인다(oklch.mjs).
+// 같은 톤 팔레트 계산. 색마다 사람이 정한 원색(ANCHORS)에서 테마별 fill, stroke, ink를 대비 규칙으로 찾는다.
+// fill은 옅은 면, stroke는 그래픽(3 이상), ink는 글자(4.5 이상)다. 원색이 규칙을 넘으면 원색 그대로, 못 넘으면 같은 색상과 채도에서 밝기만 옮긴다. sRGB 밖이면 채도만 줄인다(oklch.mjs).
 // 대비 기준 수치는 WCAG 규칙값이고 색 취향이 아니라 토큰이 아닌 상수다. 면의 값은 토큰 정본에서 읽은 것을 받는다.
 import { contrast } from '../../src/contrast.js';
 import { valueNames } from '../../src/source/grammar.js';
 import { VISION, distanceOf, seenBy } from './color-vision.mjs';
 import { oklchOf, oklchToHex } from './oklch.mjs';
 
-/** 이력서(woon-resume) `--manta-accent` 라이트 값. 라이트 기준 밝기와 채도를 이 색에서 읽는다. */
-export const RESUME_ACCENT = '#2b96ed';
 const TEXT = 4.5;
 const GRAPHIC = 3;
 const STEP = 0.002;
 const MAX_STEPS = 400;
-// 팔레트 색 이름 → OKLCH 색상(도). gray는 파랑 색상에서 채도만 줄인다(slate 원색 층).
-export const HUES = { red: 18, amber: 86, green: 163, teal: 198, navy: 281, purple: 313, pink: 345, slate: undefined };
-// 면 단계의 목표 밝기와 채도. 대비 기준에 걸리면 밝기를 옮긴다.
-const FILL = { light: { L: 0.955, C: 0.03, step: STEP }, dark: { L: 0.31, C: 0.04, step: -STEP } };
-// gray(slate)의 채도. 면은 거의 무채색이고 그래픽과 글자는 채도가 낮은 청회색이다.
-const GRAY = { fill: 0.006, mark: 0.02 };
+/**
+ * 원색 표. 팔레트 값에서 사람이 정한 입력은 이 표뿐이고 나머지는 모두 계산이다. 앞이 라이트, 뒤가 다크다.
+ * 참고 이력서(hyunseob.github.io/resume)의 파랑 #3a7bd5와 하늘색 #00d2ff 띠를 축으로 둔다. 파랑과 하늘빛 teal을 앞세우고 나머지는 채도를 낮춰 뒤로 물린다(후보 G).
+ * orange는 비교(data.compare) 전용이다. 색상 50도는 red(25도)와 amber(75도)의 가운데라 둘과 갈리고, 밝기와 채도(L 0.685, C 0.148)는 amber(L 0.68)와 blue(C 0.153) 수준이라 톤이 어긋나지 않는다.
+ * 후보 G의 원색에서 두 곳만 고쳤다. 둘 다 이미 있는 구별 규칙(docs-integration.md 색 역할)을 지키려는 것이다. teal 라이트는 색상각 222.7도에서 213도로 돌렸다(카드 태그 색은 지금 파랑과 40도 이상 떨어져야 한다, 파랑이 257도). navy 다크는 밝기 0.711에서 0.685로 낮췄다(적록 색각 이상에서 purple과 거리 0.025 이상).
+ * slate는 gray 색의 팔레트 이름이다.
+ */
+export const ANCHORS = {
+  blue: { light: '#3a7bd5', dark: '#6aa1ff' },
+  orange: { light: '#e07b39', dark: '#e87e42' },
+  red: { light: '#d9534f', dark: '#f08a87' },
+  amber: { light: '#c98a1b', dark: '#e2b25c' },
+  green: { light: '#3f9e6e', dark: '#74c59b' },
+  teal: { light: '#00a5be', dark: '#4cc9ec' },
+  navy: { light: '#4c5fa8', dark: '#8596d6' },
+  purple: { light: '#8a63b8', dark: '#b99be0' },
+  pink: { light: '#c2618d', dark: '#e79cbf' },
+  slate: { light: '#6b7684', dark: '#9aa4b1' },
+};
+// 면 단계의 목표 밝기와 채도 상한. 원색 채도가 이보다 낮으면 원색 채도를 쓴다. 대비 기준에 걸리면 밝기를 옮긴다.
+const FILL = { light: { L: 0.965, C: 0.025, step: STEP }, dark: { L: 0.29, C: 0.04, step: -STEP } };
+// 파랑의 히트맵 두 끝. low는 그림 바탕과 대비 1.5(꾸밈 요소 기준)가 되는 가장 옅은 값이고 채도 상한은 HEAT_LOW_C다. high는 흰 글자와의 대비가 라이트 7(옛 #1d5d91 값), 다크 4.5 이상인 가장 밝은 값이다.
+const HEAT_LOW_C = { light: 0.06, dark: 0.05 };
+const HEAT_LOW_FLOOR = 1.5;
+const HEAT_HIGH_FLOOR = { light: 7, dark: 4.5 };
+const HEAT_LOW_START = { light: 0.95, dark: 0.25 };
+// 구성도 아이콘 파랑(figure.icon). 밝기와 채도는 NHN Cloud 아이콘 파랑(라이트 #125de6)과 지금까지의 다크 아이콘 파랑(#6f9cf5)에서 읽고, 색상은 지금 파랑(blue 원색)보다 ICON_HUE_GAP도 보랏빛으로 돌려 아이콘이 지금 일어나는 것으로 읽히지 않게 한다.
+const ICON = { light: '#125de6', dark: '#6f9cf5' };
+const ICON_HUE_GAP = 10;
 // 갈래색 이름(grammar의 tone 값 목록) → 팔레트 색. gray만 원색 층 이름이 slate다.
 const PALETTE_OF = { gray: 'slate' };
 // 점 단계가 고르는 밝기의 간격과 범위
@@ -27,8 +48,9 @@ const DOT_RANGE = { light: [0.3, 0.62], dark: [0.55, 0.97] };
 // cost: time O(s), heap O(1), stack O(1)
 // vars: s = 찾는 걸음 수
 // basis: estimate
-// start에서 step씩 밝기를 옮기며 처음으로 ok를 만족하는 `#rrggbb`. 걸음이 MAX_STEPS를 넘으면 오류다.
-function search({ start, step, chroma, hue }, ok) {
+// 원색 그대로가 ok면 원색, 아니면 start에서 step씩 밝기를 옮기며 처음으로 ok를 만족하는 `#rrggbb`. 걸음이 MAX_STEPS를 넘으면 오류다.
+function search({ anchor, start, step, chroma, hue }, ok) {
+  if (anchor && ok(anchor)) return anchor;
   for (let i = 0; i < MAX_STEPS; i++) {
     const hex = oklchToHex(start + step * i, chroma, hue);
     if (ok(hex)) return hex;
@@ -45,55 +67,60 @@ const reaches = (hex, faces, floor) => faces.every((face) => contrast(hex, face)
 // vars: h = 색 수, f = 면 수, s = 찾는 걸음 수
 // basis: estimate
 /**
- * 한 테마의 색마다 { fill, stroke, ink }를 만든다.
+ * 한 테마의 색마다 { fill, stroke, ink }를 만든다. blue는 히트맵 두 끝 heat-low, heat-high와 구성도 아이콘 icon도 만든다.
  * @param theme 'light' | 'dark'
- * @param faces { surfaces, fg, muted, border, onActive, references, base }. surfaces는 그림 면 `#rrggbb` 목록, references는 지금과 비교 색, base는 { L, C, hue }로 파랑 기준이다
+ * @param faces { surfaces, fg, muted, border, onActive, white, bg }. surfaces는 그림 면 `#rrggbb` 목록(카드 바탕은 blue fill이라 여기 없다), white는 히트맵 글자색이다
  * @returns { 색이름: { fill, stroke, ink, dot? } }. dot은 갈래색 이름에만 있다
  */
 export function generateTheme(theme, faces) {
-  const { surfaces, fg, muted, border, onActive, base } = faces;
+  const { surfaces, fg, muted, border, onActive, white, bg } = faces;
+  const anchors = Object.fromEntries(Object.entries(ANCHORS).map(([name, pair]) => [name, { hex: pair[theme], lch: oklchOf(pair[theme]) }]));
   const fills = {};
-  for (const [name, hue] of Object.entries(HUES)) {
-    const isGray = hue === undefined;
-    const chroma = isGray ? GRAY.fill : FILL[theme].C;
-    const spec = { start: FILL[theme].L, step: FILL[theme].step, chroma, hue: hue ?? base.hue };
+  for (const [name, { lch: [, C, hue] }] of Object.entries(anchors)) {
+    const spec = { start: FILL[theme].L, step: FILL[theme].step, chroma: Math.min(FILL[theme].C, C), hue };
     fills[name] = search(spec, (hex) => reaches(hex, [fg, muted], TEXT) && contrast(hex, border) >= GRAPHIC);
   }
   const allFills = Object.values(fills);
+  const down = theme === 'light' ? -STEP : STEP;
   const out = {};
-  for (const [name, hue] of Object.entries(HUES)) {
-    const isGray = hue === undefined;
-    const spec = { start: base.L, chroma: isGray ? GRAY.mark : base.C, hue: hue ?? base.hue };
-    const down = theme === 'light' ? -STEP : STEP;
-    const stroke = search({ ...spec, step: down }, (hex) => reaches(hex, [...surfaces, ...allFills], GRAPHIC));
-    const ink = search({ ...spec, step: down }, (hex) => reaches(hex, [...surfaces, ...allFills, onActive], TEXT));
+  for (const [name, { hex, lch: [L, C, hue] }] of Object.entries(anchors)) {
+    const stroke = search({ anchor: hex, start: L, step: down, chroma: C, hue }, (value) => reaches(value, [...surfaces, ...allFills], GRAPHIC));
+    const ink = search({ anchor: stroke, start: oklchOf(stroke)[0], step: down, chroma: C, hue }, (value) => reaches(value, [...surfaces, ...allFills, onActive], TEXT));
     out[name] = { fill: fills[name], stroke, ink };
   }
-  return addDots(out, theme, { ...faces, fills: allFills });
+  const [, blueC, blueHue] = anchors.blue.lch;
+  out.blue['heat-low'] = search({ start: HEAT_LOW_START[theme], step: down, chroma: Math.min(HEAT_LOW_C[theme], blueC), hue: blueHue }, (value) => contrast(value, bg) >= HEAT_LOW_FLOOR);
+  out.blue['heat-high'] = search({ start: anchors.blue.lch[0], step: -STEP, chroma: blueC, hue: blueHue }, (value) => contrast(value, white) >= HEAT_HIGH_FLOOR[theme]);
+  const [iconL, iconC] = oklchOf(ICON[theme]);
+  const iconHue = blueHue + ICON_HUE_GAP;
+  out.blue.icon = search({ anchor: oklchToHex(iconL, iconC, iconHue), start: iconL, step: down, chroma: iconC, hue: iconHue }, (value) => reaches(value, [...surfaces, ...allFills], GRAPHIC));
+  return addDots(out, theme, { surfaces, fills: allFills, onActive, anchors, flowMin: faces.flowMin });
 }
 
 // cost: time O(c^k·k²·v), heap O(c·k), stack O(k)
 // vars: c = 후보 밝기 수, k = 갈래색 수, v = 시각 수
 // basis: estimate
 /**
- * 갈래색(tone) 이름마다 점 단계(dot)를 더한다. ink와 같은 색상과 채도이고 밝기만 다르다.
- * 이름끼리, 그리고 지금(state.active)과 비교(data.compare)와 가장 가까울 때의 OKLab 거리가 flowMin 이상인 조합 가운데 ink 밝기에서 가장 덜 벗어난 조합을 고른다.
- * 후보는 그림 면 위 3, 이동 글 상자 글자(onActive)와 4.5 이상인 밝기만이다. 같은 값이면 먼저 찾은 조합이다.
+ * 갈래색(tone) 이름마다 점 단계(dot)를 더한다. 원색과 같은 색상과 채도이고 밝기만 다르다.
+ * 이름끼리, 그리고 지금(blue stroke)과 비교(orange stroke)와 가장 가까울 때의 OKLab 거리가 flowMin 이상인 조합 가운데 ink 밝기에서 가장 덜 벗어난 조합을 고른다.
+ * 후보는 ink 자신과 밝기 격자 가운데 그림 면 위 3, 이동 글 상자 글자(onActive)와 4.5 이상인 것이다. 같은 값이면 먼저 찾은 조합이다.
  */
-function addDots(out, theme, { surfaces, fills, onActive, base, references, flowMin }) {
+function addDots(out, theme, { surfaces, fills, onActive, anchors, flowMin }) {
   const names = valueNames('tone').map((tone) => PALETTE_OF[tone] ?? tone);
   const [low, high] = DOT_RANGE[theme];
   const options = names.map((name) => {
-    const hue = HUES[name] ?? base.hue;
-    const chroma = HUES[name] === undefined ? GRAY.mark : base.C;
+    const [, chroma, hue] = anchors[name].lch;
+    const inkL = oklchOf(out[name].ink)[0];
+    const lightness = [inkL];
+    for (let L = low; L <= high + 1e-9; L += DOT_STEP) lightness.push(L);
     const found = [];
-    for (let L = low; L <= high + 1e-9; L += DOT_STEP) {
-      const hex = oklchToHex(L, chroma, hue);
-      if (reaches(hex, [...surfaces, ...fills], GRAPHIC) && contrast(hex, onActive) >= TEXT) found.push({ hex, shift: Math.abs(L - oklchOf(out[name].ink)[0]), coords: Object.values(VISION).map((matrix) => seenBy(matrix, hex)) });
+    for (const L of lightness) {
+      const hex = L === inkL ? out[name].ink : oklchToHex(L, chroma, hue);
+      if (reaches(hex, [...surfaces, ...fills], GRAPHIC) && contrast(hex, onActive) >= TEXT) found.push({ hex, shift: Math.abs(L - inkL), coords: Object.values(VISION).map((matrix) => seenBy(matrix, hex)) });
     }
     return found;
   });
-  const reference = references.map((hex) => seenBy(VISION.normal, hex));
+  const reference = [out.blue.stroke, out.orange.stroke].map((hex) => seenBy(VISION.normal, hex));
   let best = { shift: Infinity, picks: [] };
   const choose = (k, picks, shift) => {
     if (shift >= best.shift) return;
@@ -134,32 +161,31 @@ function resolve(table, name) {
   return value;
 }
 
-// 그림 면. 그래픽 3과 글자 4.5를 이 면들 위에서 맞춘다.
-const SURFACES = ['bg', 'node', 'group', 'card', 'card-on', 'page', 'surface'];
+// 그림 면. 그래픽 3과 글자 4.5를 이 면들 위에서 맞춘다. 카드 바탕(card-on)은 blue fill이라 따로 넣지 않고 모든 fill 목록이 맡는다.
+const SURFACES = ['bg', 'node', 'group', 'card', 'page', 'surface'];
 
 // cost: time O(h·f·s), heap O(h), stack O(1)
 // vars: h = 색 수, f = 면 수, s = 찾는 걸음 수
 // basis: estimate
 /**
  * 토큰 정본(tokens.json, tokens.dark.json을 읽은 Map)에서 테마별 색 단계를 만든다.
- * 다크 표는 라이트 표 위에 덮어 쓴 것이다. 기준 밝기와 채도는 라이트가 RESUME_ACCENT, 다크가 `color.palette.blue.400`에서 온다.
- * @returns { 색이름: { 'light-fill', 'light-stroke', 'light-ink', 'dark-fill', 'dark-stroke', 'dark-ink' } }
+ * 다크 표는 라이트 표 위에 덮어 쓴 것이다. 색마다 원색은 ANCHORS에서 온다.
+ * @returns { 색이름: { 'light-fill', 'light-stroke', 'light-ink', 'dark-fill', 'dark-stroke', 'dark-ink' } }. blue는 heat-low, heat-high 단계가 더 있다
  */
 export function generatePalette(light, dark) {
   const lightTable = flatten(light, [], new Map());
   const darkTable = new Map([...lightTable, ...flatten(dark, [], new Map())]);
-  const result = Object.fromEntries(Object.keys(HUES).map((name) => [name, {}]));
-  for (const [theme, table, accent] of [['light', lightTable, RESUME_ACCENT], ['dark', darkTable, resolve(lightTable, 'color.palette.blue.400')]]) {
-    const [L, C, hue] = oklchOf(accent);
+  const result = Object.fromEntries(Object.keys(ANCHORS).map((name) => [name, {}]));
+  for (const [theme, table] of [['light', lightTable], ['dark', darkTable]]) {
     const faces = {
       surfaces: SURFACES.map((name) => resolve(table, `color.${name}`)),
       fg: resolve(table, 'color.fg'),
       muted: resolve(table, 'color.muted'),
       border: resolve(table, 'color.border'),
+      bg: resolve(table, 'color.bg'),
       onActive: resolve(table, 'color.state.on-active'),
-      references: [resolve(table, 'color.state.active'), resolve(table, 'color.data.compare')],
+      white: resolve(table, 'color.data.heat-ink-on'),
       flowMin: table.get('distance.flow'),
-      base: { L, C, hue },
     };
     for (const [name, steps] of Object.entries(generateTheme(theme, faces))) {
       for (const [stage, hex] of Object.entries(steps)) result[name][`${theme}-${stage}`] = hex;

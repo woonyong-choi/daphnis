@@ -3,13 +3,13 @@
     "$type": "color",
     "state": {
       "active": {
-        "$value": "{color.palette.blue.400}"
+        "$value": "{color.palette.blue.dark-stroke}"
       },
       "active-fill": {
-        "$value": "{color.palette.blue.400}"
+        "$value": "{color.palette.blue.dark-stroke}"
       },
       "active-text": {
-        "$value": "{color.palette.blue.400}"
+        "$value": "{color.palette.blue.dark-stroke}"
       },
       "on-active": {
         "$value": "{color.palette.ink.850}"
@@ -17,7 +17,7 @@
     },
     "figure": {
       "icon": {
-        "$value": "{color.palette.blue.450}"
+        "$value": "{color.palette.blue.dark-icon}"
       }
     },
     "paint": {
@@ -124,13 +124,13 @@
     },
     "ui": {
       "link": {
-        "$value": "{color.palette.blue.400}"
+        "$value": "{color.palette.blue.dark-stroke}"
       },
       "focus": {
-        "$value": "{color.palette.blue.400}"
+        "$value": "{color.palette.blue.dark-stroke}"
       },
       "progress": {
-        "$value": "{color.palette.blue.400}"
+        "$value": "{color.palette.blue.dark-stroke}"
       },
       "control-on": {
         "$value": "{color.palette.neutral.750}"
@@ -138,16 +138,16 @@
     },
     "data": {
       "main": {
-        "$value": "{color.palette.blue.400}"
+        "$value": "{color.palette.blue.dark-stroke}"
       },
       "compare": {
-        "$value": "{color.palette.orange.400}"
+        "$value": "{color.palette.orange.dark-stroke}"
       },
       "heat-low": {
-        "$value": "{color.palette.blue.850}"
+        "$value": "{color.palette.blue.dark-heat-low}"
       },
       "heat-high": {
-        "$value": "{color.palette.blue.600}"
+        "$value": "{color.palette.blue.dark-heat-high}"
       },
       "heat-ink": {
         "$value": "{color.palette.gray.0}"
@@ -181,7 +181,7 @@
       "$value": "{color.palette.neutral.500}"
     },
     "card-on": {
-      "$value": "{color.palette.blue.900}"
+      "$value": "{color.palette.blue.dark-fill}"
     },
     "page": {
       "$value": "{color.palette.neutral.950}"
