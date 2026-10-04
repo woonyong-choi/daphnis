@@ -171,6 +171,9 @@
     "muted": {
       "$value": "{color.palette.neutral.400}"
     },
+    "group-title": {
+      "$value": "{color.palette.neutral.400}"
+    },
     "bg": {
       "$value": "{color.palette.neutral.900}"
     },

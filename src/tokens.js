@@ -11,6 +11,8 @@ export const tokens = freeze({
       "gray": {
         "0": "var(--color-palette-gray-0)",
         "25": "var(--color-palette-gray-25)",
+        "sky-50": "var(--color-palette-gray-sky-50)",
+        "sky-100": "var(--color-palette-gray-sky-100)",
         "40": "var(--color-palette-gray-40)",
         "100": "var(--color-palette-gray-100)",
         "200": "var(--color-palette-gray-200)",
@@ -48,6 +50,7 @@ export const tokens = freeze({
       "ink": {
         "200": "var(--color-palette-ink-200)",
         "600": "var(--color-palette-ink-600)",
+        "700": "var(--color-palette-ink-700)",
         "850": "var(--color-palette-ink-850)",
         "900": "var(--color-palette-ink-900)",
         "1000": "var(--color-palette-ink-1000)"
@@ -216,6 +219,7 @@ export const tokens = freeze({
     },
     "fg": "var(--color-fg)",
     "muted": "var(--color-muted)",
+    "group-title": "var(--color-group-title)",
     "bg": "var(--color-bg)",
     "node": "var(--color-node)",
     "surface": "var(--color-surface)",
@@ -457,13 +461,15 @@ export const values = freeze({
     "palette": {
       "gray": {
         "0": "#ffffff",
-        "25": "#f5f8fb",
-        "40": "#eaf1f7",
-        "100": "#e0e8f0",
+        "25": "#f7f8fa",
+        "sky-50": "#e9f4fc",
+        "sky-100": "#deedf8",
+        "40": "#eef0f3",
+        "100": "#e4e7eb",
         "200": "#d5dbe3",
         "500": "#818b99",
-        "50": "#eff4f9",
-        "150": "#dee5ec",
+        "50": "#f2f4f6",
+        "150": "#e1e4e8",
         "300": "#b0b8c1"
       },
       "neutral": {
@@ -495,6 +501,7 @@ export const values = freeze({
       "ink": {
         "200": "#c6cacf",
         "600": "#6b7684",
+        "700": "#5f6a78",
         "850": "#0d1117",
         "900": "#191f28",
         "1000": "#000000"
@@ -562,7 +569,7 @@ export const values = freeze({
         "dark-ink": "#ff8a3d"
       },
       "slate": {
-        "light-fill": "#e0e8f0",
+        "light-fill": "#e4e7eb",
         "light-stroke": "#6b7684",
         "light-ink": "#6b7684",
         "dark-fill": "#23252a",
@@ -640,7 +647,7 @@ export const values = freeze({
         "ink": "#e65200"
       },
       "gray": {
-        "fill": "#e0e8f0",
+        "fill": "#e4e7eb",
         "stroke": "#6b7684",
         "ink": "#6b7684",
         "dot": "#4e5968"
@@ -663,13 +670,14 @@ export const values = freeze({
     },
     "fg": "#191f28",
     "muted": "#6b7684",
-    "bg": "#f5f8fb",
+    "group-title": "#5f6a78",
+    "bg": "#f7f8fa",
     "node": "#ffffff",
-    "surface": "#eaf1f7",
-    "card": "#eff4f9",
-    "border": "#dee5ec",
+    "surface": "#eef0f3",
+    "card": "#f2f4f6",
+    "border": "#e1e4e8",
     "card-on": "#eaf2fd",
-    "group": "#eaf1f7",
+    "group": "#e9f4fc",
     "plate-border": "#d5dbe3",
     "page": "#ffffff",
     "tag": {
@@ -679,7 +687,7 @@ export const values = freeze({
       "gray": "#6b7684"
     },
     "line": "#b0b8c1",
-    "group-deep": "#e0e8f0"
+    "group-deep": "#deedf8"
   },
   "font": {
     "sans": "FigSans, FigSansSym, FigSansMath, Pretendard, 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif",

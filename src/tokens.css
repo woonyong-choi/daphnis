@@ -1,13 +1,15 @@
 /* tokens.json: 생성물, 손으로 고치지 않음 */
 :root {
   --color-palette-gray-0: #ffffff;
-  --color-palette-gray-25: #f5f8fb;
-  --color-palette-gray-40: #eaf1f7;
-  --color-palette-gray-100: #e0e8f0;
+  --color-palette-gray-25: #f7f8fa;
+  --color-palette-gray-sky-50: #e9f4fc;
+  --color-palette-gray-sky-100: #deedf8;
+  --color-palette-gray-40: #eef0f3;
+  --color-palette-gray-100: #e4e7eb;
   --color-palette-gray-200: #d5dbe3;
   --color-palette-gray-500: #818b99;
-  --color-palette-gray-50: #eff4f9;
-  --color-palette-gray-150: #dee5ec;
+  --color-palette-gray-50: #f2f4f6;
+  --color-palette-gray-150: #e1e4e8;
   --color-palette-gray-300: #b0b8c1;
   --color-palette-neutral-100: #eef0f3;
   --color-palette-neutral-400: #9aa1ab;
@@ -33,6 +35,7 @@
   --color-palette-blue-dark-icon: #8fb6ff;
   --color-palette-ink-200: #c6cacf;
   --color-palette-ink-600: #6b7684;
+  --color-palette-ink-700: #5f6a78;
   --color-palette-ink-850: #0d1117;
   --color-palette-ink-900: #191f28;
   --color-palette-ink-1000: #000000;
@@ -84,7 +87,7 @@
   --color-palette-pink-dark-fill: #3a2417;
   --color-palette-pink-dark-stroke: #ff8a3d;
   --color-palette-pink-dark-ink: #ff8a3d;
-  --color-palette-slate-light-fill: #e0e8f0;
+  --color-palette-slate-light-fill: #e4e7eb;
   --color-palette-slate-light-stroke: #6b7684;
   --color-palette-slate-light-ink: #6b7684;
   --color-palette-slate-dark-fill: #23252a;
@@ -153,13 +156,14 @@
   --color-data-grid: var(--color-palette-ink-200);
   --color-fg: var(--color-palette-ink-900);
   --color-muted: var(--color-palette-ink-600);
+  --color-group-title: var(--color-palette-ink-700);
   --color-bg: var(--color-palette-gray-25);
   --color-node: var(--color-palette-gray-0);
   --color-surface: var(--color-palette-gray-40);
   --color-card: var(--color-palette-gray-50);
   --color-border: var(--color-palette-gray-150);
   --color-card-on: var(--color-palette-blue-light-fill);
-  --color-group: var(--color-palette-gray-40);
+  --color-group: var(--color-palette-gray-sky-50);
   --color-plate-border: var(--color-palette-gray-200);
   --color-page: var(--color-palette-gray-0);
   --color-tag-purple: var(--color-paint-purple-stroke);
@@ -167,7 +171,7 @@
   --color-tag-teal: var(--color-paint-teal-stroke);
   --color-tag-gray: var(--color-paint-gray-stroke);
   --color-line: var(--color-palette-gray-300);
-  --color-group-deep: var(--color-palette-gray-100);
+  --color-group-deep: var(--color-palette-gray-sky-100);
   --font-sans: FigSans, FigSansSym, FigSansMath, Pretendard, 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansSym, FigSansMath, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -366,6 +370,7 @@
     --color-data-grid: var(--color-palette-neutral-750);
     --color-fg: var(--color-palette-neutral-100);
     --color-muted: var(--color-palette-neutral-400);
+    --color-group-title: var(--color-palette-neutral-400);
     --color-bg: var(--color-palette-neutral-900);
     --color-node: var(--color-palette-neutral-850);
     --color-surface: var(--color-palette-neutral-800);
@@ -428,6 +433,7 @@
   --color-data-grid: var(--color-palette-neutral-750);
   --color-fg: var(--color-palette-neutral-100);
   --color-muted: var(--color-palette-neutral-400);
+  --color-group-title: var(--color-palette-neutral-400);
   --color-bg: var(--color-palette-neutral-900);
   --color-node: var(--color-palette-neutral-850);
   --color-surface: var(--color-palette-neutral-800);

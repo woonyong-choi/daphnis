@@ -21,7 +21,7 @@
   font-size: var(--size-text-11);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-frame);
-  fill: var(--color-muted);
+  fill: var(--color-group-title);
 }
 
 .fl .edgelabel {
