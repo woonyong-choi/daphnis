@@ -7,6 +7,26 @@ import { valueNames } from '../../src/source/grammar.js';
 import { VISION, distanceOf, seenBy } from './color-vision.mjs';
 import { oklchOf, oklchToHex } from './oklch.mjs';
 
+// 실험: 색 제안안. 대비 규칙으로 계산하지 않고 견본의 값을 그대로 쓴다. 범주색은 가장 가까운 역할 색으로 잇는다.
+const PROPOSAL = true;
+const ROLE = {
+  blue: { 'light-fill': '#eaf2fd', 'light-stroke': '#3a7bd5', 'light-ink': '#3a7bd5', 'light-heat-low': '#c7dbf7', 'light-heat-high': '#2563b8', 'light-icon': '#3a7bd5', 'dark-fill': '#1b2a45', 'dark-stroke': '#6aa1ff', 'dark-ink': '#6aa1ff', 'dark-heat-low': '#223a5c', 'dark-heat-high': '#3f74c8', 'dark-icon': '#8fb6ff' },
+  orange: { 'light-fill': '#fff1e8', 'light-stroke': '#e65200', 'light-ink': '#e65200', 'dark-fill': '#3a2417', 'dark-stroke': '#ff8a3d', 'dark-ink': '#ff8a3d' },
+  red: { 'light-fill': '#ffeef0', 'light-stroke': '#f04452', 'light-ink': '#f04452', 'dark-fill': '#3d1e24', 'dark-stroke': '#ff6b77', 'dark-ink': '#ff6b77' },
+  green: { 'light-fill': '#e8f7ef', 'light-stroke': '#03a564', 'light-ink': '#03a564', 'dark-fill': '#13302a', 'dark-stroke': '#3ed598', 'dark-ink': '#3ed598' },
+  gray: { 'light-fill': '#e4e7eb', 'light-stroke': '#6b7684', 'light-ink': '#6b7684', 'dark-fill': '#23252a', 'dark-stroke': '#9aa1ab', 'dark-ink': '#9aa1ab' },
+};
+// 세 번째 이후 흐름 점은 진한 회색이다.
+const FLOW_DOT = { 'light-dot': '#4e5968', 'dark-dot': '#c3c8cf' };
+const PROPOSAL_TABLE = {
+  blue: ROLE.blue, orange: ROLE.orange, red: ROLE.red,
+  amber: ROLE.orange, pink: ROLE.orange,
+  green: { ...ROLE.green, ...FLOW_DOT }, teal: { ...ROLE.green, ...FLOW_DOT },
+  navy: { ...ROLE.blue }, purple: { ...ROLE.blue, ...FLOW_DOT },
+  slate: { ...ROLE.gray, ...FLOW_DOT },
+};
+for (const name of ['navy', 'purple']) for (const k of ['light-heat-low', 'light-heat-high', 'light-icon', 'dark-heat-low', 'dark-heat-high', 'dark-icon']) delete PROPOSAL_TABLE[name][k];
+
 const TEXT = 4.5;
 const GRAPHIC = 3;
 const STEP = 0.002;
@@ -20,7 +40,9 @@ const MAX_STEPS = 400;
  * 대비 규칙에 모자란 원색은 같은 색상과 채도에서 밝기만 옮긴다. 이 이동은 build()가 한다.
  */
 const BLUE = { light: '#3a7bd5', dark: '#6aa1ff' };
-const ORANGE = { light: '#e07b39', dark: '#e87e42' };
+const ORANGE = { light: '#e65200', dark: '#ff8a3d' };
+const RED = { light: '#f04452', dark: '#ff6b77' };
+const GREEN = { light: '#03a564', dark: '#3ed598' };
 // 팔레트 색 이름 → Carbon 색 계열. teal은 cyan(파랑과 너무 가깝다)을 쓰지 않는다. slate는 gray 색의 팔레트 이름이다.
 const CARBON_FAMILY = { red: 'red', amber: 'yellow', green: 'green', teal: 'teal', purple: 'purple', pink: 'magenta', slate: 'coolGray' };
 // navy는 지금 파랑과 구별되는 것이 먼저라 밝기가 가장 가까운 단계 대신 Carbon blue 계열에서 파랑과 OKLab 거리가 0.1 이상 떨어진 가장 가까운 단계를 쓴다. 라이트 blue 70 #0043ce, 다크 blue 60 #0f62fe.
@@ -40,7 +62,9 @@ function nearestStep(family, target) {
 export const ANCHORS = {
   blue: BLUE,
   orange: ORANGE,
-  ...Object.fromEntries(Object.entries(CARBON_FAMILY).map(([name, family]) => [name, { light: carbon[family][STEP_OVERRIDE[name]?.light] ?? nearestStep(family, BLUE.light), dark: nearestStep(family, BLUE.dark) }])),
+  red: RED,
+  green: GREEN,
+  ...Object.fromEntries(Object.entries(CARBON_FAMILY).filter(([name]) => name !== 'red' && name !== 'green').map(([name, family]) => [name, { light: carbon[family][STEP_OVERRIDE[name]?.light] ?? nearestStep(family, BLUE.light), dark: nearestStep(family, BLUE.dark) }])),
   navy: { light: carbon.blue[NAVY_STEP.light], dark: carbon.blue[NAVY_STEP.dark] },
 };
 // 면 단계의 목표 밝기와 채도 상한. 다크는 옅은 면이 판 바탕과 도형 바탕에서 보이도록 distance.fill-dark 이상 떨어져야 하고, 대비 기준에 걸리면 밝기를 낮추다가 거리를 못 지키면 오류다.
@@ -189,6 +213,7 @@ const SURFACES = ['bg', 'node', 'group', 'card', 'page', 'surface'];
  * @returns { 색이름: { 'light-fill', 'light-stroke', 'light-ink', 'dark-fill', 'dark-stroke', 'dark-ink' } }. blue는 heat-low, heat-high 단계가 더 있다
  */
 export function generatePalette(light, dark) {
+  if (PROPOSAL) return structuredClone(PROPOSAL_TABLE);
   const lightTable = flatten(light, [], new Map());
   const darkTable = new Map([...lightTable, ...flatten(dark, [], new Map())]);
   const result = Object.fromEntries(Object.keys(ANCHORS).map((name) => [name, {}]));

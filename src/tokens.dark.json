@@ -13,11 +13,17 @@
       },
       "on-active": {
         "$value": "{color.palette.ink.850}"
+      },
+      "glow": {
+        "$value": "{color.palette.blue.dark-fill}"
       }
     },
     "figure": {
       "icon": {
         "$value": "{color.palette.blue.dark-icon}"
+      },
+      "icon-tile": {
+        "$value": "{color.palette.blue.dark-fill}"
       }
     },
     "paint": {
@@ -178,7 +184,7 @@
       "$value": "{color.palette.neutral.800}"
     },
     "border": {
-      "$value": "{color.palette.neutral.500}"
+      "$value": "{color.palette.neutral.750}"
     },
     "card-on": {
       "$value": "{color.palette.blue.dark-fill}"
@@ -190,6 +196,12 @@
       "$value": "{color.palette.neutral.875}"
     },
     "plate-border": {
+      "$value": "{color.palette.neutral.800}"
+    },
+    "line": {
+      "$value": "{color.palette.neutral.600}"
+    },
+    "group-deep": {
       "$value": "{color.palette.neutral.800}"
     }
   }

@@ -6,7 +6,7 @@ import { centerBaseline, escapeXml, renderRich, roundCoord as r } from '../text.
 import { tokens, values } from '../tokens.js';
 import { cardGlyphs, createTones, drawCard } from './card.js';
 import { drawDecor, drawGroupTab } from './decor.js';
-import { drawHalo, fillOf } from './paint.js';
+import { drawHalo } from './paint.js';
 import { drawShape, outlineOf } from './shape.js';
 
 const SPACE = values.space;
@@ -46,11 +46,11 @@ function drawGroup(g, j, { decorate, glyphs, scene }) {
   const head = groupHead(g);
   const left = g.x + g.titleDx;
   const decor = head.decor ? drawDecor(head.decor, { x: left, y: g.y + (SIZE.group.title - head.decor.h) / 2, iconData: g.iconData }, glyphs) : '';
-  const colors = `${g.stroke ? ` ps-${g.stroke}` : ''}${g.fill ? ` pf-${g.fill}` : ''}`;
-  const frame = `<rect x="${r(g.x)}" y="${r(g.y)}" width="${r(g.w)}" height="${r(g.h)}" rx="${RADIUS['2xl']}"`;
-  const halo = g.stroke ? drawHalo([frame], groundOf(g, scene), { name: g.stroke, cls: decorate('group-halo', j) }) : '';
+  const colors = `${g.stroke ? ` ps-${g.stroke}` : ''}${g.fill ?? g.stroke ? ` pf-${g.fill ?? g.stroke}` : ''}`;
+  const deep = depthOf(g, scene) % 2 === 1 ? ' deep' : '';
+  const dashed = g.border === 'dashed';
   return (
-    `<g id="g-${j}" class="fl-group${g.iconData ? ' tabbed' : ''}" data-id="${escapeXml(g.id)}">${halo}<rect x="${r(g.x)}" y="${r(g.y)}" width="${r(g.w)}" height="${r(g.h)}" rx="${RADIUS['2xl']}" class="frame-box fl-stroke${colors} ${decorate('group', j)}"${g.border === 'dashed' ? ` stroke-dasharray="${GROUP_DASH}"` : ''}/>` +
+    `<g id="g-${j}" class="fl-group${g.iconData ? ' tabbed' : ''}" data-id="${escapeXml(g.id)}"><rect x="${r(g.x)}" y="${r(g.y)}" width="${r(g.w)}" height="${r(g.h)}" rx="${RADIUS['2xl']}" class="frame-box fl-stroke${deep}${dashed ? ' dashed' : ''}${colors} ${decorate('group', j)}"${dashed ? ` stroke-dasharray="${GROUP_DASH}"` : ''}/>` +
     `${g.iconData ? drawGroupTab(g) : ''}<text x="${r(left + head.textDx)}" y="${r(centerBaseline(g.y + SIZE.group.title / 2, STYLE.group.size))}" class="frame">${renderRich(g.label)}</text>${decor}</g>`
   );
 }
@@ -61,13 +61,13 @@ function drawGroup(g, j, { decorate, glyphs, scene }) {
 // 도형 하나: 윤곽, 이름, 부제, 카드. 사람과 원통의 머리, 어깨, 뚜껑은 배치 사각형 바깥 여백에 그린다.
 function drawItem(it, i, paint) {
   const { decorate, glyphs, scene } = paint;
-  const stroke = `class="fl-stroke${it.stroke ? ` ps-${it.stroke}` : ''} ${decorate('node', i)}"`;
-  const halo = it.stroke ? drawHalo(outlineOf(it), groundOf(it, scene), { name: it.stroke, cls: decorate('halo', i) }) : '';
+  const stroke = `class="fl-stroke${it.stroke ? ` ps-${it.stroke}` : ''}${it.shape === 'external' ? ' ext' : ''} ${decorate('node', i)}"`;
+  const halo = drawHalo(outlineOf(it), { cls: decorate('halo', i) });
   const open = `<g id="n-${i}" class="fl-node" data-id="${escapeXml(it.id)}">`;
   for (const l of it.labelLines ?? []) glyphs.add(l, 'medium');
   for (const l of it.subLines ?? []) glyphs.add(l, 'regular');
   if (it.card) cardGlyphs(it.card.layouts, glyphs);
-  const shape = drawShape(it, stroke, paint);
+  const shape = drawShape(it.stroke && !it.fill ? { ...it, fill: it.stroke } : it, stroke, paint);
   const decor = it.decor ? drawDecor(it.decor, { x: it.x + it.decor.x, y: it.y + it.decor.y, iconData: it.iconData }, glyphs) : '';
   const card = it.card ? drawCard(it.card, { box: cardBox(it), i }, paint) : '';
   return `${open}${halo}${shape}${decor}${HAS_OWN_LABELS.has(it.shape) ? '' : drawLabels(it)}${card}</g>`;
@@ -76,11 +76,11 @@ function drawItem(it, i, paint) {
 // cost: time O(g), heap O(1), stack O(1)
 // vars: g = 그룹 수
 // basis: estimate
-// 도형이나 그룹이 놓인 바탕 색. 그룹 안이면 그 그룹의 면(고른 색이 있으면 그 색), 아니면 그림 바탕이다. 후광의 틈이 이 색이다.
-function groundOf(box, scene) {
-  const parent = scene.groups.find((g) => g.id === box.parent);
-  if (!parent) return tokens.color.bg;
-  return parent.fill ? fillOf(parent.fill) : tokens.color.group;
+// 그룹이 안긴 깊이. 바깥 그룹이 0이고 안으로 들어갈수록 1씩 늘며, 홀수 깊이는 더 진한 면으로 겹친다.
+function depthOf(group, scene) {
+  let depth = 0;
+  for (let up = scene.groups.find((g) => g.id === group.parent); up; up = scene.groups.find((g) => g.id === up.parent)) depth += 1;
+  return depth;
 }
 
 // cost: time O(l), heap O(out), stack O(1)

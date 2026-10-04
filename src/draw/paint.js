@@ -4,10 +4,7 @@ import { tokens, values } from '../tokens.js';
 
 const SPACE = values.space;
 // 밝힌 도형의 후광: 테두리(border.strong) 바깥으로 틈(gap)을 두고 고리(ring)를 한 겹 더한다. 고리는 그 도형의 stroke 색이다.
-const HALO_GAP = SPACE['1-5'];
-const HALO_RING = values.border.edge;
-const GAP_WIDTH = values.border.strong + HALO_GAP * 2;
-const RING_WIDTH = GAP_WIDTH + HALO_RING * 2;
+const GLOW_WIDTH = values.border.strong + SPACE['2-5'] * 2;
 
 /** 색 이름의 면 색 토큰 참조 */
 export const fillOf = (name) => tokens.color.paint[name].fill;
@@ -21,7 +18,7 @@ export const strokeOf = (name) => tokens.color.paint[name].stroke;
 /** 그림이 고른 색 이름 목록. { stroke, groupFill }은 테두리와 그룹 면에 쓴 이름이다. */
 function usedPaints(scene) {
   const boxes = [...scene.items, ...scene.groups];
-  return { stroke: [...new Set(boxes.map((b) => b.stroke).filter(Boolean))], groupFill: [...new Set(scene.groups.map((g) => g.fill).filter(Boolean))] };
+  return { stroke: [...new Set(boxes.map((b) => b.stroke).filter(Boolean))], groupFill: [...new Set(scene.groups.map((g) => g.fill ?? g.stroke).filter(Boolean))] };
 }
 
 // cost: time O(c), heap O(out), stack O(1)
@@ -34,14 +31,7 @@ function usedPaints(scene) {
 export function paintCss(scene) {
   if (!scene) return '';
   const { stroke, groupFill } = usedPaints(scene);
-  const rules = stroke.flatMap((name) => {
-    const color = `stroke: var(--color-paint-${name}-stroke);`;
-    return [
-      `.fl .fl-stroke.ps-${name} {\n  ${color}\n}`,
-      `.fl .fl-node.on .fl-stroke.ps-${name},\n.fl .fl-group.on .fl-stroke.ps-${name},\n.fl .fl-group.tabbed:not(.on) .frame-box.ps-${name} {\n  ${color}\n}`,
-    ];
-  });
-  if (stroke.length) rules.push('.fl .fl-node.on .fl-halo,\n.fl .fl-group.on .fl-halo {\n  opacity: 1;\n}');
+  const rules = stroke.map((name) => `.fl .fl-stroke.ps-${name} {\n  stroke: none;\n}\n.fl .fl-node.on .fl-stroke.ps-${name} {\n  stroke: var(--color-state-active);\n}`);
   for (const name of groupFill) rules.push(`.fl .frame-box.pf-${name} {\n  fill: var(--color-paint-${name}-fill);\n}`);
   return rules.length ? `\n${rules.join('\n')}\n` : '';
 }
@@ -50,13 +40,11 @@ export function paintCss(scene) {
 // vars: p = 윤곽 조각 수
 // basis: estimate
 /**
- * 후광: 켜졌을 때만 보이는 고리. 윤곽 조각마다 stroke 색 고리를 먼저 깔고, 그 위에 바탕색 띠(틈)를 얹은 뒤 도형이 덮는다.
+ * 후광: 켜졌을 때만 보이는 옅은 파랑 면. 도형 윤곽을 굵은 선으로 한 번 더 그려 테두리 바깥으로 번지게 한다.
  * @param pieces 도형 윤곽 조각. 닫지 않은 `<rect ...` 같은 글이다
- * @param ground 도형 바깥 바탕 색(그룹 안이면 그 그룹 면, 아니면 그림 바탕)
- * @param option { name, cls }. name은 stroke 색 이름, cls는 켜짐 class다
+ * @param option { cls }. cls는 켜짐 class다
  */
-export function drawHalo(pieces, ground, { name, cls }) {
-  const ring = pieces.map((p) => `${p} stroke="${strokeOf(name)}" stroke-width="${RING_WIDTH}"/>`).join('');
-  const gap = pieces.map((p) => `${p} stroke="${ground}" stroke-width="${GAP_WIDTH}"/>`).join('');
-  return `<g class="fl-halo ${cls}" fill="none" opacity="0">${ring}${gap}</g>`;
+export function drawHalo(pieces, { cls }) {
+  const ring = pieces.map((p) => `${p} stroke="${tokens.color.state.glow}" stroke-width="${GLOW_WIDTH}" stroke-linejoin="round"/>`).join('');
+  return `<g class="fl-halo ${cls}" fill="none" opacity="0">${ring}</g>`;
 }

@@ -202,6 +202,10 @@ html.embedded .fl-figure {
   display: flex;
 }
 
+.fl .fl-node.on .fl-halo {
+  opacity: 1;
+}
+
 .fl .fl-node.on .fl-stroke {
   stroke: var(--color-state-active);
   stroke-width: var(--border-strong);
