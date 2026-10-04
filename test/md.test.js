@@ -534,11 +534,17 @@ test('md_treats_a_document_and_an_out_dir_opened_through_symlinks_as_the_same_ow
 const PAUSE = new URL('./fixtures/pause-first-rename.mjs', import.meta.url).pathname;
 const CLI = new URL('../src/cli.js', import.meta.url).pathname;
 const exists = (path) => existsSync(path);
+// cost: time O(t), heap O(1), stack O(1)
+// vars: t = 기다리는 시간(최대 60초, 10ms 간격 확인)
+// basis: estimate
 // 조건이 참이 될 때까지 기다린다(최대 60초). 고정 시간 sleep이 아니라 조건을 확인하며 돈다
 const until = async (condition, what) => {
   for (const start = Date.now(); !condition() && Date.now() - start < 60000;) await new Promise((resolve) => { setTimeout(resolve, 10); });
   assert.ok(condition(), what);
 };
+// cost: time O(out), heap O(out), stack O(1), io 1
+// vars: out = 자식 프로세스 출력 글자 수
+// basis: estimate
 const startPaused = (args, folder) => {
   const child = spawn(process.execPath, ['--import', PAUSE, CLI, ...args], { cwd: folder, env: { ...process.env, DAPHNIS_TEST_READY: join(folder, 'ready'), DAPHNIS_TEST_RELEASE: join(folder, 'release') }, stdio: ['ignore', 'pipe', 'pipe'] });
   const done = new Promise((resolve) => {
@@ -583,6 +589,8 @@ test('md_second_process_on_the_same_out_dir_fails_before_changing_files_while_th
 // 잠금 파일을 손으로 만든다. 공개 명령이 이 잠금을 어떻게 다루는지 본다
 const lockText = (over = {}) => `${JSON.stringify({ pid: process.pid, host: hostname(), created: '2026-01-01T00:00:00.000Z', nonce: 'n1', ...over })}\n`;
 const LOCK = 'out/.daphnis-md.lock';
+// cost: time O(1), heap O(1), stack O(1), io 4
+// basis: estimate
 const lockSetup = (folder, text) => {
   put(folder, 'doc.md', doc(block('name=one', FLOW)));
   mkdirSync(join(folder, 'out'));
