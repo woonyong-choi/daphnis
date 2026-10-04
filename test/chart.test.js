@@ -505,3 +505,21 @@ test('parseFigure_chart_header_failure_stops_before_any_type_dependent_check', (
     assert.ok(error.problems.every((p) => p.code !== 'internal'), source);
   }
 });
+
+// 근거: 설계 charts.md "머리와 선언 줄": 이름 문법에 맞고 실제 중복이 없는 계열 이름은 상속 속성 이름이어도 받는다
+test('buildFigure_series_named_like_an_inherited_property_reads_once_and_real_duplicates_still_fail', async () => {
+  // 이름 문법(소문자, 숫자, -)에 맞는 Object.prototype 속성은 constructor 하나다. 대소문자를 가리는 valueOf 따위는 문법에서 이미 걸러진다.
+  for (const name of ['constructor']) {
+    const source = `chart bar\nx "Value(ms)"\nseries ${name} "S"\nrow "A" ${name}=1\n`;
+
+    assert.deepEqual(await problemsOf(source), [], name);
+    assert.ok((await bodyOf(source)).includes('class="grow"'), name);
+  }
+  const twice = await problemsOf('chart bar\nx "Value(ms)"\nseries constructor "S"\nrow "A" constructor=1 constructor=2\n');
+  const optionTwice = await problemsOf('chart bar\nx "Value(ms)"\nseries a "S" key="k" key="j"\nrow "A" a=1\n');
+  const unknownWord = await problemsOf('chart bar\nx "Value(ms)"\nseries a "S"\nconstructor 1\nrow "A" a=1\n');
+
+  assert.match(twice.join('\n'), /"constructor" is written twice/);
+  assert.equal(optionTwice.length > 0, true);
+  assert.match(unknownWord.join('\n'), /unknown chart statement "constructor"/);
+});
