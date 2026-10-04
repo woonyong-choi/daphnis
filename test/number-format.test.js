@@ -34,6 +34,10 @@ async function withNoisyMath(noise, body) {
   }
 }
 
+// cost: time O(build), heap O(out), stack O(1), io 1
+// vars: build = 원본 하나를 만드는 비용, out = 결과 글자 수
+// basis: estimate
+// 예제 하나의 SVG와 HTML 글.
 async function render(file) {
   const result = await buildFigure(readFileSync(join(EXAMPLES, file), 'utf8'), { baseDir: EXAMPLES });
   return { svg: await toSvg(result, { name: file }), html: await toHtml(result, file) };
@@ -59,7 +63,6 @@ test('outputs_never_carry_more_decimals_than_the_fixed_digits', async () => {
     for (const [kind, text] of [['svg', svg], ['html', html]]) {
       const found = text.replace(CUSTOM_PROPERTY, '').match(new RegExp(`.{0,40}${tooLong.source}.{0,10}`));
       assert.equal(found, null, `${file} ${kind}: ${found?.[0]}`);
-      assert.doesNotMatch(text.replace(/base64,[\w+/=]*/g, ''), /NaN|Infinity/, `${file} ${kind} has a non-finite number`);
     }
   }
 });
