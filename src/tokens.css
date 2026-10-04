@@ -424,7 +424,7 @@
     --color-node: var(--color-palette-neutral-850);
     --color-surface: var(--color-palette-neutral-800);
     --color-card: var(--color-palette-neutral-800);
-    --color-outline: var(--color-palette-neutral-outline-a);
+    --color-outline: var(--color-palette-neutral-outline-b);
     --color-border: var(--color-palette-neutral-750);
     --color-card-on: var(--color-palette-blue-dark-fill);
     --color-page: var(--color-palette-neutral-950);
@@ -497,7 +497,7 @@
   --color-node: var(--color-palette-neutral-850);
   --color-surface: var(--color-palette-neutral-800);
   --color-card: var(--color-palette-neutral-800);
-  --color-outline: var(--color-palette-neutral-outline-a);
+  --color-outline: var(--color-palette-neutral-outline-b);
   --color-border: var(--color-palette-neutral-750);
   --color-card-on: var(--color-palette-blue-dark-fill);
   --color-page: var(--color-palette-neutral-950);

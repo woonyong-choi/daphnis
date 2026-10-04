@@ -90,7 +90,7 @@
 | `card` | 카드 기본 바탕. 도형 바탕(`node`)과 OKLab 거리가 `distance.card.min`~`max`(0.015~0.04) | `#f6f7f9` | `#2c2d30` | 글자 `fg`, `muted` | 4.5 이상 |
 | `paint.<색>.fill`, `.stroke`, `.ink` | 원본이 `fill=`, `stroke=`, `card=`로 고르는 색. 이름은 `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`, `gray`. 아래 팔레트 표 | 팔레트 표 | 팔레트 표 | 면 단계는 `fg`, `muted` 글자, 나머지 단계는 그림 면과 모든 색의 면 | 4.5 이상(글자), 3 이상(그래픽) |
 | `border` | 노드, 그룹, 카드, 조작부 윤곽(그룹 테두리도 같은 색) | `#818b99` | `#72767a` | 그림 바탕, 그룹, 카드 바탕, 노드, 문서 바탕 | 3.02 / 3.01 |
-| `outline` | 도형 외곽선(상자, 원통, 사람, 갈림길, 원, 테이블, 격자 칸, 카드, 알약). 1px, 외부는 점선 | `#c4c7cb` | `#484b53` | 그림 바탕, 노드 | 1.60~1.70 / 1.60~2.09 |
+| `outline` | 도형 외곽선(상자, 원통, 사람, 갈림길, 원, 테이블, 격자 칸, 카드, 알약). 1px, 외부는 점선 | `#c4c7cb` | `#565961` | 그림 바탕, 노드 | 1.60~1.70 / 1.99~2.61 |
 
 - `flow.*`는 점이 한눈에 갈리도록 이름끼리 OKLab 거리 0.10 이상이고 적록 색각 이상(protanopia, deuteranopia) 시뮬레이션에서도 같다. 파랑(지금)과 주황(비교)과도 OKLab 거리 0.10 이상이다. `test/contrast.test.js`의 `flow_tone_colors_stay_apart_from_each_other_for_normal_protan_and_deutan_sight_and_from_blue_and_orange_for_normal_sight`가 잰다. 이름은 카드 태그 `tone`과 같은 집합이고 이름을 늘리면 `flow.*` 색도 같은 기준으로 더한다.
 - 표 열의 PK, FK 표시는 항상 있는 스키마 표시라 파랑이 아니라 `color.muted`다.

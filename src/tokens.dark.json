@@ -214,7 +214,7 @@
       "$value": "{color.palette.neutral.800}"
     },
     "outline": {
-      "$value": "{color.palette.neutral.outline-a}"
+      "$value": "{color.palette.neutral.outline-b}"
     },
     "border": {
       "$value": "{color.palette.neutral.750}"
