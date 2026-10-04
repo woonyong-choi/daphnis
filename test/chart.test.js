@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
 import { curveOf, timeAt } from '../src/easing.js';
-import { formatChange, formatNumber, makeScale } from '../src/chart/scale.js';
+import { formatChange, formatNumber, makeScale, valueFormat } from '../src/chart/scale.js';
 import { measure } from '../src/measure/fonts.js';
 import { parseFigure } from '../src/source/parse.js';
 import { parseTime } from '../src/source/values.js';
@@ -582,4 +582,50 @@ test('buildFigure_bar_with_every_value_missing_is_an_error_and_partial_missing_o
     assert.deepEqual(result.warnings, [], rows);
     assert.doesNotMatch(svg, /NaN|Infinity/, rows);
   }
+});
+
+// 근거: 설계 charts.md 눈금 "정밀도는 축 간격에 맞춘다": 값 범위가 작아도 눈금은 서로 다른 값이고 순서대로 늘어난다
+test('makeScale_linear_ticks_stay_distinct_and_exact_for_tiny_large_negative_and_zero_adjacent_ranges', () => {
+  const cases = [
+    { name: '1e-12 단위', range: { min: 1e-12, max: 2e-12 }, first: 0, last: 2e-12, count: 5 },
+    { name: '0 주변 음양', range: { min: -1e-12, max: 1e-12 }, first: -1e-12, last: 1e-12 },
+    { name: '이진 오차(0.1 + 0.2)', range: { min: 0.1, max: 0.3 }, first: 0, last: 0.3 },
+    { name: '큰 값에서 0 시작', range: { min: 1e14, max: 3e14 }, first: 0, last: 3e14 },
+    { name: '음수만', range: { min: -3e-9, max: -1e-9 }, first: -3e-9, last: 0 },
+    { name: '값이 0 하나', range: { min: 0, max: 0 }, first: 0, last: 1 },
+    { name: '0 시작 해제, 큰 값의 작은 차이', range: { min: 1e14, max: 1e14 + 5, fromZero: false }, first: 1e14, last: 1e14 + 5 },
+    { name: '0 시작 해제, 작은 값의 작은 차이', range: { min: 1.5e-12, max: 1.9e-12, fromZero: false }, first: 1.5e-12, last: 2e-12 },
+  ];
+  for (const { name, range, first, last, count } of cases) {
+    const { ticks, at } = makeScale('linear', { ...range, start: 0, length: 100 });
+
+    assert.equal(ticks[0], first, `${name}: 첫 눈금 ${ticks}`);
+    assert.equal(ticks.at(-1), last, `${name}: 끝 눈금 ${ticks}`);
+    if (count) assert.equal(ticks.length, count, name);
+    assert.ok(ticks.every((t, i) => i === 0 || t > ticks[i - 1]), `${name}: 눈금이 늘어나지 않음 ${ticks}`);
+    assert.equal(new Set(ticks.map(formatNumber)).size, ticks.length, `${name}: 눈금 글자가 겹침 ${ticks.map(formatNumber)}`);
+    assert.ok(ticks.every((t) => Number.isFinite(at(t))) && at(ticks.at(-1)) > at(ticks[0]), name);
+  }
+});
+
+// 근거: 이슈 #75 재현. 설계 charts.md 눈금: 작은 값의 선 차트에서 y축 눈금 글자가 모두 달라야 한다
+test('buildFigure_line_chart_of_tiny_values_draws_distinct_y_ticks_and_distinct_grid_lines', async () => {
+  const source = 'chart line\nx "Time(s)"\ny "Value(s)"\nseries s "S"\npoint x=0 s=0.000000000001\npoint x=1 s=0.000000000002';
+  const body = await bodyOf(source, { strict: true });
+  const labels = [...body.matchAll(/class="chart-tick end">([^<]*)</g)].map((m) => m[1]);
+  const ys = [...body.matchAll(/y1="([^"]*)"[^>]*class="chart-grid"/g)].map((m) => m[1]);
+
+  assert.ok(labels.length >= 3, labels.join());
+  assert.equal(new Set(labels).size, labels.length, `y 눈금 글자 ${labels}`);
+  assert.equal(new Set(ys).size, ys.length, `격자 y ${ys}`);
+  assert.deepEqual(labels.slice(0, 3), ['0', '5e-13', '1e-12']);
+});
+
+// 근거: 설계 charts.md 값 글자 "1000 미만은 가장 짧은 십진 표기": 소수 자릿수가 모자라 0으로 지워지는 작은 값은 지수 표기로 쓴다
+test('valueFormat_tiny_nonzero_values_use_exponent_notation_instead_of_rounding_to_zero', () => {
+  const format = valueFormat([1e-12, 2e-12]);
+
+  assert.deepEqual([format(1e-12), format(2e-12), format(0)], ['1e-12', '2e-12', '0']);
+  assert.equal(valueFormat([0.5, 1.25])(0.5), '0.50');
+  assert.equal(valueFormat([1e-12], 2)(1e-12), '0.00');
 });
