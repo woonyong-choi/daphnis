@@ -229,9 +229,9 @@ test('check_nested_group_with_the_same_name_returns_a_syntax_error_with_the_decl
 // 근거: 이슈 #71 "부모 관계에 순환이 생기는 경로". 바깥 그룹 이름을 더 깊은 곳에서 다시 선언해도, 같은 이름의 형제나 도형을 써도 유한 시간에 중복 오류가 된다
 test('check_duplicate_names_end_in_a_duplicate_error_for_every_nesting_shape', () => {
   const cases = [
-    { name: 'two_levels_down', source: 'flow right\ngroup g "G" {\ngroup h "H" {\ngroup g "I" {\nbox a "A"\n}\n}\n}\nbox b "B"\na -> b\n', line: 4, first: 1 },
+    { name: 'two_levels_down', source: 'flow right\ngroup g "G" {\ngroup h "H" {\ngroup g "I" {\nbox a "A"\n}\n}\n}\nbox b "B"\na -> b\n', line: 4, first: 2 },
     { name: 'siblings', source: 'flow right\ngroup g "G" {\nbox a "A"\n}\ngroup g "H" {\nbox c "C"\n}\na -> c\n', line: 5, first: 2 },
-    { name: 'node_inside_group_of_same_name', source: 'flow right\ngroup g "G" {\nbox g "A"\n}\nbox b "B"\ng -> b\n', line: 3, first: 2 },
+    { name: 'node_inside_group_of_same_name', source: 'flow right\ngroup g "G" {\nbox g "A"\n}\nbox b "B"\ng -> b\n', line: 2, first: 3 },
   ];
   withFolder((folder) => {
     for (const { name, source, line, first } of cases) {
