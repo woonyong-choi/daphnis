@@ -297,6 +297,7 @@
   --scale-aspect-max: 3;
   --scale-zoom-step: 1.25;
   --scale-flow-dots-max: 80;
+  --scale-chip-visible-share: 0.6;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
