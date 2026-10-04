@@ -160,8 +160,8 @@
   --color-tag-green: var(--color-paint-green-stroke);
   --color-tag-teal: var(--color-paint-teal-stroke);
   --color-tag-gray: var(--color-paint-gray-stroke);
-  --font-sans: FigSans, FigSansKo, FigSansSym, FigSansMath, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
-  --font-mono: FigMono, FigSans, FigSansKo, FigSansSym, FigSansMath, ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: FigSans, FigSansSym, FigSansMath, Pretendard, 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+  --font-mono: FigMono, FigSans, FigSansSym, FigSansMath, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
   --size-text-11: 11px;
   --size-text-13: 13px;
@@ -225,6 +225,7 @@
   --leading-snug: 1.35;
   --tracking-tag: 0.03em;
   --tracking-frame: 0.04em;
+  --tracking-text: -0.3px;
   --space-1: 2px;
   --space-2: 4px;
   --space-3: 6px;

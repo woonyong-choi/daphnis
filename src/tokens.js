@@ -333,7 +333,8 @@ export const tokens = freeze({
   },
   "tracking": {
     "tag": "var(--tracking-tag)",
-    "frame": "var(--tracking-frame)"
+    "frame": "var(--tracking-frame)",
+    "text": "var(--tracking-text)"
   },
   "space": {
     "1": "var(--space-1)",
@@ -661,8 +662,8 @@ export const values = freeze({
     }
   },
   "font": {
-    "sans": "FigSans, FigSansKo, FigSansSym, FigSansMath, Inter, 'Inter Variable', 'Noto Sans KR', 'Noto Sans KR Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif",
-    "mono": "FigMono, FigSans, FigSansKo, FigSansSym, FigSansMath, ui-monospace, SFMono-Regular, Menlo, monospace"
+    "sans": "FigSans, FigSansSym, FigSansMath, Pretendard, 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif",
+    "mono": "FigMono, FigSans, FigSansSym, FigSansMath, ui-monospace, SFMono-Regular, Menlo, monospace"
   },
   "size": {
     "text": {
@@ -767,7 +768,8 @@ export const values = freeze({
   },
   "tracking": {
     "tag": 0.03,
-    "frame": 0.04
+    "frame": 0.04,
+    "text": -0.3
   },
   "space": {
     "1": 2,

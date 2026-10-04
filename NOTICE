@@ -24,6 +24,12 @@ Simple Icons (technology brand marks)
   Not included: icons whose license is share-alike (Rust, Jenkins), icons removed from Simple Icons or that never existed there
              (Java, OpenAI, Apache HTTP Server), and cloud provider service icons (AWS, Azure, Google Cloud).
 
+Pretendard (body and number font)
+  Source:    https://github.com/orioncactus/pretendard (npm package pretendard 1.3.9, dist/public/static/Pretendard-{Regular,Medium,SemiBold}.otf)
+  Copyright: 2021 Kil Hyung-jin, with Reserved Font Name Pretendard.
+  License:   SIL Open Font License 1.1 (full text in node_modules/pretendard/dist/LICENSE.txt)
+  Modified:  none. The figure embeds a subset made from the characters it uses, which the license allows for embedding. The embedded piece is named FigSans, not Pretendard.
+
 Trademarks
   The names and marks of the technologies shown by these icons are trademarks of their respective owners. This repository shows them
   only to identify the technology in a diagram. It does not imply affiliation with, sponsorship by, or endorsement from the owners.

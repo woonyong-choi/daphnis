@@ -5,6 +5,7 @@ body {
   margin: 0;
   padding: var(--space-12) var(--space-16);
   font-family: var(--font-sans);
+  letter-spacing: var(--tracking-text);
   color: var(--color-fg);
   background: var(--color-page);
 }
@@ -133,6 +134,7 @@ html.embedded .fl-figure {
 /* 백틱으로 감싼 글. 코드 글꼴로 그린다. */
 .fl-code {
   font-family: var(--font-mono);
+  letter-spacing: normal;
 }
 
 .fl-caption {
