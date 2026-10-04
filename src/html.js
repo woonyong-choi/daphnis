@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { chartMotionCss } from './chart/motion.js';
 import { canvasOf, fitCanvas } from './canvas.js';
-import { DEFAULT_SET, loadIcon } from './icons/index.js';
+import { LUCIDE_ICONS } from './icons/lucide/icons.js';
 import { createGlyphSet, embedFonts } from './measure/fonts.js';
 import { paintCss } from './draw/paint.js';
 import { DEFS, STYLES } from './styles.js';
@@ -12,9 +12,8 @@ import { chartContent, figureContent } from './html/content.js';
 
 // 브라우저 스크립트 파일(src/player/). 한 스크립트로 이어 붙여 HTML에 넣는다.
 const PLAYER_FILES = ['view', 'play', 'controls', 'stage', 'curve', 'values'];
-// 조작부 아이콘: 구성도와 같은 Carbon 파일(names.json의 ui- 이름)을 읽어 재생기 스크립트 앞에 상수로 붙인다.
-const UI_ICON_NAMES = ['ui-maximize', 'ui-minimize', 'ui-zoom-in', 'ui-zoom-out', 'ui-fit', 'ui-play', 'ui-pause'];
-const UI_ICONS = Object.fromEntries(UI_ICON_NAMES.map((name) => [name, loadIcon({ set: DEFAULT_SET, name }, [], '.')]));
+// 조작부 아이콘: Lucide(ISC) 24 격자 외곽선 아이콘의 도형(src/icons/lucide/icons.js)을 재생기 스크립트 앞에 상수로 붙인다. 선 굵기와 끝 모양은 그리는 쪽(view.js)이 정한다.
+const UI_ICONS = LUCIDE_ICONS;
 const UI_ICON_SCRIPT = `const UI_ICONS = ${JSON.stringify(UI_ICONS).replace(/</g, '\\u003c')};\n`;
 const PLAYER = UI_ICON_SCRIPT + PLAYER_FILES.map((name) => readFileSync(new URL(`./player/${name}.js`, import.meta.url), 'utf8')).join('\n');
 // iframe 안에서 열리면 틀을 빼고, 목록 쪽이 iframe 높이를 맞추도록 본문 높이를 알린다. 문서(html) 높이는 iframe 창보다 작아지지 않아 쓰지 않는다.

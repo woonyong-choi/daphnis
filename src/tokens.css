@@ -250,10 +250,10 @@
   --size-text-13: 13px;
   --size-text-15: 15px;
   --size-text-22: 22px;
-  --size-control-outer: 30px;
-  --size-control-inner: 22px;
+  --size-control-outer: 36px;
+  --size-control-inner: 28px;
   --size-control-icon: 16px;
-  --size-control-icon-weight: 1.5px;
+  --size-control-icon-stroke: 1.75px;
   --size-pill-height: 18px;
   --size-icon-node: 20px;
   --size-icon-group: 18px;

@@ -22,7 +22,7 @@ const PLAYER_METRICS = Object.freeze({
   chipPadY: values.space['4'],
   chipGap: values.space['6'],
   icon: values.size.control.icon,
-  iconWeight: values.size.control['icon-weight'],
+  iconStroke: values.size.control['icon-stroke'],
   zoomMax: values.scale['zoom-max'],
   zoomStep: values.scale['zoom-step'],
   move: curveOf('move'),

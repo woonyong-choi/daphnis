@@ -33,7 +33,7 @@ function setPlaying(player, value) {
 // basis: estimate
 // 재생 단추 아이콘. 재생 중이면 일시정지 모양, 멈췄으면 재생 모양이다.
 function playIconSvg(isPlaying, metrics) {
-  return drawUiIcon(metrics, isPlaying ? 'ui-pause' : 'ui-play');
+  return drawUiIcon(metrics, isPlaying ? 'pause' : 'play');
 }
 
 // ---- 진행 고리 ----

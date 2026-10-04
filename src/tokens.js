@@ -329,7 +329,7 @@ export const tokens = freeze({
       "outer": "var(--size-control-outer)",
       "inner": "var(--size-control-inner)",
       "icon": "var(--size-control-icon)",
-      "icon-weight": "var(--size-control-icon-weight)"
+      "icon-stroke": "var(--size-control-icon-stroke)"
     },
     "pill": {
       "height": "var(--size-pill-height)"
@@ -854,10 +854,10 @@ export const values = freeze({
       "22": 22
     },
     "control": {
-      "outer": 30,
-      "inner": 22,
+      "outer": 36,
+      "inner": 28,
       "icon": 16,
-      "icon-weight": 1.5
+      "icon-stroke": 1.75
     },
     "pill": {
       "height": 18

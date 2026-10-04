@@ -97,10 +97,6 @@ html.embedded .fl-figure {
   stroke: var(--color-ui-progress);
 }
 
-.fl-ui-flip {
-  transform: scaleX(-1);
-}
-
 .fl-pause-icon {
   display: grid;
   place-items: center;
