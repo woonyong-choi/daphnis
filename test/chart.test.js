@@ -8,6 +8,8 @@ import { curveOf, timeAt } from '../src/easing.js';
 import { formatChange, formatNumber, makeScale } from '../src/chart/scale.js';
 import { measure } from '../src/measure/fonts.js';
 import { parseFigure } from '../src/source/parse.js';
+import { parseTime } from '../src/source/values.js';
+import { toSvg } from '../src/svg.js';
 import { tokens, values } from '../src/tokens.js';
 import { formatProblem, withFolder } from './helpers.js';
 
@@ -522,4 +524,43 @@ test('buildFigure_series_named_like_an_inherited_property_reads_once_and_real_du
   assert.match(twice.join('\n'), /"constructor" is written twice/);
   assert.equal(optionTwice.length > 0, true);
   assert.match(unknownWord.join('\n'), /unknown chart statement "constructor"/);
+});
+
+const NINES = '9'.repeat(310);
+const HEAD = 'chart line\nx "Time(s)"\ny "Value(ms)"\nseries s "S"\n';
+// 입력 종류마다 Number 변환이 Infinity가 되는 글(310자리)과 유한하지만 1e15 이상인 글
+const NUMBER_INPUTS = [
+  { input: 'rule 선언, 310자리', source: `${HEAD}rule ${NINES} "Limit"\npoint x=0 s=1\npoint x=1 s=2`, line: 5 },
+  { input: 'rule 선언, 1e15', source: `${HEAD}rule 1${'0'.repeat(15)} "Limit"\npoint x=0 s=1\npoint x=1 s=2`, line: 5 },
+  { input: 'rule 선언, 음수 310자리', source: `${HEAD}rule -${NINES} "Limit"\npoint x=0 s=1\npoint x=1 s=2`, line: 5 },
+  { input: '선 차트 point 값', source: `${HEAD}point x=0 s=${NINES}\npoint x=1 s=2`, line: 5 },
+  { input: '선 차트 point x', source: `${HEAD}point x=${NINES} s=1\npoint x=1 s=2`, line: 5 },
+  { input: '막대 행 값', source: `chart bar\nx "v(ms)"\nseries s "S"\nrow "A" s=${NINES}`, line: 4 },
+  { input: '막대 행 기준 rule=', source: `chart bar\nx "v(ms)"\nseries s "S"\nrow "A" s=1 rule=${NINES}`, line: 4 },
+  { input: '히트맵 cell', source: `chart heatmap\ncell "a" "b" ${NINES}`, line: 2 },
+  { input: '산점도 point', source: `chart scatter\nx "a(ms)"\ny "b(ms)"\npoint "p" x=1 y=${NINES}`, line: 4 },
+];
+
+// 근거: 설계 charts.md 값 범위 "값의 절댓값은 1e15 미만": rule과 행 숫자가 같은 유한성·범위 검사를 받고 성공한 SVG에는 비유한 좌표가 없다
+test('buildFigure_chart_numbers_that_overflow_or_pass_1e15_are_line_errors_for_every_input_kind', async () => {
+  for (const { input, source, line } of NUMBER_INPUTS) {
+    const errors = await problemsOf(source, { strict: true });
+
+    assert.equal(errors.length > 0, true, `${input}: 오류 없음`);
+    assert.ok(errors.every((e) => e.startsWith(`${line}:`)), `${input}: ${errors.join(' | ')}`);
+    assert.doesNotMatch(errors.join('\n'), /internal/, input);
+  }
+  const result = await buildFigure(`${HEAD}rule 999999999999999 "Limit"\npoint x=0 s=1\npoint x=1 s=2`, { strict: true });
+  const svg = await toSvg(result, { isStatic: true });
+
+  assert.doesNotMatch(svg, /NaN|Infinity/);
+});
+
+// 근거: 설계 playback.md·figure-syntax.md 시간 값과 aspect: 유한하지 않은 시간과 비율은 구문 오류다
+test('parseFigure_time_and_ratio_that_overflow_to_infinity_are_syntax_errors', () => {
+  assert.equal(parseTime(`${NINES}ms`), undefined);
+  assert.equal(parseTime(`${NINES}s`, true), undefined);
+  assert.equal(parseTime('900ms'), 900);
+  assert.throws(() => parseFigure(`chart bar\nspeed ${NINES}s\nseries a "A"\nrow "r" a=1`), (e) => e.problems[0].line === 2);
+  assert.throws(() => parseFigure(`flow right\naspect ${NINES}\nbox a "A"`), (e) => e.problems[0].line === 2);
 });
