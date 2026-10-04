@@ -137,17 +137,23 @@ function overlapsAt(hops, t, world) {
  */
 export function findClashes(scene, timeline) {
   const world = { scene, timeline, cache: new Map() };
-  const found = [];
   const seen = new Set();
-  for (const seg of timeline.segs) {
-    const hops = seg.hops.filter((hop) => hop.data);
-    if (hops.length < 2) continue;
-    for (let t = 0; t <= seg.t1 - seg.t0; t += CHIP_FRAME_MS) {
-      for (const { a, b } of overlapsAt(hops, t, world)) {
-        const key = `${hops.indexOf(a)}\u0000${hops.indexOf(b)}\u0000${seg.t0}`;
-        if (!seen.has(key)) found.push({ seg, a, b, t });
-        seen.add(key);
-      }
+  return timeline.segs.flatMap((seg) => clashesOfSeg(seg, world, seen));
+}
+
+// cost: time O(F·h²), heap O(h), stack O(1)
+// vars: F = 구간의 프레임 수, h = 구간의 글 상자 있는 이동 수
+// basis: estimate
+// 구간 하나의 겹침. seen은 이미 낸 이동 쌍 키 모음이고 새로 낸 쌍을 더한다.
+function clashesOfSeg(seg, world, seen) {
+  const hops = seg.hops.filter((hop) => hop.data);
+  const found = [];
+  if (hops.length < 2) return found;
+  for (let t = 0; t <= seg.t1 - seg.t0; t += CHIP_FRAME_MS) {
+    for (const { a, b } of overlapsAt(hops, t, world)) {
+      const key = `${hops.indexOf(a)}\u0000${hops.indexOf(b)}\u0000${seg.t0}`;
+      if (!seen.has(key)) found.push({ seg, a, b, t });
+      seen.add(key);
     }
   }
   return found;
