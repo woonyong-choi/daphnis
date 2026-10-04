@@ -376,3 +376,36 @@ test('cli_migrate_reports_the_old_extension_once_per_input_file_and_none_for_the
     assert.equal(text.stdout, '');
   });
 });
+
+// 근거: 이슈 #103 완료 조건 "유한한 시간 둘의 합이 상한을 넘으면 진단을 내고 결과 파일을 쓰지 않는다". 각각은 상한 안이고 합만 1ms 넘는다
+test('main_render_with_a_total_time_over_the_limit_exits_1_and_writes_no_file', () => {
+  const head = 'flow right\nbox a "A"\nbox b "B"\na -> b\n';
+  withFolder((folder) => {
+    writeFileSync(join(folder, 'long.dap'), `${head}step "one" for=1800000ms\n  track a -> b time=1ms\nstep "two" for=1800001ms\n  track a -> b time=1ms\n`);
+    writeFileSync(join(folder, 'edge.dap'), `${head}step "one" for=1800000ms\n  track a -> b time=1ms\nstep "two" for=1800000ms\n  track a -> b time=1ms\n`);
+
+    const over = run(['render', 'long.dap', '--html'], folder);
+    const exact = run(['render', 'edge.dap', '--html'], folder);
+
+    assert.equal(over.status, 1);
+    assert.match(over.stderr, /^long\.dap:7: the figure runs longer than the limit of 1h \(3600000ms\)/m);
+    assert.ok(!existsSync(join(folder, 'long.svg')) && !existsSync(join(folder, 'long.html')));
+    assert.equal(exact.status, 0, exact.stderr);
+    assert.ok(existsSync(join(folder, 'edge.svg')) && existsSync(join(folder, 'edge.html')));
+  });
+});
+
+// 근거: 이슈 #103 완료 조건 "끝없이 생성 원본이 출발 배열을 만들기 전에 진단으로 끝난다". 수정 전에는 힙 200MB 안에서 메모리 부족으로 죽던 원본이다. 자식 프로세스에 힙 제한과 제한 시간을 둬서 되돌아와도 시험이 멈추거나 메모리를 다 쓰지 않는다
+test('main_render_of_the_endless_departure_source_ends_with_a_time_limit_diagnostic_and_no_file', () => {
+  const source = 'flow right\nbox a "A"\nbox b "B"\na -> b\nstep "Load" for=100000000000000020000ms\n  track a -> b time=1ms at=100000000000000000000ms every=100ms\n';
+  withFolder((folder) => {
+    writeFileSync(join(folder, 'endless.dap'), source);
+
+    const result = spawnSync(process.execPath, ['--max-old-space-size=200', CLI, 'render', 'endless.dap', '--html'], { cwd: folder, encoding: 'utf8', timeout: 20000 });
+
+    assert.equal(result.status, 1, `${result.signal} ${result.stderr.slice(-300)}`);
+    assert.match(result.stderr, /^endless\.dap:5: for is over the limit of 1h \(3600000ms\)/m);
+    assert.match(result.stderr, /^endless\.dap:6: at is over the limit of 1h \(3600000ms\)/m);
+    assert.ok(!existsSync(join(folder, 'endless.svg')) && !existsSync(join(folder, 'endless.html')));
+  });
+});

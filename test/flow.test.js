@@ -4,7 +4,8 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { buildFigure } from '../src/build.js';
 import { findClashes } from '../src/chip-clash.js';
-import { flowSeg } from '../src/timeline-flow.js';
+import { departureCount, flowSeg } from '../src/timeline-flow.js';
+import { TIME_LIMIT_MS } from '../src/source/values.js';
 import { valueNames } from '../src/source/grammar.js';
 import { tokens, values } from '../src/tokens.js';
 
@@ -233,4 +234,138 @@ test('planClashes_keeps_every_fade_key_finite_and_hides_the_later_simultaneous_c
   assert.ok(hidden[0].chipFade.flat().every(Number.isFinite));
   assert.deepEqual(hidden[0].chipFade[0], [0, 0]);
   assert.deepEqual(findClashes(result.scene, result.timeline), []);
+});
+
+const FLOW_HEAD = 'flow right\nbox a "A"\nbox b "B"\na -> b\n';
+// 시간 값 하나가 상한을 넘는 줄 하나씩. 줄 번호는 FLOW_HEAD 다음 줄부터다.
+const OVER_LIMIT_LINES = {
+  for: `${FLOW_HEAD}step "s" for=3600001ms\n  track a -> b time=1s\n`,
+  time: `${FLOW_HEAD}step "s" for=3s\n  track a -> b time=3600001ms\n`,
+  at: `${FLOW_HEAD}step "s" for=3s\n  track a -> b time=1s at=3600001ms\n`,
+  every: `${FLOW_HEAD}step "s" for=3s\n  track a -> b time=1s every=3600001ms\n`,
+  wait: `${FLOW_HEAD}step "s"\n  a -> b\n  wait 3600.001s\n`,
+  speed: `flow right\nspeed 3600001ms\nbox a "A"\nbox b "B"\na -> b\nstep "s"\n  a -> b\n`,
+};
+
+// 근거: 이슈 #103 완료 조건 "출발 배열을 만들기 전에 진단으로 끝나거나 사전 개수만큼만 만든다". 상한 검사를 거치지 않고 flowSeg에 직접 넘긴 `at + every === at` 입력은 every를 읽는 횟수에 상한을 둔 채로 오류로 끝난다
+test('flowSeg_stops_with_a_time_precision_error_when_departures_do_not_advance_and_never_loops_on_every', { timeout: 10000 }, () => {
+  const READ_LIMIT = 100000;
+  let reads = 0;
+  const track = { path: ['a', 'b'], source: 'a', legs: [{ edge: 0 }], atMs: 1e20, timeMs: 1, sets: [], line: 6 };
+  Object.defineProperty(track, 'everyMs', { get: () => (++reads > READ_LIMIT ? assert.fail('every read without end') : 100) });
+  const step = { forMs: 1e20 + 16384, tracks: [track], label: 's', line: 5 };
+  const run = { figure: { steps: [step] }, speed: 600, t: 0, tracks: [], values: [], seriesIds: [], hasReveal: false };
+  const scene = { edges: [{ points: [{ x: 0, y: 0 }, { x: 100, y: 0 }] }] };
+
+  assert.throws(() => flowSeg({ step, si: 0 }, run, { scene, cards: { starts: new Map() }, chips: () => [] }), (error) => error.problems?.[0].code === 'time-precision' && error.problems[0].line === 6);
+  assert.ok(reads < 1000, `every를 ${reads}번 읽었다`);
+});
+
+// 근거: 이슈 #103 완료 조건 "실제로 만든 출발 수가 departureCount와 같다". 부동소수 합 0.1을 열 번 더하면 1을 넘지 못해 수정 전에는 11개였다
+test('buildFigure_makes_exactly_departureCount_departures_for_a_fractional_every', async () => {
+  const cases = [['1ms', '0.1ms'], ['10ms', '0.1ms'], ['12.1ms', '0.1ms'], ['3s', '700ms']];
+  for (const [length, every] of cases) {
+    const { figure, timeline } = await buildFigure(`${FLOW_HEAD}step "s" for=${length}\n  track a -> b time=1ms every=${every}\n`);
+    const [seg] = timeline.segs;
+
+    assert.equal(seg.hops.length, departureCount(figure.steps[0].tracks[0], seg.t1 - seg.t0), `${length} ${every}`);
+    assert.equal(new Set(seg.hops.map((hop) => hop.at)).size, seg.hops.length, `${length} ${every}: 출발 시각이 모두 다르다`);
+  }
+});
+
+// 근거: 이슈 #103 완료 조건 경계 "상한 정확히 같은 값은 통과, 넘는 값은 진단(시간 하나)". 설계 figure-syntax.md 시간 값
+test('buildFigure_accepts_every_time_value_at_the_limit_and_rejects_one_millisecond_over', async () => {
+  const atLimit = `flow right\nspeed ${TIME_LIMIT_MS}ms\nbox a "A"\nbox b "B"\na -> b\nstep "s" for=3600s\n  track a -> b time=${TIME_LIMIT_MS}ms at=0s every=3600s\n`;
+  const { timeline } = await buildFigure(atLimit);
+
+  assert.equal(timeline.segs[0].t1 - timeline.segs[0].t0, TIME_LIMIT_MS);
+  for (const [key, source] of Object.entries(OVER_LIMIT_LINES)) {
+    const problems = await errorsOf(source);
+
+    assert.deepEqual(problems.map((p) => p.code), ['time-limit'], key);
+    assert.match(problems[0].message, new RegExp(`^${key} is over the limit of 1h \\(3600000ms\\)`), key);
+  }
+});
+
+// 근거: 이슈 #103 완료 조건 경계 "누적 둘이 상한 정확히 같으면 통과, 넘으면 마지막에 더한 줄의 진단". 박자 단계와 흐름 단계 모두
+test('buildFigure_accepts_a_total_at_the_limit_and_rejects_the_line_that_pushes_it_over', async () => {
+  const flowStep = (ms, line) => `step "s${line}" for=${ms}ms\n  track a -> b time=1ms\n`;
+  const exact = await buildFigure(FLOW_HEAD + flowStep(1800000, 1) + flowStep(1800000, 2));
+  const over = await errorsOf(FLOW_HEAD + flowStep(1800000, 1) + flowStep(1800001, 2));
+  const beats = await errorsOf(`${FLOW_HEAD}step "s"\n  a -> b time=2400s\n  a -> b time=2400s\n`);
+
+  assert.equal(exact.timeline.total, TIME_LIMIT_MS);
+  assert.deepEqual(over.map((p) => [p.code, p.line]), [['time-limit', 7]]);
+  assert.deepEqual(beats.map((p) => [p.code, p.line]), [['time-limit', 7]]);
+});
+
+// 근거: 이슈 #103 완료 조건 "정밀도 원본은 사전 개수 466이고 at + every === at이다. 내부 오류가 아니라 6번 줄의 시간 정밀도 입력 진단"
+test('buildFigure_reports_a_time_precision_diagnostic_on_the_track_line_when_every_is_lost_next_to_at', async () => {
+  const source = `${FLOW_HEAD}step "T" for=3599999.0000000005ms\n  track a -> b time=1ms at=3599999ms every=0.000000000001ms\n`;
+  const problems = await errorsOf(source);
+
+  assert.equal(problems.length, 1);
+  assert.deepEqual([problems[0].severity, problems[0].code, problems[0].line], ['error', 'time-precision', 6]);
+  assert.match(problems[0].message, /^time precision is not supported: .* Raise every= or lower at=$/);
+});
+
+// 근거: 이슈 #103 완료 조건 "잘림 원본은 출발 7개를 만든다. 마지막 출발은 0.06ms이고, 길이 0인 잘림 구간을 만들지 않는다". ceil(0.07 / 0.01)은 8이다
+test('buildFigure_makes_seven_departures_for_a_step_of_0_07ms_every_0_01ms_and_no_zero_length_cut', async () => {
+  const { timeline } = await buildFigure(`${FLOW_HEAD}step "T" for=0.07ms\n  track a -> b time=1ms every=0.01ms\n`);
+  const { hops } = timeline.segs[0];
+
+  assert.equal(hops.length, 7);
+  assert.equal(hops.at(-1).at, 0.06);
+  assert.ok(hops.every((hop) => hop.cut === undefined || hop.cut > 0));
+});
+
+// 근거: 이슈 #103 완료 조건 "모든 흐름에서 검증한 개수와 실제 개수가 같고, 출발 시각은 유한하고 엄격히 늘며 단계 길이보다 작다". 분수 간격과 경계 길이를 섞은 입력 전부
+test('flowSeg_invariants_count_equals_made_and_starts_are_finite_strictly_increasing_and_inside_the_step', () => {
+  const scene = { edges: [{ points: [{ x: 0, y: 0 }, { x: 100, y: 0 }] }] };
+  const deps = { scene, cards: { starts: new Map() }, chips: () => [], dotsLimit: Infinity };
+  let checked = 0;
+  for (const atMs of [0, 0.1, 0.3, 1.1, 7, 1000]) {
+    for (const everyMs of [undefined, 0.01, 0.1, 0.3, 0.7, 1.3, 3.3, 100]) {
+      for (const forMs of [0.07, 1, 2.5, 10, 12.1, 100, 12000]) {
+        const track = { path: ['a', 'b'], source: 'a', legs: [{ edge: 0 }], atMs, everyMs, timeMs: 1, sets: [], line: 6 };
+        const step = { forMs, tracks: [track], label: 's', line: 5 };
+        const run = { figure: { steps: [step] }, speed: 600, t: 0, tracks: [], values: [], seriesIds: [], hasReveal: false };
+        const { segs } = flowSeg({ step, si: 0 }, run, deps);
+        const starts = segs[0].hops.map((hop) => hop.at);
+
+        assert.equal(starts.length, departureCount(track, forMs), `at=${atMs} every=${everyMs} for=${forMs}`);
+        assert.ok(starts.every((at, i) => Number.isFinite(at) && at < forMs && (i === 0 || at > starts[i - 1])), `at=${atMs} every=${everyMs} for=${forMs}`);
+        checked++;
+      }
+    }
+  }
+  assert.equal(checked, 6 * 8 * 7);
+});
+
+const DWELL = values.duration;
+
+// 근거: 이슈 #103 완료 조건 "정확히 1시간인 이동에 자동 체류 시간이 더해져 단계나 전체 시간이 상한을 넘으면 입력 진단". 이동 1시간에 박자 멈춤(duration.dwell)과 단계 끝 멈춤(duration.step-end)이 더해진다
+test('buildFigure_rejects_a_move_of_exactly_one_hour_because_the_automatic_hold_pushes_the_step_over', async () => {
+  const exact = await errorsOf(`${FLOW_HEAD}step "s"\n  a -> b time=3600s\n`);
+  const fits = await buildFigure(`${FLOW_HEAD}step "s"\n  a -> b time=${TIME_LIMIT_MS - DWELL.dwell - DWELL['step-end']}ms\n`);
+  const over = await errorsOf(`${FLOW_HEAD}step "s"\n  a -> b time=${TIME_LIMIT_MS - DWELL.dwell - DWELL['step-end'] + 1}ms\n`);
+
+  assert.deepEqual(exact.map((p) => [p.code, p.line]), [['time-limit', 6]]);
+  assert.equal(fits.timeline.total, TIME_LIMIT_MS);
+  assert.deepEqual(over.map((p) => [p.code, p.line]), [['time-limit', 6]]);
+});
+
+// 근거: 이슈 #103 완료 조건 "거리로 정한 이동 시간, 대기, 설명 체류를 합쳐 상한을 넘는 경우도 입력 진단". 각각은 상한 안이다. 자동 체류의 합은 대기 1초 그림의 전체 시간에서 잰다
+test('buildFigure_rejects_distance_based_moves_waits_and_caption_holds_that_add_up_over_the_limit', async () => {
+  const withWait = (ms, say = '') => `${FLOW_HEAD}step "s"\n  a -> b time=1s\n  wait ${ms}ms\n${say ? `  say "${say}"\n` : ''}`;
+  const hold = (await buildFigure(withWait(1000))).timeline.total - 2000;
+  const slow = await errorsOf(`flow right\nspeed 3600s\nbox a "A"\nbox b "B"\na -> b\nstep "s"\n  a -> b\n`);
+  const fits = await buildFigure(withWait(TIME_LIMIT_MS - hold - 1000));
+  const waits = await errorsOf(withWait(TIME_LIMIT_MS - hold - 1000 + 1));
+  const said = await errorsOf(withWait(TIME_LIMIT_MS - hold - 1000, '가'.repeat(100)));
+
+  assert.deepEqual(slow.map((p) => [p.code, p.line]), [['time-limit', 7]]);
+  assert.equal(fits.timeline.total, TIME_LIMIT_MS);
+  assert.deepEqual(waits.map((p) => [p.code, p.line]), [['time-limit', 7]]);
+  assert.deepEqual(said.map((p) => p.code), ['time-limit']);
 });
