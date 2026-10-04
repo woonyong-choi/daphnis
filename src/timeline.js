@@ -12,6 +12,15 @@ const DWELL = values.duration;
 // 행 이름 세로 옮김(px)을 반올림하는 단위의 역수(소수 둘째 자리)
 const SHIFT_PRECISION = 100;
 
+// cost: time O(r), heap O(r), stack O(1)
+// vars: r = 도형의 카드 줄 수
+// basis: estimate
+// 카드 줄 하나를 도형별 줄 목록(rows)에 적용한다. clear는 그 도형의 줄을 비우고 아니면 줄을 더한다.
+function applyCardOp(rows, op) {
+  if (op.type === 'clear') rows.delete(op.node);
+  else rows.set(op.node, [...(rows.get(op.node) ?? []), op.row]);
+}
+
 // cost: time O(b·(o + k)), heap O(c·r), stack O(1)
 // vars: b = 박자 수, o = 박자의 카드 줄 수, k = 카드 있는 도형 수, c = 카드 내용 수, r = 줄 수
 // basis: estimate
@@ -42,10 +51,7 @@ export function collectCards(figure) {
     starts.set(step, state);
     for (const beat of step.beats) {
       const before = state;
-      for (const op of beat.ops) {
-        if (op.type === 'clear') rows.delete(op.node);
-        else rows.set(op.node, [...(rows.get(op.node) ?? []), op.row]);
-      }
+      for (const op of beat.ops) applyCardOp(rows, op);
       state = stateOf();
       beats.set(beat, { before, after: state });
     }
