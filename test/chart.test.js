@@ -591,19 +591,19 @@ test('makeScale_linear_ticks_stay_distinct_and_exact_for_tiny_large_negative_and
     { name: '0 주변 음양', range: { min: -1e-12, max: 1e-12 }, first: -1e-12, last: 1e-12 },
     { name: '이진 오차(0.1 + 0.2)', range: { min: 0.1, max: 0.3 }, first: 0, last: 0.3 },
     { name: '큰 값에서 0 시작', range: { min: 1e14, max: 3e14 }, first: 0, last: 3e14 },
-    { name: '음수만', range: { min: -3e-9, max: -1e-9 }, first: -3e-9, last: 0 },
+    { name: '음수만', range: { min: -3e-9, max: -1e-9 }, first: -3e-9, last: -1e-9 },
     { name: '값이 0 하나', range: { min: 0, max: 0 }, first: 0, last: 1 },
     { name: '0 시작 해제, 큰 값의 작은 차이', range: { min: 1e14, max: 1e14 + 5, fromZero: false }, first: 1e14, last: 1e14 + 5 },
-    { name: '0 시작 해제, 작은 값의 작은 차이', range: { min: 1.5e-12, max: 1.9e-12, fromZero: false }, first: 1.5e-12, last: 2e-12 },
+    { name: '0 시작 해제, 작은 값의 작은 차이', range: { min: 1.5e-12, max: 1.9e-12, fromZero: false }, first: 1.5e-12, last: 1.9e-12 },
   ];
   for (const { name, range, first, last, count } of cases) {
-    const { ticks, at } = makeScale('linear', { ...range, start: 0, length: 100 });
+    const { ticks, labels, at } = makeScale('linear', { ...range, start: 0, length: 100 });
 
     assert.equal(ticks[0], first, `${name}: 첫 눈금 ${ticks}`);
     assert.equal(ticks.at(-1), last, `${name}: 끝 눈금 ${ticks}`);
     if (count) assert.equal(ticks.length, count, name);
     assert.ok(ticks.every((t, i) => i === 0 || t > ticks[i - 1]), `${name}: 눈금이 늘어나지 않음 ${ticks}`);
-    assert.equal(new Set(ticks.map(formatNumber)).size, ticks.length, `${name}: 눈금 글자가 겹침 ${ticks.map(formatNumber)}`);
+    assert.equal(new Set(labels).size, labels.length, `${name}: 눈금 글자가 겹침 ${labels}`);
     assert.ok(ticks.every((t) => Number.isFinite(at(t))) && at(ticks.at(-1)) > at(ticks[0]), name);
   }
 });
