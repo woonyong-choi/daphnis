@@ -30,4 +30,5 @@ step "주문 하나" "웹 주문 하나가 API를 거쳐 재고 DB에 닿습니�
   say "결제는 재고와 따로 일합니다"
 
 step "주문 폭주" "웹, 앱, 제휴사의 주문이 겹쳐 들어와 값이 계속 바뀝니다"
-  track web, app, partner -> api -> db "주문" every=2s
+  track web -> api -> db "주문" every=2s
+  track app, partner -> api -> db every=2s

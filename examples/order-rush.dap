@@ -30,4 +30,5 @@ step "주문 하나의 경로" "웹 주문 하나가 API를 거쳐 재고를 줄
   say "결제 서비스는 재고와 따로 일한다"
 
 step "주문이 몰릴 때" "웹, 앱, 제휴사에서 주문이 겹쳐 들어와 값이 연달아 바뀐다"
-  track web, app, partner -> api -> db "주문" every=2s
+  track web -> api -> db "주문" every=2s
+  track app, partner -> api -> db every=2s

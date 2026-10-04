@@ -30,4 +30,5 @@ step "One order" "A web order reaches the stock DB through the API"
   say "Payment works apart from the stock"
 
 step "A rush" "Orders from the web, the app, and partners overlap and the values keep changing"
-  track web, app, partner -> api -> db "Order" every=2s
+  track web -> api -> db "Order" every=2s
+  track app, partner -> api -> db every=2s

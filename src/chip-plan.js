@@ -52,9 +52,9 @@ export function planHops(scene, timeline, avoid) {
 // cost: time O(i·g), heap O(i), stack O(1)
 // vars: i = 지점별 문제 수, g = 도형 안을 지나는 구간 수
 // basis: estimate
-// 흐름 글 상자의 문제 가운데 그림 검사가 알릴 것. 글 상자는 가리는 곳에서 숨으므로(흐려짐) 가림은 알리지 않고, 그림 밖만 알린다. 점이 도형 안을 지나 보이지 않는 구간은 보지 않는다.
+// 흐름 글 상자의 문제 가운데 그림 검사가 알릴 것. 글 상자는 가리는 곳에서 숨으므로(흐려짐) 가림은 보이는 시간의 FADE_SHARE_MAX를 넘게 숨을 때만 알리고(issuesOf가 가른다), 그림 밖은 늘 알린다. 점이 도형 안을 지나 보이지 않는 구간은 보지 않는다.
 function reportedOf(issues, hop) {
-  return issues.filter(({ at }) => !hop.gaps.some(([from, to]) => at > from && at < to)).map((issue) => ({ ...issue, hits: [] }));
+  return issues.filter(({ at }) => !hop.gaps.some(([from, to]) => at > from && at < to));
 }
 
 // cost: time O(plan) 계획이 없을 때, O(1) 있을 때, heap O(n), stack O(1)
