@@ -58,6 +58,7 @@
     "subset-font": "^2.9.0"
   },
   "devDependencies": {
+    "@carbon/colors": "^11.59.0",
     "playwright-core": "^1.63.0"
   }
 }

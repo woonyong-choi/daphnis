@@ -1,6 +1,7 @@
 // 같은 톤 팔레트 계산. 색마다 사람이 정한 원색(ANCHORS)에서 테마별 fill, stroke, ink를 대비 규칙으로 찾는다.
 // fill은 옅은 면, stroke는 그래픽(3 이상), ink는 글자(4.5 이상)다. 원색이 규칙을 넘으면 원색 그대로, 못 넘으면 같은 색상과 채도에서 밝기만 옮긴다. sRGB 밖이면 채도만 줄인다(oklch.mjs).
 // 대비 기준 수치는 WCAG 규칙값이고 색 취향이 아니라 토큰이 아닌 상수다. 면의 값은 토큰 정본에서 읽은 것을 받는다.
+import * as carbon from '@carbon/colors';
 import { contrast } from '../../src/contrast.js';
 import { valueNames } from '../../src/source/grammar.js';
 import { VISION, distanceOf, seenBy } from './color-vision.mjs';
@@ -11,26 +12,40 @@ const GRAPHIC = 3;
 const STEP = 0.002;
 const MAX_STEPS = 400;
 /**
- * 원색 표. 팔레트 값에서 사람이 정한 입력은 이 표뿐이고 나머지는 모두 계산이다. 앞이 라이트, 뒤가 다크다.
- * 참고 이력서(hyunseob.github.io/resume)의 파랑 #3a7bd5와 하늘색 #00d2ff 띠를 축으로 둔다. 파랑과 하늘빛 teal을 앞세우고 나머지는 채도를 낮춰 뒤로 물린다(후보 G).
- * orange는 비교(data.compare) 전용이다. 색상 50도는 red(25도)와 amber(75도)의 가운데라 둘과 갈리고, 밝기와 채도(L 0.685, C 0.148)는 amber(L 0.68)와 blue(C 0.153) 수준이라 톤이 어긋나지 않는다.
- * 후보 G의 원색에서 두 곳만 고쳤다. 둘 다 이미 있는 구별 규칙(docs-integration.md 색 역할)을 지키려는 것이다. teal 라이트는 색상각 222.7도에서 213도로 돌렸다(카드 태그 색은 지금 파랑과 40도 이상 떨어져야 한다, 파랑이 257도). navy 다크는 밝기 0.711에서 0.685로 낮췄다(적록 색각 이상에서 purple과 거리 0.025 이상).
- * slate는 gray 색의 팔레트 이름이다.
+ * 원색 표. 팔레트 값에서 사람이 정한 입력은 이 표(파랑, 주황, 그리고 색마다 Carbon 색 이름)뿐이고 나머지는 모두 계산이다. 라이트와 다크 한 쌍이다.
+ * 참고 이력서(hyunseob.github.io/resume)의 파랑 #3a7bd5(라이트)와 #6aa1ff(다크)가 축이다. 주황은 비교(data.compare) 전용이다.
+ * 색상 50도는 red(25도 근처)와 yellow(85도 근처)의 가운데이고, 밝기와 채도(L 0.685, C 0.148)는 파랑(C 0.153) 수준이라 톤이 어긋나지 않는다.
+ * 나머지 색은 IBM Carbon 색 체계(@carbon/colors, Apache-2.0)에서 가져온다. 색마다 Carbon 색 계열의 10~100 단계 가운데 OKLCH 밝기가 우리 파랑에 가장 가까운 단계를 쓴다. 계열 대응은 CARBON_FAMILY다.
+ * 뽑힌 단계(라이트, 다크): red 60 #da1e28, 40 #ff8389 / yellow(amber) 60 #8e6a00, 40 #d2a106 / green 50 #24a148, 40 #42be65 / teal 50 #009d9a, 40 #08bdba / purple 50 #a56eff(60 #8a3ffc에서 이웃 단계로, STEP_OVERRIDE), 40 #be95ff / magenta(pink) 60 #d02670, 40 #ff7eb6 / coolGray(slate) 60 #697077, 40 #a2a9b0.
+ * 대비 규칙에 모자란 원색은 같은 색상과 채도에서 밝기만 옮긴다. 이 이동은 build()가 한다.
  */
+const BLUE = { light: '#3a7bd5', dark: '#6aa1ff' };
+const ORANGE = { light: '#e07b39', dark: '#e87e42' };
+// 팔레트 색 이름 → Carbon 색 계열. teal은 cyan(파랑과 너무 가깝다)을 쓰지 않는다. slate는 gray 색의 팔레트 이름이다.
+const CARBON_FAMILY = { red: 'red', amber: 'yellow', green: 'green', teal: 'teal', purple: 'purple', pink: 'magenta', slate: 'coolGray' };
+// navy는 지금 파랑과 구별되는 것이 먼저라 밝기가 가장 가까운 단계 대신 Carbon blue 계열에서 파랑과 OKLab 거리가 0.1 이상 떨어진 가장 가까운 단계를 쓴다. 라이트 blue 70 #0043ce, 다크 blue 60 #0f62fe.
+const NAVY_STEP = { light: 70, dark: 60 };
+// 가장 가까운 단계가 구별 규칙을 못 지켜 같은 계열의 이웃 단계로 옮긴 곳. 체계 밖 값은 쓰지 않는다. purple 라이트 60은 색상각이 295도라 카드 태그 색이 파랑(257도)과 40도 안에 든다. 50은 298도다.
+const STEP_OVERRIDE = { purple: { light: 50 } };
+
+// cost: time O(f), heap O(1), stack O(1)
+// vars: f = 계열 단계 수
+// basis: estimate
+// Carbon 계열에서 OKLCH 밝기가 target에 가장 가까운 단계의 `#rrggbb`.
+function nearestStep(family, target) {
+  const targetL = oklchOf(target)[0];
+  return Object.values(carbon[family]).reduce((best, hex) => (Math.abs(oklchOf(hex)[0] - targetL) < Math.abs(oklchOf(best)[0] - targetL) ? hex : best));
+}
+
 export const ANCHORS = {
-  blue: { light: '#3a7bd5', dark: '#6aa1ff' },
-  orange: { light: '#e07b39', dark: '#e87e42' },
-  red: { light: '#d9534f', dark: '#f08a87' },
-  amber: { light: '#c98a1b', dark: '#e2b25c' },
-  green: { light: '#3f9e6e', dark: '#74c59b' },
-  teal: { light: '#00a5be', dark: '#4cc9ec' },
-  navy: { light: '#4c5fa8', dark: '#8596d6' },
-  purple: { light: '#8a63b8', dark: '#b99be0' },
-  pink: { light: '#c2618d', dark: '#e79cbf' },
-  slate: { light: '#6b7684', dark: '#9aa4b1' },
+  blue: BLUE,
+  orange: ORANGE,
+  ...Object.fromEntries(Object.entries(CARBON_FAMILY).map(([name, family]) => [name, { light: carbon[family][STEP_OVERRIDE[name]?.light] ?? nearestStep(family, BLUE.light), dark: nearestStep(family, BLUE.dark) }])),
+  navy: { light: carbon.blue[NAVY_STEP.light], dark: carbon.blue[NAVY_STEP.dark] },
 };
-// 면 단계의 목표 밝기와 채도 상한. 원색 채도가 이보다 낮으면 원색 채도를 쓴다. 대비 기준에 걸리면 밝기를 옮긴다.
-const FILL = { light: { L: 0.965, C: 0.025, step: STEP }, dark: { L: 0.29, C: 0.04, step: -STEP } };
+// 면 단계의 목표 밝기와 채도 상한. 다크는 옅은 면이 판 바탕과 도형 바탕에서 보이도록 distance.fill-dark 이상 떨어져야 하고, 대비 기준에 걸리면 밝기를 낮추다가 거리를 못 지키면 오류다.
+//  원색 채도가 이보다 낮으면 원색 채도를 쓴다. 대비 기준에 걸리면 밝기를 옮긴다.
+const FILL = { light: { L: 0.965, C: 0.025, step: STEP }, dark: { L: 0.36, C: 0.06, step: -STEP } };
 // 파랑의 히트맵 두 끝. low는 그림 바탕과 대비 1.5(꾸밈 요소 기준)가 되는 가장 옅은 값이고 채도 상한은 HEAT_LOW_C다. high는 흰 글자와의 대비가 라이트 7(옛 #1d5d91 값), 다크 4.5 이상인 가장 밝은 값이다.
 const HEAT_LOW_C = { light: 0.06, dark: 0.05 };
 const HEAT_LOW_FLOOR = 1.5;
@@ -73,12 +88,13 @@ const reaches = (hex, faces, floor) => faces.every((face) => contrast(hex, face)
  * @returns { 색이름: { fill, stroke, ink, dot? } }. dot은 갈래색 이름에만 있다
  */
 export function generateTheme(theme, faces) {
-  const { surfaces, fg, muted, border, onActive, white, bg } = faces;
+  const { surfaces, fg, muted, border, onActive, white, bg, node, darkFill } = faces;
   const anchors = Object.fromEntries(Object.entries(ANCHORS).map(([name, pair]) => [name, { hex: pair[theme], lch: oklchOf(pair[theme]) }]));
   const fills = {};
   for (const [name, { lch: [, C, hue] }] of Object.entries(anchors)) {
     const spec = { start: FILL[theme].L, step: FILL[theme].step, chroma: Math.min(FILL[theme].C, C), hue };
     fills[name] = search(spec, (hex) => reaches(hex, [fg, muted], TEXT) && contrast(hex, border) >= GRAPHIC);
+    if (theme === 'dark' && !(distanceOf(seenBy(VISION.normal, fills[name]), seenBy(VISION.normal, bg)) >= darkFill.bg && distanceOf(seenBy(VISION.normal, fills[name]), seenBy(VISION.normal, node)) >= darkFill.node)) throw new Error(`the dark fill of ${name} is too close to the figure ground or the node face`);
   }
   const allFills = Object.values(fills);
   const down = theme === 'light' ? -STEP : STEP;
@@ -183,6 +199,8 @@ export function generatePalette(light, dark) {
       muted: resolve(table, 'color.muted'),
       border: resolve(table, 'color.border'),
       bg: resolve(table, 'color.bg'),
+      node: resolve(table, 'color.node'),
+      darkFill: { bg: table.get('distance.fill-dark.bg'), node: table.get('distance.fill-dark.node') },
       onActive: resolve(table, 'color.state.on-active'),
       white: resolve(table, 'color.data.heat-ink-on'),
       flowMin: table.get('distance.flow'),

@@ -399,7 +399,11 @@ export const tokens = freeze({
     "flow": "var(--distance-flow)",
     "neighbor": "var(--distance-neighbor)",
     "neighbor-cvd": "var(--distance-neighbor-cvd)",
-    "fill": "var(--distance-fill)"
+    "fill": "var(--distance-fill)",
+    "fill-dark": {
+      "bg": "var(--distance-fill-dark-bg)",
+      "node": "var(--distance-fill-dark-node)"
+    }
   },
   "z": {
     "raised": "var(--z-raised)",
@@ -469,7 +473,7 @@ export const values = freeze({
         "light-heat-low": "#b3cdf3",
         "light-heat-high": "#1256ad",
         "light-icon": "#3458e7",
-        "dark-fill": "#202c3f",
+        "dark-fill": "#1c2d4c",
         "dark-stroke": "#6aa1ff",
         "dark-ink": "#6aa1ff",
         "dark-heat-low": "#2a3a54",
@@ -484,82 +488,82 @@ export const values = freeze({
         "1000": "#000000"
       },
       "red": {
-        "light-fill": "#ffefee",
-        "light-stroke": "#d9534f",
-        "light-ink": "#c33e3d",
-        "dark-fill": "#3d2322",
-        "dark-stroke": "#f08a87",
-        "dark-ink": "#f08a87"
+        "light-fill": "#ffefed",
+        "light-stroke": "#da1e28",
+        "light-ink": "#d71925",
+        "dark-fill": "#482123",
+        "dark-stroke": "#ff8389",
+        "dark-ink": "#ff8389"
       },
       "amber": {
-        "light-fill": "#fef1e1",
-        "light-stroke": "#bc7e00",
-        "light-ink": "#956300",
-        "dark-fill": "#362913",
-        "dark-stroke": "#e2b25c",
-        "dark-ink": "#e2b25c"
+        "light-fill": "#fbf3e1",
+        "light-stroke": "#8e6a00",
+        "light-ink": "#8b6800",
+        "dark-fill": "#3a2b01",
+        "dark-stroke": "#d2a106",
+        "dark-ink": "#d2a106"
       },
       "green": {
-        "light-fill": "#e6f9ed",
-        "light-stroke": "#3b9b6b",
-        "light-ink": "#127d4f",
-        "light-dot": "#127d4f",
-        "dark-fill": "#183124",
-        "dark-stroke": "#74c59b",
-        "dark-ink": "#74c59b",
-        "dark-dot": "#74c59b"
+        "light-fill": "#e9f8ea",
+        "light-stroke": "#219f46",
+        "light-ink": "#007f31",
+        "light-dot": "#008634",
+        "dark-fill": "#12331a",
+        "dark-stroke": "#42be65",
+        "dark-ink": "#42be65",
+        "dark-dot": "#42be65"
       },
       "teal": {
-        "light-fill": "#e1f8fe",
-        "light-stroke": "#0098af",
-        "light-ink": "#00788b",
-        "light-dot": "#00697a",
-        "dark-fill": "#113039",
-        "dark-stroke": "#4cc9ec",
-        "dark-ink": "#4cc9ec",
-        "dark-dot": "#73dfff"
+        "light-fill": "#e1f9f8",
+        "light-stroke": "#009a97",
+        "light-ink": "#007a78",
+        "light-dot": "#007a78",
+        "dark-fill": "#003333",
+        "dark-stroke": "#08bdba",
+        "dark-ink": "#08bdba",
+        "dark-dot": "#009d9b"
       },
       "navy": {
-        "light-fill": "#eff3ff",
-        "light-stroke": "#4c5fa8",
-        "light-ink": "#4c5fa8",
-        "dark-fill": "#242a3f",
-        "dark-stroke": "#8596d6",
-        "dark-ink": "#8596d6"
+        "light-fill": "#eef4ff",
+        "light-stroke": "#0043ce",
+        "light-ink": "#0043ce",
+        "dark-fill": "#1c2d4b",
+        "dark-stroke": "#1f6bff",
+        "dark-ink": "#5791ff"
       },
       "purple": {
-        "light-fill": "#f6f0ff",
-        "light-stroke": "#8a63b8",
-        "light-ink": "#825bb0",
-        "light-dot": "#8b64b9",
-        "dark-fill": "#30263c",
-        "dark-stroke": "#b99be0",
-        "dark-ink": "#b99be0",
-        "dark-dot": "#b99be0"
+        "light-fill": "#f5f1ff",
+        "light-stroke": "#a36cfd",
+        "light-ink": "#864cdb",
+        "light-dot": "#864cdb",
+        "dark-fill": "#332748",
+        "dark-stroke": "#be95ff",
+        "dark-ink": "#be95ff",
+        "dark-dot": "#be95ff"
       },
       "pink": {
-        "light-fill": "#ffeef4",
-        "light-stroke": "#c2618d",
-        "light-ink": "#ab4d79",
-        "dark-fill": "#3b232e",
-        "dark-stroke": "#e79cbf",
-        "dark-ink": "#e79cbf"
+        "light-fill": "#ffeff3",
+        "light-stroke": "#d02670",
+        "light-ink": "#cd226e",
+        "dark-fill": "#462131",
+        "dark-stroke": "#ff7eb6",
+        "dark-ink": "#ff7eb6"
       },
       "slate": {
-        "light-fill": "#ecf4ff",
-        "light-stroke": "#6b7684",
-        "light-ink": "#646e7c",
-        "light-dot": "#343e4b",
-        "dark-fill": "#242c36",
-        "dark-stroke": "#9aa4b1",
-        "dark-ink": "#9aa4b1",
-        "dark-dot": "#86909d"
+        "light-fill": "#ecf5fd",
+        "light-stroke": "#697077",
+        "light-ink": "#676e75",
+        "light-dot": "#474e54",
+        "dark-fill": "#282e33",
+        "dark-stroke": "#a2a9b0",
+        "dark-ink": "#a2a9b0",
+        "dark-dot": "#aeb5bc"
       },
       "orange": {
         "light-fill": "#fff0e8",
         "light-stroke": "#d36f2b",
         "light-ink": "#b05200",
-        "dark-fill": "#3c2519",
+        "dark-fill": "#472412",
         "dark-stroke": "#e87e42",
         "dark-ink": "#e87e42"
       }
@@ -569,63 +573,63 @@ export const values = freeze({
       "active-fill": "#2b6cc5",
       "active-text": "#2b6cc5",
       "on-active": "#ffffff",
-      "error": "#d9534f",
-      "success": "#3b9b6b",
-      "warning": "#bc7e00"
+      "error": "#da1e28",
+      "success": "#219f46",
+      "warning": "#8e6a00"
     },
     "flow": {
-      "purple": "#8b64b9",
-      "green": "#127d4f",
-      "teal": "#00697a",
-      "gray": "#343e4b"
+      "purple": "#864cdb",
+      "green": "#008634",
+      "teal": "#007a78",
+      "gray": "#474e54"
     },
     "figure": {
       "icon": "#3458e7"
     },
     "paint": {
       "red": {
-        "fill": "#ffefee",
-        "stroke": "#d9534f",
-        "ink": "#c33e3d"
+        "fill": "#ffefed",
+        "stroke": "#da1e28",
+        "ink": "#d71925"
       },
       "amber": {
-        "fill": "#fef1e1",
-        "stroke": "#bc7e00",
-        "ink": "#956300"
+        "fill": "#fbf3e1",
+        "stroke": "#8e6a00",
+        "ink": "#8b6800"
       },
       "green": {
-        "fill": "#e6f9ed",
-        "stroke": "#3b9b6b",
-        "ink": "#127d4f",
-        "dot": "#127d4f"
+        "fill": "#e9f8ea",
+        "stroke": "#219f46",
+        "ink": "#007f31",
+        "dot": "#008634"
       },
       "teal": {
-        "fill": "#e1f8fe",
-        "stroke": "#0098af",
-        "ink": "#00788b",
-        "dot": "#00697a"
+        "fill": "#e1f9f8",
+        "stroke": "#009a97",
+        "ink": "#007a78",
+        "dot": "#007a78"
       },
       "navy": {
-        "fill": "#eff3ff",
-        "stroke": "#4c5fa8",
-        "ink": "#4c5fa8"
+        "fill": "#eef4ff",
+        "stroke": "#0043ce",
+        "ink": "#0043ce"
       },
       "purple": {
-        "fill": "#f6f0ff",
-        "stroke": "#8a63b8",
-        "ink": "#825bb0",
-        "dot": "#8b64b9"
+        "fill": "#f5f1ff",
+        "stroke": "#a36cfd",
+        "ink": "#864cdb",
+        "dot": "#864cdb"
       },
       "pink": {
-        "fill": "#ffeef4",
-        "stroke": "#c2618d",
-        "ink": "#ab4d79"
+        "fill": "#ffeff3",
+        "stroke": "#d02670",
+        "ink": "#cd226e"
       },
       "gray": {
-        "fill": "#ecf4ff",
-        "stroke": "#6b7684",
-        "ink": "#646e7c",
-        "dot": "#343e4b"
+        "fill": "#ecf5fd",
+        "stroke": "#697077",
+        "ink": "#676e75",
+        "dot": "#474e54"
       }
     },
     "ui": {
@@ -655,10 +659,10 @@ export const values = freeze({
     "plate-border": "#d5dbe3",
     "page": "#ffffff",
     "tag": {
-      "purple": "#8a63b8",
-      "green": "#3b9b6b",
-      "teal": "#0098af",
-      "gray": "#6b7684"
+      "purple": "#a36cfd",
+      "green": "#219f46",
+      "teal": "#009a97",
+      "gray": "#697077"
     }
   },
   "font": {
@@ -834,7 +838,11 @@ export const values = freeze({
     "flow": 0.1,
     "neighbor": 0.06,
     "neighbor-cvd": 0.025,
-    "fill": 0.015
+    "fill": 0.015,
+    "fill-dark": {
+      "bg": 0.07,
+      "node": 0.03
+    }
   },
   "z": {
     "raised": 2,

@@ -30,6 +30,12 @@ Pretendard (body and number font)
   License:   SIL Open Font License 1.1 (full text in node_modules/pretendard/dist/LICENSE.txt)
   Modified:  none. The figure embeds a subset made from the characters it uses, which the license allows for embedding. The embedded piece is named FigSans, not Pretendard.
 
+IBM Carbon colors (palette source colors)
+  Source:    https://github.com/carbon-design-system/carbon (npm package @carbon/colors 11.59.0, development dependency)
+  Copyright: IBM Corp.
+  License:   Apache License 2.0 (full text in src/icons/LICENSE)
+  Use:       scripts/lib/palette.mjs reads the red, yellow, green, teal, purple, magenta, coolGray and blue steps and derives the palette from them. The color values are not copied into src; the generated palette steps in src/tokens.json are computed from them.
+
 Trademarks
   The names and marks of the technologies shown by these icons are trademarks of their respective owners. This repository shows them
   only to identify the technology in a diagram. It does not imply affiliation with, sponsorship by, or endorsement from the owners.

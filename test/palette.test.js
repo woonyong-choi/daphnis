@@ -39,6 +39,16 @@ test('paint_every_color_stage_reaches_its_contrast_floor_in_both_themes', () => 
   }
 });
 
+// 근거: 다크 면은 어두워 판 바탕과 도형 바탕에 묻히기 쉽다. 다크 fill은 그림 바탕, 도형 바탕과 distance.fill-dark 이상 떨어진다
+test('paint_dark_fills_stay_visible_against_the_figure_ground_and_the_node_face', () => {
+  const look = (name) => seenBy(VISION.normal, themeColor('dark', name));
+  for (const name of NAMES) {
+    const fill = seenBy(VISION.normal, paint('dark', name, 'fill'));
+    assert.ok(distanceOf(fill, look('bg')) >= tokenValue('distance.fill-dark.bg'), `${name} fill vs bg`);
+    assert.ok(distanceOf(fill, look('node')) >= tokenValue('distance.fill-dark.node'), `${name} fill vs node`);
+  }
+});
+
 // 근거: 색 역할 "이웃한 색은 갈린다". 보통 시각과 적록 색각 이상 시뮬레이션의 OKLab 거리, 색상 순서 이웃 쌍
 test('paint_hue_neighbors_stay_apart_for_normal_protan_and_deutan_sight', () => {
   const order = ['red', 'amber', 'green', 'teal', 'navy', 'purple', 'pink'];
