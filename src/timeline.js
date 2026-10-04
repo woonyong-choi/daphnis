@@ -1,5 +1,6 @@
 // 시간 흐름을 시간표로 편다. 박자마다 상태를 완전히 적어서, 탭으로 건너뛰어도 앞 박자를 다시 계산하지 않는다(docs/design/playback.md).
 import { presentSlots, slotMiddle } from './chart/slots.js';
+import { roundToScale } from './format.js';
 import { hopMs } from './hop-ms.js';
 import { flowSeg } from './timeline-flow.js';
 import { createSeg } from './timeline-seg.js';
@@ -172,7 +173,7 @@ function labelShiftsOf(figure, shown) {
     if (!seen.length) return 0;
     const present = presentSlots(row, series);
     const bars = seen.filter((i) => present.includes(i));
-    return Math.round((slotMiddle(bars.length ? bars : seen) - slotMiddle(present)) * SHIFT_PRECISION) / SHIFT_PRECISION;
+    return roundToScale(slotMiddle(bars.length ? bars : seen) - slotMiddle(present), SHIFT_PRECISION);
   });
 }
 
