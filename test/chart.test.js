@@ -489,3 +489,19 @@ test('drawChart_scatter_arrowhead_stays_clear_of_every_point_name', async () => 
     }
   }
 });
+
+// 근거: 설계 charts.md "머리와 선언 줄": 종류를 모르면 종류에 기대는 검사를 하지 않고 헤더 오류 하나만 남긴다
+test('parseFigure_chart_header_failure_stops_before_any_type_dependent_check', () => {
+  for (const source of ['chart', 'chart bogus', 'chart bogus\nseries s "S"\nrow "A" s=1\nrule 5 "R"']) {
+    const error = (() => {
+      try {
+        parseFigure(source);
+      } catch (e) {
+        return e;
+      }
+    })();
+
+    assert.deepEqual(error.problems.map((p) => p.line), [1], source);
+    assert.ok(error.problems.every((p) => p.code !== 'internal'), source);
+  }
+});

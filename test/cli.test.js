@@ -341,3 +341,20 @@ test('gallery_links_a_scheme_like_file_name_only_as_an_encoded_explicit_relative
     }
   });
 });
+
+// 근거: 설계 charts.md "머리와 선언 줄": 잘못된 차트 헤더는 지원하는 종류를 알려 주는 1번 줄 구문 오류다
+test('check_chart_header_without_or_with_a_wrong_type_is_a_line_1_syntax_error_not_an_internal_one', () => {
+  withFolder((folder) => {
+    for (const [source, found] of [['chart\n', ''], ['chart bogus\n', 'bogus'], ['chart bogus\nrow "A" s=1\n', 'bogus']]) {
+      writeFileSync(join(folder, 'h.dap'), source);
+
+      const result = run(['check', 'h.dap', '--json'], folder);
+      const diagnostics = result.stdout.trim().split('\n').map((line) => JSON.parse(line));
+
+      assert.equal(result.status, 1, source);
+      assert.deepEqual(diagnostics.map((d) => [d.code, d.line]), [['syntax', 1]], `${source}: ${result.stdout}`);
+      assert.match(diagnostics[0].message, /bar, .*heatmap/, source);
+      if (found) assert.ok(diagnostics[0].message.includes(`"${found}"`), diagnostics[0].message);
+    }
+  });
+});
