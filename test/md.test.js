@@ -211,6 +211,8 @@ test('md_reads_the_old_fence_and_old_image_mark_and_rewrites_the_mark_with_a_dep
 });
 
 const SVG_NAMES = ['readme-one.svg', 'readme-two.svg'];
+// cost: time O(1), heap O(1), stack O(1), io 4
+// basis: estimate
 // 같은 이름의 문서 둘(a/readme.md, b/readme.md)을 만들고 서로 다른 블록 이름을 준다. 출력 폴더는 out이다.
 const twinDocs = (folder, names = ['one', 'two']) => {
   for (const [i, dir] of ['a', 'b'].entries()) {
