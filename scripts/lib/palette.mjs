@@ -14,10 +14,10 @@ const ROLE = {
   orange: { 'light-fill': '#fff1e8', 'light-stroke': '#e65200', 'light-ink': '#e65200', 'dark-fill': '#3a2417', 'dark-stroke': '#ff8a3d', 'dark-ink': '#ff8a3d' },
   red: { 'light-fill': '#ffeef0', 'light-stroke': '#f04452', 'light-ink': '#f04452', 'dark-fill': '#3d1e24', 'dark-stroke': '#ff6b77', 'dark-ink': '#ff6b77' },
   green: { 'light-fill': '#e8f7ef', 'light-stroke': '#03a564', 'light-ink': '#03a564', 'dark-fill': '#13302a', 'dark-stroke': '#3ed598', 'dark-ink': '#3ed598' },
-  gray: { 'light-fill': '#e4e7eb', 'light-stroke': '#6b7684', 'light-ink': '#6b7684', 'dark-fill': '#23252a', 'dark-stroke': '#9aa1ab', 'dark-ink': '#9aa1ab' },
+  gray: { 'light-fill': '#e7e7e7', 'light-stroke': '#646464', 'light-ink': '#646464', 'dark-fill': '#282828', 'dark-stroke': '#a0a0a0', 'dark-ink': '#a0a0a0' },
 };
 // 세 번째 이후 흐름 점은 진한 회색이다.
-const FLOW_DOT = { 'light-dot': '#4e5968', 'dark-dot': '#c3c8cf' };
+const FLOW_DOT = { 'light-dot': '#585858', 'dark-dot': '#c7c7c7' };
 // 오류(red) 흐름 점. 글 상자 글자(on-active)와 대비 4.5 이상인 같은 색상의 진한 값(라이트 4.75), 다크는 선과 같다.
 const RED_DOT = { 'light-dot': '#da2c41', 'dark-dot': '#ff6b77' };
 const PROPOSAL_TABLE = {
