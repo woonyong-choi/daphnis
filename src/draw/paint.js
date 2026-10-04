@@ -28,15 +28,15 @@ function usedPaints(scene) {
 // basis: estimate
 /**
  * 고른 색의 CSS. 외곽선 색 클래스(`ps-이름`)는 평소 그 색의 outline 단계이고, 켜지면 같은 색의 진한 선(stroke) 단계로 굵어진다. 후광(`fl-halo`, 클래스 `ph-이름`)도 그 색의 옅은 면(fill) 단계다. 밝힘은 색을 바꾸지 않고 굵기와 후광만 더한다.
- * 강조 그룹(fill=이나 stroke=로 색을 고른 그룹)은 면을 칠하지 않고(면은 깊이 규칙의 회색 하나) 그 색의 진한 선(stroke) 1.5px 테두리와 제목 글자(ink)만 쓴다. 쓴 색이 없으면 빈 글이다.
+ * 강조 그룹(fill=이나 stroke=로 색을 고른 그룹)은 면을 칠하지 않고(면은 깊이 규칙의 회색 하나) 그 색의 진한 단계(ink, 회색 면 셋 위 대비 3 이상) 1.5px 테두리와 같은 색 제목 글자만 쓴다. 쓴 색이 없으면 빈 글이다.
  */
 export function paintCss(scene) {
   if (!scene) return '';
   const { stroke, groupFill } = usedPaints(scene);
   const rules = stroke.map((name) => `.fl .fl-node .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-outline);\n}\n.fl .fl-node.on .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-stroke);\n}\n.fl .fl-halo.ph-${name} > * {\n  stroke: var(--color-paint-${name}-fill);\n}`);
   for (const name of groupFill) {
-    rules.push(`.fl .fl-group .frame-box.ps-${name} {\n  stroke: var(--color-paint-${name}-stroke);\n  stroke-width: var(--border-tag);\n}`);
-    rules.push(`.fl .fl-group.on .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-stroke);\n  stroke-width: var(--border-strong);\n}`);
+    rules.push(`.fl .fl-group .frame-box.ps-${name} {\n  stroke: var(--color-paint-${name}-ink);\n  stroke-width: var(--border-tag);\n}`);
+    rules.push(`.fl .fl-group.on .fl-stroke.ps-${name} {\n  stroke: var(--color-paint-${name}-ink);\n  stroke-width: var(--border-strong);\n}`);
     rules.push(`.fl .frame.gt-${name} {\n  fill: var(--color-paint-${name}-ink);\n}`);
   }
   return rules.length ? `\n${rules.join('\n')}\n` : '';

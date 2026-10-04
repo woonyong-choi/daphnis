@@ -52,3 +52,15 @@ test('group_emphasis_title_ink_reaches_contrast_4_5_on_its_own_fill_in_both_them
     }
   }
 });
+
+// 근거: 사용자 결정 "강조 그룹은 1.5px 테두리(그 색의 진한 단계, 대비 3)". 강조 색(sky, amber)의 ink가 회색 그룹 면 셋과 판 위에서 3 이상이다
+test('group_emphasis_border_ink_reaches_contrast_3_on_every_gray_group_step_and_the_plate_in_both_themes', () => {
+  for (const theme of THEMES) {
+    for (const name of ['sky', 'amber']) {
+      for (const face of ['bg', ...GROUP_FACES]) {
+        const ratio = contrast(themeColor(theme, `paint.${name}.ink`), themeColor(theme, face));
+        assert.ok(ratio >= OUTLINE_MIN, `${theme} paint.${name}.ink on ${face}: ${ratio.toFixed(2)}`);
+      }
+    }
+  }
+});
