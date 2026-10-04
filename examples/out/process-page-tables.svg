@@ -6,99 +6,154 @@
 /* tokens.json: 생성물, 손으로 고치지 않음 */
 :root {
   --color-palette-gray-0: #ffffff;
-  --color-palette-gray-25: #f6f7f9;
-  --color-palette-gray-40: #eef0f3;
-  --color-palette-gray-100: #e3e7ec;
-  --color-palette-gray-200: #d5dbe3;
-  --color-palette-gray-500: #818b99;
-  --color-palette-neutral-100: #e3e3e3;
-  --color-palette-neutral-400: #9aa0a6;
-  --color-palette-neutral-500: #72767a;
-  --color-palette-neutral-750: #3c3e42;
-  --color-palette-neutral-800: #2c2d30;
-  --color-palette-neutral-850: #242526;
-  --color-palette-neutral-875: #202123;
-  --color-palette-neutral-900: #1b1b1d;
-  --color-palette-neutral-950: #111214;
+  --color-palette-gray-25: #f8f8f8;
+  --color-palette-gray-outline: #787878;
+  --color-palette-gray-group-1: #ededed;
+  --color-palette-gray-group-2: #e1e1e1;
+  --color-palette-gray-group-3: #d6d6d6;
+  --color-palette-gray-40: #f0f0f0;
+  --color-palette-gray-100: #e7e7e7;
+  --color-palette-gray-200: #dadada;
+  --color-palette-gray-500: #8a8a8a;
+  --color-palette-gray-50: #f4f4f4;
+  --color-palette-gray-150: #e4e4e4;
+  --color-palette-gray-300: #b7b7b7;
+  --color-palette-neutral-group-1: #202020;
+  --color-palette-neutral-group-2: #2a2a2a;
+  --color-palette-neutral-group-3: #343434;
+  --color-palette-neutral-outline: #888888;
+  --color-palette-neutral-100: #f0f0f0;
+  --color-palette-neutral-400: #aaaaaa;
+  --color-palette-neutral-500: #757575;
+  --color-palette-neutral-750: #393939;
+  --color-palette-neutral-800: #363636;
+  --color-palette-neutral-850: #3e3e3e;
+  --color-palette-neutral-875: #1c1c1c;
+  --color-palette-neutral-900: #171717;
+  --color-palette-neutral-950: #121212;
+  --color-palette-neutral-600: #595959;
   --color-palette-blue-light-fill: #edf4ff;
-  --color-palette-blue-light-stroke: #3a7bd5;
-  --color-palette-blue-light-ink: #2b6cc5;
-  --color-palette-blue-light-heat-low: #b3cdf3;
-  --color-palette-blue-light-heat-high: #1256ad;
-  --color-palette-blue-light-icon: #3458e7;
-  --color-palette-blue-dark-fill: #1c2d4c;
-  --color-palette-blue-dark-stroke: #6aa1ff;
-  --color-palette-blue-dark-ink: #6aa1ff;
-  --color-palette-blue-dark-heat-low: #2a3a54;
-  --color-palette-blue-dark-heat-high: #4075cf;
-  --color-palette-blue-dark-icon: #7d98f5;
-  --color-palette-ink-200: #c6cacf;
-  --color-palette-ink-600: #52514e;
-  --color-palette-ink-850: #0d1117;
-  --color-palette-ink-900: #0b0b0b;
+  --color-palette-blue-light-stroke: #125de6;
+  --color-palette-blue-light-ink: #0151d9;
+  --color-palette-blue-light-heat-low: #b7cdf5;
+  --color-palette-blue-light-heat-high: #004dd2;
+  --color-palette-blue-light-icon: #125de6;
+  --color-palette-blue-dark-fill: #1c2a43;
+  --color-palette-blue-dark-stroke: #70a3ff;
+  --color-palette-blue-dark-ink: #78a9ff;
+  --color-palette-blue-dark-heat-low: #293751;
+  --color-palette-blue-dark-heat-high: #4474cc;
+  --color-palette-blue-dark-icon: #70a3ff;
+  --color-palette-blue-light-outline: #658dd5;
+  --color-palette-blue-dark-outline: #6789c4;
+  --color-palette-ink-200: #c9c9c9;
+  --color-palette-ink-600: #5d5d5d;
+  --color-palette-ink-700: #595959;
+  --color-palette-ink-850: #111111;
+  --color-palette-ink-900: #1f1f1f;
   --color-palette-ink-1000: #000000;
   --color-palette-red-light-fill: #ffefed;
-  --color-palette-red-light-stroke: #da1e28;
-  --color-palette-red-light-ink: #d71925;
-  --color-palette-red-dark-fill: #482123;
-  --color-palette-red-dark-stroke: #ff8389;
-  --color-palette-red-dark-ink: #ff8389;
-  --color-palette-amber-light-fill: #fbf3e1;
-  --color-palette-amber-light-stroke: #8e6a00;
-  --color-palette-amber-light-ink: #8b6800;
-  --color-palette-amber-dark-fill: #3a2b01;
-  --color-palette-amber-dark-stroke: #d2a106;
-  --color-palette-amber-dark-ink: #d2a106;
-  --color-palette-green-light-fill: #e9f8ea;
-  --color-palette-green-light-stroke: #219f46;
-  --color-palette-green-light-ink: #007f31;
-  --color-palette-green-light-dot: #008634;
-  --color-palette-green-dark-fill: #12331a;
-  --color-palette-green-dark-stroke: #42be65;
-  --color-palette-green-dark-ink: #42be65;
-  --color-palette-green-dark-dot: #42be65;
-  --color-palette-teal-light-fill: #e1f9f8;
-  --color-palette-teal-light-stroke: #009a97;
-  --color-palette-teal-light-ink: #007a78;
-  --color-palette-teal-light-dot: #007a78;
-  --color-palette-teal-dark-fill: #003333;
-  --color-palette-teal-dark-stroke: #08bdba;
-  --color-palette-teal-dark-ink: #08bdba;
-  --color-palette-teal-dark-dot: #009d9b;
-  --color-palette-navy-light-fill: #eef4ff;
-  --color-palette-navy-light-stroke: #0043ce;
-  --color-palette-navy-light-ink: #0043ce;
-  --color-palette-navy-dark-fill: #1c2d4b;
-  --color-palette-navy-dark-stroke: #1f6bff;
-  --color-palette-navy-dark-ink: #5791ff;
-  --color-palette-purple-light-fill: #f5f1ff;
-  --color-palette-purple-light-stroke: #a36cfd;
-  --color-palette-purple-light-ink: #864cdb;
-  --color-palette-purple-light-dot: #864cdb;
-  --color-palette-purple-dark-fill: #332748;
-  --color-palette-purple-dark-stroke: #be95ff;
-  --color-palette-purple-dark-ink: #be95ff;
-  --color-palette-purple-dark-dot: #be95ff;
-  --color-palette-pink-light-fill: #ffeff3;
-  --color-palette-pink-light-stroke: #d02670;
-  --color-palette-pink-light-ink: #cd226e;
-  --color-palette-pink-dark-fill: #462131;
-  --color-palette-pink-dark-stroke: #ff7eb6;
-  --color-palette-pink-dark-ink: #ff7eb6;
-  --color-palette-slate-light-fill: #ecf5fd;
-  --color-palette-slate-light-stroke: #697077;
-  --color-palette-slate-light-ink: #676e75;
-  --color-palette-slate-light-dot: #474e54;
-  --color-palette-slate-dark-fill: #282e33;
-  --color-palette-slate-dark-stroke: #a2a9b0;
-  --color-palette-slate-dark-ink: #a2a9b0;
-  --color-palette-slate-dark-dot: #aeb5bc;
-  --color-palette-orange-light-fill: #fff0e8;
-  --color-palette-orange-light-stroke: #d36f2b;
-  --color-palette-orange-light-ink: #b05200;
-  --color-palette-orange-dark-fill: #472412;
-  --color-palette-orange-dark-stroke: #e87e42;
-  --color-palette-orange-dark-ink: #e87e42;
+  --color-palette-red-light-stroke: #c70005;
+  --color-palette-red-light-ink: #be0004;
+  --color-palette-red-light-dot: #6c0001;
+  --color-palette-red-dark-fill: #40201c;
+  --color-palette-red-dark-stroke: #fc7182;
+  --color-palette-red-dark-ink: #ff8390;
+  --color-palette-red-dark-dot: #e25971;
+  --color-palette-red-light-outline: #cd7367;
+  --color-palette-red-dark-outline: #c56f73;
+  --color-palette-amber-light-fill: #fff0ea;
+  --color-palette-amber-light-stroke: #d44b00;
+  --color-palette-amber-light-ink: #a63900;
+  --color-palette-amber-dark-fill: #3f2116;
+  --color-palette-amber-dark-stroke: #fa7a49;
+  --color-palette-amber-dark-ink: #ff875a;
+  --color-palette-amber-light-outline: #c47a5f;
+  --color-palette-amber-dark-outline: #c37356;
+  --color-palette-green-light-fill: #eaf8e9;
+  --color-palette-green-light-stroke: #008c1a;
+  --color-palette-green-light-ink: #006d12;
+  --color-palette-green-light-dot: #006d12;
+  --color-palette-green-dark-fill: #1a301a;
+  --color-palette-green-dark-stroke: #58bf5a;
+  --color-palette-green-dark-ink: #58bf5a;
+  --color-palette-green-dark-dot: #62c963;
+  --color-palette-green-light-outline: #629a61;
+  --color-palette-green-dark-outline: #5a9659;
+  --color-palette-teal-light-fill: #eaf8e9;
+  --color-palette-teal-light-stroke: #008c1a;
+  --color-palette-teal-light-ink: #006d12;
+  --color-palette-teal-light-dot: #006d12;
+  --color-palette-teal-dark-fill: #1a301a;
+  --color-palette-teal-dark-stroke: #58bf5a;
+  --color-palette-teal-dark-ink: #58bf5a;
+  --color-palette-teal-dark-dot: #62c963;
+  --color-palette-teal-light-outline: #629a61;
+  --color-palette-teal-dark-outline: #5a9659;
+  --color-palette-navy-light-fill: #edf4ff;
+  --color-palette-navy-light-stroke: #125de6;
+  --color-palette-navy-light-ink: #0151d9;
+  --color-palette-navy-dark-fill: #1c2a43;
+  --color-palette-navy-dark-stroke: #70a3ff;
+  --color-palette-navy-dark-ink: #78a9ff;
+  --color-palette-navy-light-outline: #658dd5;
+  --color-palette-navy-dark-outline: #6789c4;
+  --color-palette-purple-light-fill: #f7f0ff;
+  --color-palette-purple-light-stroke: #8c6aaa;
+  --color-palette-purple-light-ink: #704f8c;
+  --color-palette-purple-light-dot: #704f8c;
+  --color-palette-purple-light-tint-1: #f1eaf9;
+  --color-palette-purple-light-tint-2: #e6ddf0;
+  --color-palette-purple-light-tint-3: #dcd1e8;
+  --color-palette-purple-dark-fill: #31233d;
+  --color-palette-purple-dark-stroke: #b693d6;
+  --color-palette-purple-dark-ink: #be9ade;
+  --color-palette-purple-dark-dot: #9c7abb;
+  --color-palette-purple-dark-tint-1: #231d28;
+  --color-palette-purple-dark-tint-2: #2e2635;
+  --color-palette-purple-dark-tint-3: #393042;
+  --color-palette-purple-light-outline: #9884ac;
+  --color-palette-purple-dark-outline: #977eae;
+  --color-palette-pink-light-fill: #f7f0ff;
+  --color-palette-pink-light-stroke: #8c6aaa;
+  --color-palette-pink-light-ink: #704f8c;
+  --color-palette-pink-dark-fill: #31233d;
+  --color-palette-pink-dark-stroke: #b693d6;
+  --color-palette-pink-dark-ink: #be9ade;
+  --color-palette-pink-light-outline: #9884ac;
+  --color-palette-pink-dark-outline: #977eae;
+  --color-palette-slate-light-fill: #e7e7e7;
+  --color-palette-slate-light-stroke: #5d5d5d;
+  --color-palette-slate-light-ink: #5d5d5d;
+  --color-palette-slate-light-dot: #747474;
+  --color-palette-slate-dark-fill: #363636;
+  --color-palette-slate-dark-stroke: #aaaaaa;
+  --color-palette-slate-dark-ink: #aaaaaa;
+  --color-palette-slate-dark-dot: #c7c7c7;
+  --color-palette-slate-light-outline: #848484;
+  --color-palette-slate-dark-outline: #888888;
+  --color-palette-orange-light-fill: #fff0ea;
+  --color-palette-orange-light-stroke: #d44b00;
+  --color-palette-orange-light-ink: #a63900;
+  --color-palette-orange-dark-fill: #3f2116;
+  --color-palette-orange-dark-stroke: #fa7a49;
+  --color-palette-orange-dark-ink: #ff875a;
+  --color-palette-orange-light-outline: #c47a5f;
+  --color-palette-orange-dark-outline: #c37356;
+  --color-palette-sky-light-fill: #e9f1fe;
+  --color-palette-sky-light-stroke: #125de6;
+  --color-palette-sky-light-ink: #0151d9;
+  --color-palette-sky-light-tint-1: #e5eefc;
+  --color-palette-sky-light-tint-2: #d7e2f4;
+  --color-palette-sky-light-tint-3: #cad7ed;
+  --color-palette-sky-dark-fill: #1c2a43;
+  --color-palette-sky-dark-stroke: #70a3ff;
+  --color-palette-sky-dark-ink: #78a9ff;
+  --color-palette-sky-dark-tint-1: #1a202b;
+  --color-palette-sky-dark-tint-2: #222a38;
+  --color-palette-sky-dark-tint-3: #2a3446;
+  --color-palette-sky-light-outline: #628ad3;
+  --color-palette-sky-dark-outline: #6789c4;
   --color-state-active: var(--color-palette-blue-light-stroke);
   --color-state-active-fill: var(--color-palette-blue-light-ink);
   --color-state-active-text: var(--color-palette-blue-light-ink);
@@ -106,37 +161,59 @@
   --color-state-error: var(--color-paint-red-stroke);
   --color-state-success: var(--color-paint-green-stroke);
   --color-state-warning: var(--color-paint-amber-stroke);
+  --color-state-glow: var(--color-palette-blue-light-fill);
+  --color-flow-brand: var(--color-state-active);
   --color-flow-purple: var(--color-paint-purple-dot);
   --color-flow-green: var(--color-paint-green-dot);
-  --color-flow-teal: var(--color-paint-teal-dot);
   --color-flow-gray: var(--color-paint-gray-dot);
+  --color-flow-red: var(--color-paint-red-dot);
   --color-figure-icon: var(--color-palette-blue-light-icon);
+  --color-figure-icon-tile: var(--color-palette-blue-light-fill);
   --color-paint-red-fill: var(--color-palette-red-light-fill);
   --color-paint-red-stroke: var(--color-palette-red-light-stroke);
+  --color-paint-red-outline: var(--color-palette-red-light-outline);
   --color-paint-red-ink: var(--color-palette-red-light-ink);
+  --color-paint-red-dot: var(--color-palette-red-light-dot);
   --color-paint-amber-fill: var(--color-palette-amber-light-fill);
   --color-paint-amber-stroke: var(--color-palette-amber-light-stroke);
+  --color-paint-amber-outline: var(--color-palette-amber-light-outline);
   --color-paint-amber-ink: var(--color-palette-amber-light-ink);
   --color-paint-green-fill: var(--color-palette-green-light-fill);
   --color-paint-green-stroke: var(--color-palette-green-light-stroke);
+  --color-paint-green-outline: var(--color-palette-green-light-outline);
   --color-paint-green-ink: var(--color-palette-green-light-ink);
   --color-paint-green-dot: var(--color-palette-green-light-dot);
   --color-paint-teal-fill: var(--color-palette-teal-light-fill);
   --color-paint-teal-stroke: var(--color-palette-teal-light-stroke);
+  --color-paint-teal-outline: var(--color-palette-teal-light-outline);
   --color-paint-teal-ink: var(--color-palette-teal-light-ink);
   --color-paint-teal-dot: var(--color-palette-teal-light-dot);
   --color-paint-navy-fill: var(--color-palette-navy-light-fill);
   --color-paint-navy-stroke: var(--color-palette-navy-light-stroke);
+  --color-paint-navy-outline: var(--color-palette-navy-light-outline);
   --color-paint-navy-ink: var(--color-palette-navy-light-ink);
   --color-paint-purple-fill: var(--color-palette-purple-light-fill);
   --color-paint-purple-stroke: var(--color-palette-purple-light-stroke);
+  --color-paint-purple-outline: var(--color-palette-purple-light-outline);
   --color-paint-purple-ink: var(--color-palette-purple-light-ink);
   --color-paint-purple-dot: var(--color-palette-purple-light-dot);
+  --color-paint-purple-group-1: var(--color-palette-purple-light-tint-1);
+  --color-paint-purple-group-2: var(--color-palette-purple-light-tint-2);
+  --color-paint-purple-group-3: var(--color-palette-purple-light-tint-3);
   --color-paint-pink-fill: var(--color-palette-pink-light-fill);
   --color-paint-pink-stroke: var(--color-palette-pink-light-stroke);
+  --color-paint-pink-outline: var(--color-palette-pink-light-outline);
   --color-paint-pink-ink: var(--color-palette-pink-light-ink);
+  --color-paint-sky-fill: var(--color-palette-sky-light-fill);
+  --color-paint-sky-stroke: var(--color-palette-sky-light-stroke);
+  --color-paint-sky-outline: var(--color-palette-sky-light-outline);
+  --color-paint-sky-ink: var(--color-palette-sky-light-ink);
+  --color-paint-sky-group-1: var(--color-palette-sky-light-tint-1);
+  --color-paint-sky-group-2: var(--color-palette-sky-light-tint-2);
+  --color-paint-sky-group-3: var(--color-palette-sky-light-tint-3);
   --color-paint-gray-fill: var(--color-palette-slate-light-fill);
   --color-paint-gray-stroke: var(--color-palette-slate-light-stroke);
+  --color-paint-gray-outline: var(--color-palette-slate-light-outline);
   --color-paint-gray-ink: var(--color-palette-slate-light-ink);
   --color-paint-gray-dot: var(--color-palette-slate-light-dot);
   --color-ui-link: var(--color-palette-blue-light-ink);
@@ -152,19 +229,25 @@
   --color-data-grid: var(--color-palette-ink-200);
   --color-fg: var(--color-palette-ink-900);
   --color-muted: var(--color-palette-ink-600);
+  --color-group-title: var(--color-palette-ink-700);
   --color-bg: var(--color-palette-gray-25);
   --color-node: var(--color-palette-gray-0);
   --color-surface: var(--color-palette-gray-40);
-  --color-card: var(--color-palette-gray-25);
-  --color-border: var(--color-palette-gray-500);
+  --color-card: var(--color-palette-gray-50);
+  --color-outline: var(--color-palette-gray-outline);
+  --color-border: var(--color-palette-gray-150);
   --color-card-on: var(--color-palette-blue-light-fill);
-  --color-group: var(--color-palette-gray-40);
+  --color-group-1: var(--color-palette-gray-group-1);
   --color-plate-border: var(--color-palette-gray-200);
   --color-page: var(--color-palette-gray-0);
   --color-tag-purple: var(--color-paint-purple-stroke);
   --color-tag-green: var(--color-paint-green-stroke);
-  --color-tag-teal: var(--color-paint-teal-stroke);
   --color-tag-gray: var(--color-paint-gray-stroke);
+  --color-tag-red: var(--color-paint-red-stroke);
+  --color-tag-brand: var(--color-state-active);
+  --color-line: var(--color-palette-gray-300);
+  --color-group-2: var(--color-palette-gray-group-2);
+  --color-group-3: var(--color-palette-gray-group-3);
   --font-sans: FigSans, FigSansSym, FigSansMath, Pretendard, 'Pretendard Variable', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
   --font-mono: FigMono, FigSans, FigSansSym, FigSansMath, ui-monospace, SFMono-Regular, Menlo, monospace;
   --size-text-9: 9px;
@@ -172,9 +255,10 @@
   --size-text-13: 13px;
   --size-text-15: 15px;
   --size-text-22: 22px;
-  --size-control-outer: 30px;
-  --size-control-inner: 22px;
-  --size-control-icon: 12px;
+  --size-control-outer: 36px;
+  --size-control-inner: 28px;
+  --size-control-icon: 16px;
+  --size-control-icon-stroke: 1.75px;
   --size-pill-height: 18px;
   --size-icon-node: 20px;
   --size-icon-group: 18px;
@@ -272,7 +356,7 @@
   --opacity-tag: 0.15;
   --opacity-halo: 0.2;
   --opacity-dim: 0.3;
-  --opacity-dim-ink: 0.82;
+  --opacity-dim-ink: 0.9;
   --opacity-band: 0.22;
   --opacity-range: 0.4;
   --opacity-chip-visible-min: 0.1;
@@ -299,6 +383,7 @@
   --duration-chart-cycle: 7000ms;
   --duration-reveal: 900ms;
   --duration-value-flash: 700ms;
+  --duration-pulse: 450ms;
   --duration-chip-frame: 16.666666666666668ms;
   --duration-flow-step: 12000ms;
   --duration-cut-fade: 600ms;
@@ -317,38 +402,59 @@
   :root:not([data-theme='light']) {
     --color-state-active: var(--color-palette-blue-dark-stroke);
     --color-state-active-fill: var(--color-palette-blue-dark-stroke);
-    --color-state-active-text: var(--color-palette-blue-dark-stroke);
+    --color-state-active-text: var(--color-palette-blue-dark-ink);
     --color-state-on-active: var(--color-palette-ink-850);
+    --color-state-glow: var(--color-palette-blue-dark-fill);
     --color-figure-icon: var(--color-palette-blue-dark-icon);
+    --color-figure-icon-tile: var(--color-palette-blue-dark-fill);
     --color-paint-red-fill: var(--color-palette-red-dark-fill);
     --color-paint-red-stroke: var(--color-palette-red-dark-stroke);
+    --color-paint-red-outline: var(--color-palette-red-dark-outline);
     --color-paint-red-ink: var(--color-palette-red-dark-ink);
+    --color-paint-red-dot: var(--color-palette-red-dark-dot);
     --color-paint-amber-fill: var(--color-palette-amber-dark-fill);
     --color-paint-amber-stroke: var(--color-palette-amber-dark-stroke);
+    --color-paint-amber-outline: var(--color-palette-amber-dark-outline);
     --color-paint-amber-ink: var(--color-palette-amber-dark-ink);
     --color-paint-green-fill: var(--color-palette-green-dark-fill);
     --color-paint-green-stroke: var(--color-palette-green-dark-stroke);
+    --color-paint-green-outline: var(--color-palette-green-dark-outline);
     --color-paint-green-ink: var(--color-palette-green-dark-ink);
     --color-paint-green-dot: var(--color-palette-green-dark-dot);
     --color-paint-teal-fill: var(--color-palette-teal-dark-fill);
     --color-paint-teal-stroke: var(--color-palette-teal-dark-stroke);
+    --color-paint-teal-outline: var(--color-palette-teal-dark-outline);
     --color-paint-teal-ink: var(--color-palette-teal-dark-ink);
     --color-paint-teal-dot: var(--color-palette-teal-dark-dot);
     --color-paint-navy-fill: var(--color-palette-navy-dark-fill);
     --color-paint-navy-stroke: var(--color-palette-navy-dark-stroke);
+    --color-paint-navy-outline: var(--color-palette-navy-dark-outline);
     --color-paint-navy-ink: var(--color-palette-navy-dark-ink);
     --color-paint-purple-fill: var(--color-palette-purple-dark-fill);
     --color-paint-purple-stroke: var(--color-palette-purple-dark-stroke);
+    --color-paint-purple-outline: var(--color-palette-purple-dark-outline);
     --color-paint-purple-ink: var(--color-palette-purple-dark-ink);
     --color-paint-purple-dot: var(--color-palette-purple-dark-dot);
+    --color-paint-purple-group-1: var(--color-palette-purple-dark-tint-1);
+    --color-paint-purple-group-2: var(--color-palette-purple-dark-tint-2);
+    --color-paint-purple-group-3: var(--color-palette-purple-dark-tint-3);
     --color-paint-pink-fill: var(--color-palette-pink-dark-fill);
     --color-paint-pink-stroke: var(--color-palette-pink-dark-stroke);
+    --color-paint-pink-outline: var(--color-palette-pink-dark-outline);
     --color-paint-pink-ink: var(--color-palette-pink-dark-ink);
+    --color-paint-sky-fill: var(--color-palette-sky-dark-fill);
+    --color-paint-sky-stroke: var(--color-palette-sky-dark-stroke);
+    --color-paint-sky-outline: var(--color-palette-sky-dark-outline);
+    --color-paint-sky-ink: var(--color-palette-sky-dark-ink);
+    --color-paint-sky-group-1: var(--color-palette-sky-dark-tint-1);
+    --color-paint-sky-group-2: var(--color-palette-sky-dark-tint-2);
+    --color-paint-sky-group-3: var(--color-palette-sky-dark-tint-3);
     --color-paint-gray-fill: var(--color-palette-slate-dark-fill);
     --color-paint-gray-stroke: var(--color-palette-slate-dark-stroke);
+    --color-paint-gray-outline: var(--color-palette-slate-dark-outline);
     --color-paint-gray-ink: var(--color-palette-slate-dark-ink);
     --color-paint-gray-dot: var(--color-palette-slate-dark-dot);
-    --color-ui-link: var(--color-palette-blue-dark-stroke);
+    --color-ui-link: var(--color-palette-blue-dark-ink);
     --color-ui-focus: var(--color-palette-blue-dark-stroke);
     --color-ui-progress: var(--color-palette-blue-dark-stroke);
     --color-ui-control-on: var(--color-palette-neutral-750);
@@ -361,52 +467,78 @@
     --color-data-grid: var(--color-palette-neutral-750);
     --color-fg: var(--color-palette-neutral-100);
     --color-muted: var(--color-palette-neutral-400);
+    --color-group-title: var(--color-palette-neutral-400);
     --color-bg: var(--color-palette-neutral-900);
     --color-node: var(--color-palette-neutral-850);
     --color-surface: var(--color-palette-neutral-800);
     --color-card: var(--color-palette-neutral-800);
-    --color-border: var(--color-palette-neutral-500);
+    --color-outline: var(--color-palette-neutral-outline);
+    --color-border: var(--color-palette-neutral-750);
     --color-card-on: var(--color-palette-blue-dark-fill);
     --color-page: var(--color-palette-neutral-950);
-    --color-group: var(--color-palette-neutral-875);
+    --color-group-1: var(--color-palette-neutral-group-1);
     --color-plate-border: var(--color-palette-neutral-800);
+    --color-line: var(--color-palette-neutral-600);
+    --color-group-2: var(--color-palette-neutral-group-2);
+    --color-group-3: var(--color-palette-neutral-group-3);
   }
 }
 [data-theme='dark'] {
   --color-state-active: var(--color-palette-blue-dark-stroke);
   --color-state-active-fill: var(--color-palette-blue-dark-stroke);
-  --color-state-active-text: var(--color-palette-blue-dark-stroke);
+  --color-state-active-text: var(--color-palette-blue-dark-ink);
   --color-state-on-active: var(--color-palette-ink-850);
+  --color-state-glow: var(--color-palette-blue-dark-fill);
   --color-figure-icon: var(--color-palette-blue-dark-icon);
+  --color-figure-icon-tile: var(--color-palette-blue-dark-fill);
   --color-paint-red-fill: var(--color-palette-red-dark-fill);
   --color-paint-red-stroke: var(--color-palette-red-dark-stroke);
+  --color-paint-red-outline: var(--color-palette-red-dark-outline);
   --color-paint-red-ink: var(--color-palette-red-dark-ink);
+  --color-paint-red-dot: var(--color-palette-red-dark-dot);
   --color-paint-amber-fill: var(--color-palette-amber-dark-fill);
   --color-paint-amber-stroke: var(--color-palette-amber-dark-stroke);
+  --color-paint-amber-outline: var(--color-palette-amber-dark-outline);
   --color-paint-amber-ink: var(--color-palette-amber-dark-ink);
   --color-paint-green-fill: var(--color-palette-green-dark-fill);
   --color-paint-green-stroke: var(--color-palette-green-dark-stroke);
+  --color-paint-green-outline: var(--color-palette-green-dark-outline);
   --color-paint-green-ink: var(--color-palette-green-dark-ink);
   --color-paint-green-dot: var(--color-palette-green-dark-dot);
   --color-paint-teal-fill: var(--color-palette-teal-dark-fill);
   --color-paint-teal-stroke: var(--color-palette-teal-dark-stroke);
+  --color-paint-teal-outline: var(--color-palette-teal-dark-outline);
   --color-paint-teal-ink: var(--color-palette-teal-dark-ink);
   --color-paint-teal-dot: var(--color-palette-teal-dark-dot);
   --color-paint-navy-fill: var(--color-palette-navy-dark-fill);
   --color-paint-navy-stroke: var(--color-palette-navy-dark-stroke);
+  --color-paint-navy-outline: var(--color-palette-navy-dark-outline);
   --color-paint-navy-ink: var(--color-palette-navy-dark-ink);
   --color-paint-purple-fill: var(--color-palette-purple-dark-fill);
   --color-paint-purple-stroke: var(--color-palette-purple-dark-stroke);
+  --color-paint-purple-outline: var(--color-palette-purple-dark-outline);
   --color-paint-purple-ink: var(--color-palette-purple-dark-ink);
   --color-paint-purple-dot: var(--color-palette-purple-dark-dot);
+  --color-paint-purple-group-1: var(--color-palette-purple-dark-tint-1);
+  --color-paint-purple-group-2: var(--color-palette-purple-dark-tint-2);
+  --color-paint-purple-group-3: var(--color-palette-purple-dark-tint-3);
   --color-paint-pink-fill: var(--color-palette-pink-dark-fill);
   --color-paint-pink-stroke: var(--color-palette-pink-dark-stroke);
+  --color-paint-pink-outline: var(--color-palette-pink-dark-outline);
   --color-paint-pink-ink: var(--color-palette-pink-dark-ink);
+  --color-paint-sky-fill: var(--color-palette-sky-dark-fill);
+  --color-paint-sky-stroke: var(--color-palette-sky-dark-stroke);
+  --color-paint-sky-outline: var(--color-palette-sky-dark-outline);
+  --color-paint-sky-ink: var(--color-palette-sky-dark-ink);
+  --color-paint-sky-group-1: var(--color-palette-sky-dark-tint-1);
+  --color-paint-sky-group-2: var(--color-palette-sky-dark-tint-2);
+  --color-paint-sky-group-3: var(--color-palette-sky-dark-tint-3);
   --color-paint-gray-fill: var(--color-palette-slate-dark-fill);
   --color-paint-gray-stroke: var(--color-palette-slate-dark-stroke);
+  --color-paint-gray-outline: var(--color-palette-slate-dark-outline);
   --color-paint-gray-ink: var(--color-palette-slate-dark-ink);
   --color-paint-gray-dot: var(--color-palette-slate-dark-dot);
-  --color-ui-link: var(--color-palette-blue-dark-stroke);
+  --color-ui-link: var(--color-palette-blue-dark-ink);
   --color-ui-focus: var(--color-palette-blue-dark-stroke);
   --color-ui-progress: var(--color-palette-blue-dark-stroke);
   --color-ui-control-on: var(--color-palette-neutral-750);
@@ -419,15 +551,20 @@
   --color-data-grid: var(--color-palette-neutral-750);
   --color-fg: var(--color-palette-neutral-100);
   --color-muted: var(--color-palette-neutral-400);
+  --color-group-title: var(--color-palette-neutral-400);
   --color-bg: var(--color-palette-neutral-900);
   --color-node: var(--color-palette-neutral-850);
   --color-surface: var(--color-palette-neutral-800);
   --color-card: var(--color-palette-neutral-800);
-  --color-border: var(--color-palette-neutral-500);
+  --color-outline: var(--color-palette-neutral-outline);
+  --color-border: var(--color-palette-neutral-750);
   --color-card-on: var(--color-palette-blue-dark-fill);
   --color-page: var(--color-palette-neutral-950);
-  --color-group: var(--color-palette-neutral-875);
+  --color-group-1: var(--color-palette-neutral-group-1);
   --color-plate-border: var(--color-palette-neutral-800);
+  --color-line: var(--color-palette-neutral-600);
+  --color-group-2: var(--color-palette-neutral-group-2);
+  --color-group-3: var(--color-palette-neutral-group-3);
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
 .fl text {
@@ -452,7 +589,7 @@
   font-size: var(--size-text-11);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-frame);
-  fill: var(--color-muted);
+  fill: var(--color-group-title);
 }
 
 .fl .edgelabel {
@@ -545,13 +682,13 @@
 }
 
 .fl .fl-stroke {
-  stroke: var(--color-border);
+  stroke: var(--color-outline);
   stroke-width: var(--border-thin);
 }
 
 .fl .fl-path {
   fill: none;
-  stroke: var(--color-muted);
+  stroke: var(--color-line);
   stroke-width: var(--border-edge);
 }
 
@@ -562,25 +699,37 @@
 }
 
 .fl .frame-box {
-  fill: var(--color-group);
-  stroke: var(--color-border);
+  fill: var(--color-group-1);
+  stroke: none;
+}
+
+.fl .frame-box.d2 {
+  fill: var(--color-group-2);
+}
+
+.fl .frame-box.d3 {
+  fill: var(--color-group-3);
+}
+
+.fl .frame-box.dashed {
+  stroke: var(--color-line);
 }
 
 .fl .lifeline {
-  stroke: var(--color-border);
+  stroke: var(--color-line);
   stroke-width: var(--border-lifeline);
   stroke-dasharray: var(--dash-gap) var(--dash-gap);
 }
 
 .fl .note-box {
   fill: var(--color-surface);
-  stroke: var(--color-border);
+  stroke: var(--color-line);
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
 
 .fl .pill {
-  fill: var(--color-bg);
-  stroke: var(--color-border);
+  fill: var(--color-node);
+  stroke: var(--color-outline);
 }
 
 .fl .part-bg {
@@ -588,23 +737,30 @@
 }
 
 .fl .col-line {
-  stroke: var(--color-border);
+  stroke: var(--color-outline);
   stroke-width: var(--border-hair);
 }
 
 .fl .grid-cell {
   fill: var(--color-node);
-  stroke: var(--color-border);
+  stroke: var(--color-outline);
   stroke-width: var(--border-thin);
+}
+
+.fl .grid-ring {
+  fill: none;
+  stroke: none;
 }
 
 .fl .grid-cell.gap {
   fill: var(--color-surface);
+  stroke: var(--color-line);
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
 
 .fl .grid-cell.empty {
   fill: none;
+  stroke: var(--color-line);
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
 
@@ -622,7 +778,7 @@
 
 .fl .badge-pill {
   fill: var(--color-node);
-  stroke: var(--color-border);
+  stroke: var(--color-outline);
   stroke-width: var(--border-thin);
 }
 
@@ -630,17 +786,12 @@
   color: var(--color-figure-icon);
 }
 
-/* 그룹 제목 줄 탭(NHN box_type): 틀 왼쪽 위 모서리의 정사각 면. 아이콘 색 파랑 면에 노드 면 색 아이콘이고, 아이콘이 있는 그룹의 틀도 같은 파랑이다. */
-.fl .group-tab {
-  fill: var(--color-figure-icon);
+.fl .icon-tile {
+  fill: var(--color-figure-icon-tile);
 }
 
-.fl .fl-icon.on-tab {
-  color: var(--color-node);
-}
-
-.fl .fl-group.tabbed:not(.on) .frame-box {
-  stroke: var(--color-figure-icon);
+.fl .fl-icon.in-tile {
+  color: var(--color-figure-icon);
 }
 
 /* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
@@ -670,50 +821,66 @@
   fill: var(--color-muted);
 }
 
-@keyframes a0 { 0%,15.46% { stroke: var(--color-border); stroke-width: var(--border-thin) } 15.46% { stroke: var(--color-border); stroke-width: var(--border-thin) } 16.045%,23.734% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 23.734%,25.784% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 25.784%,38.895% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 38.896% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 39.481%,44.166% { stroke: var(--color-border); stroke-width: var(--border-thin) } 44.166%,65.23% { stroke: var(--color-border); stroke-width: var(--border-thin) } 65.23%,69.973% { stroke: var(--color-border); stroke-width: var(--border-thin) } 69.973% { stroke: var(--color-border); stroke-width: var(--border-thin) } 70.559%,78.4% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 78.4%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
+@keyframes a0 { 0%,15.46% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 15.46% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 16.045%,23.734% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 23.734%,25.784% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 25.784%,38.895% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 38.896% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 39.481%,44.166% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.166%,65.23% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 65.23%,69.973% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.973% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 70.559%,78.4% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 78.4%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
 .fl .a0 { animation: a0 34.153s infinite linear; }
-@keyframes a1 { 0%,15.46% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 15.46%,23.734% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 23.734%,25.784% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 25.784%,38.895% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 38.896%,44.166% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 44.166%,65.23% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 65.23%,69.973% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 69.973%,78.4% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 78.4%,100% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } }
+@keyframes a1 { 0%,15.46% { opacity: 0 } 15.46% { opacity: 0 } 16.045%,23.734% { opacity: 1 } 23.734%,25.784% { opacity: 1 } 25.784%,38.895% { opacity: 1 } 38.896% { opacity: 1 } 39.481%,44.166% { opacity: 0 } 44.166%,65.23% { opacity: 0 } 65.23%,69.973% { opacity: 0 } 69.973% { opacity: 0 } 70.559%,78.4% { opacity: 1 } 78.4%,100% { opacity: 1 } }
 .fl .a1 { animation: a1 34.153s infinite linear; }
-@keyframes a2 { 0%,15.46% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } 15.46%,23.734% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } 23.734%,25.784% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } 25.784%,38.895% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } 38.896% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } 39.481%,44.166% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 44.166%,65.23% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 65.23%,69.973% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 69.973%,78.4% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 78.4%,100% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } }
+@keyframes a2 { 0%,15.46% { fill: var(--color-node) } 15.46%,23.734% { fill: var(--color-node) } 23.734%,25.784% { fill: var(--color-node) } 25.784%,38.895% { fill: var(--color-node) } 38.896%,44.166% { fill: var(--color-node) } 44.166%,65.23% { fill: var(--color-node) } 65.23%,69.973% { fill: var(--color-node) } 69.973%,78.4% { fill: var(--color-node) } 78.4%,100% { fill: var(--color-node) } }
 .fl .a2 { animation: a2 34.153s infinite linear; }
-@keyframes a3 { 0%,15.46% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 15.46%,23.734% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 23.734% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 24.32%,25.784% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } 25.784%,38.895% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } 38.896% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } 39.481%,44.166% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 44.166%,65.23% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 65.23%,69.973% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 69.973%,78.4% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 78.4%,100% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } }
+@keyframes a3 { 0%,15.46% { fill: var(--color-card-on) } 15.46%,23.734% { fill: var(--color-card-on) } 23.734%,25.784% { fill: var(--color-card-on) } 25.784%,38.895% { fill: var(--color-card-on) } 38.896% { fill: var(--color-card-on) } 39.481%,44.166% { fill: var(--color-node) } 44.166%,65.23% { fill: var(--color-node) } 65.23%,69.973% { fill: var(--color-node) } 69.973%,78.4% { fill: var(--color-node) } 78.4%,100% { fill: var(--color-node) } }
 .fl .a3 { animation: a3 34.153s infinite linear; }
-@keyframes a4 { 0%,15.46% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 15.46%,23.734% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 23.734%,25.784% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 25.784%,38.895% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 38.896%,44.166% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 44.166%,65.23% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 65.23% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 65.816%,69.973% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } 69.973%,78.4% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } 78.4%,100% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } }
+@keyframes a4 { 0%,15.46% { fill: var(--color-node) } 15.46%,23.734% { fill: var(--color-node) } 23.734% { fill: var(--color-node) } 24.32%,25.784% { fill: var(--color-card-on) } 25.784%,38.895% { fill: var(--color-card-on) } 38.896% { fill: var(--color-card-on) } 39.481%,44.166% { fill: var(--color-node) } 44.166%,65.23% { fill: var(--color-node) } 65.23%,69.973% { fill: var(--color-node) } 69.973%,78.4% { fill: var(--color-node) } 78.4%,100% { fill: var(--color-node) } }
 .fl .a4 { animation: a4 34.153s infinite linear; }
-@keyframes a5 { 0%,15.46% { stroke: var(--color-border); stroke-width: var(--border-thin) } 15.46%,23.734% { stroke: var(--color-border); stroke-width: var(--border-thin) } 23.734%,25.784% { stroke: var(--color-border); stroke-width: var(--border-thin) } 25.784%,38.895% { stroke: var(--color-border); stroke-width: var(--border-thin) } 38.896%,44.166% { stroke: var(--color-border); stroke-width: var(--border-thin) } 44.166% { stroke: var(--color-border); stroke-width: var(--border-thin) } 44.752%,65.23% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 65.23% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 65.816%,69.973% { stroke: var(--color-border); stroke-width: var(--border-thin) } 69.973%,78.4% { stroke: var(--color-border); stroke-width: var(--border-thin) } 78.4% { stroke: var(--color-border); stroke-width: var(--border-thin) } 78.986%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
+@keyframes a5 { 0%,15.46% { fill: var(--color-node) } 15.46%,23.734% { fill: var(--color-node) } 23.734%,25.784% { fill: var(--color-node) } 25.784%,38.895% { fill: var(--color-node) } 38.896%,44.166% { fill: var(--color-node) } 44.166%,65.23% { fill: var(--color-node) } 65.23% { fill: var(--color-node) } 65.816%,69.973% { fill: var(--color-card-on) } 69.973%,78.4% { fill: var(--color-card-on) } 78.4%,100% { fill: var(--color-card-on) } }
 .fl .a5 { animation: a5 34.153s infinite linear; }
-@keyframes a6 { 0%,15.46% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 15.46%,23.734% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 23.734%,25.784% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 25.784%,38.895% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 38.896% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 39.481%,44.166% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } 44.166%,65.23% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } 65.23% { fill: var(--color-card-on); stroke: var(--color-state-active); stroke-width: var(--border-edge) } 65.816%,69.973% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 69.973%,78.4% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } 78.4%,100% { fill: var(--color-node); stroke: var(--color-border); stroke-width: var(--border-thin) } }
+@keyframes a6 { 0%,15.46% { stroke: none } 15.46%,23.734% { stroke: none } 23.734%,25.784% { stroke: none } 25.784%,38.895% { stroke: none } 38.896%,44.166% { stroke: none } 44.166%,65.23% { stroke: none } 65.23%,69.973% { stroke: none } 69.973%,78.4% { stroke: none } 78.4%,100% { stroke: none } }
 .fl .a6 { animation: a6 34.153s infinite linear; }
-@keyframes a7 { 0%,15.46% { stroke: var(--color-border); stroke-width: var(--border-thin) } 15.46% { stroke: var(--color-border); stroke-width: var(--border-thin) } 16.045%,23.734% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 23.734%,25.784% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 25.784%,38.895% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 38.896% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 39.481%,44.166% { stroke: var(--color-border); stroke-width: var(--border-thin) } 44.166% { stroke: var(--color-border); stroke-width: var(--border-thin) } 44.752%,65.23% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 65.23% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 65.816%,69.973% { stroke: var(--color-border); stroke-width: var(--border-thin) } 69.973% { stroke: var(--color-border); stroke-width: var(--border-thin) } 70.559%,78.4% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 78.4%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
+@keyframes a7 { 0%,15.46% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } 15.46%,23.734% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } 23.734%,25.784% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } 25.784%,38.895% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } 38.896% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } 39.481%,44.166% { stroke: none } 44.166%,65.23% { stroke: none } 65.23%,69.973% { stroke: none } 69.973%,78.4% { stroke: none } 78.4%,100% { stroke: none } }
 .fl .a7 { animation: a7 34.153s infinite linear; }
-@keyframes a8 { 0%,15.46% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 15.46% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.045%,23.734% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 23.734%,25.784% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 25.784%,38.895% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 38.896% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 39.481%,44.166% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.166%,65.23% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 65.23%,69.973% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.973%,78.4% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 78.4%,100% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a8 { 0%,15.46% { stroke: none } 15.46%,23.734% { stroke: none } 23.734% { stroke: none } 24.32%,25.784% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } 25.784%,38.895% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } 38.896% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } 39.481%,44.166% { stroke: none } 44.166%,65.23% { stroke: none } 65.23%,69.973% { stroke: none } 69.973%,78.4% { stroke: none } 78.4%,100% { stroke: none } }
 .fl .a8 { animation: a8 34.153s infinite linear; }
-@keyframes a9 { 0%,15.46% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 15.46%,23.734% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 23.734%,25.784% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.784% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 26.37%,38.895% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 38.896% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 39.481%,44.166% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.166%,65.23% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 65.23%,69.973% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.973% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 70.559%,78.4% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 78.4%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+@keyframes a9 { 0%,15.46% { stroke: none } 15.46%,23.734% { stroke: none } 23.734%,25.784% { stroke: none } 25.784%,38.895% { stroke: none } 38.896%,44.166% { stroke: none } 44.166%,65.23% { stroke: none } 65.23% { stroke: none } 65.816%,69.973% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } 69.973%,78.4% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } 78.4%,100% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } }
 .fl .a9 { animation: a9 34.153s infinite linear; }
-@keyframes a10 { 0%,15.46% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 15.46%,23.734% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 23.734%,25.784% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.784%,38.895% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 38.896%,44.166% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.166%,65.23% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 65.23%,69.973% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.973%,78.4% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 78.4%,100% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a10 { 0%,15.46% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 15.46%,23.734% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 23.734%,25.784% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 25.784%,38.895% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 38.896%,44.166% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.166% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.752%,65.23% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 65.23% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 65.816%,69.973% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.973%,78.4% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 78.4% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 78.986%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
 .fl .a10 { animation: a10 34.153s infinite linear; }
-@keyframes a11 { 0%,15.46% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 15.46%,23.734% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 23.734%,25.784% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.784%,38.895% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 38.896%,44.166% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.166% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.752%,65.23% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 65.23% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 65.816%,69.973% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.973%,78.4% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 78.4%,100% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a11 { 0%,15.46% { opacity: 0 } 15.46%,23.734% { opacity: 0 } 23.734%,25.784% { opacity: 0 } 25.784%,38.895% { opacity: 0 } 38.896%,44.166% { opacity: 0 } 44.166% { opacity: 0 } 44.752%,65.23% { opacity: 1 } 65.23% { opacity: 1 } 65.816%,69.973% { opacity: 0 } 69.973%,78.4% { opacity: 0 } 78.4% { opacity: 0 } 78.986%,100% { opacity: 1 } }
 .fl .a11 { animation: a11 34.153s infinite linear; }
-@keyframes a12 { 0%,15.46% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 15.46%,23.734% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 23.734%,25.784% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.784%,38.895% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 38.896%,44.166% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.166%,65.23% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 65.23%,69.973% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.973%,78.4% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 78.4% { stroke: var(--color-muted); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 78.986%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+@keyframes a12 { 0%,15.46% { fill: var(--color-node) } 15.46%,23.734% { fill: var(--color-node) } 23.734%,25.784% { fill: var(--color-node) } 25.784%,38.895% { fill: var(--color-node) } 38.896% { fill: var(--color-node) } 39.481%,44.166% { fill: var(--color-card-on) } 44.166%,65.23% { fill: var(--color-card-on) } 65.23% { fill: var(--color-card-on) } 65.816%,69.973% { fill: var(--color-node) } 69.973%,78.4% { fill: var(--color-node) } 78.4%,100% { fill: var(--color-node) } }
 .fl .a12 { animation: a12 34.153s infinite linear; }
-@keyframes a13 { 0%,15.46% { opacity: 1 } 15.46%,23.734% { opacity: 1 } 23.734%,25.784% { opacity: 1 } 25.784%,38.895% { opacity: 1 } 38.896% { opacity: 1 } 39.481%,44.166% { opacity: 0 } 44.166%,65.23% { opacity: 0 } 65.23%,69.973% { opacity: 0 } 69.973%,78.4% { opacity: 0 } 78.4%,100% { opacity: 0 } }
+@keyframes a13 { 0%,15.46% { stroke: none } 15.46%,23.734% { stroke: none } 23.734%,25.784% { stroke: none } 25.784%,38.895% { stroke: none } 38.896% { stroke: none } 39.481%,44.166% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } 44.166%,65.23% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } 65.23% { stroke: var(--color-state-active); stroke-width: var(--border-edge) } 65.816%,69.973% { stroke: none } 69.973%,78.4% { stroke: none } 78.4%,100% { stroke: none } }
 .fl .a13 { animation: a13 34.153s infinite linear; }
-@keyframes a14 { 0%,15.46% { opacity: 0 } 15.46%,23.734% { opacity: 0 } 23.734%,25.784% { opacity: 0 } 25.784%,39.481% { opacity: 0 } 39.481% { opacity: 0 } 40.067%,44.166% { opacity: 1 } 44.166%,65.23% { opacity: 1 } 65.23% { opacity: 1 } 65.816%,69.973% { opacity: 0 } 69.973%,78.4% { opacity: 0 } 78.4%,100% { opacity: 0 } }
+@keyframes a14 { 0%,15.46% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 15.46% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 16.045%,23.734% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 23.734%,25.784% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 25.784%,38.895% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 38.896% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 39.481%,44.166% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.166% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.752%,65.23% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 65.23% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 65.816%,69.973% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.973% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 70.559%,78.4% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 78.4%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
 .fl .a14 { animation: a14 34.153s infinite linear; }
-@keyframes a15 { 0%,15.46% { opacity: 0 } 15.46%,23.734% { opacity: 0 } 23.734%,25.784% { opacity: 0 } 25.784%,38.895% { opacity: 0 } 38.896%,44.166% { opacity: 0 } 44.166%,65.815% { opacity: 0 } 65.816% { opacity: 0 } 66.401%,69.973% { opacity: 1 } 69.973%,78.4% { opacity: 1 } 78.4%,100% { opacity: 1 } }
+@keyframes a15 { 0%,15.46% { opacity: 0 } 15.46% { opacity: 0 } 16.045%,23.734% { opacity: 1 } 23.734%,25.784% { opacity: 1 } 25.784%,38.895% { opacity: 1 } 38.896% { opacity: 1 } 39.481%,44.166% { opacity: 0 } 44.166% { opacity: 0 } 44.752%,65.23% { opacity: 1 } 65.23% { opacity: 1 } 65.816%,69.973% { opacity: 0 } 69.973% { opacity: 0 } 70.559%,78.4% { opacity: 1 } 78.4%,100% { opacity: 1 } }
 .fl .a15 { animation: a15 34.153s infinite linear; }
+@keyframes a16 { 0%,15.46% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 15.46% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.045%,23.734% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 23.734%,25.784% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 25.784%,38.895% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 38.896% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 39.481%,44.166% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.166%,65.23% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 65.23%,69.973% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.973%,78.4% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 78.4%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+.fl .a16 { animation: a16 34.153s infinite linear; }
+@keyframes a17 { 0%,15.46% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 15.46%,23.734% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 23.734%,25.784% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.784% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 26.37%,38.895% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 38.896% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 39.481%,44.166% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.166%,65.23% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 65.23%,69.973% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.973% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 70.559%,78.4% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 78.4%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+.fl .a17 { animation: a17 34.153s infinite linear; }
+@keyframes a18 { 0%,15.46% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 15.46%,23.734% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 23.734%,25.784% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.784%,38.895% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 38.896%,44.166% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.166%,65.23% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 65.23%,69.973% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.973%,78.4% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 78.4%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+.fl .a18 { animation: a18 34.153s infinite linear; }
+@keyframes a19 { 0%,15.46% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 15.46%,23.734% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 23.734%,25.784% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.784%,38.895% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 38.896%,44.166% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.166% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.752%,65.23% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 65.23% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 65.816%,69.973% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.973%,78.4% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 78.4%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+.fl .a19 { animation: a19 34.153s infinite linear; }
+@keyframes a20 { 0%,15.46% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 15.46%,23.734% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 23.734%,25.784% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.784%,38.895% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 38.896%,44.166% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.166%,65.23% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 65.23%,69.973% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.973%,78.4% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 78.4% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 78.986%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+.fl .a20 { animation: a20 34.153s infinite linear; }
+@keyframes a21 { 0%,15.46% { opacity: 1 } 15.46%,23.734% { opacity: 1 } 23.734%,25.784% { opacity: 1 } 25.784%,38.895% { opacity: 1 } 38.896% { opacity: 1 } 39.481%,44.166% { opacity: 0 } 44.166%,65.23% { opacity: 0 } 65.23%,69.973% { opacity: 0 } 69.973%,78.4% { opacity: 0 } 78.4%,100% { opacity: 0 } }
+.fl .a21 { animation: a21 34.153s infinite linear; }
+@keyframes a22 { 0%,15.46% { opacity: 0 } 15.46%,23.734% { opacity: 0 } 23.734%,25.784% { opacity: 0 } 25.784%,39.481% { opacity: 0 } 39.481% { opacity: 0 } 40.067%,44.166% { opacity: 1 } 44.166%,65.23% { opacity: 1 } 65.23% { opacity: 1 } 65.816%,69.973% { opacity: 0 } 69.973%,78.4% { opacity: 0 } 78.4%,100% { opacity: 0 } }
+.fl .a22 { animation: a22 34.153s infinite linear; }
+@keyframes a23 { 0%,15.46% { opacity: 0 } 15.46%,23.734% { opacity: 0 } 23.734%,25.784% { opacity: 0 } 25.784%,38.895% { opacity: 0 } 38.896%,44.166% { opacity: 0 } 44.166%,65.815% { opacity: 0 } 65.816% { opacity: 0 } 66.401%,69.973% { opacity: 1 } 69.973%,78.4% { opacity: 1 } 78.4%,100% { opacity: 1 } }
+.fl .a23 { animation: a23 34.153s infinite linear; }
 </style>
-<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-muted)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-main)"/></marker></defs>
+<defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-line)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-main)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="587" rx="10" fill="var(--color-bg)" stroke="var(--color-plate-border)" stroke-width="1"/>
 <g transform="translate(261 0)">
-<g id="n-0" class="fl-node" data-id="a"><rect x="28" y="28" width="180" height="238" rx="10" fill="var(--color-node)" class="fl-stroke a0"/><text x="118" y="47.7" class="label">프로세스 A의 페이지 표</text><g class="fl-part" data-part="a.ha"><rect x="40" y="58" width="52" height="32" class="grid-cell a1"/><text x="66" y="78.7" class="item">Page</text></g><g class="fl-part" data-part="a.hb"><rect x="92" y="58" width="52" height="32" class="grid-cell a1"/><text x="118" y="78.7" class="item">Frame</text></g><g class="fl-part" data-part="a.hc"><rect x="144" y="58" width="52" height="32" class="grid-cell a1"/><text x="170" y="78.7" class="item">Flags</text></g><g class="fl-part" data-part="a.a0"><rect x="40" y="110" width="52" height="32" class="grid-cell a2"/><text x="66" y="130.7" class="item">0</text></g><g class="fl-part" data-part="a.af0"><rect x="92" y="110" width="52" height="32" class="grid-cell a2"/><text x="118" y="130.7" class="item">3</text></g><g class="fl-part" data-part="a.ag0"><rect x="144" y="110" width="52" height="32" class="grid-cell a1"/><text x="170" y="130.7" class="item">RW</text></g><g class="fl-part" data-part="a.a1"><rect x="40" y="162" width="52" height="32" class="grid-cell a3"/><text x="66" y="182.7" class="item">1</text></g><g class="fl-part" data-part="a.af1"><rect x="92" y="162" width="52" height="32" class="grid-cell a3"/><text x="118" y="182.7" class="item">6</text></g><g class="fl-part" data-part="a.ag1"><rect x="144" y="162" width="52" height="32" class="grid-cell a4"/><text x="170" y="182.7" class="item">R</text></g><g class="fl-part" data-part="a.a2"><rect x="40" y="214" width="52" height="32" class="grid-cell a1"/><text x="66" y="234.7" class="item">2</text></g><g class="fl-part" data-part="a.af2"><rect x="92" y="214" width="52" height="32" class="grid-cell a1"/><text x="118" y="234.7" class="item">9</text></g><g class="fl-part" data-part="a.ag2"><rect x="144" y="214" width="52" height="32" class="grid-cell a1"/><text x="170" y="234.7" class="item">RW</text></g></g>
-<g id="n-1" class="fl-node" data-id="b"><rect x="28" y="298" width="180" height="186" rx="10" fill="var(--color-node)" class="fl-stroke a5"/><text x="118" y="317.7" class="label">프로세스 B의 페이지 표</text><g class="fl-part" data-part="b.hd"><rect x="40" y="328" width="52" height="32" class="grid-cell a1"/><text x="66" y="348.7" class="item">Page</text></g><g class="fl-part" data-part="b.he"><rect x="92" y="328" width="52" height="32" class="grid-cell a1"/><text x="118" y="348.7" class="item">Frame</text></g><g class="fl-part" data-part="b.hf"><rect x="144" y="328" width="52" height="32" class="grid-cell a1"/><text x="170" y="348.7" class="item">Flags</text></g><g class="fl-part" data-part="b.b0"><rect x="40" y="380" width="52" height="32" class="grid-cell a6"/><text x="66" y="400.7" class="item">0</text></g><g class="fl-part" data-part="b.bf0"><rect x="92" y="380" width="52" height="32" class="grid-cell a6"/><text x="118" y="400.7" class="item">5</text></g><g class="fl-part" data-part="b.bg0"><rect x="144" y="380" width="52" height="32" class="grid-cell a1"/><text x="170" y="400.7" class="item">RW</text></g><g class="fl-part" data-part="b.b1"><rect x="40" y="432" width="52" height="32" class="grid-cell a1"/><text x="66" y="452.7" class="item">1</text></g><g class="fl-part" data-part="b.bf1"><rect x="92" y="432" width="52" height="32" class="grid-cell a1"/><text x="118" y="452.7" class="item">6</text></g><g class="fl-part" data-part="b.bg1"><rect x="144" y="432" width="52" height="32" class="grid-cell a4"/><text x="170" y="452.7" class="item">R</text></g></g>
-<g id="n-2" class="fl-node" data-id="phys"><rect x="268" y="106" width="142" height="202" rx="10" fill="var(--color-node)" class="fl-stroke a7"/><text x="339" y="125.7" class="label">물리 메모리</text><g class="fl-part" data-part="phys.fr3"><rect x="280" y="136" width="118" height="32" class="grid-cell a1"/><text x="339" y="156.7" class="item">프레임 3 (A)</text></g><g class="fl-part" data-part="phys.fr5"><rect x="280" y="168" width="118" height="32" class="grid-cell a1"/><text x="339" y="188.7" class="item">프레임 5 (B)</text></g><g class="fl-part" data-part="phys.fr6"><rect x="280" y="200" width="118" height="32" class="grid-cell a1"/><text x="339" y="220.7" class="item">프레임 6 (A, B 공유)</text></g><g><rect x="280" y="232" width="118" height="32" class="grid-cell gap"/><text x="339" y="252.7" class="item gap">빈 프레임 ×2</text></g><g class="fl-part" data-part="phys.fr9"><rect x="280" y="264" width="118" height="32" class="grid-cell a1"/><text x="339" y="284.7" class="item">프레임 9 (A)</text></g></g>
-<g id="e-0" class="fl-edge"><path id="p-0" d="M 118 142 L 118 147 Q 118 152, 123 152 L 280 152" class="fl-path a8" marker-end="url(#fl-arrow)"/></g>
-<g id="e-1" class="fl-edge"><path id="p-1" d="M 118 194 L 118 199 Q 118 204, 123 204 L 230.7 204 Q 234 204, 234 207.3 L 234 207.3 Q 234 210.7, 237.3 210.7 L 280 210.7" class="fl-path a9" marker-end="url(#fl-arrow)"/></g>
-<g id="e-2" class="fl-edge"><path id="p-2" d="M 118 246 L 118 251 Q 118 256, 123 256 L 232 256 Q 244 256, 244 268 L 244 268 Q 244 280, 256 280 L 280 280" class="fl-path a10" marker-end="url(#fl-arrow)"/></g>
-<g id="e-3" class="fl-edge"><path id="p-3" d="M 118 412 L 118 417 Q 118 422, 123 422 L 202 422 Q 224 422, 224 400 L 224 206 Q 224 184, 246 184 L 280 184" class="fl-path a11" marker-end="url(#fl-arrow)"/></g>
-<g id="e-4" class="fl-edge"><path id="p-4" d="M 118 464 L 118 469 Q 118 474, 123 474 L 212 474 Q 234 474, 234 452 L 234 243.3 Q 234 221.3, 256 221.3 L 280 221.3" class="fl-path a12" marker-end="url(#fl-arrow)"/></g>
+<g id="n-0" class="fl-node" data-id="a"><g class="fl-halo a1" fill="none" opacity="0"><rect x="28" y="28" width="180" height="238" rx="10" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="28" y="28" width="180" height="238" rx="10" fill="var(--color-node)" class="fl-stroke a0"/><text x="118" y="47.7" class="label">프로세스 A의 페이지 표</text><g class="fl-part" data-part="a.ha"><rect x="40" y="58" width="52" height="32" class="grid-cell a2"/><text x="66" y="78.7" class="item">Page</text></g><g class="fl-part" data-part="a.hb"><rect x="92" y="58" width="52" height="32" class="grid-cell a2"/><text x="118" y="78.7" class="item">Frame</text></g><g class="fl-part" data-part="a.hc"><rect x="144" y="58" width="52" height="32" class="grid-cell a2"/><text x="170" y="78.7" class="item">Flags</text></g><g class="fl-part" data-part="a.a0"><rect x="40" y="110" width="52" height="32" class="grid-cell a3"/><text x="66" y="130.7" class="item">0</text></g><g class="fl-part" data-part="a.af0"><rect x="92" y="110" width="52" height="32" class="grid-cell a3"/><text x="118" y="130.7" class="item">3</text></g><g class="fl-part" data-part="a.ag0"><rect x="144" y="110" width="52" height="32" class="grid-cell a2"/><text x="170" y="130.7" class="item">RW</text></g><g class="fl-part" data-part="a.a1"><rect x="40" y="162" width="52" height="32" class="grid-cell a4"/><text x="66" y="182.7" class="item">1</text></g><g class="fl-part" data-part="a.af1"><rect x="92" y="162" width="52" height="32" class="grid-cell a4"/><text x="118" y="182.7" class="item">6</text></g><g class="fl-part" data-part="a.ag1"><rect x="144" y="162" width="52" height="32" class="grid-cell a5"/><text x="170" y="182.7" class="item">R</text></g><g class="fl-part" data-part="a.a2"><rect x="40" y="214" width="52" height="32" class="grid-cell a2"/><text x="66" y="234.7" class="item">2</text></g><g class="fl-part" data-part="a.af2"><rect x="92" y="214" width="52" height="32" class="grid-cell a2"/><text x="118" y="234.7" class="item">9</text></g><g class="fl-part" data-part="a.ag2"><rect x="144" y="214" width="52" height="32" class="grid-cell a2"/><text x="170" y="234.7" class="item">RW</text></g><g class="fl-part" data-part="a.ha"><rect x="40.9" y="58.9" width="50.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="a.hb"><rect x="92.9" y="58.9" width="50.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="a.hc"><rect x="144.9" y="58.9" width="50.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="a.a0"><rect x="40.9" y="110.9" width="50.3" height="30.3" class="grid-ring a7"/></g><g class="fl-part" data-part="a.af0"><rect x="92.9" y="110.9" width="50.3" height="30.3" class="grid-ring a7"/></g><g class="fl-part" data-part="a.ag0"><rect x="144.9" y="110.9" width="50.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="a.a1"><rect x="40.9" y="162.9" width="50.3" height="30.3" class="grid-ring a8"/></g><g class="fl-part" data-part="a.af1"><rect x="92.9" y="162.9" width="50.3" height="30.3" class="grid-ring a8"/></g><g class="fl-part" data-part="a.ag1"><rect x="144.9" y="162.9" width="50.3" height="30.3" class="grid-ring a9"/></g><g class="fl-part" data-part="a.a2"><rect x="40.9" y="214.9" width="50.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="a.af2"><rect x="92.9" y="214.9" width="50.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="a.ag2"><rect x="144.9" y="214.9" width="50.3" height="30.3" class="grid-ring a6"/></g></g>
+<g id="n-1" class="fl-node" data-id="b"><g class="fl-halo a11" fill="none" opacity="0"><rect x="28" y="298" width="180" height="186" rx="10" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="28" y="298" width="180" height="186" rx="10" fill="var(--color-node)" class="fl-stroke a10"/><text x="118" y="317.7" class="label">프로세스 B의 페이지 표</text><g class="fl-part" data-part="b.hd"><rect x="40" y="328" width="52" height="32" class="grid-cell a2"/><text x="66" y="348.7" class="item">Page</text></g><g class="fl-part" data-part="b.he"><rect x="92" y="328" width="52" height="32" class="grid-cell a2"/><text x="118" y="348.7" class="item">Frame</text></g><g class="fl-part" data-part="b.hf"><rect x="144" y="328" width="52" height="32" class="grid-cell a2"/><text x="170" y="348.7" class="item">Flags</text></g><g class="fl-part" data-part="b.b0"><rect x="40" y="380" width="52" height="32" class="grid-cell a12"/><text x="66" y="400.7" class="item">0</text></g><g class="fl-part" data-part="b.bf0"><rect x="92" y="380" width="52" height="32" class="grid-cell a12"/><text x="118" y="400.7" class="item">5</text></g><g class="fl-part" data-part="b.bg0"><rect x="144" y="380" width="52" height="32" class="grid-cell a2"/><text x="170" y="400.7" class="item">RW</text></g><g class="fl-part" data-part="b.b1"><rect x="40" y="432" width="52" height="32" class="grid-cell a2"/><text x="66" y="452.7" class="item">1</text></g><g class="fl-part" data-part="b.bf1"><rect x="92" y="432" width="52" height="32" class="grid-cell a2"/><text x="118" y="452.7" class="item">6</text></g><g class="fl-part" data-part="b.bg1"><rect x="144" y="432" width="52" height="32" class="grid-cell a5"/><text x="170" y="452.7" class="item">R</text></g><g class="fl-part" data-part="b.hd"><rect x="40.9" y="328.9" width="50.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="b.he"><rect x="92.9" y="328.9" width="50.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="b.hf"><rect x="144.9" y="328.9" width="50.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="b.b0"><rect x="40.9" y="380.9" width="50.3" height="30.3" class="grid-ring a13"/></g><g class="fl-part" data-part="b.bf0"><rect x="92.9" y="380.9" width="50.3" height="30.3" class="grid-ring a13"/></g><g class="fl-part" data-part="b.bg0"><rect x="144.9" y="380.9" width="50.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="b.b1"><rect x="40.9" y="432.9" width="50.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="b.bf1"><rect x="92.9" y="432.9" width="50.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="b.bg1"><rect x="144.9" y="432.9" width="50.3" height="30.3" class="grid-ring a9"/></g></g>
+<g id="n-2" class="fl-node" data-id="phys"><g class="fl-halo a15" fill="none" opacity="0"><rect x="268" y="106" width="142" height="202" rx="10" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="268" y="106" width="142" height="202" rx="10" fill="var(--color-node)" class="fl-stroke a14"/><text x="339" y="125.7" class="label">물리 메모리</text><g class="fl-part" data-part="phys.fr3"><rect x="280" y="136" width="118" height="32" class="grid-cell a2"/><text x="339" y="156.7" class="item">프레임 3 (A)</text></g><g class="fl-part" data-part="phys.fr5"><rect x="280" y="168" width="118" height="32" class="grid-cell a2"/><text x="339" y="188.7" class="item">프레임 5 (B)</text></g><g class="fl-part" data-part="phys.fr6"><rect x="280" y="200" width="118" height="32" class="grid-cell a2"/><text x="339" y="220.7" class="item">프레임 6 (A, B 공유)</text></g><g><rect x="280" y="232" width="118" height="32" class="grid-cell gap"/><text x="339" y="252.7" class="item gap">빈 프레임 ×2</text></g><g class="fl-part" data-part="phys.fr9"><rect x="280" y="264" width="118" height="32" class="grid-cell a2"/><text x="339" y="284.7" class="item">프레임 9 (A)</text></g><g class="fl-part" data-part="phys.fr3"><rect x="280.9" y="136.9" width="116.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="phys.fr5"><rect x="280.9" y="168.9" width="116.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="phys.fr6"><rect x="280.9" y="200.9" width="116.3" height="30.3" class="grid-ring a6"/></g><g class="fl-part" data-part="phys.fr9"><rect x="280.9" y="264.9" width="116.3" height="30.3" class="grid-ring a6"/></g></g>
+<g id="e-0" class="fl-edge"><path id="p-0" d="M 118 142 L 118 147 Q 118 152, 123 152 L 280 152" class="fl-path a16" marker-end="url(#fl-arrow)"/></g>
+<g id="e-1" class="fl-edge"><path id="p-1" d="M 118 194 L 118 199 Q 118 204, 123 204 L 230.7 204 Q 234 204, 234 207.3 L 234 207.3 Q 234 210.7, 237.3 210.7 L 280 210.7" class="fl-path a17" marker-end="url(#fl-arrow)"/></g>
+<g id="e-2" class="fl-edge"><path id="p-2" d="M 118 246 L 118 251 Q 118 256, 123 256 L 232 256 Q 244 256, 244 268 L 244 268 Q 244 280, 256 280 L 280 280" class="fl-path a18" marker-end="url(#fl-arrow)"/></g>
+<g id="e-3" class="fl-edge"><path id="p-3" d="M 118 412 L 118 417 Q 118 422, 123 422 L 202 422 Q 224 422, 224 400 L 224 206 Q 224 184, 246 184 L 280 184" class="fl-path a19" marker-end="url(#fl-arrow)"/></g>
+<g id="e-4" class="fl-edge"><path id="p-4" d="M 118 464 L 118 469 Q 118 474, 123 474 L 212 474 Q 234 474, 234 452 L 234 243.3 Q 234 221.3, 256 221.3 L 280 221.3" class="fl-path a20" marker-end="url(#fl-arrow)"/></g>
 
 <g class="p1-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="34.153s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.1546;0.21685" values="0;1;0"/><animateMotion dur="34.153s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.1546;0.21685;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
 <g class="p3-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="34.153s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.25784;0.32161" values="0;1;0"/><animateMotion dur="34.153s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.25784;0.32161;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
@@ -722,10 +889,10 @@
 <g class="p8-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="34.153s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.784;0.93266" values="0;1;0"/><animateMotion dur="34.153s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.784;0.93266;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-4" xlink:href="#p-4"/></animateMotion></g>
 
 </g>
-<text x="480" y="530" opacity="0" class="steplabel a13">프로세스 A</text>
-<text x="480" y="530" opacity="0" class="steplabel a14">프로세스 B</text>
-<text x="480" y="530" opacity="0" class="steplabel a15">공유 프레임</text>
-<g opacity="0" class="a13"><text x="480" y="556" class="caption">A의 페이지 0은 프레임 3, 페이지 1은 프레임 6으로 간다</text></g>
-<g opacity="0" class="a14"><text x="480" y="556" class="caption">B의 페이지 0은 프레임 5다. 같은 페이지 번호가 다른 프레임으로 간다</text></g>
-<g opacity="0" class="a15"><text x="480" y="556" class="caption">읽기 전용(R) 페이지 1은 두 프로세스가 프레임 6을 함께 쓴다</text></g>
+<text x="480" y="530" opacity="0" class="steplabel a21">프로세스 A</text>
+<text x="480" y="530" opacity="0" class="steplabel a22">프로세스 B</text>
+<text x="480" y="530" opacity="0" class="steplabel a23">공유 프레임</text>
+<g opacity="0" class="a21"><text x="480" y="556" class="caption">A의 페이지 0은 프레임 3, 페이지 1은 프레임 6으로 간다</text></g>
+<g opacity="0" class="a22"><text x="480" y="556" class="caption">B의 페이지 0은 프레임 5다. 같은 페이지 번호가 다른 프레임으로 간다</text></g>
+<g opacity="0" class="a23"><text x="480" y="556" class="caption">읽기 전용(R) 페이지 1은 두 프로세스가 프레임 6을 함께 쓴다</text></g>
 </svg>
