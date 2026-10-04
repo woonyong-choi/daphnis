@@ -14,10 +14,17 @@ export function checkFits({ scene, timeline }, problems) {
   const fail = (line, what, where) => problems.error(line, `[check 1] internal: ${what} does not fit in ${where}. Please report this`);
   for (const it of scene.items) checkItemFits(it, fail);
   for (const g of scene.groups) if (!fits(groupTitleWidth(g), g.w)) fail(g.line ?? 1, `group title "${g.label}"`, `group "${g.id}"`);
-  for (const seg of timeline.segs) {
-    for (const hop of seg.hops) {
-      for (const l of hop.data ?? []) if (!fits(measure(l, STYLE.chip.size, STYLE.chip.face), values.size.chip['max-width'])) fail(hop.line ?? 1, `moving text "${l}"`, 'the text box');
-    }
+  checkChipFits(timeline, fail);
+}
+
+// cost: time O(h·l·n), heap O(h·l), stack O(1)
+// vars: h = 이동 수, l = 글 상자 줄 수, n = 줄 글자 수
+// basis: estimate
+// 이동 글 상자의 줄이 글 상자 최대 폭 안에 드는지 본다.
+function checkChipFits(timeline, fail) {
+  const hops = timeline.segs.flatMap((seg) => seg.hops);
+  for (const hop of hops) {
+    for (const l of hop.data ?? []) if (!fits(measure(l, STYLE.chip.size, STYLE.chip.face), values.size.chip['max-width'])) fail(hop.line ?? 1, `moving text "${l}"`, 'the text box');
   }
 }
 
