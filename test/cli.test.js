@@ -262,3 +262,23 @@ test('validateFigure_stops_with_a_cycle_error_instead_of_looping_on_a_parent_cyc
   assert.equal(result.error, undefined, '제한 시간 안에 끝난다');
   assert.match(result.stdout, /parent cycle/);
 });
+
+// 근거: 이슈 #69 "갤러리 파일명이 URL 스킴으로 해석된다". 목록과 문서 미리보기가 파일명을 href와 src에 경로 조각 인코딩과 `./` 접두로만 쓴다
+test('gallery_links_a_scheme_like_file_name_only_as_an_encoded_explicit_relative_path', () => {
+  withFolder((folder) => {
+    writeFileSync(join(folder, 'javascript:parent.__daphnisAudit=1;void(0).dap'), FLOW);
+    writeFileSync(join(folder, 'javascript:parent.__daphnisAudit=2;void(0).muto'), FLOW);
+
+    const result = run(['gallery', '.', '--out', 'out'], folder);
+
+    assert.equal(result.status, 0, result.stderr);
+    for (const page of ['index.html', 'document.html']) {
+      const html = readFileSync(join(folder, 'out', page), 'utf8');
+      const links = [...html.matchAll(/\b(?:href|src)="([^"]*)"/g)].map((m) => m[1]).filter((url) => !url.startsWith('data:') && !['index.html', 'document.html'].includes(url));
+      assert.ok(links.length > 0, page);
+      assert.deepEqual(links.filter((url) => !url.startsWith('./')), [], `${page}: 모든 파일 링크는 ./로 시작한다`);
+      assert.ok(!/(?:href|src)="javascript/i.test(html), `${page}: 스킴으로 시작하는 링크가 없다`);
+      assert.ok(html.includes('./javascript%3Aparent.__daphnisAudit%3D1%3Bvoid(0)') && html.includes('./javascript%3Aparent.__daphnisAudit%3D2%3Bvoid(0)'), `${page}: 경로 조각은 퍼센트 인코딩이다`);
+    }
+  });
+});
