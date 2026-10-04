@@ -1,6 +1,7 @@
 // md 명령: 문서 안 ```dap 블록의 SVG와 이미지 줄(docs/design/markdown.md). 멱등, 이름 안정, 오류 시 미기록, --check 종료 코드는 그 문서의 요구사항 표다.
 import assert from 'node:assert/strict';
-import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { spawn } from 'node:child_process';
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, symlinkSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import { runCli as run, withFolder } from './helpers.js';
@@ -282,8 +283,8 @@ test('md_never_removes_a_file_that_another_document_writes_and_a_handover_needs_
     const handover = run(['md', 'b/readme.md', '--out-dir', 'out'], folder);
 
     assert.equal(handover.status, 0, handover.stderr);
-    assert.match(read(folder, 'out/readme-x.svg'), /<!-- daphnis md \.\.\/b\/readme\.md -->/);
-    assert.match(read(folder, 'out/readme-z.svg'), /<!-- daphnis md \.\.\/a\/readme\.md -->/);
+    assert.match(read(folder, 'out/readme-x.svg'), /<!-- daphnis md v2 \.\.\/b\/readme\.md -->/);
+    assert.match(read(folder, 'out/readme-z.svg'), /<!-- daphnis md v2 \.\.\/a\/readme\.md -->/);
     assert.equal(run(['md', 'a/readme.md', 'b/readme.md', '--out-dir', 'out', '--check'], folder).status, 0);
   });
 });
@@ -301,7 +302,7 @@ test('md_second_document_with_the_same_name_and_block_name_fails_before_writing_
     const result = run(['md', 'b/readme.md', '--out-dir', 'out'], folder);
 
     assert.equal(result.status, 1);
-    assert.match(result.stderr, /^b\/readme\.md:3: .*readme-one\.svg already exists and was made for another document \(\.\.\/a\/readme\.md\)\. Give the block a different name=, or write this document to a different --out-dir/m);
+    assert.match(result.stderr, /^b\/readme\.md:3: .*readme-one\.svg already exists and was made for another document, or its mark does not name this document \(\.\.\/a\/readme\.md\)\. Give the block a different name=, or write this document to a different --out-dir/m);
     assert.equal(read(folder, 'out/readme-one.svg'), svg);
     assert.equal(read(folder, 'a/readme.md'), first);
     assert.equal(read(folder, 'b/readme.md'), second, '실패한 문서에는 이미지 줄도 넣지 않는다');
@@ -381,7 +382,7 @@ test('md_marks_of_paths_mixing_percent_double_dash_hangul_and_relative_segments_
       assert.doesNotMatch(result.stdout, /removed/, dir);
     }
 
-    const marks = dirs.map((_, i) => /<!-- daphnis md (.*) -->/.exec(read(folder, `out/readme-n${i}.svg`)));
+    const marks = dirs.map((_, i) => /<!-- daphnis md v2 (.*) -->/.exec(read(folder, `out/readme-n${i}.svg`)));
     assert.ok(marks.every(Boolean));
     assert.equal(new Set(marks.map((mark) => mark[1])).size, dirs.length, '표식이 서로 다르다');
     for (const mark of marks) assert.doesNotMatch(mark[0].slice(4, -3), /--/, `${mark[0]}: 주석 안에 --가 없다`);
@@ -401,17 +402,19 @@ test('md_removes_a_stale_svg_with_an_old_mark_only_when_the_owner_is_unambiguous
     put(folder, 'x--y/readme.md', doc(block('name=keep', FLOW)));
     put(folder, 'plain/readme.md', doc(block('name=stay', FLOW)));
     mkdirSync(join(folder, 'out'));
-    const old = (owner) => `<svg xmlns="http://www.w3.org/2000/svg">\n<!-- mutoscope md ${owner} -->\n</svg>\n`;
+    const old = (owner, tool = 'mutoscope') => `<svg xmlns="http://www.w3.org/2000/svg">\n<!-- ${tool} md ${owner} -->\n</svg>\n`;
     put(folder, 'out/readme-gone.svg', old('../plain/readme.md'));
+    put(folder, 'out/readme-gonedap.svg', old('../plain/readme.md', 'daphnis'));
     put(folder, 'out/readme-ambiguous.svg', old('../x%2D-y/readme.md'));
+    put(folder, 'out/readme-ambiguousdap.svg', old('../x%2D-y/readme.md', 'daphnis'));
     put(folder, 'out/readme-percent.svg', old('../x%252D-y/readme.md'));
     put(folder, 'out/readme-foreign.svg', old('../other/readme.md'));
 
     const result = run(['md', 'plain/readme.md', 'x--y/readme.md', '--out-dir', 'out'], folder);
 
     assert.equal(result.status, 0, result.stderr);
-    assert.ok(!existsSync(join(folder, 'out/readme-gone.svg')), '소유가 분명한 옛 표식은 지운다');
-    for (const name of ['ambiguous', 'percent', 'foreign']) assert.ok(existsSync(join(folder, `out/readme-${name}.svg`)), `${name}: 모호하거나 남의 것이면 둔다`);
+    for (const name of ['gone', 'gonedap']) assert.ok(!existsSync(join(folder, `out/readme-${name}.svg`)), `${name}: 소유가 분명한 판 번호 없는 표식은 지운다`);
+    for (const name of ['ambiguous', 'ambiguousdap', 'percent', 'foreign']) assert.ok(existsSync(join(folder, `out/readme-${name}.svg`)), `${name}: 모호하거나 남의 것이면 둔다`);
     assert.equal(run(['md', 'plain/readme.md', 'x--y/readme.md', '--out-dir', 'out', '--check'], folder).status, 0);
   });
 });
@@ -424,17 +427,160 @@ test('md_does_not_write_over_an_svg_with_an_ambiguous_old_mark_but_rewrites_one_
     put(folder, 'x--y/readme.md', doc(block('name=one', FLOW)));
     put(folder, 'plain/readme.md', doc(block('name=two', FLOW)));
     mkdirSync(join(folder, 'out'));
-    const old = (owner) => `<svg xmlns="http://www.w3.org/2000/svg">\n<!-- mutoscope md ${owner} -->\n</svg>\n`;
-    put(folder, 'out/readme-one.svg', old('../x%2D-y/readme.md'));
+    const old = (owner, tool = 'mutoscope') => `<svg xmlns="http://www.w3.org/2000/svg">\n<!-- ${tool} md ${owner} -->\n</svg>\n`;
+    put(folder, 'out/readme-one.svg', old('../x%2D-y/readme.md', 'daphnis'));
     put(folder, 'out/readme-two.svg', old('../plain/readme.md'));
 
+    // 옛 구현이 `x%2D-y/readme.md`로 만든 SVG(표시는 `daphnis md ../x%2D-y/readme.md`)다. `x--y/readme.md`의 새 표식과 글자가 같아도 판 번호가 없으니 소유로 보지 않는다
     const ambiguous = run(['md', 'x--y/readme.md', '--out-dir', 'out'], folder);
     const clear = run(['md', 'plain/readme.md', '--out-dir', 'out'], folder);
 
     assert.equal(ambiguous.status, 1);
     assert.match(ambiguous.stderr, /readme-one\.svg already exists and was made for another document/);
-    assert.equal(read(folder, 'out/readme-one.svg'), old('../x%2D-y/readme.md'));
+    assert.equal(read(folder, 'out/readme-one.svg'), old('../x%2D-y/readme.md', 'daphnis'));
     assert.equal(clear.status, 0, clear.stderr);
-    assert.match(read(folder, 'out/readme-two.svg'), /<!-- daphnis md \.\.\/plain\/readme\.md -->/);
+    assert.match(read(folder, 'out/readme-two.svg'), /<!-- daphnis md v2 \.\.\/plain\/readme\.md -->/);
   });
 });
+
+// 근거: 이슈 #102 "같은 문서를 거듭 반영하면 두 번째부터 파일 내용이 바뀌지 않는다". 판 번호 없는 자기 SVG는 새 표식으로 한 번 다시 쓰고 그 뒤는 그대로다
+test('md_rewrites_its_own_svg_with_an_unversioned_mark_once_and_then_stays_unchanged', () => {
+  withFolder((folder) => {
+    put(folder, 'doc.md', doc(block('name=flow', FLOW)));
+    run(['md', 'doc.md'], folder);
+    put(folder, 'doc-flow.svg', read(folder, 'doc-flow.svg').replace('<!-- daphnis md v2 doc.md -->', '<!-- daphnis md doc.md -->'));
+
+    const upgrade = run(['md', 'doc.md'], folder);
+    const text = read(folder, 'doc-flow.svg');
+    const again = run(['md', 'doc.md'], folder);
+
+    assert.equal(upgrade.status, 0, upgrade.stderr);
+    assert.match(text, /<!-- daphnis md v2 doc\.md -->/);
+    assert.doesNotMatch(text, /<!-- daphnis md doc\.md -->/);
+    assert.equal(again.stdout, '');
+    assert.equal(read(folder, 'doc-flow.svg'), text);
+  });
+});
+
+// 폴더 안 모든 파일의 내용. 실패한 실행 전후를 바이트 단위로 비교한다
+const snapshot = (folder, dir = '') => Object.fromEntries(readdirSync(join(folder, dir), { withFileTypes: true }).flatMap((entry) => {
+  const path = join(dir, entry.name);
+  return entry.isDirectory() ? Object.entries(snapshot(folder, path)) : [[path, readFileSync(join(folder, path)).toString('hex')]];
+}));
+
+// 근거: 이슈 #102 "충돌 오류가 난 실행은 SVG와 문서를 하나도 바꾸지 않는다". 충돌 없는 문서가 같은 실행에 있어도 쓰지 않는다
+test('md_conflict_leaves_every_file_of_the_run_byte_identical_even_for_documents_without_a_conflict', () => {
+  withFolder((folder) => {
+    twinDocs(folder, ['one', 'one']);
+    mkdirSync(join(folder, 'c'));
+    put(folder, 'c/readme.md', doc(block('name=fresh', FLOW)));
+    run(['md', 'a/readme.md', '--out-dir', 'out'], folder);
+    const before = snapshot(folder);
+
+    const result = run(['md', 'c/readme.md', 'b/readme.md', '--out-dir', 'out'], folder);
+
+    assert.equal(result.status, 1);
+    assert.deepEqual(snapshot(folder), before);
+    assert.ok(!existsSync(join(folder, 'out/readme-fresh.svg')));
+  });
+});
+
+// 근거: 이슈 #102 "같은 실행에서 대소문자만 다른 출력 이름은 쓰기 전에 오류다". 블록 이름은 소문자만 받으므로 문서 파일 이름으로 만든다. NFC와 NFD도 같은 이름으로 친다
+test('md_output_names_that_differ_only_in_case_or_unicode_form_conflict_before_writing', () => {
+  withFolder((folder) => {
+    mkdirSync(join(folder, 'p'));
+    mkdirSync(join(folder, 'q'));
+    for (const [first, second] of [['Doc.md', 'doc.md'], ['caf\u00e9.md', 'cafe\u0301.md']]) {
+      put(folder, `p/${first}`, doc(block('name=one', FLOW)));
+      put(folder, `q/${second}`, doc(block('name=one', FLOW)));
+      const before = snapshot(folder);
+
+      const result = run(['md', `p/${first}`, `q/${second}`, '--out-dir', 'out'], folder);
+
+      assert.equal(result.status, 1, first);
+      assert.match(result.stderr, /is also written for p\/.*Give the block a different name=/, first);
+      assert.deepEqual(snapshot(folder), before, first);
+      assert.ok(!existsSync(join(folder, 'out')), first);
+    }
+  });
+});
+
+// 근거: 이슈 #102 "심볼릭 링크로 가리킨 같은 문서와 출력 폴더는 같은 소유로 본다"
+test('md_treats_a_document_and_an_out_dir_opened_through_symlinks_as_the_same_owner', () => {
+  withFolder((folder) => {
+    mkdirSync(join(folder, 'real'));
+    mkdirSync(join(folder, 'out'));
+    put(folder, 'real/readme.md', doc(block('name=one', FLOW)));
+    symlinkSync(join(folder, 'real'), join(folder, 'alias'));
+    symlinkSync(join(folder, 'out'), join(folder, 'outalias'));
+    run(['md', 'real/readme.md', '--out-dir', 'out'], folder);
+    const svg = read(folder, 'out/readme-one.svg');
+
+    const viaAlias = run(['md', 'alias/readme.md', '--out-dir', 'outalias'], folder);
+    const again = run(['md', 'alias/readme.md', '--out-dir', 'outalias'], folder);
+
+    assert.equal(viaAlias.status, 0, viaAlias.stderr);
+    assert.doesNotMatch(viaAlias.stdout, /removed/);
+    assert.equal(read(folder, 'out/readme-one.svg'), svg, '별칭으로 열어도 같은 표식이라 SVG는 그대로다');
+    assert.equal(again.stdout, '');
+    assert.equal(run(['md', 'real/readme.md', 'alias/readme.md', '--out-dir', 'out', '--check'], folder).status, 1, '같은 문서를 두 번 넘기면 같은 SVG를 두 번 쓰려는 오류다');
+  });
+});
+
+// 이 시험 파일이 쥐는 잠금: 별도 프로세스가 출력 폴더 잠금을 잡고 입력이 닫힐 때까지 놓지 않는다
+const HOLDER = "import { acquireLocks } from '" + new URL('../src/md-lock.js', import.meta.url).href + "'; const l = acquireLocks([process.argv[1]]); process.stdout.write(l.busy ? 'busy\\n' : 'held\\n'); process.stdin.resume(); process.stdin.on('end', () => { l.release?.(); });";
+const hold = (folder, dir) => new Promise((resolve, reject) => {
+  const child = spawn(process.execPath, ['--input-type=module', '-e', HOLDER, join(folder, dir)], { stdio: ['pipe', 'pipe', 'inherit'] });
+  child.on('error', reject);
+  child.stdout.once('data', (data) => resolve({ child, line: String(data).trim() }));
+});
+const release = (child) => new Promise((resolve) => {
+  child.on('exit', resolve);
+  child.stdin.end();
+});
+
+// 근거: 이슈 #102 "같은 출력 폴더에 두 프로세스가 동시에 쓰면 하나만 쓰고 다른 하나는 파일을 바꾸기 전에 오류로 끝난다". 잠금은 수정 전 코드에 없는 기능이라 잠금을 잡는 프로세스를 띄우는 부분은 수정 전에 시험할 수 없다
+test('md_fails_before_changing_any_file_while_another_process_holds_the_out_dir_lock_and_works_after_it_lets_go', () => withFolder(async (folder) => {
+  put(folder, 'doc.md', doc(block('name=one', FLOW)));
+  mkdirSync(join(folder, 'out'));
+  const { child, line } = await hold(folder, 'out');
+  assert.equal(line, 'held');
+
+  const blocked = run(['md', 'doc.md', '--out-dir', 'out'], folder);
+  const check = run(['md', 'doc.md', '--out-dir', 'out', '--check'], folder);
+  const during = snapshot(folder);
+  await release(child);
+  const after = run(['md', 'doc.md', '--out-dir', 'out'], folder);
+
+  assert.equal(blocked.status, 1);
+  assert.ok(blocked.stderr.includes(`.daphnis-md.lock: is held by daphnis md (pid ${child.pid}) that is writing to this folder`), blocked.stderr);
+  assert.equal(check.status, 1, '--check는 잠그지 않아 갱신 필요로 끝난다');
+  assert.deepEqual(Object.keys(during).sort(), ['doc.md', 'out/.daphnis-md.lock']);
+  assert.equal(during['doc.md'], Buffer.from(doc(block('name=one', FLOW))).toString('hex'), '막힌 실행은 문서를 바꾸지 않는다');
+  assert.equal(after.status, 0, after.stderr);
+  assert.ok(!existsSync(join(folder, 'out/.daphnis-md.lock')), '끝나면 잠금을 푼다');
+}));
+
+// 근거: 이슈 #102 "잠금 주인 pid가 살아 있지 않으면 낡은 잠금으로 보고 정리한 뒤 다시 잡는다". 끝난 자기 자식 프로세스의 번호를 쓴다
+test('md_clears_a_stale_lock_whose_owner_process_is_gone_and_releases_the_lock_after_a_failed_run', () => withFolder(async (folder) => {
+  put(folder, 'doc.md', doc(block('name=one', FLOW)));
+  mkdirSync(join(folder, 'out'));
+  const { child } = await hold(folder, 'out');
+  const gone = child.pid;
+  await release(child);
+  put(folder, 'out/.daphnis-md.lock', `${gone}\n`);
+
+  const result = run(['md', 'doc.md', '--out-dir', 'out'], folder);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.ok(!existsSync(join(folder, 'out/.daphnis-md.lock')));
+
+  put(folder, 'out/doc-one.svg', '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n');
+  const conflict = run(['md', 'doc.md', '--out-dir', 'out', '--check'], folder);
+  assert.equal(conflict.status, 1);
+  put(folder, 'doc.md', doc(block('name=one', FLOW), block('name=one', FLOW)));
+  const failed = run(['md', 'doc.md', '--out-dir', 'out'], folder);
+
+  assert.equal(failed.status, 1);
+  assert.ok(!existsSync(join(folder, 'out/.daphnis-md.lock')), '실패한 실행도 잠금을 푼다');
+}));
