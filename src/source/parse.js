@@ -158,8 +158,11 @@ function readKind(statement, ctx) {
   if (kind.value === 'sequence') {
     if (second) problems.error(line, '"sequence" takes no direction');
   } else if (kind.value === 'chart') {
-    if (!second || !valueNames('chartType').includes(second.value)) problems.error(line, `write "chart" with a type: ${valueNames('chartType').join(', ')}`);
-    else figure.chartType = second.value;
+    if (!second || !valueNames('chartType').includes(second.value)) {
+      problems.error(line, `write "chart" with a type: ${valueNames('chartType').join(', ')}${second ? `. Found "${second.value}"` : ''}`);
+      // 종류를 모르면 종류에 기대는 규칙을 고를 수 없다. 종류를 모르는 그림처럼 여기서 멈춘다.
+      figure.kind = undefined;
+    } else figure.chartType = second.value;
   } else if (second) {
     if (!valueNames('direction').includes(second.value)) problems.error(line, `direction is "right" or "down". Found "${second.value}"`);
     else figure.direction = second.value;
