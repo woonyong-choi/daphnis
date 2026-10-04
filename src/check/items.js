@@ -5,7 +5,7 @@ import { checkChartFits, checkFits } from './fit.js';
 import { checkFlow } from './flow.js';
 import { checkChips } from './moving.js';
 import { checkNotes } from './notes.js';
-import { checkLabels, checkNodes, checkTitleLines } from './overlap.js';
+import { checkChartLabels, checkLabels, checkNodes, checkTitleLines } from './overlap.js';
 import { checkAspect, checkReadable } from './proportion.js';
 
 /**
@@ -17,7 +17,7 @@ import { checkAspect, checkReadable } from './proportion.js';
  */
 export const CHECKS = [
   { number: 1, code: 'check-1', severity: ['error'], stage: 'scene', judge: checkFits, judgeChart: checkChartFits, title: '글이 도형, 카드, 알약, 글 상자, 차트 이름 칸 안에 들어간다', criterion: '잰 글 폭과 줄 수가 칸의 안쪽 크기 이하' },
-  { number: 2, code: 'check-2', severity: ['error'], stage: 'scene', judge: checkLabels, title: '글끼리 겹치지 않는다', criterion: '선 라벨, 그룹 제목, 도형 사각형(이름과 카드를 품음)끼리 겹친 넓이 0' },
+  { number: 2, code: 'check-2', severity: ['error'], stage: 'scene', judge: checkLabels, judgeChart: checkChartLabels, title: '글끼리 겹치지 않는다', criterion: '선 라벨, 그룹 제목, 도형 사각형(이름과 카드를 품음)끼리 겹친 넓이 0. 산점도 점 이름은 [차트](charts.md)가 위아래와 좌우로 비켜 놓은 뒤에도 서로 겹친 넓이 0' },
   { number: 3, code: 'check-3', severity: ['error'], stage: 'scene', judge: checkThrough, title: '선이 끝 도형이 아닌 도형과 격자 칸을 지나지 않는다', criterion: '경로 선분이 다른 도형과 그룹 사각형 안쪽을 지나지 않음. 선 끝이거나 선 끝을 품은 그룹(그 선이 드나드는 그룹)은 제외. 끝 격자 안에서도 어느 칸(빈 자리 제외)의 안쪽도 지나지 않음' },
   { number: 4, code: 'check-4', severity: ['error'], stage: 'scene', judge: checkEnds, title: '선 끝이 연결점 규칙 자리에 있다', criterion: '[배치](layout.md)의 도형별 연결점 규칙과 0.5 이내로 일치. 격자 칸 끝은 그 칸의 테두리' },
   { number: 5, code: 'check-5', severity: ['error'], stage: 'scene', judge: checkCrowding, title: '나란한 두 선이 붙지 않는다', criterion: '다른 두 선의 나란한 선분 사이가 토큰 `space.2-5` 이상. 같은 도형에서 함께 나가거나 함께 들어오는 두 선은 그 도형 쪽 끝 선분(경계에서 첫 꺾임까지)을 보지 않는다' },
