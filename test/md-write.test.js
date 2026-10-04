@@ -23,7 +23,7 @@ function injected(fail) {
     if (fail(kind, target)) throw Object.assign(new Error(`EACCES: injected ${kind}`), { code: 'EACCES' });
     return real(path, ...rest);
   };
-  return { calls, io: { mkdir: (path) => mkdirSync(path, { recursive: true }), writeFile: guard('write', writeFileSync), rename: guard('rename', renameSync), unlink: guard('unlink', unlinkSync) } };
+  return { calls, io: { mkdir: (path) => mkdirSync(path, { recursive: true }), writeFile: guard('write', (path, text, mode) => writeFileSync(path, text, mode === undefined ? undefined : { mode })), rename: guard('rename', renameSync), unlink: guard('unlink', unlinkSync) } };
 }
 
 // cost: time O(1), heap O(m), stack O(1)
@@ -100,13 +100,13 @@ test('runMd_restores_an_overwritten_svg_when_a_later_replacement_fails', async (
     const before = { bar: readFileSync(join(folder, 'doc-bar.svg'), 'utf8'), flow: readFileSync(join(folder, 'doc-flow.svg'), 'utf8'), doc: readFileSync(join(folder, 'doc.md'), 'utf8') };
     const edited = before.doc.replace('title "Latency"', 'title "Latency 2"').replace('title "Request path"', 'title "Path 2"');
     writeFileSync(join(folder, 'doc.md'), edited);
-    const { io } = injected((kind, target) => kind === 'rename' && target.endsWith('doc-flow.svg'));
+    const { io } = injected((kind, target) => kind === 'rename' && target.endsWith('doc-bar.svg'));
 
     const result = await runIn(folder, {}, io);
 
     assert.equal(result.status, 1);
-    assert.equal(readFileSync(join(folder, 'doc-bar.svg'), 'utf8'), before.bar, '앞서 바꾼 SVG를 되돌린다');
-    assert.equal(readFileSync(join(folder, 'doc-flow.svg'), 'utf8'), before.flow);
+    assert.equal(readFileSync(join(folder, 'doc-flow.svg'), 'utf8'), before.flow, '앞서 바꾼 SVG를 되돌린다');
+    assert.equal(readFileSync(join(folder, 'doc-bar.svg'), 'utf8'), before.bar);
     assert.equal(readFileSync(join(folder, 'doc.md'), 'utf8'), edited);
     assert.deepEqual(names(folder), ['doc-bar.svg', 'doc-flow.svg', 'doc.md']);
   });
