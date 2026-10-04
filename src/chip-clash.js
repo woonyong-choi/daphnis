@@ -2,11 +2,10 @@
 // 숨김은 이동마다 한 번 계산한 불투명도 키(hop.chipFade)로 시간표에 담고, 움직이는 SVG와 재생기와 그림 검사 7번이 그 키를 그대로 읽는다(docs/design/playback.md 이동 글).
 import { CHIP_FRAME_MS, CHIP_VISIBLE_MIN, chipStateAt } from './chip-motion.js';
 import { OVERLAP_SLACK, overlapArea, sizeChip } from './chip.js';
-import { curveOf, progressAt } from './easing.js';
+import { MOVE, progressAt } from './easing.js';
 import { flattenRoute } from './route.js';
 import { values } from './tokens.js';
 
-const MOVE = curveOf('move');
 /** 글 상자가 숨고 다시 나타나는 시간(ms). 이동 글 상자 흐려짐 토큰과 같다. */
 export const CHIP_HIDE_FADE_MS = values.duration['chip-fade'];
 
