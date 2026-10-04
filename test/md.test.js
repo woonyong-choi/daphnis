@@ -262,20 +262,179 @@ test('md_same_named_documents_given_together_in_either_order_keep_both_svgs_and_
   });
 });
 
-// 근거: 이슈 #70 "어떤 파일도 한 실행의 쓰기 대상과 삭제 대상에 동시에 들어가지 않는다". 한 문서의 낡은 SVG를 다른 문서가 이번에 쓰면 지우지 않는다
-test('md_never_removes_a_file_that_another_document_writes_in_the_same_run', () => {
+// 근거: 이슈 #70 "어떤 파일도 한 실행의 쓰기 대상과 삭제 대상에 동시에 들어가지 않는다". 이슈 #102 이후 다른 문서의 SVG에는 같은 실행에서도 쓰지 못하므로, 한 문서가 놓은 이름을 다른 문서가 이어받으려면 놓는 실행이 먼저다
+test('md_never_removes_a_file_that_another_document_writes_and_a_handover_needs_the_release_run_first', () => {
   withFolder((folder) => {
     twinDocs(folder, ['x', 'y']);
     run(['md', 'a/readme.md', '--out-dir', 'out'], folder);
     put(folder, 'b/readme.md', read(folder, 'b/readme.md').replace('name=y', 'name=x'));
     put(folder, 'a/readme.md', read(folder, 'a/readme.md').replace('name=x', 'name=z'));
 
-    const result = run(['md', 'a/readme.md', 'b/readme.md', '--out-dir', 'out'], folder);
+    const together = run(['md', 'a/readme.md', 'b/readme.md', '--out-dir', 'out'], folder);
+
+    assert.equal(together.status, 1);
+    assert.match(together.stderr, /readme-x\.svg already exists and was made for another document/);
+    assert.ok(existsSync(join(folder, 'out/readme-x.svg')), '오류가 나면 지우지도 않는다');
+    assert.ok(!existsSync(join(folder, 'out/readme-z.svg')));
+
+    assert.equal(run(['md', 'a/readme.md', '--out-dir', 'out'], folder).status, 0);
+    assert.ok(!existsSync(join(folder, 'out/readme-x.svg')), '자기 문서의 낡은 SVG는 지운다');
+    const handover = run(['md', 'b/readme.md', '--out-dir', 'out'], folder);
+
+    assert.equal(handover.status, 0, handover.stderr);
+    assert.match(read(folder, 'out/readme-x.svg'), /<!-- daphnis md \.\.\/b\/readme\.md -->/);
+    assert.match(read(folder, 'out/readme-z.svg'), /<!-- daphnis md \.\.\/a\/readme\.md -->/);
+    assert.equal(run(['md', 'a/readme.md', 'b/readme.md', '--out-dir', 'out', '--check'], folder).status, 0);
+  });
+});
+
+// 근거: 이슈 #102 "이름과 블록 이름이 같은 두 문서를 차례로 반영하면 두 번째가 쓰기 전에 충돌 오류로 끝나고 첫 문서의 SVG와 이미지 줄은 그대로다"
+test('md_second_document_with_the_same_name_and_block_name_fails_before_writing_and_leaves_the_first_intact', () => {
+  withFolder((folder) => {
+    twinDocs(folder, ['one', 'one']);
+    put(folder, 'b/readme.md', read(folder, 'b/readme.md').replace('"Client"', '"BBB"'));
+    run(['md', 'a/readme.md', '--out-dir', 'out'], folder);
+    const svg = read(folder, 'out/readme-one.svg');
+    const first = read(folder, 'a/readme.md');
+    const second = read(folder, 'b/readme.md');
+
+    const result = run(['md', 'b/readme.md', '--out-dir', 'out'], folder);
+
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /^b\/readme\.md:3: .*readme-one\.svg already exists and was made for another document \(\.\.\/a\/readme\.md\)\. Give the block a different name=, or write this document to a different --out-dir/m);
+    assert.equal(read(folder, 'out/readme-one.svg'), svg);
+    assert.equal(read(folder, 'a/readme.md'), first);
+    assert.equal(read(folder, 'b/readme.md'), second, '실패한 문서에는 이미지 줄도 넣지 않는다');
+  });
+});
+
+// 근거: 이슈 #102 "두 문서를 한 번에, 역순으로, 같은 문서를 거듭 반영해도 다른 문서 SVG를 쓰거나 지우지 않는다. 같은 문서 반복은 성공하고 멱등"
+test('md_same_block_name_in_two_documents_given_together_in_either_order_writes_nothing_and_the_owner_can_rerun', () => {
+  withFolder((folder) => {
+    twinDocs(folder, ['one', 'one']);
+    run(['md', 'a/readme.md', '--out-dir', 'out'], folder);
+    const svg = read(folder, 'out/readme-one.svg');
+    const second = read(folder, 'b/readme.md');
+
+    for (const order of [['a/readme.md', 'b/readme.md'], ['b/readme.md', 'a/readme.md']]) {
+      const result = run(['md', ...order, '--out-dir', 'out'], folder);
+      assert.equal(result.status, 1, order.join(' '));
+    }
+    const reverse = run(['md', 'b/readme.md', '--out-dir', 'out', '--check'], folder);
+    const again = run(['md', 'a/readme.md', '--out-dir', 'out'], folder);
+
+    assert.equal(reverse.status, 1, '--check도 충돌을 오류로 알린다');
+    assert.match(reverse.stderr, /already exists and was made for another document/);
+    assert.equal(again.status, 0, again.stderr);
+    assert.equal(again.stdout, '', '같은 문서 반복은 아무것도 쓰지 않는다');
+    assert.equal(read(folder, 'out/readme-one.svg'), svg);
+    assert.equal(read(folder, 'b/readme.md'), second);
+  });
+});
+
+// 근거: 이슈 #102 "표식이 없는 파일이면 쓰기 전에 오류를 내고 아무 파일도 쓰지 않는다". 손으로 만든 그림은 덮어쓰지 않는다
+test('md_refuses_to_overwrite_an_existing_svg_without_a_mark_and_writes_no_file_of_the_run', () => {
+  withFolder((folder) => {
+    put(folder, 'doc.md', doc(block('name=one', FLOW), block('name=two', FLOW)));
+    put(folder, 'doc-one.svg', '<svg xmlns="http://www.w3.org/2000/svg"><!-- hand made --></svg>\n');
+    const markdown = read(folder, 'doc.md');
+
+    const result = run(['md', 'doc.md'], folder);
+
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /doc\.md:3: .*doc-one\.svg already exists and has no daphnis md mark/);
+    assert.match(read(folder, 'doc-one.svg'), /hand made/);
+    assert.ok(!existsSync(join(folder, 'doc-two.svg')), '같은 실행의 다른 SVG도 쓰지 않는다');
+    assert.equal(read(folder, 'doc.md'), markdown);
+  });
+});
+
+// 근거: 이슈 #102 삭제 재현 "x--y/readme.md와 x%2D-y/readme.md를 차례로 반영하면 두 번째가 첫 문서의 그림을 지운다"
+test('md_documents_at_x_dash_dash_y_and_x_percent_2d_dash_y_do_not_remove_each_others_svg', () => {
+  withFolder((folder) => {
+    for (const [dir, name] of [['x--y', 'first'], ['x%2D-y', 'second']]) {
+      mkdirSync(join(folder, dir), { recursive: true });
+      put(folder, `${dir}/readme.md`, doc(block(`name=${name}`, FLOW)));
+    }
+
+    const first = run(['md', 'x--y/readme.md', '--out-dir', 'out'], folder);
+    const second = run(['md', 'x%2D-y/readme.md', '--out-dir', 'out'], folder);
+
+    assert.equal(first.status, 0, first.stderr);
+    assert.equal(second.status, 0, second.stderr);
+    assert.doesNotMatch(second.stdout, /removed/);
+    assert.ok(existsSync(join(folder, 'out/readme-first.svg')) && existsSync(join(folder, 'out/readme-second.svg')));
+    assert.equal(run(['md', 'x--y/readme.md', 'x%2D-y/readme.md', '--out-dir', 'out', '--check'], folder).status, 0);
+  });
+});
+
+// 근거: 이슈 #102 "%, --, 한글, 상대 경로를 섞은 경로의 표식이 서로 다르다". 표식은 XML 주석 규칙을 지키고 `%`가 없는 경로의 표식은 이전과 같다
+test('md_marks_of_paths_mixing_percent_double_dash_hangul_and_relative_segments_differ_and_stay_valid_xml_comments', () => {
+  withFolder((folder) => {
+    mkdirSync(join(folder, 'a'));
+    const dirs = ['x--y', 'x%2D-y', 'x%252D-y', 'x---y', '한글--문서', '100%', 'plain', 'a/../b-'];
+    for (const [i, dir] of dirs.entries()) {
+      mkdirSync(join(folder, dir), { recursive: true });
+      put(folder, `${dir}/readme.md`, doc(block(`name=n${i}`, FLOW)));
+      const result = run(['md', `${dir}/readme.md`, '--out-dir', 'out'], folder);
+      assert.equal(result.status, 0, `${dir}: ${result.stderr}`);
+      assert.doesNotMatch(result.stdout, /removed/, dir);
+    }
+
+    const marks = dirs.map((_, i) => /<!-- daphnis md (.*) -->/.exec(read(folder, `out/readme-n${i}.svg`)));
+    assert.ok(marks.every(Boolean));
+    assert.equal(new Set(marks.map((mark) => mark[1])).size, dirs.length, '표식이 서로 다르다');
+    for (const mark of marks) assert.doesNotMatch(mark[0].slice(4, -3), /--/, `${mark[0]}: 주석 안에 --가 없다`);
+    assert.equal(marks[6][1], '../plain/readme.md', '%와 연속 -가 없는 경로는 이전 표식과 글자가 같다');
+    assert.equal(marks[1][1], '../x%252D-y/readme.md');
+    assert.equal(marks[0][1], '../x%2D-y/readme.md');
+    assert.equal(marks[5][1], '../100%25/readme.md');
+    assert.equal(run(['md', ...dirs.map((dir) => `${dir}/readme.md`), '--out-dir', 'out', '--check'], folder).status, 0);
+  });
+});
+
+// 근거: 이슈 #102 "옛 표식이 든 SVG는 소유가 분명할 때만 지운다". 옛 인코딩은 `%`를 그대로 두어 `%`가 든 경로에서 모호하다
+test('md_removes_a_stale_svg_with_an_old_mark_only_when_the_owner_is_unambiguous', () => {
+  withFolder((folder) => {
+    mkdirSync(join(folder, 'x--y'));
+    mkdirSync(join(folder, 'plain'));
+    put(folder, 'x--y/readme.md', doc(block('name=keep', FLOW)));
+    put(folder, 'plain/readme.md', doc(block('name=stay', FLOW)));
+    mkdirSync(join(folder, 'out'));
+    const old = (owner) => `<svg xmlns="http://www.w3.org/2000/svg">\n<!-- mutoscope md ${owner} -->\n</svg>\n`;
+    put(folder, 'out/readme-gone.svg', old('../plain/readme.md'));
+    put(folder, 'out/readme-ambiguous.svg', old('../x%2D-y/readme.md'));
+    put(folder, 'out/readme-percent.svg', old('../x%252D-y/readme.md'));
+    put(folder, 'out/readme-foreign.svg', old('../other/readme.md'));
+
+    const result = run(['md', 'plain/readme.md', 'x--y/readme.md', '--out-dir', 'out'], folder);
 
     assert.equal(result.status, 0, result.stderr);
-    assert.ok(existsSync(join(folder, 'out/readme-x.svg')), 'b가 쓴 파일이 남는다');
-    assert.ok(existsSync(join(folder, 'out/readme-z.svg')));
-    assert.match(read(folder, 'out/readme-x.svg'), /<!-- daphnis md \.\.\/b\/readme\.md -->/);
-    assert.equal(run(['md', 'a/readme.md', 'b/readme.md', '--out-dir', 'out', '--check'], folder).status, 0);
+    assert.ok(!existsSync(join(folder, 'out/readme-gone.svg')), '소유가 분명한 옛 표식은 지운다');
+    for (const name of ['ambiguous', 'percent', 'foreign']) assert.ok(existsSync(join(folder, `out/readme-${name}.svg`)), `${name}: 모호하거나 남의 것이면 둔다`);
+    assert.equal(run(['md', 'plain/readme.md', 'x--y/readme.md', '--out-dir', 'out', '--check'], folder).status, 0);
+  });
+});
+
+// 근거: 이슈 #102 "옛 표식 SVG는 소유가 분명할 때만" 쓰기에도 같은 판정. 모호한 옛 표식 파일에는 쓰지 않는다
+test('md_does_not_write_over_an_svg_with_an_ambiguous_old_mark_but_rewrites_one_with_a_clear_old_mark', () => {
+  withFolder((folder) => {
+    mkdirSync(join(folder, 'x--y'));
+    mkdirSync(join(folder, 'plain'));
+    put(folder, 'x--y/readme.md', doc(block('name=one', FLOW)));
+    put(folder, 'plain/readme.md', doc(block('name=two', FLOW)));
+    mkdirSync(join(folder, 'out'));
+    const old = (owner) => `<svg xmlns="http://www.w3.org/2000/svg">\n<!-- mutoscope md ${owner} -->\n</svg>\n`;
+    put(folder, 'out/readme-one.svg', old('../x%2D-y/readme.md'));
+    put(folder, 'out/readme-two.svg', old('../plain/readme.md'));
+
+    const ambiguous = run(['md', 'x--y/readme.md', '--out-dir', 'out'], folder);
+    const clear = run(['md', 'plain/readme.md', '--out-dir', 'out'], folder);
+
+    assert.equal(ambiguous.status, 1);
+    assert.match(ambiguous.stderr, /readme-one\.svg already exists and was made for another document/);
+    assert.equal(read(folder, 'out/readme-one.svg'), old('../x%2D-y/readme.md'));
+    assert.equal(clear.status, 0, clear.stderr);
+    assert.match(read(folder, 'out/readme-two.svg'), /<!-- daphnis md \.\.\/plain\/readme\.md -->/);
   });
 });
