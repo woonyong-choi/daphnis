@@ -135,7 +135,7 @@
 ### 아이콘
 
 - 기본 세트 `builtin`은 두 묶음이고 이름은 `src/icons/names.json` 표 하나에서 찾는다. 한 표라 개념 이름과 브랜드 이름은 겹칠 수 없고 접두사 없이 쓴다.
-  - 범용 개념(`server`, `lb`, `db`, `igw` …): IBM Carbon icons(Apache-2.0) 36개, `src/icons/carbon/`. 이 가운데 7개(`ui-maximize`, `ui-minimize`, `ui-zoom-in`, `ui-zoom-out`, `ui-fit`, `ui-play`, `ui-pause`)는 재생기 조작부가 같은 파일을 단색(`currentColor`, 단추 글자색)과 `size.control.icon`으로 쓰는 것이다. 상표 로고(`logo--*`)와 쿠버네티스는 넣지 않는다.
+  - 범용 개념(`server`, `lb`, `db`, `igw` …): IBM Carbon icons(Apache-2.0) 36개, `src/icons/carbon/`. 이 가운데 7개(`ui-maximize`, `ui-minimize`, `ui-zoom-in`, `ui-zoom-out`, `ui-fit`, `ui-play`, `ui-pause`)는 재생기 조작부가 같은 파일을 단색(`currentColor`, 단추 글자색)과 `size.control.icon`으로 쓰는 것이다. 획은 채움 경로 둘레에 같은 색 선(`size.control.icon-weight`, 32 격자 1.5 단위)을 덧그려 굵게 한다. 전체 화면 열기(`ui-maximize`)와 닫기(`ui-minimize`)는 파일을 좌우로 뒤집어 ↖↘ 바깥으로 벌어지는, ↘↖ 안으로 모이는 대각선 화살표 둘로 쓴다. 상표 로고(`logo--*`)와 쿠버네티스는 넣지 않는다.
   - 기술 브랜드(`git`, `postgresql`, `kubernetes` …): Simple Icons 16.33.0의 32개, `src/icons/simple-icons/`. 라이브러리는 CC0 1.0이지만 아이콘마다 라이선스가 따로 있을 수 있어, 공유 조건이 붙은 것(Rust, Jenkins)과 삭제됐거나 없는 것(Java, OpenAI, Apache HTTP Server), 공급자 서비스 아이콘(AWS, Azure, Google Cloud)은 넣지 않는다. 자기 라이선스가 있는 `git`(CC BY 3.0)과 `kafka`(Apache-2.0)는 `NOTICE`에 저작자를 적는다.
   - 파일은 루트 요소에 `fill="currentColor"`만 더했고 모양은 그대로다(`NOTICE`와 `LICENSE`에 "modified: color only"). 브랜드 고유색은 쓰지 않는다. 상표는 각 소유자의 것이고 이 저장소는 식별 목적으로만 표시한다(`NOTICE`).
 - 색은 `currentColor`가 정하고 그림은 `.fl-icon { color: color.figure.icon }`다(단색 파랑, 라이트 `#3458e7`, 다크 `#7d98f5`). 파일 안 색은 없고 브랜드 고유색도 쓰지 않는다. 켜진 도형은 `state.active` 파랑이 테두리 색과 두께(`border.strong`)로 나타나고 아이콘은 그대로여서, 두 파랑은 색상과 두께로 갈린다([문서 연동](docs-integration.md) 색 역할 표).

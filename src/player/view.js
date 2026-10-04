@@ -1,6 +1,7 @@
 // 브라우저에서 돈다(play.js와 한 스크립트로 이어 붙는다).
 // 전체 화면과, 전체 화면에서만 켜지는 확대·축소·끌어 옮기기를 맡는다. 문서 안에서는 그림을 그대로 보인다.
 
+const FLIPPED_ICONS = ['ui-maximize', 'ui-minimize'];
 const ZOOM_ICONS = { in: 'ui-zoom-in', out: 'ui-zoom-out', fit: 'ui-fit' };
 
 // cost: time O(1) 시작, 휠·끌기마다 O(1), heap O(1), stack O(1)
@@ -134,8 +135,12 @@ function toSvgPoint(svg, e) {
   return { x: point.x, y: point.y };
 }
 
-// 조작부 아이콘. 구성도와 같은 Carbon 파일(UI_ICONS, html.js가 이 스크립트 앞에 붙인다)을 단색 currentColor로 그린다.
+// cost: time O(f), heap O(1), stack O(1)
+// vars: f = 뒤집는 아이콘 수(2)
+// basis: estimate
+// 조작부 아이콘. 구성도와 같은 Carbon 파일(UI_ICONS, html.js가 이 스크립트 앞에 붙인다)을 단색 currentColor로 그린다. 채움 경로 둘레에 같은 색 선(metrics.iconWeight)을 덧그려 획을 굵게 한다. 전체 화면 열기와 닫기는 Carbon 파일을 좌우로 뒤집어 ↖↘ 바깥으로 벌어지는, ↘↖ 안으로 모이는 대각선 화살표 둘로 쓴다.
 function drawUiIcon(metrics, name) {
   const { viewBox, body } = UI_ICONS[name];
-  return `<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="${viewBox.join(' ')}" aria-hidden="true">${body}</svg>`;
+  const flip = FLIPPED_ICONS.includes(name) ? ' class="fl-ui-flip"' : '';
+  return `<svg${flip} width="${metrics.icon}" height="${metrics.icon}" viewBox="${viewBox.join(' ')}" fill="currentColor" stroke="currentColor" stroke-width="${metrics.iconWeight}" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
 }
