@@ -31,8 +31,8 @@ export function tintOf(group, scene) {
   return undefined;
 }
 
-/** 도형이 칠한 색 이름. 면을 먼저 보고, 없으면 테두리 색 이름이다. 외곽선은 이 색의 outline 단계다. */
-export const paintOf = (item) => item.fill ?? item.stroke;
+/** 도형이 고른 색 이름. 테두리 색(stroke=)을 먼저 보고, 없으면 면 색(fill=)이다. 외곽선과 밝힌 테두리는 이 색의 단계다. */
+export const paintOf = (item) => item.stroke ?? item.fill;
 
 // cost: time O(s + g), heap O(c), stack O(1)
 // vars: s = 도형 수, g = 그룹 수, c = 고른 색 수

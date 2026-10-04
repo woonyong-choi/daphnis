@@ -13,7 +13,7 @@ const OUTLINE_MIX = 0.5;
 // 면 단계: 라이트는 옅은 면, 다크는 어두운 면(밝기 L과 채도 상한 C)
 const FILL = { light: { L: 0.965, C: 0.025 }, dark: { L: 0.285, C: 0.05 } };
 // 하늘 면(그룹 강조): 파랑과 같은 색상각의 더 옅은 면
-const SKY_FILL = { light: { L: 0.955, C: 0.02 }, dark: { L: 0.255, C: 0.022 } };
+const SKY_FILL = { light: { L: 0.955, C: 0.02 }, dark: { L: 0.285, C: 0.05 } };
 // 파랑의 히트맵 두 끝. low는 그림 바탕과 대비 1.5(꾸밈 요소 기준)가 되는 가장 옅은 값이고 채도 상한은 HEAT_LOW_C다. high는 흰 글자와의 대비가 라이트 7, 다크 4.5 이상인 가장 밝은 값이다.
 const HEAT_LOW_C = { light: 0.06, dark: 0.05 };
 const HEAT_LOW_FLOOR = 1.5;
@@ -28,8 +28,12 @@ const DARK_DOT_START = 0.5;
 const TINT_CHROMA = [0.022, 0.028, 0.034];
 // 흐름 점을 옮기는 색(L, 라이트는 어둡게, 다크는 밝게). 빨강이 비교 주황과, 초록과 색각 이상 눈에서도 OKLab 거리 0.1 이상 벌어지게 한다.
 const DOT_SHIFT = { light: { red: 0.17 }, dark: { green: 0.14 } };
+// 라이트 선(stroke)을 원색보다 어둡게 옮기는 색(L). 빨강이 주의 주황과 적록 색각 이상 눈에서도 OKLab 거리 0.025 이상 벌어지게 한다.
+const STROKE_SHIFT = { red: 0.08 };
 // 다크 흐름 점의 색상각을 옮기는 색(도). 빨강을 마젠타 쪽으로 돌려 주황과 벌린다.
 const DOT_HUE_SHIFT = { red: -16 };
+// 다크 선(stroke)의 색상각을 옮기는 색(도). 빨강을 마젠타 쪽으로 돌려 주의 주황과 보통 시각에서도 벌린다.
+const STROKE_HUE_SHIFT = { red: -14 };
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -44,7 +48,7 @@ const NHN = { blue: '#125de6', purple: '#b28fd1', red: '#ef0f0f', green: '#09c72
 export const ANCHORS = Object.fromEntries(Object.entries(NHN).map(([name, light]) => [name, { light, dark: darkOf(light) }]));
 
 // 회색(slate)은 무채색 정적 값이다. 중지 상태 도형의 면, 선, 글자, 세 번째 이후 흐름 점.
-const GRAY = { 'light-fill': '#e7e7e7', 'light-stroke': '#5d5d5d', 'light-ink': '#5d5d5d', 'light-dot': '#585858', 'dark-fill': '#363636', 'dark-stroke': '#aaaaaa', 'dark-ink': '#aaaaaa', 'dark-dot': '#c7c7c7' };
+const GRAY = { 'light-fill': '#e7e7e7', 'light-stroke': '#5d5d5d', 'light-ink': '#5d5d5d', 'light-dot': '#747474', 'dark-fill': '#363636', 'dark-stroke': '#aaaaaa', 'dark-ink': '#aaaaaa', 'dark-dot': '#c7c7c7' };
 
 // cost: time O(s), heap O(1), stack O(1)
 // vars: s = 찾는 걸음 수
@@ -68,12 +72,14 @@ const reaches = (hex, faces, floor) => faces.every((face) => contrast(hex, face)
 // vars: s = 찾는 걸음 수
 // basis: estimate
 // 한 테마의 색 하나. fill은 옅은(라이트) 또는 어두운(다크) 면, stroke는 그래픽(면 위 대비 3), ink는 글자(대비 4.5, 켜진 글 상자 글자 onActive와도), dot은 흐름 점(ink와 같다).
-function colorSteps(anchor, theme, { surfaces, onActive, dotShift, hueShift, tints }) {
+function colorSteps(anchor, theme, { surfaces, onActive, dotShift, hueShift, tints, strokeShift, strokeHueShift }) {
   const [L, C, hue] = oklchOf(anchor);
   const away = theme === 'light' ? -STEP : STEP;
   const fill = oklchToHex(FILL[theme].L, Math.min(FILL[theme].C, C), hue);
-  const stroke = search({ anchor, start: L, step: away, chroma: C, hue }, (hex) => reaches(hex, [...surfaces, fill, ...tints], GRAPHIC));
-  const ink = search({ anchor: stroke, start: oklchOf(stroke)[0], step: away, chroma: C, hue }, (hex) => reaches(hex, [surfaces[0], surfaces[1], fill, onActive, ...tints.slice(0, 1)], TEXT));
+  const strokeHue = theme === 'dark' ? hue + strokeHueShift : hue;
+  const reached = search({ anchor: strokeHueShift && theme === 'dark' ? undefined : anchor, start: L, step: away, chroma: C, hue: strokeHue }, (hex) => reaches(hex, [...surfaces, fill, ...tints], GRAPHIC));
+  const stroke = theme === 'light' && strokeShift ? oklchToHex(oklchOf(reached)[0] - strokeShift, oklchOf(reached)[1], hue) : reached;
+  const ink = search({ anchor: stroke, start: oklchOf(stroke)[0], step: away, chroma: C, hue: strokeHue }, (hex) => reaches(hex, [...surfaces, fill, onActive, ...tints.slice(0, 1)], TEXT));
   // 흐름 점: 라이트는 ink이고, 다크는 면 위 그래픽 3과 글 상자 글자 4.5를 넘는 가장 어두운 값이다(DOT_SHIFT로 옮기는 색은 그만큼 더 옮긴다).
   const found = theme === 'light' ? ink : search({ start: DARK_DOT_START, step: STEP, chroma: C, hue: hue + hueShift }, (hex) => reaches(hex, surfaces, GRAPHIC) && contrast(hex, onActive) >= TEXT);
   const dot = dotShift ? oklchToHex(oklchOf(found)[0] + (theme === 'light' ? -dotShift : dotShift), oklchOf(found)[1], hue) : found;
@@ -156,7 +162,7 @@ export function generatePalette(light, dark) {
     const faces = { surfaces: SURFACES.map((name) => resolve(tokens, `color.${name}`)), onActive: resolve(tokens, 'color.state.on-active') };
     const grayL = ['group-1', 'group-2', 'group-3'].map((name) => oklchOf(resolve(tokens, `color.${name}`))[0]);
     const tintsOf = (name) => (['blue', 'purple'].includes(name) ? grayL.map((L, i) => oklchToHex(L, TINT_CHROMA[i], oklchOf(ANCHORS[name][theme])[2])) : []);
-    const steps = Object.fromEntries(Object.entries(ANCHORS).map(([name, pair]) => [name, { ...colorSteps(pair[theme], theme, { ...faces, dotShift: DOT_SHIFT[theme][name] ?? 0, hueShift: theme === 'dark' ? DOT_HUE_SHIFT[name] ?? 0 : 0, tints: tintsOf(name) }), ...Object.fromEntries(tintsOf(name).map((hex, i) => [`tint-${i + 1}`, hex])) }]));
+    const steps = Object.fromEntries(Object.entries(ANCHORS).map(([name, pair]) => [name, { ...colorSteps(pair[theme], theme, { ...faces, dotShift: DOT_SHIFT[theme][name] ?? 0, hueShift: theme === 'dark' ? DOT_HUE_SHIFT[name] ?? 0 : 0, strokeShift: STROKE_SHIFT[name] ?? 0, strokeHueShift: STROKE_HUE_SHIFT[name] ?? 0, tints: tintsOf(name) }), ...Object.fromEntries(tintsOf(name).map((hex, i) => [`tint-${i + 1}`, hex])) }]));
     const white = resolve(tokens, 'color.data.heat-ink-on');
     steps.blue = { ...steps.blue, ...blueExtras({ steps: steps.blue, anchor: ANCHORS.blue[theme], theme }, { bg: faces.surfaces[0], white }) };
     const [, blueC, blueHue] = oklchOf(ANCHORS.blue[theme]);
