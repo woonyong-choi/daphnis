@@ -10,7 +10,7 @@ import { fillOf } from './paint.js';
 const SPACE = values.space;
 const SIZE = values.size;
 const RADIUS = values.radius;
-const EDGE_DASH = `${values.dash.line} ${values.dash.gap}`;
+export const EDGE_DASH = `${values.dash.line} ${values.dash.gap}`;
 
 // 윤곽 모양. 채우기와 선은 부르는 쪽이 정한다.
 const geometry = {

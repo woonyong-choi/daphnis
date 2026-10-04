@@ -8,12 +8,11 @@ import { tokens, values } from '../tokens.js';
 import { cardGlyphs, createTones, drawCard } from './card.js';
 import { drawDecor, drawGroupTab } from './decor.js';
 import { drawHalo, paintOf, tintOf } from './paint.js';
-import { drawShape, outlineOf } from './shape.js';
+import { EDGE_DASH, drawShape, outlineOf } from './shape.js';
 
 const SPACE = values.space;
 const SIZE = values.size;
 const RADIUS = values.radius;
-const EDGE_DASH = `${values.dash.line} ${values.dash.gap}`;
 const INNER_Y = SPACE['6'];
 // 그룹 면 단계는 깊이 0, 1, 2 이상 셋(color.group-1, group-2, group-3)이다. 깊이를 이 값으로 막는다.
 const MAX_GROUP_STEP = 2;
