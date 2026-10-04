@@ -31,7 +31,8 @@
     "NOTICE"
   ],
   "bin": {
-    "daphnis": "src/cli.js"
+    "daphnis": "src/cli.js",
+    "mutoscope": "src/cli.js"
   },
   "scripts": {
     "test": "node --test test/*.test.js",

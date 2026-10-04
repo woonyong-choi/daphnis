@@ -69,8 +69,13 @@ export function readFigure(source, problems) {
 function readVersion(statements, ctx) {
   const [first, ...rest] = statements;
   const [head, number, extra] = first.tokens;
-  if (head.type !== 'word' || head.value !== 'daphnis' || first.tokens[1]?.type === 'arrow') return statements;
+  if (head.type !== 'word' || STATEMENTS[head.value]?.section !== 'version' || first.tokens[1]?.type === 'arrow') return statements;
   const { problems } = ctx;
+  const legacy = STATEMENTS[head.value].deprecated;
+  if (legacy) {
+    const message = `statement word "${head.value}" is deprecated since version ${legacy.since} and now reads as "${legacy.replace}". Use "${legacy.replace}"`;
+    problems.deprecate(first.line, message, { code: 'deprecated-statement', column: head.column, fix: { line: first.line, column: head.column, length: head.value.length, text: legacy.replace } });
+  }
   const version = /^[1-9]\d*$/.test(number?.value ?? '') && number.type === 'word' && !extra ? Number(number.value) : undefined;
   if (version === undefined) problems.error(first.line, `write the version line as: daphnis ${VERSION}`, { code: 'invalid-version' });
   else if (version > VERSION) {

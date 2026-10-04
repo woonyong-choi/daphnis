@@ -349,6 +349,21 @@
     "series": [],
     "rows": 0
   },
+  "all-version-daphnis.dap": {
+    "kind": "flow",
+    "chartType": null,
+    "version": 1,
+    "deprecated": 0,
+    "shapes": 2,
+    "groups": 0,
+    "lines": 1,
+    "steps": 1,
+    "beats": 1,
+    "moves": 1,
+    "segments": 1,
+    "series": [],
+    "rows": 0
+  },
   "all-width-standard.dap": {
     "kind": "flow",
     "chartType": null,

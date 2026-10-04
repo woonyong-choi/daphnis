@@ -20,6 +20,9 @@ const QUIET_SOURCE = 'flow right\nbox a "A"\nbox b "B"\na -> b "보냄" quiet\nb
 // 폐기된 tone 값(blue는 brand로, orange와 teal은 purple로 읽힌다)을 쓴 원본
 const OLD_TONES = 'flow right\nbox a "A"\nstep "s"\n  show a "x" tag="t" tone=blue\n  show a "y" tag="u" tone=orange\n';
 
+// 옛 도구 이름으로 쓴 판 표기 줄(`mutoscope 1`)의 폐기 진단. 고정 묶음의 요약은 이름이 바뀌기 전 값 그대로 두려고 세지 않는다.
+const isRenamedVersionWord = (d) => d.code === 'deprecated-statement' && d.fix?.text === 'daphnis';
+
 const sourceOf = (name) => readFileSync(new URL(name, V1), 'utf8');
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -32,7 +35,7 @@ function summarize({ figure, scene, timeline, deprecations }) {
     kind: figure.kind,
     chartType: figure.chartType ?? null,
     version: figure.version,
-    deprecated: deprecations.length,
+    deprecated: deprecations.filter((d) => !isRenamedVersionWord(d)).length,
     shapes: scene ? scene.items.length : 0,
     groups: scene ? scene.groups.length : 0,
     lines: scene ? scene.edges.length : 0,
@@ -226,4 +229,17 @@ test('cli_check_prints_deprecated_and_only_no_deprecated_fails_on_it', () => {
     assert.equal(strict.status, 1);
     assert.match(strict.stderr, /^old\.dap:4: tone value "blue" is deprecated/m);
   });
+});
+
+// 근거: 설계 figure-syntax.md 호환 규칙 "옛 이름". 옛 판 표기 `mutoscope 1`은 같은 그림으로 읽고 폐기 진단과 fix를 내며 migrate가 고친다
+test('compat_old_name_version_line_reads_the_same_figure_reports_deprecated_and_migrates', async () => {
+  const body = 'flow right\nbox a "A"\nbox b "B"\na -> b\nstep "s"\n  a -> b\n';
+  const old = await buildFigure(`mutoscope 1\n${body}`);
+  const current = await buildFigure(`daphnis 1\n${body}`);
+  const migrated = migrateSource(`mutoscope 1\n${body}`);
+
+  assert.deepEqual(old.deprecations.map((d) => [d.severity, d.code, d.line, d.fix.text]), [['deprecated', 'deprecated-statement', 1, 'daphnis']]);
+  assert.deepEqual([current.deprecations, old.warnings], [[], []]);
+  assert.deepEqual(summarize(old), summarize(current));
+  assert.equal(migrated.text, `daphnis 1\n${body}`);
 });

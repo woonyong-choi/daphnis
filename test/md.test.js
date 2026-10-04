@@ -193,3 +193,19 @@ test('md_keeps_crlf_line_endings_and_stays_idempotent', () => {
     assert.equal(run(['md', 'doc.md', '--check'], folder).status, 0);
   });
 });
+
+// 근거: 설계 markdown.md 호환 "옛 이름". 옛 울타리(muto)와 옛 이미지 표시를 같은 블록으로 읽어 새 표시로 고쳐 쓰고 폐기 안내를 낸다
+test('md_reads_the_old_fence_and_old_image_mark_and_rewrites_the_mark_with_a_deprecation_notice', () => {
+  withFolder((folder) => {
+    put(folder, 'doc.md', `${doc(block('name=flow', FLOW)).replace('```dap', '```muto')}`.replace('\nend', '\n![x](doc-flow.svg)<!-- muto -->\nend'));
+
+    const result = run(['md', 'doc.md'], folder);
+    const markdown = read(folder, 'doc.md');
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stderr, /^doc\.md:3: deprecated: the code block language "muto" is now "dap"/m);
+    assert.match(markdown, /!\[Request path\]\(doc-flow\.svg\)<!-- dap -->/);
+    assert.doesNotMatch(markdown, /<!-- muto -->/);
+    assert.equal(markdown.match(/doc-flow\.svg/g).length, 1);
+  });
+});

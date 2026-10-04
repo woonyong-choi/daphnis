@@ -12,6 +12,8 @@ import { plainText } from './text.js';
 // basis: estimate
 // 이 문서에서 만든 SVG라는 표시. 이름이 바뀌어 안 쓰는 SVG를 찾아 지울 때 문서 이름까지 맞는 파일만 지운다.
 const svgMark = (file) => `<!-- daphnis md ${basename(file)} -->`;
+// 옛 이름의 표시. 옛 표시가 든 SVG도 이 문서가 만든 것으로 보고 안 쓰게 되면 지운다.
+const legacySvgMark = (file) => `<!-- mutoscope md ${basename(file)} -->`;
 const problem = (message, code = 'md') => makeDiagnostic({ severity: 'error', line: 0, message }, { code });
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -77,7 +79,10 @@ function staleSvgs(file, outDir, keep) {
   return readdirSync(outDir)
     .filter((name) => name.startsWith(prefix) && name.endsWith('.svg') && !keep.has(join(outDir, name)))
     .map((name) => join(outDir, name))
-    .filter((path) => readFileSync(path, 'utf8').includes(svgMark(file)));
+    .filter((path) => {
+      const text = readFileSync(path, 'utf8');
+      return text.includes(svgMark(file)) || text.includes(legacySvgMark(file));
+    });
 }
 
 // cost: time O(b·build + n), heap O(b·out), stack O(1), io 2b + n
@@ -98,6 +103,7 @@ async function planDocument(file, args, claimed) {
   const lines = text.split(/\r?\n/);
   const found = findBlocks(lines);
   report(file, found.errors.map(({ line, message }) => ({ ...problem(message), line })), json);
+  report(file, found.blocks.filter((block) => block.legacy).map((block) => ({ ...makeDiagnostic({ severity: 'deprecated', line: block.open + 1, message: 'the code block language "muto" is now "dap". Write the fence as ```dap' }, { code: 'deprecated-fence' }) })), json);
   const outDir = args['out-dir'] ?? dirname(file);
   const targets = targetsOf(file, found.blocks, outDir);
   const unique = claimTargets(file, targets, { claimed, json });

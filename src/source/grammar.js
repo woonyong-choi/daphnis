@@ -95,6 +95,7 @@ export const VALUES = {
  */
 export const STATEMENTS = table({
   daphnis: { ...V1, section: 'version', kinds: ALL_KINDS },
+  mutoscope: { ...V1, section: 'version', kinds: ALL_KINDS, deprecated: { since: 1, replace: 'daphnis' } },
   title: { ...V1, section: 'header', kinds: ALL_KINDS },
   subtitle: { ...V1, section: 'header', kinds: ALL_KINDS },
   speed: { ...V1, section: 'header', kinds: ALL_KINDS },

@@ -265,10 +265,11 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | `warning` | 품질 문제 | 씀 | `--strict` |
 | `deprecated` | 옛 형식이고 계속 동작한다 | 씀 | `--no-deprecated` |
 
-- 진단 하나의 모양은 `{ severity, code, line, column, message, fix? }`이고 모든 진단이 쓴다. `--json`은 여기에 `file`을 더하고, 옛 필드 `lines`, `check`, `level`도 함께 내(폐기, 다음 판까지) 진단마다 한 줄을 표준 출력에 쓴다. `code`는 `syntax`(문법), `check-1`~`check-14`([그림 검사](figure-check.md) 번호), `deprecated-statement`, `deprecated-option`, `deprecated-value`, `deprecated-kind`, `unsupported-version`, `invalid-version`, `version-required`, `layout`(배치 실패, [배치](layout.md#배치-실패)), `io`, `internal`이다. `column`은 줄 안 1부터 센 자리다. `fix`는 `{ line, column, length, text }`로, 그 줄의 `column`부터 `length`글자를 `text`로 바꾼다.
+- 진단 하나의 모양은 `{ severity, code, line, column, message, fix? }`이고 모든 진단이 쓴다. `--json`은 여기에 `file`을 더하고, 옛 필드 `lines`, `check`, `level`도 함께 내(폐기, 다음 판까지) 진단마다 한 줄을 표준 출력에 쓴다. `code`는 `syntax`(문법), `check-1`~`check-14`([그림 검사](figure-check.md) 번호), `deprecated-statement`, `deprecated-option`, `deprecated-value`, `deprecated-kind`, `deprecated-extension`(옛 확장자 파일), `deprecated-fence`(마크다운 옛 울타리), `unsupported-version`, `invalid-version`, `version-required`, `layout`(배치 실패, [배치](layout.md#배치-실패)), `io`, `internal`이다. `column`은 줄 안 1부터 센 자리다. `fix`는 `{ line, column, length, text }`로, 그 줄의 `column`부터 `length`글자를 `text`로 바꾼다.
 - `daphnis migrate 원본... [--write]`는 진단의 `fix`를 그대로 적용한다. 기본은 바뀔 줄만 `-`, `+`로 보여 주고, `--write`일 때만 파일을 고친다. 원본에 오류가 있거나 고친 글에 오류나 폐기가 남으면 아무것도 쓰지 않는다. 새 폐기 항목은 표에 `replace`만 적으면 된다.
 
 - CLI 출력과 옵션도 같은 규칙이다. 명령과 옵션 이름, 종료 코드, `--json` 필드는 추가만 하고, 옛 `--json` 필드(`lines`, `check`, `level`)는 `src/diagnostics.js` 표에 deprecated로 표시해 다음 판까지 함께 낸다.
+- 옛 이름: 이 도구의 옛 이름 `mutoscope`로 쓴 것은 한 판 동안 계속 받고 폐기 안내를 낸다. 안내는 `deprecated` 진단이라 종료 코드를 바꾸지 않는다. 옛 명령 `mutoscope`는 `daphnis`와 같은 진입점의 별칭 bin이고 실행할 때마다 표준 오류에 안내를 쓴다(표준 출력과 `--json`은 그대로). 첫 문장의 `mutoscope 1`은 `daphnis 1`로 읽고 `fix`를 낸다(`migrate`가 고친다). 옛 확장자 `.muto` 파일은 읽고 `deprecated-extension`을 낸다. 마크다운의 ` ```muto ` 울타리는 읽고 `deprecated-fence`를 내며, 이미지 줄의 옛 표시 `<!-- muto -->`와 SVG의 옛 표시 `<!-- mutoscope md … -->`는 이 도구가 만든 것으로 알아보고 새 표시로 다시 쓴다. 목록 쪽 테마 저장 키 `mutoscope-theme`은 새 키 `daphnis-theme`이 없을 때만 읽는다.
 - 고정 묶음: `test/fixtures/compat/v1/`는 판 1 원본의 고정 묶음이다. 폐기 전 예제 원본(`main-*`), 옛 형식 사례(`old-*`), 모든 낱말과 선택 사항을 한 번씩 쓰는 파일(`all-*`)이 들어 있고, 앞으로 고치지 않는다. `test/compat.test.js`는 모든 파일이 오류 없이 읽히고 구조 요약(도형, 선, 박자, 계열 수)이 스냅샷과 같은지, 문법 표의 모든 항목이 묶음에 쓰였는지 본다. 새 판이 생기면 `v2` 폴더를 더한다.
 - 기능 추가 체크리스트: 표에 항목을 더한다(`since`는 현재 판). 생략했을 때의 기본값이 옛 뜻을 지키는지 확인한다. 항목을 쓰는 `all-*` 파일을 묶음에 더한다(있는 파일은 고치지 않는다). 옛 형식을 없애면 표에 `deprecated.replace`를 적는다. `npm run grammar`로 아래 문법 표를 다시 쓴다.
 
@@ -278,6 +279,7 @@ step "대화" "입력은 화면을 거쳐 엔진이 에이전트로 보낸다"
 | 부분 | 낱말 | 그림 종류 | 판 | 폐기 |
 |---|---|---|---|---|
 | 판 표기 | `daphnis` | 모든 그림 | 판 1 |  |
+| 판 표기 | `mutoscope` | 모든 그림 | 판 1 | 폐기(판 1), `daphnis`로 읽는다 |
 | 머리 | `title`, `subtitle`, `speed` | 모든 그림 | 판 1 |  |
 | 머리 | `aspect`, `width` | flow, state, data | 판 1 |  |
 | 머리 | `x`, `y`, `scale`, `zero`, `decimals` | chart | 판 1 |  |

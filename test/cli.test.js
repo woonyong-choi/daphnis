@@ -164,3 +164,41 @@ test('main_gallery_writes_the_index_and_the_document_preview_with_each_figure_an
     }
   });
 });
+
+// 근거: 이슈 완료 조건 "옛 명령 mutoscope가 같은 그림을 낸다", D08 별칭. 옛 이름으로 실행하면 stderr에만 폐기 안내를 쓴다
+test('main_old_command_name_renders_the_same_svg_and_only_stderr_gets_the_deprecation_notice', () => {
+  withFolder((folder) => {
+    const link = join(folder, 'mutoscope');
+    symlinkSync(CLI, link);
+    writeFileSync(join(folder, 'a.dap'), FLOW);
+
+    const current = spawnSync(process.execPath, [CLI, 'render', 'a.dap', '--out', 'new'], { cwd: folder, encoding: 'utf8' });
+    const old = spawnSync(process.execPath, [link, 'render', 'a.dap', '--out', 'old'], { cwd: folder, encoding: 'utf8' });
+    const json = spawnSync(process.execPath, [link, 'check', 'a.dap', '--json'], { cwd: folder, encoding: 'utf8' });
+
+    assert.equal(current.stderr, '');
+    assert.equal(old.status, 0, old.stderr);
+    assert.match(old.stderr, /deprecated: the "mutoscope" command is now "daphnis"/);
+    assert.equal(readFileSync(join(folder, 'old/a.svg'), 'utf8'), readFileSync(join(folder, 'new/a.svg'), 'utf8'));
+    assert.equal(json.stdout, '');
+    assert.match(json.stderr, /deprecated/);
+  });
+});
+
+// 근거: 이슈 결정 "`.muto`는 계속 읽고 폐기 안내만 낸다". 같은 그림이고 종료 코드는 그대로, 안내는 새 확장자를 알린다
+test('cli_old_extension_is_read_with_only_a_deprecation_notice', () => {
+  withFolder((folder) => {
+    writeFileSync(join(folder, 'a.dap'), FLOW);
+    writeFileSync(join(folder, 'b.muto'), FLOW);
+
+    const result = run(['render', 'b.muto'], folder);
+    run(['render', 'a.dap'], folder);
+    const gallery = run(['gallery', '.', '--out', 'out'], folder);
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stderr, /^b\.muto: deprecated: the \.muto extension is now \.dap\. Rename the file to b\.dap$/m);
+    assert.ok(readFileSync(join(folder, 'b.svg'), 'utf8').replace('<title>b</title>', '<title>a</title>') === readFileSync(join(folder, 'a.svg'), 'utf8'), '같은 원본이면 이름 말고는 같은 SVG');
+    assert.equal(gallery.status, 0, gallery.stderr);
+    assert.match(readFileSync(join(folder, 'out/index.html'), 'utf8'), /<code class="name">b\.muto<\/code>/);
+  });
+});
