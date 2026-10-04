@@ -1,8 +1,8 @@
 // 1번: 글이 자기 칸 안쪽에 들어간다. 크기는 잰 글로 정하므로 구조 그림의 실패는 이 도구의 버그다.
-import { measure } from '../measure/fonts.js';
+import { FIT_SLACK, measure } from '../measure/fonts.js';
 import { CARD, GRID, STYLE, groupTitleWidth } from '../measure/sizes.js';
 import { values } from '../tokens.js';
-import { FIT_SLACK, fits } from './geometry.js';
+import { fits } from './geometry.js';
 
 const SPACE = values.space;
 const INNER_X = SPACE['9'];
