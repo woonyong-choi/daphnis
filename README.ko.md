@@ -1,10 +1,10 @@
-# mutoscope
+# daphnis
 
 [English](README.md) | 한국어
 
 `.muto` 원본 하나를 움직이는 문서 그림 하나로 바꾸는 명령입니다. 구조, 순서, 상태, 데이터 관계 그림과 차트를 그립니다.
 
-설계 문서에는 요청이 어떤 길로 가는지 보이는 그림과, 기준값 뒤에 개선 값을 보이는 차트가 필요합니다. 그림은 D2로, 차트는 Vega-Lite로 그리면 한 문서 안의 그림이 두 모양이 되고, D2 배치는 다른 그리기 모양과 맞지 않습니다. mutoscope는 그림에 넣는 글꼴 파일로 모든 도형을 재고, elkjs로 배치하고, 겹침을 검사한 뒤, HTML 재생기나 움직이는 SVG로 단계를 재생합니다.
+설계 문서에는 요청이 어떤 길로 가는지 보이는 그림과, 기준값 뒤에 개선 값을 보이는 차트가 필요합니다. 그림은 D2로, 차트는 Vega-Lite로 그리면 한 문서 안의 그림이 두 모양이 되고, D2 배치는 다른 그리기 모양과 맞지 않습니다. daphnis는 그림에 넣는 글꼴 파일로 모든 도형을 재고, elkjs로 배치하고, 겹침을 검사한 뒤, HTML 재생기나 움직이는 SVG로 단계를 재생합니다.
 
 > [!NOTE]
 > 개발 중입니다. 아직 npm 배포판이 없으니 GitHub에서 바로 실행하거나 복제해서 쓰세요.
@@ -36,7 +36,7 @@ step "Chat" "Input goes through the screen to the engine"
 ![위 원본으로 그린 그림: 개발자의 질문이 Screen에서 Engine을 거쳐 Codex CLI로 갑니다](docs/assets/how-it-works.svg)
 
 1. 첫 줄에 그림 종류를 적고, 도형과 선을 적은 뒤, `step`부터 단계를 적습니다.
-2. mutoscope가 `system` 안 도형은 위에서 아래로, 나머지는 왼쪽에서 오른쪽으로 놓습니다.
+2. daphnis가 `system` 안 도형은 위에서 아래로, 나머지는 왼쪽에서 오른쪽으로 놓습니다.
 3. 첫 박자에 점이 `user`에서 `tui`로 가고, 점이 닿을 때 `tui` 안 카드가 채워집니다.
 4. `engine -> cdex` 같은 오타는 `how-it-works.muto:19: unknown node "cdex". Did you mean "codex"? Declared: codex, engine, system, tui, user`를 내고 멈춥니다.
 
@@ -44,21 +44,21 @@ step "Chat" "Input goes through the screen to the engine"
 
 요구 사항: Node.js 20 이상.
 
-아직 npm에 올라가 있지 않아 `npm install mutoscope`는 되지 않습니다. GitHub에서 바로 실행합니다.
+아직 npm에 올라가 있지 않아 `npm install daphnis`는 되지 않습니다. GitHub에서 바로 실행합니다.
 
 ```sh
-npx github:woonyong-choi/mutoscope render figure.muto
+npx github:woonyong-choi/daphnis render figure.muto
 ```
 
 복제해서 쓸 수도 있습니다.
 
 ```sh
-git clone https://github.com/woonyong-choi/mutoscope.git
-cd mutoscope
+git clone https://github.com/woonyong-choi/daphnis.git
+cd daphnis
 npm install
 ```
 
-첫 npm 배포 뒤에는 `npm install --save-dev mutoscope`로 프로젝트에 `mutoscope` 명령을 더하고 `npx mutoscope`로 실행합니다. 아래 예시는 복제한 저장소에서 `node src/cli.js`로 실행합니다.
+첫 npm 배포 뒤에는 `npm install --save-dev daphnis`로 프로젝트에 `daphnis` 명령을 더하고 `npx daphnis`로 실행합니다. 아래 예시는 복제한 저장소에서 `node src/cli.js`로 실행합니다.
 
 ## 사용법
 
@@ -90,7 +90,7 @@ node src/cli.js migrate examples/memory.muto
 node src/cli.js migrate examples/memory.muto --write
 ```
 
-옛 문법으로 쓴 파일도 계속 동작합니다. `migrate`는 바뀔 줄을 diff로 보여 주고 `--write`일 때만 파일을 고칩니다. 고친 뒤에도 오류나 폐기된 형식이 남으면 쓰지 않습니다. 첫 줄에 `mutoscope 1`로 문법 판을 적을 수 있고, 없으면 판 1로 읽습니다.
+옛 문법으로 쓴 파일도 계속 동작합니다. `migrate`는 바뀔 줄을 diff로 보여 주고 `--write`일 때만 파일을 고칩니다. 고친 뒤에도 오류나 폐기된 형식이 남으면 쓰지 않습니다. 첫 줄에 `daphnis 1`로 문법 판을 적을 수 있고, 없으면 판 1로 읽습니다.
 
 ### 예제 전부와 목록 쪽 만들기
 
@@ -125,7 +125,7 @@ node src/cli.js md docs/guide.md
 
 ```yaml
 - uses: actions/checkout@v4
-- uses: woonyong-choi/mutoscope@main
+- uses: woonyong-choi/daphnis@main
   with:
     paths: "docs/**/*.muto docs/**/*.md README.md"
     mode: check   # check(기본) 또는 render
@@ -145,7 +145,7 @@ node src/cli.js md docs/guide.md
 - 색과 글꼴: 그림은 대부분 무채색 회색이고, 그룹은 중첩 깊이마다 한 단계씩 진해집니다. 브랜드 파랑 `#125DE6`은 핵심 자리(밝힌 도형, 흐르는 점, 차트 주 계열, 아이콘)에만 쓰고, 보라, 빨강(오류), 초록(정상)은 드문 강조이며 주황은 비교와 주의에만 남습니다. 그룹은 `sky`나 `purple` 강조로 옅은 틴트 면을 칠할 수 있습니다. 모든 외곽선은 대비 3, 모든 글자는 4.5를 라이트와 다크에서 지킵니다. 글자는 그림에 넣는 Pretendard와 JetBrains Mono 파일로 그립니다.
 - 그림 검사: 겹침, 도형을 지나는 선, 붙은 선, 비율, 읽힘.
 - 재생: 같은 시간표로 만드는 HTML 재생기와 움직이는 SVG.
-- 마크다운: `mutoscope md`가 문서의 `muto` 코드 블록을 그리고 블록 아래 이미지 줄을 맞춥니다. GitHub Action이 CI에서 이를 검사합니다.
+- 마크다운: `daphnis md`가 문서의 `muto` 코드 블록을 그리고 블록 아래 이미지 줄을 맞춥니다. GitHub Action이 CI에서 이를 검사합니다.
 
 ## 상태
 

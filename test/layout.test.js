@@ -633,7 +633,7 @@ function collisions(scene) {
 }
 
 const sequenceSources = () =>
-  [EXAMPLES, FIXTURES, COMPAT].flatMap((dir) => readdirSync(dir).filter((f) => f.endsWith('.muto')).map((f) => ({ file: f, source: readFileSync(new URL(f, dir), 'utf8') }))).filter(({ source }) => /^sequence\b/m.test(source.replace(/^mutoscope.*\n/, '')));
+  [EXAMPLES, FIXTURES, COMPAT].flatMap((dir) => readdirSync(dir).filter((f) => f.endsWith('.muto')).map((f) => ({ file: f, source: readFileSync(new URL(f, dir), 'utf8') }))).filter(({ source }) => /^sequence\b/m.test(source.replace(/^daphnis.*\n/, '')));
 
 const NOTE_CASES = [
   { name: '보내는 쪽 메모는 라벨 위에 쌓인다', source: ['sequence', 'box a "호출"', 'box b "응답"', 'step "s" "c"', '  a -> b "긴 요청 라벨이 있는 메시지"', '  note a "보내는 쪽 메모가 화살표 위를 지나간다"', ''].join('\n'), expect: (scene) => assert.ok(scene.notes[0].y + scene.notes[0].h < scene.edges[0].labelAt.y, '메모가 라벨 위에 있다') },
@@ -684,7 +684,7 @@ test('buildFigure_state_figures_light_the_edges_their_move_lines_name', async ()
   for (const dir of [EXAMPLES, COMPAT, FIXTURES]) {
     for (const file of readdirSync(dir).filter((f) => f.endsWith('.muto'))) {
       const source = readFileSync(new URL(file, dir), 'utf8');
-      if (!/^state\b/m.test(source.replace(/^mutoscope.*\n/, ''))) continue;
+      if (!/^state\b/m.test(source.replace(/^daphnis.*\n/, ''))) continue;
       assert.deepEqual(mismatches(await buildFigure(source, { baseDir: dir.pathname })), [], file);
       checked += 1;
     }

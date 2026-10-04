@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// 사용: mutoscope render|check|gallery|migrate|md … 명령과 결과 파일은 docs/design/playback.md 결과 파일 절이다.
+// 사용: daphnis render|check|gallery|migrate|md … 명령과 결과 파일은 docs/design/playback.md 결과 파일 절이다.
 // stdout에는 만든 파일 경로(또는 --json 메시지)만, stderr에는 오류와 경고만 쓴다.
 import { mkdirSync, readdirSync, readFileSync, realpathSync } from 'node:fs';
 import { basename, dirname, join, relative } from 'node:path';
@@ -13,11 +13,11 @@ import { toSvg } from './svg.js';
 
 const USAGE = [
   'usage:',
-  '  mutoscope render <file.muto ...> [--out dir] [--html] [--static] [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
-  '  mutoscope check <file.muto ...> [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
-  '  mutoscope gallery <dir> [--out dir] [--title "text"] [--strict] [--no-deprecated] [--require-data] [--require-ci]',
-  '  mutoscope migrate <file.muto ...> [--write] [--json]',
-  '  mutoscope md <file.md ...> [--check] [--out-dir dir] [--static] [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
+  '  daphnis render <file.muto ...> [--out dir] [--html] [--static] [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
+  '  daphnis check <file.muto ...> [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
+  '  daphnis gallery <dir> [--out dir] [--title "text"] [--strict] [--no-deprecated] [--require-data] [--require-ci]',
+  '  daphnis migrate <file.muto ...> [--write] [--json]',
+  '  daphnis md <file.md ...> [--check] [--out-dir dir] [--static] [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]',
 ].join('\n');
 // gallery가 받는 옵션. --html은 gallery가 늘 HTML을 쓰므로 받기만 한다(옛 호출이 깨지지 않게).
 const GALLERY_FLAGS = ['html', 'strict', 'no-deprecated', 'require-data', 'require-ci'];
@@ -25,8 +25,8 @@ const FLAGS = ['--html', '--static', '--strict', '--no-deprecated', '--require-d
 // md 명령이 받지 않는 옵션과 md 명령만 받는 옵션
 const MD_REFUSED = ['out', 'title', 'html', 'write'];
 const MD_ONLY = ['check', 'out-dir'];
-// 판 표기 줄(`mutoscope 1`). 목록 쪽 머리에서 종류 줄을 찾을 때 건너뛴다.
-const VERSION_LINE = /^\s*mutoscope\s/;
+// 판 표기 줄(`daphnis 1`). 목록 쪽 머리에서 종류 줄을 찾을 때 건너뛴다.
+const VERSION_LINE = /^\s*daphnis\s/;
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate

@@ -8,7 +8,7 @@ const THEME_MODES = [
 ];
 export const THEME_BUTTONS = THEME_MODES.map(([mode, label]) => `<button type="button" data-mode="${mode}" aria-pressed="false">${label}</button>`).join('');
 export const THEME_SCRIPT = `
-const THEME_KEY = 'mutoscope-theme';
+const THEME_KEY = 'daphnis-theme';
 // cost: time O(1), heap O(1), stack O(1)
 // vars: 단추 3개
 // basis: estimate

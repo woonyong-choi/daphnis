@@ -1,5 +1,5 @@
 {
-  "name": "mutoscope",
+  "name": "daphnis",
   "version": "0.1.0",
   "description": "Turn .muto sources into animated documentation diagrams and charts as SVG, and keep the figures in Markdown documents up to date",
   "license": "MIT",
@@ -18,11 +18,11 @@
   "author": "choi woo-nyong",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/woonyong-choi/mutoscope.git"
+    "url": "git+https://github.com/woonyong-choi/daphnis.git"
   },
-  "homepage": "https://github.com/woonyong-choi/mutoscope#readme",
+  "homepage": "https://github.com/woonyong-choi/daphnis#readme",
   "bugs": {
-    "url": "https://github.com/woonyong-choi/mutoscope/issues"
+    "url": "https://github.com/woonyong-choi/daphnis/issues"
   },
   "type": "module",
   "files": [
@@ -31,7 +31,7 @@
     "NOTICE"
   ],
   "bin": {
-    "mutoscope": "src/cli.js"
+    "daphnis": "src/cli.js"
   },
   "scripts": {
     "test": "node --test test/*.test.js",

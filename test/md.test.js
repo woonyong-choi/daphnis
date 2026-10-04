@@ -124,7 +124,7 @@ test('md_check_exits_1_when_an_update_is_needed_and_writes_nothing', () => {
     run(['md', 'doc.md'], folder);
     put(folder, 'doc.md', read(folder, 'doc.md').replace('name=flow', 'name=path'));
     run(['md', 'doc.md'], folder);
-    put(folder, 'doc-flow.svg', '<!-- mutoscope md doc.md -->');
+    put(folder, 'doc-flow.svg', '<!-- daphnis md doc.md -->');
     const stale = run(['md', 'doc.md', '--check'], folder);
 
     assert.equal(unrendered.status, 1);

@@ -21,7 +21,7 @@ function packedFiles() {
 // 근거: 계약 package.json "files는 배포에 필요한 것만". 반대 사례: 시험, 문서, 예제, 스크립트, 저장소 설정이 새면 실패한다
 test('package_files_hold_what_runs_and_the_licenses_and_nothing_else', () => {
   const files = packedFiles();
-  const required = [manifest.bin.mutoscope, 'LICENSE', 'NOTICE', 'README.md', 'package.json', 'src/tokens.json', 'src/icons/names.json', 'src/icons/LICENSE', 'src/icons/simple-icons/LICENSE'];
+  const required = [manifest.bin.daphnis, 'LICENSE', 'NOTICE', 'README.md', 'package.json', 'src/tokens.json', 'src/icons/names.json', 'src/icons/LICENSE', 'src/icons/simple-icons/LICENSE'];
   const leaked = files.filter((path) => !/^(src\/|LICENSE$|NOTICE$|README(\.ko)?\.md$|package\.json$)/.test(path));
 
   assert.deepEqual(required.filter((path) => !files.includes(path)), []);

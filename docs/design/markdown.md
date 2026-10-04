@@ -7,7 +7,7 @@
 
 ## 요약
 
-`mutoscope md`는 마크다운 문서 안의 ` ```muto ` 코드 블록을 SVG로 만들고, 블록 바로 아래에 그 그림을 보이는 이미지 줄을 넣거나 고친다. 같은 문서에 다시 돌려도 결과가 같고, `--check`는 문서와 SVG가 낡았는지만 알린다. 이 기능을 쓰기 위한 설치 경로(npm 패키지, 저장소 직접 실행, GitHub Action)와 배포 절차도 이 문서가 맡는다.
+`daphnis md`는 마크다운 문서 안의 ` ```muto ` 코드 블록을 SVG로 만들고, 블록 바로 아래에 그 그림을 보이는 이미지 줄을 넣거나 고친다. 같은 문서에 다시 돌려도 결과가 같고, `--check`는 문서와 SVG가 낡았는지만 알린다. 이 기능을 쓰기 위한 설치 경로(npm 패키지, 저장소 직접 실행, GitHub Action)와 배포 절차도 이 문서가 맡는다.
 
 ## 동기
 
@@ -23,19 +23,19 @@
 ```muto name=flow
 flow right
 box doc "doc.md"
-box cli "mutoscope md"
+box cli "daphnis md"
 doc -> cli
 ```
 ````
 
-2. `mutoscope md doc.md`를 돌린다. 명령이 `doc-flow.svg`를 쓰고, 블록 아래에 이미지 줄을 넣는다.
+2. `daphnis md doc.md`를 돌린다. 명령이 `doc-flow.svg`를 쓰고, 블록 아래에 이미지 줄을 넣는다.
 
 ````text
 ```muto name=flow
 ...
 ```
 
-![doc.md, mutoscope md](doc-flow.svg)<!-- muto -->
+![doc.md, daphnis md](doc-flow.svg)<!-- muto -->
 ````
 
 3. 이름을 `name=path`로 바꾸고 다시 돌리면 이미지 줄이 `doc-path.svg`를 가리키고 옛 `doc-flow.svg`는 지워진다.
@@ -43,15 +43,15 @@ doc -> cli
 ### CI에서 낡은 그림 잡기
 
 1. 블록을 고치고 `md`를 돌리지 않은 채 올린다.
-2. `mutoscope md doc.md --check`가 `doc-flow.svg: is out of date. Run mutoscope md to update it`을 내고 종료 코드 1로 끝난다. 아무 파일도 쓰지 않는다.
+2. `daphnis md doc.md --check`가 `doc-flow.svg: is out of date. Run daphnis md to update it`을 내고 종료 코드 1로 끝난다. 아무 파일도 쓰지 않는다.
 
-이 문서의 아래 그림은 이 문서의 ` ```muto ` 블록을 `mutoscope md`로 만든 것이다.
+이 문서의 아래 그림은 이 문서의 ` ```muto ` 블록을 `daphnis md`로 만든 것이다.
 
 ```muto name=flow
 flow right
-title "mutoscope md가 문서를 고치는 길"
+title "daphnis md가 문서를 고치는 길"
 box doc "문서(.md)"
-box cli "mutoscope md"
+box cli "daphnis md"
 box svg "SVG 파일"
 doc -> cli "muto 블록"
 cli -> svg "그림 만들기"
@@ -63,14 +63,14 @@ step "쓰기" "SVG를 쓰고 블록 아래 이미지 줄을 맞춘다"
   cli -> doc
 ```
 
-![mutoscope md가 문서를 고치는 길](markdown-flow.svg)<!-- muto -->
+![daphnis md가 문서를 고치는 길](markdown-flow.svg)<!-- muto -->
 
 ## 상세 설계
 
 ### 명령
 
 ```text
-mutoscope md <file.md ...> [--check] [--out-dir dir] [--static] [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]
+daphnis md <file.md ...> [--check] [--out-dir dir] [--static] [--strict] [--no-deprecated] [--require-data] [--require-ci] [--json]
 ```
 
 | 옵션 | 뜻 |
@@ -103,7 +103,7 @@ mutoscope md <file.md ...> [--check] [--out-dir dir] [--static] [--strict] [--no
 - 이름은 `{문서 이름}-{블록 이름}.svg`다. 문서 이름은 확장자를 뺀 파일 이름이다. 이름 없는 블록은 `{문서 이름}-{순번}.svg`이고, 순번은 이름 없는 블록만 세어 1부터다. 이름 있는 블록은 문서 안에서 순서가 바뀌거나 앞에 블록이 늘어도 같은 이름이다.
 - 위치는 문서 옆이고 `--out-dir`로 바꾼다.
 - 한 실행 안에서 두 블록이 같은 파일을 쓰려 하면 오류다(같은 이름, 같은 문서 이름 두 개).
-- 만든 SVG에는 `<!-- mutoscope md {문서 파일 이름} -->` 표시가 들어 있다.
+- 만든 SVG에는 `<!-- daphnis md {문서 파일 이름} -->` 표시가 들어 있다.
 
 ### 오래된 SVG 정리
 
@@ -114,7 +114,7 @@ mutoscope md <file.md ...> [--check] [--out-dir dir] [--static] [--strict] [--no
 | 상황 | 종료 코드 | 파일 |
 |---|---|---|
 | 갱신 없음 또는 갱신 완료 | 0 | 바뀐 파일만 쓴다. 쓴 경로를 stdout에 한 줄씩 알리고, 지운 파일은 `removed {경로}`로 알린다 |
-| `--check`에서 갱신 필요 | 1 | 쓰지 않는다. 낡은 파일마다 stderr에 `{경로}: is out of date. Run mutoscope md to update it` 또는 `is a stale figure`를 알린다 |
+| `--check`에서 갱신 필요 | 1 | 쓰지 않는다. 낡은 파일마다 stderr에 `{경로}: is out of date. Run daphnis md to update it` 또는 `is a stale figure`를 알린다 |
 | 어느 문서의 블록이든 오류(원본 오류, `--strict` 경고, 울타리 형식, 이름 겹침, 읽기 실패) | 1 | 모든 문서를 먼저 만들고 하나라도 오류면 아무 파일도 쓰거나 지우지 않는다([그림 검사](figure-check.md)의 gallery와 같은 계약) |
 | 인자 오류 | 2 | 없음 |
 
@@ -128,9 +128,9 @@ GitHub 마크다운은 ` ```muto ` 블록을 코드로 보이고 아래 이미�
 
 | 경로 | 명령 | 상태 |
 |---|---|---|
-| npm | `npx mutoscope md doc.md` | 배포 뒤 |
-| 저장소 | `npx github:woonyong-choi/mutoscope md doc.md` | 지금 |
-| GitHub Action | `uses: woonyong-choi/mutoscope@main` | 지금 |
+| npm | `npx daphnis md doc.md` | 배포 뒤 |
+| 저장소 | `npx github:woonyong-choi/daphnis md doc.md` | 지금 |
+| GitHub Action | `uses: woonyong-choi/daphnis@main` | 지금 |
 
 저장소 루트 `action.yml`은 composite Action이다. 의존 패키지를 Action 폴더에 설치한 뒤 입력에 맞춰 명령을 돌린다.
 
@@ -154,7 +154,7 @@ GitHub 마크다운은 ` ```muto ` 블록을 코드로 보이고 아래 이미�
 
 ### 패키지
 
-`package.json`의 `files`는 `src`, `LICENSE`, `NOTICE`다. README와 `package.json`은 npm이 늘 넣는다. 글꼴은 의존 패키지(`@expo-google-fonts/*`, `jetbrains-mono`)로 설치되고, 아이콘과 그 라이선스는 `src/icons`에 들어 있다. 시험, 문서, 예제, 스크립트는 올라가지 않는다. 실행 파일은 `bin`의 `mutoscope` 하나이고 라이브러리 API는 내보내지 않는다(`exports` 없음).
+`package.json`의 `files`는 `src`, `LICENSE`, `NOTICE`다. README와 `package.json`은 npm이 늘 넣는다. 글꼴은 의존 패키지(`@expo-google-fonts/*`, `jetbrains-mono`)로 설치되고, 아이콘과 그 라이선스는 `src/icons`에 들어 있다. 시험, 문서, 예제, 스크립트는 올라가지 않는다. 실행 파일은 `bin`의 `daphnis` 하나이고 라이브러리 API는 내보내지 않는다(`exports` 없음).
 
 ### 요구사항
 
@@ -172,7 +172,7 @@ GitHub 마크다운은 ` ```muto ` 블록을 코드로 보이고 아래 이미�
 | CRLF 문서는 CRLF로 다시 쓰고 두 번째 실행은 바꾸지 않는다. | CRLF 시험 |
 | 옵션은 명령마다 받는 것만 받는다. 기존 명령은 그대로다. | 옵션 거절 시험, 기존 `cli.test.js`, `compat.test.js` |
 | 패키지에는 실행에 필요한 파일, 라이선스, NOTICE만 든다. | `test/package.test.js`(반대 사례: `files`에 `docs`를 더하면 실패) |
-| 패키지를 설치해 실행할 수 있다. | 수동: `npm pack`, 빈 폴더에 설치, `npx mutoscope render`와 `md`(자동 시험은 설치에 네트워크가 필요해 두지 않는다) |
+| 패키지를 설치해 실행할 수 있다. | 수동: `npm pack`, 빈 폴더에 설치, `npx daphnis render`와 `md`(자동 시험은 설치에 네트워크가 필요해 두지 않는다) |
 | Action이 저장소 CI에서 돈다. | `ci.yml`의 `action` 작업 |
 
 ## 단점
@@ -190,4 +190,4 @@ GitHub 마크다운은 ` ```muto ` 블록을 코드로 보이고 아래 이미�
 
 ## 미해결 질문
 
-- 블록을 접어 보이는 `fold` 옵션을 둘지([#39](https://github.com/woonyong-choi/mutoscope/issues/39))
+- 블록을 접어 보이는 `fold` 옵션을 둘지([#39](https://github.com/woonyong-choi/daphnis/issues/39))

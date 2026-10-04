@@ -1,4 +1,4 @@
-// mutoscope md: 마크다운 문서의 ```muto 블록을 SVG로 만들고 블록 아래 이미지 줄을 맞춘다(docs/design/markdown.md).
+// daphnis md: 마크다운 문서의 ```muto 블록을 SVG로 만들고 블록 아래 이미지 줄을 맞춘다(docs/design/markdown.md).
 // 모든 문서를 먼저 만든 다음에 쓴다. 오류가 하나라도 있으면 아무 파일도 쓰지 않고, --check는 쓰지 않고 갱신이 필요한지만 알린다.
 import { existsSync, mkdirSync, readdirSync, readFileSync, unlinkSync } from 'node:fs';
 import { basename, dirname, extname, join, relative, sep } from 'node:path';
@@ -11,7 +11,7 @@ import { plainText } from './text.js';
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 // 이 문서에서 만든 SVG라는 표시. 이름이 바뀌어 안 쓰는 SVG를 찾아 지울 때 문서 이름까지 맞는 파일만 지운다.
-const svgMark = (file) => `<!-- mutoscope md ${basename(file)} -->`;
+const svgMark = (file) => `<!-- daphnis md ${basename(file)} -->`;
 const problem = (message, code = 'md') => makeDiagnostic({ severity: 'error', line: 0, message }, { code });
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -119,7 +119,7 @@ const changedFiles = (files) => files.filter(({ path, text }) => !existsSync(pat
 // vars: d = 문서 수, b = 문서 안 블록 수, build = 블록 하나를 만드는 비용, out = SVG 글자 수, n = 폴더 안 파일 수
 // basis: estimate
 /**
- * `mutoscope md`를 실행한다. 종료 코드를 돌려준다: 0 정상(또는 --check에서 갱신 불필요), 1 오류(또는 --check에서 갱신 필요).
+ * `daphnis md`를 실행한다. 종료 코드를 돌려준다: 0 정상(또는 --check에서 갱신 불필요), 1 오류(또는 --check에서 갱신 필요).
  * 오류가 있으면 아무 파일도 쓰거나 지우지 않는다.
  */
 export async function runMd(args) {
@@ -131,8 +131,8 @@ export async function runMd(args) {
   const writes = changedFiles(plans.flatMap((plan) => plan.files));
   const removes = plans.flatMap((plan) => plan.stale);
   if (args.flags.has('check')) {
-    for (const { path } of writes) report(path, [problem('is out of date. Run mutoscope md to update it', 'md-outdated')], json);
-    for (const path of removes) report(path, [problem('is a stale figure. Run mutoscope md to remove it', 'md-outdated')], json);
+    for (const { path } of writes) report(path, [problem('is out of date. Run daphnis md to update it', 'md-outdated')], json);
+    for (const path of removes) report(path, [problem('is a stale figure. Run daphnis md to remove it', 'md-outdated')], json);
     return writes.length || removes.length ? 1 : 0;
   }
   for (const { path, text } of writes) {

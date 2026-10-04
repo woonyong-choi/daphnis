@@ -14,10 +14,10 @@ const BAR = 'chart bar\nseries s "S"\nrow "r" s=1\n';
 const QUIET = 'flow right\nbox a "A"\nbox b "B"\na -> b "보냄" quiet\nb -> a\nstep "s"\n  b -> a\n';
 const BAD = 'flow right\nbox a "A"\na -> zz\n';
 
-// 근거: 계약 package.json bin "mutoscope": 명령은 심볼릭 링크로 실행되어도 사용법을 낸다
+// 근거: 계약 package.json bin "daphnis": 명령은 심볼릭 링크로 실행되어도 사용법을 낸다
 test('main_run_through_symlink_prints_usage', () => {
   withFolder((folder) => {
-    const link = join(folder, 'mutoscope');
+    const link = join(folder, 'daphnis');
     symlinkSync(CLI, link);
 
     const result = spawnSync(process.execPath, [link], { encoding: 'utf8' });

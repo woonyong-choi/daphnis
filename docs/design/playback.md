@@ -154,7 +154,7 @@
 - iframe 높이는 그림 쪽이 알린 본문 높이에 맞추고, 카드는 줄에서 가장 긴 카드 높이로 늘이지 않는다.
 - 위쪽에 테마 단추 "시스템 / 라이트 / 다크"가 있다. 고르면 목록 쪽과 모든 iframe 그림이 그 모드로 바뀐다.
 - 시스템은 루트에 `color-scheme: light dark`를 걸어 OS 설정을 따른다. 라이트와 다크는 루트에 `color-scheme`을 그 값으로 걸고 목록 쪽 자체 색은 토큰 CSS의 `data-theme`로 바꾼다. iframe 안 문서는 Chrome에서 부모의 `color-scheme`을 `prefers-color-scheme`에 안정적으로 받지 못해(OS 다크에서 라이트를 골라도 어둡게 남음), 목록 쪽이 iframe에 `{ theme }` 메시지를 보내고 iframe 문서가 자기 루트의 `data-theme`과 `color-scheme`을 바꾼다. 새로 뜬 iframe은 `themeRequest`로 현재 테마를 받는다.
-- 고른 값은 `localStorage`의 `mutoscope-theme`에 기억하고 첫 그림 전에 적용한다. 단독 재생기 HTML에는 이 단추가 없고 OS 설정만 따른다.
+- 고른 값은 `localStorage`의 `daphnis-theme`에 기억하고 첫 그림 전에 적용한다. 단독 재생기 HTML에는 이 단추가 없고 OS 설정만 따른다.
 
 ### 문서 미리보기
 

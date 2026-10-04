@@ -1,4 +1,4 @@
-name: mutoscope
+name: daphnis
 description: Check or render .muto figures and the muto code blocks in Markdown documents
 author: choi woo-nyong
 inputs:
@@ -20,10 +20,10 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: 20
-    - name: Install mutoscope
+    - name: Install daphnis
       shell: bash
       run: npm ci --omit=dev --ignore-scripts --no-audit --no-fund --prefix "$GITHUB_ACTION_PATH"
-    - name: Run mutoscope
+    - name: Run daphnis
       shell: bash
       env:
         PATHS: ${{ inputs.paths }}

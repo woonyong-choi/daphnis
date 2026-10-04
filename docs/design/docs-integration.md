@@ -19,7 +19,7 @@
 
 1. 기여자가 `docs/assets/architecture.muto`를 고친다.
 2. 기여자가 저장소 루트에서 `python3 <스킬 폴더>/scripts/render_figures.py docs/assets/architecture.muto`를 실행한다.
-3. 스크립트가 `mutoscope render --strict docs/assets/architecture.muto`를 부르고, 같은 폴더에 움직이는 SVG `architecture.svg`가 생긴다.
+3. 스크립트가 `daphnis render --strict docs/assets/architecture.muto`를 부르고, 같은 폴더에 움직이는 SVG `architecture.svg`가 생긴다.
 4. 그림 검사 오류가 있으면 스크립트가 실패하고 결과 파일은 생기지 않는다.
 
 ### 실험 차트 변환
@@ -162,7 +162,7 @@
 
 | 스킬 규칙 | 이 도구 |
 |---|---|
-| 변환은 `render_figures`로만 | `render_figures`가 `.muto` 원본마다 `mutoscope render --strict`를 부른다. 경고도 실패다 |
+| 변환은 `render_figures`로만 | `render_figures`가 `.muto` 원본마다 `daphnis render --strict`를 부른다. 경고도 실패다 |
 | 실험 차트 값 손 기재 금지, 비율에 신뢰구간 | `docs/experiments/` 아래 차트에 `--require-data --require-ci`를 붙인다([차트](charts.md)) |
 | 원본과 만든 그림 함께 커밋 | 그대로 |
 | 변환 뒤 그림을 열어 겹침, 잘림, 빈 영역 확인 | 겹침과 잘림은 [그림 검사](figure-check.md)가 대신한다. 빈 영역은 검사 항목이 없어 눈 확인으로 남는다 |

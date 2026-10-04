@@ -154,7 +154,7 @@ describe('pages', { skip: SKIP }, () => {
 
       assert.deepEqual(labels, ['시스템', '라이트', '다크']);
       assert.equal(await page.evaluate(() => document.documentElement.style.colorScheme), 'light');
-      assert.equal(await page.evaluate(() => localStorage.getItem('mutoscope-theme')), 'light');
+      assert.equal(await page.evaluate(() => localStorage.getItem('daphnis-theme')), 'light');
       assert.equal(await frame.evaluate(() => document.readyState), 'complete');
       assert.ok(await frame.locator('svg').count() > 0, '자식 문서에 그림이 있다');
     });

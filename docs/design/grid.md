@@ -189,4 +189,4 @@ step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
 
 ## 미해결 질문
 
-- 큰 격자의 칸 수에 한도를 두고 `gap`으로 접게 강제할지. ([#28](https://github.com/woonyong-choi/mutoscope/issues/28))
+- 큰 격자의 칸 수에 한도를 두고 `gap`으로 접게 강제할지. ([#28](https://github.com/woonyong-choi/daphnis/issues/28))
