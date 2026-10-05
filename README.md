@@ -12,7 +12,7 @@ Turn one `.dap` text source into an animated SVG figure for documentation: async
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/showcase/async-orders-en-dark.svg">
-    <img src="docs/assets/showcase/async-orders-en-light.svg" alt="Orders from the web and the app enter an event queue and spread to stock, payment, and notification consumers, while the queue fills and one mail is lost" width="100%">
+    <img src="docs/assets/showcase/async-orders-en-light.svg" alt="Orders from four sources enter an event queue and spread to stock, payment, and notification consumers, while the queue fills and one mail is lost" width="100%">
   </picture>
 </p>
 

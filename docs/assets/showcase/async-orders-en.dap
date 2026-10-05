@@ -1,11 +1,13 @@
 flow right
 title "Order events fan out"
-subtitle "Orders from the web and the app fill an event queue while stock, payment, and notification consumers take them at their own pace. Some notifications are lost"
+subtitle "Orders from four sources fill an event queue while stock, payment, and notification consumers take them at their own pace. A mail is lost on the way"
 
 box web "Web" icon=desktop
 box app "App" icon=mobile
+box partner "Partner" icon=apigw
+box batch "Batch" icon=server
 box api "Order API" icon=server
-queue q "Order events" slots=8
+queue q "Order events" slots=10 from=6
 box stock "Stock" icon=db
 box pay "Payment" icon=key
 box notify "Notify" icon=mobile
@@ -22,15 +24,19 @@ on notify sent+1
 
 web -> api
 app -> api
+partner -> api
+batch -> api
 api -> q
 q -> stock
 q -> pay
 q -> notify
 
-step "Events in flight" "Dots move at different paces, values change as they arrive, and the queue fills" for=14s
-  track web -> api -> q at=0s every=1200ms time=1500ms
-  track app -> api -> q at=500ms every=2s time=1500ms tone=purple
-  track q -> stock "Reserve" at=2500ms every=3s time=1200ms set="q-1@q"
-  track q -> pay "Charge" at=3500ms every=4s time=1800ms tone=purple set="q-1@q"
-  track q -> notify at=4s every=7s time=1500ms tone=gray set="q-1@q"
-  track q -> notify at=6s every=7s time=1500ms tone=red lost=60% set="q-1@q"
+step "Events in flight" "Dots start at different times and paces, values change as they arrive, and the queue fills" for=14s
+  track web -> api -> q at=0s every=2s time=3s
+  track app -> api -> q at=500ms every=2s time=3s tone=purple
+  track partner -> api -> q at=1s every=2s time=3s tone=gray
+  track batch -> api -> q at=1500ms every=2s time=3s tone=purple
+  track q -> stock at=0s every=1500ms time=2200ms set="q-1@q"
+  track q -> pay at=150ms every=3s time=2800ms tone=purple set="q-1@q"
+  track q -> notify at=300ms every=5s time=2500ms tone=gray set="q-1@q"
+  track q -> notify "Mail lost" at=450ms every=7s time=3s tone=red lost=60% set="q-1@q"

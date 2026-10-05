@@ -12,7 +12,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/showcase/async-orders-ko-dark.svg">
-    <img src="docs/assets/showcase/async-orders-ko-light.svg" alt="웹과 앱의 주문이 이벤트 큐로 들어가 재고, 결제, 알림 소비자로 퍼지고, 큐가 차오르며 메일 하나가 유실되는 그림" width="100%">
+    <img src="docs/assets/showcase/async-orders-ko-light.svg" alt="네 곳의 주문이 이벤트 큐로 들어가 재고, 결제, 알림 소비자로 퍼지고, 큐가 차오르며 메일 하나가 유실되는 그림" width="100%">
   </picture>
 </p>
 
