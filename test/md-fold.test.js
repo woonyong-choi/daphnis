@@ -125,7 +125,7 @@ test('md_fold_keeps_the_list_indent_and_the_quote_prefix_and_unfold_restores_the
     const list = `- item\n\n  \`\`\`dap name=inlist\n  ${BAR.replaceAll('\n', '\n  ').trimEnd()}\n  \`\`\`\n\n- next\n`;
     const quote = `> note\n>\n> \`\`\`dap name=inquote\n> ${BAR.replaceAll('\n', '\n> ').trimEnd()}\n> \`\`\`\n\nend\n`;
     put(folder, `${list}\n${quote}`);
-    run(['md', 'doc.md'], folder);
+    run(['md', 'doc.md', '--unfold'], folder);
     const plain = read(folder);
 
     const folded = run(['md', 'doc.md', '--fold'], folder);
@@ -258,13 +258,13 @@ test('md_fold_does_not_touch_a_user_image_line_next_to_the_block', () => {
   });
 });
 
-// 근거: 이슈 #39 완료 조건 "인용 안 블록을 처리한다". 옵션 없는 실행도 인용 안 dap 블록을 그림으로 만들고 이미지 줄에 인용 표시를 붙인다
-test('md_draws_a_dap_block_inside_a_block_quote_and_keeps_the_quote_prefix_on_the_image_line', () => {
+// 근거: 이슈 #39 완료 조건 "인용 안 블록을 처리한다". --unfold나 --fold를 준 실행은 인용 안 dap 블록을 그림으로 만들고 이미지 줄에 인용 표시를 붙인다
+test('md_with_an_fold_option_draws_a_dap_block_inside_a_block_quote_and_keeps_the_quote_prefix', () => {
   withFolder((folder) => {
     put(folder, `> \`\`\`dap name=q\n> ${BAR.replaceAll('\n', '\n> ').trimEnd()}\n> \`\`\`\n\ntext\n`);
 
-    const first = run(['md', 'doc.md'], folder);
-    const second = run(['md', 'doc.md'], folder);
+    const first = run(['md', 'doc.md', '--unfold'], folder);
+    const second = run(['md', 'doc.md', '--unfold'], folder);
 
     assert.equal(first.status, 0, first.stderr);
     assert.match(read(folder), /> ```\n>\n> !\[Latency\]\(doc-q\.svg\)<!-- dap -->\n\ntext\n/);
@@ -272,17 +272,55 @@ test('md_draws_a_dap_block_inside_a_block_quote_and_keeps_the_quote_prefix_on_th
   });
 });
 
-// 근거: 이슈 #39 구현 기준 "구조를 확정할 수 없는 입력은 추측해 고치지 않고 위치와 이유를 알린다". 인용 안에서 열린 울타리가 인용 표시 없는 줄을 만나면 닫힌 것으로 읽지 않는다
-test('md_reports_a_quoted_fence_that_loses_its_quote_mark_before_it_closes', () => {
+// 근거: AGENTS.md "기존 명령의 옵션과 출력은 바꾸지 않고 추가만"과 결정 "접기 옵션이 없는 새 문서는 지금처럼". 옵션 없는 실행은 표식 없는 인용 안 블록을 읽지 않고, 인용 안 표식 줄도 지우지 않으며, 인용 안 울타리 오류도 내지 않는다(인용 블록이 없던 판과 같은 결과)
+test('md_without_an_option_ignores_unmarked_blocks_in_a_quote_exactly_as_before', () => {
+  withFolder((folder) => {
+    const head = `# Doc\n\n\`\`\`dap name=flow\n${FLOW}\`\`\`\n\nmiddle\n`;
+    const quote = `\n> \`\`\`dap name=q\n> ${BAR.replaceAll('\n', '\n> ').trimEnd()}\n> \`\`\`\n>\n> note\n>\n> ![x](x.svg)<!-- dap -->\n\n> \`\`\`dap name=broken\n> chart bar\nnot quoted\n\nend\n`;
+    put(folder, head + quote);
+    put(folder, head, 'plain.md');
+    run(['md', 'plain.md'], folder);
+
+    const result = run(['md', 'doc.md'], folder);
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.stderr, '');
+    assert.equal(read(folder), read(folder, 'plain.md').replace('plain-flow.svg', 'doc-flow.svg').replace('middle\n', 'middle\n' + quote));
+    assert.deepEqual(readdirSync(folder).sort(), ['doc-flow.svg', 'doc.md', 'plain-flow.svg', 'plain.md']);
+    assert.equal(run(['md', 'doc.md', '--check'], folder).status, 0);
+  });
+});
+
+// 근거: 이슈 #39 규칙 "인용 안 블록에 이미 이 도구의 표식이 있으면 옵션 없이도 처리한다". 접은 인용 블록과 이미지 줄이 있는 인용 블록은 옵션 없는 실행이 그림을 갱신한다
+test('md_without_an_option_updates_a_quoted_block_that_already_carries_a_daphnis_mark', () => {
+  for (const start of ['--fold', '--unfold']) {
+    withFolder((folder) => {
+      put(folder, `> \`\`\`dap name=q\n> ${BAR.replaceAll('\n', '\n> ').trimEnd()}\n> \`\`\`\n\nend\n`);
+      run(['md', 'doc.md', start], folder);
+      put(folder, read(folder).replace('title "Latency"', 'title "Latency 2"').replace('> title "Latency"', '> title "Latency 2"'));
+
+      const result = run(['md', 'doc.md'], folder);
+
+      assert.equal(result.status, 0, result.stderr);
+      assert.match(read(folder), /!\[Latency 2\]\(doc-q\.svg\)/, start);
+      assert.equal(read(folder).includes('<details>'), start === '--fold');
+      assert.equal(run(['md', 'doc.md'], folder).stdout, '');
+    });
+  }
+});
+
+// 근거: 이슈 #39 구현 기준 "구조를 확정할 수 없는 입력은 추측해 고치지 않고 위치와 이유를 알린다". 옵션을 준 실행에서 인용 안 울타리가 인용 표시 없는 줄을 만나면 닫힌 것으로 읽지 않는다
+test('md_with_an_fold_option_reports_a_quoted_fence_that_loses_its_quote_mark_before_it_closes', () => {
   withFolder((folder) => {
     const text = `> \`\`\`dap name=q\n> chart bar\nnot quoted\n\`\`\`\n`;
     put(folder, text);
 
-    const result = run(['md', 'doc.md'], folder);
+    const result = run(['md', 'doc.md', '--unfold'], folder);
 
     assert.equal(result.status, 1);
     assert.match(result.stderr, /doc\.md:1: the dap fence inside a block quote ends before its closing fence/);
     assert.equal(read(folder), text);
+    assert.equal(run(['md', 'doc.md'], folder).status, 0, '옵션이 없으면 새 오류가 없다');
   });
 });
 

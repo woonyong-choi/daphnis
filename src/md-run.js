@@ -4,8 +4,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { basename, dirname, extname, join, relative, sep } from 'node:path';
 import { buildReported, report } from './build-reported.js';
 import { fileHref } from './href.js';
-import { findBlocks } from './md.js';
-import { inspectFold, joinLines, layoutDocument } from './md-fold.js';
+import { findForMode, inspectFold, joinLines, layoutDocument } from './md-fold.js';
 import { acquireLocks } from './md-lock.js';
 import { ownerOf, ownership, realPath, svgMark } from './md-owner.js';
 import { commitWrites, FILE_IO } from './md-write.js';
@@ -143,9 +142,9 @@ async function planDocument(file, args, claimed) {
   const json = args.flags.has('json');
   const doc = readDocument(file, json);
   if (!doc) return undefined;
-  const found = findBlocks(doc.lines);
-  reportBlocks(file, found, json);
   const mode = foldMode(args.flags);
+  const found = findForMode(doc.lines, mode);
+  reportBlocks(file, found, json);
   const inspected = inspectFold(doc.lines, found, mode);
   report(file, inspected.errors.map(({ line, message }) => ({ ...problem(message, 'md-fold'), line })), json);
   const outDir = args['out-dir'] ?? dirname(file);
@@ -160,7 +159,7 @@ async function planDocument(file, args, claimed) {
   const files = [];
   for (const item of built) files.push({ path: item.svg, text: await svgText(item, { args, owner }) });
   // 문서는 SVG 뒤에 쓴다. 문서가 가리키는 SVG가 먼저 놓여 있어야 중간에 멈춰도 깨진 링크가 없다.
-  const text = joinLines(layoutDocument(doc, { ...inspected, fenced: found.fenced }, { mode, title: args['fold-title'], images }), doc.eol);
+  const text = joinLines(layoutDocument(doc, { ...inspected, fenced: found.fenced, quotes: found.quotes }, { mode, title: args['fold-title'], images }), doc.eol);
   files.push({ path: file, text, isDocument: true });
   return { files, stale: staleSvgs({ file, outDir, owner }, new Set(built.map((item) => item.svg))) };
 }

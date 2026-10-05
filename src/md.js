@@ -3,7 +3,7 @@
 /** 이미지 줄 끝의 표시. 이 표시가 붙은 줄만 이 도구가 만든 줄로 보고 갱신하거나 지운다. */
 export const IMAGE_MARK = '<!-- dap -->';
 // 옛 표시(`<!-- muto -->`)가 붙은 줄도 이 도구가 만든 줄로 보고 새 표시로 고쳐 쓴다.
-const MARKED_IMAGE = /^(?:\s*>)*\s*!\[.*\]\(.*\)<!-- (?:dap|muto) -->\s*$/;
+const MARKED_IMAGE = /^\s*!\[.*\]\(.*\)<!-- (?:dap|muto) -->\s*$/;
 /** 옛 울타리 언어 이름. 계속 읽고 폐기 안내를 낸다. */
 export const LEGACY_FENCE = 'muto';
 // 인용 표시(`>`)가 앞에 있어도 울타리를 읽는다. 1번 묶음은 인용 표시와 그 뒤 공백 하나, 2번은 목록 들여쓰기다.
@@ -13,9 +13,9 @@ const BLOCK_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 // 여는 울타리 줄. 백틱 울타리의 설명 글자에는 백틱이 없다(CommonMark). leader는 인용 표시를 포함한 앞머리, quote는 인용 깊이, indent는 인용 뒤 들여쓰기다.
-function openingFence(line) {
+function openingFence(line, quotes) {
   const match = FENCE_OPEN.exec(line);
-  if (!match || (match[3][0] === '`' && match[4].includes('`'))) return undefined;
+  if (!match || (match[1] && !quotes) || (match[3][0] === '`' && match[4].includes('`'))) return undefined;
   const quote = (match[1].match(/>/g) ?? []).length;
   return { leader: match[1], quote, indent: match[2], char: match[3][0], length: match[3].length, info: match[4].trim() };
 }
@@ -94,20 +94,20 @@ function addBlock(found, open, { lines, close }) {
 // basis: estimate
 /**
  * 문서에서 dap 코드 블록을 찾는다. 다른 울타리(`text` 등) 안의 dap 줄은 블록이 아니다.
- * 인용(`>`) 안 울타리는 인용이 끝나기 전에 닫혀야 한다. 인용 표시 없는 줄을 만나면 울타리를 닫은 것으로 읽지 않고 dap 울타리는 오류로 알린다.
+ * quotes가 true일 때만 인용(`>`) 안 울타리를 읽는다(false면 인용 안 울타리는 울타리로도 보지 않는다). 인용 안 울타리는 인용이 끝나기 전에 닫혀야 한다. 인용 표시 없는 줄을 만나면 울타리를 닫은 것으로 읽지 않고 dap 울타리는 오류로 알린다.
  * @returns { blocks, errors, fenced }. blocks는 { name?, source, open, close, indent, leader, quote }(open, close는 0부터 센 줄 번호, leader는 인용 표시를 포함한 앞머리, quote는 인용 깊이),
  *   errors는 { line, message }(1부터 센 줄), fenced는 울타리에 든 줄 번호 집합이다
  */
-export function findBlocks(lines) {
-  const found = { blocks: [], errors: [], fenced: new Set() };
+export function findBlocks(lines, quotes = false) {
+  const found = { blocks: [], errors: [], fenced: new Set(), quotes };
   let open;
   for (const [index, line] of lines.entries()) {
     if (open && open.ctx.rest(line) === undefined) {
-      if (parseInfo(open.info)) found.errors.push({ line: open.at + 1, message: 'the dap fence inside a block quote ends before its closing fence. Close the fence on a line that still has the quote mark' });
+      if (parseInfo(open.info)) found.errors.push({ line: open.at + 1, message: 'the dap fence inside a block quote ends before its closing fence. Close the fence on a line that still has the quote mark', quote: true });
       open = undefined;
     }
     if (!open) {
-      open = openingFence(line);
+      open = openingFence(line, quotes);
       if (open) Object.assign(open, { at: index, ctx: contextOf(open) });
       if (open) found.fenced.add(index);
       continue;

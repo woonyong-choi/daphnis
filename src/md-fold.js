@@ -11,7 +11,7 @@
 //   </details>
 //   <!-- /daphnis fold v1 {id} -->       끝 표식
 // 접지 않은 배치는 블록 아래 `(빈 줄) 그림`이다. 표식 두 줄과 그 사이 모양이 정확히 맞는 것만 이 도구가 만든 감싸기로 읽고, 그 밖의 `<details>`는 사용자 것이다.
-import { contextOf, imageLine, isMarkedImage } from './md.js';
+import { contextOf, findBlocks, imageLine, isMarkedImage } from './md.js';
 
 export const FOLD_VERSION = 'v1';
 export const DEFAULT_TITLE = '그림 원본';
@@ -61,7 +61,7 @@ function wrapperAround(lines, block, ctx) {
   const last = markOf(ctx.content(lines[end]));
   const summary = SUMMARY.exec(ctx.content(lines[start + 4]) ?? '');
   const marks = first && last && !first.end && last.end && first.version === FOLD_VERSION && last.version === FOLD_VERSION && first.id === last.id;
-  const image = ctx.content(lines[start + 1]) !== undefined && isMarkedImage(lines[start + 1]);
+  const image = ctx.content(lines[start + 1]) !== undefined && isMarkedImage(ctx.content(lines[start + 1]) ?? '');
   const blanks = [start + 2, open - 1, close + 1].every((i) => ctx.isBlank(lines[i]));
   const tags = ctx.content(lines[start + 3]) === '<details>' && ctx.content(lines[close + 2]) === '</details>';
   return marks && image && blanks && tags && summary ? { start, end, id: first.id, summary: summary[1] } : undefined;
@@ -128,8 +128,8 @@ function wantsFold({ wrapper, user }, mode) {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 // 닫는 울타리 뒤에 있던 이 도구의 이미지 줄(앞에 빈 줄 하나가 있어도 된다)이 차지한 줄 수. 없으면 0이다.
-function oldImageSpan(lines, from, ctx) {
-  const marked = (i) => lines[i] !== undefined && ctx.rest(lines[i]) !== undefined && isMarkedImage(lines[i]);
+export function oldImageSpan(lines, from, ctx) {
+  const marked = (i) => lines[i] !== undefined && ctx.rest(lines[i]) !== undefined && isMarkedImage(ctx.rest(lines[i]));
   if (marked(from)) return 1;
   return ctx.isBlank(lines[from]) && lines[from] !== undefined && marked(from + 1) ? 2 : 0;
 }
@@ -170,7 +170,8 @@ function planItem(lines, item, { mode, title, image }) {
  * @param options { mode, title, images }. images는 블록 순서대로 { alt, href }
  * @returns { text, end? }[]. end가 없는 줄은 새 줄이라 문서의 줄바꿈을 쓴다
  */
-export function layoutDocument({ lines, ends }, { items, fenced }, options) {
+export function layoutDocument({ lines, ends }, { items, fenced, quotes }, options) {
+  const orphan = (line) => isMarkedImage(quotes ? line.replace(/^(?:[ \t]*>[ \t]?)+/, '') : line);
   const plans = new Map(items.map((item, k) => {
     const plan = planItem(lines, item, { ...options, image: imageLine(item.ctx.wrap, options.images[k].alt, options.images[k].href) });
     return [plan.from, plan];
@@ -180,7 +181,7 @@ export function layoutDocument({ lines, ends }, { items, fenced }, options) {
   for (let i = 0; i < lines.length; i++) {
     const plan = plans.get(i);
     if (!plan) {
-      if (fenced.has(i) || !isMarkedImage(lines[i])) keep(i);
+      if (fenced.has(i) || !orphan(lines[i])) keep(i);
       continue;
     }
     out.push(...plan.before.map((text) => ({ text })));
@@ -198,4 +199,19 @@ export function layoutDocument({ lines, ends }, { items, fenced }, options) {
 /** 줄 목록을 문서 글로 잇는다. 새 줄과 줄바꿈이 없던 줄은 eol을 쓰고, 마지막 줄 뒤에는 아무것도 붙이지 않는다. */
 export function joinLines(entries, eol) {
   return entries.map((entry, i) => entry.text + (i === entries.length - 1 ? '' : (entry.end || eol))).join('');
+}
+
+// cost: time O(n + b), heap O(b), stack O(1)
+// vars: n = 문서 줄 수, b = 블록 수
+// basis: estimate
+/**
+ * 이번 실행이 다룰 블록을 찾는다. 인용(`>`) 안 블록은 --fold나 --unfold를 준 실행이거나 그 블록에 이미 이 도구의 표식(접기 표식, 이미지 줄)이 있을 때만 다룬다.
+ * 그 밖의 옵션 없는 실행은 인용 안 블록을 읽지 않으므로 인용 안 블록이 없던 판과 결과가 같다.
+ */
+export function findForMode(lines, mode) {
+  const full = findBlocks(lines, true);
+  if (mode !== 'keep') return full;
+  const marked = new Set(inspectFold(lines, full, 'keep').items.filter(({ block, wrapper, ctx }) => block.quote && (wrapper || oldImageSpan(lines, block.close + 1, ctx) > 0)).map(({ block }) => block));
+  if (!marked.size) return findBlocks(lines, false);
+  return { ...full, blocks: full.blocks.filter((block) => !block.quote || marked.has(block)), errors: full.errors.filter((error) => !error.quote) };
 }
