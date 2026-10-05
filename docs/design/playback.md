@@ -2,7 +2,7 @@
 
 | 항목 | 값 |
 |---|---|
-| 상태 | 결정 |
+| 상태 | 구현 |
 | 관련 결정 | [그림 문법과 배치를 직접 맡고 D2 호환을 버린다](../decisions/2026-10-01-own-syntax-and-layout.md), [조건과 대기를 빌드 때 계산해 같은 시간표에 담는다](../decisions/2026-10-04-flow-conditions-in-timetable.md) |
 
 ## 요약
@@ -278,17 +278,17 @@
 | 요구사항 | 검증 계획 |
 |---|---|
 | 박자 상태가 앞 박자와 상관없이 완전하다. | 아무 박자를 골라 시간표만으로 그린 상태와 처음부터 재생한 상태 비교 |
-| 같은 입력은 같은 이벤트 순서와 값 결과를 만들고, 일시정지, 배속, 재시작, 단계 직접 선택이 값 결과를 바꾸지 않는다. | 조건과 대기를 쓴 원본을 두 번 만들어 시간표를 비교하고, 재생기를 가짜 시계로 돌려 일시정지, 배속, 재시작, 단계 직접 선택 뒤의 값 글자를 처음부터 재생한 값과 비교 |
-| `keep`한 값은 앞 단계가 끝난 값에서 시작하고 단계 `set=` 재설정이 우선하며, 첫 단계와 재시작은 `from`에서 시작한다. | 값을 바꾸는 두 단계 원본에서 둘째 단계의 `values[].initial` 확인. 재설정을 건 값, `keep`하지 않은 값, 첫 단계, 한 바퀴 뒤 재시작을 포함 |
-| 같은 시각의 읽기와 쓰기가 이벤트 순서 표를 따르고, 대기 해제 연쇄가 선언 순서로 풀린다. | `on`과 `set=`가 같은 시각인 원본, `set="a:=b, b:=a"` 맞바꿈 원본, 한 갱신에 대기 둘이 풀리는 원본에서 `values`와 `waits`의 순서 확인 |
-| `when`이 거짓인 이동은 점, 값, 선 켜짐 없이 건너뛰고 박자와 단계는 남는다. | 박자 단계의 이동 하나와 전부를 건너뛴 원본, 흐름 단계 원본에서 `skips`와 시간표의 박자 수 확인 |
-| 시간 초과 분기와 끝나지 않는 대기를 결과에 남기고, 교착은 경고와 `stalls`로 설명한다. | `timeout`과 `else`를 쓴 원본의 `waits[].end`와 분기 이동, 두 대기가 서로를 기다리는 원본의 `stalls`와 `wait-stalled` 메시지, `stuck`이면 경고 없음 확인 |
-| 이벤트 예산을 넘으면 오류로 끝나고 결과 파일이 없다. | 작은 `events`, `chain` 값을 주입해 끝없이 되풀이되는 대기와 대량 출발 원본이 제한 시간 안에 `budget-exceeded`로 끝나는지, 사전 검사가 시간표를 만들기 전에 막는지, 파일이 없는지 확인 |
-| 사라짐의 경계(0%, 100%, 도형에 닿는 비율과 같은 값)에서 도착 효과, 후광, 값 변화가 SVG와 재생기에서 같다. | `lost` 값마다 시간표의 `cut`, `values`, `pulses`를 읽고 움직이는 SVG의 SMIL 값과 재생기 상태를 25ms 간격으로 비교 |
-| 구간 시간이 직접 지정, 나머지 배분, 거리 기반 순서로 정해지고 합계 오류를 진단하며, 점 위치가 SVG와 재생기에서 같다. | `legs=`가 있는 원본의 `hops[].ms`, `pace`, 도착 시각을 계산값과 비교하고 `leg-time`을 내는 입력 확인 |
-| 단계 상태가 그 단계에서만 보이고 단계를 옮겨도 같으며 색 없이도 구분된다. | `status`를 건 단계와 다음 단계의 `segs[].status` 확인, 알약에 글자와 기호가 있는지 확인 |
-| 새 기능을 쓰지 않은 원본의 시간표와 출력이 바뀌지 않고 이벤트 처리 단계를 거치지 않는다. | 모든 예제의 시간표와 출력을 이 설계 이전과 비교하고, 이벤트 처리 함수 호출 수 확인 |
-| 잠금 획득과 해제, 풀리지 않는 교착, 큐 역압, 실패 횟수에 따른 회로 차단이 공통 기능만으로 표현된다. | 네 예제를 `examples/`에 두고 렌더해 값 변화, 대기 해제 시각, 멈춘 대기를 확인 |
+| 같은 입력은 같은 이벤트 순서와 값 결과를 만들고, 일시정지, 배속, 재시작, 단계 직접 선택이 값 결과를 바꾸지 않는다. | 조건과 대기를 쓴 원본을 두 번 만들어 시간표를 비교하고, 재생기를 가짜 시계로 돌려 일시정지, 배속, 재시작, 단계 직접 선택 뒤의 값 글자를 처음부터 재생한 값과 비교. 담당: [#118](https://github.com/woonyong-choi/daphnis/issues/118), [#119](https://github.com/woonyong-choi/daphnis/issues/119), [#120](https://github.com/woonyong-choi/daphnis/issues/120) |
+| `keep`한 값은 앞 단계가 끝난 값에서 시작하고 단계 `set=` 재설정이 우선하며, 첫 단계와 재시작은 `from`에서 시작한다. | 값을 바꾸는 두 단계 원본에서 둘째 단계의 `values[].initial` 확인. 재설정을 건 값, `keep`하지 않은 값, 첫 단계, 한 바퀴 뒤 재시작을 포함. 담당: [#118](https://github.com/woonyong-choi/daphnis/issues/118) |
+| 같은 시각의 읽기와 쓰기가 이벤트 순서 표를 따르고, 대기 해제 연쇄가 선언 순서로 풀린다. | `on`과 `set=`가 같은 시각인 원본, `set="a:=b, b:=a"` 맞바꿈 원본, 한 갱신에 대기 둘이 풀리는 원본에서 `values`와 `waits`의 순서 확인. 담당: [#118](https://github.com/woonyong-choi/daphnis/issues/118), [#119](https://github.com/woonyong-choi/daphnis/issues/119) |
+| `when`이 거짓인 이동은 점, 값, 선 켜짐 없이 건너뛰고 박자와 단계는 남는다. | 박자 단계의 이동 하나와 전부를 건너뛴 원본, 흐름 단계 원본에서 `skips`와 시간표의 박자 수 확인. 담당: [#119](https://github.com/woonyong-choi/daphnis/issues/119) |
+| 시간 초과 분기와 끝나지 않는 대기를 결과에 남기고, 교착은 경고와 `stalls`로 설명한다. | `timeout`과 `else`를 쓴 원본의 `waits[].end`와 분기 이동, 두 대기가 서로를 기다리는 원본의 `stalls`와 `wait-stalled` 메시지, `stuck`이면 경고 없음 확인. 담당: [#119](https://github.com/woonyong-choi/daphnis/issues/119) |
+| 이벤트 예산을 넘으면 오류로 끝나고 결과 파일이 없다. | 작은 `events`, `chain` 값을 주입해 끝없이 되풀이되는 대기와 대량 출발 원본이 제한 시간 안에 `budget-exceeded`로 끝나는지, 사전 검사가 시간표를 만들기 전에 막는지, 파일이 없는지 확인. 담당: [#119](https://github.com/woonyong-choi/daphnis/issues/119) |
+| 사라짐의 경계(0%, 100%, 도형에 닿는 비율과 같은 값)에서 도착 효과, 후광, 값 변화가 SVG와 재생기에서 같다. | `lost` 값마다 시간표의 `cut`, `values`, `pulses`를 읽고 움직이는 SVG의 SMIL 값과 재생기 상태를 25ms 간격으로 비교. 담당: [#120](https://github.com/woonyong-choi/daphnis/issues/120) |
+| 구간 시간이 직접 지정, 나머지 배분, 거리 기반 순서로 정해지고 합계 오류를 진단하며, 점 위치가 SVG와 재생기에서 같다. | `legs=`가 있는 원본의 `hops[].ms`, `pace`, 도착 시각을 계산값과 비교하고 `leg-time`을 내는 입력 확인. 담당: [#120](https://github.com/woonyong-choi/daphnis/issues/120) |
+| 단계 상태가 그 단계에서만 보이고 단계를 옮겨도 같으며 색 없이도 구분된다. | `status`를 건 단계와 다음 단계의 `segs[].status` 확인, 알약에 글자와 기호가 있는지 확인. 담당: [#120](https://github.com/woonyong-choi/daphnis/issues/120) |
+| 새 기능을 쓰지 않은 원본의 시간표와 출력이 바뀌지 않고 이벤트 처리 단계를 거치지 않는다. | 모든 예제의 시간표와 출력을 이 설계 이전과 비교하고, 이벤트 처리 함수 호출 수 확인. 담당: [#118](https://github.com/woonyong-choi/daphnis/issues/118), [#119](https://github.com/woonyong-choi/daphnis/issues/119), [#120](https://github.com/woonyong-choi/daphnis/issues/120) |
+| 잠금 획득과 해제, 풀리지 않는 교착, 큐 역압, 실패 횟수에 따른 회로 차단이 공통 기능만으로 표현된다. | 네 예제를 `examples/`에 두고 렌더해 값 변화, 대기 해제 시각, 멈춘 대기를 확인. 담당: [#119](https://github.com/woonyong-choi/daphnis/issues/119) |
 | 목록 쪽 테마 단추가 목록과 iframe 그림을 함께 바꾼다. | `test/pages.test.js`의 `gallery_theme_buttons_set_the_root_color_scheme_and_remember_the_choice`(Chrome이 있을 때). 시스템을 다크로 둔 브라우저에서 실제 자식 HTML을 iframe으로 연 목록 쪽의 라이트 단추를 눌러, 목록 루트와 자식 문서의 테마가 모두 라이트로 바뀌고 자식 문서가 로드를 마쳐 그림을 그렸는지 확인. 카드 전체가 그림과 같은 한 톤인지는 캡처로 본다 |
 | 재생기 안에는 그림 바탕 판이 없고, SVG 파일에만 있다. | `test/cli.test.js`의 `main_render_svg_keeps_the_rounded_plate_and_the_html_player_has_none` |
 | gallery가 통과하면 안 되는 입력(경고 있는 원본의 `--strict`, 오류 원본 섞임, 원본 없음, 받지 않는 선택 사항)에서 실패하고 파일을 쓰지 않는다. | `test/cli.test.js`의 `main_gallery_fails_without_writing_any_file_when_the_input_must_not_pass`. 반대로 경고만 있는 원본은 `--strict` 없이 통과한다(`main_gallery_still_writes_the_files_for_a_warning_without_strict_and_accepts_its_options`) |
