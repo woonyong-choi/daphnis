@@ -277,3 +277,25 @@ test('main_budget_option_with_a_bad_name_or_value_is_a_usage_error', () => {
     assert.equal(run(['migrate', 'g.dap', '--budget', 'grid-elements=5'], folder).status, 2);
   });
 });
+
+const LONG = '참조 비트는 CPU가 접근할 때 켜고 운영체제가 주기적으로 지워 최근에 쓰지 않은 페이지를 교체 후보로 고른다';
+const WRAPPED = `flow right\ngrid g "여러 줄 제목이 들어가는 긴 격자 제목은 폭을 넘으면 줄을 나눈다 ${LONG}" rows=3 cols=3 {\n  item a "${LONG}" cols=2\n  gap s "${LONG}" count=3 row=1\n  item b "짧음" row=2 col=2\n}\n`;
+
+// 근거: 이슈 #28 결정 "비용을 실제로 늘리는 단위가 예산에서 빠지면 안 된다": 줄 나눔으로 늘어난 글 요소도 센다
+test('buildFigure_grid_budget_counts_the_wrapped_text_lines_so_it_never_undercounts_the_drawn_elements', async () => {
+  const result = await buildFigure(WRAPPED);
+  const [grid] = result.scene.items;
+  const svg = await toSvg(result, { isStatic: true, name: 'g' });
+  // 도형 묶음 g 하나와 모든 도형이 갖는 후광(g, rect)은 격자 비용이 아니라 뺀다.
+  const drawn = svg.slice(svg.indexOf('<g id="n-0"'), svg.indexOf('</svg>')).match(/<(?:rect|text|path|pattern|g)\b/g).length - 3;
+  const cost = gridCost(result.figure.nodes[0]).elements;
+
+  assert.ok(grid.cells.every((c) => c.lines.length >= 1) && grid.cells.some((c) => c.lines.length > 1), 'the fixture needs a wrapped cell');
+  assert.ok(drawn <= cost, `drawn ${drawn} > counted ${cost}`);
+  assert.ok(cost > 1 + 1 + 4 + 1 + 2 + 1 + 4 + 1 + 3, 'wrapped lines are counted beyond one per cell');
+  assert.equal(drawn, cost);
+  const over = await failureOf(WRAPPED, { budget: { 'grid-elements': cost - 1 } });
+  assert.equal(over[0].code, 'budget-exceeded');
+  assert.match(over[0].message, new RegExp(`needs ${cost} SVG`));
+  assert.ok(await buildFigure(WRAPPED, { budget: { 'grid-elements': cost } }));
+});

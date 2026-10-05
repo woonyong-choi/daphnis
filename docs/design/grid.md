@@ -171,10 +171,10 @@ step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
 
 | 이름 | 단위 | 기본 한도 |
 |---|---|---|
-| `grid-elements` | 격자가 그리는 SVG 요소 수. 틀 사각형과 제목 글 2, 칸마다 `item` 5(묶음, 사각형, 글, 고리 묶음, 고리 사각형)와 `gap` 3, 빈 자리가 있으면 3(무늬, 무늬 안 선, 경로). 글은 칸마다 한 줄로 센다 | 500000 |
+| `grid-elements` | 격자가 그리는 SVG 요소 수. 틀 사각형 1, 제목 글 줄마다 1, 칸마다 `item` 4(묶음, 사각형, 고리 묶음, 고리 사각형)와 `gap` 2에 칸 글 줄마다 1, 빈 자리가 있으면 3(무늬, 무늬 안 선, 경로). 글 줄은 그릴 때와 같은 줄 나눔(칸 폭에 따른 자동 줄 나눔)의 실제 결과다 | 500000 |
 | `grid-path-commands` | 빈 자리 경로의 명령 수(구간마다 5) | 1000000 |
 
-- 검사는 크기를 정하기 전에 선언만으로 한다. 칸 목록은 이미 읽은 선언이라 검사가 새로 큰 할당을 하지 않고, 초과하면 크기, 배치, 그리기에 들어가지 않고 파일도 쓰지 않는다. 시간표 항목은 격자 크기로 늘지 않는다(`light`는 칸 하나를 가리키고 단계마다 줄 수만큼만 늘어난다)라 이 PR은 예산을 두지 않는다.
+- 검사는 크기와 배치를 정하기 전에 한다. 글 줄 수는 칸 글을 칸 폭에 맞춰 나눈 결과라 이 검사가 줄 나눔(칸 글 길이에 비례한 비용)을 먼저 하고 크기 계산이 그 결과를 다시 쓴다. 따라서 세는 요소 수는 실제로 그리는 수와 같고, 검사가 칸 수나 글 길이를 넘는 큰 할당을 하지 않으며, 초과하면 크기, 배치, 그리기에 들어가지 않고 파일도 쓰지 않는다. 시간표 항목은 격자 크기로 늘지 않는다(`light`는 칸 하나를 가리키고 단계마다 줄 수만큼만 늘어난다)라 이 PR은 예산을 두지 않는다.
 - 초과 진단은 합계가 처음 한도를 넘은 격자의 줄에 붙고 필요한 양, 지금 한도, 올리는 방법을 적는다. 예: `this figure needs 502 SVG elements drawn by grids, over the budget grid-elements=100, and grid "g0" is where the total passes it. Raise it with --budget grid-elements=502 (the Action input budget: grid-elements=502), or shrink the grids`. 넘는 예산마다 진단 하나이고 `code`는 `budget`이다.
 - 올리는 방법: `render`, `check`, `gallery`, `md`가 `--budget 이름=값`을 받고(여러 번 쓸 수 있다), GitHub Action은 입력 `budget`(공백이나 쉼표로 나눈 `이름=값`)을 같은 해석으로 넘긴다. 값은 양의 안전한 정수이고, 모르는 이름이나 틀린 값은 그림을 만들기 전에 사용법 오류(종료 2)다.
 - 기본 한도는 현재 구현의 측정에서 정했다([측정](#측정)). 요소 500000은 빽빽한 316×316 격자(499282개)가 한 그림으로 5초, 최대 메모리 약 620MB, SVG 28MB에 끝나는 크기라, 브라우저가 한 번에 그릴 수 있는 크기와 기본 Node 힙 안에 든다. 경로 명령 1000000은 `gap` 칸 10만 개를 대각선 계단으로 놓은 입력(구간 20만 개, 명령 999990개, 요소 30만 개)이 같은 범위(최대 메모리 약 650MB)에 끝나는 크기다. 일반 문서의 격자(수십~수백 칸)는 한도의 0.1% 아래다.
@@ -230,7 +230,7 @@ step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
 | 칸 면, 글, 윤곽은 모든 면에서 대비 기준을 넘는다. | `test/contrast.test.js`의 `contrast_text_pairs_reach_4_5_in_both_themes`, `contrast_graphic_pairs_reach_3_in_both_themes`. 칸이 쓰는 `fg`, `muted`, `border`, `state.active`와 `node`, `surface`, `card-on` 짝이 이 입력에 이미 들어 있다 |
 | 선언 수가 같으면 논리 격자가 커져도 출력과 빈 구간 수가 같다(행×열에 비례하지 않는다). | `test/grid-scale.test.js`의 `buildFigure_grid_output_stays_the_same_size_when_only_the_logical_grid_grows`(100, 400, 100000), `toSvg_grid_draws_all_empty_cells_as_one_pattern_filled_path`, `emptyRegions_count_follows_the_declared_cells_not_the_grid_size` |
 | 구간은 선언하지 않은 단위 칸을 정확히 한 번씩 덮고, 칸 겹침을 쓸기로 찾는다. | `test/grid-scale.test.js`의 `emptyRegions_cover_every_undeclared_unit_exactly_once`(무작위 300판을 단위 집합과 대조), `findOverlaps_pairs_each_later_cell_with_an_earlier_cell_it_overlaps` |
-| 예산은 모든 격자의 합계를 크기를 정하기 전에 검사하고, 한도와 같은 양은 통과하며, 초과는 필요한 양과 조정 방법을 알린다. | `test/grid-scale.test.js`의 `buildFigure_grid_over_budget_reports_the_needed_amount_and_how_to_raise_it`, `..._budget_accepts_exactly_the_needed_amount_and_rejects_one_less`, `..._budget_counts_all_grids_of_the_figure_and_names_the_grid_that_passes_it`, `..._budget_counts_the_path_commands_of_the_merged_empty_area_path`, `..._budget_is_checked_before_the_grid_is_sized` |
+| 예산은 모든 격자의 합계를 크기를 정하기 전에 검사하고, 한도와 같은 양은 통과하며, 초과는 필요한 양과 조정 방법을 알린다. | `test/grid-scale.test.js`의 `buildFigure_grid_over_budget_reports_the_needed_amount_and_how_to_raise_it`, `..._budget_accepts_exactly_the_needed_amount_and_rejects_one_less`, `..._budget_counts_all_grids_of_the_figure_and_names_the_grid_that_passes_it`, `..._budget_counts_the_path_commands_of_the_merged_empty_area_path`, `..._budget_is_checked_before_the_grid_is_sized`, `..._budget_counts_the_wrapped_text_lines_so_it_never_undercounts_the_drawn_elements`(여러 줄 글 격자에서 그린 요소 수와 계산값이 같고, 한도를 하나 낮추면 오류) |
 | 좌표 범위와 인덱스 합을 넘는 입력은 격자 줄의 오류이고 중단하지 않는다. | `test/grid-scale.test.js`의 `buildFigure_grid_beyond_the_exact_coordinate_range_is_a_line_error_not_a_crash`, `..._cell_index_sums_beyond_the_safe_integer_range_are_line_errors` |
 | `--budget`과 Action 입력 `budget`이 같은 해석이고, 모든 그림 명령이 받으며, 잘못된 값은 만들기 전에 끝나고, 초과는 파일을 쓰지 않는다. | `test/grid-scale.test.js`의 `main_budget_option_raises_the_limit_and_an_over_budget_figure_writes_no_file`, `main_every_figure_command_takes_budget_with_the_same_meaning`, `main_budget_option_with_a_bad_name_or_value_is_a_usage_error`, `parseBudgetPair_accepts_only_known_names_with_positive_safe_integers`, `test/action.test.js`의 `action_budget_input_raises_the_limit_with_spaces_or_commas_and_rejects_bad_items` |
 | 문서의 예시와 예제 그림이 오류와 경고 없이 만들어지고 움직임이 시간표와 같다. | `test/grammar.test.js`의 `docExamples_every_design_doc_example_builds_without_errors_or_warnings`, `test/motion.test.js`의 `toSvg_moving_packets_match_the_timeline_at_every_example`(`examples/address-bits.dap` 외 세 파일 포함) |
@@ -248,4 +248,3 @@ step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
 ## 미해결 질문
 
 - 칸 선언이 많은 격자는 `item`마다 묶음과 고리 요소를 그린다. 칸 선언 자체를 구간이나 반복으로 줄여 적는 문법은 아직 없다.
-- 글 줄 수를 예산의 요소 수에 정확히 넣지 않는다(칸마다 한 줄로 센다). 칸 글이 여러 줄이면 실제 요소가 예산 계산보다 많다.

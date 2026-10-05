@@ -140,12 +140,8 @@ function sizeTable(node, contents) {
 // 칸 격자: 제목 줄과 칸 묶음이 모두 배치 사각형 안이다. 칸 단위(가로, 세로)는 모든 칸이 글을 넣을 수 있는 가장 작은 크기이고, 칸은 차지한 단위 수만큼 커진다.
 // 칸에 이은 선이 안쪽 칸으로 돌아 나갈 통로가 있으면 행 사이가 벌어진다(grid-links.js).
 function sizeGrid(node, links = []) {
-  const titleLines = wrap(node.label, GRID.textMax, STYLE.label);
-  const titleW = Math.max(...titleLines.map((l) => measure(l, STYLE.label.size, STYLE.label.face)));
+  const { titleLines, titleW, unitW, lined } = gridLines(node);
   const titleH = titleLines.length * STYLE.label.line + GRID.titlePad * 2;
-  const shown = node.cells.map((c) => ({ ...c, text: c.kind === 'gap' ? `${c.label} ×${c.count}` : c.label }));
-  const unitW = gridUnitWidth(shown, { cols: node.cols, titleRoom: titleW + INNER_X * 2 - GRID.pad * 2 });
-  const lined = shown.map((c) => ({ ...c, lines: wrap(c.text, c.cols * unitW - GRID.cellPadX * 2, STYLE.item) }));
   const unitH = lined.reduce((tallest, c) => Math.max(tallest, Math.ceil((c.lines.length * STYLE.item.line + GRID.cellPadY * 2) / c.rows)), SIZE.grid.cell);
   const plan = planGridLinks({ rows: node.rows, cols: node.cols, cells: node.cells, links }, { pad: GRID.pad, unitW, unitH, titleH, titleHalf: titleW / 2 });
   const box = ({ row, col, rows, cols }) => ({ x: GRID.pad + col * unitW, y: plan.rowTop(row), w: cols * unitW, h: rows * unitH + (rows - 1) * plan.gutter });
@@ -153,6 +149,28 @@ function sizeGrid(node, links = []) {
   const empties = emptyRegions(node).map((r) => ({ ...r, ...box({ row: r.row0, col: r.col0, rows: r.row1 - r.row0, cols: r.col1 - r.col0 }) }));
   const unit = { w: unitW, h: unitH, gutter: plan.gutter, x: GRID.pad, y: plan.rowTop(0) };
   return { w: plan.w, h: plan.h, marginTop: 0, marginBottom: 0, labelLines: titleLines, subLines: [], cells, empties, unit, titleH, cellEnds: plan.ends, cellRoutes: plan.inner };
+}
+
+// 같은 격자의 줄 나눔을 크기 계산과 예산 세기가 다시 하지 않도록 담아 둔다. 칸 목록이 키다.
+const gridLinesMemo = new WeakMap();
+
+// cost: time O(c·n²), heap O(c·l), stack O(1)
+// vars: c = 칸 수, n = 칸 글자 수, l = 칸 글 줄 수
+// basis: estimate
+/**
+ * 칸 격자의 제목과 칸 글 줄 나눔. 칸 단위 너비는 모든 칸이 글을 넣을 수 있는 가장 작은 너비다. 크기를 정하는 쪽과 예산이 쓰는 요소 수가 같은 줄 수를 본다.
+ * @returns { titleLines, titleW, unitW, lined }. lined는 칸마다 `lines`를 더한 목록이다
+ */
+export function gridLines(node) {
+  if (gridLinesMemo.has(node.cells)) return gridLinesMemo.get(node.cells);
+  const titleLines = wrap(node.label, GRID.textMax, STYLE.label);
+  const titleW = Math.max(...titleLines.map((l) => measure(l, STYLE.label.size, STYLE.label.face)));
+  const shown = node.cells.map((c) => ({ ...c, text: c.kind === 'gap' ? `${c.label} ×${c.count}` : c.label }));
+  const unitW = gridUnitWidth(shown, { cols: node.cols, titleRoom: titleW + INNER_X * 2 - GRID.pad * 2 });
+  const lined = shown.map((c) => ({ ...c, lines: wrap(c.text, c.cols * unitW - GRID.cellPadX * 2, STYLE.item) }));
+  const result = { titleLines, titleW, unitW, lined };
+  gridLinesMemo.set(node.cells, result);
+  return result;
 }
 
 // cost: time O(c), heap O(c), stack O(1)
