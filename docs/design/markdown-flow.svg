@@ -143,14 +143,14 @@
   --color-data-heat-ink-on: var(--color-gray-0);
   --color-data-grid: var(--color-gray-212);
   --color-accent: var(--color-blue-light-stroke);
-  --color-figure-icon-service-ink: var(--color-blue-light-ink);
-  --color-figure-icon-service-surface: var(--color-blue-light-heat-low);
-  --color-figure-icon-data-ink: var(--color-purple-light-ink);
-  --color-figure-icon-data-surface: var(--color-purple-light-tint-3);
-  --color-figure-icon-access-ink: var(--color-orange-light-ink);
-  --color-figure-icon-access-surface: var(--color-orange-light-fill);
-  --color-figure-icon-person-ink: var(--color-green-light-ink);
-  --color-figure-icon-person-surface: var(--color-green-light-fill);
+  --color-figure-icon-service-ink: var(--primitive-simple2-icon-service);
+  --color-figure-icon-service-surface: var(--primitive-simple2-icon-service-face);
+  --color-figure-icon-data-ink: var(--primitive-simple2-icon-data);
+  --color-figure-icon-data-surface: var(--primitive-simple2-icon-data-face);
+  --color-figure-icon-access-ink: var(--primitive-simple2-icon-access);
+  --color-figure-icon-access-surface: var(--primitive-simple2-icon-access-face);
+  --color-figure-icon-person-ink: var(--primitive-simple2-icon-person);
+  --color-figure-icon-person-surface: var(--primitive-simple2-icon-person-face);
   --color-figure-icon-brand-ink: var(--color-gray-467);
   --color-figure-icon-brand-surface: var(--color-gray-59);
   --font-sans: FigSans, Pretendard, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Apple SD Gothic Neo', sans-serif;
@@ -222,12 +222,20 @@
   --simple2-card-gap: 48px;
   --simple2-node-stroke: 1px;
   --simple2-heading-weight: 700;
-  --simple2-progress-stroke: 2px;
+  --simple2-progress-stroke: 1px;
   --simple2-node-corner: 8px;
   --simple2-separator: var(--primitive-simple2-plate-border);
-  --simple2-canvas-corner: 28px;
+  --simple2-canvas-corner: 12px;
   --simple2-canvas-fill: var(--primitive-simple2-canvas);
-  --simple2-symbol-stroke: 1.75px;
+  --simple2-symbol-stroke: 1.5px;
+  --simple2-selection-fill: var(--primitive-simple2-selection-fill);
+  --simple2-selection-ink: var(--primitive-simple2-selection-ink);
+  --simple2-tab-fill: var(--primitive-simple2-tab-fill);
+  --simple2-label-size: 15px;
+  --simple2-detail-size: 13px;
+  --simple2-micro-size: 11px;
+  --simple2-surface-edge: var(--primitive-simple2-plate-border);
+  --simple2-progress-width: 160px;
   --primitive-simple2-fg: #303336;
   --primitive-simple2-muted: #505b69;
   --primitive-simple2-bg: #f2f5f7;
@@ -235,14 +243,25 @@
   --primitive-simple2-node: #ffffff;
   --primitive-simple2-card: #f6f7fa;
   --primitive-simple2-surface: #edeef1;
-  --primitive-simple2-plate-border: #d1d7de;
+  --primitive-simple2-plate-border: #d9dce1;
   --primitive-simple2-border: #838b96;
   --primitive-simple2-shadow: 0 2px 8px rgba(0,0,0,.10), 0 0 2px rgba(0,0,0,.10);
   --primitive-simple2-play-fill: #4f91fb;
   --primitive-simple2-play-ink: #ffffff;
   --primitive-simple2-node-shadow: drop-shadow(0px 1px 1px rgba(0,0,0,.07));
   --primitive-simple2-group-title: #505b69;
-  --primitive-simple2-canvas: #edeef2;
+  --primitive-simple2-canvas: #f5f5f7;
+  --primitive-simple2-selection-fill: #e3e4e8;
+  --primitive-simple2-selection-ink: #303336;
+  --primitive-simple2-tab-fill: #f5f5f7;
+  --primitive-simple2-icon-service: #1e6bd6;
+  --primitive-simple2-icon-data: #269c6e;
+  --primitive-simple2-icon-access: #a78b16;
+  --primitive-simple2-icon-person: #c62859;
+  --primitive-simple2-icon-service-face: #edf4ff;
+  --primitive-simple2-icon-data-face: #eaf5ef;
+  --primitive-simple2-icon-access-face: #fff8d5;
+  --primitive-simple2-icon-person-face: #fff0f4;
   --color-palette-amber-light-fill: var(--color-orange-light-fill);
   --color-palette-amber-light-stroke: var(--color-orange-light-stroke);
   --color-palette-amber-light-ink: var(--color-orange-light-ink);
@@ -525,6 +544,10 @@
     --simple2-node-shadow: var(--primitive-simple2-node-shadow);
     --simple2-separator: var(--color-gray-635);
     --simple2-canvas-fill: var(--color-gray-910);
+    --simple2-selection-fill: var(--color-gray-757);
+    --simple2-selection-ink: var(--color-gray-0);
+    --simple2-tab-fill: var(--color-gray-835);
+    --simple2-surface-edge: var(--color-gray-635);
     --color-figure-icon: var(--color-blue-dark-stroke);
     --color-figure-icon-tile: var(--color-blue-dark-fill);
     --color-figure-queue-fill: var(--color-blue-dark-stroke);
@@ -634,6 +657,10 @@
   --simple2-node-shadow: var(--primitive-simple2-node-shadow);
   --simple2-separator: var(--color-gray-635);
   --simple2-canvas-fill: var(--color-gray-910);
+  --simple2-selection-fill: var(--color-gray-757);
+  --simple2-selection-ink: var(--color-gray-0);
+  --simple2-tab-fill: var(--color-gray-835);
+  --simple2-surface-edge: var(--color-gray-635);
   --color-figure-icon: var(--color-blue-dark-stroke);
   --color-figure-icon-tile: var(--color-blue-dark-fill);
   --color-figure-queue-fill: var(--color-blue-dark-stroke);
@@ -693,7 +720,7 @@
 }
 
 .fl .label {
-  font-size: var(--size-text-13);
+  font-size: var(--simple2-label-size);
   font-weight: var(--weight-medium);
   text-anchor: middle;
   fill: var(--color-fg);
@@ -929,6 +956,7 @@
 
 .fl :where(.fl-shape-rect, .fl-shape-box, .fl-shape-tile, .fl-shape-external, .fl-shape-store, .fl-shape-table, .fl-shape-grid, .fl-shape-queue) > .fl-stroke:not([fill="none"]) {
   stroke-width: var(--simple2-node-stroke);
+  stroke: var(--simple2-surface-edge);
   filter: var(--simple2-node-shadow);
 }
 
@@ -1049,19 +1077,19 @@
 .fl .a16 { animation: a16 14.506s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-line)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-main)"/></marker></defs>
-<rect x="0.5" y="0.5" width="959" height="184.8" rx="28" fill="var(--simple2-canvas-fill)"/>
-<g transform="translate(112.7 0)">
-<g id="n-0" class="fl-node fl-shape-box" data-id="doc"><g class="fl-halo a1" fill="none" opacity="0"><rect x="28" y="28" width="100" height="46" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="28" y="28" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><text x="78" y="55.7" class="label">문서(.md)</text></g>
-<g id="n-1" class="fl-node fl-shape-box" data-id="cli"><g class="fl-halo a3" fill="none" opacity="0"><rect x="322.2" y="28" width="102" height="46" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="322.2" y="28" width="102" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a2"/><text x="373.1" y="55.7" class="label">daphnis md</text></g>
-<g id="n-2" class="fl-node fl-shape-box" data-id="svg"><g class="fl-halo a5" fill="none" opacity="0"><rect x="606.6" y="28" width="100" height="46" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="606.6" y="28" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a4"/><text x="656.6" y="55.7" class="label">SVG 파일</text></g>
+<rect x="0.5" y="0.5" width="959" height="184.8" rx="12" fill="var(--simple2-canvas-fill)"/>
+<g transform="translate(107.4 0)">
+<g id="n-0" class="fl-node fl-shape-box" data-id="doc"><g class="fl-halo a1" fill="none" opacity="0"><rect x="28" y="28" width="100" height="46" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="28" y="28" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><text x="78" y="56.4" class="label">문서(.md)</text></g>
+<g id="n-1" class="fl-node fl-shape-box" data-id="cli"><g class="fl-halo a3" fill="none" opacity="0"><rect x="322.2" y="28" width="112.6" height="46" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="322.2" y="28" width="112.6" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a2"/><text x="378.5" y="56.4" class="label">daphnis md</text></g>
+<g id="n-2" class="fl-node fl-shape-box" data-id="svg"><g class="fl-halo a5" fill="none" opacity="0"><rect x="617.2" y="28" width="100" height="46" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="617.2" y="28" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a4"/><text x="667.2" y="56.4" class="label">SVG 파일</text></g>
 <g id="e-0" class="fl-edge"><path id="p-0" d="M 128 43.3 L 322.2 43.3" class="fl-path a6" marker-end="url(#fl-arrow)"/></g>
-<g id="e-1" class="fl-edge"><path id="p-1" d="M 424.1 51 L 606.6 51" class="fl-path a7" marker-end="url(#fl-arrow)"/></g>
+<g id="e-1" class="fl-edge"><path id="p-1" d="M 434.7 51 L 617.2 51" class="fl-path a7" marker-end="url(#fl-arrow)"/></g>
 <g id="e-2" class="fl-edge"><path id="p-2" d="M 322.2 58.7 L 285 58.7 Q 278.2 58.7, 278.2 65.5 L 278.2 65.5 Q 278.2 72.3, 271.3 72.3 L 150.8 72.3 Q 144 72.3, 144 65.5 L 144 65.5 Q 144 58.7, 137.2 58.7 L 128 58.7" class="fl-path a8" marker-end="url(#fl-arrow)"/></g>
 
 <g class="p0-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="14.506s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.16731" values="1;0"/><animateMotion dur="14.506s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.16731;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
 <g class="p1-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="14.506s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.42775;0.585" values="0;1;0"/><animateMotion dur="14.506s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.42775;0.585;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
 <g class="p2-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="14.506s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.65945;0.84144" values="0;1;0"/><animateMotion dur="14.506s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.65945;0.84144;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
-<g class="fl-pills"><g id="l-0" class="fl-edge"><g class="fl-pill"><rect x="198.7" y="33.8" width="52.7" height="18" rx="9" class="pill a9"/><text x="225.1" y="46.8" class="edgelabel a10">dap 블록</text></g></g><g id="l-1" class="fl-edge"><g class="fl-pill"><rect x="484.1" y="41.5" width="62.5" height="18" rx="9" class="pill a11"/><text x="515.4" y="54.5" class="edgelabel a12">그림 만들기</text></g></g><g id="l-2" class="fl-edge"><g class="fl-pill"><rect x="188" y="62.8" width="74.2" height="18" rx="9" class="pill a13"/><text x="225.1" y="75.8" class="edgelabel a14">이미지 줄 넣기</text></g></g></g>
+<g class="fl-pills"><g id="l-0" class="fl-edge"><g class="fl-pill"><rect x="198.7" y="33.8" width="52.7" height="18" rx="9" class="pill a9"/><text x="225.1" y="46.8" class="edgelabel a10">dap 블록</text></g></g><g id="l-1" class="fl-edge"><g class="fl-pill"><rect x="494.7" y="41.5" width="62.5" height="18" rx="9" class="pill a11"/><text x="526" y="54.5" class="edgelabel a12">그림 만들기</text></g></g><g id="l-2" class="fl-edge"><g class="fl-pill"><rect x="188" y="62.8" width="74.2" height="18" rx="9" class="pill a13"/><text x="225.1" y="75.8" class="edgelabel a14">이미지 줄 넣기</text></g></g></g>
 </g>
 <text x="480" y="127.8" opacity="0" class="steplabel a15">읽기</text>
 <text x="480" y="127.8" opacity="0" class="steplabel a16">쓰기</text>

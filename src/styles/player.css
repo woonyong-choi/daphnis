@@ -62,22 +62,40 @@ html.embedded .fl-figure {
   background: var(--color-page);
 }
 
-/* 양쪽 칸 너비가 같아(1fr) 배속 글자가 바뀌어도 탭 묶음이 설명과 같은 축에 있다. */
+/* 장면 선택과 재생 조작을 두 줄로 나눠 좁은 화면에서도 탭 너비를 확보한다. */
 .fl-bar {
   display: grid;
-  grid-template-columns: minmax(var(--size-control-outer), 1fr) minmax(0, auto) minmax(var(--size-control-outer), 1fr);
-  max-width: 100%;
+  width: 100%;
+  gap: var(--simple2-control-gap);
+  justify-items: center;
+}
+
+.fl-transport {
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--simple2-control-gap);
   align-items: center;
+  justify-content: center;
 }
 
-.fl-bar .fl-pause {
-  justify-self: end;
+.fl-transport .fl-pause {
+  display: flex;
+  gap: var(--space-2);
+  padding: 0;
+  color: var(--color-state-active-text);
 }
 
-.fl-bar .fl-rate {
-  grid-column: 3;
-  justify-self: start;
+.fl-play-symbol {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--size-control-outer);
+  height: var(--size-control-outer);
+}
+
+.fl-repeat[aria-pressed='true'] {
+  color: var(--color-state-active-text);
+  background: var(--color-card-on);
 }
 
 /* 현재 탭의 진행은 일시정지 단추 테두리 위를 12시에서 시계 방향으로 도는 진행(ui.progress) 고리다. 트랙은 단추 테두리 그대로다. */
@@ -86,10 +104,10 @@ html.embedded .fl-figure {
 }
 
 .fl-ring {
-  position: absolute;
-  inset: 0;
-  width: var(--size-control-outer);
-  height: var(--size-control-outer);
+  display: block;
+  width: var(--simple2-progress-width);
+  height: var(--simple2-progress-stroke);
+  background: var(--simple2-separator);
   pointer-events: none;
 }
 
@@ -205,12 +223,12 @@ html.embedded .fl-figure {
 }
 
 .fl .fl-node.on .fl-halo {
-  opacity: 1;
+  opacity: 0;
 }
 
 .fl .fl-node.on .fl-stroke {
-  stroke: var(--color-state-active);
-  stroke-width: var(--border-strong);
+  stroke: var(--simple2-surface-edge);
+  stroke-width: var(--simple2-node-stroke);
 }
 
 /* 내용이 없는 카드는 틀도 보이지 않는다(그리는 쪽이 opacity 0). 흐름 그림은 내용이 있어도 켜진 색은 아니라 filled가 따로 있다. */
@@ -223,29 +241,33 @@ html.embedded .fl-figure {
   stroke: var(--color-state-active);
 }
 
-.fl .fl-edge.on .fl-path,
+.fl .fl-edge.is-current .fl-path,
 .fl .fl-edge.hover .fl-path {
   stroke: var(--color-state-active);
-  stroke-width: var(--border-strong);
+  stroke-width: var(--border-edge);
 }
 
-.fl .fl-edge.on .fl-path[marker-end],
+.fl .fl-edge.is-current .fl-path[marker-end],
 .fl .fl-edge.hover .fl-path[marker-end] {
   marker-end: url("#fl-arrow-on");
 }
 
-.fl .fl-edge.on .fl-path[marker-start],
+.fl .fl-edge.is-current .fl-path[marker-start],
 .fl .fl-edge.hover .fl-path[marker-start] {
   marker-start: url("#fl-arrow-on");
 }
 
 .fl .fl-edge.on .fl-pill rect {
-  fill: var(--color-state-active-fill);
-  stroke: var(--color-state-active-fill);
+  fill: var(--color-node);
+  stroke: var(--color-outline);
 }
 
 .fl .fl-edge.on .fl-pill text {
-  fill: var(--color-state-on-active);
+  fill: var(--color-muted);
+}
+
+.fl .fl-packet > circle:first-child {
+  opacity: 0;
 }
 
 .fl .fl-path,
@@ -307,8 +329,8 @@ html.embedded .fl-figure {
   display: none !important;
 }
 
-/* 보이는 재생 원은 36px, 누르는 영역은 공통 조작 높이를 유지한다. */
-.fl-pause::before {
+/* 큰 원형 재생 면은 유지하고 시간 진행 선은 단추 밖의 별도 줄에 둔다. */
+.fl-play-symbol::before {
   position: absolute;
   width: var(--simple2-play-face);
   height: var(--simple2-play-face);
@@ -322,6 +344,14 @@ html.embedded .fl-figure {
   color: var(--simple2-play-ink);
 }
 
+.fl-pause:hover .fl-play-symbol::before {
+  background: var(--color-state-active);
+}
+
+.fl-pause:active .fl-play-symbol::before {
+  background: var(--color-state-active-fill);
+}
+
 .fl-pause-icon svg {
   fill: currentColor;
   stroke: none;
@@ -330,14 +360,6 @@ html.embedded .fl-figure {
 .fl-pause:hover,
 .fl-pause:active {
   background: transparent;
-}
-
-.fl-pause:hover::before {
-  background: var(--color-state-active);
-}
-
-.fl-pause:active::before {
-  background: var(--color-state-active-fill);
 }
 
 .fl-context {

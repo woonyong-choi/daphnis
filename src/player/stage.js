@@ -124,10 +124,10 @@ function drawChartState(stage, seg, mayGrow) {
 // 정지면 멈추고 재개하면 잇고, 배속이면 재생 속도를 같게 한다. 모델 상태는 다시 계산하지 않는다(상태는 시간표가 정한다).
 // 이미 끝난 움직임은 건드리지 않는다. play()는 끝난 움직임을 처음부터 다시 돌리기 때문이다.
 function syncChartMotion(stage, clock) {
-  // 시간 흐름 없는 차트는 되풀이 움직임(chart-loop)을 재생을 켤 때 건다. 건 뒤에는 정지와 재개를 아래 반복문이 맡는다.
-  if (stage.isStill && clock.isPlaying) stage.svg.classList.add('chart-loop');
+  // 시간 흐름 없는 차트도 한 번 드러낸다. 정지와 재개는 같은 움직임을 잇는다.
+  if (stage.isStill && clock.isPlaying) stage.svg.classList.add('chart-once');
   for (const animation of stage.svg.getAnimations({ subtree: true })) {
-    if (!animation.animationName?.startsWith('chart-')) continue;
+    if (animation.transitionProperty || (animation.animationName && !animation.animationName.startsWith('chart-'))) continue;
     animation.playbackRate = clock.rate;
     if (!clock.isPlaying && animation.playState === 'running') animation.pause();
     else if (clock.isPlaying && animation.playState === 'paused') animation.play();
@@ -149,6 +149,8 @@ function resetPackets(stage, seg) {
 // 점을 옮기고, 도착한 도형의 카드를 바꾼다.
 function advanceStage(stage, seg, elapsed) {
   stage.packets.forEach((packet) => packet.move(elapsed));
+  const current = new Set(seg.hops.filter((hop) => elapsed >= (hop.at ?? 0) && elapsed < (hop.at ?? 0) + (hop.cut ?? hop.ms)).map((hop) => hop.edge));
+  stage.edges.forEach((edge, i) => edge?.classList.toggle('is-current', current.has(i)));
   stage.pendingCards = stage.pendingCards.filter(({ n, at }) => {
     if (elapsed < at) return true;
     showCards(stage, seg.cards, n);

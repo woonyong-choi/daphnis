@@ -35,26 +35,25 @@
 }
 
 /* 켜진 탭은 옅은 파란 면과 굵은 글자로 구분한다. */
-.fl-tabs button.on,
 .theme button[aria-pressed='true'] {
   font-weight: var(--weight-semibold);
-  color: var(--color-state-active-text);
-  background: var(--color-card-on);
+  color: var(--simple2-selection-ink);
+  background: var(--simple2-selection-fill);
 }
 
 /* 같은 조작의 hover와 pressed를 재생기와 목록에서 공유한다. */
 .fl-round:hover,
 .fl-tabs button:hover,
 .theme button:hover {
-  color: var(--color-state-active-text);
-  background: var(--color-card-on);
+  color: var(--simple2-selection-ink);
+  background: var(--simple2-selection-fill);
 }
 
 .fl-round:active,
 .fl-tabs button:active,
 .theme button:active {
-  color: var(--color-state-on-active);
-  background: var(--color-state-active-fill);
+  color: var(--simple2-selection-ink);
+  background: var(--simple2-selection-fill);
 }
 
 .fl-round:disabled,
@@ -63,4 +62,28 @@
   color: var(--color-muted);
   background: var(--color-surface);
   cursor: default;
+}
+
+.fl-tabs button {
+  background: var(--simple2-tab-fill);
+}
+
+.fl-tabs button.on {
+  font-weight: var(--weight-semibold);
+  color: var(--simple2-selection-ink);
+  background: var(--simple2-selection-fill);
+}
+
+.fl-tabs button:not(.on):hover {
+  color: var(--simple2-selection-ink);
+  background: var(--simple2-selection-fill);
+}
+
+.fl-tabs button.on:hover {
+  background: var(--simple2-selection-fill);
+}
+
+.fl-tabs button:active {
+  color: var(--simple2-selection-ink);
+  background: var(--simple2-selection-fill);
 }

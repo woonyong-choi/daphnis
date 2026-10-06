@@ -5,7 +5,7 @@
 }
 
 .fl .label {
-  font-size: var(--size-text-13);
+  font-size: var(--simple2-label-size);
   font-weight: var(--weight-medium);
   text-anchor: middle;
   fill: var(--color-fg);
@@ -241,6 +241,7 @@
 
 .fl :where(.fl-shape-rect, .fl-shape-box, .fl-shape-tile, .fl-shape-external, .fl-shape-store, .fl-shape-table, .fl-shape-grid, .fl-shape-queue) > .fl-stroke:not([fill="none"]) {
   stroke-width: var(--simple2-node-stroke);
+  stroke: var(--simple2-surface-edge);
   filter: var(--simple2-node-shadow);
 }
 

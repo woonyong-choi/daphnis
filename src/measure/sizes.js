@@ -19,7 +19,7 @@ export const lineHeight = (size, leading) => Math.round(size * leading);
 
 /** 글 모양. 크기, 글꼴, 줄 높이 */
 export const STYLE = Object.freeze({
-  label: { size: TEXT['13'], face: 'medium', line: lineHeight(TEXT['13'], SNUG) },
+  label: { size: values.simple2['label-size'], face: 'medium', line: lineHeight(values.simple2['label-size'], SNUG) },
   sub: { size: TEXT['11'], face: 'regular', line: lineHeight(TEXT['11'], SNUG) },
   row: { size: TEXT['11'], face: 'regular', line: lineHeight(TEXT['11'], SNUG) },
   mono: { size: TEXT['11'], face: 'mono', line: lineHeight(TEXT['11'], SNUG) },

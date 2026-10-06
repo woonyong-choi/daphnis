@@ -171,6 +171,8 @@ describe('player', { skip: CHROME ? false : 'Chrome이 없다' }, () => {
       await page.clock.install({ time: 0 });
       await page.clock.pauseAt(PAUSE_AT_MS);
       await page.goto(`file://${join(folder, 'page.html')}`);
+      // 반복 시 값과 대기 순서가 보존되는지 검사하므로 반복을 명시적으로 켠다.
+      await page.click('.fl-repeat');
       await page.click('.fl-pause');
       // 가짜 시계는 CSS 전환(실제 시간으로 흐른다)을 따라가지 못한다. 전환을 꺼 켜진 뒤의 값을 잰다.
       await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' });

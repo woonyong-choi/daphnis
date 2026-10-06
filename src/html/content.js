@@ -134,7 +134,7 @@ export function chartContent(result, glyphs) {
     growing: seg.growing.map((id) => ids.indexOf(id)),
     lights: seg.lights.map((key) => chart.rowKeys.indexOf(key)),
   }));
-  const data = { segs, steps: timeline.steps, cardCounts: [], edgeEnds: [], seriesCount: ids.length, rowCount: chart.rowKeys.length, metrics: PLAYER_METRICS };
+  const data = { segs, stillMs: timeline.growMs + values.duration.fast, steps: timeline.steps, cardCounts: [], edgeEnds: [], seriesCount: ids.length, rowCount: chart.rowKeys.length, metrics: PLAYER_METRICS };
   // 재생기 안에서는 그림 바탕 사각형을 그리지 않는다. 카드가 유일한 틀이고, 회색 판은 문서에 넣는 SVG 파일에만 있다.
   return { svg: chart.body, width: chart.width, height: chart.height, data };
 }

@@ -22,17 +22,21 @@ function figurePlay(root, data) {
   figureView(root, data.metrics);
   centerCanvas(root);
   setPlaying(player, player.clock.isPlaying);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) setPlaying(player, false);
+  });
   REDUCED_MOTION.addEventListener('change', () => REDUCED_MOTION.matches && settleReducedMotion(player));
   if (data.segs.length) {
     enterSegment(player, 0);
-    requestAnimationFrame(player.tick);
   } else {
-    // 시간 흐름이 없는 그림은 단계 이름과 설명이 없어 탭과 설명 줄을 숨기고 재생 단추와 배속만 둔다.
-    // 차트는 다 자란 채 멈춰 있다가 재생을 누르면 되풀이한다.
+    // 시간 흐름이 없는 그림은 단계 이름과 설명이 없어 탭과 설명 줄을 숨기고 차트에만 재생 조작을 둔다.
+    // 차트는 다 자란 채 멈춰 있다가 재생을 누르면 한 번 드러낸다.
     root.querySelector('.fl-tabs').hidden = true;
     root.querySelector('.fl-context').hidden = true;
+    root.querySelector('.fl-transport').hidden = !data.stillMs;
     player.ring.draw(0);
   }
+  requestAnimationFrame(player.tick);
 }
 
 // cost: time O(s + r), heap O(1), stack O(1)
@@ -43,7 +47,11 @@ function settleReducedMotion(player) {
   const { data, clock, stage } = player;
   setPlaying(player, false);
   if (data.segs.length) drawChartState(stage, data.segs[clock.index], false);
-  else stage.svg.classList.remove('chart-loop');
+  else {
+    stage.svg.classList.remove('chart-once');
+    clock.elapsed = 0;
+    player.ring.draw(0);
+  }
 }
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -86,8 +94,8 @@ function createPlayer(root, data) {
     position: root.querySelector('.fl-position'),
     captionText: undefined,
     captionFade: undefined,
-    pause: { button: pauseButton, icon: pauseButton.querySelector('.fl-pause-icon') },
-    ring: createRing(pauseButton),
+    pause: { button: pauseButton, icon: pauseButton.querySelector('.fl-pause-icon'), label: pauseButton.querySelector('.fl-play-label') },
+    ring: createRing(root),
     tabs: [],
     tick: (now) => drawFrame(player, now),
   };
@@ -105,6 +113,8 @@ function createClock() {
     elapsed: 0,
     before: performance.now(),
     isPlaying: false,
+    ended: false,
+    repeat: false,
     rate: PLAYER_RATES[0],
   };
 }
@@ -135,9 +145,15 @@ function drawFrame(player, now) {
   clock.before = now;
   const seg = data.segs[clock.index];
   if (clock.isPlaying) {
-    advanceStage(player.stage, seg, clock.elapsed);
-    player.ring.draw(tabProgress(player, seg));
-    if (clock.elapsed >= seg.t1 - seg.t0) enterSegment(player, (clock.index + 1) % data.segs.length);
+    const duration = seg ? seg.t1 - seg.t0 : data.stillMs;
+    clock.elapsed = Math.min(clock.elapsed, duration);
+    if (seg) advanceStage(player.stage, seg, clock.elapsed);
+    player.ring.draw(seg ? tabProgress(player, seg) : clock.elapsed / duration);
+    if (clock.elapsed >= duration) {
+      if (seg && clock.index + 1 < data.segs.length) enterSegment(player, clock.index + 1);
+      else if (clock.repeat) restartPlayback(player);
+      else finishPlayback(player);
+    }
   }
   requestAnimationFrame(player.tick);
 }
@@ -149,6 +165,7 @@ function drawFrame(player, now) {
 function enterSegment(player, i) {
   const { clock, data } = player;
   const seg = data.segs[i];
+  clock.ended = false;
   clock.index = i;
   clock.elapsed = 0;
   drawSegmentState(player.stage, seg, mayAnimate(clock));
@@ -185,4 +202,32 @@ function showCaption(player, text) {
     player.captionFade = caption.animate([{ opacity: 0 }, { opacity: 1 }], { duration: fadeMs });
     out.cancel();
   }, () => {});
+}
+
+// cost: time O(a), heap O(a), stack O(1)
+// vars: a = 차트 움직임 수
+// basis: estimate
+// 마지막 결과를 유지한다. 재생 고리는 업무 완료가 아니라 시간의 끝이다.
+function finishPlayback(player) {
+  player.clock.ended = true;
+  setPlaying(player, false);
+  for (const animation of player.stage.svg.getAnimations({ subtree: true })) {
+    if (!animation.transitionProperty) animation.finish();
+  }
+}
+
+// cost: time O(s + c + k + r), heap O(h), stack O(1)
+// vars: s = 도형 수, c = 선 수, k = 카드 수, r = 차트 행 수, h = 이동 수
+// basis: estimate
+function restartPlayback(player) {
+  const { clock, data, stage } = player;
+  clock.ended = false;
+  clock.elapsed = 0;
+  if (data.segs.length) enterSegment(player, 0);
+  else {
+    stage.svg.classList.remove('chart-once');
+    stage.svg.getBoundingClientRect();
+    stage.svg.classList.add('chart-once');
+    syncChartMotion(stage, clock);
+  }
 }

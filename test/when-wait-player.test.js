@@ -158,6 +158,8 @@ describe('player', { skip: CHROME ? false : 'Chrome이 없다' }, () => {
       await page.clock.install({ time: 0 });
       await page.clock.pauseAt(PAUSE_AT_MS);
       await page.goto(`file://${join(folder, 'page.html')}`);
+      // 반복 시 값과 대기 순서가 보존되는지 검사하므로 반복을 명시적으로 켠다.
+      await page.click('.fl-repeat');
       await page.click('.fl-pause');
       await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' });
       try {

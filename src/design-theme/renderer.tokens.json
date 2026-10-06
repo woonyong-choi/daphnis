@@ -570,35 +570,35 @@
     },
     "figure": {
       "icon-service-ink": {
-        "$value": "{color.blue.light-ink}",
+        "$value": "{primitive.simple2.icon-service}",
         "$type": "color"
       },
       "icon-service-surface": {
-        "$value": "{color.blue.light-heat-low}",
+        "$value": "{primitive.simple2.icon-service-face}",
         "$type": "color"
       },
       "icon-data-ink": {
-        "$value": "{color.purple.light-ink}",
+        "$value": "{primitive.simple2.icon-data}",
         "$type": "color"
       },
       "icon-data-surface": {
-        "$value": "{color.purple.light-tint-3}",
+        "$value": "{primitive.simple2.icon-data-face}",
         "$type": "color"
       },
       "icon-access-ink": {
-        "$value": "{color.orange.light-ink}",
+        "$value": "{primitive.simple2.icon-access}",
         "$type": "color"
       },
       "icon-access-surface": {
-        "$value": "{color.orange.light-fill}",
+        "$value": "{primitive.simple2.icon-access-face}",
         "$type": "color"
       },
       "icon-person-ink": {
-        "$value": "{color.green.light-ink}",
+        "$value": "{primitive.simple2.icon-person}",
         "$type": "color"
       },
       "icon-person-surface": {
-        "$value": "{color.green.light-fill}",
+        "$value": "{primitive.simple2.icon-person-face}",
         "$type": "color"
       },
       "icon-brand-ink": {
@@ -1047,7 +1047,7 @@
       "$type": "fontWeight"
     },
     "progress-stroke": {
-      "$value": 2,
+      "$value": 1,
       "$type": "dimension"
     },
     "node-corner": {
@@ -1059,7 +1059,7 @@
       "$type": "color"
     },
     "canvas-corner": {
-      "$value": 28,
+      "$value": 12,
       "$type": "dimension"
     },
     "canvas-fill": {
@@ -1067,7 +1067,39 @@
       "$type": "color"
     },
     "symbol-stroke": {
-      "$value": 1.75,
+      "$value": 1.5,
+      "$type": "dimension"
+    },
+    "selection-fill": {
+      "$value": "{primitive.simple2.selection-fill}",
+      "$type": "color"
+    },
+    "selection-ink": {
+      "$value": "{primitive.simple2.selection-ink}",
+      "$type": "color"
+    },
+    "tab-fill": {
+      "$value": "{primitive.simple2.tab-fill}",
+      "$type": "color"
+    },
+    "label-size": {
+      "$value": 15,
+      "$type": "dimension"
+    },
+    "detail-size": {
+      "$value": 13,
+      "$type": "dimension"
+    },
+    "micro-size": {
+      "$value": 11,
+      "$type": "dimension"
+    },
+    "surface-edge": {
+      "$value": "{primitive.simple2.plate-border}",
+      "$type": "color"
+    },
+    "progress-width": {
+      "$value": 160,
       "$type": "dimension"
     }
   },
@@ -1102,7 +1134,7 @@
         "$type": "color"
       },
       "plate-border": {
-        "$value": "#d1d7de",
+        "$value": "#d9dce1",
         "$type": "color"
       },
       "border": {
@@ -1130,7 +1162,51 @@
         "$type": "color"
       },
       "canvas": {
-        "$value": "#edeef2",
+        "$value": "#f5f5f7",
+        "$type": "color"
+      },
+      "selection-fill": {
+        "$value": "#e3e4e8",
+        "$type": "color"
+      },
+      "selection-ink": {
+        "$value": "#303336",
+        "$type": "color"
+      },
+      "tab-fill": {
+        "$value": "#f5f5f7",
+        "$type": "color"
+      },
+      "icon-service": {
+        "$value": "#1e6bd6",
+        "$type": "color"
+      },
+      "icon-data": {
+        "$value": "#269c6e",
+        "$type": "color"
+      },
+      "icon-access": {
+        "$value": "#a78b16",
+        "$type": "color"
+      },
+      "icon-person": {
+        "$value": "#c62859",
+        "$type": "color"
+      },
+      "icon-service-face": {
+        "$value": "#edf4ff",
+        "$type": "color"
+      },
+      "icon-data-face": {
+        "$value": "#eaf5ef",
+        "$type": "color"
+      },
+      "icon-access-face": {
+        "$value": "#fff8d5",
+        "$type": "color"
+      },
+      "icon-person-face": {
+        "$value": "#fff0f4",
         "$type": "color"
       }
     }

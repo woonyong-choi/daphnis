@@ -231,6 +231,22 @@
     "canvas-fill": {
       "$value": "{color.gray.910}",
       "$type": "color"
+    },
+    "selection-fill": {
+      "$value": "{color.gray.757}",
+      "$type": "color"
+    },
+    "selection-ink": {
+      "$value": "{color.gray.0}",
+      "$type": "color"
+    },
+    "tab-fill": {
+      "$value": "{color.gray.835}",
+      "$type": "color"
+    },
+    "surface-edge": {
+      "$value": "{color.gray.635}",
+      "$type": "color"
     }
   }
 }

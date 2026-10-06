@@ -58,22 +58,19 @@ function roundButton(extraClass, { label, zoom, content = '' } = {}) {
   return `<button type="button" class="${className}"${zoomAttr}${labelAttr}>${content}</button>`;
 }
 
-// 일시정지 단추 둘레의 진행 고리. 단추 바깥 테두리(size.control.outer)를 덮고, 선 굵기의 한가운데가 둘레다. 12시에서 시작한다.
-const RING_START_DEGREES = -90;
+// 시간 진행은 재생 단추와 분리한 얇은 선으로 표시한다.
 function ringSvg() {
-  const size = values.size.control.outer;
+  const size = values.simple2['progress-width'];
   const width = values.simple2['progress-stroke'];
-  const center = size / 2;
-  const radius = (size - width) / 2;
-  const start = `rotate(${RING_START_DEGREES} ${center} ${center})`;
-  return `<svg class="fl-ring" viewBox="0 0 ${size} ${size}" aria-hidden="true"><circle class="fl-ring-fill" cx="${center}" cy="${center}" r="${radius}" stroke-width="${width}" stroke-linecap="round" transform="${start}"/></svg>`;
+  return `<svg class="fl-ring" viewBox="0 0 ${size} ${width}" aria-hidden="true"><path class="fl-ring-fill" d="M0 ${width / 2} H${size}" stroke-width="${width}" stroke-linecap="round"/></svg>`;
 }
 
 // 전체 화면 단추와, 전체 화면에서만 보이는 확대·축소 단추.
 const VIEW_BUTTONS =
   roundButton('fl-full') +
   `<div class="fl-zoom">${roundButton('', { label: '확대', zoom: 'in' })}${roundButton('', { label: '축소', zoom: 'out' })}${roundButton('', { label: '전체 보기', zoom: 'fit' })}</div>`;
-const PAUSE_BUTTON = roundButton('fl-pause', { content: `${ringSvg()}<span class="fl-pause-icon"></span>` });
+const PAUSE_BUTTON = roundButton('fl-pause', { content: `<span class="fl-play-symbol"><span class="fl-pause-icon"></span></span><span class="fl-play-label" aria-hidden="true"></span>` });
+const REPEAT_BUTTON = '<button type="button" class="fl-round fl-repeat" aria-label="반복" aria-pressed="false">반복 꺼짐</button>';
 const RATE_BUTTON = roundButton('fl-rate', { label: '배속', content: '1×' });
 
 // cost: time O(s + e + b·(e + k) + out), heap O(out), stack O(1), io 1
@@ -104,7 +101,7 @@ ${VIEW_BUTTONS}
 <div class="fl-canvas">${svg}</div>
 <figcaption class="fl-foot">
 <div class="fl-context"><span class="fl-position" aria-label="현재 단계"></span><p class="fl-caption" aria-live="polite"></p></div>
-<div class="fl-bar">${PAUSE_BUTTON}<div class="fl-tabs" role="tablist" aria-label="장면 선택"></div>${RATE_BUTTON}</div>
+${ringSvg()}<div class="fl-bar"><div class="fl-tabs" role="tablist" aria-label="장면 선택"></div><div class="fl-transport">${PAUSE_BUTTON}${RATE_BUTTON}${REPEAT_BUTTON}</div></div>
 </figcaption>
 </figure>
 <script>
@@ -121,7 +118,7 @@ figurePlay(document.querySelector('.fl-figure'), ${JSON.stringify(content.data, 
 // basis: estimate
 // 재생기가 설명, 단계 이름, 이동 글로 그리는 글자를 글꼴 부분 집합에 더한다.
 function addTimelineGlyphs(timeline, glyphs) {
-  glyphs.add('0123456789 /×.', 'regular');
+  glyphs.add('0123456789 /×. 재생일시정지다시반복켜짐꺼짐', 'regular');
   for (const label of timeline.steps) {
     glyphs.add(label, 'regular');
     glyphs.add(label, 'semibold');

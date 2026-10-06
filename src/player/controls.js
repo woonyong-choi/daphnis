@@ -7,6 +7,12 @@
 function bindControls(root, player) {
   const { clock, pause } = player;
   const rateButton = root.querySelector('.fl-rate');
+  const repeat = root.querySelector('.fl-repeat');
+  repeat.addEventListener('click', () => {
+    clock.repeat = !clock.repeat;
+    repeat.setAttribute('aria-pressed', clock.repeat);
+    repeat.textContent = clock.repeat ? '반복 켜짐' : '반복 꺼짐';
+  });
   pause.button.addEventListener('click', () => setPlaying(player, !clock.isPlaying));
   rateButton.addEventListener('click', () => {
     clock.rate = nextRate(clock.rate);
@@ -25,14 +31,18 @@ function bindControls(root, player) {
 // basis: estimate
 function setPlaying(player, value) {
   const { clock, pause } = player;
+  if (value && !player.data.segs.length && !player.data.stillMs) return;
   const wasPlaying = clock.isPlaying;
   clock.isPlaying = value;
+  if (value && clock.ended) restartPlayback(player);
   clock.before = performance.now();
   if (value && !wasPlaying && clock.elapsed === 0 && player.data.segs.length) {
     drawChartState(player.stage, player.data.segs[clock.index], true);
   }
   pause.icon.innerHTML = playIconSvg(clock.isPlaying, player.data.metrics);
-  pause.button.setAttribute('aria-label', clock.isPlaying ? '일시정지' : '재생');
+  const label = clock.isPlaying ? '일시정지' : clock.ended ? '다시 재생' : '재생';
+  pause.button.setAttribute('aria-label', label);
+  pause.label.textContent = label;
   syncChartMotion(player.stage, clock);
 }
 
@@ -50,7 +60,7 @@ function playIconSvg(isPlaying, metrics) {
 // 고리 둘레는 마크업의 반지름에서 구한다. draw(0~1)로 12시에서 시계 방향으로 채운다.
 function createRing(button) {
   const fill = button.querySelector('.fl-ring-fill');
-  const length = 2 * Math.PI * fill.r.baseVal.value;
+  const length = fill.getTotalLength();
   fill.style.strokeDasharray = length;
   return {
     draw(progress) {
@@ -70,6 +80,7 @@ function createTabs(container, player) {
   const buttons = data.steps.map((label, si) => createTab(label, () => {
     setPlaying(player, false);
     enterSegment(player, data.segs.indexOf(stepSegs[si][0]));
+    setPlaying(player, false);
   }));
   container.addEventListener('keydown', (event) => moveTab(event, buttons));
   container.append(...buttons);

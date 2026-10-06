@@ -171,6 +171,7 @@ describe('player', { skip: CHROME ? false : 'Chrome이 없다' }, () => {
       await page.clock.install({ time: 0 });
       await page.clock.pauseAt(3_600_000);
       await page.setContent(html);
+      await page.locator('.fl-repeat').dispatchEvent('click');
       await page.locator('.fl-pause').dispatchEvent('click');
       await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' });
       const seen = [];

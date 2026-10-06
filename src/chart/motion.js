@@ -24,7 +24,7 @@ export function chartMotionCss(growMs, dotAts = []) {
 .fl.chart-loop .dot[data-at="${at}"] { animation: chart-dot-loop-${n} ${cycle}ms infinite both; }
 @keyframes chart-dot-loop-${n} { 0%, ${from} { opacity: 0; animation-timing-function: ${ease}; } ${to}, 100% { opacity: 1; } }`;
   });
-  return `
+  return `${onceMotion(growMs, dotAts)}
 .fl .play .dot, .fl .play.dot { animation: chart-dot ${fade}ms ${ease} both; }
 @keyframes chart-dot { from { opacity: 0; } }
 ${dots.join('\n')}
@@ -49,4 +49,20 @@ ${dots.join('\n')}
 
 function percent(ratio) {
   return percentText(Math.min(1, ratio));
+}
+
+// cost: time O(a), heap O(out), stack O(1)
+// vars: a = 점 출현 시각 수, out = CSS 길이
+// basis: estimate
+function onceMotion(growMs, dotAts) {
+  const fade = values.duration.fast;
+  const ease = tokens.easing.reveal;
+  return `
+.fl.chart-once .grow { animation: chart-grow ${growMs}ms ${ease} both; }
+.fl.chart-once .draw { animation: chart-draw ${growMs}ms ${ease} both; }
+.fl.chart-once .wipe { animation: chart-wipe ${growMs}ms ${ease} both; }
+.fl.chart-once .pop, .fl.chart-once .late { animation: chart-fade ${growMs}ms ${ease} both; }
+.fl.chart-once .dot { animation: chart-dot ${fade}ms ${ease} both; }
+${dotAts.map((at) => `.fl.chart-once .dot[data-at="${at}"] { animation-delay: ${Math.round(at * growMs)}ms; }`).join('\n')}
+`;
 }

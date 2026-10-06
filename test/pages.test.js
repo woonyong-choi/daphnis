@@ -94,8 +94,8 @@ describe('pages', { skip: SKIP }, () => {
       });
       assert.equal(details.width, details.view);
       assert.equal(details.cap, 'round');
-      assert.equal(details.stroke, '2px');
-      assert.equal(details.active, '2.5px');
+      assert.equal(details.stroke, '1px');
+      assert.equal(details.active, '1px');
       assert.equal(details.font, details.label);
     });
   });
@@ -112,7 +112,7 @@ describe('pages', { skip: SKIP }, () => {
             card: read('.fl-figure').boxShadow,
             node: read('.fl-node > .fl-stroke').filter,
             text: read('.label').filter, edge: read('.fl-path').filter,
-            face: read('.fl-pause', '::before').width,
+            face: read('.fl-play-symbol', '::before').width,
             fill: read('.fl-pause-icon svg').fill, stroke: read('.fl-pause-icon svg').stroke,
             selected: read('.fl-tabs button.on').boxShadow,
             border: read('.fl-rate').borderWidth,
@@ -189,7 +189,7 @@ describe('pages', { skip: SKIP }, () => {
       }, CAPTION);
       const box = (selector) => page.locator(selector).first().boundingBox();
       const center = (b) => b.x + b.width / 2;
-      const [tabs, caption, bar, pause, ring, round] = await Promise.all(['.fl-tabs', '.fl-caption', '.fl-bar', '.fl-pause', '.fl-ring', '.fl-pause'].map(box));
+      const [tabs, caption, bar, pause, ring, round] = await Promise.all(['.fl-tabs', '.fl-caption', '.fl-bar', '.fl-play-symbol', '.fl-ring', '.fl-pause'].map(box));
       const offsetAt = () => page.evaluate(() => Number.parseFloat(getComputedStyle(document.querySelector('.fl-ring-fill')).strokeDashoffset));
       await page.click('.fl-pause');
       const first = await offsetAt();
@@ -204,7 +204,7 @@ describe('pages', { skip: SKIP }, () => {
       assert.ok(Math.abs(center(tabs) - center(caption)) <= AXIS_TOLERANCE, `탭과 설명의 축 차이 ${center(tabs) - center(caption)}`);
       assert.ok(Math.abs(center(tabs) - center(bar)) <= AXIS_TOLERANCE, '탭 묶음이 조작 막대 가운데에 있다');
       assert.ok(Math.abs(tabs.height - round.height) <= AXIS_TOLERANCE, `탭 묶음 높이 ${tabs.height}, 둥근 단추 높이 ${round.height}`);
-      assert.ok(Math.abs(center(ring) - center(pause)) <= AXIS_TOLERANCE && ring.width >= pause.width, '진행 고리가 일시정지 단추 둘레에 있다');
+      assert.ok(Math.abs(center(ring) - center(bar)) <= AXIS_TOLERANCE && ring.height < pause.height && ring.y < pause.y, '진행 선이 재생 아이콘 밖의 별도 줄에 있다');
       assert.ok(first > (await offsetAt()) || first === 0, '고리 채움이 시간에 따라 늘어난다');
       assert.ok(style.on.weight >= SEMIBOLD && style.off.weight < SEMIBOLD, '켜진 탭만 굵은 글');
       assert.notEqual(style.on.background, style.group, '켜진 탭은 묶음 바탕과 다른 알약 면');

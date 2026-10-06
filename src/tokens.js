@@ -542,7 +542,15 @@ export const tokens = freeze({
     "separator": "var(--simple2-separator)",
     "canvas-corner": "var(--simple2-canvas-corner)",
     "canvas-fill": "var(--simple2-canvas-fill)",
-    "symbol-stroke": "var(--simple2-symbol-stroke)"
+    "symbol-stroke": "var(--simple2-symbol-stroke)",
+    "selection-fill": "var(--simple2-selection-fill)",
+    "selection-ink": "var(--simple2-selection-ink)",
+    "tab-fill": "var(--simple2-tab-fill)",
+    "label-size": "var(--simple2-label-size)",
+    "detail-size": "var(--simple2-detail-size)",
+    "micro-size": "var(--simple2-micro-size)",
+    "surface-edge": "var(--simple2-surface-edge)",
+    "progress-width": "var(--simple2-progress-width)"
   },
   "primitive": {
     "simple2": {
@@ -560,7 +568,18 @@ export const tokens = freeze({
       "play-ink": "var(--primitive-simple2-play-ink)",
       "node-shadow": "var(--primitive-simple2-node-shadow)",
       "group-title": "var(--primitive-simple2-group-title)",
-      "canvas": "var(--primitive-simple2-canvas)"
+      "canvas": "var(--primitive-simple2-canvas)",
+      "selection-fill": "var(--primitive-simple2-selection-fill)",
+      "selection-ink": "var(--primitive-simple2-selection-ink)",
+      "tab-fill": "var(--primitive-simple2-tab-fill)",
+      "icon-service": "var(--primitive-simple2-icon-service)",
+      "icon-data": "var(--primitive-simple2-icon-data)",
+      "icon-access": "var(--primitive-simple2-icon-access)",
+      "icon-person": "var(--primitive-simple2-icon-person)",
+      "icon-service-face": "var(--primitive-simple2-icon-service-face)",
+      "icon-data-face": "var(--primitive-simple2-icon-data-face)",
+      "icon-access-face": "var(--primitive-simple2-icon-access-face)",
+      "icon-person-face": "var(--primitive-simple2-icon-person-face)"
     }
   },
   "dash": {
@@ -730,7 +749,7 @@ export const values = freeze({
     "page": "#ffffff",
     "outline": "#787878",
     "border": "#838b96",
-    "plate-border": "#d1d7de",
+    "plate-border": "#d9dce1",
     "line": "#b7b7b7",
     "state": {
       "active": "#1e66d8",
@@ -766,14 +785,14 @@ export const values = freeze({
     },
     "accent": "#1e66d8",
     "figure": {
-      "icon-service-ink": "#0a57c8",
-      "icon-service-surface": "#b3cbf2",
-      "icon-data-ink": "#704f8c",
-      "icon-data-surface": "#dcd1e8",
-      "icon-access-ink": "#a63900",
-      "icon-access-surface": "#fff0ea",
-      "icon-person-ink": "#006d12",
-      "icon-person-surface": "#eaf8e9",
+      "icon-service-ink": "#1e6bd6",
+      "icon-service-surface": "#edf4ff",
+      "icon-data-ink": "#269c6e",
+      "icon-data-surface": "#eaf5ef",
+      "icon-access-ink": "#a78b16",
+      "icon-access-surface": "#fff8d5",
+      "icon-person-ink": "#c62859",
+      "icon-person-surface": "#fff0f4",
       "icon-brand-ink": "#888888",
       "icon-brand-surface": "#f0f0f0",
       "icon": "#1e66d8",
@@ -1138,12 +1157,20 @@ export const values = freeze({
     "card-gap": 48,
     "node-stroke": 1,
     "heading-weight": 700,
-    "progress-stroke": 2,
+    "progress-stroke": 1,
     "node-corner": 8,
-    "separator": "#d1d7de",
-    "canvas-corner": 28,
-    "canvas-fill": "#edeef2",
-    "symbol-stroke": 1.75
+    "separator": "#d9dce1",
+    "canvas-corner": 12,
+    "canvas-fill": "#f5f5f7",
+    "symbol-stroke": 1.5,
+    "selection-fill": "#e3e4e8",
+    "selection-ink": "#303336",
+    "tab-fill": "#f5f5f7",
+    "label-size": 15,
+    "detail-size": 13,
+    "micro-size": 11,
+    "surface-edge": "#d9dce1",
+    "progress-width": 160
   },
   "primitive": {
     "simple2": {
@@ -1154,14 +1181,25 @@ export const values = freeze({
       "node": "#ffffff",
       "card": "#f6f7fa",
       "surface": "#edeef1",
-      "plate-border": "#d1d7de",
+      "plate-border": "#d9dce1",
       "border": "#838b96",
       "shadow": "0 2px 8px rgba(0,0,0,.10), 0 0 2px rgba(0,0,0,.10)",
       "play-fill": "#4f91fb",
       "play-ink": "#ffffff",
       "node-shadow": "drop-shadow(0px 1px 1px rgba(0,0,0,.07))",
       "group-title": "#505b69",
-      "canvas": "#edeef2"
+      "canvas": "#f5f5f7",
+      "selection-fill": "#e3e4e8",
+      "selection-ink": "#303336",
+      "tab-fill": "#f5f5f7",
+      "icon-service": "#1e6bd6",
+      "icon-data": "#269c6e",
+      "icon-access": "#a78b16",
+      "icon-person": "#c62859",
+      "icon-service-face": "#edf4ff",
+      "icon-data-face": "#eaf5ef",
+      "icon-access-face": "#fff8d5",
+      "icon-person-face": "#fff0f4"
     }
   },
   "dash": {
