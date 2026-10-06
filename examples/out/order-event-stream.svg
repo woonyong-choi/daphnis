@@ -37,86 +37,86 @@
   --color-blue-anchor: #1e66d8;
   --color-blue-light-fill: #edf4ff;
   --color-blue-light-stroke: #1e66d8;
-  --color-blue-light-ink: #0a57c8;
-  --color-blue-light-heat-low: #b3cbf2;
+  --color-blue-light-ink: #1760d2;
+  --color-blue-light-heat-low: #b4ccf2;
   --color-blue-light-heat-high: #0352c3;
   --color-blue-light-outline: #678dcb;
-  --color-blue-light-tint-1: #e5eefc;
-  --color-blue-light-tint-2: #d7e2f4;
-  --color-blue-light-tint-3: #c9d7ed;
-  --color-blue-dark-fill: #1b2a43;
+  --color-blue-light-tint-1: #e8f1ff;
+  --color-blue-light-tint-2: #dfebfd;
+  --color-blue-light-tint-3: #d7e5fb;
+  --color-blue-dark-fill: #08152d;
   --color-blue-dark-stroke: #6ca4ff;
-  --color-blue-dark-ink: #74a9ff;
-  --color-blue-dark-heat-low: #283851;
+  --color-blue-dark-ink: #6fa6ff;
+  --color-blue-dark-heat-low: #33445e;
   --color-blue-dark-heat-high: #4075cc;
-  --color-blue-dark-outline: #6489c3;
-  --color-blue-dark-tint-1: #1a202b;
-  --color-blue-dark-tint-2: #222a38;
-  --color-blue-dark-tint-3: #2a3546;
+  --color-blue-dark-outline: #577bb4;
+  --color-blue-dark-tint-1: #272e39;
+  --color-blue-dark-tint-2: #2c3543;
+  --color-blue-dark-tint-3: #323d4e;
   --color-purple-anchor: #b28fd1;
   --color-purple-light-fill: #f7f0ff;
-  --color-purple-light-stroke: #8c6aaa;
-  --color-purple-light-ink: #704f8c;
-  --color-purple-light-dot: #704f8c;
-  --color-purple-light-outline: #9884ac;
-  --color-purple-light-tint-1: #f1eaf9;
-  --color-purple-light-tint-2: #e6ddf0;
-  --color-purple-light-tint-3: #dcd1e8;
-  --color-purple-dark-fill: #31233d;
+  --color-purple-light-stroke: #9573b3;
+  --color-purple-light-ink: #795895;
+  --color-purple-light-dot: #795895;
+  --color-purple-light-outline: #9885ac;
+  --color-purple-light-tint-1: #f4ecfc;
+  --color-purple-light-tint-2: #efe5f9;
+  --color-purple-light-tint-3: #eadef6;
+  --color-purple-dark-fill: #1c0f27;
   --color-purple-dark-stroke: #b693d6;
-  --color-purple-dark-ink: #be9ade;
-  --color-purple-dark-dot: #9c7abb;
-  --color-purple-dark-outline: #977eae;
-  --color-purple-dark-tint-1: #231d28;
-  --color-purple-dark-tint-2: #2e2635;
-  --color-purple-dark-tint-3: #393042;
+  --color-purple-dark-ink: #bb98db;
+  --color-purple-dark-dot: #9a77b8;
+  --color-purple-dark-outline: #89709f;
+  --color-purple-dark-tint-1: #302b36;
+  --color-purple-dark-tint-2: #38303f;
+  --color-purple-dark-tint-3: #41374a;
   --color-red-anchor: #ef0f0f;
   --color-red-light-fill: #ffefed;
   --color-red-light-stroke: #c70005;
-  --color-red-light-ink: #be0004;
-  --color-red-light-dot: #6c0001;
+  --color-red-light-ink: #c70005;
+  --color-red-light-dot: #740001;
   --color-red-light-outline: #cd7367;
-  --color-red-dark-fill: #40201c;
+  --color-red-dark-fill: #290b08;
   --color-red-dark-stroke: #fc7182;
-  --color-red-dark-ink: #ff8390;
-  --color-red-dark-dot: #e25971;
-  --color-red-dark-outline: #c56f73;
+  --color-red-dark-ink: #ff7e8c;
+  --color-red-dark-dot: #df576f;
+  --color-red-dark-outline: #b56165;
   --color-green-anchor: #09c72c;
   --color-green-light-fill: #eaf8e9;
-  --color-green-light-stroke: #008c1a;
-  --color-green-light-ink: #006d12;
-  --color-green-light-dot: #006d12;
-  --color-green-light-outline: #629a61;
-  --color-green-dark-fill: #1a301a;
+  --color-green-light-stroke: #00971d;
+  --color-green-light-ink: #007715;
+  --color-green-light-dot: #007715;
+  --color-green-light-outline: #609b5f;
+  --color-green-dark-fill: #061b07;
   --color-green-dark-stroke: #58bf5a;
   --color-green-dark-ink: #58bf5a;
-  --color-green-dark-dot: #62c963;
-  --color-green-dark-outline: #5a9659;
+  --color-green-dark-dot: #5fc660;
+  --color-green-dark-outline: #4b874b;
   --color-orange-anchor: #e65200;
   --color-orange-light-fill: #fff0ea;
-  --color-orange-light-stroke: #d44b00;
-  --color-orange-light-ink: #a63900;
-  --color-orange-light-outline: #c47a5f;
-  --color-orange-dark-fill: #3f2116;
+  --color-orange-light-stroke: #e45100;
+  --color-orange-light-ink: #b43e00;
+  --color-orange-light-outline: #c6785b;
+  --color-orange-dark-fill: #280d04;
   --color-orange-dark-stroke: #fa7a49;
-  --color-orange-dark-ink: #ff875a;
-  --color-orange-dark-outline: #c37356;
+  --color-orange-dark-ink: #ff8253;
+  --color-orange-dark-outline: #b36548;
   --color-fg: var(--primitive-simple2-fg);
   --color-muted: var(--primitive-simple2-muted);
   --color-group-title: var(--primitive-simple2-group-title);
   --color-bg: var(--primitive-simple2-bg);
-  --color-group-1: var(--color-gray-71);
-  --color-group-2: var(--color-gray-118);
-  --color-group-3: var(--color-gray-161);
+  --color-group-1: var(--primitive-simple2-group-1);
+  --color-group-2: var(--primitive-simple2-group-2);
+  --color-group-3: var(--primitive-simple2-group-3);
   --color-node: var(--primitive-simple2-node);
   --color-surface: var(--primitive-simple2-surface);
   --color-card: var(--primitive-simple2-card);
   --color-card-on: var(--color-blue-light-fill);
   --color-page: var(--primitive-simple2-page);
-  --color-outline: var(--color-gray-529);
+  --color-outline: var(--primitive-simple2-light-outline);
   --color-border: var(--primitive-simple2-border);
   --color-plate-border: var(--primitive-simple2-plate-border);
-  --color-line: var(--color-gray-282);
+  --color-line: var(--primitive-simple2-line);
   --color-state-active: var(--color-blue-light-stroke);
   --color-state-active-fill: var(--color-blue-light-ink);
   --color-state-active-text: var(--color-blue-light-ink);
@@ -125,8 +125,8 @@
   --color-state-success: var(--color-green-light-stroke);
   --color-state-warning: var(--color-orange-light-stroke);
   --color-state-glow: var(--color-blue-light-fill);
-  --color-flow-brand: var(--color-blue-light-stroke);
-  --color-flow-purple: var(--color-purple-light-dot);
+  --color-flow-brand: var(--color-blue-light-ink);
+  --color-flow-purple: var(--primitive-simple2-flow-purple);
   --color-flow-green: var(--color-green-light-dot);
   --color-flow-gray: var(--color-gray-545);
   --color-flow-red: var(--color-red-light-dot);
@@ -235,32 +235,68 @@
   --simple2-micro-size: 11px;
   --simple2-surface-edge: var(--primitive-simple2-plate-border);
   --simple2-progress-width: 160px;
+  --simple2-hover-fill: var(--primitive-simple2-hover-fill);
+  --simple2-row-selection: var(--primitive-simple2-row-selection);
+  --simple2-data-line: var(--primitive-simple2-data-line);
   --primitive-simple2-fg: #303336;
-  --primitive-simple2-muted: #505b69;
-  --primitive-simple2-bg: #f2f5f7;
+  --primitive-simple2-muted: #566170;
+  --primitive-simple2-bg: #f5f6f8;
   --primitive-simple2-page: #ffffff;
   --primitive-simple2-node: #ffffff;
-  --primitive-simple2-card: #f6f7fa;
-  --primitive-simple2-surface: #edeef1;
-  --primitive-simple2-plate-border: #d9dce1;
+  --primitive-simple2-card: #f2f3f5;
+  --primitive-simple2-surface: #eef0f3;
+  --primitive-simple2-plate-border: #d4d8de;
   --primitive-simple2-border: #838b96;
   --primitive-simple2-shadow: 0 2px 8px rgba(0,0,0,.10), 0 0 2px rgba(0,0,0,.10);
   --primitive-simple2-play-fill: #4f91fb;
   --primitive-simple2-play-ink: #ffffff;
   --primitive-simple2-node-shadow: drop-shadow(0px 1px 1px rgba(0,0,0,.07));
-  --primitive-simple2-group-title: #505b69;
-  --primitive-simple2-canvas: #f5f5f7;
+  --primitive-simple2-group-title: #566170;
+  --primitive-simple2-canvas: #f5f6f8;
   --primitive-simple2-selection-fill: #e3e4e8;
   --primitive-simple2-selection-ink: #303336;
   --primitive-simple2-tab-fill: #f5f5f7;
-  --primitive-simple2-icon-service: #1e6bd6;
-  --primitive-simple2-icon-data: #269c6e;
-  --primitive-simple2-icon-access: #a78b16;
-  --primitive-simple2-icon-person: #c62859;
-  --primitive-simple2-icon-service-face: #edf4ff;
-  --primitive-simple2-icon-data-face: #eaf5ef;
-  --primitive-simple2-icon-access-face: #fff8d5;
-  --primitive-simple2-icon-person-face: #fff0f4;
+  --primitive-simple2-icon-service: #3688cb;
+  --primitive-simple2-icon-data: #299b8f;
+  --primitive-simple2-icon-access: #9b8950;
+  --primitive-simple2-icon-person: #d74474;
+  --primitive-simple2-icon-service-face: #e7f3fc;
+  --primitive-simple2-icon-data-face: #e8f5f2;
+  --primitive-simple2-icon-access-face: #f7f2df;
+  --primitive-simple2-icon-person-face: #fcecf2;
+  --primitive-simple2-group-1: #eef0f3;
+  --primitive-simple2-group-2: #e7eaee;
+  --primitive-simple2-group-3: #e0e4e9;
+  --primitive-simple2-hover-fill: #eef4fc;
+  --primitive-simple2-row-selection: #cee2fd;
+  --primitive-simple2-line: #9da5b0;
+  --primitive-simple2-data-line: #737e8b;
+  --primitive-simple2-dark-bg: #26272b;
+  --primitive-simple2-dark-page: #1d1e22;
+  --primitive-simple2-dark-node: #303136;
+  --primitive-simple2-dark-card: #36373b;
+  --primitive-simple2-dark-edge: #50535b;
+  --primitive-simple2-dark-separator: #454850;
+  --primitive-simple2-dark-hover: #343e50;
+  --primitive-simple2-dark-selection: #274174;
+  --primitive-simple2-dark-muted: #a9adb6;
+  --primitive-simple2-dark-group-1: #2c2d32;
+  --primitive-simple2-dark-group-2: #32343a;
+  --primitive-simple2-dark-group-3: #393c43;
+  --primitive-simple2-dark-line: #7f8793;
+  --primitive-simple2-dark-data-line: #acb4c0;
+  --primitive-simple2-dark-icon-service: #6cb9ef;
+  --primitive-simple2-dark-icon-service-face: #263e50;
+  --primitive-simple2-dark-icon-data: #64beb0;
+  --primitive-simple2-dark-icon-data-face: #263f3a;
+  --primitive-simple2-dark-icon-access: #ccbd80;
+  --primitive-simple2-dark-icon-access-face: #423d2d;
+  --primitive-simple2-dark-icon-person: #ed82a3;
+  --primitive-simple2-dark-icon-person-face: #492f3b;
+  --primitive-simple2-light-outline: #818181;
+  --primitive-simple2-dark-outline: #868686;
+  --primitive-simple2-flow-purple: #70508c;
+  --primitive-simple2-dark-paint-gray: #121318;
   --color-palette-amber-light-fill: var(--color-orange-light-fill);
   --color-palette-amber-light-stroke: var(--color-orange-light-stroke);
   --color-palette-amber-light-ink: var(--color-orange-light-ink);
@@ -302,26 +338,26 @@
   --color-palette-sky-light-tint-2: var(--color-blue-light-tint-2);
   --color-palette-sky-light-tint-3: var(--color-blue-light-tint-3);
   --color-palette-sky-light-outline: #648bca;
-  --color-palette-sky-dark-fill: #1b2a43;
+  --color-palette-sky-dark-fill: #08152c;
   --color-palette-sky-dark-stroke: var(--color-blue-dark-stroke);
   --color-palette-sky-dark-ink: var(--color-blue-dark-ink);
   --color-palette-sky-dark-tint-1: var(--color-blue-dark-tint-1);
   --color-palette-sky-dark-tint-2: var(--color-blue-dark-tint-2);
   --color-palette-sky-dark-tint-3: var(--color-blue-dark-tint-3);
-  --color-palette-sky-dark-outline: #6489c3;
+  --color-palette-sky-dark-outline: #587bb5;
   --color-palette-slate-light-fill: #e7e7e7;
   --color-palette-slate-light-stroke: var(--color-gray-635);
   --color-palette-slate-light-ink: var(--color-gray-635);
   --color-palette-slate-light-dot: var(--color-gray-545);
-  --color-palette-slate-dark-fill: var(--color-gray-788);
+  --color-palette-slate-dark-fill: var(--primitive-simple2-dark-paint-gray);
   --color-palette-slate-dark-stroke: var(--color-gray-333);
   --color-palette-slate-dark-ink: var(--color-gray-333);
   --color-palette-slate-dark-dot: var(--color-gray-220);
   --color-palette-slate-light-outline: #848484;
-  --color-palette-slate-dark-outline: #888888;
+  --color-palette-slate-dark-outline: #797a7d;
   --color-figure-icon: var(--color-blue-light-stroke);
   --color-figure-icon-tile: var(--color-blue-light-fill);
-  --color-figure-queue-fill: var(--color-blue-light-stroke);
+  --color-figure-queue-fill: var(--color-blue-light-ink);
   --color-figure-queue-empty: var(--color-gray-161);
   --color-paint-red-fill: var(--color-red-light-fill);
   --color-paint-red-stroke: var(--color-red-light-stroke);
@@ -380,7 +416,7 @@
   --size-control-outer: 52px;
   --size-control-inner: 44px;
   --size-control-icon: 20px;
-  --size-control-icon-stroke: 1.75px;
+  --size-control-icon-stroke: 2.5px;
   --size-pill-height: 18px;
   --size-icon-node: 20px;
   --size-icon-group: 18px;
@@ -489,21 +525,21 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     --color-fg: var(--color-gray-59);
-    --color-muted: var(--color-gray-333);
-    --color-group-title: var(--color-gray-333);
-    --color-bg: var(--color-gray-910);
-    --color-group-1: var(--color-gray-875);
-    --color-group-2: var(--color-gray-835);
-    --color-group-3: var(--color-gray-796);
-    --color-node: var(--color-gray-757);
-    --color-surface: var(--color-gray-788);
-    --color-card: var(--color-gray-788);
+    --color-muted: var(--primitive-simple2-dark-muted);
+    --color-group-title: var(--primitive-simple2-dark-muted);
+    --color-bg: var(--primitive-simple2-dark-bg);
+    --color-group-1: var(--primitive-simple2-dark-group-1);
+    --color-group-2: var(--primitive-simple2-dark-group-2);
+    --color-group-3: var(--primitive-simple2-dark-group-3);
+    --color-node: var(--primitive-simple2-dark-node);
+    --color-surface: var(--primitive-simple2-dark-card);
+    --color-card: var(--primitive-simple2-dark-card);
     --color-card-on: var(--color-blue-dark-fill);
-    --color-page: var(--color-gray-929);
-    --color-outline: var(--color-gray-467);
+    --color-page: var(--primitive-simple2-dark-page);
+    --color-outline: var(--primitive-simple2-dark-outline);
     --color-border: var(--primitive-simple2-border);
-    --color-plate-border: var(--color-gray-788);
-    --color-line: var(--color-gray-651);
+    --color-plate-border: var(--primitive-simple2-dark-edge);
+    --color-line: var(--primitive-simple2-dark-line);
     --color-state-active: var(--color-blue-dark-stroke);
     --color-state-active-fill: var(--color-blue-dark-stroke);
     --color-state-active-text: var(--color-blue-dark-ink);
@@ -512,7 +548,7 @@
     --color-state-success: var(--color-green-dark-stroke);
     --color-state-warning: var(--color-orange-dark-stroke);
     --color-state-glow: var(--color-blue-dark-fill);
-    --color-flow-brand: var(--color-blue-dark-stroke);
+    --color-flow-brand: var(--color-blue-dark-ink);
     --color-flow-purple: var(--color-purple-dark-dot);
     --color-flow-green: var(--color-green-dark-dot);
     --color-flow-gray: var(--color-gray-220);
@@ -526,27 +562,30 @@
     --color-data-heat-low: var(--color-blue-dark-heat-low);
     --color-data-heat-high: var(--color-blue-dark-heat-high);
     --color-data-heat-ink: var(--color-gray-0);
-    --color-data-grid: var(--color-gray-776);
+    --color-data-grid: var(--primitive-simple2-dark-edge);
     --color-accent: var(--color-blue-dark-stroke);
-    --color-figure-icon-service-ink: var(--color-blue-dark-ink);
-    --color-figure-icon-service-surface: var(--color-blue-dark-fill);
-    --color-figure-icon-data-ink: var(--color-purple-dark-ink);
-    --color-figure-icon-data-surface: var(--color-purple-dark-fill);
-    --color-figure-icon-access-ink: var(--color-orange-dark-ink);
-    --color-figure-icon-access-surface: var(--color-orange-dark-fill);
-    --color-figure-icon-person-ink: var(--color-green-dark-ink);
-    --color-figure-icon-person-surface: var(--color-green-dark-fill);
+    --color-figure-icon-service-ink: var(--primitive-simple2-dark-icon-service);
+    --color-figure-icon-service-surface: var(--primitive-simple2-dark-icon-service-face);
+    --color-figure-icon-data-ink: var(--primitive-simple2-dark-icon-data);
+    --color-figure-icon-data-surface: var(--primitive-simple2-dark-icon-data-face);
+    --color-figure-icon-access-ink: var(--primitive-simple2-dark-icon-access);
+    --color-figure-icon-access-surface: var(--primitive-simple2-dark-icon-access-face);
+    --color-figure-icon-person-ink: var(--primitive-simple2-dark-icon-person);
+    --color-figure-icon-person-surface: var(--primitive-simple2-dark-icon-person-face);
     --color-figure-icon-brand-ink: var(--color-gray-220);
     --color-figure-icon-brand-surface: var(--color-gray-835);
     --simple2-play-fill: var(--color-blue-dark-stroke);
     --simple2-play-ink: var(--color-gray-933);
     --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-    --simple2-separator: var(--color-gray-635);
-    --simple2-canvas-fill: var(--color-gray-910);
-    --simple2-selection-fill: var(--color-gray-757);
+    --simple2-separator: var(--primitive-simple2-dark-separator);
+    --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
+    --simple2-selection-fill: var(--primitive-simple2-dark-edge);
     --simple2-selection-ink: var(--color-gray-0);
-    --simple2-tab-fill: var(--color-gray-835);
-    --simple2-surface-edge: var(--color-gray-635);
+    --simple2-tab-fill: var(--primitive-simple2-dark-node);
+    --simple2-surface-edge: var(--primitive-simple2-dark-edge);
+    --simple2-hover-fill: var(--primitive-simple2-dark-hover);
+    --simple2-row-selection: var(--primitive-simple2-dark-selection);
+    --simple2-data-line: var(--primitive-simple2-dark-data-line);
     --color-figure-icon: var(--color-blue-dark-stroke);
     --color-figure-icon-tile: var(--color-blue-dark-fill);
     --color-figure-queue-fill: var(--color-blue-dark-stroke);
@@ -602,21 +641,21 @@
 }
 [data-theme='dark'] {
   --color-fg: var(--color-gray-59);
-  --color-muted: var(--color-gray-333);
-  --color-group-title: var(--color-gray-333);
-  --color-bg: var(--color-gray-910);
-  --color-group-1: var(--color-gray-875);
-  --color-group-2: var(--color-gray-835);
-  --color-group-3: var(--color-gray-796);
-  --color-node: var(--color-gray-757);
-  --color-surface: var(--color-gray-788);
-  --color-card: var(--color-gray-788);
+  --color-muted: var(--primitive-simple2-dark-muted);
+  --color-group-title: var(--primitive-simple2-dark-muted);
+  --color-bg: var(--primitive-simple2-dark-bg);
+  --color-group-1: var(--primitive-simple2-dark-group-1);
+  --color-group-2: var(--primitive-simple2-dark-group-2);
+  --color-group-3: var(--primitive-simple2-dark-group-3);
+  --color-node: var(--primitive-simple2-dark-node);
+  --color-surface: var(--primitive-simple2-dark-card);
+  --color-card: var(--primitive-simple2-dark-card);
   --color-card-on: var(--color-blue-dark-fill);
-  --color-page: var(--color-gray-929);
-  --color-outline: var(--color-gray-467);
+  --color-page: var(--primitive-simple2-dark-page);
+  --color-outline: var(--primitive-simple2-dark-outline);
   --color-border: var(--primitive-simple2-border);
-  --color-plate-border: var(--color-gray-788);
-  --color-line: var(--color-gray-651);
+  --color-plate-border: var(--primitive-simple2-dark-edge);
+  --color-line: var(--primitive-simple2-dark-line);
   --color-state-active: var(--color-blue-dark-stroke);
   --color-state-active-fill: var(--color-blue-dark-stroke);
   --color-state-active-text: var(--color-blue-dark-ink);
@@ -625,7 +664,7 @@
   --color-state-success: var(--color-green-dark-stroke);
   --color-state-warning: var(--color-orange-dark-stroke);
   --color-state-glow: var(--color-blue-dark-fill);
-  --color-flow-brand: var(--color-blue-dark-stroke);
+  --color-flow-brand: var(--color-blue-dark-ink);
   --color-flow-purple: var(--color-purple-dark-dot);
   --color-flow-green: var(--color-green-dark-dot);
   --color-flow-gray: var(--color-gray-220);
@@ -639,27 +678,30 @@
   --color-data-heat-low: var(--color-blue-dark-heat-low);
   --color-data-heat-high: var(--color-blue-dark-heat-high);
   --color-data-heat-ink: var(--color-gray-0);
-  --color-data-grid: var(--color-gray-776);
+  --color-data-grid: var(--primitive-simple2-dark-edge);
   --color-accent: var(--color-blue-dark-stroke);
-  --color-figure-icon-service-ink: var(--color-blue-dark-ink);
-  --color-figure-icon-service-surface: var(--color-blue-dark-fill);
-  --color-figure-icon-data-ink: var(--color-purple-dark-ink);
-  --color-figure-icon-data-surface: var(--color-purple-dark-fill);
-  --color-figure-icon-access-ink: var(--color-orange-dark-ink);
-  --color-figure-icon-access-surface: var(--color-orange-dark-fill);
-  --color-figure-icon-person-ink: var(--color-green-dark-ink);
-  --color-figure-icon-person-surface: var(--color-green-dark-fill);
+  --color-figure-icon-service-ink: var(--primitive-simple2-dark-icon-service);
+  --color-figure-icon-service-surface: var(--primitive-simple2-dark-icon-service-face);
+  --color-figure-icon-data-ink: var(--primitive-simple2-dark-icon-data);
+  --color-figure-icon-data-surface: var(--primitive-simple2-dark-icon-data-face);
+  --color-figure-icon-access-ink: var(--primitive-simple2-dark-icon-access);
+  --color-figure-icon-access-surface: var(--primitive-simple2-dark-icon-access-face);
+  --color-figure-icon-person-ink: var(--primitive-simple2-dark-icon-person);
+  --color-figure-icon-person-surface: var(--primitive-simple2-dark-icon-person-face);
   --color-figure-icon-brand-ink: var(--color-gray-220);
   --color-figure-icon-brand-surface: var(--color-gray-835);
   --simple2-play-fill: var(--color-blue-dark-stroke);
   --simple2-play-ink: var(--color-gray-933);
   --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-  --simple2-separator: var(--color-gray-635);
-  --simple2-canvas-fill: var(--color-gray-910);
-  --simple2-selection-fill: var(--color-gray-757);
+  --simple2-separator: var(--primitive-simple2-dark-separator);
+  --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
+  --simple2-selection-fill: var(--primitive-simple2-dark-edge);
   --simple2-selection-ink: var(--color-gray-0);
-  --simple2-tab-fill: var(--color-gray-835);
-  --simple2-surface-edge: var(--color-gray-635);
+  --simple2-tab-fill: var(--primitive-simple2-dark-node);
+  --simple2-surface-edge: var(--primitive-simple2-dark-edge);
+  --simple2-hover-fill: var(--primitive-simple2-dark-hover);
+  --simple2-row-selection: var(--primitive-simple2-dark-selection);
+  --simple2-data-line: var(--primitive-simple2-dark-data-line);
   --color-figure-icon: var(--color-blue-dark-stroke);
   --color-figure-icon-tile: var(--color-blue-dark-fill);
   --color-figure-queue-fill: var(--color-blue-dark-stroke);
@@ -874,8 +916,8 @@
 }
 
 .fl .pill {
-  fill: var(--color-node);
-  stroke: var(--color-outline);
+  fill: var(--color-card);
+  stroke: var(--simple2-separator);
 }
 
 .fl .part-bg {
@@ -889,7 +931,7 @@
 
 .fl .grid-cell {
   fill: var(--color-node);
-  stroke: var(--color-outline);
+  stroke: var(--simple2-separator);
   stroke-width: var(--border-thin);
 }
 
@@ -899,9 +941,8 @@
 }
 
 .fl .grid-cell.gap {
-  fill: var(--color-surface);
-  stroke: var(--color-line);
-  stroke-dasharray: var(--dash-card) var(--dash-card);
+  fill: var(--color-card);
+  stroke: var(--simple2-separator);
 }
 
 .fl .grid-cell.empty {
@@ -923,8 +964,8 @@
 }
 
 .fl .badge-pill {
-  fill: var(--color-node);
-  stroke: var(--color-outline);
+  fill: var(--color-card);
+  stroke: var(--simple2-separator);
   stroke-width: var(--border-thin);
 }
 
@@ -938,7 +979,7 @@
 
 /* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
 .fl .number-pill {
-  fill: var(--color-fg);
+  fill: var(--color-muted);
 }
 
 .fl .number {
@@ -950,6 +991,7 @@
 
 /* 표면에만 그림자를 두어 글자·아이콘·선의 가장자리는 선명하게 유지한다. */
 .fl :where(.fl-node) > .fl-stroke {
+  stroke: var(--simple2-surface-edge);
   stroke-width: var(--simple2-node-stroke);
 }
 
@@ -960,7 +1002,11 @@
 }
 
 .fl .fl-path,
-.fl .fl-node > .fl-stroke {
+.fl .fl-node > .fl-stroke,
+.fl .grid-cell,
+.fl .col-line,
+.fl .pill,
+.fl .badge-pill {
   vector-effect: non-scaling-stroke;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -982,7 +1028,7 @@
 
 .fl .symbol-cut {
   fill: none;
-  stroke: var(--color-node);
+  stroke: currentColor;
 }
 
 .fl .fl-symbol-service {
@@ -1024,6 +1070,26 @@
 .fl .fl-symbol-brand .symbol-face {
   fill: var(--color-figure-icon-brand-surface);
 }
+
+.fl .fl-node.on > .fl-stroke {
+  stroke: var(--color-state-active);
+  stroke-width: var(--simple2-node-stroke);
+}
+
+/* 호버와 키보드 초점은 같은 도형 면을 가리키며 윤곽을 두 겹으로 만들지 않는다. */
+.fl .fl-node.is-hovered > .fl-stroke:not([fill="none"]),
+.fl .fl-node:hover > .fl-stroke:not([fill="none"]) {
+  fill: var(--simple2-hover-fill);
+}
+
+.fl .fl-node:focus-visible {
+  outline: none;
+}
+
+.fl .fl-node:focus-visible > .fl-stroke {
+  stroke: var(--color-ui-focus);
+  stroke-width: var(--simple2-focus-width);
+}
 /* 움직이는 SVG에만 있는 단계 이름과 설명 줄 */
 .fl .steplabel {
   font-family: var(--font-figure-sans);
@@ -1046,88 +1112,81 @@
 .fl .fl-node.on .fl-stroke.ps-red {
   stroke: var(--color-paint-red-stroke);
 }
-.fl .fl-halo.ph-red > * {
-  stroke: var(--color-paint-red-fill);
-}
 
 @keyframes a0 { 0%,16.689% { stroke: none; stroke-width: var(--border-thin) } 16.69%,20.713% { stroke: none; stroke-width: var(--border-thin) } 20.713%,39.724% { stroke: none; stroke-width: var(--border-thin) } 39.724%,44.266% { stroke: none; stroke-width: var(--border-thin) } 44.267%,56.74% { stroke: none; stroke-width: var(--border-thin) } 56.74%,71.16% { stroke: none; stroke-width: var(--border-thin) } 71.16%,85.58% { stroke: none; stroke-width: var(--border-thin) } 85.58%,100% { stroke: none; stroke-width: var(--border-thin) } }
 .fl .a0 { animation: a0 34.674s infinite linear; }
-@keyframes a1 { 0%,16.689% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 16.69%,20.713% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 20.713%,39.724% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 39.724%,44.266% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 44.267%,56.74% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 56.74% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 57.317%,71.16% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 71.16%,85.58% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 85.58%,100% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a1 { 0%,16.689% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 16.69%,20.713% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 20.713%,39.724% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 39.724%,44.266% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 44.267%,56.74% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 56.74% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 57.317%,71.16% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 71.16%,85.58% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 85.58%,100% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a1 { animation: a1 34.674s infinite linear; }
-@keyframes a2 { 0%,16.689% { opacity: 1 } 16.69%,20.713% { opacity: 1 } 20.713%,39.724% { opacity: 1 } 39.724%,44.266% { opacity: 1 } 44.267%,56.74% { opacity: 1 } 56.74% { opacity: 1 } 57.317%,71.16% { opacity: 0 } 71.16%,85.58% { opacity: 0 } 85.58%,100% { opacity: 0 } }
+@keyframes a2 { 0%,16.689% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 16.69%,20.713% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 20.713%,39.724% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 39.724%,44.266% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 44.267%,56.74% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 56.74%,71.16% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 71.16%,85.58% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 85.58%,100% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a2 { animation: a2 34.674s infinite linear; }
-@keyframes a3 { 0%,16.689% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 16.69%,20.713% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 20.713%,39.724% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 39.724%,44.266% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.267%,56.74% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 56.74%,71.16% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 71.16%,85.58% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 85.58%,100% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a3 { 0%,16.689% { opacity: 1 } 16.69%,20.713% { opacity: 1 } 20.713%,39.724% { opacity: 1 } 39.724%,44.266% { opacity: 1 } 44.267%,56.74% { opacity: 1 } 56.74%,71.16% { opacity: 1 } 71.16%,85.58% { opacity: 1 } 85.58%,100% { opacity: 1 } }
 .fl .a3 { animation: a3 34.674s infinite linear; }
-@keyframes a4 { 0%,16.689% { opacity: 0 } 16.69%,20.713% { opacity: 0 } 20.713%,39.724% { opacity: 0 } 39.724%,44.266% { opacity: 0 } 44.267%,56.74% { opacity: 0 } 56.74%,71.16% { opacity: 0 } 71.16%,85.58% { opacity: 0 } 85.58%,100% { opacity: 0 } }
+@keyframes a4 { 0%,16.689% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 16.69%,20.713% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 20.713%,39.724% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 39.724%,44.266% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 44.267%,56.74% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 56.74%,71.16% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 71.16%,85.58% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 85.58%,100% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } }
 .fl .a4 { animation: a4 34.674s infinite linear; }
-@keyframes a5 { 0%,16.689% { opacity: 1 } 16.69%,20.713% { opacity: 1 } 20.713%,39.724% { opacity: 1 } 39.724%,44.266% { opacity: 1 } 44.267%,56.74% { opacity: 1 } 56.74%,71.16% { opacity: 1 } 71.16%,85.58% { opacity: 1 } 85.58%,100% { opacity: 1 } }
+@keyframes a5 { 0%,16.689% { stroke: var(--color-paint-red-stroke); stroke-width: var(--simple2-node-stroke) } 16.69%,20.713% { stroke: var(--color-paint-red-stroke); stroke-width: var(--simple2-node-stroke) } 20.713%,39.724% { stroke: var(--color-paint-red-stroke); stroke-width: var(--simple2-node-stroke) } 39.724%,44.266% { stroke: var(--color-paint-red-stroke); stroke-width: var(--simple2-node-stroke) } 44.267%,56.74% { stroke: var(--color-paint-red-stroke); stroke-width: var(--simple2-node-stroke) } 56.74% { stroke: var(--color-paint-red-stroke); stroke-width: var(--simple2-node-stroke) } 57.317%,71.16% { stroke: var(--color-paint-red-outline); stroke-width: var(--border-thin) } 71.16%,85.58% { stroke: var(--color-paint-red-outline); stroke-width: var(--border-thin) } 85.58%,100% { stroke: var(--color-paint-red-outline); stroke-width: var(--border-thin) } }
 .fl .a5 { animation: a5 34.674s infinite linear; }
-@keyframes a6 { 0%,16.689% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 16.69%,20.713% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 20.713%,39.724% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 39.724%,44.266% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 44.267%,56.74% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 56.74%,71.16% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 71.16%,85.58% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } 85.58%,100% { opacity: 1; stroke: var(--color-state-active); fill: var(--color-card-on) } }
+@keyframes a6 { 0%,16.689% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 16.69%,20.713% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 20.713%,39.724% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 39.724%,44.266% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 44.267%,56.74% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 56.74%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 71.16% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 71.736%,71.736% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 71.737% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 72.314%,85.58% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 85.58%,100% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } }
 .fl .a6 { animation: a6 34.674s infinite linear; }
-@keyframes a7 { 0%,16.689% { stroke: var(--color-paint-red-stroke); stroke-width: var(--border-strong) } 16.69%,20.713% { stroke: var(--color-paint-red-stroke); stroke-width: var(--border-strong) } 20.713%,39.724% { stroke: var(--color-paint-red-stroke); stroke-width: var(--border-strong) } 39.724%,44.266% { stroke: var(--color-paint-red-stroke); stroke-width: var(--border-strong) } 44.267%,56.74% { stroke: var(--color-paint-red-stroke); stroke-width: var(--border-strong) } 56.74% { stroke: var(--color-paint-red-stroke); stroke-width: var(--border-strong) } 57.317%,71.16% { stroke: var(--color-paint-red-outline); stroke-width: var(--border-thin) } 71.16%,85.58% { stroke: var(--color-paint-red-outline); stroke-width: var(--border-thin) } 85.58%,100% { stroke: var(--color-paint-red-outline); stroke-width: var(--border-thin) } }
+@keyframes a7 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,71.16% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 71.16%,85.58% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 85.58%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a7 { animation: a7 34.674s infinite linear; }
-@keyframes a8 { 0%,16.689% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 16.69%,20.713% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 20.713%,39.724% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 39.724%,44.266% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 44.267%,56.74% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 56.74%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 71.16% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 71.736%,71.736% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 71.737% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 72.314%,85.58% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 85.58%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+@keyframes a8 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,57.316% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 57.317% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 57.894%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 71.16% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 71.737%,85.58% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 85.58%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a8 { animation: a8 34.674s infinite linear; }
-@keyframes a9 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,71.16% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 71.16%,85.58% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 85.58%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a9 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,57.028% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 57.028% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 57.605%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 71.16%,85.58% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 85.58% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 86.157%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a9 { animation: a9 34.674s infinite linear; }
-@keyframes a10 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,57.316% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 57.317% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 57.894%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 71.16% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 71.737%,85.58% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 85.58%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a10 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 21.29%,39.724% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 39.724%,44.266% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 44.267%,56.74% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 56.74% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 57.317%,60.489% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 60.489% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.066%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 71.16% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 71.737%,72.602% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 72.602% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 73.179%,85.58% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 85.58% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 86.157%,89.329% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 89.329% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 89.906%,100% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } }
 .fl .a10 { animation: a10 34.674s infinite linear; }
-@keyframes a11 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,57.028% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 57.028% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 57.605%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 71.16%,85.58% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 85.58% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 86.157%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a11 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,60.777% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 60.778% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.354%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 71.16% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 71.737%,85.58% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 85.58%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a11 { animation: a11 34.674s infinite linear; }
-@keyframes a12 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 21.29%,39.724% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 39.724%,44.266% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 44.267%,56.74% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 56.74% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 57.317%,60.489% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 60.489% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.066%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 71.16% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 71.737%,72.602% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 72.602% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 73.179%,85.58% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 85.58% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 86.157%,89.329% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 89.329% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 89.906%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+@keyframes a12 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,60.777% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 60.778% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.354%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 71.16%,85.58% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 85.58% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 86.157%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a12 { animation: a12 34.674s infinite linear; }
-@keyframes a13 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,60.777% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 60.778% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.354%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 71.16% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 71.737%,85.58% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 85.58%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a13 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.843%,56.74% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 56.74% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 57.317%,64.238% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 64.238% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 64.815%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 71.16% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 71.737%,85.58% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 85.58%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a13 { animation: a13 34.674s infinite linear; }
-@keyframes a14 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,60.777% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 60.778% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 61.354%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 71.16%,85.58% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 85.58% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 86.157%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a14 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,71.16% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 71.16%,85.58% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 85.58%,87.31% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 87.31% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 87.887%,100% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } }
 .fl .a14 { animation: a14 34.674s infinite linear; }
-@keyframes a15 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.843%,56.74% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 56.74% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 57.317%,64.238% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 64.238% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 64.815%,71.16% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 71.16% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 71.737%,85.58% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 85.58%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a15 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,71.16% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 71.16%,85.58% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 85.58%,91.059% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 91.06% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 91.636%,100% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } }
 .fl .a15 { animation: a15 34.674s infinite linear; }
-@keyframes a16 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,71.16% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 71.16%,85.58% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 85.58%,87.31% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 87.31% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 87.887%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+@keyframes a16 { 0%,16.689% { fill: var(--color-card); stroke: var(--simple2-separator) } 16.69%,20.713% { fill: var(--color-card); stroke: var(--simple2-separator) } 20.713%,39.724% { fill: var(--color-card); stroke: var(--simple2-separator) } 39.724%,44.266% { fill: var(--color-card); stroke: var(--simple2-separator) } 44.267%,56.74% { fill: var(--color-card); stroke: var(--simple2-separator) } 56.74%,71.16% { fill: var(--color-card); stroke: var(--simple2-separator) } 71.16%,71.736% { fill: var(--color-card); stroke: var(--simple2-separator) } 71.737%,85.58% { fill: var(--color-card); stroke: var(--simple2-separator) } 85.58%,100% { fill: var(--color-card); stroke: var(--simple2-separator) } }
 .fl .a16 { animation: a16 34.674s infinite linear; }
-@keyframes a17 { 0%,16.689% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 16.69%,20.713% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 20.713%,39.724% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 39.724%,44.266% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.267%,56.74% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 56.74%,71.16% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 71.16%,85.58% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 85.58%,91.059% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 91.06% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 91.636%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+@keyframes a17 { 0%,16.689% { fill: var(--color-muted) } 16.69%,20.713% { fill: var(--color-muted) } 20.713%,39.724% { fill: var(--color-muted) } 39.724%,44.266% { fill: var(--color-muted) } 44.267%,56.74% { fill: var(--color-muted) } 56.74%,71.16% { fill: var(--color-muted) } 71.16%,71.736% { fill: var(--color-muted) } 71.737%,85.58% { fill: var(--color-muted) } 85.58%,100% { fill: var(--color-muted) } }
 .fl .a17 { animation: a17 34.674s infinite linear; }
-@keyframes a18 { 0%,16.689% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 16.69%,20.713% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 20.713%,39.724% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 39.724%,44.266% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 44.267%,56.74% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 56.74%,71.16% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 71.16% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 71.736%,71.736% { fill: var(--color-node); stroke: var(--color-border) } 71.737% { fill: var(--color-node); stroke: var(--color-border) } 72.314%,85.58% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 85.58%,100% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } }
+@keyframes a18 { 0%,16.689% { fill: var(--color-card); stroke: var(--simple2-separator) } 16.69%,20.713% { fill: var(--color-card); stroke: var(--simple2-separator) } 20.713%,39.724% { fill: var(--color-card); stroke: var(--simple2-separator) } 39.724%,44.266% { fill: var(--color-card); stroke: var(--simple2-separator) } 44.267%,56.74% { fill: var(--color-card); stroke: var(--simple2-separator) } 56.74%,71.16% { fill: var(--color-card); stroke: var(--simple2-separator) } 71.16%,85.58% { fill: var(--color-card); stroke: var(--simple2-separator) } 85.58%,100% { fill: var(--color-card); stroke: var(--simple2-separator) } }
 .fl .a18 { animation: a18 34.674s infinite linear; }
-@keyframes a19 { 0%,16.689% { fill: var(--color-state-on-active) } 16.69%,20.713% { fill: var(--color-state-on-active) } 20.713%,39.724% { fill: var(--color-state-on-active) } 39.724%,44.266% { fill: var(--color-state-on-active) } 44.267%,56.74% { fill: var(--color-state-on-active) } 56.74%,71.16% { fill: var(--color-state-on-active) } 71.16% { fill: var(--color-state-on-active) } 71.736%,71.736% { fill: var(--color-muted) } 71.737% { fill: var(--color-muted) } 72.314%,85.58% { fill: var(--color-state-on-active) } 85.58%,100% { fill: var(--color-state-on-active) } }
+@keyframes a19 { 0%,16.689% { fill: var(--color-muted) } 16.69%,20.713% { fill: var(--color-muted) } 20.713%,39.724% { fill: var(--color-muted) } 39.724%,44.266% { fill: var(--color-muted) } 44.267%,56.74% { fill: var(--color-muted) } 56.74%,71.16% { fill: var(--color-muted) } 71.16%,85.58% { fill: var(--color-muted) } 85.58%,100% { fill: var(--color-muted) } }
 .fl .a19 { animation: a19 34.674s infinite linear; }
-@keyframes a20 { 0%,16.689% { fill: var(--color-node); stroke: var(--color-border) } 16.69%,20.713% { fill: var(--color-node); stroke: var(--color-border) } 20.713%,39.724% { fill: var(--color-node); stroke: var(--color-border) } 39.724%,44.266% { fill: var(--color-node); stroke: var(--color-border) } 44.267%,56.74% { fill: var(--color-node); stroke: var(--color-border) } 56.74%,71.16% { fill: var(--color-node); stroke: var(--color-border) } 71.16%,85.58% { fill: var(--color-node); stroke: var(--color-border) } 85.58%,100% { fill: var(--color-node); stroke: var(--color-border) } }
+@keyframes a20 { 0%,16.689% { fill: var(--color-card); stroke: var(--simple2-separator) } 16.69%,20.713% { fill: var(--color-card); stroke: var(--simple2-separator) } 20.713%,39.724% { fill: var(--color-card); stroke: var(--simple2-separator) } 39.724%,44.266% { fill: var(--color-card); stroke: var(--simple2-separator) } 44.267%,56.74% { fill: var(--color-card); stroke: var(--simple2-separator) } 56.74%,57.316% { fill: var(--color-card); stroke: var(--simple2-separator) } 57.317%,71.16% { fill: var(--color-card); stroke: var(--simple2-separator) } 71.16%,85.58% { fill: var(--color-card); stroke: var(--simple2-separator) } 85.58%,100% { fill: var(--color-card); stroke: var(--simple2-separator) } }
 .fl .a20 { animation: a20 34.674s infinite linear; }
-@keyframes a21 { 0%,16.689% { fill: var(--color-muted) } 16.69%,20.713% { fill: var(--color-muted) } 20.713%,39.724% { fill: var(--color-muted) } 39.724%,44.266% { fill: var(--color-muted) } 44.267%,56.74% { fill: var(--color-muted) } 56.74%,71.16% { fill: var(--color-muted) } 71.16%,85.58% { fill: var(--color-muted) } 85.58%,100% { fill: var(--color-muted) } }
+@keyframes a21 { 0%,16.689% { fill: var(--color-muted) } 16.69%,20.713% { fill: var(--color-muted) } 20.713%,39.724% { fill: var(--color-muted) } 39.724%,44.266% { fill: var(--color-muted) } 44.267%,56.74% { fill: var(--color-muted) } 56.74%,57.316% { fill: var(--color-muted) } 57.317%,71.16% { fill: var(--color-muted) } 71.16%,85.58% { fill: var(--color-muted) } 85.58%,100% { fill: var(--color-muted) } }
 .fl .a21 { animation: a21 34.674s infinite linear; }
-@keyframes a22 { 0%,16.689% { fill: var(--color-node); stroke: var(--color-border) } 16.69%,20.713% { fill: var(--color-node); stroke: var(--color-border) } 20.713%,39.724% { fill: var(--color-node); stroke: var(--color-border) } 39.724%,44.266% { fill: var(--color-node); stroke: var(--color-border) } 44.267%,56.74% { fill: var(--color-node); stroke: var(--color-border) } 56.74%,57.316% { fill: var(--color-node); stroke: var(--color-border) } 57.317% { fill: var(--color-node); stroke: var(--color-border) } 57.894%,71.16% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 71.16% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 71.737%,85.58% { fill: var(--color-node); stroke: var(--color-border) } 85.58%,100% { fill: var(--color-node); stroke: var(--color-border) } }
+@keyframes a22 { 0%,16.689% { fill: var(--color-card); stroke: var(--simple2-separator) } 16.69%,20.713% { fill: var(--color-card); stroke: var(--simple2-separator) } 20.713%,39.724% { fill: var(--color-card); stroke: var(--simple2-separator) } 39.724%,44.266% { fill: var(--color-card); stroke: var(--simple2-separator) } 44.267%,56.74% { fill: var(--color-card); stroke: var(--simple2-separator) } 56.74%,57.028% { fill: var(--color-card); stroke: var(--simple2-separator) } 57.028%,71.16% { fill: var(--color-card); stroke: var(--simple2-separator) } 71.16%,85.58% { fill: var(--color-card); stroke: var(--simple2-separator) } 85.58%,100% { fill: var(--color-card); stroke: var(--simple2-separator) } }
 .fl .a22 { animation: a22 34.674s infinite linear; }
-@keyframes a23 { 0%,16.689% { fill: var(--color-muted) } 16.69%,20.713% { fill: var(--color-muted) } 20.713%,39.724% { fill: var(--color-muted) } 39.724%,44.266% { fill: var(--color-muted) } 44.267%,56.74% { fill: var(--color-muted) } 56.74%,57.316% { fill: var(--color-muted) } 57.317% { fill: var(--color-muted) } 57.894%,71.16% { fill: var(--color-state-on-active) } 71.16% { fill: var(--color-state-on-active) } 71.737%,85.58% { fill: var(--color-muted) } 85.58%,100% { fill: var(--color-muted) } }
+@keyframes a23 { 0%,16.689% { fill: var(--color-muted) } 16.69%,20.713% { fill: var(--color-muted) } 20.713%,39.724% { fill: var(--color-muted) } 39.724%,44.266% { fill: var(--color-muted) } 44.267%,56.74% { fill: var(--color-muted) } 56.74%,57.028% { fill: var(--color-muted) } 57.028%,71.16% { fill: var(--color-muted) } 71.16%,85.58% { fill: var(--color-muted) } 85.58%,100% { fill: var(--color-muted) } }
 .fl .a23 { animation: a23 34.674s infinite linear; }
-@keyframes a24 { 0%,16.689% { fill: var(--color-node); stroke: var(--color-border) } 16.69%,20.713% { fill: var(--color-node); stroke: var(--color-border) } 20.713%,39.724% { fill: var(--color-node); stroke: var(--color-border) } 39.724%,44.266% { fill: var(--color-node); stroke: var(--color-border) } 44.267%,56.74% { fill: var(--color-node); stroke: var(--color-border) } 56.74%,57.028% { fill: var(--color-node); stroke: var(--color-border) } 57.028% { fill: var(--color-node); stroke: var(--color-border) } 57.605%,71.16% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 71.16%,85.58% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 85.58% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 86.157%,100% { fill: var(--color-node); stroke: var(--color-border) } }
+@keyframes a24 { 0%,16.689% { fill: var(--color-card); stroke: var(--simple2-separator) } 16.69%,20.713% { fill: var(--color-card); stroke: var(--simple2-separator) } 20.713%,39.724% { fill: var(--color-card); stroke: var(--simple2-separator) } 39.724%,44.266% { fill: var(--color-card); stroke: var(--simple2-separator) } 44.267%,56.74% { fill: var(--color-card); stroke: var(--simple2-separator) } 56.74%,64.238% { fill: var(--color-card); stroke: var(--simple2-separator) } 64.238%,71.16% { fill: var(--color-card); stroke: var(--simple2-separator) } 71.16%,85.58% { fill: var(--color-card); stroke: var(--simple2-separator) } 85.58%,100% { fill: var(--color-card); stroke: var(--simple2-separator) } }
 .fl .a24 { animation: a24 34.674s infinite linear; }
-@keyframes a25 { 0%,16.689% { fill: var(--color-muted) } 16.69%,20.713% { fill: var(--color-muted) } 20.713%,39.724% { fill: var(--color-muted) } 39.724%,44.266% { fill: var(--color-muted) } 44.267%,56.74% { fill: var(--color-muted) } 56.74%,57.028% { fill: var(--color-muted) } 57.028% { fill: var(--color-muted) } 57.605%,71.16% { fill: var(--color-state-on-active) } 71.16%,85.58% { fill: var(--color-state-on-active) } 85.58% { fill: var(--color-state-on-active) } 86.157%,100% { fill: var(--color-muted) } }
+@keyframes a25 { 0%,16.689% { fill: var(--color-muted) } 16.69%,20.713% { fill: var(--color-muted) } 20.713%,39.724% { fill: var(--color-muted) } 39.724%,44.266% { fill: var(--color-muted) } 44.267%,56.74% { fill: var(--color-muted) } 56.74%,64.238% { fill: var(--color-muted) } 64.238%,71.16% { fill: var(--color-muted) } 71.16%,85.58% { fill: var(--color-muted) } 85.58%,100% { fill: var(--color-muted) } }
 .fl .a25 { animation: a25 34.674s infinite linear; }
-@keyframes a26 { 0%,16.689% { fill: var(--color-node); stroke: var(--color-border) } 16.69%,20.713% { fill: var(--color-node); stroke: var(--color-border) } 20.713%,39.724% { fill: var(--color-node); stroke: var(--color-border) } 39.724%,44.266% { fill: var(--color-node); stroke: var(--color-border) } 44.267% { fill: var(--color-node); stroke: var(--color-border) } 44.843%,56.74% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 56.74% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 57.317%,64.238% { fill: var(--color-node); stroke: var(--color-border) } 64.238% { fill: var(--color-node); stroke: var(--color-border) } 64.815%,71.16% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 71.16% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 71.737%,85.58% { fill: var(--color-node); stroke: var(--color-border) } 85.58%,100% { fill: var(--color-node); stroke: var(--color-border) } }
+@keyframes a26 { 0%,16.689% { fill: var(--color-card); stroke: var(--simple2-separator) } 16.69%,20.713% { fill: var(--color-card); stroke: var(--simple2-separator) } 20.713%,39.724% { fill: var(--color-card); stroke: var(--simple2-separator) } 39.724%,44.266% { fill: var(--color-card); stroke: var(--simple2-separator) } 44.267%,56.74% { fill: var(--color-card); stroke: var(--simple2-separator) } 56.74%,71.16% { fill: var(--color-card); stroke: var(--simple2-separator) } 71.16%,85.58% { fill: var(--color-card); stroke: var(--simple2-separator) } 85.58%,87.31% { fill: var(--color-card); stroke: var(--simple2-separator) } 87.31%,100% { fill: var(--color-card); stroke: var(--simple2-separator) } }
 .fl .a26 { animation: a26 34.674s infinite linear; }
-@keyframes a27 { 0%,16.689% { fill: var(--color-muted) } 16.69%,20.713% { fill: var(--color-muted) } 20.713%,39.724% { fill: var(--color-muted) } 39.724%,44.266% { fill: var(--color-muted) } 44.267% { fill: var(--color-muted) } 44.843%,56.74% { fill: var(--color-state-on-active) } 56.74% { fill: var(--color-state-on-active) } 57.317%,64.238% { fill: var(--color-muted) } 64.238% { fill: var(--color-muted) } 64.815%,71.16% { fill: var(--color-state-on-active) } 71.16% { fill: var(--color-state-on-active) } 71.737%,85.58% { fill: var(--color-muted) } 85.58%,100% { fill: var(--color-muted) } }
+@keyframes a27 { 0%,16.689% { fill: var(--color-muted) } 16.69%,20.713% { fill: var(--color-muted) } 20.713%,39.724% { fill: var(--color-muted) } 39.724%,44.266% { fill: var(--color-muted) } 44.267%,56.74% { fill: var(--color-muted) } 56.74%,71.16% { fill: var(--color-muted) } 71.16%,85.58% { fill: var(--color-muted) } 85.58%,87.31% { fill: var(--color-muted) } 87.31%,100% { fill: var(--color-muted) } }
 .fl .a27 { animation: a27 34.674s infinite linear; }
-@keyframes a28 { 0%,16.689% { fill: var(--color-node); stroke: var(--color-border) } 16.69%,20.713% { fill: var(--color-node); stroke: var(--color-border) } 20.713%,39.724% { fill: var(--color-node); stroke: var(--color-border) } 39.724%,44.266% { fill: var(--color-node); stroke: var(--color-border) } 44.267%,56.74% { fill: var(--color-node); stroke: var(--color-border) } 56.74%,71.16% { fill: var(--color-node); stroke: var(--color-border) } 71.16%,85.58% { fill: var(--color-node); stroke: var(--color-border) } 85.58%,87.31% { fill: var(--color-node); stroke: var(--color-border) } 87.31% { fill: var(--color-node); stroke: var(--color-border) } 87.887%,100% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } }
+@keyframes a28 { 0%,16.689% { fill: var(--color-card); stroke: var(--simple2-separator) } 16.69%,20.713% { fill: var(--color-card); stroke: var(--simple2-separator) } 20.713%,39.724% { fill: var(--color-card); stroke: var(--simple2-separator) } 39.724%,44.266% { fill: var(--color-card); stroke: var(--simple2-separator) } 44.267%,56.74% { fill: var(--color-card); stroke: var(--simple2-separator) } 56.74%,71.16% { fill: var(--color-card); stroke: var(--simple2-separator) } 71.16%,85.58% { fill: var(--color-card); stroke: var(--simple2-separator) } 85.58%,91.059% { fill: var(--color-card); stroke: var(--simple2-separator) } 91.06%,100% { fill: var(--color-card); stroke: var(--simple2-separator) } }
 .fl .a28 { animation: a28 34.674s infinite linear; }
-@keyframes a29 { 0%,16.689% { fill: var(--color-muted) } 16.69%,20.713% { fill: var(--color-muted) } 20.713%,39.724% { fill: var(--color-muted) } 39.724%,44.266% { fill: var(--color-muted) } 44.267%,56.74% { fill: var(--color-muted) } 56.74%,71.16% { fill: var(--color-muted) } 71.16%,85.58% { fill: var(--color-muted) } 85.58%,87.31% { fill: var(--color-muted) } 87.31% { fill: var(--color-muted) } 87.887%,100% { fill: var(--color-state-on-active) } }
+@keyframes a29 { 0%,16.689% { fill: var(--color-muted) } 16.69%,20.713% { fill: var(--color-muted) } 20.713%,39.724% { fill: var(--color-muted) } 39.724%,44.266% { fill: var(--color-muted) } 44.267%,56.74% { fill: var(--color-muted) } 56.74%,71.16% { fill: var(--color-muted) } 71.16%,85.58% { fill: var(--color-muted) } 85.58%,91.059% { fill: var(--color-muted) } 91.06%,100% { fill: var(--color-muted) } }
 .fl .a29 { animation: a29 34.674s infinite linear; }
-@keyframes a30 { 0%,16.689% { fill: var(--color-node); stroke: var(--color-border) } 16.69%,20.713% { fill: var(--color-node); stroke: var(--color-border) } 20.713%,39.724% { fill: var(--color-node); stroke: var(--color-border) } 39.724%,44.266% { fill: var(--color-node); stroke: var(--color-border) } 44.267%,56.74% { fill: var(--color-node); stroke: var(--color-border) } 56.74%,71.16% { fill: var(--color-node); stroke: var(--color-border) } 71.16%,85.58% { fill: var(--color-node); stroke: var(--color-border) } 85.58%,91.059% { fill: var(--color-node); stroke: var(--color-border) } 91.06% { fill: var(--color-node); stroke: var(--color-border) } 91.636%,100% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } }
+@keyframes a30 { 0%,16.689% { opacity: 1 } 16.69%,20.713% { opacity: 1 } 20.713%,39.724% { opacity: 1 } 39.724%,44.266% { opacity: 1 } 44.267%,56.74% { opacity: 1 } 56.74% { opacity: 1 } 57.317%,71.16% { opacity: 0 } 71.16%,85.58% { opacity: 0 } 85.58%,100% { opacity: 0 } }
 .fl .a30 { animation: a30 34.674s infinite linear; }
-@keyframes a31 { 0%,16.689% { fill: var(--color-muted) } 16.69%,20.713% { fill: var(--color-muted) } 20.713%,39.724% { fill: var(--color-muted) } 39.724%,44.266% { fill: var(--color-muted) } 44.267%,56.74% { fill: var(--color-muted) } 56.74%,71.16% { fill: var(--color-muted) } 71.16%,85.58% { fill: var(--color-muted) } 85.58%,91.059% { fill: var(--color-muted) } 91.06% { fill: var(--color-muted) } 91.636%,100% { fill: var(--color-state-on-active) } }
+@keyframes a31 { 0%,16.689% { opacity: 0 } 16.69%,20.713% { opacity: 0 } 20.713%,39.724% { opacity: 0 } 39.724%,44.266% { opacity: 0 } 44.267%,57.316% { opacity: 0 } 57.317% { opacity: 0 } 57.894%,71.16% { opacity: 1 } 71.16% { opacity: 1 } 71.737%,85.58% { opacity: 0 } 85.58%,100% { opacity: 0 } }
 .fl .a31 { animation: a31 34.674s infinite linear; }
-@keyframes a32 { 0%,16.689% { opacity: 1 } 16.69%,20.713% { opacity: 1 } 20.713%,39.724% { opacity: 1 } 39.724%,44.266% { opacity: 1 } 44.267%,56.74% { opacity: 1 } 56.74% { opacity: 1 } 57.317%,71.16% { opacity: 0 } 71.16%,85.58% { opacity: 0 } 85.58%,100% { opacity: 0 } }
+@keyframes a32 { 0%,16.689% { opacity: 0 } 16.69%,20.713% { opacity: 0 } 20.713%,39.724% { opacity: 0 } 39.724%,44.266% { opacity: 0 } 44.267%,56.74% { opacity: 0 } 56.74%,71.736% { opacity: 0 } 71.737% { opacity: 0 } 72.314%,85.58% { opacity: 1 } 85.58% { opacity: 1 } 86.157%,100% { opacity: 0 } }
 .fl .a32 { animation: a32 34.674s infinite linear; }
-@keyframes a33 { 0%,16.689% { opacity: 0 } 16.69%,20.713% { opacity: 0 } 20.713%,39.724% { opacity: 0 } 39.724%,44.266% { opacity: 0 } 44.267%,57.316% { opacity: 0 } 57.317% { opacity: 0 } 57.894%,71.16% { opacity: 1 } 71.16% { opacity: 1 } 71.737%,85.58% { opacity: 0 } 85.58%,100% { opacity: 0 } }
+@keyframes a33 { 0%,16.689% { opacity: 0 } 16.69%,20.713% { opacity: 0 } 20.713%,39.724% { opacity: 0 } 39.724%,44.266% { opacity: 0 } 44.267%,56.74% { opacity: 0 } 56.74%,71.16% { opacity: 0 } 71.16%,86.156% { opacity: 0 } 86.157% { opacity: 0 } 86.734%,100% { opacity: 1 } }
 .fl .a33 { animation: a33 34.674s infinite linear; }
-@keyframes a34 { 0%,16.689% { opacity: 0 } 16.69%,20.713% { opacity: 0 } 20.713%,39.724% { opacity: 0 } 39.724%,44.266% { opacity: 0 } 44.267%,56.74% { opacity: 0 } 56.74%,71.736% { opacity: 0 } 71.737% { opacity: 0 } 72.314%,85.58% { opacity: 1 } 85.58% { opacity: 1 } 86.157%,100% { opacity: 0 } }
+@keyframes a34 { 0%,16.689% { opacity: 1 } 16.69% { opacity: 1 } 17.267%,20.713% { opacity: 0 } 20.713%,39.724% { opacity: 0 } 39.724%,44.266% { opacity: 0 } 44.267%,56.74% { opacity: 0 } 56.74%,71.16% { opacity: 0 } 71.16%,85.58% { opacity: 0 } 85.58%,100% { opacity: 0 } }
 .fl .a34 { animation: a34 34.674s infinite linear; }
-@keyframes a35 { 0%,16.689% { opacity: 0 } 16.69%,20.713% { opacity: 0 } 20.713%,39.724% { opacity: 0 } 39.724%,44.266% { opacity: 0 } 44.267%,56.74% { opacity: 0 } 56.74%,71.16% { opacity: 0 } 71.16%,86.156% { opacity: 0 } 86.157% { opacity: 0 } 86.734%,100% { opacity: 1 } }
+@keyframes a35 { 0%,17.266% { opacity: 0 } 17.267% { opacity: 0 } 17.843%,20.713% { opacity: 1 } 20.713%,39.724% { opacity: 1 } 39.724% { opacity: 1 } 40.301%,44.266% { opacity: 0 } 44.267%,56.74% { opacity: 0 } 56.74%,71.16% { opacity: 0 } 71.16%,85.58% { opacity: 0 } 85.58%,100% { opacity: 0 } }
 .fl .a35 { animation: a35 34.674s infinite linear; }
-@keyframes a36 { 0%,16.689% { opacity: 1 } 16.69% { opacity: 1 } 17.267%,20.713% { opacity: 0 } 20.713%,39.724% { opacity: 0 } 39.724%,44.266% { opacity: 0 } 44.267%,56.74% { opacity: 0 } 56.74%,71.16% { opacity: 0 } 71.16%,85.58% { opacity: 0 } 85.58%,100% { opacity: 0 } }
+@keyframes a36 { 0%,16.689% { opacity: 0 } 16.69%,20.713% { opacity: 0 } 20.713%,40.301% { opacity: 0 } 40.301% { opacity: 0 } 40.878%,44.266% { opacity: 1 } 44.267%,56.74% { opacity: 1 } 56.74% { opacity: 1 } 57.317%,71.16% { opacity: 0 } 71.16%,85.58% { opacity: 0 } 85.58%,100% { opacity: 0 } }
 .fl .a36 { animation: a36 34.674s infinite linear; }
-@keyframes a37 { 0%,17.266% { opacity: 0 } 17.267% { opacity: 0 } 17.843%,20.713% { opacity: 1 } 20.713%,39.724% { opacity: 1 } 39.724% { opacity: 1 } 40.301%,44.266% { opacity: 0 } 44.267%,56.74% { opacity: 0 } 56.74%,71.16% { opacity: 0 } 71.16%,85.58% { opacity: 0 } 85.58%,100% { opacity: 0 } }
-.fl .a37 { animation: a37 34.674s infinite linear; }
-@keyframes a38 { 0%,16.689% { opacity: 0 } 16.69%,20.713% { opacity: 0 } 20.713%,40.301% { opacity: 0 } 40.301% { opacity: 0 } 40.878%,44.266% { opacity: 1 } 44.267%,56.74% { opacity: 1 } 56.74% { opacity: 1 } 57.317%,71.16% { opacity: 0 } 71.16%,85.58% { opacity: 0 } 85.58%,100% { opacity: 0 } }
-.fl .a38 { animation: a38 34.674s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-line)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-main)"/></marker></defs>
 <rect x="0.5" y="0.5" width="1439" height="1464" rx="12" fill="var(--simple2-canvas-fill)"/>
@@ -1136,28 +1195,28 @@
 <g id="g-1" class="fl-group tabbed" data-id="cluster"><rect x="28" y="313" width="860" height="405" rx="18" class="frame-box fl-stroke a0"/><g class="fl-symbol fl-symbol-brand"><g class="fl-icon" transform="translate(36 317) scale(0.83333)"><g fill="currentColor"><path d="M9.71 2.136a1.43 1.43 0 0 0-2.047 0h-.007a1.48 1.48 0 0 0-.421 1.042c0 .41.161.777.422 1.039l.007.007c.257.264.616.426 1.019.426.404 0 .766-.162 1.027-.426l.003-.007c.261-.262.421-.629.421-1.039 0-.408-.159-.777-.421-1.042H9.71zM8.683 22.295c.404 0 .766-.167 1.027-.429l.003-.008c.261-.261.421-.631.421-1.036 0-.41-.159-.778-.421-1.044H9.71a1.42 1.42 0 0 0-1.027-.432 1.4 1.4 0 0 0-1.02.432h-.007c-.26.266-.422.634-.422 1.044 0 .406.161.775.422 1.036l.007.008c.258.262.617.429 1.02.429zm7.89-4.462c.359-.096.683-.33.882-.684l.027-.052a1.47 1.47 0 0 0 .114-1.067 1.454 1.454 0 0 0-.675-.896l-.021-.014a1.425 1.425 0 0 0-1.078-.132c-.36.091-.684.335-.881.686-.2.349-.241.75-.146 1.119.099.363.33.691.675.896h.002c.346.203.737.239 1.101.144zm-6.405-7.342a2.083 2.083 0 0 0-1.485-.627c-.58 0-1.103.242-1.482.627-.378.385-.612.916-.612 1.507s.233 1.124.612 1.514a2.08 2.08 0 0 0 2.967 0c.379-.39.612-.923.612-1.514s-.233-1.122-.612-1.507zm-.835-2.51c.843.141 1.6.552 2.178 1.144h.004c.092.093.182.196.265.299l1.446-.851a3.176 3.176 0 0 1-.047-1.808 3.149 3.149 0 0 1 1.456-1.926l.025-.016a3.062 3.062 0 0 1 2.345-.306c.77.21 1.465.721 1.898 1.482v.002c.431.757.518 1.626.313 2.408a3.145 3.145 0 0 1-1.456 1.928l-.198.118h-.02a3.095 3.095 0 0 1-2.154.201 3.127 3.127 0 0 1-1.514-.944l-1.444.848a4.162 4.162 0 0 1 0 2.879l1.444.846c.413-.47.939-.789 1.514-.944a3.041 3.041 0 0 1 2.371.319l.048.023v.002a3.17 3.17 0 0 1 1.408 1.906 3.215 3.215 0 0 1-.313 2.405l-.026.053-.003-.005a3.147 3.147 0 0 1-1.867 1.436 3.096 3.096 0 0 1-2.371-.318v-.006a3.156 3.156 0 0 1-1.456-1.927 3.175 3.175 0 0 1 .047-1.805l-1.446-.848a3.905 3.905 0 0 1-.265.294l-.004.005a3.938 3.938 0 0 1-2.178 1.138v1.699a3.09 3.09 0 0 1 1.56.862l.002.004c.565.572.914 1.368.914 2.243 0 .873-.35 1.664-.914 2.239l-.002.009a3.1 3.1 0 0 1-2.21.931 3.1 3.1 0 0 1-2.206-.93h-.002v-.009a3.186 3.186 0 0 1-.916-2.239c0-.875.35-1.672.916-2.243v-.004h.002a3.1 3.1 0 0 1 1.558-.862v-1.699a3.926 3.926 0 0 1-2.176-1.138l-.006-.005a4.098 4.098 0 0 1-1.173-2.874c0-1.122.452-2.136 1.173-2.872h.006a3.947 3.947 0 0 1 2.176-1.144V6.289a3.137 3.137 0 0 1-1.558-.864h-.002v-.004a3.192 3.192 0 0 1-.916-2.243c0-.871.35-1.669.916-2.243l.002-.002A3.084 3.084 0 0 1 8.683 0c.861 0 1.641.355 2.21.932v.002h.002c.565.574.914 1.372.914 2.243 0 .876-.35 1.667-.914 2.243l-.002.005a3.142 3.142 0 0 1-1.56.864v1.692zm8.121-1.129l-.012-.019a1.452 1.452 0 0 0-.87-.668 1.43 1.43 0 0 0-1.103.146h.002c-.347.2-.58.529-.677.896-.095.365-.054.768.146 1.119l.007.009c.2.347.519.579.874.673.357.103.755.059 1.098-.144l.019-.009a1.47 1.47 0 0 0 .657-.885 1.493 1.493 0 0 0-.141-1.118"/></g></g></g><text x="74" y="331" class="frame">카프카 클러스터</text></g>
 <g id="g-2" class="fl-group" data-id="topic"><rect x="52" y="353" width="616" height="184" rx="18" class="frame-box fl-stroke d2 a0"/><text x="70" y="371" class="frame">토픽 orders</text></g>
 <g id="g-3" class="fl-group tabbed" data-id="consumers"><rect x="184" y="856" width="428" height="211" rx="18" class="frame-box fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(192 860) scale(0.83333)"><rect class="symbol-face" x="2" y="12" width="10" height="10" rx="2"/><path d="M8 3h13v13M21 3 10 14"/></g></g><text x="273" y="874" class="frame">소비자 그룹</text></g>
-<g id="n-0" class="fl-node fl-shape-box" data-id="orderapi"><g class="fl-halo a2" fill="none" opacity="0"><rect x="242.6" y="68" width="100" height="83" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="242.6" y="68" width="100" height="83" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(282.6 80) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path d="M4 9h16M4 15h16"/><path class="symbol-solid" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="292.6" y="119.4" class="label">주문 API</text><text x="292.6" y="135.5" class="sub">주문 생성</text></g>
-<g id="n-1" class="fl-node fl-shape-box" data-id="payapi"><g class="fl-halo a4" fill="none" opacity="0"><rect x="362.6" y="68" width="100" height="83" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="362.6" y="68" width="100" height="83" rx="8" fill="var(--color-node)" class="fl-stroke a3"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(402.6 80) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path d="M4 9h16M4 15h16"/><path class="symbol-solid" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="412.6" y="119.4" class="label">결제 API</text><text x="412.6" y="135.5" class="sub">결제 승인</text></g>
-<g id="n-2" class="fl-node fl-shape-box" data-id="stockapi"><g class="fl-halo a4" fill="none" opacity="0"><rect x="482.6" y="68" width="100" height="83" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="482.6" y="68" width="100" height="83" rx="8" fill="var(--color-node)" class="fl-stroke a3"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(522.6 80) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path d="M4 9h16M4 15h16"/><path class="symbol-solid" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="532.6" y="119.4" class="label">재고 API</text><text x="532.6" y="135.5" class="sub">재고 차감</text></g>
-<g id="n-3" class="fl-node fl-shape-box" data-id="p0"><g class="fl-halo a2" fill="none" opacity="0"><rect x="76" y="393" width="176" height="120" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="76" y="393" width="176" height="120" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-brand"><g class="fl-icon" transform="translate(154 405) scale(0.83333)"><g fill="currentColor"><path d="M9.71 2.136a1.43 1.43 0 0 0-2.047 0h-.007a1.48 1.48 0 0 0-.421 1.042c0 .41.161.777.422 1.039l.007.007c.257.264.616.426 1.019.426.404 0 .766-.162 1.027-.426l.003-.007c.261-.262.421-.629.421-1.039 0-.408-.159-.777-.421-1.042H9.71zM8.683 22.295c.404 0 .766-.167 1.027-.429l.003-.008c.261-.261.421-.631.421-1.036 0-.41-.159-.778-.421-1.044H9.71a1.42 1.42 0 0 0-1.027-.432 1.4 1.4 0 0 0-1.02.432h-.007c-.26.266-.422.634-.422 1.044 0 .406.161.775.422 1.036l.007.008c.258.262.617.429 1.02.429zm7.89-4.462c.359-.096.683-.33.882-.684l.027-.052a1.47 1.47 0 0 0 .114-1.067 1.454 1.454 0 0 0-.675-.896l-.021-.014a1.425 1.425 0 0 0-1.078-.132c-.36.091-.684.335-.881.686-.2.349-.241.75-.146 1.119.099.363.33.691.675.896h.002c.346.203.737.239 1.101.144zm-6.405-7.342a2.083 2.083 0 0 0-1.485-.627c-.58 0-1.103.242-1.482.627-.378.385-.612.916-.612 1.507s.233 1.124.612 1.514a2.08 2.08 0 0 0 2.967 0c.379-.39.612-.923.612-1.514s-.233-1.122-.612-1.507zm-.835-2.51c.843.141 1.6.552 2.178 1.144h.004c.092.093.182.196.265.299l1.446-.851a3.176 3.176 0 0 1-.047-1.808 3.149 3.149 0 0 1 1.456-1.926l.025-.016a3.062 3.062 0 0 1 2.345-.306c.77.21 1.465.721 1.898 1.482v.002c.431.757.518 1.626.313 2.408a3.145 3.145 0 0 1-1.456 1.928l-.198.118h-.02a3.095 3.095 0 0 1-2.154.201 3.127 3.127 0 0 1-1.514-.944l-1.444.848a4.162 4.162 0 0 1 0 2.879l1.444.846c.413-.47.939-.789 1.514-.944a3.041 3.041 0 0 1 2.371.319l.048.023v.002a3.17 3.17 0 0 1 1.408 1.906 3.215 3.215 0 0 1-.313 2.405l-.026.053-.003-.005a3.147 3.147 0 0 1-1.867 1.436 3.096 3.096 0 0 1-2.371-.318v-.006a3.156 3.156 0 0 1-1.456-1.927 3.175 3.175 0 0 1 .047-1.805l-1.446-.848a3.905 3.905 0 0 1-.265.294l-.004.005a3.938 3.938 0 0 1-2.178 1.138v1.699a3.09 3.09 0 0 1 1.56.862l.002.004c.565.572.914 1.368.914 2.243 0 .873-.35 1.664-.914 2.239l-.002.009a3.1 3.1 0 0 1-2.21.931 3.1 3.1 0 0 1-2.206-.93h-.002v-.009a3.186 3.186 0 0 1-.916-2.239c0-.875.35-1.672.916-2.243v-.004h.002a3.1 3.1 0 0 1 1.558-.862v-1.699a3.926 3.926 0 0 1-2.176-1.138l-.006-.005a4.098 4.098 0 0 1-1.173-2.874c0-1.122.452-2.136 1.173-2.872h.006a3.947 3.947 0 0 1 2.176-1.144V6.289a3.137 3.137 0 0 1-1.558-.864h-.002v-.004a3.192 3.192 0 0 1-.916-2.243c0-.871.35-1.669.916-2.243l.002-.002A3.084 3.084 0 0 1 8.683 0c.861 0 1.641.355 2.21.932v.002h.002c.565.574.914 1.372.914 2.243 0 .876-.35 1.667-.914 2.243l-.002.005a3.142 3.142 0 0 1-1.56.864v1.692zm8.121-1.129l-.012-.019a1.452 1.452 0 0 0-.87-.668 1.43 1.43 0 0 0-1.103.146h.002c-.347.2-.58.529-.677.896-.095.365-.054.768.146 1.119l.007.009c.2.347.519.579.874.673.357.103.755.059 1.098-.144l.019-.009a1.47 1.47 0 0 0 .657-.885 1.493 1.493 0 0 0-.141-1.118"/></g></g></g><text x="164" y="444.4" class="label">파티션 0</text><text x="164" y="460.5" class="sub">해시 0</text><rect x="86" y="476" width="156" height="27" rx="6" fill="var(--color-card)" stroke="var(--color-outline)" stroke-dasharray="3 3" opacity="0" class="fl-card a6"/><g id="n-3-c0" opacity="0" class="fl-layer a5"><text x="94" y="493" class="row">offset</text></g></g>
-<g id="n-4" class="fl-node fl-shape-box" data-id="p1"><g class="fl-halo a2" fill="none" opacity="0"><rect x="272" y="393" width="176" height="120" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="272" y="393" width="176" height="120" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-brand"><g class="fl-icon" transform="translate(350 405) scale(0.83333)"><g fill="currentColor"><path d="M9.71 2.136a1.43 1.43 0 0 0-2.047 0h-.007a1.48 1.48 0 0 0-.421 1.042c0 .41.161.777.422 1.039l.007.007c.257.264.616.426 1.019.426.404 0 .766-.162 1.027-.426l.003-.007c.261-.262.421-.629.421-1.039 0-.408-.159-.777-.421-1.042H9.71zM8.683 22.295c.404 0 .766-.167 1.027-.429l.003-.008c.261-.261.421-.631.421-1.036 0-.41-.159-.778-.421-1.044H9.71a1.42 1.42 0 0 0-1.027-.432 1.4 1.4 0 0 0-1.02.432h-.007c-.26.266-.422.634-.422 1.044 0 .406.161.775.422 1.036l.007.008c.258.262.617.429 1.02.429zm7.89-4.462c.359-.096.683-.33.882-.684l.027-.052a1.47 1.47 0 0 0 .114-1.067 1.454 1.454 0 0 0-.675-.896l-.021-.014a1.425 1.425 0 0 0-1.078-.132c-.36.091-.684.335-.881.686-.2.349-.241.75-.146 1.119.099.363.33.691.675.896h.002c.346.203.737.239 1.101.144zm-6.405-7.342a2.083 2.083 0 0 0-1.485-.627c-.58 0-1.103.242-1.482.627-.378.385-.612.916-.612 1.507s.233 1.124.612 1.514a2.08 2.08 0 0 0 2.967 0c.379-.39.612-.923.612-1.514s-.233-1.122-.612-1.507zm-.835-2.51c.843.141 1.6.552 2.178 1.144h.004c.092.093.182.196.265.299l1.446-.851a3.176 3.176 0 0 1-.047-1.808 3.149 3.149 0 0 1 1.456-1.926l.025-.016a3.062 3.062 0 0 1 2.345-.306c.77.21 1.465.721 1.898 1.482v.002c.431.757.518 1.626.313 2.408a3.145 3.145 0 0 1-1.456 1.928l-.198.118h-.02a3.095 3.095 0 0 1-2.154.201 3.127 3.127 0 0 1-1.514-.944l-1.444.848a4.162 4.162 0 0 1 0 2.879l1.444.846c.413-.47.939-.789 1.514-.944a3.041 3.041 0 0 1 2.371.319l.048.023v.002a3.17 3.17 0 0 1 1.408 1.906 3.215 3.215 0 0 1-.313 2.405l-.026.053-.003-.005a3.147 3.147 0 0 1-1.867 1.436 3.096 3.096 0 0 1-2.371-.318v-.006a3.156 3.156 0 0 1-1.456-1.927 3.175 3.175 0 0 1 .047-1.805l-1.446-.848a3.905 3.905 0 0 1-.265.294l-.004.005a3.938 3.938 0 0 1-2.178 1.138v1.699a3.09 3.09 0 0 1 1.56.862l.002.004c.565.572.914 1.368.914 2.243 0 .873-.35 1.664-.914 2.239l-.002.009a3.1 3.1 0 0 1-2.21.931 3.1 3.1 0 0 1-2.206-.93h-.002v-.009a3.186 3.186 0 0 1-.916-2.239c0-.875.35-1.672.916-2.243v-.004h.002a3.1 3.1 0 0 1 1.558-.862v-1.699a3.926 3.926 0 0 1-2.176-1.138l-.006-.005a4.098 4.098 0 0 1-1.173-2.874c0-1.122.452-2.136 1.173-2.872h.006a3.947 3.947 0 0 1 2.176-1.144V6.289a3.137 3.137 0 0 1-1.558-.864h-.002v-.004a3.192 3.192 0 0 1-.916-2.243c0-.871.35-1.669.916-2.243l.002-.002A3.084 3.084 0 0 1 8.683 0c.861 0 1.641.355 2.21.932v.002h.002c.565.574.914 1.372.914 2.243 0 .876-.35 1.667-.914 2.243l-.002.005a3.142 3.142 0 0 1-1.56.864v1.692zm8.121-1.129l-.012-.019a1.452 1.452 0 0 0-.87-.668 1.43 1.43 0 0 0-1.103.146h.002c-.347.2-.58.529-.677.896-.095.365-.054.768.146 1.119l.007.009c.2.347.519.579.874.673.357.103.755.059 1.098-.144l.019-.009a1.47 1.47 0 0 0 .657-.885 1.493 1.493 0 0 0-.141-1.118"/></g></g></g><text x="360" y="444.4" class="label">파티션 1</text><text x="360" y="460.5" class="sub">해시 1</text><rect x="282" y="476" width="156" height="27" rx="6" fill="var(--color-card)" stroke="var(--color-outline)" stroke-dasharray="3 3" opacity="0" class="fl-card a6"/><g id="n-4-c0" opacity="0" class="fl-layer a5"><text x="290" y="493" class="row">offset</text></g></g>
-<g id="n-5" class="fl-node fl-shape-box" data-id="p2"><g class="fl-halo a2" fill="none" opacity="0"><rect x="468" y="393" width="176" height="120" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="468" y="393" width="176" height="120" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-brand"><g class="fl-icon" transform="translate(546 405) scale(0.83333)"><g fill="currentColor"><path d="M9.71 2.136a1.43 1.43 0 0 0-2.047 0h-.007a1.48 1.48 0 0 0-.421 1.042c0 .41.161.777.422 1.039l.007.007c.257.264.616.426 1.019.426.404 0 .766-.162 1.027-.426l.003-.007c.261-.262.421-.629.421-1.039 0-.408-.159-.777-.421-1.042H9.71zM8.683 22.295c.404 0 .766-.167 1.027-.429l.003-.008c.261-.261.421-.631.421-1.036 0-.41-.159-.778-.421-1.044H9.71a1.42 1.42 0 0 0-1.027-.432 1.4 1.4 0 0 0-1.02.432h-.007c-.26.266-.422.634-.422 1.044 0 .406.161.775.422 1.036l.007.008c.258.262.617.429 1.02.429zm7.89-4.462c.359-.096.683-.33.882-.684l.027-.052a1.47 1.47 0 0 0 .114-1.067 1.454 1.454 0 0 0-.675-.896l-.021-.014a1.425 1.425 0 0 0-1.078-.132c-.36.091-.684.335-.881.686-.2.349-.241.75-.146 1.119.099.363.33.691.675.896h.002c.346.203.737.239 1.101.144zm-6.405-7.342a2.083 2.083 0 0 0-1.485-.627c-.58 0-1.103.242-1.482.627-.378.385-.612.916-.612 1.507s.233 1.124.612 1.514a2.08 2.08 0 0 0 2.967 0c.379-.39.612-.923.612-1.514s-.233-1.122-.612-1.507zm-.835-2.51c.843.141 1.6.552 2.178 1.144h.004c.092.093.182.196.265.299l1.446-.851a3.176 3.176 0 0 1-.047-1.808 3.149 3.149 0 0 1 1.456-1.926l.025-.016a3.062 3.062 0 0 1 2.345-.306c.77.21 1.465.721 1.898 1.482v.002c.431.757.518 1.626.313 2.408a3.145 3.145 0 0 1-1.456 1.928l-.198.118h-.02a3.095 3.095 0 0 1-2.154.201 3.127 3.127 0 0 1-1.514-.944l-1.444.848a4.162 4.162 0 0 1 0 2.879l1.444.846c.413-.47.939-.789 1.514-.944a3.041 3.041 0 0 1 2.371.319l.048.023v.002a3.17 3.17 0 0 1 1.408 1.906 3.215 3.215 0 0 1-.313 2.405l-.026.053-.003-.005a3.147 3.147 0 0 1-1.867 1.436 3.096 3.096 0 0 1-2.371-.318v-.006a3.156 3.156 0 0 1-1.456-1.927 3.175 3.175 0 0 1 .047-1.805l-1.446-.848a3.905 3.905 0 0 1-.265.294l-.004.005a3.938 3.938 0 0 1-2.178 1.138v1.699a3.09 3.09 0 0 1 1.56.862l.002.004c.565.572.914 1.368.914 2.243 0 .873-.35 1.664-.914 2.239l-.002.009a3.1 3.1 0 0 1-2.21.931 3.1 3.1 0 0 1-2.206-.93h-.002v-.009a3.186 3.186 0 0 1-.916-2.239c0-.875.35-1.672.916-2.243v-.004h.002a3.1 3.1 0 0 1 1.558-.862v-1.699a3.926 3.926 0 0 1-2.176-1.138l-.006-.005a4.098 4.098 0 0 1-1.173-2.874c0-1.122.452-2.136 1.173-2.872h.006a3.947 3.947 0 0 1 2.176-1.144V6.289a3.137 3.137 0 0 1-1.558-.864h-.002v-.004a3.192 3.192 0 0 1-.916-2.243c0-.871.35-1.669.916-2.243l.002-.002A3.084 3.084 0 0 1 8.683 0c.861 0 1.641.355 2.21.932v.002h.002c.565.574.914 1.372.914 2.243 0 .876-.35 1.667-.914 2.243l-.002.005a3.142 3.142 0 0 1-1.56.864v1.692zm8.121-1.129l-.012-.019a1.452 1.452 0 0 0-.87-.668 1.43 1.43 0 0 0-1.103.146h.002c-.347.2-.58.529-.677.896-.095.365-.054.768.146 1.119l.007.009c.2.347.519.579.874.673.357.103.755.059 1.098-.144l.019-.009a1.47 1.47 0 0 0 .657-.885 1.493 1.493 0 0 0-.141-1.118"/></g></g></g><text x="556" y="444.4" class="label">파티션 2</text><text x="556" y="460.5" class="sub">해시 2</text><rect x="478" y="476" width="156" height="27" rx="6" fill="var(--color-card)" stroke="var(--color-outline)" stroke-dasharray="3 3" opacity="0" class="fl-card a6"/><g id="n-5-c0" opacity="0" class="fl-layer a5"><text x="486" y="493" class="row">offset</text></g></g>
-<g id="n-6" class="fl-node fl-shape-box" data-id="retry"><g class="fl-halo a4" fill="none" opacity="0"><rect x="726" y="353" width="100" height="83" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="726" y="353" width="100" height="83" rx="8" fill="var(--color-node)" class="fl-stroke a3"/><g class="fl-symbol fl-symbol-brand"><g class="fl-icon" transform="translate(766 365) scale(0.83333)"><g fill="currentColor"><path d="M9.71 2.136a1.43 1.43 0 0 0-2.047 0h-.007a1.48 1.48 0 0 0-.421 1.042c0 .41.161.777.422 1.039l.007.007c.257.264.616.426 1.019.426.404 0 .766-.162 1.027-.426l.003-.007c.261-.262.421-.629.421-1.039 0-.408-.159-.777-.421-1.042H9.71zM8.683 22.295c.404 0 .766-.167 1.027-.429l.003-.008c.261-.261.421-.631.421-1.036 0-.41-.159-.778-.421-1.044H9.71a1.42 1.42 0 0 0-1.027-.432 1.4 1.4 0 0 0-1.02.432h-.007c-.26.266-.422.634-.422 1.044 0 .406.161.775.422 1.036l.007.008c.258.262.617.429 1.02.429zm7.89-4.462c.359-.096.683-.33.882-.684l.027-.052a1.47 1.47 0 0 0 .114-1.067 1.454 1.454 0 0 0-.675-.896l-.021-.014a1.425 1.425 0 0 0-1.078-.132c-.36.091-.684.335-.881.686-.2.349-.241.75-.146 1.119.099.363.33.691.675.896h.002c.346.203.737.239 1.101.144zm-6.405-7.342a2.083 2.083 0 0 0-1.485-.627c-.58 0-1.103.242-1.482.627-.378.385-.612.916-.612 1.507s.233 1.124.612 1.514a2.08 2.08 0 0 0 2.967 0c.379-.39.612-.923.612-1.514s-.233-1.122-.612-1.507zm-.835-2.51c.843.141 1.6.552 2.178 1.144h.004c.092.093.182.196.265.299l1.446-.851a3.176 3.176 0 0 1-.047-1.808 3.149 3.149 0 0 1 1.456-1.926l.025-.016a3.062 3.062 0 0 1 2.345-.306c.77.21 1.465.721 1.898 1.482v.002c.431.757.518 1.626.313 2.408a3.145 3.145 0 0 1-1.456 1.928l-.198.118h-.02a3.095 3.095 0 0 1-2.154.201 3.127 3.127 0 0 1-1.514-.944l-1.444.848a4.162 4.162 0 0 1 0 2.879l1.444.846c.413-.47.939-.789 1.514-.944a3.041 3.041 0 0 1 2.371.319l.048.023v.002a3.17 3.17 0 0 1 1.408 1.906 3.215 3.215 0 0 1-.313 2.405l-.026.053-.003-.005a3.147 3.147 0 0 1-1.867 1.436 3.096 3.096 0 0 1-2.371-.318v-.006a3.156 3.156 0 0 1-1.456-1.927 3.175 3.175 0 0 1 .047-1.805l-1.446-.848a3.905 3.905 0 0 1-.265.294l-.004.005a3.938 3.938 0 0 1-2.178 1.138v1.699a3.09 3.09 0 0 1 1.56.862l.002.004c.565.572.914 1.368.914 2.243 0 .873-.35 1.664-.914 2.239l-.002.009a3.1 3.1 0 0 1-2.21.931 3.1 3.1 0 0 1-2.206-.93h-.002v-.009a3.186 3.186 0 0 1-.916-2.239c0-.875.35-1.672.916-2.243v-.004h.002a3.1 3.1 0 0 1 1.558-.862v-1.699a3.926 3.926 0 0 1-2.176-1.138l-.006-.005a4.098 4.098 0 0 1-1.173-2.874c0-1.122.452-2.136 1.173-2.872h.006a3.947 3.947 0 0 1 2.176-1.144V6.289a3.137 3.137 0 0 1-1.558-.864h-.002v-.004a3.192 3.192 0 0 1-.916-2.243c0-.871.35-1.669.916-2.243l.002-.002A3.084 3.084 0 0 1 8.683 0c.861 0 1.641.355 2.21.932v.002h.002c.565.574.914 1.372.914 2.243 0 .876-.35 1.667-.914 2.243l-.002.005a3.142 3.142 0 0 1-1.56.864v1.692zm8.121-1.129l-.012-.019a1.452 1.452 0 0 0-.87-.668 1.43 1.43 0 0 0-1.103.146h.002c-.347.2-.58.529-.677.896-.095.365-.054.768.146 1.119l.007.009c.2.347.519.579.874.673.357.103.755.059 1.098-.144l.019-.009a1.47 1.47 0 0 0 .657-.885 1.493 1.493 0 0 0-.141-1.118"/></g></g></g><text x="776" y="404.4" class="label">재시도</text><text x="776" y="420.5" class="sub">retry 토픽</text></g>
-<g id="n-7" class="fl-node fl-shape-store" data-id="dlq"><g class="fl-halo a2 ph-red" fill="none" opacity="0"><path d="M688 586 a 88 12 0 0 1 176 0 v 96 a 88 12 0 0 1 -176 0 z" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><path d="M688 586 a 88 12 0 0 1 176 0 v 96 a 88 12 0 0 1 -176 0 z" fill="var(--color-paint-red-fill)" class="fl-stroke ps-red a7"/><path d="M688 586 a 88 12 0 0 0 176 0" fill="none" class="fl-stroke ps-red a7"/><text x="776" y="613.4" class="label">DLQ</text><text x="776" y="629.5" class="sub">orders.dlq</text><rect x="698" y="645" width="156" height="27" rx="6" fill="var(--color-card)" stroke="var(--color-outline)" stroke-dasharray="3 3" opacity="0" class="fl-card a6"/><g id="n-7-c0" opacity="0" class="fl-layer a5"><text x="706" y="662" class="row">DLQ 건수</text></g></g>
-<g id="n-8" class="fl-node fl-shape-box" data-id="settle"><g class="fl-halo a2" fill="none" opacity="0"><rect x="208" y="896" width="176" height="139" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="216" y="904" width="176" height="139" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><rect x="212" y="900" width="176" height="139" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><rect x="208" y="896" width="176" height="139" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(270 908) scale(0.83333)"><rect class="symbol-face" x="2" y="2" width="20" height="20" rx="5"/><path d="m9 7-4 5 4 5m6-10 4 5-4 5"/></g></g><g class="fl-badge"><rect x="294" y="909" width="28" height="18" rx="9" class="badge-pill"/><text x="308" y="922" class="badge">(2)</text></g><text x="296" y="947.4" class="label">정산 소비자</text><text x="296" y="963.5" class="sub">파티션 0·1</text><rect x="218" y="979" width="156" height="46" rx="6" fill="var(--color-card)" stroke="var(--color-outline)" stroke-dasharray="3 3" opacity="0" class="fl-card a6"/><g id="n-8-c0" opacity="0" class="fl-layer a5"><text x="226" y="996" class="row">lag</text><text x="226" y="1015" class="row">처리 건수</text></g></g>
-<g id="n-9" class="fl-node fl-shape-box" data-id="notify"><g class="fl-halo a2" fill="none" opacity="0"><rect x="412" y="896" width="176" height="120" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="412" y="896" width="176" height="120" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(490 908) scale(0.83333)"><rect class="symbol-face" x="2" y="2" width="20" height="20" rx="5"/><path d="m9 7-4 5 4 5m6-10 4 5-4 5"/></g></g><text x="500" y="947.4" class="label">알림 소비자</text><text x="500" y="963.5" class="sub">파티션 1·2</text><rect x="422" y="979" width="156" height="27" rx="6" fill="var(--color-card)" stroke="var(--color-outline)" stroke-dasharray="3 3" opacity="0" class="fl-card a6"/><g id="n-9-c0" opacity="0" class="fl-layer a5"><text x="430" y="996" class="row">lag</text></g></g>
-<g id="n-10" class="fl-node fl-shape-store" data-id="db"><g class="fl-halo a2" fill="none" opacity="0"><path d="M181 1217 a 88 12 0 0 1 176 0 v 132 a 88 12 0 0 1 -176 0 z" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><path d="M181 1217 a 88 12 0 0 1 176 0 v 132 a 88 12 0 0 1 -176 0 z" fill="var(--color-node)" class="fl-stroke a1"/><path d="M181 1217 a 88 12 0 0 0 176 0" fill="none" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(259 1241) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="269" y="1280.4" class="label">정산 DB</text><text x="269" y="1296.5" class="sub">주문 정산</text><rect x="191" y="1312" width="156" height="27" rx="6" fill="var(--color-card)" stroke="var(--color-outline)" stroke-dasharray="3 3" opacity="0" class="fl-card a6"/><g id="n-10-c0" opacity="0" class="fl-layer a5"><text x="199" y="1329" class="row">정산 행</text></g></g>
-<g id="e-0" class="fl-edge"><path id="p-0" d="M 275.6 151 L 275.6 247 Q 275.6 269, 253.6 269 L 186 269 Q 164 269, 164 291 L 164 393" class="fl-path a8" marker-end="url(#fl-arrow)"/></g>
-<g id="e-1" class="fl-edge"><path id="p-1" d="M 309.6 151 L 309.6 180.3 Q 309.6 191, 320.3 191 L 320.3 191 Q 331 191, 331 201.7 L 331 393" class="fl-path a9" marker-end="url(#fl-arrow)"/></g>
-<g id="e-2" class="fl-edge"><path id="p-2" d="M 412.6 151 L 412.6 257.2 Q 412.6 269, 400.8 269 L 400.8 269 Q 389 269, 389 280.8 L 389 393" class="fl-path a10" marker-end="url(#fl-arrow)"/></g>
-<g id="e-3" class="fl-edge"><path id="p-3" d="M 532.6 151 L 532.6 257.3 Q 532.6 269, 544.3 269 L 544.3 269 Q 556 269, 556 280.7 L 556 393" class="fl-path a11" marker-end="url(#fl-arrow)"/></g>
-<g id="e-4" class="fl-edge"><path id="p-4" d="M 164 513 L 164 790 Q 164 812, 186 812 L 247 812 Q 269 812, 269 834 L 269 896" class="fl-path a12" marker-end="url(#fl-arrow)"/></g>
-<g id="e-5" class="fl-edge"><path id="p-5" d="M 331 513 L 331 896" class="fl-path a9" marker-end="url(#fl-arrow)"/></g>
-<g id="e-6" class="fl-edge"><path id="p-6" d="M 389 513 L 389 790 Q 389 812, 411 812 L 449 812 Q 471 812, 471 834 L 471 896" class="fl-path a13" marker-end="url(#fl-arrow)"/></g>
-<g id="e-7" class="fl-edge"><path id="p-7" d="M 556 513 L 556 798.5 Q 556 812, 542.5 812 L 542.5 812 Q 529 812, 529 825.5 L 529 896" class="fl-path a14" marker-end="url(#fl-arrow)"/></g>
-<g id="e-8" class="fl-edge"><path id="p-8" d="M 269 1043 L 269 1205" class="fl-path a15" marker-end="url(#fl-arrow)"/></g>
-<g id="e-9" class="fl-edge"><path id="p-9" d="M 331 1043 L 331 1063 Q 331 1083, 351 1083 L 882 1083 Q 904 1083, 904 1061 L 904 291 Q 904 269, 882 269 L 798 269 Q 776 269, 776 291 L 776 353" class="fl-path a16" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/></g>
-<g id="e-10" class="fl-edge"><path id="p-10" d="M 776 436 L 776 574" class="fl-path a17" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/></g>
+<g id="n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="주문 API" data-id="orderapi"><rect x="242.6" y="68" width="100" height="83" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(282.6 80) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path d="M4 9h16M4 15h16"/><path class="symbol-solid" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="292.6" y="119.4" class="label">주문 API</text><text x="292.6" y="135.5" class="sub">주문 생성</text></g>
+<g id="n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="결제 API" data-id="payapi"><rect x="362.6" y="68" width="100" height="83" rx="8" fill="var(--color-node)" class="fl-stroke a2"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(402.6 80) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path d="M4 9h16M4 15h16"/><path class="symbol-solid" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="412.6" y="119.4" class="label">결제 API</text><text x="412.6" y="135.5" class="sub">결제 승인</text></g>
+<g id="n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="재고 API" data-id="stockapi"><rect x="482.6" y="68" width="100" height="83" rx="8" fill="var(--color-node)" class="fl-stroke a2"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(522.6 80) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path d="M4 9h16M4 15h16"/><path class="symbol-solid" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="532.6" y="119.4" class="label">재고 API</text><text x="532.6" y="135.5" class="sub">재고 차감</text></g>
+<g id="n-3" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="파티션 0" data-id="p0"><rect x="76" y="393" width="176" height="120" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-brand"><g class="fl-icon" transform="translate(154 405) scale(0.83333)"><g fill="currentColor"><path d="M9.71 2.136a1.43 1.43 0 0 0-2.047 0h-.007a1.48 1.48 0 0 0-.421 1.042c0 .41.161.777.422 1.039l.007.007c.257.264.616.426 1.019.426.404 0 .766-.162 1.027-.426l.003-.007c.261-.262.421-.629.421-1.039 0-.408-.159-.777-.421-1.042H9.71zM8.683 22.295c.404 0 .766-.167 1.027-.429l.003-.008c.261-.261.421-.631.421-1.036 0-.41-.159-.778-.421-1.044H9.71a1.42 1.42 0 0 0-1.027-.432 1.4 1.4 0 0 0-1.02.432h-.007c-.26.266-.422.634-.422 1.044 0 .406.161.775.422 1.036l.007.008c.258.262.617.429 1.02.429zm7.89-4.462c.359-.096.683-.33.882-.684l.027-.052a1.47 1.47 0 0 0 .114-1.067 1.454 1.454 0 0 0-.675-.896l-.021-.014a1.425 1.425 0 0 0-1.078-.132c-.36.091-.684.335-.881.686-.2.349-.241.75-.146 1.119.099.363.33.691.675.896h.002c.346.203.737.239 1.101.144zm-6.405-7.342a2.083 2.083 0 0 0-1.485-.627c-.58 0-1.103.242-1.482.627-.378.385-.612.916-.612 1.507s.233 1.124.612 1.514a2.08 2.08 0 0 0 2.967 0c.379-.39.612-.923.612-1.514s-.233-1.122-.612-1.507zm-.835-2.51c.843.141 1.6.552 2.178 1.144h.004c.092.093.182.196.265.299l1.446-.851a3.176 3.176 0 0 1-.047-1.808 3.149 3.149 0 0 1 1.456-1.926l.025-.016a3.062 3.062 0 0 1 2.345-.306c.77.21 1.465.721 1.898 1.482v.002c.431.757.518 1.626.313 2.408a3.145 3.145 0 0 1-1.456 1.928l-.198.118h-.02a3.095 3.095 0 0 1-2.154.201 3.127 3.127 0 0 1-1.514-.944l-1.444.848a4.162 4.162 0 0 1 0 2.879l1.444.846c.413-.47.939-.789 1.514-.944a3.041 3.041 0 0 1 2.371.319l.048.023v.002a3.17 3.17 0 0 1 1.408 1.906 3.215 3.215 0 0 1-.313 2.405l-.026.053-.003-.005a3.147 3.147 0 0 1-1.867 1.436 3.096 3.096 0 0 1-2.371-.318v-.006a3.156 3.156 0 0 1-1.456-1.927 3.175 3.175 0 0 1 .047-1.805l-1.446-.848a3.905 3.905 0 0 1-.265.294l-.004.005a3.938 3.938 0 0 1-2.178 1.138v1.699a3.09 3.09 0 0 1 1.56.862l.002.004c.565.572.914 1.368.914 2.243 0 .873-.35 1.664-.914 2.239l-.002.009a3.1 3.1 0 0 1-2.21.931 3.1 3.1 0 0 1-2.206-.93h-.002v-.009a3.186 3.186 0 0 1-.916-2.239c0-.875.35-1.672.916-2.243v-.004h.002a3.1 3.1 0 0 1 1.558-.862v-1.699a3.926 3.926 0 0 1-2.176-1.138l-.006-.005a4.098 4.098 0 0 1-1.173-2.874c0-1.122.452-2.136 1.173-2.872h.006a3.947 3.947 0 0 1 2.176-1.144V6.289a3.137 3.137 0 0 1-1.558-.864h-.002v-.004a3.192 3.192 0 0 1-.916-2.243c0-.871.35-1.669.916-2.243l.002-.002A3.084 3.084 0 0 1 8.683 0c.861 0 1.641.355 2.21.932v.002h.002c.565.574.914 1.372.914 2.243 0 .876-.35 1.667-.914 2.243l-.002.005a3.142 3.142 0 0 1-1.56.864v1.692zm8.121-1.129l-.012-.019a1.452 1.452 0 0 0-.87-.668 1.43 1.43 0 0 0-1.103.146h.002c-.347.2-.58.529-.677.896-.095.365-.054.768.146 1.119l.007.009c.2.347.519.579.874.673.357.103.755.059 1.098-.144l.019-.009a1.47 1.47 0 0 0 .657-.885 1.493 1.493 0 0 0-.141-1.118"/></g></g></g><text x="164" y="444.4" class="label">파티션 0</text><text x="164" y="460.5" class="sub">해시 0</text><rect x="86" y="476" width="156" height="27" rx="6" fill="var(--color-card)" stroke="var(--simple2-separator)" opacity="0" class="fl-card a4"/><g id="n-3-c0" opacity="0" class="fl-layer a3"><text x="94" y="493" class="row">offset</text></g></g>
+<g id="n-4" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="파티션 1" data-id="p1"><rect x="272" y="393" width="176" height="120" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-brand"><g class="fl-icon" transform="translate(350 405) scale(0.83333)"><g fill="currentColor"><path d="M9.71 2.136a1.43 1.43 0 0 0-2.047 0h-.007a1.48 1.48 0 0 0-.421 1.042c0 .41.161.777.422 1.039l.007.007c.257.264.616.426 1.019.426.404 0 .766-.162 1.027-.426l.003-.007c.261-.262.421-.629.421-1.039 0-.408-.159-.777-.421-1.042H9.71zM8.683 22.295c.404 0 .766-.167 1.027-.429l.003-.008c.261-.261.421-.631.421-1.036 0-.41-.159-.778-.421-1.044H9.71a1.42 1.42 0 0 0-1.027-.432 1.4 1.4 0 0 0-1.02.432h-.007c-.26.266-.422.634-.422 1.044 0 .406.161.775.422 1.036l.007.008c.258.262.617.429 1.02.429zm7.89-4.462c.359-.096.683-.33.882-.684l.027-.052a1.47 1.47 0 0 0 .114-1.067 1.454 1.454 0 0 0-.675-.896l-.021-.014a1.425 1.425 0 0 0-1.078-.132c-.36.091-.684.335-.881.686-.2.349-.241.75-.146 1.119.099.363.33.691.675.896h.002c.346.203.737.239 1.101.144zm-6.405-7.342a2.083 2.083 0 0 0-1.485-.627c-.58 0-1.103.242-1.482.627-.378.385-.612.916-.612 1.507s.233 1.124.612 1.514a2.08 2.08 0 0 0 2.967 0c.379-.39.612-.923.612-1.514s-.233-1.122-.612-1.507zm-.835-2.51c.843.141 1.6.552 2.178 1.144h.004c.092.093.182.196.265.299l1.446-.851a3.176 3.176 0 0 1-.047-1.808 3.149 3.149 0 0 1 1.456-1.926l.025-.016a3.062 3.062 0 0 1 2.345-.306c.77.21 1.465.721 1.898 1.482v.002c.431.757.518 1.626.313 2.408a3.145 3.145 0 0 1-1.456 1.928l-.198.118h-.02a3.095 3.095 0 0 1-2.154.201 3.127 3.127 0 0 1-1.514-.944l-1.444.848a4.162 4.162 0 0 1 0 2.879l1.444.846c.413-.47.939-.789 1.514-.944a3.041 3.041 0 0 1 2.371.319l.048.023v.002a3.17 3.17 0 0 1 1.408 1.906 3.215 3.215 0 0 1-.313 2.405l-.026.053-.003-.005a3.147 3.147 0 0 1-1.867 1.436 3.096 3.096 0 0 1-2.371-.318v-.006a3.156 3.156 0 0 1-1.456-1.927 3.175 3.175 0 0 1 .047-1.805l-1.446-.848a3.905 3.905 0 0 1-.265.294l-.004.005a3.938 3.938 0 0 1-2.178 1.138v1.699a3.09 3.09 0 0 1 1.56.862l.002.004c.565.572.914 1.368.914 2.243 0 .873-.35 1.664-.914 2.239l-.002.009a3.1 3.1 0 0 1-2.21.931 3.1 3.1 0 0 1-2.206-.93h-.002v-.009a3.186 3.186 0 0 1-.916-2.239c0-.875.35-1.672.916-2.243v-.004h.002a3.1 3.1 0 0 1 1.558-.862v-1.699a3.926 3.926 0 0 1-2.176-1.138l-.006-.005a4.098 4.098 0 0 1-1.173-2.874c0-1.122.452-2.136 1.173-2.872h.006a3.947 3.947 0 0 1 2.176-1.144V6.289a3.137 3.137 0 0 1-1.558-.864h-.002v-.004a3.192 3.192 0 0 1-.916-2.243c0-.871.35-1.669.916-2.243l.002-.002A3.084 3.084 0 0 1 8.683 0c.861 0 1.641.355 2.21.932v.002h.002c.565.574.914 1.372.914 2.243 0 .876-.35 1.667-.914 2.243l-.002.005a3.142 3.142 0 0 1-1.56.864v1.692zm8.121-1.129l-.012-.019a1.452 1.452 0 0 0-.87-.668 1.43 1.43 0 0 0-1.103.146h.002c-.347.2-.58.529-.677.896-.095.365-.054.768.146 1.119l.007.009c.2.347.519.579.874.673.357.103.755.059 1.098-.144l.019-.009a1.47 1.47 0 0 0 .657-.885 1.493 1.493 0 0 0-.141-1.118"/></g></g></g><text x="360" y="444.4" class="label">파티션 1</text><text x="360" y="460.5" class="sub">해시 1</text><rect x="282" y="476" width="156" height="27" rx="6" fill="var(--color-card)" stroke="var(--simple2-separator)" opacity="0" class="fl-card a4"/><g id="n-4-c0" opacity="0" class="fl-layer a3"><text x="290" y="493" class="row">offset</text></g></g>
+<g id="n-5" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="파티션 2" data-id="p2"><rect x="468" y="393" width="176" height="120" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-brand"><g class="fl-icon" transform="translate(546 405) scale(0.83333)"><g fill="currentColor"><path d="M9.71 2.136a1.43 1.43 0 0 0-2.047 0h-.007a1.48 1.48 0 0 0-.421 1.042c0 .41.161.777.422 1.039l.007.007c.257.264.616.426 1.019.426.404 0 .766-.162 1.027-.426l.003-.007c.261-.262.421-.629.421-1.039 0-.408-.159-.777-.421-1.042H9.71zM8.683 22.295c.404 0 .766-.167 1.027-.429l.003-.008c.261-.261.421-.631.421-1.036 0-.41-.159-.778-.421-1.044H9.71a1.42 1.42 0 0 0-1.027-.432 1.4 1.4 0 0 0-1.02.432h-.007c-.26.266-.422.634-.422 1.044 0 .406.161.775.422 1.036l.007.008c.258.262.617.429 1.02.429zm7.89-4.462c.359-.096.683-.33.882-.684l.027-.052a1.47 1.47 0 0 0 .114-1.067 1.454 1.454 0 0 0-.675-.896l-.021-.014a1.425 1.425 0 0 0-1.078-.132c-.36.091-.684.335-.881.686-.2.349-.241.75-.146 1.119.099.363.33.691.675.896h.002c.346.203.737.239 1.101.144zm-6.405-7.342a2.083 2.083 0 0 0-1.485-.627c-.58 0-1.103.242-1.482.627-.378.385-.612.916-.612 1.507s.233 1.124.612 1.514a2.08 2.08 0 0 0 2.967 0c.379-.39.612-.923.612-1.514s-.233-1.122-.612-1.507zm-.835-2.51c.843.141 1.6.552 2.178 1.144h.004c.092.093.182.196.265.299l1.446-.851a3.176 3.176 0 0 1-.047-1.808 3.149 3.149 0 0 1 1.456-1.926l.025-.016a3.062 3.062 0 0 1 2.345-.306c.77.21 1.465.721 1.898 1.482v.002c.431.757.518 1.626.313 2.408a3.145 3.145 0 0 1-1.456 1.928l-.198.118h-.02a3.095 3.095 0 0 1-2.154.201 3.127 3.127 0 0 1-1.514-.944l-1.444.848a4.162 4.162 0 0 1 0 2.879l1.444.846c.413-.47.939-.789 1.514-.944a3.041 3.041 0 0 1 2.371.319l.048.023v.002a3.17 3.17 0 0 1 1.408 1.906 3.215 3.215 0 0 1-.313 2.405l-.026.053-.003-.005a3.147 3.147 0 0 1-1.867 1.436 3.096 3.096 0 0 1-2.371-.318v-.006a3.156 3.156 0 0 1-1.456-1.927 3.175 3.175 0 0 1 .047-1.805l-1.446-.848a3.905 3.905 0 0 1-.265.294l-.004.005a3.938 3.938 0 0 1-2.178 1.138v1.699a3.09 3.09 0 0 1 1.56.862l.002.004c.565.572.914 1.368.914 2.243 0 .873-.35 1.664-.914 2.239l-.002.009a3.1 3.1 0 0 1-2.21.931 3.1 3.1 0 0 1-2.206-.93h-.002v-.009a3.186 3.186 0 0 1-.916-2.239c0-.875.35-1.672.916-2.243v-.004h.002a3.1 3.1 0 0 1 1.558-.862v-1.699a3.926 3.926 0 0 1-2.176-1.138l-.006-.005a4.098 4.098 0 0 1-1.173-2.874c0-1.122.452-2.136 1.173-2.872h.006a3.947 3.947 0 0 1 2.176-1.144V6.289a3.137 3.137 0 0 1-1.558-.864h-.002v-.004a3.192 3.192 0 0 1-.916-2.243c0-.871.35-1.669.916-2.243l.002-.002A3.084 3.084 0 0 1 8.683 0c.861 0 1.641.355 2.21.932v.002h.002c.565.574.914 1.372.914 2.243 0 .876-.35 1.667-.914 2.243l-.002.005a3.142 3.142 0 0 1-1.56.864v1.692zm8.121-1.129l-.012-.019a1.452 1.452 0 0 0-.87-.668 1.43 1.43 0 0 0-1.103.146h.002c-.347.2-.58.529-.677.896-.095.365-.054.768.146 1.119l.007.009c.2.347.519.579.874.673.357.103.755.059 1.098-.144l.019-.009a1.47 1.47 0 0 0 .657-.885 1.493 1.493 0 0 0-.141-1.118"/></g></g></g><text x="556" y="444.4" class="label">파티션 2</text><text x="556" y="460.5" class="sub">해시 2</text><rect x="478" y="476" width="156" height="27" rx="6" fill="var(--color-card)" stroke="var(--simple2-separator)" opacity="0" class="fl-card a4"/><g id="n-5-c0" opacity="0" class="fl-layer a3"><text x="486" y="493" class="row">offset</text></g></g>
+<g id="n-6" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="재시도" data-id="retry"><rect x="726" y="353" width="100" height="83" rx="8" fill="var(--color-node)" class="fl-stroke a2"/><g class="fl-symbol fl-symbol-brand"><g class="fl-icon" transform="translate(766 365) scale(0.83333)"><g fill="currentColor"><path d="M9.71 2.136a1.43 1.43 0 0 0-2.047 0h-.007a1.48 1.48 0 0 0-.421 1.042c0 .41.161.777.422 1.039l.007.007c.257.264.616.426 1.019.426.404 0 .766-.162 1.027-.426l.003-.007c.261-.262.421-.629.421-1.039 0-.408-.159-.777-.421-1.042H9.71zM8.683 22.295c.404 0 .766-.167 1.027-.429l.003-.008c.261-.261.421-.631.421-1.036 0-.41-.159-.778-.421-1.044H9.71a1.42 1.42 0 0 0-1.027-.432 1.4 1.4 0 0 0-1.02.432h-.007c-.26.266-.422.634-.422 1.044 0 .406.161.775.422 1.036l.007.008c.258.262.617.429 1.02.429zm7.89-4.462c.359-.096.683-.33.882-.684l.027-.052a1.47 1.47 0 0 0 .114-1.067 1.454 1.454 0 0 0-.675-.896l-.021-.014a1.425 1.425 0 0 0-1.078-.132c-.36.091-.684.335-.881.686-.2.349-.241.75-.146 1.119.099.363.33.691.675.896h.002c.346.203.737.239 1.101.144zm-6.405-7.342a2.083 2.083 0 0 0-1.485-.627c-.58 0-1.103.242-1.482.627-.378.385-.612.916-.612 1.507s.233 1.124.612 1.514a2.08 2.08 0 0 0 2.967 0c.379-.39.612-.923.612-1.514s-.233-1.122-.612-1.507zm-.835-2.51c.843.141 1.6.552 2.178 1.144h.004c.092.093.182.196.265.299l1.446-.851a3.176 3.176 0 0 1-.047-1.808 3.149 3.149 0 0 1 1.456-1.926l.025-.016a3.062 3.062 0 0 1 2.345-.306c.77.21 1.465.721 1.898 1.482v.002c.431.757.518 1.626.313 2.408a3.145 3.145 0 0 1-1.456 1.928l-.198.118h-.02a3.095 3.095 0 0 1-2.154.201 3.127 3.127 0 0 1-1.514-.944l-1.444.848a4.162 4.162 0 0 1 0 2.879l1.444.846c.413-.47.939-.789 1.514-.944a3.041 3.041 0 0 1 2.371.319l.048.023v.002a3.17 3.17 0 0 1 1.408 1.906 3.215 3.215 0 0 1-.313 2.405l-.026.053-.003-.005a3.147 3.147 0 0 1-1.867 1.436 3.096 3.096 0 0 1-2.371-.318v-.006a3.156 3.156 0 0 1-1.456-1.927 3.175 3.175 0 0 1 .047-1.805l-1.446-.848a3.905 3.905 0 0 1-.265.294l-.004.005a3.938 3.938 0 0 1-2.178 1.138v1.699a3.09 3.09 0 0 1 1.56.862l.002.004c.565.572.914 1.368.914 2.243 0 .873-.35 1.664-.914 2.239l-.002.009a3.1 3.1 0 0 1-2.21.931 3.1 3.1 0 0 1-2.206-.93h-.002v-.009a3.186 3.186 0 0 1-.916-2.239c0-.875.35-1.672.916-2.243v-.004h.002a3.1 3.1 0 0 1 1.558-.862v-1.699a3.926 3.926 0 0 1-2.176-1.138l-.006-.005a4.098 4.098 0 0 1-1.173-2.874c0-1.122.452-2.136 1.173-2.872h.006a3.947 3.947 0 0 1 2.176-1.144V6.289a3.137 3.137 0 0 1-1.558-.864h-.002v-.004a3.192 3.192 0 0 1-.916-2.243c0-.871.35-1.669.916-2.243l.002-.002A3.084 3.084 0 0 1 8.683 0c.861 0 1.641.355 2.21.932v.002h.002c.565.574.914 1.372.914 2.243 0 .876-.35 1.667-.914 2.243l-.002.005a3.142 3.142 0 0 1-1.56.864v1.692zm8.121-1.129l-.012-.019a1.452 1.452 0 0 0-.87-.668 1.43 1.43 0 0 0-1.103.146h.002c-.347.2-.58.529-.677.896-.095.365-.054.768.146 1.119l.007.009c.2.347.519.579.874.673.357.103.755.059 1.098-.144l.019-.009a1.47 1.47 0 0 0 .657-.885 1.493 1.493 0 0 0-.141-1.118"/></g></g></g><text x="776" y="404.4" class="label">재시도</text><text x="776" y="420.5" class="sub">retry 토픽</text></g>
+<g id="n-7" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="DLQ" data-id="dlq"><path d="M688 586 a 88 12 0 0 1 176 0 v 96 a 88 12 0 0 1 -176 0 z" fill="var(--color-paint-red-fill)" class="fl-stroke ps-red a5"/><path d="M688 586 a 88 12 0 0 0 176 0" fill="none" class="fl-stroke ps-red a5"/><text x="776" y="613.4" class="label">DLQ</text><text x="776" y="629.5" class="sub">orders.dlq</text><rect x="698" y="645" width="156" height="27" rx="6" fill="var(--color-card)" stroke="var(--simple2-separator)" opacity="0" class="fl-card a4"/><g id="n-7-c0" opacity="0" class="fl-layer a3"><text x="706" y="662" class="row">DLQ 건수</text></g></g>
+<g id="n-8" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="정산 소비자" data-id="settle"><rect x="216" y="904" width="176" height="139" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><rect x="212" y="900" width="176" height="139" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><rect x="208" y="896" width="176" height="139" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(270 908) scale(0.83333)"><rect class="symbol-face" x="2" y="2" width="20" height="20" rx="5"/><path d="m9 7-4 5 4 5m6-10 4 5-4 5"/></g></g><g class="fl-badge"><rect x="294" y="909" width="28" height="18" rx="9" class="badge-pill"/><text x="308" y="922" class="badge">(2)</text></g><text x="296" y="947.4" class="label">정산 소비자</text><text x="296" y="963.5" class="sub">파티션 0·1</text><rect x="218" y="979" width="156" height="46" rx="6" fill="var(--color-card)" stroke="var(--simple2-separator)" opacity="0" class="fl-card a4"/><g id="n-8-c0" opacity="0" class="fl-layer a3"><text x="226" y="996" class="row">lag</text><text x="226" y="1015" class="row">처리 건수</text></g></g>
+<g id="n-9" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="알림 소비자" data-id="notify"><rect x="412" y="896" width="176" height="120" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(490 908) scale(0.83333)"><rect class="symbol-face" x="2" y="2" width="20" height="20" rx="5"/><path d="m9 7-4 5 4 5m6-10 4 5-4 5"/></g></g><text x="500" y="947.4" class="label">알림 소비자</text><text x="500" y="963.5" class="sub">파티션 1·2</text><rect x="422" y="979" width="156" height="27" rx="6" fill="var(--color-card)" stroke="var(--simple2-separator)" opacity="0" class="fl-card a4"/><g id="n-9-c0" opacity="0" class="fl-layer a3"><text x="430" y="996" class="row">lag</text></g></g>
+<g id="n-10" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="정산 DB" data-id="db"><path d="M181 1217 a 88 12 0 0 1 176 0 v 132 a 88 12 0 0 1 -176 0 z" fill="var(--color-node)" class="fl-stroke a1"/><path d="M181 1217 a 88 12 0 0 0 176 0" fill="none" class="fl-stroke a1"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(259 1241) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="269" y="1280.4" class="label">정산 DB</text><text x="269" y="1296.5" class="sub">주문 정산</text><rect x="191" y="1312" width="156" height="27" rx="6" fill="var(--color-card)" stroke="var(--simple2-separator)" opacity="0" class="fl-card a4"/><g id="n-10-c0" opacity="0" class="fl-layer a3"><text x="199" y="1329" class="row">정산 행</text></g></g>
+<g id="e-0" class="fl-edge"><path id="p-0" d="M 275.6 151 L 275.6 247 Q 275.6 269, 253.6 269 L 186 269 Q 164 269, 164 291 L 164 393" class="fl-path a6" marker-end="url(#fl-arrow)"/></g>
+<g id="e-1" class="fl-edge"><path id="p-1" d="M 309.6 151 L 309.6 180.3 Q 309.6 191, 320.3 191 L 320.3 191 Q 331 191, 331 201.7 L 331 393" class="fl-path a7" marker-end="url(#fl-arrow)"/></g>
+<g id="e-2" class="fl-edge"><path id="p-2" d="M 412.6 151 L 412.6 257.2 Q 412.6 269, 400.8 269 L 400.8 269 Q 389 269, 389 280.8 L 389 393" class="fl-path a8" marker-end="url(#fl-arrow)"/></g>
+<g id="e-3" class="fl-edge"><path id="p-3" d="M 532.6 151 L 532.6 257.3 Q 532.6 269, 544.3 269 L 544.3 269 Q 556 269, 556 280.7 L 556 393" class="fl-path a9" marker-end="url(#fl-arrow)"/></g>
+<g id="e-4" class="fl-edge"><path id="p-4" d="M 164 513 L 164 790 Q 164 812, 186 812 L 247 812 Q 269 812, 269 834 L 269 896" class="fl-path a10" marker-end="url(#fl-arrow)"/></g>
+<g id="e-5" class="fl-edge"><path id="p-5" d="M 331 513 L 331 896" class="fl-path a7" marker-end="url(#fl-arrow)"/></g>
+<g id="e-6" class="fl-edge"><path id="p-6" d="M 389 513 L 389 790 Q 389 812, 411 812 L 449 812 Q 471 812, 471 834 L 471 896" class="fl-path a11" marker-end="url(#fl-arrow)"/></g>
+<g id="e-7" class="fl-edge"><path id="p-7" d="M 556 513 L 556 798.5 Q 556 812, 542.5 812 L 542.5 812 Q 529 812, 529 825.5 L 529 896" class="fl-path a12" marker-end="url(#fl-arrow)"/></g>
+<g id="e-8" class="fl-edge"><path id="p-8" d="M 269 1043 L 269 1205" class="fl-path a13" marker-end="url(#fl-arrow)"/></g>
+<g id="e-9" class="fl-edge"><path id="p-9" d="M 331 1043 L 331 1063 Q 331 1083, 351 1083 L 882 1083 Q 904 1083, 904 1061 L 904 291 Q 904 269, 882 269 L 798 269 Q 776 269, 776 291 L 776 353" class="fl-path a14" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/></g>
+<g id="e-10" class="fl-edge"><path id="p-10" d="M 776 436 L 776 574" class="fl-path a15" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/></g>
 <defs><path id="tp-0" class="fl-track-path" d="M 275.6 151 L 275.6 247 Q 275.6 269, 253.6 269 L 186 269 Q 164 269, 164 291 L 164 393" fill="none"/><path id="tp-1" class="fl-track-path" d="M 164 513 L 164 790 Q 164 812, 186 812 L 247 812 Q 269 812, 269 834 L 269 896" fill="none"/><path id="tp-2" class="fl-track-path" d="M 269 1043 L 269 1205" fill="none"/><path id="tp-3" class="fl-track-path" d="M 412.6 151 L 412.6 257.2 Q 412.6 269, 400.8 269 L 400.8 269 Q 389 269, 389 280.8 L 389 393" fill="none"/><path id="tp-4" class="fl-track-path" d="M 389 513 L 389 790 Q 389 812, 411 812 L 449 812 Q 471 812, 471 834 L 471 896" fill="none"/><path id="tp-5" class="fl-track-path" d="M 532.6 151 L 532.6 257.3 Q 532.6 269, 544.3 269 L 544.3 269 Q 556 269, 556 280.7 L 556 393" fill="none"/><path id="tp-6" class="fl-track-path" d="M 556 513 L 556 798.5 Q 556 812, 542.5 812 L 542.5 812 Q 529 812, 529 825.5 L 529 896" fill="none"/><path id="tp-7" class="fl-track-path" d="M 532.6 151 L 532.6 257.3 Q 532.6 269, 544.3 269 L 544.3 269 Q 556 269, 556 280.7 L 556 393" fill="none"/><path id="tp-8" class="fl-track-path" d="M 275.6 151 L 275.6 247 Q 275.6 269, 253.6 269 L 186 269 Q 164 269, 164 291 L 164 393" fill="none"/><path id="tp-9" class="fl-track-path" d="M 556 513 L 556 798.5 Q 556 812, 542.5 812 L 542.5 812 Q 529 812, 529 825.5 L 529 896" fill="none"/><path id="tp-10" class="fl-track-path" d="M 164 513 L 164 790 Q 164 812, 186 812 L 247 812 Q 269 812, 269 834 L 269 896" fill="none"/><path id="tp-11" class="fl-track-path" d="M 275.6 151 L 275.6 247 Q 275.6 269, 253.6 269 L 186 269 Q 164 269, 164 291 L 164 393" fill="none"/><path id="tp-12" class="fl-track-path" d="M 164 513 L 164 790 Q 164 812, 186 812 L 247 812 Q 269 812, 269 834 L 269 896" fill="none"/><path id="tp-13" class="fl-track-path" d="M 331 1043 L 331 1063 Q 331 1083, 351 1083 L 882 1083 Q 904 1083, 904 1061 L 904 291 Q 904 269, 882 269 L 798 269 Q 776 269, 776 291 L 776 353" fill="none"/><path id="tp-14" class="fl-track-path" d="M 776 436 L 776 574" fill="none"/></defs><g class="fl-value"><rect x="90" y="480" width="148" height="19" rx="4" fill="none" stroke="var(--color-state-active)" stroke-width="1.75" opacity="0" data-vf="0"><animate attributeName="opacity" dur="34.674s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.12147;0.14166" values="0;1;0"/></rect><text x="234" y="493" class="value" opacity="0" data-v="0" data-t="0">0<animate attributeName="opacity" dur="34.674s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.12147" values="1;0"/></text><text x="234" y="493" class="value" opacity="0" data-v="0" data-t="1">1<animate attributeName="opacity" dur="34.674s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.12147;0.5674" values="0;1;0"/></text></g>
 <g class="fl-value"><rect x="286" y="480" width="148" height="19" rx="4" fill="none" stroke="var(--color-state-active)" stroke-width="1.75" opacity="0" data-vf="1"><animate attributeName="opacity" dur="34.674s" repeatCount="indefinite" calcMode="discrete" keyTimes="0" values="0"/></rect><text x="430" y="493" class="value" opacity="0" data-v="1" data-t="0">0<animate attributeName="opacity" dur="34.674s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.5674" values="1;0"/></text></g>
 <g class="fl-value"><rect x="482" y="480" width="148" height="19" rx="4" fill="none" stroke="var(--color-state-active)" stroke-width="1.75" opacity="0" data-vf="2"><animate attributeName="opacity" dur="34.674s" repeatCount="indefinite" calcMode="discrete" keyTimes="0" values="0"/></rect><text x="626" y="493" class="value" opacity="0" data-v="2" data-t="0">0<animate attributeName="opacity" dur="34.674s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.5674" values="1;0"/></text></g>
@@ -1265,16 +1324,16 @@
 <g class="p7-11" opacity="0"><circle r="10" fill="var(--color-flow-red)" opacity="0.2"/><circle r="4.5" fill="var(--color-flow-red)"/><g><rect x="-28.6" y="-35" width="57.3" height="23" rx="8" fill="var(--color-flow-red)" stroke="var(--color-flow-red)" stroke-width="1.75"/><text x="0" y="-20" class="chip">처리 실패</text><animateTransform attributeName="transform" type="translate" dur="34.674s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.96539;0.98173;0.98462;0.98846;0.98943;1" values="16.4 47;16.4 47;0 0;0 0;0 0;0 0;0 0"/><animate attributeName="opacity" dur="34.674s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.96539;0.98173;0.98462;0.98846;0.98943;1" values="1;1;0;0;0.9;1;1"/></g><animate attributeName="opacity" dur="34.674s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.96539;1" values="0;1;0"/><animateMotion dur="34.674s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.96539;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955" keyPoints="0;0;1"><mpath href="#tp-13" xlink:href="#tp-13"/></animateMotion></g>
 <g class="p7-12" opacity="0"><circle r="10" fill="var(--color-flow-red)" opacity="0.2"/><circle r="4.5" fill="var(--color-flow-red)"/><animate attributeName="opacity" dur="34.674s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.9106;0.9452" values="0;1;0"/><animateMotion dur="34.674s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.9106;0.9452;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-14" xlink:href="#tp-14"/></animateMotion></g>
 <g class="p7-13" opacity="0"><circle r="10" fill="var(--color-flow-red)" opacity="0.2"/><circle r="4.5" fill="var(--color-flow-red)"/><animate attributeName="opacity" dur="34.674s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.95674;0.99135" values="0;1;0"/><animateMotion dur="34.674s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.95674;0.99135;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-14" xlink:href="#tp-14"/></animateMotion></g>
-<g class="fl-pills"><g id="l-0" class="fl-edge"><g class="fl-pill"><rect x="252.6" y="235" width="45.4" height="18" rx="9" class="pill a18"/><rect x="254.6" y="237" width="14" height="14" rx="7" class="number-pill"/><text x="261.6" y="248" class="number">1</text><text x="281.8" y="248" class="edgelabel a19">주문</text></g></g><g id="l-1" class="fl-edge"><g class="fl-pill"><rect x="308" y="235" width="45.7" height="18" rx="9" class="pill a20"/><rect x="310" y="236.8" width="14.3" height="14.3" rx="7.2" class="number-pill"/><text x="317.2" y="248" class="number">2</text><text x="337.5" y="248" class="edgelabel a21">주문</text></g></g><g id="l-2" class="fl-edge"><g class="fl-pill"><rect x="389.1" y="235" width="46.1" height="18" rx="9" class="pill a22"/><rect x="391.1" y="236.7" width="14.7" height="14.7" rx="7.3" class="number-pill"/><text x="398.4" y="248" class="number">3</text><text x="418.9" y="248" class="edgelabel a23">결제</text></g></g><g id="l-3" class="fl-edge"><g class="fl-pill"><rect x="509.1" y="235" width="46.2" height="18" rx="9" class="pill a24"/><rect x="511.1" y="236.6" width="14.8" height="14.8" rx="7.4" class="number-pill"/><text x="518.5" y="248" class="number">4</text><text x="539.1" y="248" class="edgelabel a25">재고</text></g></g><g id="l-4" class="fl-edge"><g class="fl-pill"><rect x="156.8" y="655.3" width="14.5" height="14.5" rx="7.2" class="number-pill"/><text x="164" y="666.5" class="number">5</text></g></g><g id="l-5" class="fl-edge"><g class="fl-pill"><rect x="323.7" y="697.2" width="14.7" height="14.7" rx="7.3" class="number-pill"/><text x="331" y="708.5" class="number">6</text></g></g><g id="l-6" class="fl-edge"><g class="fl-pill"><rect x="382" y="655.5" width="14" height="14" rx="7" class="number-pill"/><text x="389" y="666.5" class="number">7</text></g></g><g id="l-7" class="fl-edge"><g class="fl-pill"><rect x="548.7" y="655.2" width="14.6" height="14.6" rx="7.3" class="number-pill"/><text x="556" y="666.5" class="number">8</text></g></g><g id="l-8" class="fl-edge"><g class="fl-pill"><rect x="235.5" y="1127" width="66.9" height="18" rx="9" class="pill a26"/><rect x="237.5" y="1128.7" width="14.7" height="14.7" rx="7.3" class="number-pill"/><text x="244.8" y="1140" class="number">9</text><text x="275.8" y="1140" class="edgelabel a27">정산 기록</text></g></g><g id="l-9" class="fl-edge"><g class="fl-pill"><rect x="878.5" y="778" width="50.9" height="18" rx="9" class="pill a28"/><rect x="880.5" y="777.3" width="19.5" height="19.5" rx="9.7" class="number-pill"/><text x="890.2" y="791" class="number">10</text><text x="913.2" y="791" class="edgelabel a29">실패</text></g></g><g id="l-10" class="fl-edge"><g class="fl-pill"><rect x="741" y="496" width="69.8" height="18" rx="9" class="pill a30"/><rect x="743" y="496.3" width="17.5" height="17.5" rx="8.7" class="number-pill"/><text x="751.7" y="509" class="number">11</text><text x="784.1" y="509" class="edgelabel a31">한도 초과</text></g></g></g>
+<g class="fl-pills"><g id="l-0" class="fl-edge"><g class="fl-pill"><rect x="252.6" y="235" width="45.4" height="18" rx="9" class="pill a16"/><rect x="254.6" y="237" width="14" height="14" rx="7" class="number-pill"/><text x="261.6" y="248" class="number">1</text><text x="281.8" y="248" class="edgelabel a17">주문</text></g></g><g id="l-1" class="fl-edge"><g class="fl-pill"><rect x="308" y="235" width="45.7" height="18" rx="9" class="pill a18"/><rect x="310" y="236.8" width="14.3" height="14.3" rx="7.2" class="number-pill"/><text x="317.2" y="248" class="number">2</text><text x="337.5" y="248" class="edgelabel a19">주문</text></g></g><g id="l-2" class="fl-edge"><g class="fl-pill"><rect x="389.1" y="235" width="46.1" height="18" rx="9" class="pill a20"/><rect x="391.1" y="236.7" width="14.7" height="14.7" rx="7.3" class="number-pill"/><text x="398.4" y="248" class="number">3</text><text x="418.9" y="248" class="edgelabel a21">결제</text></g></g><g id="l-3" class="fl-edge"><g class="fl-pill"><rect x="509.1" y="235" width="46.2" height="18" rx="9" class="pill a22"/><rect x="511.1" y="236.6" width="14.8" height="14.8" rx="7.4" class="number-pill"/><text x="518.5" y="248" class="number">4</text><text x="539.1" y="248" class="edgelabel a23">재고</text></g></g><g id="l-4" class="fl-edge"><g class="fl-pill"><rect x="156.8" y="655.3" width="14.5" height="14.5" rx="7.2" class="number-pill"/><text x="164" y="666.5" class="number">5</text></g></g><g id="l-5" class="fl-edge"><g class="fl-pill"><rect x="323.7" y="697.2" width="14.7" height="14.7" rx="7.3" class="number-pill"/><text x="331" y="708.5" class="number">6</text></g></g><g id="l-6" class="fl-edge"><g class="fl-pill"><rect x="382" y="655.5" width="14" height="14" rx="7" class="number-pill"/><text x="389" y="666.5" class="number">7</text></g></g><g id="l-7" class="fl-edge"><g class="fl-pill"><rect x="548.7" y="655.2" width="14.6" height="14.6" rx="7.3" class="number-pill"/><text x="556" y="666.5" class="number">8</text></g></g><g id="l-8" class="fl-edge"><g class="fl-pill"><rect x="235.5" y="1127" width="66.9" height="18" rx="9" class="pill a24"/><rect x="237.5" y="1128.7" width="14.7" height="14.7" rx="7.3" class="number-pill"/><text x="244.8" y="1140" class="number">9</text><text x="275.8" y="1140" class="edgelabel a25">정산 기록</text></g></g><g id="l-9" class="fl-edge"><g class="fl-pill"><rect x="878.5" y="778" width="50.9" height="18" rx="9" class="pill a26"/><rect x="880.5" y="777.3" width="19.5" height="19.5" rx="9.7" class="number-pill"/><text x="890.2" y="791" class="number">10</text><text x="913.2" y="791" class="edgelabel a27">실패</text></g></g><g id="l-10" class="fl-edge"><g class="fl-pill"><rect x="741" y="496" width="69.8" height="18" rx="9" class="pill a28"/><rect x="743" y="496.3" width="17.5" height="17.5" rx="8.7" class="number-pill"/><text x="751.7" y="509" class="number">11</text><text x="784.1" y="509" class="edgelabel a29">한도 초과</text></g></g></g>
 </g>
-<text x="720" y="1407" opacity="0" class="steplabel a32">이벤트 하나</text>
-<text x="720" y="1407" opacity="0" class="steplabel a33">평상시 트래픽</text>
-<text x="720" y="1407" opacity="0" class="steplabel a34">소비자 지연</text>
-<text x="720" y="1407" opacity="0" class="steplabel a35">실패가 DLQ로</text>
-<g opacity="0" class="a36"><text x="720" y="1433" class="caption">주문 이벤트 하나가 파티션에서 소비자를 거쳐 정산 DB까지 간다</text></g>
-<g opacity="0" class="a37"><text x="720" y="1433" class="caption">키 해시로 파티션 0에 쌓이고 offset이 하나 오른다</text></g>
-<g opacity="0" class="a38"><text x="720" y="1433" class="caption">정산 소비자가 파티션 0을 읽는다. 읽은 만큼 lag가 줄어든다</text></g>
-<g opacity="0" class="a33"><text x="720" y="1433" class="caption">생산자 셋이 끊이지 않고 쓰고, 소비자가 따라 읽는다</text></g>
-<g opacity="0" class="a34"><text x="720" y="1433" class="caption">알림 소비자가 느려져 파티션 2의 lag가 쌓인다</text></g>
-<g opacity="0" class="a35"><text x="720" y="1433" class="caption">정산이 실패하면 재시도 토픽을 거쳐 DLQ에 쌓인다</text></g>
+<text x="720" y="1407" opacity="0" class="steplabel a30">이벤트 하나</text>
+<text x="720" y="1407" opacity="0" class="steplabel a31">평상시 트래픽</text>
+<text x="720" y="1407" opacity="0" class="steplabel a32">소비자 지연</text>
+<text x="720" y="1407" opacity="0" class="steplabel a33">실패가 DLQ로</text>
+<g opacity="0" class="a34"><text x="720" y="1433" class="caption">주문 이벤트 하나가 파티션에서 소비자를 거쳐 정산 DB까지 간다</text></g>
+<g opacity="0" class="a35"><text x="720" y="1433" class="caption">키 해시로 파티션 0에 쌓이고 offset이 하나 오른다</text></g>
+<g opacity="0" class="a36"><text x="720" y="1433" class="caption">정산 소비자가 파티션 0을 읽는다. 읽은 만큼 lag가 줄어든다</text></g>
+<g opacity="0" class="a31"><text x="720" y="1433" class="caption">생산자 셋이 끊이지 않고 쓰고, 소비자가 따라 읽는다</text></g>
+<g opacity="0" class="a32"><text x="720" y="1433" class="caption">알림 소비자가 느려져 파티션 2의 lag가 쌓인다</text></g>
+<g opacity="0" class="a33"><text x="720" y="1433" class="caption">정산이 실패하면 재시도 토픽을 거쳐 DLQ에 쌓인다</text></g>
 </svg>

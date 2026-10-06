@@ -1,6 +1,10 @@
 /* 재생기 틀과 조작 막대. iframe 안(html.embedded)에서는 테두리와 바깥 여백을 뺀다. */
 /* 그림 표시 폭 규칙: 문서 미리보기, 목록 카드, 재생기가 같다. 컨테이너 폭은 화면 폭에서 좌우 바깥 여백(simple2.page-gutter)을 뺀 값이고,
    그림 폭은 min(표준 캔버스 폭, 컨테이너 폭)이다. 컨테이너 안쪽에는 좌우 여백과 레이아웃을 차지하는 테두리를 두지 않아 세 곳의 그림 폭이 같다. */
+:root {
+  color-scheme: light dark;
+}
+
 body {
   margin: 0;
   padding: var(--simple2-page-gap) var(--simple2-page-gutter);
@@ -98,7 +102,7 @@ html.embedded .fl-figure {
   background: var(--color-card-on);
 }
 
-/* 현재 탭의 진행은 일시정지 단추 테두리 위를 12시에서 시계 방향으로 도는 진행(ui.progress) 고리다. 트랙은 단추 테두리 그대로다. */
+/* 현재 장면의 시간은 조작부와 분리한 수평 진행선에 표시한다. */
 .fl-pause {
   position: relative;
 }
@@ -222,15 +226,6 @@ html.embedded .fl-figure {
   display: flex;
 }
 
-.fl .fl-node.on .fl-halo {
-  opacity: 0;
-}
-
-.fl .fl-node.on .fl-stroke {
-  stroke: var(--simple2-surface-edge);
-  stroke-width: var(--simple2-node-stroke);
-}
-
 /* 내용이 없는 카드는 틀도 보이지 않는다(그리는 쪽이 opacity 0). 흐름 그림은 내용이 있어도 켜진 색은 아니라 filled가 따로 있다. */
 .fl .fl-card.filled {
   opacity: 1;
@@ -258,8 +253,8 @@ html.embedded .fl-figure {
 }
 
 .fl .fl-edge.on .fl-pill rect {
-  fill: var(--color-node);
-  stroke: var(--color-outline);
+  fill: var(--color-card);
+  stroke: var(--simple2-separator);
 }
 
 .fl .fl-edge.on .fl-pill text {
@@ -308,7 +303,7 @@ html.embedded .fl-figure {
 
 .fl .fl-group.on .fl-stroke {
   stroke: var(--color-state-active);
-  stroke-width: var(--border-strong);
+  stroke-width: var(--simple2-node-stroke);
 }
 
 .fl .fl-part.on .part-bg {
@@ -316,12 +311,12 @@ html.embedded .fl-figure {
 }
 
 .fl .fl-part.on .grid-cell {
-  fill: var(--color-card-on);
+  fill: var(--simple2-row-selection);
 }
 
 .fl .fl-part.on .grid-ring {
   stroke: var(--color-state-active);
-  stroke-width: var(--border-edge);
+  stroke-width: var(--simple2-node-stroke);
 }
 
 /* hidden 속성이 display: grid 같은 규칙에 지지 않게 한다. 시간 흐름 없는 그림의 빈 조작 막대를 숨기기 위해서다. */

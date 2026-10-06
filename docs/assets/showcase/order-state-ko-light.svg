@@ -37,86 +37,86 @@
   --color-blue-anchor: #1e66d8;
   --color-blue-light-fill: #edf4ff;
   --color-blue-light-stroke: #1e66d8;
-  --color-blue-light-ink: #0a57c8;
-  --color-blue-light-heat-low: #b3cbf2;
+  --color-blue-light-ink: #1760d2;
+  --color-blue-light-heat-low: #b4ccf2;
   --color-blue-light-heat-high: #0352c3;
   --color-blue-light-outline: #678dcb;
-  --color-blue-light-tint-1: #e5eefc;
-  --color-blue-light-tint-2: #d7e2f4;
-  --color-blue-light-tint-3: #c9d7ed;
-  --color-blue-dark-fill: #1b2a43;
+  --color-blue-light-tint-1: #e8f1ff;
+  --color-blue-light-tint-2: #dfebfd;
+  --color-blue-light-tint-3: #d7e5fb;
+  --color-blue-dark-fill: #08152d;
   --color-blue-dark-stroke: #6ca4ff;
-  --color-blue-dark-ink: #74a9ff;
-  --color-blue-dark-heat-low: #283851;
+  --color-blue-dark-ink: #6fa6ff;
+  --color-blue-dark-heat-low: #33445e;
   --color-blue-dark-heat-high: #4075cc;
-  --color-blue-dark-outline: #6489c3;
-  --color-blue-dark-tint-1: #1a202b;
-  --color-blue-dark-tint-2: #222a38;
-  --color-blue-dark-tint-3: #2a3546;
+  --color-blue-dark-outline: #577bb4;
+  --color-blue-dark-tint-1: #272e39;
+  --color-blue-dark-tint-2: #2c3543;
+  --color-blue-dark-tint-3: #323d4e;
   --color-purple-anchor: #b28fd1;
   --color-purple-light-fill: #f7f0ff;
-  --color-purple-light-stroke: #8c6aaa;
-  --color-purple-light-ink: #704f8c;
-  --color-purple-light-dot: #704f8c;
-  --color-purple-light-outline: #9884ac;
-  --color-purple-light-tint-1: #f1eaf9;
-  --color-purple-light-tint-2: #e6ddf0;
-  --color-purple-light-tint-3: #dcd1e8;
-  --color-purple-dark-fill: #31233d;
+  --color-purple-light-stroke: #9573b3;
+  --color-purple-light-ink: #795895;
+  --color-purple-light-dot: #795895;
+  --color-purple-light-outline: #9885ac;
+  --color-purple-light-tint-1: #f4ecfc;
+  --color-purple-light-tint-2: #efe5f9;
+  --color-purple-light-tint-3: #eadef6;
+  --color-purple-dark-fill: #1c0f27;
   --color-purple-dark-stroke: #b693d6;
-  --color-purple-dark-ink: #be9ade;
-  --color-purple-dark-dot: #9c7abb;
-  --color-purple-dark-outline: #977eae;
-  --color-purple-dark-tint-1: #231d28;
-  --color-purple-dark-tint-2: #2e2635;
-  --color-purple-dark-tint-3: #393042;
+  --color-purple-dark-ink: #bb98db;
+  --color-purple-dark-dot: #9a77b8;
+  --color-purple-dark-outline: #89709f;
+  --color-purple-dark-tint-1: #302b36;
+  --color-purple-dark-tint-2: #38303f;
+  --color-purple-dark-tint-3: #41374a;
   --color-red-anchor: #ef0f0f;
   --color-red-light-fill: #ffefed;
   --color-red-light-stroke: #c70005;
-  --color-red-light-ink: #be0004;
-  --color-red-light-dot: #6c0001;
+  --color-red-light-ink: #c70005;
+  --color-red-light-dot: #740001;
   --color-red-light-outline: #cd7367;
-  --color-red-dark-fill: #40201c;
+  --color-red-dark-fill: #290b08;
   --color-red-dark-stroke: #fc7182;
-  --color-red-dark-ink: #ff8390;
-  --color-red-dark-dot: #e25971;
-  --color-red-dark-outline: #c56f73;
+  --color-red-dark-ink: #ff7e8c;
+  --color-red-dark-dot: #df576f;
+  --color-red-dark-outline: #b56165;
   --color-green-anchor: #09c72c;
   --color-green-light-fill: #eaf8e9;
-  --color-green-light-stroke: #008c1a;
-  --color-green-light-ink: #006d12;
-  --color-green-light-dot: #006d12;
-  --color-green-light-outline: #629a61;
-  --color-green-dark-fill: #1a301a;
+  --color-green-light-stroke: #00971d;
+  --color-green-light-ink: #007715;
+  --color-green-light-dot: #007715;
+  --color-green-light-outline: #609b5f;
+  --color-green-dark-fill: #061b07;
   --color-green-dark-stroke: #58bf5a;
   --color-green-dark-ink: #58bf5a;
-  --color-green-dark-dot: #62c963;
-  --color-green-dark-outline: #5a9659;
+  --color-green-dark-dot: #5fc660;
+  --color-green-dark-outline: #4b874b;
   --color-orange-anchor: #e65200;
   --color-orange-light-fill: #fff0ea;
-  --color-orange-light-stroke: #d44b00;
-  --color-orange-light-ink: #a63900;
-  --color-orange-light-outline: #c47a5f;
-  --color-orange-dark-fill: #3f2116;
+  --color-orange-light-stroke: #e45100;
+  --color-orange-light-ink: #b43e00;
+  --color-orange-light-outline: #c6785b;
+  --color-orange-dark-fill: #280d04;
   --color-orange-dark-stroke: #fa7a49;
-  --color-orange-dark-ink: #ff875a;
-  --color-orange-dark-outline: #c37356;
+  --color-orange-dark-ink: #ff8253;
+  --color-orange-dark-outline: #b36548;
   --color-fg: var(--primitive-simple2-fg);
   --color-muted: var(--primitive-simple2-muted);
   --color-group-title: var(--primitive-simple2-group-title);
   --color-bg: var(--primitive-simple2-bg);
-  --color-group-1: var(--color-gray-71);
-  --color-group-2: var(--color-gray-118);
-  --color-group-3: var(--color-gray-161);
+  --color-group-1: var(--primitive-simple2-group-1);
+  --color-group-2: var(--primitive-simple2-group-2);
+  --color-group-3: var(--primitive-simple2-group-3);
   --color-node: var(--primitive-simple2-node);
   --color-surface: var(--primitive-simple2-surface);
   --color-card: var(--primitive-simple2-card);
   --color-card-on: var(--color-blue-light-fill);
   --color-page: var(--primitive-simple2-page);
-  --color-outline: var(--color-gray-529);
+  --color-outline: var(--primitive-simple2-light-outline);
   --color-border: var(--primitive-simple2-border);
   --color-plate-border: var(--primitive-simple2-plate-border);
-  --color-line: var(--color-gray-282);
+  --color-line: var(--primitive-simple2-line);
   --color-state-active: var(--color-blue-light-stroke);
   --color-state-active-fill: var(--color-blue-light-ink);
   --color-state-active-text: var(--color-blue-light-ink);
@@ -125,8 +125,8 @@
   --color-state-success: var(--color-green-light-stroke);
   --color-state-warning: var(--color-orange-light-stroke);
   --color-state-glow: var(--color-blue-light-fill);
-  --color-flow-brand: var(--color-blue-light-stroke);
-  --color-flow-purple: var(--color-purple-light-dot);
+  --color-flow-brand: var(--color-blue-light-ink);
+  --color-flow-purple: var(--primitive-simple2-flow-purple);
   --color-flow-green: var(--color-green-light-dot);
   --color-flow-gray: var(--color-gray-545);
   --color-flow-red: var(--color-red-light-dot);
@@ -235,32 +235,68 @@
   --simple2-micro-size: 11px;
   --simple2-surface-edge: var(--primitive-simple2-plate-border);
   --simple2-progress-width: 160px;
+  --simple2-hover-fill: var(--primitive-simple2-hover-fill);
+  --simple2-row-selection: var(--primitive-simple2-row-selection);
+  --simple2-data-line: var(--primitive-simple2-data-line);
   --primitive-simple2-fg: #303336;
-  --primitive-simple2-muted: #505b69;
-  --primitive-simple2-bg: #f2f5f7;
+  --primitive-simple2-muted: #566170;
+  --primitive-simple2-bg: #f5f6f8;
   --primitive-simple2-page: #ffffff;
   --primitive-simple2-node: #ffffff;
-  --primitive-simple2-card: #f6f7fa;
-  --primitive-simple2-surface: #edeef1;
-  --primitive-simple2-plate-border: #d9dce1;
+  --primitive-simple2-card: #f2f3f5;
+  --primitive-simple2-surface: #eef0f3;
+  --primitive-simple2-plate-border: #d4d8de;
   --primitive-simple2-border: #838b96;
   --primitive-simple2-shadow: 0 2px 8px rgba(0,0,0,.10), 0 0 2px rgba(0,0,0,.10);
   --primitive-simple2-play-fill: #4f91fb;
   --primitive-simple2-play-ink: #ffffff;
   --primitive-simple2-node-shadow: drop-shadow(0px 1px 1px rgba(0,0,0,.07));
-  --primitive-simple2-group-title: #505b69;
-  --primitive-simple2-canvas: #f5f5f7;
+  --primitive-simple2-group-title: #566170;
+  --primitive-simple2-canvas: #f5f6f8;
   --primitive-simple2-selection-fill: #e3e4e8;
   --primitive-simple2-selection-ink: #303336;
   --primitive-simple2-tab-fill: #f5f5f7;
-  --primitive-simple2-icon-service: #1e6bd6;
-  --primitive-simple2-icon-data: #269c6e;
-  --primitive-simple2-icon-access: #a78b16;
-  --primitive-simple2-icon-person: #c62859;
-  --primitive-simple2-icon-service-face: #edf4ff;
-  --primitive-simple2-icon-data-face: #eaf5ef;
-  --primitive-simple2-icon-access-face: #fff8d5;
-  --primitive-simple2-icon-person-face: #fff0f4;
+  --primitive-simple2-icon-service: #3688cb;
+  --primitive-simple2-icon-data: #299b8f;
+  --primitive-simple2-icon-access: #9b8950;
+  --primitive-simple2-icon-person: #d74474;
+  --primitive-simple2-icon-service-face: #e7f3fc;
+  --primitive-simple2-icon-data-face: #e8f5f2;
+  --primitive-simple2-icon-access-face: #f7f2df;
+  --primitive-simple2-icon-person-face: #fcecf2;
+  --primitive-simple2-group-1: #eef0f3;
+  --primitive-simple2-group-2: #e7eaee;
+  --primitive-simple2-group-3: #e0e4e9;
+  --primitive-simple2-hover-fill: #eef4fc;
+  --primitive-simple2-row-selection: #cee2fd;
+  --primitive-simple2-line: #9da5b0;
+  --primitive-simple2-data-line: #737e8b;
+  --primitive-simple2-dark-bg: #26272b;
+  --primitive-simple2-dark-page: #1d1e22;
+  --primitive-simple2-dark-node: #303136;
+  --primitive-simple2-dark-card: #36373b;
+  --primitive-simple2-dark-edge: #50535b;
+  --primitive-simple2-dark-separator: #454850;
+  --primitive-simple2-dark-hover: #343e50;
+  --primitive-simple2-dark-selection: #274174;
+  --primitive-simple2-dark-muted: #a9adb6;
+  --primitive-simple2-dark-group-1: #2c2d32;
+  --primitive-simple2-dark-group-2: #32343a;
+  --primitive-simple2-dark-group-3: #393c43;
+  --primitive-simple2-dark-line: #7f8793;
+  --primitive-simple2-dark-data-line: #acb4c0;
+  --primitive-simple2-dark-icon-service: #6cb9ef;
+  --primitive-simple2-dark-icon-service-face: #263e50;
+  --primitive-simple2-dark-icon-data: #64beb0;
+  --primitive-simple2-dark-icon-data-face: #263f3a;
+  --primitive-simple2-dark-icon-access: #ccbd80;
+  --primitive-simple2-dark-icon-access-face: #423d2d;
+  --primitive-simple2-dark-icon-person: #ed82a3;
+  --primitive-simple2-dark-icon-person-face: #492f3b;
+  --primitive-simple2-light-outline: #818181;
+  --primitive-simple2-dark-outline: #868686;
+  --primitive-simple2-flow-purple: #70508c;
+  --primitive-simple2-dark-paint-gray: #121318;
   --color-palette-amber-light-fill: var(--color-orange-light-fill);
   --color-palette-amber-light-stroke: var(--color-orange-light-stroke);
   --color-palette-amber-light-ink: var(--color-orange-light-ink);
@@ -302,26 +338,26 @@
   --color-palette-sky-light-tint-2: var(--color-blue-light-tint-2);
   --color-palette-sky-light-tint-3: var(--color-blue-light-tint-3);
   --color-palette-sky-light-outline: #648bca;
-  --color-palette-sky-dark-fill: #1b2a43;
+  --color-palette-sky-dark-fill: #08152c;
   --color-palette-sky-dark-stroke: var(--color-blue-dark-stroke);
   --color-palette-sky-dark-ink: var(--color-blue-dark-ink);
   --color-palette-sky-dark-tint-1: var(--color-blue-dark-tint-1);
   --color-palette-sky-dark-tint-2: var(--color-blue-dark-tint-2);
   --color-palette-sky-dark-tint-3: var(--color-blue-dark-tint-3);
-  --color-palette-sky-dark-outline: #6489c3;
+  --color-palette-sky-dark-outline: #587bb5;
   --color-palette-slate-light-fill: #e7e7e7;
   --color-palette-slate-light-stroke: var(--color-gray-635);
   --color-palette-slate-light-ink: var(--color-gray-635);
   --color-palette-slate-light-dot: var(--color-gray-545);
-  --color-palette-slate-dark-fill: var(--color-gray-788);
+  --color-palette-slate-dark-fill: var(--primitive-simple2-dark-paint-gray);
   --color-palette-slate-dark-stroke: var(--color-gray-333);
   --color-palette-slate-dark-ink: var(--color-gray-333);
   --color-palette-slate-dark-dot: var(--color-gray-220);
   --color-palette-slate-light-outline: #848484;
-  --color-palette-slate-dark-outline: #888888;
+  --color-palette-slate-dark-outline: #797a7d;
   --color-figure-icon: var(--color-blue-light-stroke);
   --color-figure-icon-tile: var(--color-blue-light-fill);
-  --color-figure-queue-fill: var(--color-blue-light-stroke);
+  --color-figure-queue-fill: var(--color-blue-light-ink);
   --color-figure-queue-empty: var(--color-gray-161);
   --color-paint-red-fill: var(--color-red-light-fill);
   --color-paint-red-stroke: var(--color-red-light-stroke);
@@ -380,7 +416,7 @@
   --size-control-outer: 52px;
   --size-control-inner: 44px;
   --size-control-icon: 20px;
-  --size-control-icon-stroke: 1.75px;
+  --size-control-icon-stroke: 2.5px;
   --size-pill-height: 18px;
   --size-icon-node: 20px;
   --size-icon-group: 18px;
@@ -489,21 +525,21 @@
 
 [data-theme='dark'] {
   --color-fg: var(--color-gray-59);
-  --color-muted: var(--color-gray-333);
-  --color-group-title: var(--color-gray-333);
-  --color-bg: var(--color-gray-910);
-  --color-group-1: var(--color-gray-875);
-  --color-group-2: var(--color-gray-835);
-  --color-group-3: var(--color-gray-796);
-  --color-node: var(--color-gray-757);
-  --color-surface: var(--color-gray-788);
-  --color-card: var(--color-gray-788);
+  --color-muted: var(--primitive-simple2-dark-muted);
+  --color-group-title: var(--primitive-simple2-dark-muted);
+  --color-bg: var(--primitive-simple2-dark-bg);
+  --color-group-1: var(--primitive-simple2-dark-group-1);
+  --color-group-2: var(--primitive-simple2-dark-group-2);
+  --color-group-3: var(--primitive-simple2-dark-group-3);
+  --color-node: var(--primitive-simple2-dark-node);
+  --color-surface: var(--primitive-simple2-dark-card);
+  --color-card: var(--primitive-simple2-dark-card);
   --color-card-on: var(--color-blue-dark-fill);
-  --color-page: var(--color-gray-929);
-  --color-outline: var(--color-gray-467);
+  --color-page: var(--primitive-simple2-dark-page);
+  --color-outline: var(--primitive-simple2-dark-outline);
   --color-border: var(--primitive-simple2-border);
-  --color-plate-border: var(--color-gray-788);
-  --color-line: var(--color-gray-651);
+  --color-plate-border: var(--primitive-simple2-dark-edge);
+  --color-line: var(--primitive-simple2-dark-line);
   --color-state-active: var(--color-blue-dark-stroke);
   --color-state-active-fill: var(--color-blue-dark-stroke);
   --color-state-active-text: var(--color-blue-dark-ink);
@@ -512,7 +548,7 @@
   --color-state-success: var(--color-green-dark-stroke);
   --color-state-warning: var(--color-orange-dark-stroke);
   --color-state-glow: var(--color-blue-dark-fill);
-  --color-flow-brand: var(--color-blue-dark-stroke);
+  --color-flow-brand: var(--color-blue-dark-ink);
   --color-flow-purple: var(--color-purple-dark-dot);
   --color-flow-green: var(--color-green-dark-dot);
   --color-flow-gray: var(--color-gray-220);
@@ -526,27 +562,30 @@
   --color-data-heat-low: var(--color-blue-dark-heat-low);
   --color-data-heat-high: var(--color-blue-dark-heat-high);
   --color-data-heat-ink: var(--color-gray-0);
-  --color-data-grid: var(--color-gray-776);
+  --color-data-grid: var(--primitive-simple2-dark-edge);
   --color-accent: var(--color-blue-dark-stroke);
-  --color-figure-icon-service-ink: var(--color-blue-dark-ink);
-  --color-figure-icon-service-surface: var(--color-blue-dark-fill);
-  --color-figure-icon-data-ink: var(--color-purple-dark-ink);
-  --color-figure-icon-data-surface: var(--color-purple-dark-fill);
-  --color-figure-icon-access-ink: var(--color-orange-dark-ink);
-  --color-figure-icon-access-surface: var(--color-orange-dark-fill);
-  --color-figure-icon-person-ink: var(--color-green-dark-ink);
-  --color-figure-icon-person-surface: var(--color-green-dark-fill);
+  --color-figure-icon-service-ink: var(--primitive-simple2-dark-icon-service);
+  --color-figure-icon-service-surface: var(--primitive-simple2-dark-icon-service-face);
+  --color-figure-icon-data-ink: var(--primitive-simple2-dark-icon-data);
+  --color-figure-icon-data-surface: var(--primitive-simple2-dark-icon-data-face);
+  --color-figure-icon-access-ink: var(--primitive-simple2-dark-icon-access);
+  --color-figure-icon-access-surface: var(--primitive-simple2-dark-icon-access-face);
+  --color-figure-icon-person-ink: var(--primitive-simple2-dark-icon-person);
+  --color-figure-icon-person-surface: var(--primitive-simple2-dark-icon-person-face);
   --color-figure-icon-brand-ink: var(--color-gray-220);
   --color-figure-icon-brand-surface: var(--color-gray-835);
   --simple2-play-fill: var(--color-blue-dark-stroke);
   --simple2-play-ink: var(--color-gray-933);
   --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-  --simple2-separator: var(--color-gray-635);
-  --simple2-canvas-fill: var(--color-gray-910);
-  --simple2-selection-fill: var(--color-gray-757);
+  --simple2-separator: var(--primitive-simple2-dark-separator);
+  --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
+  --simple2-selection-fill: var(--primitive-simple2-dark-edge);
   --simple2-selection-ink: var(--color-gray-0);
-  --simple2-tab-fill: var(--color-gray-835);
-  --simple2-surface-edge: var(--color-gray-635);
+  --simple2-tab-fill: var(--primitive-simple2-dark-node);
+  --simple2-surface-edge: var(--primitive-simple2-dark-edge);
+  --simple2-hover-fill: var(--primitive-simple2-dark-hover);
+  --simple2-row-selection: var(--primitive-simple2-dark-selection);
+  --simple2-data-line: var(--primitive-simple2-dark-data-line);
   --color-figure-icon: var(--color-blue-dark-stroke);
   --color-figure-icon-tile: var(--color-blue-dark-fill);
   --color-figure-queue-fill: var(--color-blue-dark-stroke);
@@ -761,8 +800,8 @@
 }
 
 .fl .pill {
-  fill: var(--color-node);
-  stroke: var(--color-outline);
+  fill: var(--color-card);
+  stroke: var(--simple2-separator);
 }
 
 .fl .part-bg {
@@ -776,7 +815,7 @@
 
 .fl .grid-cell {
   fill: var(--color-node);
-  stroke: var(--color-outline);
+  stroke: var(--simple2-separator);
   stroke-width: var(--border-thin);
 }
 
@@ -786,9 +825,8 @@
 }
 
 .fl .grid-cell.gap {
-  fill: var(--color-surface);
-  stroke: var(--color-line);
-  stroke-dasharray: var(--dash-card) var(--dash-card);
+  fill: var(--color-card);
+  stroke: var(--simple2-separator);
 }
 
 .fl .grid-cell.empty {
@@ -810,8 +848,8 @@
 }
 
 .fl .badge-pill {
-  fill: var(--color-node);
-  stroke: var(--color-outline);
+  fill: var(--color-card);
+  stroke: var(--simple2-separator);
   stroke-width: var(--border-thin);
 }
 
@@ -825,7 +863,7 @@
 
 /* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
 .fl .number-pill {
-  fill: var(--color-fg);
+  fill: var(--color-muted);
 }
 
 .fl .number {
@@ -837,6 +875,7 @@
 
 /* 표면에만 그림자를 두어 글자·아이콘·선의 가장자리는 선명하게 유지한다. */
 .fl :where(.fl-node) > .fl-stroke {
+  stroke: var(--simple2-surface-edge);
   stroke-width: var(--simple2-node-stroke);
 }
 
@@ -847,7 +886,11 @@
 }
 
 .fl .fl-path,
-.fl .fl-node > .fl-stroke {
+.fl .fl-node > .fl-stroke,
+.fl .grid-cell,
+.fl .col-line,
+.fl .pill,
+.fl .badge-pill {
   vector-effect: non-scaling-stroke;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -869,7 +912,7 @@
 
 .fl .symbol-cut {
   fill: none;
-  stroke: var(--color-node);
+  stroke: currentColor;
 }
 
 .fl .fl-symbol-service {
@@ -911,6 +954,26 @@
 .fl .fl-symbol-brand .symbol-face {
   fill: var(--color-figure-icon-brand-surface);
 }
+
+.fl .fl-node.on > .fl-stroke {
+  stroke: var(--color-state-active);
+  stroke-width: var(--simple2-node-stroke);
+}
+
+/* 호버와 키보드 초점은 같은 도형 면을 가리키며 윤곽을 두 겹으로 만들지 않는다. */
+.fl .fl-node.is-hovered > .fl-stroke:not([fill="none"]),
+.fl .fl-node:hover > .fl-stroke:not([fill="none"]) {
+  fill: var(--simple2-hover-fill);
+}
+
+.fl .fl-node:focus-visible {
+  outline: none;
+}
+
+.fl .fl-node:focus-visible > .fl-stroke {
+  stroke: var(--color-ui-focus);
+  stroke-width: var(--simple2-focus-width);
+}
 /* 움직이는 SVG에만 있는 단계 이름과 설명 줄 */
 .fl .steplabel {
   font-family: var(--font-figure-sans);
@@ -927,90 +990,80 @@
   fill: var(--color-muted);
 }
 
-@keyframes a0 { 0%,24.245% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 24.246%,37.652% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 37.652%,58.24% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 58.24%,76.7% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 76.701%,99.999% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a0 { 0%,24.245% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 24.246%,37.652% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 37.652%,58.24% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 58.24%,76.7% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 76.701%,99.999% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a0 { animation: a0 19.55s infinite linear; }
-@keyframes a1 { 0%,24.245% { opacity: 0 } 24.246%,37.652% { opacity: 0 } 37.652%,58.24% { opacity: 0 } 58.24%,76.7% { opacity: 0 } 76.701%,99.999% { opacity: 0 } }
+@keyframes a1 { 0%,24.245% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 24.246%,37.652% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 37.652%,58.24% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 58.24%,76.7% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 76.701%,99.999% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } }
 .fl .a1 { animation: a1 19.55s infinite linear; }
-@keyframes a2 { 0%,24.245% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 24.246%,37.652% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 37.652%,58.24% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 58.24%,76.7% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 76.701%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
+@keyframes a2 { 0%,24.245% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 24.246% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 25.269%,37.652% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 37.652%,58.24% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 58.24% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 59.263%,76.7% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 76.701%,99.999% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a2 { animation: a2 19.55s infinite linear; }
-@keyframes a3 { 0%,24.245% { opacity: 1 } 24.246%,37.652% { opacity: 1 } 37.652%,58.24% { opacity: 1 } 58.24%,76.7% { opacity: 1 } 76.701%,99.999% { opacity: 1 } }
+@keyframes a3 { 0%,24.245% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 24.246%,37.652% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 37.652% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 38.675%,58.24% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 58.24% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 59.263%,76.7% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 76.701%,99.999% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a3 { animation: a3 19.55s infinite linear; }
-@keyframes a4 { 0%,24.245% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 24.246% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 25.269%,37.652% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 37.652%,58.24% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 58.24% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 59.263%,76.7% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 76.701%,99.999% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a4 { 0%,24.245% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 24.246%,37.652% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 37.652%,58.24% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 58.24%,76.7% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 76.701% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 77.724%,99.999% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } }
 .fl .a4 { animation: a4 19.55s infinite linear; }
-@keyframes a5 { 0%,24.245% { opacity: 0 } 24.246% { opacity: 0 } 25.269%,37.652% { opacity: 1 } 37.652%,58.24% { opacity: 1 } 58.24% { opacity: 1 } 59.263%,76.7% { opacity: 0 } 76.701%,99.999% { opacity: 0 } }
+@keyframes a5 { 0%,24.245% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 24.246%,37.652% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 37.652%,58.24% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 58.24%,76.7% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 76.701%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } }
 .fl .a5 { animation: a5 19.55s infinite linear; }
-@keyframes a6 { 0%,24.245% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 24.246%,37.652% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 37.652% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 38.675%,58.24% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 58.24% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 59.263%,76.7% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 76.701%,99.999% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a6 { 0%,24.245% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 24.246% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.269%,37.652% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 37.652%,58.24% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 58.24% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 59.263%,76.7% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.701%,99.999% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a6 { animation: a6 19.55s infinite linear; }
-@keyframes a7 { 0%,24.245% { opacity: 0 } 24.246%,37.652% { opacity: 0 } 37.652% { opacity: 0 } 38.675%,58.24% { opacity: 1 } 58.24% { opacity: 1 } 59.263%,76.7% { opacity: 0 } 76.701%,99.999% { opacity: 0 } }
+@keyframes a7 { 0%,24.245% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 24.246%,37.652% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.652% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 38.675%,58.24% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 58.24% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 59.263%,76.7% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.701%,99.999% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a7 { animation: a7 19.55s infinite linear; }
-@keyframes a8 { 0%,24.245% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 24.246%,37.652% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 37.652%,58.24% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 58.24%,76.7% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 76.701% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 77.724%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
+@keyframes a8 { 0%,24.245% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 24.246%,37.652% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.652%,58.24% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 58.24%,76.7% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.701%,99.999% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a8 { animation: a8 19.55s infinite linear; }
-@keyframes a9 { 0%,24.245% { opacity: 0 } 24.246%,37.652% { opacity: 0 } 37.652%,58.24% { opacity: 0 } 58.24%,76.7% { opacity: 0 } 76.701% { opacity: 0 } 77.724%,99.999% { opacity: 1 } }
+@keyframes a9 { 0%,24.245% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 24.246%,37.652% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.652%,58.24% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 58.24%,76.7% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.701% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 77.724%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } }
 .fl .a9 { animation: a9 19.55s infinite linear; }
-@keyframes a10 { 0%,24.245% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 24.246%,37.652% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 37.652%,58.24% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 58.24%,76.7% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 76.701%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+@keyframes a10 { 0%,24.245% { fill: var(--color-card); stroke: var(--simple2-separator) } 24.246%,37.652% { fill: var(--color-card); stroke: var(--simple2-separator) } 37.652%,58.24% { fill: var(--color-card); stroke: var(--simple2-separator) } 58.24%,76.7% { fill: var(--color-card); stroke: var(--simple2-separator) } 76.701%,99.999% { fill: var(--color-card); stroke: var(--simple2-separator) } }
 .fl .a10 { animation: a10 19.55s infinite linear; }
-@keyframes a11 { 0%,24.245% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 24.246% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 25.269%,37.652% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 37.652%,58.24% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 58.24% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 59.263%,76.7% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.701%,99.999% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a11 { 0%,24.245% { fill: var(--color-muted) } 24.246%,37.652% { fill: var(--color-muted) } 37.652%,58.24% { fill: var(--color-muted) } 58.24%,76.7% { fill: var(--color-muted) } 76.701%,99.999% { fill: var(--color-muted) } }
 .fl .a11 { animation: a11 19.55s infinite linear; }
-@keyframes a12 { 0%,24.245% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 24.246%,37.652% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.652% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 38.675%,58.24% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 58.24% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 59.263%,76.7% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.701%,99.999% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a12 { 0%,24.245% { fill: var(--color-card); stroke: var(--simple2-separator) } 24.246%,37.652% { fill: var(--color-card); stroke: var(--simple2-separator) } 37.652%,58.24% { fill: var(--color-card); stroke: var(--simple2-separator) } 58.24%,76.7% { fill: var(--color-card); stroke: var(--simple2-separator) } 76.701%,99.999% { fill: var(--color-card); stroke: var(--simple2-separator) } }
 .fl .a12 { animation: a12 19.55s infinite linear; }
-@keyframes a13 { 0%,24.245% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 24.246%,37.652% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.652%,58.24% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 58.24%,76.7% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.701%,99.999% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a13 { 0%,24.245% { fill: var(--color-muted) } 24.246%,37.652% { fill: var(--color-muted) } 37.652%,58.24% { fill: var(--color-muted) } 58.24%,76.7% { fill: var(--color-muted) } 76.701%,99.999% { fill: var(--color-muted) } }
 .fl .a13 { animation: a13 19.55s infinite linear; }
-@keyframes a14 { 0%,24.245% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 24.246%,37.652% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.652%,58.24% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 58.24%,76.7% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.701% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 77.724%,99.999% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
+@keyframes a14 { 0%,24.245% { fill: var(--color-card); stroke: var(--simple2-separator) } 24.246%,37.652% { fill: var(--color-card); stroke: var(--simple2-separator) } 37.652%,58.24% { fill: var(--color-card); stroke: var(--simple2-separator) } 58.24%,76.7% { fill: var(--color-card); stroke: var(--simple2-separator) } 76.701%,99.999% { fill: var(--color-card); stroke: var(--simple2-separator) } }
 .fl .a14 { animation: a14 19.55s infinite linear; }
-@keyframes a15 { 0%,24.245% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 24.246%,37.652% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 37.652%,58.24% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 58.24%,76.7% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 76.701%,99.999% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } }
+@keyframes a15 { 0%,24.245% { fill: var(--color-muted) } 24.246%,37.652% { fill: var(--color-muted) } 37.652%,58.24% { fill: var(--color-muted) } 58.24%,76.7% { fill: var(--color-muted) } 76.701%,99.999% { fill: var(--color-muted) } }
 .fl .a15 { animation: a15 19.55s infinite linear; }
-@keyframes a16 { 0%,24.245% { fill: var(--color-state-on-active) } 24.246%,37.652% { fill: var(--color-state-on-active) } 37.652%,58.24% { fill: var(--color-state-on-active) } 58.24%,76.7% { fill: var(--color-state-on-active) } 76.701%,99.999% { fill: var(--color-state-on-active) } }
+@keyframes a16 { 0%,24.245% { fill: var(--color-card); stroke: var(--simple2-separator) } 24.246%,37.652% { fill: var(--color-card); stroke: var(--simple2-separator) } 37.652%,58.24% { fill: var(--color-card); stroke: var(--simple2-separator) } 58.24%,76.7% { fill: var(--color-card); stroke: var(--simple2-separator) } 76.701%,99.999% { fill: var(--color-card); stroke: var(--simple2-separator) } }
 .fl .a16 { animation: a16 19.55s infinite linear; }
-@keyframes a17 { 0%,24.245% { fill: var(--color-node); stroke: var(--color-border) } 24.246% { fill: var(--color-node); stroke: var(--color-border) } 25.269%,37.652% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 37.652%,58.24% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 58.24% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 59.263%,76.7% { fill: var(--color-node); stroke: var(--color-border) } 76.701%,99.999% { fill: var(--color-node); stroke: var(--color-border) } }
+@keyframes a17 { 0%,24.245% { fill: var(--color-muted) } 24.246%,37.652% { fill: var(--color-muted) } 37.652%,58.24% { fill: var(--color-muted) } 58.24%,76.7% { fill: var(--color-muted) } 76.701%,99.999% { fill: var(--color-muted) } }
 .fl .a17 { animation: a17 19.55s infinite linear; }
-@keyframes a18 { 0%,24.245% { fill: var(--color-muted) } 24.246% { fill: var(--color-muted) } 25.269%,37.652% { fill: var(--color-state-on-active) } 37.652%,58.24% { fill: var(--color-state-on-active) } 58.24% { fill: var(--color-state-on-active) } 59.263%,76.7% { fill: var(--color-muted) } 76.701%,99.999% { fill: var(--color-muted) } }
+@keyframes a18 { 0%,24.245% { fill: var(--color-card); stroke: var(--simple2-separator) } 24.246%,37.652% { fill: var(--color-card); stroke: var(--simple2-separator) } 37.652%,58.24% { fill: var(--color-card); stroke: var(--simple2-separator) } 58.24%,76.7% { fill: var(--color-card); stroke: var(--simple2-separator) } 76.701%,99.999% { fill: var(--color-card); stroke: var(--simple2-separator) } }
 .fl .a18 { animation: a18 19.55s infinite linear; }
-@keyframes a19 { 0%,24.245% { fill: var(--color-node); stroke: var(--color-border) } 24.246%,37.652% { fill: var(--color-node); stroke: var(--color-border) } 37.652% { fill: var(--color-node); stroke: var(--color-border) } 38.675%,58.24% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 58.24% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } 59.263%,76.7% { fill: var(--color-node); stroke: var(--color-border) } 76.701%,99.999% { fill: var(--color-node); stroke: var(--color-border) } }
+@keyframes a19 { 0%,24.245% { fill: var(--color-muted) } 24.246%,37.652% { fill: var(--color-muted) } 37.652%,58.24% { fill: var(--color-muted) } 58.24%,76.7% { fill: var(--color-muted) } 76.701%,99.999% { fill: var(--color-muted) } }
 .fl .a19 { animation: a19 19.55s infinite linear; }
-@keyframes a20 { 0%,24.245% { fill: var(--color-muted) } 24.246%,37.652% { fill: var(--color-muted) } 37.652% { fill: var(--color-muted) } 38.675%,58.24% { fill: var(--color-state-on-active) } 58.24% { fill: var(--color-state-on-active) } 59.263%,76.7% { fill: var(--color-muted) } 76.701%,99.999% { fill: var(--color-muted) } }
+@keyframes a20 { 0%,24.245% { opacity: 1 } 24.246%,37.652% { opacity: 1 } 37.652%,58.24% { opacity: 1 } 58.24% { opacity: 1 } 59.263%,76.7% { opacity: 0 } 76.701%,99.999% { opacity: 0 } }
 .fl .a20 { animation: a20 19.55s infinite linear; }
-@keyframes a21 { 0%,24.245% { fill: var(--color-node); stroke: var(--color-border) } 24.246%,37.652% { fill: var(--color-node); stroke: var(--color-border) } 37.652%,58.24% { fill: var(--color-node); stroke: var(--color-border) } 58.24%,76.7% { fill: var(--color-node); stroke: var(--color-border) } 76.701%,99.999% { fill: var(--color-node); stroke: var(--color-border) } }
+@keyframes a21 { 0%,24.245% { opacity: 0 } 24.246%,37.652% { opacity: 0 } 37.652%,59.263% { opacity: 0 } 59.263% { opacity: 0 } 60.286%,76.7% { opacity: 1 } 76.701%,99.999% { opacity: 1 } }
 .fl .a21 { animation: a21 19.55s infinite linear; }
-@keyframes a22 { 0%,24.245% { fill: var(--color-muted) } 24.246%,37.652% { fill: var(--color-muted) } 37.652%,58.24% { fill: var(--color-muted) } 58.24%,76.7% { fill: var(--color-muted) } 76.701%,99.999% { fill: var(--color-muted) } }
-.fl .a22 { animation: a22 19.55s infinite linear; }
-@keyframes a23 { 0%,24.245% { fill: var(--color-node); stroke: var(--color-border) } 24.246%,37.652% { fill: var(--color-node); stroke: var(--color-border) } 37.652%,58.24% { fill: var(--color-node); stroke: var(--color-border) } 58.24%,76.7% { fill: var(--color-node); stroke: var(--color-border) } 76.701% { fill: var(--color-node); stroke: var(--color-border) } 77.724%,99.999% { fill: var(--color-state-active-fill); stroke: var(--color-state-active-fill) } }
-.fl .a23 { animation: a23 19.55s infinite linear; }
-@keyframes a24 { 0%,24.245% { fill: var(--color-muted) } 24.246%,37.652% { fill: var(--color-muted) } 37.652%,58.24% { fill: var(--color-muted) } 58.24%,76.7% { fill: var(--color-muted) } 76.701% { fill: var(--color-muted) } 77.724%,99.999% { fill: var(--color-state-on-active) } }
-.fl .a24 { animation: a24 19.55s infinite linear; }
-@keyframes a25 { 0%,24.245% { opacity: 1 } 24.246%,37.652% { opacity: 1 } 37.652%,58.24% { opacity: 1 } 58.24% { opacity: 1 } 59.263%,76.7% { opacity: 0 } 76.701%,99.999% { opacity: 0 } }
-.fl .a25 { animation: a25 19.55s infinite linear; }
-@keyframes a26 { 0%,24.245% { opacity: 0 } 24.246%,37.652% { opacity: 0 } 37.652%,59.263% { opacity: 0 } 59.263% { opacity: 0 } 60.286%,76.7% { opacity: 1 } 76.701%,99.999% { opacity: 1 } }
-.fl .a26 { animation: a26 19.55s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-line)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-main)"/></marker></defs>
 <rect x="0.5" y="0.5" width="959" height="877" rx="12" fill="var(--simple2-canvas-fill)"/>
 <g transform="translate(336 0)">
-<g id="n-0" class="fl-node fl-shape-start" data-id="__start"><g class="fl-halo a1" fill="none" opacity="0"><rect x="203" y="28" width="14" height="14" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><circle cx="210" cy="35" r="7" fill="var(--color-fg)" class="fl-stroke a0"/></g>
-<g id="n-1" class="fl-node fl-shape-state" data-id="created"><g class="fl-halo a3" fill="none" opacity="0"><rect x="160" y="102" width="100" height="46" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="160" y="102" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a2"/><text x="210" y="130.4" class="label">생성됨</text></g>
-<g id="n-2" class="fl-node fl-shape-state" data-id="paid"><g class="fl-halo a3" fill="none" opacity="0"><rect x="67.7" y="286" width="100" height="46" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="67.7" y="286" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a2"/><text x="117.7" y="314.4" class="label">결제됨</text></g>
-<g id="n-3" class="fl-node fl-shape-state" data-id="shipped"><g class="fl-halo a5" fill="none" opacity="0"><rect x="28" y="470" width="100" height="46" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="28" y="470" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a4"/><text x="78" y="498.4" class="label">배송 중</text></g>
-<g id="n-4" class="fl-node fl-shape-state" data-id="delivered"><g class="fl-halo a7" fill="none" opacity="0"><rect x="28" y="654" width="100" height="46" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="28" y="654" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a6"/><text x="78" y="682.4" class="label">배송 완료</text></g>
-<g id="n-5" class="fl-node fl-shape-state" data-id="cancelled"><g class="fl-halo a9" fill="none" opacity="0"><rect x="160" y="470" width="100" height="46" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="160" y="470" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a8"/><text x="210" y="498.4" class="label">취소됨</text></g>
-<g id="n-6" class="fl-node fl-shape-final" data-id="__final0"><g class="fl-halo a1" fill="none" opacity="0"><rect x="71" y="760" width="14" height="14" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><circle cx="78" cy="767" r="7" fill="none" class="fl-stroke a0"/><circle cx="78" cy="767" r="3.5" fill="var(--color-fg)"/></g>
-<g id="n-7" class="fl-node fl-shape-final" data-id="__final1"><g class="fl-halo a1" fill="none" opacity="0"><rect x="203" y="576" width="14" height="14" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><circle cx="210" cy="583" r="7" fill="none" class="fl-stroke a0"/><circle cx="210" cy="583" r="3.5" fill="var(--color-fg)"/></g>
-<g id="e-0" class="fl-edge"><path id="p-0" d="M 193.3 148 L 193.3 156 Q 193.3 164, 185.3 164 L 139.7 164 Q 117.7 164, 117.7 186 L 117.7 286" class="fl-path a10" marker-end="url(#fl-arrow)"/></g>
-<g id="e-1" class="fl-edge"><path id="p-1" d="M 101 332 L 101 340 Q 101 348, 93 348 L 89.5 348 Q 78 348, 78 359.5 L 78 470" class="fl-path a11" marker-end="url(#fl-arrow)"/></g>
-<g id="e-2" class="fl-edge"><path id="p-2" d="M 78 516 L 78 654" class="fl-path a12" marker-end="url(#fl-arrow)"/></g>
-<g id="e-3" class="fl-edge"><path id="p-3" d="M 226.7 148 L 226.7 470" class="fl-path a13" marker-end="url(#fl-arrow)"/></g>
-<g id="e-4" class="fl-edge"><path id="p-4" d="M 134.3 332 L 134.3 404 Q 134.3 426, 156.3 426 L 171.3 426 Q 193.3 426, 193.3 448 L 193.3 470" class="fl-path a14" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/></g>
-<g id="e-5" class="fl-edge mark"><path id="p-5" d="M 210 42 L 210 102" class="fl-path a13" marker-end="url(#fl-arrow)"/></g>
-<g id="e-6" class="fl-edge mark"><path id="p-6" d="M 78 700 L 78 760" class="fl-path a13" marker-end="url(#fl-arrow)"/></g>
-<g id="e-7" class="fl-edge mark"><path id="p-7" d="M 210 516 L 210 576" class="fl-path a13" marker-end="url(#fl-arrow)"/></g>
+<g id="n-0" class="fl-node fl-shape-start" tabindex="0" role="img" aria-label="" data-id="__start"><circle cx="210" cy="35" r="7" fill="var(--color-fg)" class="fl-stroke a0"/></g>
+<g id="n-1" class="fl-node fl-shape-state" tabindex="0" role="img" aria-label="생성됨" data-id="created"><rect x="160" y="102" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><text x="210" y="130.4" class="label">생성됨</text></g>
+<g id="n-2" class="fl-node fl-shape-state" tabindex="0" role="img" aria-label="결제됨" data-id="paid"><rect x="67.7" y="286" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a1"/><text x="117.7" y="314.4" class="label">결제됨</text></g>
+<g id="n-3" class="fl-node fl-shape-state" tabindex="0" role="img" aria-label="배송 중" data-id="shipped"><rect x="28" y="470" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a2"/><text x="78" y="498.4" class="label">배송 중</text></g>
+<g id="n-4" class="fl-node fl-shape-state" tabindex="0" role="img" aria-label="배송 완료" data-id="delivered"><rect x="28" y="654" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a3"/><text x="78" y="682.4" class="label">배송 완료</text></g>
+<g id="n-5" class="fl-node fl-shape-state" tabindex="0" role="img" aria-label="취소됨" data-id="cancelled"><rect x="160" y="470" width="100" height="46" rx="8" fill="var(--color-node)" class="fl-stroke a4"/><text x="210" y="498.4" class="label">취소됨</text></g>
+<g id="n-6" class="fl-node fl-shape-final" tabindex="0" role="img" aria-label="" data-id="__final0"><circle cx="78" cy="767" r="7" fill="none" class="fl-stroke a0"/><circle cx="78" cy="767" r="3.5" fill="var(--color-fg)"/></g>
+<g id="n-7" class="fl-node fl-shape-final" tabindex="0" role="img" aria-label="" data-id="__final1"><circle cx="210" cy="583" r="7" fill="none" class="fl-stroke a0"/><circle cx="210" cy="583" r="3.5" fill="var(--color-fg)"/></g>
+<g id="e-0" class="fl-edge"><path id="p-0" d="M 193.3 148 L 193.3 156 Q 193.3 164, 185.3 164 L 139.7 164 Q 117.7 164, 117.7 186 L 117.7 286" class="fl-path a5" marker-end="url(#fl-arrow)"/></g>
+<g id="e-1" class="fl-edge"><path id="p-1" d="M 101 332 L 101 340 Q 101 348, 93 348 L 89.5 348 Q 78 348, 78 359.5 L 78 470" class="fl-path a6" marker-end="url(#fl-arrow)"/></g>
+<g id="e-2" class="fl-edge"><path id="p-2" d="M 78 516 L 78 654" class="fl-path a7" marker-end="url(#fl-arrow)"/></g>
+<g id="e-3" class="fl-edge"><path id="p-3" d="M 226.7 148 L 226.7 470" class="fl-path a8" marker-end="url(#fl-arrow)"/></g>
+<g id="e-4" class="fl-edge"><path id="p-4" d="M 134.3 332 L 134.3 404 Q 134.3 426, 156.3 426 L 171.3 426 Q 193.3 426, 193.3 448 L 193.3 470" class="fl-path a9" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/></g>
+<g id="e-5" class="fl-edge mark"><path id="p-5" d="M 210 42 L 210 102" class="fl-path a8" marker-end="url(#fl-arrow)"/></g>
+<g id="e-6" class="fl-edge mark"><path id="p-6" d="M 78 700 L 78 760" class="fl-path a8" marker-end="url(#fl-arrow)"/></g>
+<g id="e-7" class="fl-edge mark"><path id="p-7" d="M 210 516 L 210 576" class="fl-path a8" marker-end="url(#fl-arrow)"/></g>
 
 <g class="p0-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><g><rect x="-30.4" y="-35" width="60.9" height="23" rx="8" fill="var(--color-state-active-fill)"/><text x="0" y="-20" class="chip">39,000원</text><animateTransform attributeName="transform" type="translate" dur="19.55s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.04945;0.05115;0.05797;0.07502;0.07673;0.10742;0.12936;1" values="0 47;0 47;0 47;0 47;0 47;0 47;0 0;0 0;0 0"/><animate attributeName="opacity" dur="19.55s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.04945;0.05115;0.05797;0.07502;0.07673;0.10742;0.12936;1" values="1;1;0.9;0;0;0.2;1;1;1"/></g><animate attributeName="opacity" dur="19.55s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.12936" values="1;0"/><animateMotion dur="19.55s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.12936;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
 <g class="p1-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="19.55s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.24246;0.34072" values="0;1;0"/><animateMotion dur="19.55s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.24246;0.34072;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
 <g class="p2-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="19.55s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.37652;0.46476" values="0;1;0"/><animateMotion dur="19.55s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.37652;0.46476;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
 <g class="p3-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="19.55s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.5824;0.71176" values="0;1;0"/><animateMotion dur="19.55s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5824;0.71176;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
 <g class="p4-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><g><rect x="-18.2" y="-35" width="36.4" height="23" rx="8" fill="var(--color-state-active-fill)"/><text x="0" y="-20" class="chip">환불</text><animateTransform attributeName="transform" type="translate" dur="19.55s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.76701;0.78747;0.78917;0.79599;0.81645;0.87783;0.88235;1" values="0 47;0 47;0 47;0 47;0 47;0 47;0 0;0 0;0 0"/><animate attributeName="opacity" dur="19.55s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.76701;0.78747;0.78917;0.79599;0.81645;0.87783;0.88235;1" values="1;1;1;0.9;0;0;1;1;1"/></g><animate attributeName="opacity" dur="19.55s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.76701;0.88235" values="0;1;0"/><animateMotion dur="19.55s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.76701;0.88235;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-4" xlink:href="#p-4"/></animateMotion></g>
-<g class="fl-pills"><g id="l-0" class="fl-edge"><g class="fl-pill"><rect x="90.7" y="208" width="53.3" height="18" rx="9" class="pill a15"/><text x="117.3" y="221" class="edgelabel a16">결제 승인</text></g></g><g id="l-1" class="fl-edge"><g class="fl-pill"><rect x="61.5" y="392" width="32.4" height="18" rx="9" class="pill a17"/><text x="77.7" y="405" class="edgelabel a18">출고</text></g></g><g id="l-2" class="fl-edge"><g class="fl-pill"><rect x="51" y="576" width="53.3" height="18" rx="9" class="pill a19"/><text x="77.6" y="589" class="edgelabel a20">수령 확인</text></g></g><g id="l-3" class="fl-edge"><g class="fl-pill"><rect x="199.7" y="300" width="53.3" height="18" rx="9" class="pill a21"/><text x="226.3" y="313" class="edgelabel a22">결제 실패</text></g></g><g id="l-4" class="fl-edge"><g class="fl-pill"><rect x="107.3" y="392" width="53.3" height="18" rx="9" class="pill a23"/><text x="134" y="405" class="edgelabel a24">고객 취소</text></g></g></g>
+<g class="fl-pills"><g id="l-0" class="fl-edge"><g class="fl-pill"><rect x="90.7" y="208" width="53.3" height="18" rx="9" class="pill a10"/><text x="117.3" y="221" class="edgelabel a11">결제 승인</text></g></g><g id="l-1" class="fl-edge"><g class="fl-pill"><rect x="61.5" y="392" width="32.4" height="18" rx="9" class="pill a12"/><text x="77.7" y="405" class="edgelabel a13">출고</text></g></g><g id="l-2" class="fl-edge"><g class="fl-pill"><rect x="51" y="576" width="53.3" height="18" rx="9" class="pill a14"/><text x="77.6" y="589" class="edgelabel a15">수령 확인</text></g></g><g id="l-3" class="fl-edge"><g class="fl-pill"><rect x="199.7" y="300" width="53.3" height="18" rx="9" class="pill a16"/><text x="226.3" y="313" class="edgelabel a17">결제 실패</text></g></g><g id="l-4" class="fl-edge"><g class="fl-pill"><rect x="107.3" y="392" width="53.3" height="18" rx="9" class="pill a18"/><text x="134" y="405" class="edgelabel a19">고객 취소</text></g></g></g>
 </g>
-<text x="480" y="820" opacity="0" class="steplabel a25">정상 주문</text>
-<text x="480" y="820" opacity="0" class="steplabel a26">취소</text>
-<g opacity="0" class="a25"><text x="480" y="846" class="caption">결제가 끝나면 출고되고 수령으로 끝납니다</text></g>
-<g opacity="0" class="a26"><text x="480" y="846" class="caption">결제 뒤에도 출고 전이면 취소할 수 있습니다</text></g>
+<text x="480" y="820" opacity="0" class="steplabel a20">정상 주문</text>
+<text x="480" y="820" opacity="0" class="steplabel a21">취소</text>
+<g opacity="0" class="a20"><text x="480" y="846" class="caption">결제가 끝나면 출고되고 수령으로 끝납니다</text></g>
+<g opacity="0" class="a21"><text x="480" y="846" class="caption">결제 뒤에도 출고 전이면 취소할 수 있습니다</text></g>
 </svg>

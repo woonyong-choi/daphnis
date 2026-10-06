@@ -41,7 +41,7 @@ export function drawCard(card, { box, i }, { toneOf, decorate }) {
     .map((layout, k) => `<g id="n-${i}-c${k}" opacity="0" class="fl-layer ${decorate('layer', i, k)}">${drawFace(layout, box)}${drawRows(layout, box, toneOf)}</g>`)
     .join('');
   return (
-    `<rect x="${r(box.x)}" y="${r(box.y)}" width="${r(box.w)}" height="${r(box.h)}" rx="${RADIUS.md}" fill="${tokens.color.card}" stroke="${tokens.color.outline}" stroke-dasharray="${values.dash.card} ${values.dash.card}" opacity="0" class="fl-card ${decorate('card', i)}"/>` +
+    `<rect x="${r(box.x)}" y="${r(box.y)}" width="${r(box.w)}" height="${r(box.h)}" rx="${RADIUS.md}" fill="${tokens.color.card}" stroke="${tokens.simple2.separator}" opacity="0" class="fl-card ${decorate('card', i)}"/>` +
     layers
   );
 }

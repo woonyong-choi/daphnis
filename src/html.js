@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { chartMotionCss } from './chart/motion.js';
 import { canvasOf, fitCanvas } from './canvas.js';
-import { LUCIDE_ICONS } from './icons/lucide/icons.js';
+import { CONTROL_ICONS } from './icons/controls.js';
 import { createGlyphSet, embedFonts } from './measure/fonts.js';
 import { paintCss } from './draw/paint.js';
 import { hasStatus } from './draw/status.js';
@@ -17,8 +17,8 @@ import { roundedNumbers } from './format.js';
 const PLAYER_FILES = ['view', 'play', 'controls', 'stage', 'curve', 'values'];
 // 단계별 도형 상태와 구간별 이동 시간을 쓰는 그림에만 뒤에 붙는 재생기 파일. 앞 파일의 함수를 감싸서 이 기능을 쓰지 않는 그림의 재생기 글은 그대로다.
 const PLAYER_EXTRAS = { pace: 'pace', status: 'status' };
-// 조작부 아이콘: Lucide(ISC) 24 격자 외곽선 아이콘의 도형(src/icons/lucide/icons.js)을 재생기 스크립트 앞에 상수로 붙인다. 선 굵기와 끝 모양은 그리는 쪽(view.js)이 정한다.
-const UI_ICONS = LUCIDE_ICONS;
+// 조작부 전용 글리프를 재생기 앞에 붙인다. 크기와 선 굵기는 simple2 토큰을 따른다.
+const UI_ICONS = CONTROL_ICONS;
 const UI_ICON_SCRIPT = `const UI_ICONS = ${JSON.stringify(UI_ICONS).replace(/</g, '\\u003c')};\n`;
 const readPlayerFile = (name) => readFileSync(new URL(`./player/${name}.js`, import.meta.url), 'utf8');
 const PLAYER = UI_ICON_SCRIPT + PLAYER_FILES.map(readPlayerFile).join('\n');
@@ -69,9 +69,9 @@ function ringSvg() {
 const VIEW_BUTTONS =
   roundButton('fl-full') +
   `<div class="fl-zoom">${roundButton('', { label: '확대', zoom: 'in' })}${roundButton('', { label: '축소', zoom: 'out' })}${roundButton('', { label: '전체 보기', zoom: 'fit' })}</div>`;
-const PAUSE_BUTTON = roundButton('fl-pause', { content: `<span class="fl-play-symbol"><span class="fl-pause-icon"></span></span><span class="fl-play-label" aria-hidden="true"></span>` });
-const REPEAT_BUTTON = '<button type="button" class="fl-round fl-repeat" aria-label="반복" aria-pressed="false">반복 꺼짐</button>';
-const RATE_BUTTON = roundButton('fl-rate', { label: '배속', content: '1×' });
+const PAUSE_BUTTON = roundButton('fl-pause', { content: `<span class="fl-play-symbol"><span class="fl-pause-icon"></span></span>` });
+const REPEAT_BUTTON = '<button type="button" class="fl-round fl-repeat" aria-label="반복" aria-pressed="false" title="반복 꺼짐"></button>';
+const RATE_BUTTON = roundButton('fl-rate', { label: '배속' });
 
 // cost: time O(s + e + b·(e + k) + out), heap O(out), stack O(1), io 1
 // vars: s = 도형 수, e = 선 수, b = 박자 수, k = 카드 있는 도형 수, out = 만든 HTML 글자 수

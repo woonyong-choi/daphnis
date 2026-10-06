@@ -99,22 +99,22 @@ test('parseFigure_rejects_hex_unknown_names_and_the_reserved_blue_and_orange', (
 
 const SOURCE = 'flow right\nbox a "A" "sub" fill=red stroke=amber\nbox b "B"\ngroup g "G" stroke=green fill=teal {\n  box c "C" stroke=navy\n}\na -> b\nb -> c\nstep "s"\n  light a\n  show a "x" card=pink\n';
 
-// 근거: 밝힘은 색이 아니라 굵은 테두리와 후광. 색을 고른 도형은 켜져도 그 색이고, 고르지 않은 도형은 지금처럼 파랑이다
-test('toSvg_lit_shape_keeps_its_stroke_color_and_gets_a_halo_while_unpainted_shapes_stay_blue', async () => {
+// 근거: #164의 단일 윤곽 규칙. 색을 고른 도형은 색 역할을 유지하고 재생 강조가 두 번째 외곽선을 만들지 않는다.
+test('toSvg_lit_shape_keeps_its_stroke_color_without_duplicate_outlines', async () => {
   const svg = await toSvg(await buildFigure(SOURCE));
-  assert.ok(/stroke: var\(--color-paint-amber-stroke\); stroke-width: var\(--border-strong\)/.test(svg), 'lit keyframe keeps amber');
-  assert.ok(/class="fl-halo [^"]*" fill="none" opacity="0"/.test(svg), 'halo');
+  assert.ok(/stroke: var\(--color-paint-amber-stroke\); stroke-width: var\(--simple2-node-stroke\)/.test(svg), 'lit keyframe keeps amber');
+  assert.ok(!svg.includes('fl-halo'), 'no duplicate silhouette');
   assert.ok(svg.includes('fill="var(--color-paint-red-fill)"'), 'red fill');
   assert.ok(svg.includes('fill="var(--color-paint-pink-fill)"'), 'pink card');
   const plain = await toSvg(await buildFigure('flow right\nbox a "A"\nbox b "B"\na -> b\nstep "s"\n  light a\n'));
-  assert.ok(/fl-halo/.test(plain) && !/ps-|ph-/.test(plain), 'unpainted shapes keep the blue halo and get no paint classes');
+  assert.ok(!/fl-halo|ps-|ph-/.test(plain), 'unpainted shapes have one outline');
 });
 
-// 근거: HTML 재생기도 같은 규칙. 켜진 도형의 테두리는 고른 색이 이기고 후광은 켜질 때 보인다
-test('toHtml_painted_stroke_rules_beat_the_lit_blue_and_show_the_halo_when_on', async () => {
+// 근거: HTML도 SVG와 같이 색 역할을 유지하고 중복 윤곽이 없다.
+test('toHtml_painted_stroke_rules_keep_the_role_without_duplicate_outlines', async () => {
   const html = await toHtml(await buildFigure(SOURCE), 'x');
   assert.ok(html.includes('.fl .fl-node.on .fl-stroke.ps-amber'));
-  assert.ok(html.includes('.fl .fl-halo.ph-amber'));
+  assert.ok(!html.includes('fl-halo'));
   assert.ok(html.includes('.fl .fl-group.on .fl-stroke.ps-green'));
   assert.ok(html.includes('.fl .fl-group .frame-box.ps-green'));
 });

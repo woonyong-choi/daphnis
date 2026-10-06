@@ -127,11 +127,48 @@ describe('pages', { skip: SKIP }, () => {
         assert.equal(style.stroke, 'none');
         assert.equal(style.selected, 'none');
         assert.equal(style.border, '0px');
+        assert.equal(await page.locator('html').evaluate((el) => getComputedStyle(el).colorScheme), 'light dark');
       }
     });
     await withPage(browser, toGallery(FIGURES, '예제'), async (page) => {
       assert.equal(await page.locator('section').evaluate((el) => getComputedStyle(el).boxShadow), 'none');
       assert.equal(await page.locator('section').evaluate((el) => getComputedStyle(el).borderRadius), '0px');
+    });
+  });
+
+  // 근거: #164. 아이콘만으로 조작하고 큰 원은 유지하며 도형 호버와 초점이 같은 외곽에 반응한다.
+  test('player_icon_controls_and_shape_feedback_share_the_contract_in_both_modes', async () => {
+    await withPage(browser, await toHtml(await buildFigure(CODE_FIGURE), 'controls'), async (page) => {
+      for (const colorScheme of ['light', 'dark']) {
+        await page.emulateMedia({ colorScheme });
+        assert.equal(await page.locator('.fl-transport').innerText(), '');
+        assert.equal(await page.locator('.fl-halo').count(), 0);
+        assert.equal(await page.locator('.fl-pause .fl-ring').count(), 0);
+        const repeat = page.locator('.fl-repeat');
+        await repeat.click();
+        assert.equal(await repeat.getAttribute('aria-pressed'), 'true');
+        await repeat.click();
+        assert.equal(await repeat.getAttribute('aria-pressed'), 'false');
+        const beforeRate = await page.locator('.fl-rate').getAttribute('data-rate');
+        await page.locator('.fl-rate').click();
+        assert.notEqual(await page.locator('.fl-rate').getAttribute('data-rate'), beforeRate);
+        const shape = page.locator('.fl-node').first();
+        const face = shape.locator(':scope > .fl-stroke').first();
+        await page.waitForFunction(() => getComputedStyle(document.querySelector('.fl-node > .fl-stroke')).strokeWidth === '1px');
+        const before = await face.evaluate((el) => ({ fill: getComputedStyle(el).fill, width: getComputedStyle(el).strokeWidth }));
+        await shape.hover();
+        await page.waitForFunction((fill) => getComputedStyle(document.querySelector('.fl-node > .fl-stroke')).fill !== fill, before.fill);
+        assert.notEqual(await face.evaluate((el) => getComputedStyle(el).fill), before.fill);
+        assert.equal(await face.evaluate((el) => getComputedStyle(el).strokeWidth), before.width);
+        await page.mouse.move(0, 0);
+        await page.keyboard.press('Tab');
+        await shape.focus();
+        await page.waitForFunction(() => getComputedStyle(document.querySelector('.fl-node > .fl-stroke')).strokeWidth === '3px');
+        assert.equal(await face.evaluate((el) => getComputedStyle(el).strokeWidth), '3px');
+        assert.equal(await shape.evaluate((el) => el.classList.contains('is-hovered')), true);
+        await page.locator('.fl-rate').focus();
+        assert.equal(await shape.evaluate((el) => el.classList.contains('is-hovered')), false);
+      }
     });
   });
 
@@ -185,7 +222,6 @@ describe('pages', { skip: SKIP }, () => {
     const html = await toHtml(await buildFigure(readFileSync(new URL('../examples/memory.dap', import.meta.url), 'utf8'), { baseDir: 'examples' }), 'memory');
     await withPage(browser, html, async (page) => {
       await page.evaluate((text) => { document.querySelector('.fl-caption').textContent = text;
-        document.querySelector('.fl-rate').textContent = '0.25×';
       }, CAPTION);
       const box = (selector) => page.locator(selector).first().boundingBox();
       const center = (b) => b.x + b.width / 2;
@@ -259,7 +295,7 @@ describe('pages', { skip: SKIP }, () => {
     });
   });
 
-  // 근거: 버그 "격자 칸을 밝히면 파랑 테두리가 일부만 보인다"(pte-fields). 밝힌 칸 테두리의 네 변 어디에서도 맨 위에 보이는 것은 그 칸 자신의 테두리이고, 뒤에 그린 이웃 칸의 선이 아니다
+  // 근거: 격자의 선택 선은 기본 선을 덮고 모서리 좌표가 같다. 이웃도 선택됐으면 공유 변의 같은 선택 선이 맨 위여도 된다.
   test('grid_lit_cell_border_is_topmost_on_all_four_sides_over_neighbor_cell_lines', async () => {
     const source = readFileSync(new URL('../examples/pte-fields.dap', import.meta.url), 'utf8');
     const html = await toHtml(await buildFigure(source, { baseDir: 'examples' }), 'pte-fields');
@@ -271,13 +307,20 @@ describe('pages', { skip: SKIP }, () => {
           const lit = [...document.querySelectorAll('.fl-part.on')].map((g) => g.dataset.part);
           const out = [];
           for (const key of new Set(lit)) {
-            const cell = document.querySelector(`.fl-part[data-part="${key}"] .grid-cell`).getBoundingClientRect();
+            const cellEl = document.querySelector(`.fl-part[data-part="${key}"] .grid-cell`);
+            const ringEl = document.querySelector(`.fl-part[data-part="${key}"] .grid-ring`);
+            for (const attr of ['x', 'y', 'width', 'height', 'rx']) {
+              if (cellEl.getAttribute(attr) !== ringEl.getAttribute(attr)) out.push(`${key}: ${attr} differs`);
+            }
+            const cell = cellEl.getBoundingClientRect();
             const scale = cell.width / Number(document.querySelector(`.fl-part[data-part="${key}"] .grid-cell`).getAttribute('width'));
             const pad = inset * scale;
             const sides = { top: [cell.x + cell.width / 2, cell.y + pad], bottom: [cell.x + cell.width / 2, cell.bottom - pad], left: [cell.x + pad, cell.y + cell.height / 2], right: [cell.right - pad, cell.y + cell.height / 2] };
             for (const [side, [x, y]] of Object.entries(sides)) {
-              const hit = document.elementFromPoint(x, y)?.closest('.fl-part')?.dataset.part;
-              if (hit !== key) out.push(`${key} ${side} -> ${hit}`);
+              const element = document.elementFromPoint(x, y);
+              const hit = element?.closest('.fl-part')?.dataset.part;
+              const sharedSelection = element?.matches('.grid-ring') && lit.includes(hit);
+              if (hit !== key && !sharedSelection) out.push(`${key} ${side} -> ${hit}`);
             }
           }
           return out;

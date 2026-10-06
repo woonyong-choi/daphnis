@@ -134,7 +134,7 @@ function toSvgPoint(svg, e) {
   return { x: point.x, y: point.y };
 }
 
-// 조작부 아이콘. Lucide 원본 24 격자 외곽선 아이콘(UI_ICONS, html.js가 이 스크립트 앞에 붙인다)을 단색 currentColor 선으로 그린다. 선 굵기는 metrics.iconStroke 한 곳이다(Obsidian 기본 아이콘과 같은 모양).
+// 조작부의 24 격자 글리프. 크기와 획은 공통 토큰을 쓰며 재생·일시정지는 CSS에서 면으로 채운다.
 function drawUiIcon(metrics, name) {
   return `<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${metrics.iconStroke}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${UI_ICONS[name]}</svg>`;
 }

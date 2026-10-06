@@ -94,7 +94,7 @@ function createPlayer(root, data) {
     position: root.querySelector('.fl-position'),
     captionText: undefined,
     captionFade: undefined,
-    pause: { button: pauseButton, icon: pauseButton.querySelector('.fl-pause-icon'), label: pauseButton.querySelector('.fl-play-label') },
+    pause: { button: pauseButton, icon: pauseButton.querySelector('.fl-pause-icon') },
     ring: createRing(root),
     tabs: [],
     tick: (now) => drawFrame(player, now),

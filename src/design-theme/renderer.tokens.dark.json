@@ -5,39 +5,39 @@
       "$type": "color"
     },
     "muted": {
-      "$value": "{color.gray.333}",
+      "$value": "{primitive.simple2.dark-muted}",
       "$type": "color"
     },
     "group-title": {
-      "$value": "{color.gray.333}",
+      "$value": "{primitive.simple2.dark-muted}",
       "$type": "color"
     },
     "bg": {
-      "$value": "{color.gray.910}",
+      "$value": "{primitive.simple2.dark-bg}",
       "$type": "color"
     },
     "group-1": {
-      "$value": "{color.gray.875}",
+      "$value": "{primitive.simple2.dark-group-1}",
       "$type": "color"
     },
     "group-2": {
-      "$value": "{color.gray.835}",
+      "$value": "{primitive.simple2.dark-group-2}",
       "$type": "color"
     },
     "group-3": {
-      "$value": "{color.gray.796}",
+      "$value": "{primitive.simple2.dark-group-3}",
       "$type": "color"
     },
     "node": {
-      "$value": "{color.gray.757}",
+      "$value": "{primitive.simple2.dark-node}",
       "$type": "color"
     },
     "surface": {
-      "$value": "{color.gray.788}",
+      "$value": "{primitive.simple2.dark-card}",
       "$type": "color"
     },
     "card": {
-      "$value": "{color.gray.788}",
+      "$value": "{primitive.simple2.dark-card}",
       "$type": "color"
     },
     "card-on": {
@@ -45,11 +45,11 @@
       "$type": "color"
     },
     "page": {
-      "$value": "{color.gray.929}",
+      "$value": "{primitive.simple2.dark-page}",
       "$type": "color"
     },
     "outline": {
-      "$value": "{color.gray.467}",
+      "$value": "{primitive.simple2.dark-outline}",
       "$type": "color"
     },
     "border": {
@@ -57,11 +57,11 @@
       "$type": "color"
     },
     "plate-border": {
-      "$value": "{color.gray.788}",
+      "$value": "{primitive.simple2.dark-edge}",
       "$type": "color"
     },
     "line": {
-      "$value": "{color.gray.651}",
+      "$value": "{primitive.simple2.dark-line}",
       "$type": "color"
     },
     "state": {
@@ -100,7 +100,7 @@
     },
     "flow": {
       "brand": {
-        "$value": "{color.blue.dark-stroke}",
+        "$value": "{color.blue.dark-ink}",
         "$type": "color"
       },
       "purple": {
@@ -160,7 +160,7 @@
         "$type": "color"
       },
       "grid": {
-        "$value": "{color.gray.776}",
+        "$value": "{primitive.simple2.dark-edge}",
         "$type": "color"
       }
     },
@@ -170,35 +170,35 @@
     },
     "figure": {
       "icon-service-ink": {
-        "$value": "{color.blue.dark-ink}",
+        "$value": "{primitive.simple2.dark-icon-service}",
         "$type": "color"
       },
       "icon-service-surface": {
-        "$value": "{color.blue.dark-fill}",
+        "$value": "{primitive.simple2.dark-icon-service-face}",
         "$type": "color"
       },
       "icon-data-ink": {
-        "$value": "{color.purple.dark-ink}",
+        "$value": "{primitive.simple2.dark-icon-data}",
         "$type": "color"
       },
       "icon-data-surface": {
-        "$value": "{color.purple.dark-fill}",
+        "$value": "{primitive.simple2.dark-icon-data-face}",
         "$type": "color"
       },
       "icon-access-ink": {
-        "$value": "{color.orange.dark-ink}",
+        "$value": "{primitive.simple2.dark-icon-access}",
         "$type": "color"
       },
       "icon-access-surface": {
-        "$value": "{color.orange.dark-fill}",
+        "$value": "{primitive.simple2.dark-icon-access-face}",
         "$type": "color"
       },
       "icon-person-ink": {
-        "$value": "{color.green.dark-ink}",
+        "$value": "{primitive.simple2.dark-icon-person}",
         "$type": "color"
       },
       "icon-person-surface": {
-        "$value": "{color.green.dark-fill}",
+        "$value": "{primitive.simple2.dark-icon-person-face}",
         "$type": "color"
       },
       "icon-brand-ink": {
@@ -225,15 +225,15 @@
       "$type": "string"
     },
     "separator": {
-      "$value": "{color.gray.635}",
+      "$value": "{primitive.simple2.dark-separator}",
       "$type": "color"
     },
     "canvas-fill": {
-      "$value": "{color.gray.910}",
+      "$value": "{primitive.simple2.dark-bg}",
       "$type": "color"
     },
     "selection-fill": {
-      "$value": "{color.gray.757}",
+      "$value": "{primitive.simple2.dark-edge}",
       "$type": "color"
     },
     "selection-ink": {
@@ -241,11 +241,23 @@
       "$type": "color"
     },
     "tab-fill": {
-      "$value": "{color.gray.835}",
+      "$value": "{primitive.simple2.dark-node}",
       "$type": "color"
     },
     "surface-edge": {
-      "$value": "{color.gray.635}",
+      "$value": "{primitive.simple2.dark-edge}",
+      "$type": "color"
+    },
+    "hover-fill": {
+      "$value": "{primitive.simple2.dark-hover}",
+      "$type": "color"
+    },
+    "row-selection": {
+      "$value": "{primitive.simple2.dark-selection}",
+      "$type": "color"
+    },
+    "data-line": {
+      "$value": "{primitive.simple2.dark-data-line}",
       "$type": "color"
     }
   }

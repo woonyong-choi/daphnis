@@ -136,12 +136,12 @@
 
 .fl .chart-whisker,
 .fl .chart-median {
-  stroke: var(--color-fg);
+  stroke: var(--simple2-data-line);
   stroke-width: var(--border-tag);
 }
 
 .fl .chart-ci {
-  stroke: var(--color-fg);
+  stroke: var(--simple2-data-line);
   stroke-width: var(--border-tag);
 }
 

@@ -37,86 +37,86 @@
   --color-blue-anchor: #1e66d8;
   --color-blue-light-fill: #edf4ff;
   --color-blue-light-stroke: #1e66d8;
-  --color-blue-light-ink: #0a57c8;
-  --color-blue-light-heat-low: #b3cbf2;
+  --color-blue-light-ink: #1760d2;
+  --color-blue-light-heat-low: #b4ccf2;
   --color-blue-light-heat-high: #0352c3;
   --color-blue-light-outline: #678dcb;
-  --color-blue-light-tint-1: #e5eefc;
-  --color-blue-light-tint-2: #d7e2f4;
-  --color-blue-light-tint-3: #c9d7ed;
-  --color-blue-dark-fill: #1b2a43;
+  --color-blue-light-tint-1: #e8f1ff;
+  --color-blue-light-tint-2: #dfebfd;
+  --color-blue-light-tint-3: #d7e5fb;
+  --color-blue-dark-fill: #08152d;
   --color-blue-dark-stroke: #6ca4ff;
-  --color-blue-dark-ink: #74a9ff;
-  --color-blue-dark-heat-low: #283851;
+  --color-blue-dark-ink: #6fa6ff;
+  --color-blue-dark-heat-low: #33445e;
   --color-blue-dark-heat-high: #4075cc;
-  --color-blue-dark-outline: #6489c3;
-  --color-blue-dark-tint-1: #1a202b;
-  --color-blue-dark-tint-2: #222a38;
-  --color-blue-dark-tint-3: #2a3546;
+  --color-blue-dark-outline: #577bb4;
+  --color-blue-dark-tint-1: #272e39;
+  --color-blue-dark-tint-2: #2c3543;
+  --color-blue-dark-tint-3: #323d4e;
   --color-purple-anchor: #b28fd1;
   --color-purple-light-fill: #f7f0ff;
-  --color-purple-light-stroke: #8c6aaa;
-  --color-purple-light-ink: #704f8c;
-  --color-purple-light-dot: #704f8c;
-  --color-purple-light-outline: #9884ac;
-  --color-purple-light-tint-1: #f1eaf9;
-  --color-purple-light-tint-2: #e6ddf0;
-  --color-purple-light-tint-3: #dcd1e8;
-  --color-purple-dark-fill: #31233d;
+  --color-purple-light-stroke: #9573b3;
+  --color-purple-light-ink: #795895;
+  --color-purple-light-dot: #795895;
+  --color-purple-light-outline: #9885ac;
+  --color-purple-light-tint-1: #f4ecfc;
+  --color-purple-light-tint-2: #efe5f9;
+  --color-purple-light-tint-3: #eadef6;
+  --color-purple-dark-fill: #1c0f27;
   --color-purple-dark-stroke: #b693d6;
-  --color-purple-dark-ink: #be9ade;
-  --color-purple-dark-dot: #9c7abb;
-  --color-purple-dark-outline: #977eae;
-  --color-purple-dark-tint-1: #231d28;
-  --color-purple-dark-tint-2: #2e2635;
-  --color-purple-dark-tint-3: #393042;
+  --color-purple-dark-ink: #bb98db;
+  --color-purple-dark-dot: #9a77b8;
+  --color-purple-dark-outline: #89709f;
+  --color-purple-dark-tint-1: #302b36;
+  --color-purple-dark-tint-2: #38303f;
+  --color-purple-dark-tint-3: #41374a;
   --color-red-anchor: #ef0f0f;
   --color-red-light-fill: #ffefed;
   --color-red-light-stroke: #c70005;
-  --color-red-light-ink: #be0004;
-  --color-red-light-dot: #6c0001;
+  --color-red-light-ink: #c70005;
+  --color-red-light-dot: #740001;
   --color-red-light-outline: #cd7367;
-  --color-red-dark-fill: #40201c;
+  --color-red-dark-fill: #290b08;
   --color-red-dark-stroke: #fc7182;
-  --color-red-dark-ink: #ff8390;
-  --color-red-dark-dot: #e25971;
-  --color-red-dark-outline: #c56f73;
+  --color-red-dark-ink: #ff7e8c;
+  --color-red-dark-dot: #df576f;
+  --color-red-dark-outline: #b56165;
   --color-green-anchor: #09c72c;
   --color-green-light-fill: #eaf8e9;
-  --color-green-light-stroke: #008c1a;
-  --color-green-light-ink: #006d12;
-  --color-green-light-dot: #006d12;
-  --color-green-light-outline: #629a61;
-  --color-green-dark-fill: #1a301a;
+  --color-green-light-stroke: #00971d;
+  --color-green-light-ink: #007715;
+  --color-green-light-dot: #007715;
+  --color-green-light-outline: #609b5f;
+  --color-green-dark-fill: #061b07;
   --color-green-dark-stroke: #58bf5a;
   --color-green-dark-ink: #58bf5a;
-  --color-green-dark-dot: #62c963;
-  --color-green-dark-outline: #5a9659;
+  --color-green-dark-dot: #5fc660;
+  --color-green-dark-outline: #4b874b;
   --color-orange-anchor: #e65200;
   --color-orange-light-fill: #fff0ea;
-  --color-orange-light-stroke: #d44b00;
-  --color-orange-light-ink: #a63900;
-  --color-orange-light-outline: #c47a5f;
-  --color-orange-dark-fill: #3f2116;
+  --color-orange-light-stroke: #e45100;
+  --color-orange-light-ink: #b43e00;
+  --color-orange-light-outline: #c6785b;
+  --color-orange-dark-fill: #280d04;
   --color-orange-dark-stroke: #fa7a49;
-  --color-orange-dark-ink: #ff875a;
-  --color-orange-dark-outline: #c37356;
+  --color-orange-dark-ink: #ff8253;
+  --color-orange-dark-outline: #b36548;
   --color-fg: var(--primitive-simple2-fg);
   --color-muted: var(--primitive-simple2-muted);
   --color-group-title: var(--primitive-simple2-group-title);
   --color-bg: var(--primitive-simple2-bg);
-  --color-group-1: var(--color-gray-71);
-  --color-group-2: var(--color-gray-118);
-  --color-group-3: var(--color-gray-161);
+  --color-group-1: var(--primitive-simple2-group-1);
+  --color-group-2: var(--primitive-simple2-group-2);
+  --color-group-3: var(--primitive-simple2-group-3);
   --color-node: var(--primitive-simple2-node);
   --color-surface: var(--primitive-simple2-surface);
   --color-card: var(--primitive-simple2-card);
   --color-card-on: var(--color-blue-light-fill);
   --color-page: var(--primitive-simple2-page);
-  --color-outline: var(--color-gray-529);
+  --color-outline: var(--primitive-simple2-light-outline);
   --color-border: var(--primitive-simple2-border);
   --color-plate-border: var(--primitive-simple2-plate-border);
-  --color-line: var(--color-gray-282);
+  --color-line: var(--primitive-simple2-line);
   --color-state-active: var(--color-blue-light-stroke);
   --color-state-active-fill: var(--color-blue-light-ink);
   --color-state-active-text: var(--color-blue-light-ink);
@@ -125,8 +125,8 @@
   --color-state-success: var(--color-green-light-stroke);
   --color-state-warning: var(--color-orange-light-stroke);
   --color-state-glow: var(--color-blue-light-fill);
-  --color-flow-brand: var(--color-blue-light-stroke);
-  --color-flow-purple: var(--color-purple-light-dot);
+  --color-flow-brand: var(--color-blue-light-ink);
+  --color-flow-purple: var(--primitive-simple2-flow-purple);
   --color-flow-green: var(--color-green-light-dot);
   --color-flow-gray: var(--color-gray-545);
   --color-flow-red: var(--color-red-light-dot);
@@ -235,32 +235,68 @@
   --simple2-micro-size: 11px;
   --simple2-surface-edge: var(--primitive-simple2-plate-border);
   --simple2-progress-width: 160px;
+  --simple2-hover-fill: var(--primitive-simple2-hover-fill);
+  --simple2-row-selection: var(--primitive-simple2-row-selection);
+  --simple2-data-line: var(--primitive-simple2-data-line);
   --primitive-simple2-fg: #303336;
-  --primitive-simple2-muted: #505b69;
-  --primitive-simple2-bg: #f2f5f7;
+  --primitive-simple2-muted: #566170;
+  --primitive-simple2-bg: #f5f6f8;
   --primitive-simple2-page: #ffffff;
   --primitive-simple2-node: #ffffff;
-  --primitive-simple2-card: #f6f7fa;
-  --primitive-simple2-surface: #edeef1;
-  --primitive-simple2-plate-border: #d9dce1;
+  --primitive-simple2-card: #f2f3f5;
+  --primitive-simple2-surface: #eef0f3;
+  --primitive-simple2-plate-border: #d4d8de;
   --primitive-simple2-border: #838b96;
   --primitive-simple2-shadow: 0 2px 8px rgba(0,0,0,.10), 0 0 2px rgba(0,0,0,.10);
   --primitive-simple2-play-fill: #4f91fb;
   --primitive-simple2-play-ink: #ffffff;
   --primitive-simple2-node-shadow: drop-shadow(0px 1px 1px rgba(0,0,0,.07));
-  --primitive-simple2-group-title: #505b69;
-  --primitive-simple2-canvas: #f5f5f7;
+  --primitive-simple2-group-title: #566170;
+  --primitive-simple2-canvas: #f5f6f8;
   --primitive-simple2-selection-fill: #e3e4e8;
   --primitive-simple2-selection-ink: #303336;
   --primitive-simple2-tab-fill: #f5f5f7;
-  --primitive-simple2-icon-service: #1e6bd6;
-  --primitive-simple2-icon-data: #269c6e;
-  --primitive-simple2-icon-access: #a78b16;
-  --primitive-simple2-icon-person: #c62859;
-  --primitive-simple2-icon-service-face: #edf4ff;
-  --primitive-simple2-icon-data-face: #eaf5ef;
-  --primitive-simple2-icon-access-face: #fff8d5;
-  --primitive-simple2-icon-person-face: #fff0f4;
+  --primitive-simple2-icon-service: #3688cb;
+  --primitive-simple2-icon-data: #299b8f;
+  --primitive-simple2-icon-access: #9b8950;
+  --primitive-simple2-icon-person: #d74474;
+  --primitive-simple2-icon-service-face: #e7f3fc;
+  --primitive-simple2-icon-data-face: #e8f5f2;
+  --primitive-simple2-icon-access-face: #f7f2df;
+  --primitive-simple2-icon-person-face: #fcecf2;
+  --primitive-simple2-group-1: #eef0f3;
+  --primitive-simple2-group-2: #e7eaee;
+  --primitive-simple2-group-3: #e0e4e9;
+  --primitive-simple2-hover-fill: #eef4fc;
+  --primitive-simple2-row-selection: #cee2fd;
+  --primitive-simple2-line: #9da5b0;
+  --primitive-simple2-data-line: #737e8b;
+  --primitive-simple2-dark-bg: #26272b;
+  --primitive-simple2-dark-page: #1d1e22;
+  --primitive-simple2-dark-node: #303136;
+  --primitive-simple2-dark-card: #36373b;
+  --primitive-simple2-dark-edge: #50535b;
+  --primitive-simple2-dark-separator: #454850;
+  --primitive-simple2-dark-hover: #343e50;
+  --primitive-simple2-dark-selection: #274174;
+  --primitive-simple2-dark-muted: #a9adb6;
+  --primitive-simple2-dark-group-1: #2c2d32;
+  --primitive-simple2-dark-group-2: #32343a;
+  --primitive-simple2-dark-group-3: #393c43;
+  --primitive-simple2-dark-line: #7f8793;
+  --primitive-simple2-dark-data-line: #acb4c0;
+  --primitive-simple2-dark-icon-service: #6cb9ef;
+  --primitive-simple2-dark-icon-service-face: #263e50;
+  --primitive-simple2-dark-icon-data: #64beb0;
+  --primitive-simple2-dark-icon-data-face: #263f3a;
+  --primitive-simple2-dark-icon-access: #ccbd80;
+  --primitive-simple2-dark-icon-access-face: #423d2d;
+  --primitive-simple2-dark-icon-person: #ed82a3;
+  --primitive-simple2-dark-icon-person-face: #492f3b;
+  --primitive-simple2-light-outline: #818181;
+  --primitive-simple2-dark-outline: #868686;
+  --primitive-simple2-flow-purple: #70508c;
+  --primitive-simple2-dark-paint-gray: #121318;
   --color-palette-amber-light-fill: var(--color-orange-light-fill);
   --color-palette-amber-light-stroke: var(--color-orange-light-stroke);
   --color-palette-amber-light-ink: var(--color-orange-light-ink);
@@ -302,26 +338,26 @@
   --color-palette-sky-light-tint-2: var(--color-blue-light-tint-2);
   --color-palette-sky-light-tint-3: var(--color-blue-light-tint-3);
   --color-palette-sky-light-outline: #648bca;
-  --color-palette-sky-dark-fill: #1b2a43;
+  --color-palette-sky-dark-fill: #08152c;
   --color-palette-sky-dark-stroke: var(--color-blue-dark-stroke);
   --color-palette-sky-dark-ink: var(--color-blue-dark-ink);
   --color-palette-sky-dark-tint-1: var(--color-blue-dark-tint-1);
   --color-palette-sky-dark-tint-2: var(--color-blue-dark-tint-2);
   --color-palette-sky-dark-tint-3: var(--color-blue-dark-tint-3);
-  --color-palette-sky-dark-outline: #6489c3;
+  --color-palette-sky-dark-outline: #587bb5;
   --color-palette-slate-light-fill: #e7e7e7;
   --color-palette-slate-light-stroke: var(--color-gray-635);
   --color-palette-slate-light-ink: var(--color-gray-635);
   --color-palette-slate-light-dot: var(--color-gray-545);
-  --color-palette-slate-dark-fill: var(--color-gray-788);
+  --color-palette-slate-dark-fill: var(--primitive-simple2-dark-paint-gray);
   --color-palette-slate-dark-stroke: var(--color-gray-333);
   --color-palette-slate-dark-ink: var(--color-gray-333);
   --color-palette-slate-dark-dot: var(--color-gray-220);
   --color-palette-slate-light-outline: #848484;
-  --color-palette-slate-dark-outline: #888888;
+  --color-palette-slate-dark-outline: #797a7d;
   --color-figure-icon: var(--color-blue-light-stroke);
   --color-figure-icon-tile: var(--color-blue-light-fill);
-  --color-figure-queue-fill: var(--color-blue-light-stroke);
+  --color-figure-queue-fill: var(--color-blue-light-ink);
   --color-figure-queue-empty: var(--color-gray-161);
   --color-paint-red-fill: var(--color-red-light-fill);
   --color-paint-red-stroke: var(--color-red-light-stroke);
@@ -380,7 +416,7 @@
   --size-control-outer: 52px;
   --size-control-inner: 44px;
   --size-control-icon: 20px;
-  --size-control-icon-stroke: 1.75px;
+  --size-control-icon-stroke: 2.5px;
   --size-pill-height: 18px;
   --size-icon-node: 20px;
   --size-icon-group: 18px;
@@ -489,21 +525,21 @@
 
   :root {
     --color-fg: var(--color-gray-59);
-    --color-muted: var(--color-gray-333);
-    --color-group-title: var(--color-gray-333);
-    --color-bg: var(--color-gray-910);
-    --color-group-1: var(--color-gray-875);
-    --color-group-2: var(--color-gray-835);
-    --color-group-3: var(--color-gray-796);
-    --color-node: var(--color-gray-757);
-    --color-surface: var(--color-gray-788);
-    --color-card: var(--color-gray-788);
+    --color-muted: var(--primitive-simple2-dark-muted);
+    --color-group-title: var(--primitive-simple2-dark-muted);
+    --color-bg: var(--primitive-simple2-dark-bg);
+    --color-group-1: var(--primitive-simple2-dark-group-1);
+    --color-group-2: var(--primitive-simple2-dark-group-2);
+    --color-group-3: var(--primitive-simple2-dark-group-3);
+    --color-node: var(--primitive-simple2-dark-node);
+    --color-surface: var(--primitive-simple2-dark-card);
+    --color-card: var(--primitive-simple2-dark-card);
     --color-card-on: var(--color-blue-dark-fill);
-    --color-page: var(--color-gray-929);
-    --color-outline: var(--color-gray-467);
+    --color-page: var(--primitive-simple2-dark-page);
+    --color-outline: var(--primitive-simple2-dark-outline);
     --color-border: var(--primitive-simple2-border);
-    --color-plate-border: var(--color-gray-788);
-    --color-line: var(--color-gray-651);
+    --color-plate-border: var(--primitive-simple2-dark-edge);
+    --color-line: var(--primitive-simple2-dark-line);
     --color-state-active: var(--color-blue-dark-stroke);
     --color-state-active-fill: var(--color-blue-dark-stroke);
     --color-state-active-text: var(--color-blue-dark-ink);
@@ -512,7 +548,7 @@
     --color-state-success: var(--color-green-dark-stroke);
     --color-state-warning: var(--color-orange-dark-stroke);
     --color-state-glow: var(--color-blue-dark-fill);
-    --color-flow-brand: var(--color-blue-dark-stroke);
+    --color-flow-brand: var(--color-blue-dark-ink);
     --color-flow-purple: var(--color-purple-dark-dot);
     --color-flow-green: var(--color-green-dark-dot);
     --color-flow-gray: var(--color-gray-220);
@@ -526,27 +562,30 @@
     --color-data-heat-low: var(--color-blue-dark-heat-low);
     --color-data-heat-high: var(--color-blue-dark-heat-high);
     --color-data-heat-ink: var(--color-gray-0);
-    --color-data-grid: var(--color-gray-776);
+    --color-data-grid: var(--primitive-simple2-dark-edge);
     --color-accent: var(--color-blue-dark-stroke);
-    --color-figure-icon-service-ink: var(--color-blue-dark-ink);
-    --color-figure-icon-service-surface: var(--color-blue-dark-fill);
-    --color-figure-icon-data-ink: var(--color-purple-dark-ink);
-    --color-figure-icon-data-surface: var(--color-purple-dark-fill);
-    --color-figure-icon-access-ink: var(--color-orange-dark-ink);
-    --color-figure-icon-access-surface: var(--color-orange-dark-fill);
-    --color-figure-icon-person-ink: var(--color-green-dark-ink);
-    --color-figure-icon-person-surface: var(--color-green-dark-fill);
+    --color-figure-icon-service-ink: var(--primitive-simple2-dark-icon-service);
+    --color-figure-icon-service-surface: var(--primitive-simple2-dark-icon-service-face);
+    --color-figure-icon-data-ink: var(--primitive-simple2-dark-icon-data);
+    --color-figure-icon-data-surface: var(--primitive-simple2-dark-icon-data-face);
+    --color-figure-icon-access-ink: var(--primitive-simple2-dark-icon-access);
+    --color-figure-icon-access-surface: var(--primitive-simple2-dark-icon-access-face);
+    --color-figure-icon-person-ink: var(--primitive-simple2-dark-icon-person);
+    --color-figure-icon-person-surface: var(--primitive-simple2-dark-icon-person-face);
     --color-figure-icon-brand-ink: var(--color-gray-220);
     --color-figure-icon-brand-surface: var(--color-gray-835);
     --simple2-play-fill: var(--color-blue-dark-stroke);
     --simple2-play-ink: var(--color-gray-933);
     --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-    --simple2-separator: var(--color-gray-635);
-    --simple2-canvas-fill: var(--color-gray-910);
-    --simple2-selection-fill: var(--color-gray-757);
+    --simple2-separator: var(--primitive-simple2-dark-separator);
+    --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
+    --simple2-selection-fill: var(--primitive-simple2-dark-edge);
     --simple2-selection-ink: var(--color-gray-0);
-    --simple2-tab-fill: var(--color-gray-835);
-    --simple2-surface-edge: var(--color-gray-635);
+    --simple2-tab-fill: var(--primitive-simple2-dark-node);
+    --simple2-surface-edge: var(--primitive-simple2-dark-edge);
+    --simple2-hover-fill: var(--primitive-simple2-dark-hover);
+    --simple2-row-selection: var(--primitive-simple2-dark-selection);
+    --simple2-data-line: var(--primitive-simple2-dark-data-line);
     --color-figure-icon: var(--color-blue-dark-stroke);
     --color-figure-icon-tile: var(--color-blue-dark-fill);
     --color-figure-queue-fill: var(--color-blue-dark-stroke);
@@ -602,21 +641,21 @@
 
 [data-theme='dark'] {
   --color-fg: var(--color-gray-59);
-  --color-muted: var(--color-gray-333);
-  --color-group-title: var(--color-gray-333);
-  --color-bg: var(--color-gray-910);
-  --color-group-1: var(--color-gray-875);
-  --color-group-2: var(--color-gray-835);
-  --color-group-3: var(--color-gray-796);
-  --color-node: var(--color-gray-757);
-  --color-surface: var(--color-gray-788);
-  --color-card: var(--color-gray-788);
+  --color-muted: var(--primitive-simple2-dark-muted);
+  --color-group-title: var(--primitive-simple2-dark-muted);
+  --color-bg: var(--primitive-simple2-dark-bg);
+  --color-group-1: var(--primitive-simple2-dark-group-1);
+  --color-group-2: var(--primitive-simple2-dark-group-2);
+  --color-group-3: var(--primitive-simple2-dark-group-3);
+  --color-node: var(--primitive-simple2-dark-node);
+  --color-surface: var(--primitive-simple2-dark-card);
+  --color-card: var(--primitive-simple2-dark-card);
   --color-card-on: var(--color-blue-dark-fill);
-  --color-page: var(--color-gray-929);
-  --color-outline: var(--color-gray-467);
+  --color-page: var(--primitive-simple2-dark-page);
+  --color-outline: var(--primitive-simple2-dark-outline);
   --color-border: var(--primitive-simple2-border);
-  --color-plate-border: var(--color-gray-788);
-  --color-line: var(--color-gray-651);
+  --color-plate-border: var(--primitive-simple2-dark-edge);
+  --color-line: var(--primitive-simple2-dark-line);
   --color-state-active: var(--color-blue-dark-stroke);
   --color-state-active-fill: var(--color-blue-dark-stroke);
   --color-state-active-text: var(--color-blue-dark-ink);
@@ -625,7 +664,7 @@
   --color-state-success: var(--color-green-dark-stroke);
   --color-state-warning: var(--color-orange-dark-stroke);
   --color-state-glow: var(--color-blue-dark-fill);
-  --color-flow-brand: var(--color-blue-dark-stroke);
+  --color-flow-brand: var(--color-blue-dark-ink);
   --color-flow-purple: var(--color-purple-dark-dot);
   --color-flow-green: var(--color-green-dark-dot);
   --color-flow-gray: var(--color-gray-220);
@@ -639,27 +678,30 @@
   --color-data-heat-low: var(--color-blue-dark-heat-low);
   --color-data-heat-high: var(--color-blue-dark-heat-high);
   --color-data-heat-ink: var(--color-gray-0);
-  --color-data-grid: var(--color-gray-776);
+  --color-data-grid: var(--primitive-simple2-dark-edge);
   --color-accent: var(--color-blue-dark-stroke);
-  --color-figure-icon-service-ink: var(--color-blue-dark-ink);
-  --color-figure-icon-service-surface: var(--color-blue-dark-fill);
-  --color-figure-icon-data-ink: var(--color-purple-dark-ink);
-  --color-figure-icon-data-surface: var(--color-purple-dark-fill);
-  --color-figure-icon-access-ink: var(--color-orange-dark-ink);
-  --color-figure-icon-access-surface: var(--color-orange-dark-fill);
-  --color-figure-icon-person-ink: var(--color-green-dark-ink);
-  --color-figure-icon-person-surface: var(--color-green-dark-fill);
+  --color-figure-icon-service-ink: var(--primitive-simple2-dark-icon-service);
+  --color-figure-icon-service-surface: var(--primitive-simple2-dark-icon-service-face);
+  --color-figure-icon-data-ink: var(--primitive-simple2-dark-icon-data);
+  --color-figure-icon-data-surface: var(--primitive-simple2-dark-icon-data-face);
+  --color-figure-icon-access-ink: var(--primitive-simple2-dark-icon-access);
+  --color-figure-icon-access-surface: var(--primitive-simple2-dark-icon-access-face);
+  --color-figure-icon-person-ink: var(--primitive-simple2-dark-icon-person);
+  --color-figure-icon-person-surface: var(--primitive-simple2-dark-icon-person-face);
   --color-figure-icon-brand-ink: var(--color-gray-220);
   --color-figure-icon-brand-surface: var(--color-gray-835);
   --simple2-play-fill: var(--color-blue-dark-stroke);
   --simple2-play-ink: var(--color-gray-933);
   --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-  --simple2-separator: var(--color-gray-635);
-  --simple2-canvas-fill: var(--color-gray-910);
-  --simple2-selection-fill: var(--color-gray-757);
+  --simple2-separator: var(--primitive-simple2-dark-separator);
+  --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
+  --simple2-selection-fill: var(--primitive-simple2-dark-edge);
   --simple2-selection-ink: var(--color-gray-0);
-  --simple2-tab-fill: var(--color-gray-835);
-  --simple2-surface-edge: var(--color-gray-635);
+  --simple2-tab-fill: var(--primitive-simple2-dark-node);
+  --simple2-surface-edge: var(--primitive-simple2-dark-edge);
+  --simple2-hover-fill: var(--primitive-simple2-dark-hover);
+  --simple2-row-selection: var(--primitive-simple2-dark-selection);
+  --simple2-data-line: var(--primitive-simple2-dark-data-line);
   --color-figure-icon: var(--color-blue-dark-stroke);
   --color-figure-icon-tile: var(--color-blue-dark-fill);
   --color-figure-queue-fill: var(--color-blue-dark-stroke);
@@ -874,8 +916,8 @@
 }
 
 .fl .pill {
-  fill: var(--color-node);
-  stroke: var(--color-outline);
+  fill: var(--color-card);
+  stroke: var(--simple2-separator);
 }
 
 .fl .part-bg {
@@ -889,7 +931,7 @@
 
 .fl .grid-cell {
   fill: var(--color-node);
-  stroke: var(--color-outline);
+  stroke: var(--simple2-separator);
   stroke-width: var(--border-thin);
 }
 
@@ -899,9 +941,8 @@
 }
 
 .fl .grid-cell.gap {
-  fill: var(--color-surface);
-  stroke: var(--color-line);
-  stroke-dasharray: var(--dash-card) var(--dash-card);
+  fill: var(--color-card);
+  stroke: var(--simple2-separator);
 }
 
 .fl .grid-cell.empty {
@@ -923,8 +964,8 @@
 }
 
 .fl .badge-pill {
-  fill: var(--color-node);
-  stroke: var(--color-outline);
+  fill: var(--color-card);
+  stroke: var(--simple2-separator);
   stroke-width: var(--border-thin);
 }
 
@@ -938,7 +979,7 @@
 
 /* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
 .fl .number-pill {
-  fill: var(--color-fg);
+  fill: var(--color-muted);
 }
 
 .fl .number {
@@ -950,6 +991,7 @@
 
 /* 표면에만 그림자를 두어 글자·아이콘·선의 가장자리는 선명하게 유지한다. */
 .fl :where(.fl-node) > .fl-stroke {
+  stroke: var(--simple2-surface-edge);
   stroke-width: var(--simple2-node-stroke);
 }
 
@@ -960,7 +1002,11 @@
 }
 
 .fl .fl-path,
-.fl .fl-node > .fl-stroke {
+.fl .fl-node > .fl-stroke,
+.fl .grid-cell,
+.fl .col-line,
+.fl .pill,
+.fl .badge-pill {
   vector-effect: non-scaling-stroke;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -982,7 +1028,7 @@
 
 .fl .symbol-cut {
   fill: none;
-  stroke: var(--color-node);
+  stroke: currentColor;
 }
 
 .fl .fl-symbol-service {
@@ -1024,6 +1070,26 @@
 .fl .fl-symbol-brand .symbol-face {
   fill: var(--color-figure-icon-brand-surface);
 }
+
+.fl .fl-node.on > .fl-stroke {
+  stroke: var(--color-state-active);
+  stroke-width: var(--simple2-node-stroke);
+}
+
+/* 호버와 키보드 초점은 같은 도형 면을 가리키며 윤곽을 두 겹으로 만들지 않는다. */
+.fl .fl-node.is-hovered > .fl-stroke:not([fill="none"]),
+.fl .fl-node:hover > .fl-stroke:not([fill="none"]) {
+  fill: var(--simple2-hover-fill);
+}
+
+.fl .fl-node:focus-visible {
+  outline: none;
+}
+
+.fl .fl-node:focus-visible > .fl-stroke {
+  stroke: var(--color-ui-focus);
+  stroke-width: var(--simple2-focus-width);
+}
 /* 움직이는 SVG에만 있는 단계 이름과 설명 줄 */
 .fl .steplabel {
   font-family: var(--font-figure-sans);
@@ -1044,136 +1110,112 @@
 .fl .a0 { animation: a0 67.888s infinite linear; }
 @keyframes a1 { 0%,8.109% { stroke: none; stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: none; stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: none; stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: none; stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: none; stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: none; stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: none; stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: none; stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: none; stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: none; stroke-width: var(--border-thin) } 90.788%,100% { stroke: none; stroke-width: var(--border-thin) } }
 .fl .a1 { animation: a1 67.888s infinite linear; }
-@keyframes a2 { 0%,8.109% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 8.109%,12.601% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 12.602% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 12.896%,31.458% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a2 { 0%,8.109% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 8.109%,12.601% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 12.602% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 12.896%,31.458% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a2 { animation: a2 67.888s infinite linear; }
-@keyframes a3 { 0%,8.109% { opacity: 1 } 8.109%,12.601% { opacity: 1 } 12.602% { opacity: 1 } 12.896%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
+@keyframes a3 { 0%,8.109% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 69.428% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 69.722%,75.806% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 75.806% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 76.1%,90.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a3 { animation: a3 67.888s infinite linear; }
-@keyframes a4 { 0%,8.109% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.428% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.722%,75.806% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 75.806% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 76.1%,90.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a4 { 0%,8.109% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 69.428% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 69.722%,75.806% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 75.806%,90.788% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 90.788%,100% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } }
 .fl .a4 { animation: a4 67.888s infinite linear; }
-@keyframes a5 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428% { opacity: 0 } 69.722%,75.806% { opacity: 1 } 75.806% { opacity: 1 } 76.1%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
+@keyframes a5 { 0%,8.109% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 8.109% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 8.404%,12.601% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 12.602%,31.458% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 31.458%,36.861% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 36.861% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 37.155%,44.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a5 { animation: a5 67.888s infinite linear; }
-@keyframes a6 { 0%,8.109% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.428% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.722%,75.806% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 75.806%,90.788% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 90.788%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
+@keyframes a6 { 0%,8.109% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a6 { animation: a6 67.888s infinite linear; }
-@keyframes a7 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428% { opacity: 0 } 69.722%,75.806% { opacity: 1 } 75.806%,90.788% { opacity: 1 } 90.788%,100% { opacity: 1 } }
+@keyframes a7 { 0%,8.109% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 12.602% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 12.896%,31.458% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 31.458%,36.861% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 36.861% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 37.155%,44.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a7 { animation: a7 67.888s infinite linear; }
-@keyframes a8 { 0%,8.109% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 8.109% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 8.404%,12.601% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 12.602%,31.458% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 31.458%,36.861% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 36.861% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 37.155%,44.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a8 { 0%,8.109% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 75.806% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 76.1%,90.788% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 90.788%,100% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } }
 .fl .a8 { animation: a8 67.888s infinite linear; }
-@keyframes a9 { 0%,8.109% { opacity: 0 } 8.109% { opacity: 0 } 8.404%,12.601% { opacity: 1 } 12.602%,31.458% { opacity: 1 } 31.458%,36.861% { opacity: 1 } 36.861% { opacity: 1 } 37.155%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
+@keyframes a9 { 0%,8.109% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 31.458% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 31.752%,36.861% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 36.861%,44.788% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 44.788%,53.38% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 53.381% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 53.675%,62.898% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a9 { animation: a9 67.888s infinite linear; }
-@keyframes a10 { 0%,8.109% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a10 { 0%,8.109% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 36.861% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 37.155%,44.788% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 44.788%,53.38% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 53.381%,62.898% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 62.898%,69.427% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 69.428% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 69.722%,75.806% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 90.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 91.082%,100% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } }
 .fl .a10 { animation: a10 67.888s infinite linear; }
-@keyframes a11 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
+@keyframes a11 { 0%,8.109% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 53.381% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 53.675%,62.898% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 62.898%,69.427% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 69.428% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 69.722%,75.806% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a11 { animation: a11 67.888s infinite linear; }
-@keyframes a12 { 0%,8.109% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 12.602% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 12.896%,31.458% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 31.458%,36.861% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 36.861% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 37.155%,44.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a12 { 0%,8.109% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 62.898% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 63.192%,69.427% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 69.428% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 69.722%,75.806% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a12 { animation: a12 67.888s infinite linear; }
-@keyframes a13 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602% { opacity: 0 } 12.896%,31.458% { opacity: 1 } 31.458%,36.861% { opacity: 1 } 36.861% { opacity: 1 } 37.155%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
+@keyframes a13 { 0%,8.109% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 44.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 45.083%,53.38% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 53.381% { stroke: var(--color-state-active); stroke-width: var(--simple2-node-stroke) } 53.675%,62.898% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--simple2-surface-edge); stroke-width: var(--border-thin) } }
 .fl .a13 { animation: a13 67.888s infinite linear; }
-@keyframes a14 { 0%,8.109% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 75.806% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 76.1%,90.788% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 90.788%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
+@keyframes a14 { 0%,8.109% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 8.109%,12.601% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 12.602% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 12.896%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a14 { animation: a14 67.888s infinite linear; }
-@keyframes a15 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,75.806% { opacity: 0 } 75.806% { opacity: 0 } 76.1%,90.788% { opacity: 1 } 90.788%,100% { opacity: 1 } }
+@keyframes a15 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.404%,12.601% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 12.602% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 12.896%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a15 { animation: a15 67.888s infinite linear; }
-@keyframes a16 { 0%,8.109% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 31.458% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 31.752%,36.861% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 36.861%,44.788% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 44.788%,53.38% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 53.381% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 53.675%,62.898% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a16 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.896%,31.458% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 31.458%,36.861% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 36.861% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 37.155%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a16 { animation: a16 67.888s infinite linear; }
-@keyframes a17 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458% { opacity: 0 } 31.752%,36.861% { opacity: 1 } 36.861%,44.788% { opacity: 1 } 44.788%,53.38% { opacity: 1 } 53.381% { opacity: 1 } 53.675%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
+@keyframes a17 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.752%,36.861% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 36.861% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 37.155%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a17 { animation: a17 67.888s infinite linear; }
-@keyframes a18 { 0%,8.109% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 36.861% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 37.155%,44.788% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 44.788%,53.38% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 53.381%,62.898% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 62.898%,69.427% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 69.428% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 69.722%,75.806% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 90.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 91.082%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } }
+@keyframes a18 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.155%,44.788% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 44.788%,53.38% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 53.381% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 53.675%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a18 { animation: a18 67.888s infinite linear; }
-@keyframes a19 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861% { opacity: 0 } 37.155%,44.788% { opacity: 1 } 44.788%,53.38% { opacity: 1 } 53.381%,62.898% { opacity: 1 } 62.898%,69.427% { opacity: 1 } 69.428% { opacity: 1 } 69.722%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788% { opacity: 0 } 91.082%,100% { opacity: 1 } }
+@keyframes a19 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.675%,62.898% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 62.898%,69.427% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 69.428% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 69.722%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a19 { animation: a19 67.888s infinite linear; }
-@keyframes a20 { 0%,8.109% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 53.381% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 53.675%,62.898% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 62.898%,69.427% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 69.428% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 69.722%,75.806% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a20 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.722%,75.806% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 75.806% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 76.1%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a20 { animation: a20 67.888s infinite linear; }
-@keyframes a21 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381% { opacity: 0 } 53.675%,62.898% { opacity: 1 } 62.898%,69.427% { opacity: 1 } 69.428% { opacity: 1 } 69.722%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
+@keyframes a21 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.1%,90.788% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 90.788%,100% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } }
 .fl .a21 { animation: a21 67.888s infinite linear; }
-@keyframes a22 { 0%,8.109% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.788%,53.38% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 53.381%,62.898% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 62.898% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 63.192%,69.427% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 69.428% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 69.722%,75.806% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a22 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 91.082%,100% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } }
 .fl .a22 { animation: a22 67.888s infinite linear; }
-@keyframes a23 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898% { opacity: 0 } 63.192%,69.427% { opacity: 1 } 69.428% { opacity: 1 } 69.722%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
+@keyframes a23 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 63.192%,69.427% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 69.428% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 69.722%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a23 { animation: a23 67.888s infinite linear; }
-@keyframes a24 { 0%,8.109% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 8.109%,12.601% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 12.602%,31.458% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 31.458%,36.861% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 36.861%,44.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 44.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 45.083%,53.38% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 53.381% { stroke: var(--color-state-active); stroke-width: var(--border-strong) } 53.675%,62.898% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 62.898%,69.427% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 69.428%,75.806% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 75.806%,90.788% { stroke: var(--color-outline); stroke-width: var(--border-thin) } 90.788%,100% { stroke: var(--color-outline); stroke-width: var(--border-thin) } }
+@keyframes a24 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 45.083%,53.38% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 53.381% { stroke: var(--color-state-active); stroke-width: var(--border-edge); marker-end: url(#fl-arrow-on) } 53.675%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a24 { animation: a24 67.888s infinite linear; }
-@keyframes a25 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788% { opacity: 0 } 45.083%,53.38% { opacity: 1 } 53.381% { opacity: 1 } 53.675%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
+@keyframes a25 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
 .fl .a25 { animation: a25 67.888s infinite linear; }
-@keyframes a26 { 0%,8.109% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 8.109%,12.601% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 12.602% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 12.896%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a26 { 0%,8.109% { opacity: 1 } 8.109%,12.601% { opacity: 1 } 12.602% { opacity: 1 } 12.896%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
 .fl .a26 { animation: a26 67.888s infinite linear; }
-@keyframes a27 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.404%,12.601% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 12.602% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 12.896%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a27 { 0%,8.109% { opacity: 0 } 8.109%,12.896% { opacity: 0 } 12.896% { opacity: 0 } 13.191%,31.458% { opacity: 1 } 31.458%,36.861% { opacity: 1 } 36.861% { opacity: 1 } 37.155%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
 .fl .a27 { animation: a27 67.888s infinite linear; }
-@keyframes a28 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.896%,31.458% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 31.458%,36.861% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 36.861% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 37.155%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a28 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,37.155% { opacity: 0 } 37.155% { opacity: 0 } 37.45%,44.788% { opacity: 1 } 44.788%,53.38% { opacity: 1 } 53.381% { opacity: 1 } 53.675%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
 .fl .a28 { animation: a28 67.888s infinite linear; }
-@keyframes a29 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.752%,36.861% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 36.861% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 37.155%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a29 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.675% { opacity: 0 } 53.675% { opacity: 0 } 53.97%,62.898% { opacity: 1 } 62.898%,69.427% { opacity: 1 } 69.428% { opacity: 1 } 69.722%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
 .fl .a29 { animation: a29 67.888s infinite linear; }
-@keyframes a30 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 37.155%,44.788% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 44.788%,53.38% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 53.381% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 53.675%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a30 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.722% { opacity: 0 } 69.722% { opacity: 0 } 70.017%,75.806% { opacity: 1 } 75.806% { opacity: 1 } 76.1%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
 .fl .a30 { animation: a30 67.888s infinite linear; }
-@keyframes a31 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.675%,62.898% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 62.898%,69.427% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 69.428% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 69.722%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
+@keyframes a31 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,76.1% { opacity: 0 } 76.1% { opacity: 0 } 76.395%,90.788% { opacity: 1 } 90.788%,100% { opacity: 1 } }
 .fl .a31 { animation: a31 67.888s infinite linear; }
-@keyframes a32 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.722%,75.806% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 75.806% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 76.1%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
-.fl .a32 { animation: a32 67.888s infinite linear; }
-@keyframes a33 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 76.1%,90.788% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 90.788%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
-.fl .a33 { animation: a33 67.888s infinite linear; }
-@keyframes a34 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 91.082%,100% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } }
-.fl .a34 { animation: a34 67.888s infinite linear; }
-@keyframes a35 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 63.192%,69.427% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 69.428% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 69.722%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
-.fl .a35 { animation: a35 67.888s infinite linear; }
-@keyframes a36 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 45.083%,53.38% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 53.381% { stroke: var(--color-state-active); stroke-width: var(--border-strong); marker-end: url(#fl-arrow-on) } 53.675%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
-.fl .a36 { animation: a36 67.888s infinite linear; }
-@keyframes a37 { 0%,8.109% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 8.109%,12.601% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 12.602%,31.458% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 31.458%,36.861% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 36.861%,44.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 44.788%,53.38% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 53.381%,62.898% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 62.898%,69.427% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 69.428%,75.806% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 75.806%,90.788% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } 90.788%,100% { stroke: var(--color-line); stroke-width: var(--border-edge); marker-end: url(#fl-arrow) } }
-.fl .a37 { animation: a37 67.888s infinite linear; }
-@keyframes a38 { 0%,8.109% { opacity: 1 } 8.109%,12.601% { opacity: 1 } 12.602% { opacity: 1 } 12.896%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
-.fl .a38 { animation: a38 67.888s infinite linear; }
-@keyframes a39 { 0%,8.109% { opacity: 0 } 8.109%,12.896% { opacity: 0 } 12.896% { opacity: 0 } 13.191%,31.458% { opacity: 1 } 31.458%,36.861% { opacity: 1 } 36.861% { opacity: 1 } 37.155%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
-.fl .a39 { animation: a39 67.888s infinite linear; }
-@keyframes a40 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,37.155% { opacity: 0 } 37.155% { opacity: 0 } 37.45%,44.788% { opacity: 1 } 44.788%,53.38% { opacity: 1 } 53.381% { opacity: 1 } 53.675%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
-.fl .a40 { animation: a40 67.888s infinite linear; }
-@keyframes a41 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.675% { opacity: 0 } 53.675% { opacity: 0 } 53.97%,62.898% { opacity: 1 } 62.898%,69.427% { opacity: 1 } 69.428% { opacity: 1 } 69.722%,75.806% { opacity: 0 } 75.806%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
-.fl .a41 { animation: a41 67.888s infinite linear; }
-@keyframes a42 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.722% { opacity: 0 } 69.722% { opacity: 0 } 70.017%,75.806% { opacity: 1 } 75.806% { opacity: 1 } 76.1%,90.788% { opacity: 0 } 90.788%,100% { opacity: 0 } }
-.fl .a42 { animation: a42 67.888s infinite linear; }
-@keyframes a43 { 0%,8.109% { opacity: 0 } 8.109%,12.601% { opacity: 0 } 12.602%,31.458% { opacity: 0 } 31.458%,36.861% { opacity: 0 } 36.861%,44.788% { opacity: 0 } 44.788%,53.38% { opacity: 0 } 53.381%,62.898% { opacity: 0 } 62.898%,69.427% { opacity: 0 } 69.428%,76.1% { opacity: 0 } 76.1% { opacity: 0 } 76.395%,90.788% { opacity: 1 } 90.788%,100% { opacity: 1 } }
-.fl .a43 { animation: a43 67.888s infinite linear; }
 </style>
 <defs><marker id="fl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-line)"/></marker><marker id="fl-arrow-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-state-active)"/></marker><marker id="fl-arrow-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="var(--color-data-main)"/></marker></defs>
 <rect x="0.5" y="0.5" width="1439" height="1879" rx="12" fill="var(--simple2-canvas-fill)"/>
 <g transform="translate(200.4 0)">
-<g id="g-0" class="fl-group tabbed" data-id="users"><rect x="188" y="28" width="128" height="146" rx="18" class="frame-box fl-stroke dashed a0" stroke-dasharray="5 4"/><g class="fl-symbol fl-symbol-person"><g class="fl-symbol-glyph" transform="translate(196 32) scale(0.83333)"><circle class="symbol-solid" cx="12" cy="7" r="4"/><path class="symbol-solid" d="M4 21v-3a8 6 0 0 1 16 0v3Z"/></g></g><text x="234" y="46" class="frame">Users</text></g>
-<g id="g-1" class="fl-group tabbed" data-id="admins"><rect x="28" y="376" width="128" height="288" rx="18" class="frame-box fl-stroke dashed a0" stroke-dasharray="5 4"/><g class="fl-symbol fl-symbol-access"><g class="fl-symbol-glyph" transform="translate(36 380) scale(0.83333)"><circle class="symbol-solid" cx="12" cy="7" r="4"/><path class="symbol-solid" d="M4 21v-3a8 6 0 0 1 16 0v3Z"/><path class="symbol-cut" d="m8 17 3 3 5-5"/></g></g><text x="74" y="394" class="frame">Admins</text></g>
+<g id="g-0" class="fl-group tabbed" data-id="users"><rect x="188" y="28" width="128" height="146" rx="18" class="frame-box fl-stroke dashed a0" stroke-dasharray="5 4"/><g class="fl-symbol fl-symbol-person"><g class="fl-symbol-glyph" transform="translate(196 32) scale(0.83333)"><circle class="symbol-face" cx="12" cy="7" r="4"/><path class="symbol-face" d="M4 21v-3a8 6 0 0 1 16 0v3Z"/></g></g><text x="234" y="46" class="frame">Users</text></g>
+<g id="g-1" class="fl-group tabbed" data-id="admins"><rect x="28" y="376" width="128" height="288" rx="18" class="frame-box fl-stroke dashed a0" stroke-dasharray="5 4"/><g class="fl-symbol fl-symbol-access"><g class="fl-symbol-glyph" transform="translate(36 380) scale(0.83333)"><circle class="symbol-face" cx="12" cy="7" r="4"/><path class="symbol-face" d="M4 21v-3a8 6 0 0 1 16 0v3Z"/><path class="symbol-cut" d="m8 17 3 3 5-5"/></g></g><text x="74" y="394" class="frame">Admins</text></g>
 <g id="g-2" class="fl-group tabbed" data-id="net"><rect x="188" y="234" width="203.6" height="430" rx="18" class="frame-box fl-stroke dashed a0" stroke-dasharray="5 4"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(196 238) scale(0.83333)"><circle class="symbol-face" cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 6h14M5 18h14"/></g></g><text x="256" y="252" class="frame">Internet</text></g>
 <g id="g-3" class="fl-group tabbed" data-id="cloud"><rect x="44" y="724" width="956.9" height="846" rx="18" class="frame-box fl-stroke a1"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(52 728) scale(0.83333)"><path class="symbol-face" d="M7 19a5 5 0 0 1-1-10 6 6 0 0 1 11-2 6 6 0 0 1 1 12Z"/></g></g><text x="106" y="742" class="frame">Cloud</text></g>
 <g id="g-4" class="fl-group tabbed" data-id="vpc"><rect x="68" y="764" width="908.9" height="782" rx="18" class="frame-box fl-stroke d2 dashed a0" stroke-dasharray="5 4"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(76 768) scale(0.83333)"><path class="symbol-face" d="M7 19a5 5 0 0 1-1-10 6 6 0 0 1 11-2 6 6 0 0 1 1 12Z"/><path d="m8 13 3 3 5-6"/></g></g><text x="114" y="782" class="frame">VPC</text></g>
-<g id="g-5" class="fl-group tabbed" data-id="pub"><rect x="172" y="967" width="129.5" height="280" rx="18" class="frame-box fl-stroke d3 a1"/><g class="fl-symbol fl-symbol-access"><g class="fl-symbol-glyph" transform="translate(180 971) scale(0.83333)"><path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect class="symbol-solid" x="4" y="10" width="16" height="12" rx="3"/><path class="symbol-cut" d="M12 14v4"/></g></g><text x="218" y="985" class="frame">Public subnet</text></g>
+<g id="g-5" class="fl-group tabbed" data-id="pub"><rect x="172" y="967" width="129.5" height="280" rx="18" class="frame-box fl-stroke d3 a1"/><g class="fl-symbol fl-symbol-access"><g class="fl-symbol-glyph" transform="translate(180 971) scale(0.83333)"><path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect class="symbol-face" x="4" y="10" width="16" height="12" rx="3"/><path class="symbol-cut" d="M12 14v4"/></g></g><text x="218" y="985" class="frame">Public subnet</text></g>
 <g id="g-6" class="fl-group tabbed" data-id="scaling"><rect x="361.5" y="979" width="146.8" height="154" rx="18" class="frame-box fl-stroke d3 dashed a0" stroke-dasharray="5 4"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(369.5 983) scale(0.83333)"><rect class="symbol-face" x="2" y="12" width="10" height="10" rx="2"/><path d="M8 3h13v13M21 3 10 14"/></g></g><text x="407.5" y="997" class="frame">Scaling group</text></g>
-<g id="g-7" class="fl-group tabbed" data-id="priv"><rect x="568.3" y="804" width="304.6" height="718" rx="18" class="frame-box fl-stroke d3 a1"/><g class="fl-symbol fl-symbol-access"><g class="fl-symbol-glyph" transform="translate(576.3 808) scale(0.83333)"><path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect class="symbol-solid" x="4" y="10" width="16" height="12" rx="3"/><path class="symbol-cut" d="M12 14v4"/></g></g><text x="614.3" y="822" class="frame">Private subnet</text></g>
+<g id="g-7" class="fl-group tabbed" data-id="priv"><rect x="568.3" y="804" width="304.6" height="718" rx="18" class="frame-box fl-stroke d3 a1"/><g class="fl-symbol fl-symbol-access"><g class="fl-symbol-glyph" transform="translate(576.3 808) scale(0.83333)"><path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect class="symbol-face" x="4" y="10" width="16" height="12" rx="3"/><path class="symbol-cut" d="M12 14v4"/></g></g><text x="614.3" y="822" class="frame">Private subnet</text></g>
 <g id="g-8" class="fl-group tabbed" data-id="ops"><rect x="768.3" y="1630" width="242.9" height="146" rx="18" class="frame-box fl-stroke dashed a0" stroke-dasharray="5 4"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(776.3 1634) scale(0.83333)"><rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="m5 11 4-4 4 6 5-5"/></g></g><text x="839.3" y="1648" class="frame">Operations</text></g>
-<g id="n-0" class="fl-node fl-shape-box" data-id="client"><g class="fl-halo a3" fill="none" opacity="0"><rect x="212" y="68" width="80" height="82" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="212" y="68" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a2"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(236 80) scale(1.33333)"><rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></g></g><text x="252" y="133.4" class="label">Web user</text></g>
-<g id="n-1" class="fl-node fl-shape-box" data-id="admin"><g class="fl-halo a5" fill="none" opacity="0"><rect x="52" y="416" width="80" height="82" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="52" y="416" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a4"/><g class="fl-symbol fl-symbol-access"><g class="fl-symbol-glyph" transform="translate(76 428) scale(1.33333)"><circle class="symbol-solid" cx="12" cy="7" r="4"/><path class="symbol-solid" d="M4 21v-3a8 6 0 0 1 16 0v3Z"/><path class="symbol-cut" d="m8 17 3 3 5-5"/></g></g><text x="92" y="481.4" class="label">Operator</text></g>
-<g id="n-2" class="fl-node fl-shape-box" data-id="vpn"><g class="fl-halo a7" fill="none" opacity="0"><rect x="52" y="558" width="80" height="82" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="52" y="558" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a6"/><g class="fl-symbol fl-symbol-access"><g class="fl-symbol-glyph" transform="translate(76 570) scale(1.33333)"><path class="symbol-face" d="M12 2 21 6v6c0 5-5 8-9 10-4-2-9-5-9-10V6Z"/><path d="m8 12 3 3 5-6"/></g></g><text x="92" y="623.4" class="label">VPN</text></g>
-<g id="n-3" class="fl-node fl-shape-box" data-id="dns"><g class="fl-halo a3" fill="none" opacity="0"><rect x="212" y="274" width="80" height="82" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="212" y="274" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a2"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(236 286) scale(1.33333)"><circle class="symbol-face" cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 6h14M5 18h14"/></g></g><text x="252" y="339.4" class="label">DNS</text></g>
-<g id="n-4" class="fl-node fl-shape-box" data-id="cdn"><g class="fl-halo a9" fill="none" opacity="0"><rect x="212" y="416" width="80" height="82" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="212" y="416" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a8"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(236 428) scale(1.33333)"><circle class="symbol-face" cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 6h14M5 18h14"/></g></g><text x="252" y="481.4" class="label">CDN</text></g>
-<g id="n-5" class="fl-node fl-shape-box" data-id="storage"><g class="fl-halo a11" fill="none" opacity="0"><rect x="256" y="558" width="80" height="82" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="256" y="558" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a10"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(280 570) scale(1.33333)"><path class="symbol-face" d="m3 7 9-5 9 5v11l-9 4-9-4Z"/><path d="m3 7 9 5 9-5M12 12v10M7 4l10 5v5"/></g></g><text x="296" y="623.4" class="label">Storage</text></g>
-<g id="n-6" class="fl-node fl-shape-box" data-id="lb"><g class="fl-halo a13" fill="none" opacity="0"><rect x="196" y="1023" width="80" height="82" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="196" y="1023" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a12"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(220 1035) scale(1.33333)"><rect class="symbol-face" x="8" y="2" width="8" height="6" rx="2"/><path d="M12 8v5M5 17v-4h14v4"/><rect class="symbol-solid" x="2" y="17" width="6" height="5" rx="1"/><rect class="symbol-solid" x="16" y="17" width="6" height="5" rx="1"/></g></g><text x="236" y="1088.4" class="label">Balancer</text></g>
-<g id="n-7" class="fl-node fl-shape-box" data-id="bastion"><g class="fl-halo a15" fill="none" opacity="0"><rect x="196" y="1141" width="80" height="82" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="196" y="1141" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a14"/><g class="fl-symbol fl-symbol-access"><g class="fl-symbol-glyph" transform="translate(220 1153) scale(1.33333)"><path class="symbol-face" d="M12 2 21 6v6c0 5-5 8-9 10-4-2-9-5-9-10V6Z"/><path d="M9 16V9h6v7Z"/></g></g><text x="236" y="1206.4" class="label">Bastion</text></g>
-<g id="n-8" class="fl-node fl-shape-box" data-id="web"><g class="fl-halo a17" fill="none" opacity="0"><rect x="385.5" y="1019" width="90.8" height="82" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="393.5" y="1027" width="90.8" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a16"/><rect x="389.5" y="1023" width="90.8" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a16"/><rect x="385.5" y="1019" width="90.8" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a16"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(398.7 1031) scale(1.33333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path d="M4 9h16M4 15h16"/><path class="symbol-solid" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><g class="fl-badge"><rect x="434.7" y="1038" width="28.3" height="18" rx="9" class="badge-pill"/><text x="448.9" y="1051" class="badge">(3)</text></g><text x="430.9" y="1084.4" class="label">Web server</text></g>
-<g id="n-9" class="fl-node fl-shape-box" data-id="app"><g class="fl-halo a19" fill="none" opacity="0"><rect x="592.3" y="1127" width="87.8" height="82" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="592.3" y="1127" width="87.8" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a18"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(620.2 1139) scale(1.33333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path d="M4 9h16M4 15h16"/><path class="symbol-solid" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="636.2" y="1192.4" class="label">App server</text></g>
-<g id="n-10" class="fl-node fl-shape-store" data-id="db"><g class="fl-halo a21" fill="none" opacity="0"><path d="M740.1 856 a 54.4 12 0 0 1 108.8 0 v 80 a 54.4 12 0 0 1 -108.8 0 z" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><path d="M740.1 856 a 54.4 12 0 0 1 108.8 0 v 80 a 54.4 12 0 0 1 -108.8 0 z" fill="var(--color-node)" class="fl-stroke a20"/><path d="M740.1 856 a 54.4 12 0 0 0 108.8 0" fill="none" class="fl-stroke a20"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(767 880) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><g class="fl-badge"><rect x="791" y="881" width="30.9" height="18" rx="9" class="badge-pill"/><text x="806.5" y="894" class="badge">RW</text></g><text x="794.5" y="919.4" class="label">DB primary</text></g>
-<g id="n-11" class="fl-node fl-shape-store" data-id="dbro"><g class="fl-halo a23" fill="none" opacity="0"><path d="M740.1 992 a 51 12 0 0 1 102 0 v 80 a 51 12 0 0 1 -102 0 z" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><path d="M740.1 992 a 51 12 0 0 1 102 0 v 80 a 51 12 0 0 1 -102 0 z" fill="var(--color-node)" class="fl-stroke a22"/><path d="M740.1 992 a 51 12 0 0 0 102 0" fill="none" class="fl-stroke a22"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(764.9 1016) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><g class="fl-badge"><rect x="788.9" y="1017" width="28.4" height="18" rx="9" class="badge-pill"/><text x="803.1" y="1030" class="badge">RO</text></g><text x="791.1" y="1055.4" class="label">DB replica</text></g>
-<g id="n-12" class="fl-node fl-shape-store" data-id="cache"><g class="fl-halo a25" fill="none" opacity="0"><path d="M740.1 1128 a 50 12 0 0 1 100 0 v 80 a 50 12 0 0 1 -100 0 z" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><path d="M740.1 1128 a 50 12 0 0 1 100 0 v 80 a 50 12 0 0 1 -100 0 z" fill="var(--color-node)" class="fl-stroke a24"/><path d="M740.1 1128 a 50 12 0 0 0 100 0" fill="none" class="fl-stroke a24"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(762.6 1152) scale(0.83333)"><path class="symbol-solid" d="M14 2 4 14h7l-1 8 10-13h-7Z"/></g></g><g class="fl-badge"><rect x="786.6" y="1153" width="30.9" height="18" rx="9" class="badge-pill"/><text x="802.1" y="1166" class="badge">RW</text></g><text x="790.1" y="1191.4" class="label">Cache</text></g>
-<g id="n-13" class="fl-node fl-shape-store" data-id="cachero"><g class="fl-halo a11" fill="none" opacity="0"><path d="M740.1 1264 a 50.7 12 0 0 1 101.4 0 v 80 a 50.7 12 0 0 1 -101.4 0 z" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><path d="M740.1 1264 a 50.7 12 0 0 1 101.4 0 v 80 a 50.7 12 0 0 1 -101.4 0 z" fill="var(--color-node)" class="fl-stroke a10"/><path d="M740.1 1264 a 50.7 12 0 0 0 101.4 0" fill="none" class="fl-stroke a10"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(764.5 1288) scale(0.83333)"><path class="symbol-solid" d="M14 2 4 14h7l-1 8 10-13h-7Z"/></g></g><g class="fl-badge"><rect x="788.5" y="1289" width="28.4" height="18" rx="9" class="badge-pill"/><text x="802.8" y="1302" class="badge">RO</text></g><text x="790.8" y="1327.4" class="label">Cache RO</text></g>
-<g id="n-14" class="fl-node fl-shape-box" data-id="mq"><g class="fl-halo a25" fill="none" opacity="0"><rect x="740.1" y="1388" width="80" height="82" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="740.1" y="1388" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a24"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(764.1 1400) scale(1.33333)"><rect class="symbol-face" x="2" y="5" width="20" height="14" rx="3"/><path d="M8 5v14M15 5v14"/></g></g><text x="780.1" y="1453.4" class="label">Queue</text></g>
-<g id="n-15" class="fl-node fl-shape-box" data-id="monitor"><g class="fl-halo a11" fill="none" opacity="0"><rect x="792.3" y="1670" width="86.7" height="82" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="792.3" y="1670" width="86.7" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a10"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(819.7 1682) scale(1.33333)"><rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="m5 11 4-4 4 6 5-5"/></g></g><text x="835.7" y="1735.4" class="label">Monitoring</text></g>
-<g id="n-16" class="fl-node fl-shape-box" data-id="logs"><g class="fl-halo a11" fill="none" opacity="0"><rect x="899" y="1670" width="88.3" height="82" rx="8" stroke="var(--color-state-glow)" stroke-width="12.5" stroke-linejoin="round"/></g><rect x="899" y="1670" width="88.3" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a10"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(927.1 1682) scale(1.33333)"><path class="symbol-face" d="M4 2h10l5 5v14H4Z"/><path d="M14 2v6h5M7 12h8M7 16h5"/></g></g><text x="943.1" y="1735.4" class="label">Log search</text></g>
-<g id="e-0" class="fl-edge"><path id="p-0" d="M 252 150 L 252 274" class="fl-path a26" marker-end="url(#fl-arrow)"/></g>
-<g id="e-1" class="fl-edge"><path id="p-1" d="M 252 356 L 252 416" class="fl-path a27" marker-end="url(#fl-arrow)"/></g>
-<g id="e-2" class="fl-edge"><path id="p-2" d="M 239 498 L 239 658 Q 239 680, 217 680 L 124 680 Q 102 680, 102 702 L 102 985 Q 102 1007, 124 1007 L 228 1007 Q 236 1007, 236 1015 L 236 1023" class="fl-path a28" marker-end="url(#fl-arrow)"/></g>
-<g id="e-3" class="fl-edge"><path id="p-3" d="M 276 1064 L 385.5 1064" class="fl-path a29" marker-end="url(#fl-arrow)"/></g>
-<g id="e-4" class="fl-edge"><path id="p-4" d="M 484.3 1064 L 504.3 1064 Q 524.3 1064, 524.3 1084 L 524.3 1132 Q 524.3 1154, 546.3 1154 L 592.3 1154" class="fl-path a30" marker-end="url(#fl-arrow)"/></g>
-<g id="e-5" class="fl-edge"><path id="p-5" d="M 680.1 1141 L 688.1 1141 Q 696.1 1141, 696.1 1133 L 696.1 918 Q 696.1 896, 718.1 896 L 740.1 896" class="fl-path a31" marker-end="url(#fl-arrow)"/></g>
-<g id="e-6" class="fl-edge"><path id="p-6" d="M 92 498 L 92 558" class="fl-path a32" marker-end="url(#fl-arrow)"/></g>
-<g id="e-7" class="fl-edge"><path id="p-7" d="M 92 640 L 92 1103 Q 92 1125, 114 1125 L 228 1125 Q 236 1125, 236 1133 L 236 1141" class="fl-path a33" marker-end="url(#fl-arrow)"/></g>
-<g id="e-8" class="fl-edge"><path id="p-8" d="M 276 1182 L 592.3 1182" class="fl-path a34" marker-end="url(#fl-arrow)"/></g>
-<g id="e-9" class="fl-edge"><path id="p-9" d="M 680.1 1154 L 693.1 1154 Q 706.1 1154, 706.1 1141 L 706.1 1049 Q 706.1 1032, 723.1 1032 L 740.1 1032" class="fl-path a35" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/></g>
-<g id="e-10" class="fl-edge"><path id="p-10" d="M 680.1 1168 L 740.1 1168" class="fl-path a36" marker-end="url(#fl-arrow)"/></g>
-<g id="e-11" class="fl-edge"><path id="p-11" d="M 680.1 1182 L 693.1 1182 Q 706.1 1182, 706.1 1195 L 706.1 1287 Q 706.1 1304, 723.1 1304 L 740.1 1304" class="fl-path a37" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/></g>
-<g id="e-12" class="fl-edge"><path id="p-12" d="M 680.1 1195 L 688.1 1195 Q 696.1 1195, 696.1 1203 L 696.1 1407 Q 696.1 1429, 718.1 1429 L 740.1 1429" class="fl-path a36" marker-end="url(#fl-arrow)"/></g>
-<g id="e-13" class="fl-edge"><path id="p-13" d="M 265 498 L 265 506 Q 265 514, 273 514 L 280.5 514 Q 296 514, 296 529.5 L 296 558" class="fl-path a37" marker-end="url(#fl-arrow)"/></g>
-<g id="e-14" class="fl-edge"><path id="p-14" d="M 650.8 1209 L 650.8 1464 Q 650.8 1486, 672.8 1486 L 910.9 1486 Q 932.9 1486, 932.9 1508 L 933 1564 Q 933 1586, 911 1586 L 857.3 1586 Q 835.3 1586, 835.3 1608 L 835.3 1670" class="fl-path a37" marker-end="url(#fl-arrow)"/></g>
-<g id="e-15" class="fl-edge"><path id="p-15" d="M 621.6 1209 L 621.6 1475 Q 621.6 1497, 643.6 1497 L 920.9 1497 Q 942.9 1497, 942.9 1519 L 942.9 1670" class="fl-path a37" marker-end="url(#fl-arrow)"/></g>
+<g id="n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Web user" data-id="client"><rect x="212" y="68" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a2"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(236 80) scale(1.33333)"><rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></g></g><text x="252" y="133.4" class="label">Web user</text></g>
+<g id="n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Operator" data-id="admin"><rect x="52" y="416" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a3"/><g class="fl-symbol fl-symbol-access"><g class="fl-symbol-glyph" transform="translate(76 428) scale(1.33333)"><circle class="symbol-face" cx="12" cy="7" r="4"/><path class="symbol-face" d="M4 21v-3a8 6 0 0 1 16 0v3Z"/><path class="symbol-cut" d="m8 17 3 3 5-5"/></g></g><text x="92" y="481.4" class="label">Operator</text></g>
+<g id="n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="VPN" data-id="vpn"><rect x="52" y="558" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a4"/><g class="fl-symbol fl-symbol-access"><g class="fl-symbol-glyph" transform="translate(76 570) scale(1.33333)"><path class="symbol-face" d="M12 2 21 6v6c0 5-5 8-9 10-4-2-9-5-9-10V6Z"/><path d="m8 12 3 3 5-6"/></g></g><text x="92" y="623.4" class="label">VPN</text></g>
+<g id="n-3" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="DNS" data-id="dns"><rect x="212" y="274" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a2"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(236 286) scale(1.33333)"><circle class="symbol-face" cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 6h14M5 18h14"/></g></g><text x="252" y="339.4" class="label">DNS</text></g>
+<g id="n-4" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="CDN" data-id="cdn"><rect x="212" y="416" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a5"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(236 428) scale(1.33333)"><circle class="symbol-face" cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 6h14M5 18h14"/></g></g><text x="252" y="481.4" class="label">CDN</text></g>
+<g id="n-5" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Storage" data-id="storage"><rect x="256" y="558" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a6"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(280 570) scale(1.33333)"><path class="symbol-face" d="m3 7 9-5 9 5v11l-9 4-9-4Z"/><path d="m3 7 9 5 9-5M12 12v10M7 4l10 5v5"/></g></g><text x="296" y="623.4" class="label">Storage</text></g>
+<g id="n-6" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Balancer" data-id="lb"><rect x="196" y="1023" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a7"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(220 1035) scale(1.33333)"><rect class="symbol-face" x="8" y="2" width="8" height="6" rx="2"/><path d="M12 8v5M5 17v-4h14v4"/><rect class="symbol-solid" x="2" y="17" width="6" height="5" rx="1"/><rect class="symbol-solid" x="16" y="17" width="6" height="5" rx="1"/></g></g><text x="236" y="1088.4" class="label">Balancer</text></g>
+<g id="n-7" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Bastion" data-id="bastion"><rect x="196" y="1141" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a8"/><g class="fl-symbol fl-symbol-access"><g class="fl-symbol-glyph" transform="translate(220 1153) scale(1.33333)"><path class="symbol-face" d="M12 2 21 6v6c0 5-5 8-9 10-4-2-9-5-9-10V6Z"/><path d="M9 16V9h6v7Z"/></g></g><text x="236" y="1206.4" class="label">Bastion</text></g>
+<g id="n-8" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Web server" data-id="web"><rect x="393.5" y="1027" width="90.8" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a9"/><rect x="389.5" y="1023" width="90.8" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a9"/><rect x="385.5" y="1019" width="90.8" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a9"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(398.7 1031) scale(1.33333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path d="M4 9h16M4 15h16"/><path class="symbol-solid" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><g class="fl-badge"><rect x="434.7" y="1038" width="28.3" height="18" rx="9" class="badge-pill"/><text x="448.9" y="1051" class="badge">(3)</text></g><text x="430.9" y="1084.4" class="label">Web server</text></g>
+<g id="n-9" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="App server" data-id="app"><rect x="592.3" y="1127" width="87.8" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a10"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(620.2 1139) scale(1.33333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path d="M4 9h16M4 15h16"/><path class="symbol-solid" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="636.2" y="1192.4" class="label">App server</text></g>
+<g id="n-10" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="DB primary" data-id="db"><path d="M740.1 856 a 54.4 12 0 0 1 108.8 0 v 80 a 54.4 12 0 0 1 -108.8 0 z" fill="var(--color-node)" class="fl-stroke a11"/><path d="M740.1 856 a 54.4 12 0 0 0 108.8 0" fill="none" class="fl-stroke a11"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(767 880) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><g class="fl-badge"><rect x="791" y="881" width="30.9" height="18" rx="9" class="badge-pill"/><text x="806.5" y="894" class="badge">RW</text></g><text x="794.5" y="919.4" class="label">DB primary</text></g>
+<g id="n-11" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="DB replica" data-id="dbro"><path d="M740.1 992 a 51 12 0 0 1 102 0 v 80 a 51 12 0 0 1 -102 0 z" fill="var(--color-node)" class="fl-stroke a12"/><path d="M740.1 992 a 51 12 0 0 0 102 0" fill="none" class="fl-stroke a12"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(764.9 1016) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><g class="fl-badge"><rect x="788.9" y="1017" width="28.4" height="18" rx="9" class="badge-pill"/><text x="803.1" y="1030" class="badge">RO</text></g><text x="791.1" y="1055.4" class="label">DB replica</text></g>
+<g id="n-12" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="Cache" data-id="cache"><path d="M740.1 1128 a 50 12 0 0 1 100 0 v 80 a 50 12 0 0 1 -100 0 z" fill="var(--color-node)" class="fl-stroke a13"/><path d="M740.1 1128 a 50 12 0 0 0 100 0" fill="none" class="fl-stroke a13"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(762.6 1152) scale(0.83333)"><path class="symbol-face" d="M14 2 4 14h7l-1 8 10-13h-7Z"/></g></g><g class="fl-badge"><rect x="786.6" y="1153" width="30.9" height="18" rx="9" class="badge-pill"/><text x="802.1" y="1166" class="badge">RW</text></g><text x="790.1" y="1191.4" class="label">Cache</text></g>
+<g id="n-13" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="Cache RO" data-id="cachero"><path d="M740.1 1264 a 50.7 12 0 0 1 101.4 0 v 80 a 50.7 12 0 0 1 -101.4 0 z" fill="var(--color-node)" class="fl-stroke a6"/><path d="M740.1 1264 a 50.7 12 0 0 0 101.4 0" fill="none" class="fl-stroke a6"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(764.5 1288) scale(0.83333)"><path class="symbol-face" d="M14 2 4 14h7l-1 8 10-13h-7Z"/></g></g><g class="fl-badge"><rect x="788.5" y="1289" width="28.4" height="18" rx="9" class="badge-pill"/><text x="802.8" y="1302" class="badge">RO</text></g><text x="790.8" y="1327.4" class="label">Cache RO</text></g>
+<g id="n-14" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Queue" data-id="mq"><rect x="740.1" y="1388" width="80" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a13"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(764.1 1400) scale(1.33333)"><rect class="symbol-face" x="2" y="5" width="20" height="14" rx="3"/><path d="M8 5v14M15 5v14"/></g></g><text x="780.1" y="1453.4" class="label">Queue</text></g>
+<g id="n-15" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Monitoring" data-id="monitor"><rect x="792.3" y="1670" width="86.7" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a6"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(819.7 1682) scale(1.33333)"><rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="m5 11 4-4 4 6 5-5"/></g></g><text x="835.7" y="1735.4" class="label">Monitoring</text></g>
+<g id="n-16" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Log search" data-id="logs"><rect x="899" y="1670" width="88.3" height="82" rx="8" fill="var(--color-node)" class="fl-stroke a6"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(927.1 1682) scale(1.33333)"><path class="symbol-face" d="M4 2h10l5 5v14H4Z"/><path d="M14 2v6h5M7 12h8M7 16h5"/></g></g><text x="943.1" y="1735.4" class="label">Log search</text></g>
+<g id="e-0" class="fl-edge"><path id="p-0" d="M 252 150 L 252 274" class="fl-path a14" marker-end="url(#fl-arrow)"/></g>
+<g id="e-1" class="fl-edge"><path id="p-1" d="M 252 356 L 252 416" class="fl-path a15" marker-end="url(#fl-arrow)"/></g>
+<g id="e-2" class="fl-edge"><path id="p-2" d="M 239 498 L 239 658 Q 239 680, 217 680 L 124 680 Q 102 680, 102 702 L 102 985 Q 102 1007, 124 1007 L 228 1007 Q 236 1007, 236 1015 L 236 1023" class="fl-path a16" marker-end="url(#fl-arrow)"/></g>
+<g id="e-3" class="fl-edge"><path id="p-3" d="M 276 1064 L 385.5 1064" class="fl-path a17" marker-end="url(#fl-arrow)"/></g>
+<g id="e-4" class="fl-edge"><path id="p-4" d="M 484.3 1064 L 504.3 1064 Q 524.3 1064, 524.3 1084 L 524.3 1132 Q 524.3 1154, 546.3 1154 L 592.3 1154" class="fl-path a18" marker-end="url(#fl-arrow)"/></g>
+<g id="e-5" class="fl-edge"><path id="p-5" d="M 680.1 1141 L 688.1 1141 Q 696.1 1141, 696.1 1133 L 696.1 918 Q 696.1 896, 718.1 896 L 740.1 896" class="fl-path a19" marker-end="url(#fl-arrow)"/></g>
+<g id="e-6" class="fl-edge"><path id="p-6" d="M 92 498 L 92 558" class="fl-path a20" marker-end="url(#fl-arrow)"/></g>
+<g id="e-7" class="fl-edge"><path id="p-7" d="M 92 640 L 92 1103 Q 92 1125, 114 1125 L 228 1125 Q 236 1125, 236 1133 L 236 1141" class="fl-path a21" marker-end="url(#fl-arrow)"/></g>
+<g id="e-8" class="fl-edge"><path id="p-8" d="M 276 1182 L 592.3 1182" class="fl-path a22" marker-end="url(#fl-arrow)"/></g>
+<g id="e-9" class="fl-edge"><path id="p-9" d="M 680.1 1154 L 693.1 1154 Q 706.1 1154, 706.1 1141 L 706.1 1049 Q 706.1 1032, 723.1 1032 L 740.1 1032" class="fl-path a23" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/></g>
+<g id="e-10" class="fl-edge"><path id="p-10" d="M 680.1 1168 L 740.1 1168" class="fl-path a24" marker-end="url(#fl-arrow)"/></g>
+<g id="e-11" class="fl-edge"><path id="p-11" d="M 680.1 1182 L 693.1 1182 Q 706.1 1182, 706.1 1195 L 706.1 1287 Q 706.1 1304, 723.1 1304 L 740.1 1304" class="fl-path a25" stroke-dasharray="5 4" marker-end="url(#fl-arrow)"/></g>
+<g id="e-12" class="fl-edge"><path id="p-12" d="M 680.1 1195 L 688.1 1195 Q 696.1 1195, 696.1 1203 L 696.1 1407 Q 696.1 1429, 718.1 1429 L 740.1 1429" class="fl-path a24" marker-end="url(#fl-arrow)"/></g>
+<g id="e-13" class="fl-edge"><path id="p-13" d="M 265 498 L 265 506 Q 265 514, 273 514 L 280.5 514 Q 296 514, 296 529.5 L 296 558" class="fl-path a25" marker-end="url(#fl-arrow)"/></g>
+<g id="e-14" class="fl-edge"><path id="p-14" d="M 650.8 1209 L 650.8 1464 Q 650.8 1486, 672.8 1486 L 910.9 1486 Q 932.9 1486, 932.9 1508 L 933 1564 Q 933 1586, 911 1586 L 857.3 1586 Q 835.3 1586, 835.3 1608 L 835.3 1670" class="fl-path a25" marker-end="url(#fl-arrow)"/></g>
+<g id="e-15" class="fl-edge"><path id="p-15" d="M 621.6 1209 L 621.6 1475 Q 621.6 1497, 643.6 1497 L 920.9 1497 Q 942.9 1497, 942.9 1519 L 942.9 1670" class="fl-path a25" marker-end="url(#fl-arrow)"/></g>
 
 <g class="p0-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="67.888s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.02283" values="1;0"/><animateMotion dur="67.888s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.02283;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
 <g class="p1-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="67.888s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.08109;0.09214" values="0;1;0"/><animateMotion dur="67.888s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.08109;0.09214;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
@@ -1189,16 +1231,16 @@
 <g class="p10-0" opacity="0"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="67.888s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.90788;0.96612" values="0;1;0"/><animateMotion dur="67.888s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.90788;0.96612;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-8" xlink:href="#p-8"/></animateMotion></g>
 <g class="fl-pills"><g id="l-0" class="fl-edge"><g class="fl-pill"><rect x="245" y="205" width="14" height="14" rx="7" class="number-pill"/><text x="252" y="216" class="number">1</text></g></g><g id="l-1" class="fl-edge"><g class="fl-pill"><rect x="244.8" y="378.8" width="14.3" height="14.3" rx="7.2" class="number-pill"/><text x="252" y="390" class="number">2</text></g></g><g id="l-2" class="fl-edge"><g class="fl-pill"><rect x="94.7" y="836.2" width="14.7" height="14.7" rx="7.3" class="number-pill"/><text x="102" y="847.5" class="number">3</text></g></g><g id="l-3" class="fl-edge"><g class="fl-pill"><rect x="323.3" y="1056.6" width="14.8" height="14.8" rx="7.4" class="number-pill"/><text x="330.7" y="1068" class="number">4</text></g></g><g id="l-4" class="fl-edge"><g class="fl-pill"><rect x="517" y="1101.8" width="14.5" height="14.5" rx="7.2" class="number-pill"/><text x="524.3" y="1113" class="number">5</text></g></g><g id="l-5" class="fl-edge"><g class="fl-pill"><rect x="688.8" y="1011.2" width="14.7" height="14.7" rx="7.3" class="number-pill"/><text x="696.1" y="1022.5" class="number">6</text></g></g><g id="l-6" class="fl-edge"><g class="fl-pill"><rect x="85" y="521" width="14" height="14" rx="7" class="number-pill"/><text x="92" y="532" class="number">7</text></g></g><g id="l-7" class="fl-edge"><g class="fl-pill"><rect x="84.7" y="875.2" width="14.6" height="14.6" rx="7.3" class="number-pill"/><text x="92" y="886.5" class="number">8</text></g></g><g id="l-8" class="fl-edge"><g class="fl-pill"><rect x="426.8" y="1174.7" width="14.7" height="14.7" rx="7.3" class="number-pill"/><text x="434.1" y="1186" class="number">9</text></g></g></g>
 </g>
-<text x="720" y="1822" opacity="0" class="steplabel a38">Resolve</text>
-<text x="720" y="1822" opacity="0" class="steplabel a39">Distribute</text>
-<text x="720" y="1822" opacity="0" class="steplabel a40">Process</text>
-<text x="720" y="1822" opacity="0" class="steplabel a41">Store</text>
-<text x="720" y="1822" opacity="0" class="steplabel a42">VPN login</text>
-<text x="720" y="1822" opacity="0" class="steplabel a43">Through the bastion</text>
-<g opacity="0" class="a38"><text x="720" y="1848" class="caption">The domain resolves from DNS to the CDN</text></g>
-<g opacity="0" class="a39"><text x="720" y="1848" class="caption">The CDN hands the request to the balancer, which spreads it over the web servers</text></g>
-<g opacity="0" class="a40"><text x="720" y="1848" class="caption">A web server calls the app server, which uses the cache and the queue</text></g>
-<g opacity="0" class="a41"><text x="720" y="1848" class="caption">The app server writes to the primary DB and reads the replicas</text></g>
-<g opacity="0" class="a42"><text x="720" y="1848" class="caption">An administrator connects to the VPN gateway</text></g>
-<g opacity="0" class="a43"><text x="720" y="1848" class="caption">The VPN reaches the app server through the bastion</text></g>
+<text x="720" y="1822" opacity="0" class="steplabel a26">Resolve</text>
+<text x="720" y="1822" opacity="0" class="steplabel a27">Distribute</text>
+<text x="720" y="1822" opacity="0" class="steplabel a28">Process</text>
+<text x="720" y="1822" opacity="0" class="steplabel a29">Store</text>
+<text x="720" y="1822" opacity="0" class="steplabel a30">VPN login</text>
+<text x="720" y="1822" opacity="0" class="steplabel a31">Through the bastion</text>
+<g opacity="0" class="a26"><text x="720" y="1848" class="caption">The domain resolves from DNS to the CDN</text></g>
+<g opacity="0" class="a27"><text x="720" y="1848" class="caption">The CDN hands the request to the balancer, which spreads it over the web servers</text></g>
+<g opacity="0" class="a28"><text x="720" y="1848" class="caption">A web server calls the app server, which uses the cache and the queue</text></g>
+<g opacity="0" class="a29"><text x="720" y="1848" class="caption">The app server writes to the primary DB and reads the replicas</text></g>
+<g opacity="0" class="a30"><text x="720" y="1848" class="caption">An administrator connects to the VPN gateway</text></g>
+<g opacity="0" class="a31"><text x="720" y="1848" class="caption">The VPN reaches the app server through the bastion</text></g>
 </svg>

@@ -72,38 +72,38 @@
 
 공통 색과 그림 전용 색의 정본은 [design-tokens](https://github.com/woonyong-choi/design-tokens)의 simple2다. 기본 단계와 역할 토큰을 구분하며 코드와 CSS는 역할 토큰만 사용한다. daphnis는 해시가 있는 완성본과 그림 전용 호환 사본을 가져온다. 같은 토큰을 소비자에서 다시 정의하지 않는다.
 
-Things의 라이트 화면을 기준으로 회백색 그림 판·흰 도형 면·파란 조작 강조를 사용한다. 기존 다크 모드와 오류·성공·주의·범주 구분을 유지한다. 아래 값은 simple2에서 가져오며 글자 4.5, 그래픽 3 기준을 실제 사용 면에서 검사한다.
+기준은 클래식 macOS Things 3의 앱 화면이다. 웹사이트의 홍보 배지와 큰 제목, 다른 세대의 iOS 화면을 조작부에 섞지 않는다. [공식 라이트·다크 비교](https://culturedcode.com/things/blog/2018/09/night-and-day/)에서 관찰한 면의 위계를 사용하며, 색상은 이미지 관찰값과 대비 검사를 바탕으로 구성한 simple2 값이다. Things의 소스 코드에서 추출한 상수라는 뜻은 아니다. 아래 값은 simple2에서 가져오며 글자 4.5, 그래픽 3 기준을 실제 사용 면에서 검사한다.
 
 | 역할 | 뜻 | 라이트 | 다크 | 기준 |
 |---|---|---|---|---|
 | `state.active` | 활성 선·점·도형 테두리 | `#1e66d8` | `#6ca4ff` | 3 이상 |
-| `state.active-fill` | 선택한 면 | `#0a57c8` | `#6ca4ff` | on-active 글자 4.5 이상 |
-| `state.active-text` | 활성 글자 | `#0a57c8` | `#74a9ff` | 4.5 이상 |
-| `ui.link` | 링크 | `#0a57c8` | `#74a9ff` | 4.5 이상 |
+| `state.active-fill` | 선택한 면 | `#1760d2` | `#6ca4ff` | on-active 글자 4.5 이상 |
+| `state.active-text` | 활성 글자 | `#1760d2` | `#6fa6ff` | 4.5 이상 |
+| `ui.link` | 링크 | `#1760d2` | `#6fa6ff` | 4.5 이상 |
 | `ui.focus` | 키보드 초점 | `#1e66d8` | `#6ca4ff` | 3 이상 |
-| `ui.progress` | 재생 진행 고리 | `#1e66d8` | `#6ca4ff` | 3 이상 |
+| `ui.progress` | 재생 진행선 | `#1e66d8` | `#6ca4ff` | 3 이상 |
 | `figure.icon` | 도형 아이콘 | `#1e66d8` | `#6ca4ff` | 3 이상 |
 | `data.main` | 주 계열 | `#1e66d8` | `#6ca4ff` | 3 이상 |
-| `data.compare` | 비교 계열 | `#d44b00` | `#fa7a49` | 3 이상 |
+| `data.compare` | 비교 계열 | `#e45100` | `#fa7a49` | 3 이상 |
 | `fg` | 본문과 그림 글자 | `#303336` | `#f0f0f0` | 4.5 이상 |
-| `muted` | 보조 글자 | `#505b69` | `#aaaaaa` | 4.5 이상 |
-| `simple2.canvas-fill` | 설명용 그림 판 | `#edeef2` | `#171717` | 글자 대비 기준 적용 |
-| `node` | 도형 면 | `#ffffff` | `#3e3e3e` | 글자 대비 기준 적용 |
-| `page` | 문서 바탕 | `#ffffff` | `#121212` | 글자 대비 기준 적용 |
-| `group-title` | 그룹 제목 | `#505b69` | `#aaaaaa` | 4.5 이상 |
-| `outline` | 도형 외곽선 | `#787878` | `#888888` | 3 이상 |
-| `plate-border` | 판과 조작부 구분선 | `#d1d7de` | `#363636` | 1.3 이상 |
-| `card` | 카드 기본 면 | `#f6f7fa` | `#363636` | 글자 대비 기준 적용 |
-| `card-on` | 카드 활성 면 | `#edf4ff` | `#1b2a43` | 글자 대비 기준 적용 |
+| `muted` | 보조 글자 | `#566170` | `#a9adb6` | 4.5 이상 |
+| `simple2.canvas-fill` | 설명용 그림 판 | `#f5f6f8` | `#26272b` | 글자 대비 기준 적용 |
+| `node` | 도형 면 | `#ffffff` | `#303136` | 글자 대비 기준 적용 |
+| `page` | 문서 바탕 | `#ffffff` | `#1d1e22` | 글자 대비 기준 적용 |
+| `group-title` | 그룹 제목 | `#566170` | `#a9adb6` | 4.5 이상 |
+| `outline` | 도형 외곽선 | `#818181` | `#868686` | 3 이상 |
+| `plate-border` | 판과 조작부 구분선 | `#d4d8de` | `#50535b` | 1.3 이상 |
+| `card` | 카드 기본 면 | `#f2f3f5` | `#36373b` | 글자 대비 기준 적용 |
+| `card-on` | 카드 활성 면 | `#edf4ff` | `#08152d` | 글자 대비 기준 적용 |
 
 - `flow.*`는 점이 한눈에 갈리도록 이름끼리 OKLab 거리 0.10 이상이고 적록 색각 이상(protanopia, deuteranopia) 시뮬레이션에서도 같다. 파랑(지금)과 주황(비교)과도 OKLab 거리 0.10 이상이다. `test/contrast.test.js`의 `flow_tone_colors_stay_apart_from_each_other_for_normal_protan_and_deutan_sight_and_from_blue_and_orange_for_normal_sight`가 잰다. 이름은 카드 태그 `tone`과 같은 집합이고 이름을 늘리면 `flow.*` 색도 같은 기준으로 더한다.
 - 표 열의 PK, FK 표시는 항상 있는 스키마 표시라 파랑이 아니라 `color.muted`다.
 - 칸 격자의 칸([칸 격자](grid.md))은 새 색 역할이 없다. 칸 면 `node`와 윤곽 `border`, 글 `fg`, 생략 칸 면 `surface`와 글 `muted`, 밝힌 칸 면 `card-on`과 윤곽 `state.active`가 위 기준의 기존 짝이다.
 - 파랑은 "지금"(`state`)과 "주장하는 계열"(`data.main`)을 뜻하고, 조작부(`ui`)도 같은 파랑을 쓴다. 그 밖의 뜻으로는 쓰지 않는다. 사용자 아이콘의 기본 색 `figure.icon`은 브랜드 파랑이다(색상각 차이 1도 이내, `test/contrast.test.js`의 `palette_figure_icon_is_the_brand_blue_of_the_active_blue_in_both_themes`). 의미 아이콘은 서비스·데이터·접근·사용자·브랜드 역할별 면과 윤곽을 갖는다. 지금은 색만이 아니라 켜진 도형과 그룹의 재생 강조가 알리고 아이콘은 그대로다. 카드 태그는 파랑과 주황을 쓰지 않는다. 태그 색상이 `state.active`, `data.compare`와 40도 이상 떨어진다는 것을 `test/contrast.test.js`의 `tagColors_keep_their_hue_away_from_the_active_blue_and_the_compare_orange`가 잰다.
 - `data.main`, `data.compare`는 선언 순서가 아니라 계열의 `role`이 정한다([차트](charts.md)). 같은 계열 이름은 모든 예제에서 같은 역할이다. `test/chart.test.js`의 `examples_same_series_label_and_id_have_the_same_role_in_every_source`가 잰다.
-- 색 사용은 simple2의 역할 색을 따른다. 그림은 무채색 회색이 대부분이고, 브랜드 파랑 `#1E66D8`은 핵심 자리(지금 밝힘, 흐르는 선과 점과 글 상자, 차트 주 계열, 구성도 아이콘, 재생기 진행 고리)에만 쓴다. 다크는 같은 색상각에서 다크 면 위 대비를 넘는 밝은 단계(선 `#6ca4ff`, 글자 `#78a9ff`)다. 보라 `#B28FD1`, 빨강 `#EF0F0F`(오류), 초록 `#09C72C`(정상)는 드문 강조이고, 주황은 NHN에 없어 비교(`data.compare`)와 주의(`state.warning`)에만 남는다. 흐름 색은 첫째가 브랜드 파랑, 둘째가 보라, 셋째 이후가 진한 회색, 오류가 빨강이다. `tone=brand`가 파랑, `tone=purple`이 보라, `tone=green`이 초록, `tone=gray`가 진한 회색, `tone=red`가 빨강을 그린다. 옛 `blue`는 `brand`로, 옛 `teal`과 `orange`는 `purple`로 읽는 폐기 별칭이다.
-- 주황은 NHN 자료에 없어 비교(`data.compare`)와 주의(`state.warning`)에만 남고 design-tokens의 팔레트 스크립트가 같은 방식으로 계산한다. 원색은 라이트 `#e65200`이다. 색상 50도는 red(26도)와 amber(85도 근처)의 가운데이고 채도는 파랑(0.153) 수준이라 톤이 같다. 다크는 amber와 OKLab 거리 0.06을 넘기려고 밝기와 채도를 정했다. 라이트는 3을 넘는 가장 가까운 값(`#d36f2b`)이다. 파랑과 주황은 적록 색각 이상(protanopia, deuteranopia) 시뮬레이션에서도 OKLab 거리 0.1 이상으로 구분된다. 글자, 보조 글자는 스킬 값이다.
-- 라이트 모드 그림 바탕(`color.bg`)은 흰 문서 안에서 그림 경계가 보이도록 아주 옅은 회색(design-tokens `color.gray.27`)이고, 판 테두리(`color.plate-border`)가 경계를 더한다. HTML 카드와 조작 막대는 이 선 대신 표면과 그림자로 구분한다(예전 `color.frame`을 합쳤다. 라이트 `color.gray.145`, 다크 `color.gray.788`). 상자, 원통, 사람, 테이블 채우기(`color.node`)는 라이트에서 흰색이라 바탕 위에 떠 보이고, 다크에서는 바탕(`color.gray.910`)보다 한 단계 밝은 `color.gray.757`이다. 구조 그림의 그룹은 중첩 깊이로 무채색 회색 면을 한 단계씩 진하게 고르고, 일반 그룹은 외곽선 없이 면 밝기 차이로만 구분한다. 깊이 1(판 바로 위)은 `color.group-1`(라이트 `#ededed`, 다크 `#202020`), 깊이 2는 `color.group-2`(라이트 `#e1e1e1`, 다크 `#2a2a2a`), 깊이 3 이상은 `color.group-3`(라이트 `#d6d6d6`, 다크 `#343434`)이다. 설명 판은 라이트 `#edeef2`, 다크 `#171717`이고 도형 바탕은 라이트 `#ffffff`, 다크 `#3e3e3e`다. 점선 경계 그룹만 점선을 그리고 면은 같은 규칙이다. 강조 그룹은 `fill=sky`(브랜드 파랑과 같은 색상각의 하늘색)나 `fill=purple`(보라)로 고르고, 그 그룹은 면을 그 색의 옅은 틴트로 칠한다(`paint.<색>.group-1`). 강조 그룹 안의 그룹은 같은 색상각 틴트를 깊이마다 한 단계씩 진하게(다크는 밝게, `group-2`, `group-3`) 칠한다. 틴트 단계의 밝기(OKLCH L)는 회색 그룹 면과 같고 채도만 0.022, 0.028, 0.034로 얹는다. 강조 그룹 밖은 위의 회색 위계 그대로다. 강조 그룹의 테두리(1.5px, `border.tag`)와 제목 글자는 그 색의 진한 단계(`paint.<색>.ink`, 틴트 위 제목 4.5, 테두리 3 이상)다. 빨강과 초록은 상태 도형 면 전용이라 그룹 강조로 쓰지 않고, 그 밖의 이름을 그룹에 적으면 테두리와 제목만 그 색이고 면은 회색이다. 그룹 제목은 `color.group-title`로 세 회색 면 위에서 4.5 이상이다. 면을 칠한 도형(`fill=`, `stroke=`)의 외곽선은 그 색의 `paint.<색>.outline`이다. 면과 진한 선을 OKLab에서 반씩 섞은 값에서 같은 색상으로 밝기만 옮겨 그 면, 판, 도형 바탕 위 대비 3을 맞춘다. SVG와 HTML 설명 판은 `simple2.canvas-fill`을 쓴다. HTML 머리와 조작 줄은 `color.page`다.
+- 색 사용은 simple2의 역할 색을 따른다. 파랑은 재생·현재 상태·주 계열, 주황은 비교·주의, 빨강은 오류, 초록은 정상이다. 구성도 의미 아이콘은 별도 service·data·access·person 역할을 사용한다. 흐름은 `tone=brand`, `purple`, `green`, `gray`, `red`로 고른다. 옛 `blue`는 `brand`, `teal`과 `orange`는 `purple`로 읽는 폐기 별칭이다.
+- 비교와 주의의 주황은 의미 아이콘의 금색과 구분한다. 파랑과 주황은 적록 색각 이상 시뮬레이션에서도 OKLab 거리 0.1 이상이다. 흐름 점과 글 상자의 보라 단계도 다른 흐름색과 구분되는 값으로 정한다.
+- 설명 판은 `simple2.canvas-fill`, 도형 면은 `color.node`, 조작 줄은 `color.page`를 쓴다. 중첩 그룹은 `group-1`부터 `group-3`까지 중립색 면의 밝기로 구분한다. `fill=sky`와 `fill=purple` 그룹은 같은 깊이의 틴트 면을 쓴다. 이름과 면으로 경계가 식별되는 도형에는 `simple2.surface-edge` 장식선을 쓰고, 의미를 전달하는 선에는 대비 3 이상의 역할색을 쓴다. 내부 표와 배지는 `simple2.separator` 한 규칙을 공유한다. 박스플롯의 중앙값·수염 같은 데이터 선은 `simple2.data-line`으로 구분한다.
 - 9px 태그 글자는 범주색으로 쓰면 대비가 1.7~3.4라 읽기 어려워서, 글자는 `color.fg`로 쓰고 범주색은 글자 뒤의 옅은 바탕 띠로만 전한다. 태그 색은 갈래를 나누는 색이고 판정을 뜻하지 않는다. 스킬의 상태 색 금지는 차트 판정에 대한 규칙이라 태그 색과 부딪치지 않는다.
 
 
@@ -113,25 +113,25 @@ Things의 라이트 화면을 기준으로 회백색 그림 판·흰 도형 면�
 
 | 색 | 라이트 fill, stroke, ink | 다크 fill, stroke, ink |
 |---|---|---|
-| `red` | `#ffefed`, `#c70005`, `#be0004` | `#40201c`, `#fc7182`, `#ff8390` |
-| `amber` | `#fff0ea`, `#d44b00`, `#a63900` | `#3f2116`, `#fa7a49`, `#ff875a` |
-| `green` | `#eaf8e9`, `#008c1a`, `#006d12` | `#1a301a`, `#58bf5a`, `#58bf5a` |
-| `teal` | `#eaf8e9`, `#008c1a`, `#006d12` | `#1a301a`, `#58bf5a`, `#58bf5a` |
-| `navy` | `#edf4ff`, `#1e66d8`, `#0a57c8` | `#1b2a43`, `#6ca4ff`, `#74a9ff` |
-| `purple` | `#f7f0ff`, `#8c6aaa`, `#704f8c` | `#31233d`, `#b693d6`, `#be9ade` |
-| `pink` | `#f7f0ff`, `#8c6aaa`, `#704f8c` | `#31233d`, `#b693d6`, `#be9ade` |
-| `gray` | `#e7e7e7`, `#5d5d5d`, `#5d5d5d` | `#363636`, `#aaaaaa`, `#aaaaaa` |
-| `sky` | `#e8f1fe`, `#1e66d8`, `#0a57c8` | `#1b2a43`, `#6ca4ff`, `#74a9ff` |
+| `red` | `#ffefed`, `#c70005`, `#c70005` | `#290b08`, `#fc7182`, `#ff7e8c` |
+| `amber` | `#fff0ea`, `#e45100`, `#b43e00` | `#280d04`, `#fa7a49`, `#ff8253` |
+| `green` | `#eaf8e9`, `#00971d`, `#007715` | `#061b07`, `#58bf5a`, `#58bf5a` |
+| `teal` | `#eaf8e9`, `#00971d`, `#007715` | `#061b07`, `#58bf5a`, `#58bf5a` |
+| `navy` | `#edf4ff`, `#1e66d8`, `#1760d2` | `#08152d`, `#6ca4ff`, `#6fa6ff` |
+| `purple` | `#f7f0ff`, `#9573b3`, `#795895` | `#1c0f27`, `#b693d6`, `#bb98db` |
+| `pink` | `#f7f0ff`, `#9573b3`, `#795895` | `#1c0f27`, `#b693d6`, `#bb98db` |
+| `gray` | `#e7e7e7`, `#5d5d5d`, `#5d5d5d` | `#121318`, `#aaaaaa`, `#aaaaaa` |
+| `sky` | `#e8f1fe`, `#1e66d8`, `#1760d2` | `#08152c`, `#6ca4ff`, `#6fa6ff` |
 
 갈래색은 `flow.*`와 `paint.*.dot`로 구분한다. 파랑은 핵심 상태와 조작에 사용하고 주황은 비교와 주의에 사용한다.
 
 - 이웃한 색(색상 순서 `red`, `amber`, `green`, `teal`, `navy`, `purple`, `pink`)의 `stroke`는 OKLab 거리가 보통 시각에서 `distance.neighbor`(0.06) 이상, 적록 색각 이상(protanopia, deuteranopia) 시뮬레이션에서 `distance.neighbor-cvd`(0.025) 이상이다. 색각 이상에서는 파랑 계열 이웃이 가까워지므로 값이 보통 시각보다 낮다. 그림은 색 하나로 뜻을 전하지 않는다. 이름과 글이 함께 간다. 팔레트 색은 모두 파랑(지금)과 주황(비교)에서도 보통 시각 0.06 이상 떨어진다.
 - 갈래색(`flow.*`)끼리와 파랑, 주황은 `distance.flow`(0.10) 이상이다. 위 이웃 기준과 달리 색각 이상에서도 이 값이다.
-- 색을 고른 도형이 켜지면 테두리는 그 색을 유지하고 굵기가 `border.thin`에서 `border.strong`으로 바뀌며 후광이 보인다. 파랑으로 바꾸지 않는 이유는 `stroke`가 "오류", "정상" 같은 범주를 나르고 있어 켜질 때 그 뜻이 사라지면 안 되기 때문이다. 파랑(지금)은 `stroke`를 고르지 않은 도형에만 쓴다.
+- 색을 고른 도형은 재생 중에도 색 역할을 유지한다. 도형 외곽선은 1px, 색을 지정한 그룹은 1.5px로 유지하고 후광용 복제 윤곽을 그리지 않는다. 색을 지정하지 않은 도형의 활성 상태는 같은 굵기의 파란 외곽선으로 표시한다. 선택 칸은 `simple2.row-selection` 면과 같은 모서리의 단일 선으로 표시한다. HTML과 SVG에 같은 규칙을 적용한다.
 
 ### 색표와 글꼴
 
-- 색의 정본은 공통 색은 design-tokens, 그림 전용 색(`paint`, `tag`, `figure`, 팔레트 별칭)은 이 도구의 `src/tokens.json`이다. 스킬의 색표 절은 토큰 이름 표로 바뀌고 값을 적지 않는다. 같은 값을 두 곳에 적어 어긋나는 일을 막기 위해서다.
+- 공통 색과 그림 전용 색의 정본은 모두 design-tokens의 simple2다. daphnis의 `src/tokens.json`은 그림 전용 사본이며 직접 값을 고치지 않는다.
 - 모든 그림의 SVG `width`는 같은 표준 캔버스 폭(`size.figure-canvas`, 960)이다. 그림 머리 `width wide`를 쓴 그림만 넓은 폭(`size.figure-canvas-wide`)이고, 문서에서는 본문 폭에 맞춰 줄어든다. GitHub README는 이미지를 원래 크기보다 키우지 않고 본문 폭에 맞춰 줄이므로 모든 그림이 같은 폭으로 보인다. 가운데 정렬은 SVG 파일이 아니라 문서 쪽 몫이다. GitHub README는 `<img>` 하나만 두면 왼쪽에 붙으므로 `<p align="center"><img src="docs/assets/그림.svg" alt="설명"></p>` 형식으로 넣어야 가운데에 선다(Markdown 이미지 문법 `![]()`로는 정렬할 수 없다).
 - 글꼴은 이 도구가 Pretendard, JetBrains Mono 파일(수학 기호용 Noto Sans, Noto Sans Math 포함)을 함께 배포하고 그림에 잘라 넣는다. 본문 글자 간격은 `tracking.text`(-0.3px)다([배치](layout.md)). 스킬의 글꼴 설치 줄은 지운다.
 

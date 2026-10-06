@@ -286,8 +286,8 @@ test('buildFigure_grid_budget_counts_the_wrapped_text_lines_so_it_never_undercou
   const result = await buildFigure(WRAPPED);
   const [grid] = result.scene.items;
   const svg = await toSvg(result, { isStatic: true, name: 'g' });
-  // 도형 묶음 g 하나와 모든 도형이 갖는 후광(g, rect)은 격자 비용이 아니라 뺀다.
-  const drawn = svg.slice(svg.indexOf('<g id="n-0"'), svg.indexOf('</svg>')).match(/<(?:rect|text|path|pattern|g)\b/g).length - 3;
+  // 도형 묶음 g 하나는 격자 내부 비용이 아니라 뺀다. 중복 윤곽용 후광은 그리지 않는다.
+  const drawn = svg.slice(svg.indexOf('<g id="n-0"'), svg.indexOf('</svg>')).match(/<(?:rect|text|path|pattern|g)\b/g).length - 1;
   const cost = gridCost(result.figure.nodes[0]).elements;
 
   assert.ok(grid.cells.every((c) => c.lines.length >= 1) && grid.cells.some((c) => c.lines.length > 1), 'the fixture needs a wrapped cell');

@@ -1,4 +1,4 @@
-// 브라우저에서 돈다(play.js와 한 스크립트로 이어 붙는다). 재생 단추와 배속, 진행 고리, 탭, 설명 글의 백틱 코드.
+// 브라우저에서 돈다(play.js와 한 스크립트로 이어 붙는다). 재생 단추와 배속, 진행선, 탭, 설명 글의 백틱 코드.
 
 // ---- 재생 단추와 배속 ----
 
@@ -8,15 +8,22 @@ function bindControls(root, player) {
   const { clock, pause } = player;
   const rateButton = root.querySelector('.fl-rate');
   const repeat = root.querySelector('.fl-repeat');
+  repeat.innerHTML = drawUiIcon(player.data.metrics, 'repeat');
+  rateButton.innerHTML = drawUiIcon(player.data.metrics, 'gauge');
+  rateButton.title = `배속 ${clock.rate}× · 클릭하여 변경`;
+  rateButton.dataset.rate = clock.rate;
+  rateButton.setAttribute('aria-description', `${clock.rate}배속`);
   repeat.addEventListener('click', () => {
     clock.repeat = !clock.repeat;
     repeat.setAttribute('aria-pressed', clock.repeat);
-    repeat.textContent = clock.repeat ? '반복 켜짐' : '반복 꺼짐';
+    repeat.title = clock.repeat ? '반복 켜짐' : '반복 꺼짐';
   });
   pause.button.addEventListener('click', () => setPlaying(player, !clock.isPlaying));
   rateButton.addEventListener('click', () => {
     clock.rate = nextRate(clock.rate);
-    rateButton.textContent = `${clock.rate}×`;
+    rateButton.title = `배속 ${clock.rate}× · 클릭하여 변경`;
+    rateButton.setAttribute('aria-description', `${clock.rate}배속`);
+    rateButton.dataset.rate = clock.rate;
     syncChartMotion(player.stage, clock);
   });
   root.addEventListener('keydown', (e) => {
@@ -42,7 +49,7 @@ function setPlaying(player, value) {
   pause.icon.innerHTML = playIconSvg(clock.isPlaying, player.data.metrics);
   const label = clock.isPlaying ? '일시정지' : clock.ended ? '다시 재생' : '재생';
   pause.button.setAttribute('aria-label', label);
-  pause.label.textContent = label;
+  pause.button.title = label;
   syncChartMotion(player.stage, clock);
 }
 
@@ -53,11 +60,11 @@ function playIconSvg(isPlaying, metrics) {
   return drawUiIcon(metrics, isPlaying ? 'pause' : 'play');
 }
 
-// ---- 진행 고리 ----
+// ---- 진행선 ----
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 고리 둘레는 마크업의 반지름에서 구한다. draw(0~1)로 12시에서 시계 방향으로 채운다.
+// 마크업의 수평 경로 길이를 읽고 draw(0~1)로 왼쪽부터 채운다.
 function createRing(button) {
   const fill = button.querySelector('.fl-ring-fill');
   const length = fill.getTotalLength();

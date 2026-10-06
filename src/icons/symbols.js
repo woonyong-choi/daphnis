@@ -3,9 +3,9 @@ const SERVER = '<rect class="symbol-face" x="4" y="3" width="16" height="18" rx=
 const DATABASE = '<path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/>'; // tokens-allow: 24 격자 아이콘 실루엣의 기하 좌표
 const CLOUD = '<path class="symbol-face" d="M7 19a5 5 0 0 1-1-10 6 6 0 0 1 11-2 6 6 0 0 1 1 12Z"/>';
 const SHIELD = '<path class="symbol-face" d="M12 2 21 6v6c0 5-5 8-9 10-4-2-9-5-9-10V6Z"/>';
-const PERSON = '<circle class="symbol-solid" cx="12" cy="7" r="4"/><path class="symbol-solid" d="M4 21v-3a8 6 0 0 1 16 0v3Z"/>';
+const PERSON = '<circle class="symbol-face" cx="12" cy="7" r="4"/><path class="symbol-face" d="M4 21v-3a8 6 0 0 1 16 0v3Z"/>';
 const GLOBE = '<circle class="symbol-face" cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 6h14M5 18h14"/>'; // tokens-allow: 24 격자 아이콘 실루엣의 기하 좌표
-const LOCK = '<path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect class="symbol-solid" x="4" y="10" width="16" height="12" rx="3"/><path class="symbol-cut" d="M12 14v4"/>'; // tokens-allow: 24 격자 아이콘 실루엣의 기하 좌표
+const LOCK = '<path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect class="symbol-face" x="4" y="10" width="16" height="12" rx="3"/><path class="symbol-cut" d="M12 14v4"/>'; // tokens-allow: 24 격자 아이콘 실루엣의 기하 좌표
 const MONITOR = '<rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>'; // tokens-allow: 24 격자 아이콘 실루엣의 기하 좌표
 const QUEUE = '<rect class="symbol-face" x="2" y="5" width="20" height="14" rx="3"/><path d="M8 5v14M15 5v14"/>'; // tokens-allow: 24 격자 아이콘 실루엣의 기하 좌표
 const NETWORK = '<rect class="symbol-face" x="8" y="2" width="8" height="6" rx="2"/><path d="M12 8v5M5 17v-4h14v4"/><rect class="symbol-solid" x="2" y="17" width="6" height="5" rx="1"/><rect class="symbol-solid" x="16" y="17" width="6" height="5" rx="1"/>'; // tokens-allow: 24 격자 아이콘 실루엣의 기하 좌표
@@ -18,7 +18,7 @@ export const SYMBOLS = Object.freeze({
   block: '<rect class="symbol-face" x="3" y="4" width="18" height="16" rx="3"/><path d="M3 14h18"/><circle class="symbol-solid" cx="17" cy="17" r="1"/>', // tokens-allow: 24 격자 아이콘 실루엣의 기하 좌표
   object: PACKAGE,
   container: PACKAGE,
-  cache: '<path class="symbol-solid" d="M14 2 4 14h7l-1 8 10-13h-7Z"/>',
+  cache: '<path class="symbol-face" d="M14 2 4 14h7l-1 8 10-13h-7Z"/>',
   mq: QUEUE,
   region: CLOUD,
   vpc: CLOUD + '<path d="m8 13 3 3 5-6"/>',

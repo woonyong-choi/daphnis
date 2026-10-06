@@ -24,7 +24,7 @@ const snapshot = (page) =>
     await Promise.all(animations.map((a) => a.ready));
     const fill = document.querySelector('.fl-ring-fill');
     const ring = 1 - parseFloat(fill.style.strokeDashoffset) / parseFloat(fill.style.strokeDasharray);
-    return { count: animations.length, times: animations.map((a) => a.currentTime), states: animations.map((a) => a.playState), rates: animations.map((a) => a.playbackRate), ring, rate: document.querySelector('.fl-rate').textContent };
+    return { count: animations.length, times: animations.map((a) => a.currentTime), states: animations.map((a) => a.playState), rates: animations.map((a) => a.playbackRate), ring, rate: `${document.querySelector('.fl-rate').dataset.rate}×` };
   });
 
 // cost: time O(page), heap O(page), stack O(1), io page

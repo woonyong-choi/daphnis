@@ -196,7 +196,7 @@ test('palette_graphic_text_and_outline_colors_are_the_closest_step_that_reaches_
   // 외곽선은 바탕 쪽으로 한 단계 가면(라이트는 흰색, 다크는 검정 반대인 흰색 쪽이 아니라 면 쪽) 3 아래로 떨어져야 최소 값이다.
   for (const [theme, toward] of [['light', '#ffffff'], ['dark', '#000000']]) {
     const outline = color(theme, 'outline');
-    const outlineFaces = ['bg', 'node', 'group-1', 'group-2', 'group-3', 'card'];
+    const outlineFaces = ['bg', 'node', 'group-1', 'group-2', 'group-3', 'card', ...['sky', 'purple'].flatMap((hue) => [1, 2, 3].map((level) => `paint.${hue}.group-${level}`))];
 
     assert.ok(lowest(outline, outlineFaces, theme) >= GRAPHIC && lowest(mixHex(outline, theme === 'light' ? '#ffffff' : '#000000', STEP_MIX), outlineFaces, theme) < GRAPHIC, `${theme} outline step`);
   }

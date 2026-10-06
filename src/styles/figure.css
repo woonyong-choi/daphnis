@@ -160,8 +160,8 @@
 }
 
 .fl .pill {
-  fill: var(--color-node);
-  stroke: var(--color-outline);
+  fill: var(--color-card);
+  stroke: var(--simple2-separator);
 }
 
 .fl .part-bg {
@@ -175,7 +175,7 @@
 
 .fl .grid-cell {
   fill: var(--color-node);
-  stroke: var(--color-outline);
+  stroke: var(--simple2-separator);
   stroke-width: var(--border-thin);
 }
 
@@ -185,9 +185,8 @@
 }
 
 .fl .grid-cell.gap {
-  fill: var(--color-surface);
-  stroke: var(--color-line);
-  stroke-dasharray: var(--dash-card) var(--dash-card);
+  fill: var(--color-card);
+  stroke: var(--simple2-separator);
 }
 
 .fl .grid-cell.empty {
@@ -209,8 +208,8 @@
 }
 
 .fl .badge-pill {
-  fill: var(--color-node);
-  stroke: var(--color-outline);
+  fill: var(--color-card);
+  stroke: var(--simple2-separator);
   stroke-width: var(--border-thin);
 }
 
@@ -224,7 +223,7 @@
 
 /* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
 .fl .number-pill {
-  fill: var(--color-fg);
+  fill: var(--color-muted);
 }
 
 .fl .number {
@@ -236,6 +235,7 @@
 
 /* 표면에만 그림자를 두어 글자·아이콘·선의 가장자리는 선명하게 유지한다. */
 .fl :where(.fl-node) > .fl-stroke {
+  stroke: var(--simple2-surface-edge);
   stroke-width: var(--simple2-node-stroke);
 }
 
@@ -246,7 +246,11 @@
 }
 
 .fl .fl-path,
-.fl .fl-node > .fl-stroke {
+.fl .fl-node > .fl-stroke,
+.fl .grid-cell,
+.fl .col-line,
+.fl .pill,
+.fl .badge-pill {
   vector-effect: non-scaling-stroke;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -268,7 +272,7 @@
 
 .fl .symbol-cut {
   fill: none;
-  stroke: var(--color-node);
+  stroke: currentColor;
 }
 
 .fl .fl-symbol-service {
@@ -309,4 +313,24 @@
 
 .fl .fl-symbol-brand .symbol-face {
   fill: var(--color-figure-icon-brand-surface);
+}
+
+.fl .fl-node.on > .fl-stroke {
+  stroke: var(--color-state-active);
+  stroke-width: var(--simple2-node-stroke);
+}
+
+/* 호버와 키보드 초점은 같은 도형 면을 가리키며 윤곽을 두 겹으로 만들지 않는다. */
+.fl .fl-node.is-hovered > .fl-stroke:not([fill="none"]),
+.fl .fl-node:hover > .fl-stroke:not([fill="none"]) {
+  fill: var(--simple2-hover-fill);
+}
+
+.fl .fl-node:focus-visible {
+  outline: none;
+}
+
+.fl .fl-node:focus-visible > .fl-stroke {
+  stroke: var(--color-ui-focus);
+  stroke-width: var(--simple2-focus-width);
 }

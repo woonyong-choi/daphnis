@@ -51,8 +51,17 @@ function withLabel(edge, label) {
 function highlightOnHover(stage) {
   stage.nodes.forEach((g, i) => {
     const touching = stage.edgeEnds.map((e, j) => (e[0] === i || e[1] === i ? stage.edges[j] : null)).filter(Boolean);
-    g?.addEventListener('mouseenter', () => touching.forEach((e) => e.classList.add('hover')));
-    g?.addEventListener('mouseleave', () => touching.forEach((e) => e.classList.remove('hover')));
+    // cost: time O(e), heap O(1), stack O(1)
+    // vars: e = 연결된 선 수
+    // basis: estimate
+    const highlight = (active) => {
+      g.classList.toggle('is-hovered', active);
+      touching.forEach((e) => e.classList.toggle('hover', active));
+    };
+    g?.addEventListener('mouseenter', () => highlight(true));
+    g?.addEventListener('mouseleave', () => highlight(g.matches(':focus')));
+    g?.addEventListener('focus', () => highlight(true));
+    g?.addEventListener('blur', () => highlight(g.matches(':hover')));
   });
 }
 
@@ -171,9 +180,13 @@ function advanceStage(stage, seg, elapsed) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 점이 닿은 도형의 후광을 한 번 깜빡인다. 도형은 켜지지 않고 테두리도 그대로다.
+// 도착은 도형 안의 선택 면으로 표시하고 외곽에 진행 고리를 만들지 않는다.
 function pulseNode(stage, n) {
-  stage.nodes[n]?.querySelector('.fl-halo')?.animate([{ opacity: 1 }, { opacity: 0 }], { duration: stage.metrics.pulseMs });
+  const node = stage.nodes[n];
+  const face = node?.querySelector('.fl-stroke:not([fill="none"])');
+  if (!face || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const color = getComputedStyle(node).getPropertyValue('--simple2-row-selection');
+  face.animate([{ fill: color }, { fill: getComputedStyle(face).fill }], { duration: stage.metrics.pulseMs });
 }
 
 // cost: time O(l), heap O(l), stack O(1)

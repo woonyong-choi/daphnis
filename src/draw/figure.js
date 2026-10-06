@@ -7,8 +7,8 @@ import { centerBaseline, escapeXml, renderRich, roundCoord as r } from '../text.
 import { tokens, values } from '../tokens.js';
 import { cardGlyphs, createTones, drawCard } from './card.js';
 import { drawDecor, drawGroupTab } from './decor.js';
-import { drawHalo, paintOf, tintOf } from './paint.js';
-import { LINE_DASH, drawShape, outlineOf } from './shape.js';
+import { paintOf, tintOf } from './paint.js';
+import { LINE_DASH, drawShape } from './shape.js';
 
 const SPACE = values.space;
 const SIZE = values.size;
@@ -65,15 +65,14 @@ function drawGroup(g, j, { decorate, glyphs, scene }) {
 function drawItem(it, i, paint) {
   const { decorate, glyphs, scene } = paint;
   const stroke = `class="fl-stroke${paintOf(it) ? ` ps-${paintOf(it)}` : ''}${it.shape === 'external' ? ' ext' : ''} ${decorate('node', i)}"`;
-  const halo = drawHalo(outlineOf(it), { cls: decorate('halo', i), paint: paintOf(it) });
-  const open = `<g id="n-${i}" class="fl-node fl-shape-${escapeXml(it.shape)}" data-id="${escapeXml(it.id)}">`;
+  const open = `<g id="n-${i}" class="fl-node fl-shape-${escapeXml(it.shape)}" tabindex="0" role="img" aria-label="${escapeXml(it.label)}" data-id="${escapeXml(it.id)}">`;
   for (const l of it.labelLines ?? []) glyphs.add(l, 'medium');
   for (const l of it.subLines ?? []) glyphs.add(l, 'regular');
   if (it.card) cardGlyphs(it.card.layouts, glyphs);
   const shape = drawShape(it.stroke && !it.fill ? { ...it, fill: it.stroke } : it, stroke, { ...paint, index: i });
   const decor = it.decor ? drawDecor(it.decor, { x: it.x + it.decor.x, y: it.y + it.decor.y, iconData: it.iconData }, glyphs) : '';
   const card = it.card ? drawCard(it.card, { box: cardBox(it), i }, paint) : '';
-  return `${open}${halo}${shape}${decor}${HAS_OWN_LABELS.has(it.shape) ? '' : drawLabels(it)}${card}</g>`;
+  return `${open}${shape}${decor}${HAS_OWN_LABELS.has(it.shape) ? '' : drawLabels(it)}${card}</g>`;
 }
 
 // cost: time O(g²), heap O(g), stack O(1)

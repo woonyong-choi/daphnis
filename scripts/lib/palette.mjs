@@ -84,7 +84,7 @@ function stepsOf(theme, tokens) {
   const plate = color('bg');
   const node = color('node');
   const [, blueC, blueHue] = oklchOf(theme === 'light' ? color('blue.anchor') : darkOf(color('blue.anchor')));
-  const skyFill = oklchToHex(SKY_FILL[theme].L, Math.min(SKY_FILL[theme].C, blueC), blueHue);
+  const skyFill = theme === 'dark' ? color('palette.sky.dark-fill') : oklchToHex(SKY_FILL[theme].L, Math.min(SKY_FILL[theme].C, blueC), blueHue);
   const slateFill = theme === 'light' ? SLATE_LIGHT_FILL : color('palette.slate.dark-fill');
   return {
     sky: { [`${theme}-fill`]: skyFill, [`${theme}-outline`]: outlineOf({ theme, fill: skyFill, stroke: color(`palette.sky.${theme}-stroke`), plate, node }) },
