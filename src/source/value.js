@@ -1,5 +1,5 @@
 // 값 선언(`value id "이름" on=도형 [from=값 | ref=값]`)과 값 바꾸기 식(`set="id+1@도형, id=낱말"`)을 읽는다. 이름이 선언됐는지는 value-check.js가 확인한다.
-import { MAX_VALUE, RANGE_MESSAGE } from './chart-rules.js';
+import { MAX_VALUE, RANGE_MESSAGE } from './chart-limits.js';
 import { checkId } from './names.js';
 import { readOptions } from './options.js';
 import { ID_PATTERN, NUMBER_PATTERN } from './words.js';
@@ -31,13 +31,15 @@ export function readValue({ tokens, line }, ctx) {
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 값 글자 수
 // basis: estimate
-/** 값 글자 하나(숫자나 공백 없는 낱말)를 확인하고 숫자는 간단한 꼴로 돌려준다. 어긋나면 오류를 내고 undefined다. */
-export function readLiteral(text, { line, key, ctx }) {
+/** 값 글자 하나(숫자나 공백 없는 낱말)를 확인하고 숫자는 간단한 꼴로 돌려준다. 숫자는 차트 숫자와 같은 범위(절댓값 1e15 미만)다. 어긋나면 오류를 내고 undefined다. */
+function readLiteral(text, { line, key, ctx }) {
   if (/\s/.test(text)) {
     ctx.problems.error(line, `${key} is a number or a word without spaces. Found "${text}"`);
     return undefined;
   }
-  return NUMBER_PATTERN.test(text) ? String(roundNumber(Number(text))) : text;
+  if (!NUMBER_PATTERN.test(text)) return text;
+  if (!(Math.abs(Number(text)) < MAX_VALUE)) return fail(RANGE_MESSAGE, { line, ctx });
+  return String(roundNumber(Number(text)));
 }
 
 /** 소수 계산 오차를 지운 숫자 */
@@ -50,7 +52,7 @@ export function roundNumber(number) {
 // basis: estimate
 /**
  * `set="식, 식"`을 식 목록으로 읽는다. 식은 `id+N`, `id-N`, `id=N`, `id=낱말`, `id:=원천`이고 뒤에 `@도형`을 붙일 수 있다. `=` 뒤는 언제나 값 글자(숫자나 공백 없는 낱말)이고 다른 값의 이름이어도 그 글자다. 다른 값을 따라가는 것은 `ref`가 맡고, 값 하나를 다른 값으로 한 번 복사하는 것은 읽기 식(`:=`)이 맡는다.
- * @returns { id, op, operand, at, line }[]. op는 `+`, `-`, `=`, `:=`다. `:=`의 operand는 읽을 값 이름이다. 읽기 식이 하나라도 있으면 그림 모형의 hasRead를 켠다. 어긋난 식은 오류를 내고 뺀다
+ * @returns { id, op, operand, at, line }[]. op는 `+`, `-`, `=`, `:=`다. `:=`의 operand는 읽을 값 이름이다. 어긋난 식은 오류를 내고 뺀다
  */
 export function readSets(text, { line, ctx }) {
   const ids = ctx.figure.values.map((v) => v.id).sort((a, b) => b.length - a.length);
@@ -93,7 +95,6 @@ function readExpression(raw, { ids, line, ctx }) {
 // 읽기 식 하나. 원천은 값 이름 꼴이어야 하고, 그 이름이 선언됐는지는 value-check.js가 확인한다.
 function readRead(expression, raw, { line, ctx }) {
   if (!ID_PATTERN.test(expression.operand)) return fail(`write a read as target:=source, where source is a value name. Found "${raw}"`, { line, ctx });
-  ctx.figure.hasRead = true;
   return expression;
 }
 

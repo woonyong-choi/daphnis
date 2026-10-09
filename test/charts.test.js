@@ -6,7 +6,7 @@ import { reflowFigure } from '../src/build.js';
 import { DOT, PAD } from '../src/chart/metrics.js';
 import { measure } from '../src/measure/fonts.js';
 import { values } from '../src/tokens.js';
-import { build, dap, descendants, finalValue, findAll, lineOf, num, parseMarkup, reject, stillDom, textContent, textsOf, toHtml, toSvg, visibleTexts } from './support.js';
+import { EXAMPLES, build, dap, descendants, finalValue, findAll, lineOf, num, parseMarkup, read, reject, stillDom, textContent, textsOf, toHtml, toSvg, visibleTexts } from './support.js';
 
 const chart = (kind, body, head = 'x "x(u)"\n  y "y(u)"') => dap(`chart c "T-${kind}" ${kind} {\n  ${head}\n${body.split('\n').map((l) => `  ${l.trim()}`).join('\n')}\n}\n`);
 
@@ -72,43 +72,65 @@ test('K3 positions follow values: scatter orders points by x and y, a negative d
   assert.ok(sign('−2') < sign('+3'), 'the negative difference sits left of the positive one');
 });
 
+test('K3 signed value text keeps its sign when decimals round the magnitude to zero: difference and dumbbell', async () => {
+  const gap = await stillDom(chart('difference', 'series d "d"\nrow "A" d=-0.04\nrow "B" d=0.04\nrow "C" d=0', 'x "x(u)"\n  decimals 1'));
+  assert.deepEqual(['−0.0', '+0.0', '0.0'].filter((word) => !textsOf(gap).includes(word)), [], JSON.stringify(textsOf(gap)));
+  const rows = 'series a "a" role=compare\nseries b "b" role=main\nrow "A" a=1000 b=997\nrow "B" a=50 b=50\nrow "C" a=1000 b=1003';
+  const dumbbell = textsOf(await stillDom(chart('dumbbell', rows)));
+  assert.deepEqual(['−0%', '0%', '+0%'].filter((word) => !dumbbell.includes(word)), [], JSON.stringify(dumbbell));
+});
+
+test('K4 a box chart whose every value is missing draws its fallback axis on both scales', async () => {
+  const empty = (scale) => chart('box', 'row "A" min=- q1=- median=- q3=- max=-', `x "x(u)"\n  scale ${scale}`);
+  const [linear, log] = [textsOf(await stillDom(empty('linear'))), textsOf(await stillDom(empty('log')))];
+  assert.deepEqual(['0', '1'].filter((tick) => !linear.includes(tick)), [], JSON.stringify(linear));
+  assert.deepEqual(['1', '10'].filter((tick) => !log.includes(tick)), [], JSON.stringify(log));
+});
+
 test('K4 bar and stacked charts keep missing values distinct from zero', async () => {
   const bar = await stillDom(chart('bar', 'series v "v"\nrow "A" v=-\nrow "B" v=0\nrow "C" v=5\nmissing "none here"'));
   const texts = textsOf(bar);
   assert.ok(texts.includes('none here'), 'a missing bar says so');
-  assert.equal(texts.filter((t) => t === '0').length >= 1, true, 'a zero bar keeps its value text');
+  const rowB = visibleTexts(bar).find((n) => textContent(n).trim() === 'B');
+  const zeroValue = visibleTexts(bar).find((n) => textContent(n).trim() === '0' && Math.abs(num(n, 'y') - num(rowB, 'y')) < 2);
+  assert.ok(zeroValue, 'the zero bar on row B keeps its value text beside its label, not only the axis tick');
   const [zero, ten] = marks(await stillDom(chart('bar', 'series v "v"\nrow "A" v=0\nrow "B" v=10'))).map((m) => num(m, 'width'));
   assert.ok(zero <= 3 && ten > 100, `a zero bar is only a marker (${zero}) beside a real one (${ten})`);
   const allMissing = chart('line', 'series s "s"\npoint x=1 s=-\npoint x=2 s=-');
   assert.ok(textsOf(await stillDom(allMissing)).includes('값 없음'));
 });
 
-test('K5 each kind rejects its own invalid shapes at the offending line', async () => {
+test('K5 each kind rejects its own invalid shapes for the stated reason at the offending line', async () => {
+  // [종류, 본문, 이유, 오류가 나야 하는 줄의 조각, 오류 글]
   const cases = [
-    ['bar', 'series v "v"\nrow "A" v=-1', 'negative'],
-    ['bar', 'series v "v"\nrow "A" v=1\nrow "A" v=2', 'duplicate row'],
-    ['bar', 'series v "v"\nrow "A" v=1 v.low=2 v.high=3', 'value outside its interval'],
-    ['bar', 'series v "v"\nrow "A" v=1\nrule -1', 'negative rule'],
-    ['stacked', 'series p "p"\nseries q "q"\nrow "A" p=1', 'missing series value'],
-    ['stacked', 'series p "p" role=reference\nseries q "q"\nrow "A" p=1 q=2', 'reference series'],
-    ['percent', 'series p "p"\nrow "A" p=1', 'one series'],
-    ['percent', 'series p "p"\nseries q "q"\nrow "A" p=-1 q=2', 'negative share'],
-    ['dumbbell', 'series a "a"\nrow "A" a=1', 'one series'],
-    ['dumbbell', 'series a "a"\nseries b "b"\nseries c "c"\nrow "A" a=1 b=2 c=3', 'three series'],
-    ['difference', 'series a "a"\nseries b "b"\nrow "A" a=1 b=2', 'two series'],
-    ['line', 'series s "s"\npoint x=1 s=1\npoint x=1 s=2', 'duplicate x'],
-    ['step', 'series s "s"\npoint x=1 s=1 s.low=0 s.high=2', 'interval on a step chart'],
-    ['area', 'series s "s"\npoint x=1 s=1', 'one x'],
-    ['scatter', 'point "P" x=1 y=2\npoint "P" x=3 y=4', 'duplicate name'],
-    ['scatter', 'point "P" x=1 y=2\nlink "P" -> "Z"', 'link to unknown point'],
-    ['box', 'row "A" min=3 q1=2 median=3 q3=4 max=5', 'quartile order'],
-    ['heatmap', 'cell "r" "c" 1\ncell "r" "c" 2', 'duplicate cell'],
-    ['histogram', 'bins 10 0 2\nsample 1', 'bins reversed'],
-    ['bar', 'series v "v"\nrow "A" v=1\nscale log', 'log bar'],
+    ['bar', 'series v "v"\nrow "A" v=-1', 'negative', 'row "A"', /values cannot be negative/],
+    ['bar', 'series v "v"\nrow "A" v=1\nrow "A" v=2', 'duplicate row', 'v=2', /appears twice/],
+    ['bar', 'series v "v"\nrow "A" v=1 v.low=2 v.high=3', 'value outside its interval', 'v.low', /v\.low ≤ v ≤ v\.high/],
+    ['bar', 'series v "v"\nrow "A" v=1\nrule -1 "r"', 'negative rule', 'rule -1', /a rule cannot be negative/],
+    ['stacked', 'series p "p"\nseries q "q"\nrow "A" p=1', 'missing series value', 'row "A"', /needs q=value/],
+    ['stacked', 'series p "p" role=reference\nseries q "q"\nrow "A" p=1 q=2', 'reference series', 'role=reference', /role=reference is not allowed/],
+    ['percent', 'series p "p"\nrow "A" p=1', 'one series', 'chart c', /takes 2 or more series/],
+    ['percent', 'series p "p"\nseries q "q"\nrow "A" p=-1 q=2', 'negative share', 'row "A"', /values cannot be negative/],
+    ['dumbbell', 'series a "a"\nrow "A" a=1', 'one series', 'chart c', /takes 2 series/],
+    ['dumbbell', 'series a "a"\nseries b "b"\nseries c "c"\nrow "A" a=1 b=2 c=3', 'three series', 'series c', /takes 2 series/],
+    ['difference', 'series a "a"\nseries b "b"\nrow "A" a=1 b=2', 'two series', 'series b', /takes 1 series/],
+    ['line', 'series s "s"\npoint x=1 s=1\npoint x=1 s=2', 'duplicate x', 'point x=1 s=2', /appears twice/],
+    ['step', 'series s "s"\npoint x=1 s=1 s.low=0 s.high=2', 'interval on a step chart', 'point x=1', /is not a value of a step chart/],
+    ['area', 'series s "s"\npoint x=1 s=1', 'one x', 'point x=1', /at least two different x values/],
+    ['scatter', 'point "P" x=1 y=2\npoint "P" x=3 y=4', 'duplicate name', 'point "P" x=3', /appears twice/],
+    ['scatter', 'point "P" x=1 y=2\nlink "P" -> "Z"', 'link to unknown point', 'link "P"', /unknown point "Z"/],
+    ['box', 'row "A" min=3 q1=2 median=3 q3=4 max=5', 'quartile order', 'row "A"', /min ≤ q1 ≤ median ≤ q3 ≤ max/],
+    ['heatmap', 'cell "r" "c" 1\ncell "r" "c" 2', 'duplicate cell', 'cell "r" "c" 2', /appears twice/],
+    ['histogram', 'bins 10 0 2\nsample 1', 'bins reversed', 'bins 10 0 2', /minimum < maximum/],
+    ['bar', 'series v "v"\nrow "A" v=1\nscale log', 'log bar', 'scale log', /scale log is not allowed/],
   ];
-  for (const [kind, rows, why] of cases) {
-    const problems = await reject(chart(kind, rows)).catch((error) => { throw new Error(`${kind} (${why}): ${error.message}`); });
+  for (const [kind, rows, why, at, message] of cases) {
+    const source = chart(kind, rows);
+    const problems = await reject(source).catch((error) => { throw new Error(`${kind} (${why}): ${error.message}`); });
     assert.ok(problems.every((p) => p.line >= 1 && p.severity === 'error'), `${kind} ${why}: ${JSON.stringify(problems)}`);
+    const cause = problems.find((p) => message.test(p.message));
+    assert.ok(cause, `${kind} ${why}: expected ${message} in ${JSON.stringify(problems)}`);
+    assert.equal(cause.line, lineOf(source, at), `${kind} ${why}: ${cause.message}`);
   }
 });
 
@@ -131,8 +153,8 @@ test('K7 the number range is shared by every number in a chart: finite, under 1e
   const bar = (v) => chart('bar', `series v "v"\nrow "A" v=${v}`);
   await build(bar('999999999999999'));
   await build(bar('0'));
-  await build(bar('2.2250738585072014e-308'.replace('e-308', '').replace('2.2250738585072014', '1')));
-  for (const bad of ['1000000000000000', '1e3', '1,5', 'NaN', 'Infinity', '.5.', `${'9'.repeat(400)}`, `0.${'0'.repeat(400)}1`]) {
+  await build(bar(`0.${'0'.repeat(307)}22250738585072014`));
+  for (const bad of ['1000000000000000', '1e3', '1,5', 'NaN', 'Infinity', '.5.', `${'9'.repeat(400)}`, `0.${'0'.repeat(309)}1`, `0.${'0'.repeat(400)}1`]) {
     const source = bar(bad);
     assert.ok((await reject(source)).some((p) => p.line === lineOf(source, 'row "A"')), bad);
   }
@@ -213,7 +235,7 @@ test('K9 narrow value-axis labels keep both ends, thin out at an even stride and
 });
 
 // 점 이름은 자기 점이 다른 어느 점보다 `space.6` 이상 가까워야 어느 점의 이름인지 읽힌다. 이름 자리가 모자란 아주 좁은 폭(256 이하, 점이 몰려 그런 자리가 없다)은 예전 자리로 돌아가므로 보지 않는다.
-test('K9 scatter names sit nearer to their own point than to any other point', async () => {
+test('K9 scatter names sit nearer to their own point than to any other point, and a narrow layout never breaks a word of a name', async () => {
   const base = await build(chart('scatter', 'point "Growth B" x=1000 y=5\npoint "Growth C" x=500 y=5\npoint "Low" x=0 y=0'));
   const gap = (a, b) => Math.hypot(Math.max(a.x0 - b.x1, b.x0 - a.x1, 0), Math.max(a.y0 - b.y1, b.y0 - a.y1, 0));
   const around = ({ x, y }) => ({ x0: x - DOT, x1: x + DOT, y0: y - DOT, y1: y + DOT });
@@ -227,6 +249,18 @@ test('K9 scatter names sit nearer to their own point than to any other point', a
     const names = findAll(dom, (n) => n.tag === 'rect' && /\bchart-text-bg\b/.test(n.attrs.class ?? '')).map((rect) => ({ x0: num(rect, 'x') + pad, y0: num(rect, 'y') + pad, x1: num(rect, 'x') + num(rect, 'width') - pad, y1: num(rect, 'y') + num(rect, 'height') - pad }));
     assert.equal(names.length, 3);
     names.forEach((box, k) => dots.forEach((dot, j) => j === k || assert.ok(gap(box, around(dot)) >= gap(box, around(dots[k])) + values.space['6'], `${chartWidth}: name ${k} is ${(gap(box, around(dot)) - gap(box, around(dots[k]))).toFixed(1)}px nearer to point ${j} than the margin`)));
+  }
+  // 좁은 배치(HTML의 `fl-narrow` 템플릿)에서 점 이름 줄은 낱말 안에서 끊기지 않는다: 번호 키가 앞에 붙은 이름이 같은 낱말 목록을 줄로 나눠 가진다.
+  const example = await build(read(EXAMPLES, 'scatter.dap'), { baseDir: EXAMPLES });
+  const narrow = descendants(parseMarkup(await toHtml(example, 'scatter'), { html: true })).find((n) => n.tag === 'template' && /\bfl-narrow\b/.test(n.attrs.class ?? ''));
+  assert.ok(narrow, 'the scatter ships a narrow-screen layout');
+  const labels = example.figure.nodes.find((node) => node.id === 'risk').plot.chart.rows.map((row) => row.label);
+  const drawn = findAll(narrow, (n) => n.tag === 'text' && /\bchart-name\b/.test(n.attrs.class ?? ''));
+  assert.equal(drawn.length, labels.length, 'every point has a name');
+  for (const name of drawn) {
+    const lines = findAll(name, (n) => n.tag === 'tspan').map((n) => textContent(n).trim());
+    const words = lines.join(' ').split(/\s+/).filter(Boolean).slice(1);
+    assert.ok(labels.some((label) => label === words.join(' ')), `the lines ${JSON.stringify(lines)} keep every word of one point name whole`);
   }
 });
 

@@ -94,6 +94,6 @@ img {
 
 .figure-open a:focus-visible,
 .figure a:focus-visible {
-  outline: var(--border-tag) solid var(--color-ui-focus);
+  outline: var(--simple2-focus-width) solid var(--color-ui-focus);
   outline-offset: var(--space-1);
 }

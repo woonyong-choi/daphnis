@@ -15,8 +15,6 @@ import { THEME_KEY } from './html/theme.js';
 import { CANONICAL_NAME, PLAYER_SCRIPT, figureFrame } from './html/player-script.js';
 import { roundedNumbers } from './format.js';
 
-export { CANONICAL_NAME };
-
 // iframe 안에서 열리면 틀을 빼고, 목록 쪽이 iframe 높이를 맞추도록 본문 높이를 알린다. 문서(html) 높이는 iframe 창보다 작아지지 않아 쓰지 않는다.
 // 목록 쪽의 라이트·다크 선택은 iframe의 prefers-color-scheme에 안정적으로 전해지지 않아, 목록 쪽이 보내는 테마 메시지로 이 문서의 data-theme을 바꾼다. 처음에는 목록 쪽에 현재 테마를 물어본다.
 // 목록 밖에서 따로 열린 재생 화면(목록의 `열기`)은 목록이 기억한 같은 선택(localStorage)을 처음 그리기 전에 읽어 따른다. 그림마다 테마 단추를 두지 않는다(도구 막대와 겹치지 않는다). 고르지 않았거나(시스템) 읽을 수 없으면 시스템 설정을 따른다.

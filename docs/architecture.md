@@ -30,7 +30,7 @@
 |---|---|---|---|
 | 카드 면과 구분선 | `measure/sizes.js`의 `sizeNode`(상자, 사람, 외부, 원통, 갈림길, 원), `table.js`(표, API), `class.js`(클래스, 인터페이스), `sizeParticipant`(순서 보기 참여자), 큐와 격자. `build-scene.js`가 도형마다 한 번 부른다 | `draw/figure.js`의 `drawScene` → `draw/shape.js` → `draw/card.js`의 `drawCard` → `draw/surface.js`의 `drawSurface`. 원통, 갈림길, 원, 상태 점만 `shape.js`가 모양 자체를 그린다 | `test/components.test.js`(U1) |
 | 카드 머리 | `measure/card.js`의 `headerOf`와 `placeHeader`(표, API, 클래스, 순서 보기 참여자가 같은 머리), 상자와 사람은 같은 `headerDecor`. 폭과 안쪽 여백(`PAD`)을 한 곳에서 정한다. 제목은 아이콘과 배지를 뺀 폭(`room`)에서 줄을 나눈다 | `draw/card.js`의 `drawHead` → `draw/decor.js`의 `drawDecor`(아이콘, 배지, 개수)와 `draw/texts.js` | `test/components.test.js`(U2, U3), `test/text.test.js`(T6~T8) |
-| 글 한 줄(text) | `measure/texts.js`의 `STYLE`(글 역할과 크기), `textAt`(제목, 열 이름, 형식, 제약, 클래스 멤버, 격자 칸이 모두 같은 모양), `stackTexts`, `titleTexts`, `textBlock`(메모와 구획 제목), `textWidth`, `textSpan`, `allTexts`. 글을 읽는 방식은 `text.js`의 `isLiteralFace`가 글꼴로 정한다 | `draw/texts.js`의 `drawTexts`. 이동 글 상자가 피할 사각형(`draw/boxes.js`)과 그림 검사 1번(`check/fit.js`)도 같은 `textSpan`을 읽는다 | `test/components.test.js`(U1, U4, U5, U6), `test/text.test.js`(T1~T3, T5) |
+| 글 한 줄(text) | `measure/texts.js`의 `STYLE`(글 역할의 크기, 굵기, 줄 높이. 카드 라벨은 regular, 그룹 제목은 15 semibold이고 글자 사이 간격은 CSS와 같은 `tracking.text` 하나다), `textAt`(제목, 열 이름, 형식, 제약, 클래스 멤버, 격자 칸이 모두 같은 모양), `stackTexts`, `titleTexts`, `textBlock`(메모와 구획 제목), `textWidth`, `textSpan`, `allTexts`. 글을 읽는 방식은 `text.js`의 `isLiteralFace`가 글꼴로 정한다 | `draw/texts.js`의 `drawTexts`. 이동 글 상자가 피할 사각형(`draw/boxes.js`)과 그림 검사 1번(`check/fit.js`)도 같은 `textSpan`을 읽는다 | `test/components.test.js`(U1, U4, U5, U6), `test/text.test.js`(T1~T3, T5, T13) |
 | 카드 내용(`show`) | `measure/content.js`의 `sizeContent`가 줄마다 태그, 표시, 본문, 관계 그래프 이름, 값을 text로 재고 `fitValueSlot`, `valueText`가 값 글을 재어 돌려준다 | `draw/content.js`의 `drawContent`와 `draw/values.js`는 잰 text를 `drawTexts`로 그리고 태그 알약, 그래프 도형만 따로 그린다 | `test/cards.test.js`(S8), `test/text.test.js`(T4) |
 | 차트와 시간 머리 | `chart/labels.js`의 `drawHeader`가 제목(`label`)과 부제(`sub`)를 `stackTexts`로 쌓고 높이를 정한다. 차트(`chart/draw.js`)와 시간 보기(`layout/time.js`)가 같은 함수다 | 같은 함수가 `textMarkup`으로 그린다. 긴 글은 `chart.layout.width`나 없으면 `WIDTH`에서 줄을 나눈다 | `test/text.test.js`(T10, T11) |
 | 연결선과 선 라벨 | 라벨 알약 크기 `measure/sizes.js`의 `sizePill`. 선 경로는 `layout/`이 정하고 건드리지 않는다 | `draw/connector.js`의 `drawEdge`, `drawEdgeLabel` | `test/components.test.js`(U6, U7) |
@@ -57,12 +57,12 @@
 
 - `timeline.steps`: 장면마다 정확히 `{ label: string, mode: 'static' | 'once' | 'loop', speed: number }`다. 문자열 형태는 없다.
 - `timeline.segs[]`: `{ si, bi, t0, t1, hops, nodesOn, partsOn, cards, cardsBefore, cardsAt, charts?, status?, ... }`. `t0`, `t1`은 논리 시각이다(효과 시간과 박자 뒤 머묾이 없다). 설명 글(`caption`)과 지나간 선을 남기는 목록은 없다. `hops`는 이동마다 보기별 투영 하나씩이고 `edge`는 합친 장면의 선·메시지 번호이며 같은 이동의 투영은 `at`, `ms`, `cut`이 같다. `charts`는 차트 카드 id → `{ series, growing, lights }`로 차트마다 따로 움직인다.
-- `timeline.values[]`: 장면마다 값 줄 `{ si, id, node, t0, t1, initial, changes, periods, flashes }`. `node`가 없는 값은 카드에 보이지 않는다. 시각 `t`의 글은 `periods.find(([from, to]) => from <= t && t < to) ?? periods.at(-1)`이다. 장면이 없는 문서는 선언한 값마다 `si`가 없고 길이가 0이며 변화와 펄스가 없는 줄을 하나 갖는다(처음 값을 보이기 위한 줄이고 탭이나 시간을 만들지 않는다).
+- `timeline.values[]`: 장면마다 값 줄 `{ si, id, node, t0, t1, initial, changes, periods }`. 바뀌는 순간의 밝힘은 `timeline.pulses`의 값 펄스가 맡는다. 같은 시각의 변화는 마지막 글 하나만 남는다. `node`가 없는 값은 카드에 보이지 않는다. 시각 `t`의 글은 `periods.find(([from, to]) => from <= t && t < to) ?? periods.at(-1)`이다. 장면이 없는 문서는 선언한 값마다 `si`가 없고 길이가 0이며 변화와 펄스가 없는 줄을 하나 갖는다(처음 값을 보이기 위한 줄이고 탭이나 시간을 만들지 않는다).
 - `timeline.total`: 장면의 논리 길이의 합이다. 장면이 없거나 모두 길이 0이면 0이고 1ms로 올려 쓰지 않는다. 재생기는 이 값을 쓰지 않는다.
 - `timeline.charts[카드 id]`: 값에 묶인 차트만. `{ id, rows: [{ si, t0, t1, periods: [[from, to, 프레임 번호, 바뀐 표식 id[]]] }] }`. 같은 규칙으로 보이는 프레임을 정하고, 장면의 첫 구간의 바뀐 표식은 장면이 시작할 때 보이는 값(`set=`과 `keep`을 반영한 시작 값)의 프레임과 견준다.
 - `scene.chartFrames[카드 id]`: `{ marks: [{ id, tag }], frames: [{ [표식 id]: { attrs, text? } }] }`. 모든 프레임이 같은 표식을 갖고 `attrs`는 그 표식의 속성 전체다. 그려진 차트의 표식 요소에는 `data-mark`(글은 `data-mark-text`)가 붙고 차트 그림은 `<g data-chart="카드 id">` 안에 있다.
 - `timeline.marks`: `{ [키]: [[from, to, si], ...] }`. 조용한 선이 보이는 구간이다(`quiet:번호`). 같은 장면 안에서만 합치고 길이 0 구간도 남기며, 세 번째 값이 구간을 소유한 장면이다. 점이 지나는 동안의 선은 이동 목록(`hops`)에서 구하고, 켜 둔 도형과 부분, 차트 행은 구간(`nodesOn`, `partsOn`, `charts[id].lights`)이 가진다.
-- `timeline.pulses`: `[{ key, at, si }]` 시각 순. 키는 `value:값 줄 번호`나 `chart:차트:표식 id`이고 `si`는 출처 장면이다. 펄스 모양은 `src/pulse.js`다(`PULSE`, `PULSE_MS`, `pulseAt`, `envelopeKeys`).
+- `timeline.pulses`: `[{ key, at, si }]` 시각 순. 키는 `value:값 줄 번호`나 `chart:차트:표식 id`이고 `si`는 출처 장면이다. 펄스 모양은 `src/pulse.js`다(`PULSE`, `PULSE_MS`, `envelopeKeys`).
 - `timeline.presentation[si]`: 장면마다 표시 길이(화면 ms). 논리 길이를 `speed`로 나눈 값과 마지막 펄스·선 이탈에 `PULSE_MS`를 더한 값 가운데 큰 것이고, 컴파일러가 한 번 정해(`timeline-marks.js`의 `presentationOf`) 재생기와 SVG가 읽는다([재생](design/playback.md#장면과-재생-방식)).
 - `scene`: `{ items, groups, edges, lifelines, notes, activations, destructions, fragments, plots, times, panels, chartFrames, width, height, tagOrder }`. 도형, 그룹, 선에는 `view`(보기의 내부 열쇠 `v1`, `v2`, ...)가 있고 선에는 `strategy`가 있다. 같은 카드가 여러 보기에 그려지면 `items`에 같은 `id`가 여러 번 있다. `panels[]`는 `{ index, view, strategy, box: { x, y, w, h }, label?, labelAt? }`이고 `box.w`는 판의 자연 폭이다. `plots[]`와 `times[]`는 차트 보기와 시간 보기 판이다.
 - 재생기가 해야 할 일: 같은 `id`의 요소는 `querySelectorAll`로 모두 찾고, 시각의 상태는 `periods`와 `charts`의 같은 규칙으로 정하고, 펄스는 `timeline.pulses`로 건다. 애니메이션 끝 이벤트는 논리 상태를 정하지 않는다.
@@ -71,11 +71,11 @@
 
 ### 토큰 만들기
 
-1. 공통 토큰은 설치된 `@woonyong-choi/design-tokens`의 정본(`source`, `source-dark`)에서 읽는다. 버전은 `package.json` `devDependencies`의 태그(`github:woonyong-choi/design-tokens#v0.1.1`)가 정한다.
-2. `scripts/build-tokens.mjs`가 그 정본과 `src/tokens.json`, `src/tokens.dark.json`을 합쳐 `src/tokens.css`, `src/tokens.js`를 만든다. `src/` 정본에는 그림 전용 구성 요소 토큰(`color.figure`, `color.paint`(범주 계열의 이름과 이전 이름의 임시 별칭), `color.tag`, `color.flow-ink`, `color.flow-outline`, `color.palette`의 `sky`, `slate`, 그림과 재생기와 차트의 `size`, `duration`, `opacity`, `distance` 같은 값, 내장 글꼴 사슬 `font.figure-sans`, `font.figure-mono`)만 있다.
-3. `src/` 정본이 공통 토큰과 같은 이름을 다시 정의하면 `npm run check`(`build-tokens.mjs --check`)가 실패한다. 생성물이 낡았을 때도 같다.
-4. `npm run palette`가 이 저장소가 값을 갖는 팔레트 단계(`sky`와 `slate`의 면과 외곽선)를 공통 토큰의 면 위 대비 규칙으로 다시 계산해 `src/tokens.json`에 쓴다. 나머지 팔레트 단계는 공통 토큰을 가리키는 별칭이다.
-5. design-tokens에 새 태그가 나오면 `design-tokens-update` 워크플로가 의존성을 올리고 1~4와 `npm run figures`로 생성물을 다시 만든 PR과 이슈를 연다. 알림(`repository_dispatch`)과 매일 한 번의 정기 확인, 수동 실행을 받는다. 같은 버전의 PR이 열려 있으면 새로 만들지 않는다.
+1. 정본은 design-tokens 저장소의 선택한 테마다. 버전은 `package.json` `devDependencies`의 태그(`github:woonyong-choi/design-tokens#v0.1.1`)가 정한다. 이 저장소는 값을 계산하지 않고 정본이 만든 완성본을 가져온다.
+2. `npm run theme:sync -- --from <design-tokens-root>`(`scripts/sync-theme.mjs`)가 완성본을 `src/design-theme/`에 가져오고, 그림 전용 토큰 사본 `diagram.tokens.json`, `diagram.tokens.dark.json`을 `src/tokens.json`, `src/tokens.dark.json`으로 복사한다. `src/tokens*.json`은 정본이 아니라 가져온 사본이라 손으로 고치지 않는다. 사본에는 그림 전용 구성 요소 토큰(`color.figure`, `color.paint`, `color.tag`, `color.flow-ink`, `color.flow-outline`, `color.palette`의 `sky`, `slate`, 그림과 재생기와 차트의 `size`, `duration`, `opacity`, `distance` 같은 값, 내장 글꼴 사슬 `font.figure-sans`, `font.figure-mono`)만 있다.
+3. `npm run tokens`(`scripts/build-tokens.mjs`)가 `src/design-theme/`의 공통 토큰(`renderer.tokens.json`, `renderer.tokens.dark.json`)과 `src/tokens*.json`을 합쳐 `src/tokens.css`, `src/tokens.js`를 만든다.
+4. `npm run check`가 무결성을 맡는다. `sync-theme.mjs --check`는 `src/design-theme/`의 파일 해시와 설정한 테마 이름, `src/tokens*.json`이 사본과 같은지, 사본의 출처 버전(`theme.json`의 `source.version`)이 `package.json`의 design-tokens 태그와 같은지 본다. 태그만 올리고 사본을 다시 가져오지 않으면 실패한다. `build-tokens.mjs --check`는 `src/tokens*.json`이 공통 토큰과 같은 이름을 다시 정의했는지, 참조가 풀리는지, 생성물이 낡았는지 본다. `check-tokens.mjs`는 화면 값의 하드코딩을 찾는다.
+5. design-tokens에 새 태그가 나오면 `design-tokens-update` 워크플로가 의존성을 올리고, 그 태그를 작업 트리 밖에 따로 받아(npm 패키지에는 `scripts/export-theme.mjs`가 없다) `npm run theme:sync -- --from <받은 폴더>`, `npm run tokens`, `npm run figures`로 사본과 생성물을 다시 만든 PR과 이슈를 연다. 받은 폴더의 `package.json` 버전이 태그와 같아야 하고 인증 정보는 쓰지 않는다. 알림(`repository_dispatch`)과 매일 한 번의 정기 확인, 수동 실행을 받는다. 같은 버전의 PR이 열려 있으면 새로 만들지 않는다.
 
 새 이슈는 라벨 `build`, `area:repo`, `P3`와 제목 `공통 토큰 v0.1.2 변경`(20자를 넘으면 `토큰 v0.1.2 변경`)으로 만들고, 저장소에 연결된 프로젝트(GraphQL `repository.projectsV2`로 조회)에 등록해 Status를 `대기`로 둔다. 프로젝트 쓰기 권한(Projects)이 있는 `DESIGN_TOKENS_UPDATE_TOKEN`이 필요하다. 성공은 토큰 유무가 아니라 조회, 등록, 상태 설정 호출 결과로 판단하고, 하나라도 실패하면 실행 요약의 "프로젝트 등록 실패" 문단과 `::warning::` 줄에 단계와 이유를 남기되 이슈와 PR 만들기는 계속한다. 같은 버전으로 다시 실행하면 열린 이슈(옛 제목 `design-tokens v0.1.2로 올린다` 포함)와 PR을 찾아 쓰고, 판에 없는 이슈만 등록한다. 이 로직은 `scripts/update-design-tokens.mjs publish`와 `scripts/lib/design-tokens-board.mjs`에 있다.
 
@@ -98,7 +98,7 @@
 - 논리 시각(`t0`, `t1`, `at`, `ms`, 값 구간, 프레임 구간)은 재생 속도, 펄스, 화면 길이가 바꾸지 않는다. 펄스의 꼬리는 화면 길이만 늘린다.
 - 값 글자와 차트 카드 크기는 실제 글꼴로 잰 글 폭이다. 렌더러가 같은 글꼴로 같은 줄 나눔을 쓴다.
 - 점 이동 곡선, 글 상자 밀어 넣기, 차트 자라기는 HTML과 SVG가 같은 토큰과 같은 규칙을 쓴다. 규칙은 `src/easing.js`, `src/chip.js`, `src/chart/motion.js`에 있고, 브라우저 코드(`player/`)는 불러올 수 없어 같은 계산을 따로 둔다. 글 상자 자리는 예외로, 빌드 때 시간표에 담은 계획을 재생기가 보간만 한다.
-- 크기, 간격, 색, 시간 값은 토큰만 쓴다. 공통 토큰은 design-tokens가, 그림 전용 토큰은 `src/tokens.json`이 정본이고 같은 이름을 두 곳에 두지 않는다. `src/tokens.css`, `src/tokens.js`는 둘을 합친 생성물이라 손으로 고치지 않는다.
+- 크기, 간격, 색, 시간 값은 토큰만 쓴다. 정본은 공통 토큰과 그림 전용 토큰 모두 design-tokens가 갖고, `src/design-theme/`와 `src/tokens*.json`은 가져온 사본이며 같은 이름을 두 곳에 두지 않는다. `src/tokens.css`, `src/tokens.js`는 사본을 합친 생성물이라 손으로 고치지 않는다.
 - 그림은 정의된 부품을 가져다 조립한다(React처럼 합성하되 React에 기대지 않는다). 흐름은 원본 문법 → 공통 모형 → 필요한 배치 → 공통 부품 → 조작부 하나다. 카드(머리와 필드 줄), 연결선과 라벨, 화살촉, 아이콘, 장면 탭, 도구 막대는 모양과 상태를 부품 하나가 소유하고, 종류별 렌더러는 데이터와 필요한 배치 결과만 넘긴다. 같은 토큰을 읽는 것만으로 같은 부품이라 하지 않고, 측정과 그리기는 같은 부품의 역할 규약을 쓴다. 같은 모양이 종류마다 복제되는 일과 같은 시험이 종류마다 되풀이되는 일을 막기 위해서다. 부품이 코드의 어느 파일에 있는지는 [부품 호출 지도](#부품-호출-지도)에 있다.
 - 변환 중 네트워크에 접근하지 않는다. 글꼴과 배치 엔진을 모두 함께 배포한다.
 
@@ -114,9 +114,9 @@
 
 ## 선택 테마 가져오기
 
-테마 선택은 루트 theme.config.json의 simple2다. design-tokens의 dist/simple2 완성본을 src/design-theme에 커밋한다. scripts/theme-snapshot.mjs가 설정의 테마 이름과 사본의 이름이 같은지, 모든 파일의 해시가 같은지 검사한다. scripts/lib/design-tokens.mjs는 이 사본의 renderer.tokens.json과 renderer.tokens.dark.json을 읽는다. src/tokens.json과 src/tokens.dark.json은 그림 전용 토큰의 호환 사본이다. 계산 알고리즘은 유지하고 생성 CSS·JS는 선택한 테마의 값을 사용한다.
+테마 선택은 루트 theme.config.json의 simple2다. design-tokens의 dist/simple2 완성본을 src/design-theme에 커밋한다. scripts/theme-snapshot.mjs가 설정의 테마 이름과 사본의 이름이 같은지, 모든 파일의 해시가 같은지 검사한다. scripts/lib/design-tokens.mjs는 이 사본의 renderer.tokens.json과 renderer.tokens.dark.json을 읽는다. src/tokens.json과 src/tokens.dark.json은 그림 전용 토큰의 가져온 사본이다. 이 저장소는 팔레트 값을 다시 계산하지 않고, 생성 CSS·JS는 선택한 테마의 값을 사용한다.
 
-공통 정본에서 수정한 다음 `npm run theme:sync -- --from <design-tokens-root>`, `npm run tokens`, `npm run check`, `npm test` 순서로 확인한다. theme:sync는 기존 사본의 수동 수정을 발견하면 중단한다. 자동 업데이트 워크플로도 새 패키지 설치 후 같은 명령으로 설정한 테마를 가져온다. Git 태그 개발 의존성은 업데이트 감지용이며 실행 시에는 커밋된 사본과 생성물을 사용한다.
+공통 정본에서 수정한 다음 `npm run theme:sync -- --from <design-tokens-root>`, `npm run tokens`, `npm run figures`, `npm run check`, `npm test` 순서로 확인한다. theme:sync는 기존 사본의 수동 수정을 발견하면 중단한다. 자동 업데이트 워크플로도 감지한 태그를 따로 받아 같은 명령으로 설정한 테마를 가져온다. Git 태그 개발 의존성은 업데이트 감지용이며 실행 시에는 커밋된 사본과 생성물을 사용한다.
 
 현재 연결은 simple2의 두 모드를 사용하고 그림의 측정 글꼴을 보존한다. 다른 테마는 renderer 계약과 그림 전용 값, 실제 측정 글꼴을 갖추고 검사한 뒤 연결한다. npm 사용자에게 테마 원본을 다시 다운로드하도록 요구하지 않는다.
 

@@ -109,6 +109,9 @@ test('E7 a queue counts through its own name and is observable through a referen
       a -> q set="q-1"
   `);
   assert.equal(await finalValue(doc, 'len'), '2');
+  // 같은 시각에 넘쳤다가 돌아오는 값은 보이지 않으므로 칸 수 경고도 없다
+  const over = dap('box a "A"\nqueue q "Q" slots=2 from=2\na -> q\nscene "s" mode=once\n  a -> q time=500ms set="q+1, q-1"\n');
+  assert.deepEqual((await build(over, { strict: false })).warnings, []);
   for (const bad of ['queue q "Q" slots=0', 'queue q "Q" slots=33', 'queue q "Q" slots=2.5', 'queue q "Q" slots=2 from=3', 'queue q "Q"']) {
     const source = dap(`${bad}\n`);
     assert.ok(atLine(await reject(source), source, bad), bad);
@@ -146,10 +149,24 @@ test('E9 parallel moves of one beat: the later arrival wins, equal arrivals go i
   assert.equal(await finalValue(staggered(2, 1), 'n'), '2');
 });
 
+test('E9 updates of one instant show as the last text of that instant; a return to the earlier text is no change and no pulse', async () => {
+  const seen = async (exprs) => {
+    const { timeline } = await build(one([`a -> b time=500ms set="${exprs}"`], BASE, 'once'));
+    return { changes: timeline.values.find((row) => row.id === 'n').changes, hasPulse: timeline.pulses.some((pulse) => pulse.key.startsWith('value:')) };
+  };
+  assert.deepEqual(await seen('n+1, n-1'), { changes: [], hasPulse: false });
+  assert.deepEqual(await seen('n+1, n+1, n-1'), { changes: [[500, '1']], hasPulse: true });
+  assert.deepEqual(await seen('n=7, n=3'), { changes: [[500, '3']], hasPulse: true });
+});
+
 test('E10 a flow with every= departs repeatedly; only dots that arrive before the scene ends change the value', async () => {
   const flow = (length) => dap(`${BASE}\nscene "s" mode=static for=${length}\n  track a -> b at=0s every=1s time=500ms set="n+1"\n`);
   assert.equal(await finalValue(flow('3s'), 'n'), '3');
   assert.equal(await finalValue(flow('2.2s'), 'n'), '2');
+  // 흐름도 같은 시각의 갱신은 마지막 글 하나로 보이고, 조건이 있는 흐름(이벤트 처리기)도 같다
+  const returned = async (condition) => (await build(dap(`${BASE}\nscene "s" mode=once for=2s\n  track a -> b at=0s time=500ms ${condition} set="n+1, n-1"\n`))).timeline.values.find((row) => row.id === 'n').changes;
+  assert.deepEqual(await returned(''), []);
+  assert.deepEqual(await returned('wait="n=0"'), []);
 });
 
 test('E11 when: a false condition skips the move completely, a true one runs it', async () => {
@@ -158,6 +175,25 @@ test('E11 when: a false condition skips the move completely, a true one runs it'
   assert.equal(await finalValue(gated('n=0'), 'n'), '1');
   assert.equal(await finalValue(gated('n!=0 || n<1'), 'n'), '1');
   assert.equal(await finalValue(gated('!(n=0)'), 'n'), '0');
+});
+
+/** 시퀀스 보기를 더한 원본. `fragment`는 순서 보기가 있어야 쓴다. */
+const sequenced = (moves) => dap(`${BASE}\nview graph\nview sequence "S" {\n  a b\n}\nscene "s" mode=once\n${moves}`);
+
+test('E11 inside a fragment a value changes when each repetition arrives, a message takes the time it takes outside, and when, wait and reserve are line errors', async () => {
+  const loop = await build(sequenced('  fragment loop "L" times=3 {\n    a -> b "x" time=500ms set="n+1"\n  }\n'));
+  assert.deepEqual(loop.timeline.values.find((row) => row.id === 'n').changes, [[500, '1'], [1000, '2'], [1500, '3']]);
+  const same = await build(sequenced('  a -> b "x"\n  fragment loop "L" times=1 {\n    a -> b "x"\n  }\n'));
+  const [outside, inside] = same.timeline.segs.map((seg) => seg.hops[0].ms);
+  assert.equal(inside, outside);
+  for (const option of ['when="n<0"', 'wait="n=0"', 'reserve="n+1"']) {
+    const direct = sequenced(`  fragment loop "L" times=2 {\n    a -> b "x" ${option}\n  }\n`);
+    const nested = sequenced(`  fragment alt "A" choose="p" {\n    branch "p" {\n      fragment opt "O" run=on {\n        a -> b "x" ${option}\n      }\n    }\n    branch "q" {\n      a -> b "y"\n    }\n  }\n`);
+    for (const source of [direct, nested]) {
+      const problems = await reject(source);
+      assert.ok(problems.some((p) => p.line === lineOf(source, option) && /cannot be used inside a fragment/.test(p.message)), `${option}: ${JSON.stringify(problems)}`);
+    }
+  }
 });
 
 /** 잠금 한 칸과 요청 둘. `seen`은 `lock`에 닿은 점 수를 센다. */
@@ -244,6 +280,12 @@ test('E14 a reserve takes effect at departure and is not returned when the dot i
   assert.equal(await finalValue(doc('', `wait="holder='zz'" timeout=1s`), 'holder'), 'none');
 });
 
+test('E14 a reserve and an update at one instant that end on the earlier text are no change', async () => {
+  const doc = lockDoc(['track a -> lock at=0s time=1s reserve="holder=none" set="holder=A@a"']);
+  const { timeline } = await build(doc);
+  assert.deepEqual(timeline.values.find((row) => row.id === 'holder').changes, []);
+});
+
 test('E14 a reserve is all-or-nothing: an expression that cannot run at departure fails the build at that line', async () => {
   const doc = dap(`
     box a "A"
@@ -279,6 +321,13 @@ test('E17 numbers in value expressions are finite and under 1e15 in magnitude', 
   assert.equal(await finalValue(set('n+999999999999999'), 'n'), '999999999999999');
   for (const bad of ['n+1000000000000000', 'n+1e3', 'n+1,5', 'n+0x10', `n+${'9'.repeat(400)}`, 'n++1', 'n*2', 'n+']) {
     assert.ok(atLine(await reject(set(bad)), set(bad), 'set='), bad);
+  }
+  // 합의 결과도 같은 범위다. 넘으면 정밀도를 잃은 글을 만들지 않고 그 식 줄의 value-type 오류다.
+  const high = BASE.replace('from=0', 'from=999999999999999');
+  for (const [head, expr] of [[high, 'n+1'], [BASE.replace('from=0', 'from=-999999999999999'), 'n-1'], [high, 'n+999999999999999, n-999999999999999']]) {
+    const source = one([`a -> b set="${expr}"`], head);
+    const problems = await reject(source);
+    assert.ok(problems.some((p) => p.code === 'value-type' && p.line === lineOf(source, 'set=')), `${expr}: ${JSON.stringify(problems)}`);
   }
 });
 

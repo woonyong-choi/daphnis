@@ -1,8 +1,8 @@
 // 차트 카드 블록(`chart id "제목" 종류 ["부제"] {` ... `}`)을 읽는다. 블록 안 줄은 차트 선언이다. 카드는 plot에 차트 하나를 통째로 담는다.
 import { readChartDeclaration } from './chart.js';
 import { DECIMALS_MAX, VALUES, valueNames } from './grammar.js';
-import { checkId, parentFor, rejectName } from './names.js';
-import { ID_PATTERN } from './words.js';
+import { checkId, parentFor, rejectName, skipBlock } from './names.js';
+import { ID_PATTERN, INTEGER_PATTERN } from './words.js';
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -20,14 +20,14 @@ export function readChartCard({ tokens, line }, ctx) {
   const form = 'write chart as: chart id "title" type ["subtitle"] {';
   if (!checkId(id, { line, ctx }, ID_PATTERN)) {
     rejectName(id, ctx);
-    if (tokens.at(-1).type === 'open') ctx.block = { kind: 'chart', card: { id: id?.value, plot: { chart: emptyChart() }, isRejected: true, line }, line };
+    skipBlock('chart', { id: id?.value, plot: { chart: emptyChart() } }, { tokens, line }, ctx);
     return;
   }
   const subtitle = rest.length > 1 ? rest[0] : undefined;
   const isShape = title?.type === 'text' && type?.type === 'word' && rest.at(-1)?.type === 'open' && rest.length <= 2 && (!subtitle || subtitle.type === 'text');
   if (!isShape) {
     ctx.problems.error(line, form);
-    if (tokens.at(-1).type === 'open') ctx.block = { kind: 'chart', card: { id: id.value, plot: { chart: emptyChart() }, isRejected: true, line }, line };
+    skipBlock('chart', { id: id.value, plot: { chart: emptyChart() } }, { tokens, line }, ctx);
     return;
   }
   const isType = valueNames('chartType').includes(type.value);
@@ -75,7 +75,7 @@ function readChartHeader({ tokens, line }, { figure, problems }) {
     else Object.assign(chart, { [key]: value.value, [`${key}Line`]: line });
   } else if (key === 'decimals') {
     const places = Number(value?.value);
-    if (value?.type !== 'word' || !Number.isInteger(places) || places < 0 || places > DECIMALS_MAX) problems.error(line, `write decimals as a whole number from 0 to ${DECIMALS_MAX}, such as decimals 2`);
+    if (value?.type !== 'word' || !INTEGER_PATTERN.test(value.value) || places > DECIMALS_MAX) problems.error(line, `write decimals as a whole number from 0 to ${DECIMALS_MAX}, such as decimals 2`);
     else chart.decimals = places;
   } else if (!valueNames(key).includes(value?.value)) problems.error(line, `${key} is ${valueNames(key).map((v) => `"${v}"`).join(' or ')}`);
   else Object.assign(chart, { [key]: value.value, [`${key}Line`]: line });

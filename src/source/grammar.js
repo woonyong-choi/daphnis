@@ -29,10 +29,10 @@ const APPEARANCE = { type: 'word', values: 'appearance' };
 /** 시간 선택 사항. 값은 `900ms`, `2s` 꼴이다. */
 const TIME = { type: 'word', format: '시간' };
 /** 도형 글자 배지의 글자 수 상한. 도형 윗줄에 이름 글과 함께 들어갈 만큼이다. */
-export const BADGE_MAX = 8;
+const BADGE_MAX = 8;
 
 /** 큐 칸 수(`slots`)의 상한. 가장 넓은 큐(칸 폭 16px, 틈 4px)가 약 640px라 캔버스 폭(960) 안에 들고, 칸 수를 세어 읽을 수 있는 한계다. */
-export const QUEUE_SLOTS_MAX = 32;
+const QUEUE_SLOTS_MAX = 32;
 
 /** 카드를 쓰는 도형(`show`, `value`가 놓이는 곳). 이름 순서는 오류 안내 글에 그대로 나온다. */
 export const CARD_SHAPES = ['box', 'external', 'store', 'person', 'table', 'api'];

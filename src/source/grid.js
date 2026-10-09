@@ -1,5 +1,5 @@
 // 칸 격자(`grid id "글" rows=N cols=N {` ... `}`)를 읽는다. 칸은 `item`과 `gap` 줄이고, 칸 자리는 격자 안의 논리 인덱스다(docs/design/figure-kinds.md 칸 격자).
-import { checkId, parentFor } from './names.js';
+import { checkId, parentFor, rejectName } from './names.js';
 import { readOptions } from './options.js';
 import { findOverlaps } from './grid-space.js';
 import { ID_PATTERN } from './words.js';
@@ -12,6 +12,7 @@ export function readGrid({ tokens, line }, ctx) {
   const [, id, label, ...rest] = tokens;
   const isOpen = tokens.at(-1).type === 'open';
   if (!checkId(id, { line, ctx }, ID_PATTERN)) {
+    rejectName(id, ctx);
     // 안쪽 줄을 이 격자의 줄로 읽어 넘기도록 버린 격자 자리를 연다.
     if (isOpen) ctx.block = { kind: 'grid', card: { isRejected: true, cells: [], line }, names: new Map(), line };
     return;

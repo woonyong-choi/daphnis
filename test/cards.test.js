@@ -107,9 +107,15 @@ test('S3 grid cells are as wide and tall as the units they cover, empty places s
 test('S4 a table foreign key becomes an edge between the two columns, to a key column only, and a column cannot reference itself', async () => {
   const doc = (child) => dap(`table users "users" {\n  id bigint pk\n  name text\n}\ntable orders "orders" {\n  id bigint pk\n  ${child}\n}\n`);
   await build(doc('user_id bigint fk=users.id'));
-  for (const bad of ['user_id bigint fk=users.name', 'user_id bigint fk=users.zz', 'user_id bigint fk=nope.id', 'user_id bigint fk=orders.user_id']) {
-    const source = doc(bad);
-    assert.ok((await reject(source)).some((p) => p.line === lineOf(source, 'user_id')), bad);
+  const cases = [
+    [doc('user_id bigint fk=users.name'), 'user_id', /fk must point to a pk or unique column/],
+    [doc('user_id bigint fk=users.zz'), 'user_id', /unknown column in "users" "zz"/],
+    [doc('user_id bigint fk=nope.id'), 'user_id', /unknown table "nope"/],
+    [dap('table orders "orders" {\n  id bigint pk fk=orders.id\n}\n'), 'fk=orders.id', /cannot go from "orders.id" to itself/],
+  ];
+  for (const [source, needle, message] of cases) {
+    const problems = await reject(source);
+    assert.ok(problems.some((p) => p.line === lineOf(source, needle) && message.test(p.message)), `${needle}: ${JSON.stringify(problems)}`);
   }
   const contradictory = dap(`table t "t" {\n  id bigint pk nullable\n}\n`);
   assert.ok((await reject(contradictory)).some((p) => p.line === lineOf(contradictory, 'id bigint')));

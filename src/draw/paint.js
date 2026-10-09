@@ -34,7 +34,7 @@ export function paintCss(scene) {
       `.fl .fl-node.ap-outline${t} {\n  --fx-edge-rest: var(--color-paint-${name}-outline);\n}`,
       `.fl .fl-node${t} .fl-symbol,\n.fl .fl-group${t} .fl-symbol {\n  color: var(--color-paint-${name}-outline);\n  --symbol-detail: var(--color-node);\n}`,
       `.fl .fl-group.ap-filled${t} > .frame-box {\n  fill: var(--color-paint-${name}-fill);\n}`,
-      `.fl .fl-group.ap-outline${t} > .frame-box {\n  stroke: var(--color-paint-${name}-outline);\n  stroke-width: var(--border-tag);\n}`,
+      `.fl .fl-group.ap-outline${t} > .frame-box {\n  --fx-edge-rest: var(--color-paint-${name}-outline);\n}`,
       `.fl .fl-group${t} > .frame {\n  fill: var(--color-paint-${name}-ink);\n}`,
       `.fl .face${t}.ap-filled {\n  fill: var(--color-paint-${name}-fill);\n}`,
       `.fl .face${t}.ap-outline {\n  stroke: var(--color-paint-${name}-outline);\n}`,

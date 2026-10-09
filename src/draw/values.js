@@ -29,14 +29,14 @@ const instancesOf = (scene, row) => scene.items.flatMap((item, index) => (item.i
  * 값이 바뀔 때 잠깐 켜지는 배경 면. 면은 글자와 칸 아래에 있어야 이름과 값이 가려지지 않으므로 값 층이 아니라 도형 그룹 안(도형 면 바로 위, 글자 아래)에 넣는다.
  * 큐는 도형과 같은 윤곽(outlineOf)이고 카드 값 줄은 줄 모양이며 둘 다 테두리가 없어 기본 경계 위에 두 번째 윤곽이 생기지 않는다.
  * 보이는 글이 바뀐 카드 글 줄(timeline.rowPulses)도 같은 면을 가진다(`data-rf`). 카드의 모든 내용 층에서 그 줄 자리에 놓여 보이는 층의 줄만 켜진다.
- * @param deps { windows, pulse?, row? }. windows(구간 목록)은 움직이는 SVG의 SMIL 요소를 돌려주고 재생기는 빈 글을 돌려주는 함수다(재생기가 불투명도를 바꾼다). pulse(값 줄 번호)가 있으면 갱신 펄스(80/80/240ms, 겹치면 최댓값)가 면을 켜고, 없으면 값 줄의 flashes 구간이 켠다. row(펄스 키)는 글 줄 면의 SMIL 요소를 돌려준다(재생기는 없다)
+ * @param deps { pulse?, row? }. pulse(값 줄 번호)는 갱신 펄스(80/80/240ms, 겹치면 최댓값)로 면을 켜는 움직이는 SVG의 SMIL 요소를 돌려준다. 없으면(재생기) 면은 비어 있고 재생기가 불투명도를 바꾼다. row(펄스 키)는 글 줄 면의 SMIL 요소를 돌려준다(재생기는 없다)
  * @returns { shape: Map<도형 번호, 글>, card: Map<`도형 번호:카드 번호`, 글> }. 도형 면 아래 면과 카드 층 안 면이다
  */
-export function drawFlashes(scene, timeline, { windows, pulse, row }) {
+export function drawFlashes(scene, timeline, { pulse, row }) {
   const flashes = { shape: new Map(), card: new Map() };
   addRowFlashes(flashes, scene, timeline, row);
   (timeline.values ?? []).forEach((row, vi) => {
-    const anim = pulse ? pulse(vi) : windows(row.flashes);
+    const anim = pulse?.(vi) ?? '';
     for (const { item, index } of instancesOf(scene, row)) {
       if (row.slots !== undefined) {
         flashes.shape.set(index, `${flashes.shape.get(index) ?? ''}${outlineOf(item)} class="fl-flash fl-flash-face" opacity="0" data-vf="${vi}">${anim}</rect>`);

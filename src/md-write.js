@@ -5,8 +5,8 @@ import { basename, dirname, join, relative, resolve } from 'node:path';
 import { realPath } from './md-owner.js';
 
 /**
- * 실제 파일 시스템 동작. 시험은 같은 모양의 객체로 바꿔 실패를 주입한다.
- * mkdir은 새로 만든 가장 바깥 폴더의 경로(없으면 undefined)를 돌려주고, rmdir은 빈 폴더만 지운다. 실패 때 이번 실행이 만든 폴더를 치우는 데 쓴다(rmdir은 없어도 된다).
+ * 파일 시스템 동작 한 벌. 쓰기와 되돌리기는 이 객체로만 파일 시스템을 만진다.
+ * mkdir은 새로 만든 가장 바깥 폴더의 경로(없으면 undefined)를 돌려주고, rmdir은 빈 폴더만 지운다. 실패 때 이번 실행이 만든 폴더를 치우는 데 쓴다.
  */
 export const FILE_IO = {
   mkdir: (path) => mkdirSync(path, { recursive: true }),
@@ -107,7 +107,7 @@ function removeCreated(created, io) {
   for (const { top, leaf } of created.reverse()) {
     try {
       for (let path = leaf; !relative(resolve(top), resolve(path)).startsWith('..'); path = dirname(path)) {
-        io.rmdir?.(path);
+        io.rmdir(path);
         if (resolve(path) === resolve(top)) break;
       }
     } catch {

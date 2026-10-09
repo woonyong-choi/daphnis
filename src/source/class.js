@@ -1,6 +1,6 @@
 // 클래스와 인터페이스의 멤버 구획 및 관계를 읽는다.
 import { flagNames } from './grammar.js';
-import { checkId, parentFor, rejectName } from './names.js';
+import { checkId, parentFor, rejectName, skipBlock } from './names.js';
 import { readOptions } from './options.js';
 import { ID_PATTERN } from './words.js';
 
@@ -11,11 +11,12 @@ export function readClassifier({ tokens, line }, ctx) {
   const [head, id, label, ...tail] = tokens;
   if (!checkId(id, { line, ctx }, ID_PATTERN)) {
     rejectName(id, ctx);
-    if (tokens.at(-1).type === 'open') ctx.block = { kind: 'class', card: { id: id?.value, members: [], isRejected: true, line }, line };
+    skipBlock('class', { id: id?.value, members: [] }, { tokens, line }, ctx);
     return;
   }
   if (label?.type !== 'text' || tail.at(-1)?.type !== 'open') {
     ctx.problems.error(line, `write ${head.value} as: ${head.value} ${id.value} "name" [abstract] {`);
+    skipBlock('class', { id: id.value, members: [] }, { tokens, line }, ctx);
     return;
   }
   const flags = readFlags(tail.slice(0, -1), 'classifier', { line, ctx });
@@ -53,7 +54,7 @@ export function readMember({ tokens, line }, ctx) {
 function readFlags(tokens, scope, { line, ctx }) {
   const found = {};
   for (const token of tokens) {
-    if (token.type !== 'word' || !flagNames(scope).includes(token.value)) ctx.problems.error(line, `${scope} takes ${flagNames(scope).join(', ')}. Found "${token.value}"`);
+    if (token.type !== 'word' || !flagNames(scope).includes(token.value)) ctx.problems.error(line, `${scope} takes ${flagNames(scope).join(', ')}. Found "${token.key ?? token.value}"`);
     else if (found[token.value]) ctx.problems.error(line, `"${token.value}" is written twice`);
     else found[token.value] = true;
   }

@@ -2,7 +2,7 @@
 import { values } from '../tokens.js';
 
 const SPACE = values.space;
-export const ACTIVATION_WIDTH = SPACE['6'];
+const ACTIVATION_WIDTH =SPACE['6'];
 
 // cost: time O(p + m + a), heap O(p + a), stack O(1)
 // vars: p = 참여자 수, m = 메시지 수, a = 활성 명령 수

@@ -27,13 +27,13 @@ export const chartCards = (figure) => figure.nodes.filter((n) => n.shape === 'ch
 // vars: r = 행 수
 // basis: estimate
 /** 차트 카드의 행이 묶은 값 이름 목록 */
-export const boundIds = (card) => [...new Set(card.plot.chart.rows.flatMap((row) => Object.values(row.bind ?? {})))];
+const boundIds = (card) => [...new Set(card.plot.chart.rows.flatMap((row) => Object.values(row.bind ?? {})))];
 
 // cost: time O(v), heap O(1), stack O(1)
 // vars: v = 보기 수
 // basis: estimate
 /** 차트 보기에 놓인 차트는 문서 폭 전체로, 그래프 카드로만 놓인 차트는 좁은 폭으로 그린다. 한 차트는 한 모양으로만 그린다. */
-export const isFullChart = (figure, card) => figure.views.some((v) => v.strategy === 'plot' && v.cardIds.includes(card.id));
+const isFullChart = (figure, card) => figure.views.some((v) => v.strategy === 'plot' && v.cardIds.includes(card.id));
 
 // 값 이름이 가질 글 가운데 숫자인 것. 숫자가 아닌 글은 시간표를 만든 뒤 checkNumbers가 알린다.
 const numericTexts = (texts, byId, id) => [...(texts.get(rootOf(byId, id)) ?? [])].filter((t) => NUMBER_PATTERN.test(t));

@@ -174,7 +174,7 @@ function readRowOption(t, row, { line, ctx }) {
 // cost: time O(v), heap O(v), stack O(1)
 // vars: v = 값 목록의 값 수
 // basis: estimate
-// 카드 줄 선택 사항의 값. 값 목록이 있으면 그 안의 값만 받는다. 옛 값은 normalize.js가 이미 바꿔 놓았다.
+// 카드 줄 선택 사항의 값. 값 목록이 있으면 그 안의 값만 받는다.
 function readRowValue(t, { spec, row }, { line, ctx }) {
   if (spec.values && (t.valueType !== 'word' || !valueNames(spec.values).includes(t.value))) ctx.problems.error(line, `${t.key} is one of ${valueNames(spec.values).join(', ')}`);
   else if (!spec.values && t.valueType !== 'text') ctx.problems.error(line, `write ${t.key} as quoted text: ${t.key}="..."`);

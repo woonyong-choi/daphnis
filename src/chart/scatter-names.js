@@ -40,9 +40,11 @@ export function placeNames(points, right, bounds) {
     const rightRoom = right - point.x - NAME_OFFSET;
     const leftRoom = point.x - (bounds?.left ?? 0) - NAME_OFFSET;
     const wantsLeft = width > rightRoom && (!bounds || leftRoom > rightRoom);
+    // 줄 폭의 하한은 가장 긴 낱말이다. 좁은 쪽에서도 낱말 안은 끊지 않고, 낱말이 들어가지 않는 쪽의 상자는 inBounds가 걸러 다른 쪽이나 위아래로 옮긴 자리가 고려된다.
+    const longest = Math.max(...point.text.split(' ').map((word) => measure(word, TEXT['11'])));
     const options = [wantsLeft, !wantsLeft].flatMap((toLeft) => {
       const room = toLeft ? point.x - (bounds?.left ?? 0) - NAME_OFFSET : right - point.x - NAME_OFFSET;
-      const lines = bounds ? wrap(point.text, Math.max(TEXT['11'], room), { size: TEXT['11'] }) : [point.text];
+      const lines = bounds ? wrap(point.text, Math.max(longest, room), { size: TEXT['11'] }) : [point.text];
       const nameW = bounds ? Math.max(...lines.map((line) => measure(line, TEXT['11']))) : width;
       return SHIFTS.map((shift) => ({ width: nameW, height: lines.length * NAME_STEP, toLeft, shift, lines }));
     });

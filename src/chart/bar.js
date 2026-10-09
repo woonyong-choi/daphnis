@@ -12,6 +12,7 @@ import { markAttrs, markId } from './marks.js';
 import { BAR, SPACE, TEXT, isReference, seriesFill, seriesOutline, seriesPaint } from './metrics.js';
 import { patternRect } from './pattern.js';
 import { formatNumber, seriesFormats } from './scale.js';
+import { barRadius } from './shape.js';
 import { CI_OFFSET, CI_REACH, presentSlots, slotMiddle, stepOf } from './slots.js';
 import { hasRowRule } from '../source/chart-rules.js';
 
@@ -106,7 +107,8 @@ function barMark(ctx, row, at) {
   const raw = `${low}~${high}`;
   const mark = { line: markAttrs(chart, markId(chart, i, k, '.ci'), { raw, paint: seriesPaint(chart, i) }), caps: markAttrs(chart, markId(chart, i, k, '.cc'), { raw, paint: seriesPaint(chart, i) }) };
   const ci = high !== undefined ? confidenceLine({ x1: scale.at(low), x2: reach, cy: by + CI_OFFSET }, mark) : '';
-  const face = { x: plotX, y: by, w: Math.max(SPACE['1'], end - plotX), h: BAR, radius: values.radius.sm };
+  const width = Math.max(SPACE['1'], end - plotX);
+  const face = { x: plotX, y: by, w: width, h: BAR, radius: barRadius(width) };
   const text = valueText({ x: Math.max(end, reach) + SPACE['3'], cy }, formats[i](v), `chart-value${i === 0 ? ' ours' : ''} late`, { chart, id: markId(chart, i, k), raw: v, paint: seriesPaint(chart, i) });
   return { mark: `<g class="cr-${k}"><g class="cs-${i}">${barFace({ ...ctx, row }, { i, k }, face)}${ci}</g></g>`, value: inkGroup(k, text, i) };
 }

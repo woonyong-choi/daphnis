@@ -39,7 +39,7 @@ const KINDS = {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /** 알약 크기. 왼쪽 안쪽 간격, 기호, 간격, 글자, 오른쪽 안쪽 간격이다. */
-export function sizeStatus(kind) {
+function sizeStatus(kind) {
   return { w: SPACE['3'] + ICON + SPACE['2'] + measure(KINDS[kind].text, BADGE_STYLE.size, BADGE_STYLE.face) + SPACE['3'], h: HEIGHT };
 }
 
@@ -56,7 +56,7 @@ function cornerOf(it) {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /** 도형 it의 상태 알약 사각형. 오른쪽 위 모서리에서 OVERHANG만큼 바깥으로 나가고, 아래 가장자리는 모서리 INSET 안쪽이다. */
-export function statusBox(it, kind) {
+function statusBox(it, kind) {
   const { w, h } = sizeStatus(kind);
   const corner = cornerOf(it);
   return { x: corner.x + OVERHANG - w, y: corner.y + INSET - h, w, h };
@@ -72,7 +72,7 @@ export const hasStatus = (timeline) => timeline.segs.some((seg) => seg.status);
 // vars: b = 구간 수, s = 상태 수
 // basis: estimate
 /** 시간표가 쓰는 알약마다 { node, kind, spans }. spans는 그 알약이 보이는 시각 구간 [시작, 끝](그림 전체 ms)이고 처음 나온 순서로 모은다. */
-export function statusPills(timeline) {
+function statusPills(timeline) {
   const pills = new Map();
   for (const seg of timeline.segs) {
     for (const { node, kind } of seg.status ?? []) {

@@ -2,7 +2,7 @@ import { PERSON_SYMBOL as PERSON } from './person.js';
 // 의미 아이콘 등록부. 개념 이름(`server`, `lb`, `db` 등)의 도형과 역할이 이 표 하나에 있고, 다른 곳에 같은 이름의 도형이나 파일이 없다.
 // 24 격자에서 역할색으로 채운 실루엣(symbol-face)과 그 안의 밝은 세부(symbol-cut, symbol-detail), 실루엣 밖으로 나오는 같은 색 획(symbol-line)을 그린다. 브랜드와 사용자 SVG는 원래 글리프를 쓴다.
 
-/** 의미 아이콘의 격자 한 변. 그리는 쪽이 아이콘 틀(viewBox)을 이 값으로 잡아 모든 의미 아이콘이 같은 여백으로 앉는다. */
+/** 아이콘의 격자 한 변. 그리는 쪽은 모든 아이콘을 이 격자로 보고, 브랜드와 사용자 SVG는 읽을 때 이 격자에 맞춘다(sanitize.js). 그래서 모든 아이콘이 같은 여백으로 앉는다. */
 export const ICON_GRID = 24;
 
 const SERVER = '<rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/>'; // tokens-allow: 24 격자 아이콘 실루엣의 기하 좌표

@@ -1,33 +1,43 @@
-// 검사할 파일을 찾고 정렬하는 함수들. check-tokens.mjs가 쓴다.
+// 파일을 찾고 정렬하는 함수들. 어느 파일을 보고 어느 폴더를 건너뛸지는 부르는 쪽의 규칙({ wants, skipDirs })이 정한다. check-tokens.mjs, check-size.mjs, check-cost-comments.mjs, run-md.mjs가 쓴다.
 import { existsSync, readdirSync, statSync } from 'node:fs';
-import { dirname, extname, join, resolve } from 'node:path';
+import { basename, dirname, extname, join, resolve } from 'node:path';
 import { CSS_EXTS, SCRIPT_EXTS, SKIP_DIRS, TOKEN_FILES } from './tokens-patterns.mjs';
+
+// 토큰 검사가 보는 파일은 CSS와 스크립트(가져온 토큰 파일 제외)다. 대상으로 직접 준 파일은 확장자와 상관없이 본다.
+export const TOKEN_SOURCES = {
+  wants: (name) => !TOKEN_FILES.has(name) && (CSS_EXTS.has(extname(name).toLowerCase()) || SCRIPT_EXTS.has(extname(name).toLowerCase())),
+  skipDirs: SKIP_DIRS,
+  filterTargets: false,
+};
 
 // cost: time O(f), heap O(d), stack O(d), io f
 // vars: f = 파일 수, d = 폴더 깊이
 // basis: estimate
-/** 검사할 파일 경로. 폴더는 정렬 순서로 내려가고, 한 폴더의 파일을 하위 폴더보다 먼저 낸다. */
-export function* iterFiles(targets) {
+/**
+ * 볼 파일 경로. 폴더는 정렬 순서로 내려가고, 한 폴더의 파일을 하위 폴더보다 먼저 낸다.
+ * @param rules { wants, skipDirs, filterTargets? }. wants는 파일 이름을 받아 볼 파일이면 true, skipDirs는 내려가지 않는 폴더 이름 집합이다.
+ *   filterTargets가 false면 대상으로 직접 준 파일은 wants와 상관없이 낸다(기본은 wants를 따른다)
+ */
+export function* iterFiles(targets, rules) {
   for (const target of targets) {
     if (isFile(target)) {
-      yield target;
+      if (rules.filterTargets === false || rules.wants(basename(target))) yield target;
       continue;
     }
-    if (isDirectory(target)) yield* walkFiles(target);
+    if (isDirectory(target)) yield* walkFiles(target, rules);
   }
 }
 
 // cost: time O(f), heap O(d), stack O(d), io f
 // vars: f = 폴더 아래 파일 수, d = 폴더 깊이
 // basis: estimate
-export function* walkFiles(folder) {
+function* walkFiles(folder, rules) {
   const { files, dirs } = listFolder(folder);
   for (const name of files) {
-    const ext = extname(name).toLowerCase();
-    if (!TOKEN_FILES.has(name) && (CSS_EXTS.has(ext) || SCRIPT_EXTS.has(ext))) yield joinPath(folder, name);
+    if (rules.wants(name)) yield joinPath(folder, name);
   }
   for (const name of dirs) {
-    if (!SKIP_DIRS.has(name)) yield* walkFiles(joinPath(folder, name));
+    if (!rules.skipDirs.has(name)) yield* walkFiles(joinPath(folder, name), rules);
   }
 }
 
@@ -82,13 +92,13 @@ function findBelow(folder) {
 
 // cost: time O(1), heap O(1), stack O(1), io 1
 // basis: estimate
-export function isFile(path) {
+function isFile(path) {
   return statSync(path, { throwIfNoEntry: false })?.isFile() ?? false;
 }
 
 // cost: time O(1), heap O(1), stack O(1), io 1
 // basis: estimate
-export function isDirectory(path) {
+function isDirectory(path) {
   return statSync(path, { throwIfNoEntry: false })?.isDirectory() ?? false;
 }
 
@@ -96,7 +106,7 @@ export function isDirectory(path) {
 // vars: g = 경로 글자 수
 // basis: estimate
 /** 폴더와 이름을 잇는다. 사용자가 준 폴더 표기(`./src`)를 그대로 남긴다. */
-export function joinPath(folder, name) {
+function joinPath(folder, name) {
   return folder.endsWith('/') ? `${folder}${name}` : `${folder}/${name}`;
 }
 

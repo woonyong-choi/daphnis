@@ -1,7 +1,7 @@
 // 추적 카드 블록(`trace id "제목" [unit=ms] {` ... `}`)과 그 안의 구간 줄(`span id "이름" lane=카드 at=0 dur=100`)을 읽는다.
 // 구간은 실제 시간(unit)으로 놓인다. 레인이 선언된 카드인지는 validate.js가 확인한다.
 import { VALUES } from './grammar.js';
-import { checkId, parentFor, rejectName } from './names.js';
+import { checkId, parentFor, rejectName, skipBlock } from './names.js';
 import { readOptions } from './options.js';
 import { isTinyNumber, parseNumber } from './values.js';
 import { ID_PATTERN } from './words.js';
@@ -14,12 +14,12 @@ export function readTrace({ tokens, line }, ctx) {
   const [, id, label, ...rest] = tokens;
   if (!checkId(id, { line, ctx }, ID_PATTERN)) {
     rejectName(id, ctx);
-    if (tokens.at(-1).type === 'open') ctx.block = { kind: 'trace', card: { id: id?.value, spans: [], isRejected: true, line }, line };
+    skipBlock('trace', { id: id?.value, spans: [] }, { tokens, line }, ctx);
     return;
   }
   if (label?.type !== 'text' || rest.at(-1)?.type !== 'open') {
     ctx.problems.error(line, 'write trace as: trace id "title" [unit=ms] {');
-    if (tokens.at(-1).type === 'open') ctx.block = { kind: 'trace', card: { id: id.value, spans: [], isRejected: true, line }, line };
+    skipBlock('trace', { id: id.value, spans: [] }, { tokens, line }, ctx);
     return;
   }
   const found = readOptions(rest.slice(0, -1), { scopes: ['trace'], what: 'a trace', line, ctx });
@@ -51,8 +51,8 @@ export function readSpanLine({ tokens, line, hasLexError }, ctx) {
     return;
   }
   const found = readOptions(rest, { scopes: ['span'], what: 'a span', line, ctx });
-  const at = numberOf(found.at, { key: 'at', min: 0, isZeroOk: true, line, ctx });
-  const dur = numberOf(found.dur, { key: 'dur', min: 0, isZeroOk: false, line, ctx });
+  const at = numberOf(found.at, { key: 'at', isZeroOk: true, line, ctx });
+  const dur = numberOf(found.dur, { key: 'dur', isZeroOk: false, line, ctx });
   for (const key of ['lane', 'at', 'dur']) if (found[key] === undefined && !rest.some((t) => t.key === key)) ctx.problems.error(line, `a span needs ${key}=. ${form}`);
   if (card.spans.some((s) => s.id === id.value)) ctx.problems.error(line, `span "${id.value}" is already in trace "${card.id}"`);
   card.spans.push({ id: id.value, label: label.value, lane: found.lane, at, dur, line });

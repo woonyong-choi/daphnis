@@ -5,7 +5,8 @@ import { values } from '../tokens.js';
 
 export const SPACE = values.space;
 export const SIZE = values.size;
-export const TEXT = values.size.text;
+// 차트 글자 크기. 그림 안 글 위계의 작은 표시(11)와 문장(13)이고, 카드 안 글(measure/texts.js STYLE)과 chart.css가 읽는 simple2 역할 토큰 한 벌이다.
+export const TEXT = Object.freeze({ 11: values.simple2['micro-size'], 13: values.simple2['detail-size'] });
 export const WIDTH = SIZE.chart.width;
 export const BAR = SIZE.chart.bar;
 export const ROW = SIZE.chart.row;
@@ -24,7 +25,7 @@ export const NAME_OFFSET = DOT + SPACE['3'];
  * 계열 i의 범주 번호. main 계열이 0번이고 나머지는 계열 순서를 따라 1번부터다(main이 없으면 계열 번호 그대로).
  * 역할은 색을 정하지 않는다. 계열이 하나뿐인 차트(산점도 점)는 0번이다. 계열 수에 상한이 없다.
  */
-export function categoryIndex(chart, i) {
+function categoryIndex(chart, i) {
   const main = chart.series.findIndex((s) => s.role === 'main');
   if (chart.series.length <= 1 || main < 0) return Math.max(0, i);
   if (i === main) return 0;
@@ -54,7 +55,7 @@ function isLightFamily(paint) {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /** 점과 범례 칸이 같은 계열의 경계를 가져야 하는 계열인가: 밝은 계열이고 실제값이다. 선과 범위선에는 쓰지 않는다(굵기가 계열마다 같다). */
-export function hasBoundary(chart, i) {
+function hasBoundary(chart, i) {
   return isLightFamily(seriesPaint(chart, i)) && !isReference(chart, i);
 }
 

@@ -42,7 +42,7 @@ function edgesOfLeg(k, { hop, names, scene }) {
  * @param asked 지난 배치가 요구한 Map<`보기\u0000선 번호`(보기 안 순서), px>
  * @returns Map<`보기\u0000선 번호`, px>와 옆 폭 Map<`보기\u0000선 번호\u0000sweep`, { x, y }>. 숨는 흐름이 없으면 빈 Map이다
  */
-export function chipRoomNeeds({ scene, timeline, avoid, directions }, asked = new Map()) {
+function chipRoomNeeds({ scene, timeline, avoid, directions }, asked = new Map()) {
   const needs = new Map();
   for (const seg of timeline.segs) {
     for (const hop of seg.hops) addHopNeeds(needs, hop, { scene, timeline, avoid, directions, asked });

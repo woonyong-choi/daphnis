@@ -47,7 +47,7 @@ export async function layoutOrFail(figure, sizes, { problems, width }) {
  * @param layoutWidth 배치가 들어갈 목표 폭. 표시 배율이나 글자 크기는 바꾸지 않는다
  * @returns { items, groups, edges, width, height }. items는 도형 사각형(배치 사각형과 바깥 여백), edges는 경로 점과 라벨 자리
  */
-export async function layoutGraph(figure, sizes, layoutWidth = canvasOf(figure)) {
+async function layoutGraph(figure, sizes, layoutWidth = canvasOf(figure)) {
   engine ??= new ELK();
   try {
     return await place(figure, sizes, layoutWidth);

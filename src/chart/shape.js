@@ -1,5 +1,13 @@
 // 꼭짓점과 점의 모양. 범주 번호마다 원, 사각형, 마름모, 삼각형이 돌아가며 정해진다(chart-palette.js 모양 목록). 모양이 달라도 넓이는 원과 같다.
 import { roundCoord as r } from '../text.js';
+import { values } from '../tokens.js';
+
+const BAR_RADIUS = values.radius.sm;
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+/** 막대형 사각형(막대, 워터폴 막대)의 모서리 반지름. 폭이 두 모서리 반지름보다 좁으면 SVG가 반지름을 줄여 둥근 점으로 그리므로 각지게 둔다. */
+export const barRadius = (width) => (width < BAR_RADIUS * 2 ? 0 : BAR_RADIUS);
 
 // 반지름 radius인 원과 넓이가 같은 도형의 크기 배율. 사각형은 반변, 마름모는 반대각선, 삼각형은 외접원 반지름이다.
 const HALF_SIDE = Math.sqrt(Math.PI) / 2;

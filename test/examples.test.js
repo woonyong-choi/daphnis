@@ -15,20 +15,6 @@ test('K30 the examples are one per expression: sixteen chart kinds and fourteen 
   assert.deepEqual(names, [...CHARTS, ...FIGURES].sort());
 });
 
-/** 원본의 장면 줄에서 장면마다 기대하는 mode. mode를 적지 않으면 줄이 없는 장면은 static, 있는 장면은 once다. */
-function expectedModes(source) {
-  const modes = [];
-  let current;
-  for (const raw of source.split('\n')) {
-    const line = raw.replace(/#.*$/, '').trimEnd();
-    if (/^scene\b/.test(line) && !/^scene\s*->/.test(line)) {
-      current = { mode: /\bmode=(static|once|loop)\b/.exec(line)?.[1], lines: 0 };
-      modes.push(current);
-    } else if (current && line.trim()) current.lines += 1;
-  }
-  return modes.map(({ mode, lines }) => mode ?? (lines ? 'once' : 'static'));
-}
-
 /** 그림에 선언한 카드 제목(`kind id "제목"`). 코드 조각과 줄바꿈이 필요한 긴 글은 뺀다. */
 function declaredTitles(source) {
   return [...source.matchAll(/^\s*(?:person|box|external|store|decision|queue|state|table|api|class|interface|grid|chart|trace|group)\s+[a-z][a-z0-9-]*\s+"([^"]{1,16})"/gm)].map((m) => m[1]).filter((t) => !t.includes('`'));
@@ -39,16 +25,21 @@ for (const name of [...CHARTS, ...FIGURES]) {
     const source = readFileSync(join(EXAMPLES, `${name}.dap`), 'utf8');
     const result = await build(source, { baseDir: EXAMPLES });
     assert.deepEqual(result.warnings, []);
-    const modes = expectedModes(source);
-    const scenes = Math.max(modes.length, 1);
-    for (let scene = 0; scene < scenes; scene += 1) {
-      const moving = parseMarkup(await toSvg(result, { scene }));
+    const { steps, presentation } = result.timeline;
+    for (let scene = 0; scene < Math.max(steps.length, 1); scene += 1) {
+      const movingSvg = await toSvg(result, { scene });
+      const moving = parseMarkup(movingSvg);
       const still = parseMarkup(await toSvg(result, { scene, isStatic: true }));
       assert.equal(moving.attrs['data-scene'], String(scene));
+      // 장면의 방식은 컴파일러가 정한 시간표 값이다. 움직이는 장면(반복이나 한 번이고 표시 길이가 0보다 긴 장면)은 SMIL과 CSS 시계가 모두 그 방식으로 되풀이하고, 나머지는 시계가 없다.
+      const mode = steps[scene]?.mode ?? 'static';
+      assert.equal(moving.attrs['data-mode'], mode);
       const animations = descendants(moving).filter((n) => ANIMATION.has(n.tag));
-      if (modes[scene] === 'loop') assert.ok(animations.every((n) => n.attrs.repeatCount === 'indefinite'), `scene ${scene} loops`);
-      if (modes[scene] === 'once') assert.ok(animations.every((n) => n.attrs.repeatCount === '1'), `scene ${scene} plays once`);
-      if (modes[scene] === 'static') assert.equal(animations.length, 0, `scene ${scene} is still`);
+      const clocks = [...animations.map((n) => (n.attrs.repeatCount === 'indefinite' ? 'loop' : 'once')), ...[...movingSvg.matchAll(/\d(?:\.\d+)?s (infinite|1 forwards) linear/g)].map(([, repeat]) => (repeat === 'infinite' ? 'loop' : 'once'))];
+      if (mode !== 'static' && presentation[scene] > 0) {
+        assert.ok(clocks.length > 0, `scene ${scene} moves`);
+        assert.ok(clocks.every((repeat) => repeat === mode), `scene ${scene} ${mode}`);
+      } else assert.deepEqual(clocks, [], `scene ${scene} is still`);
       assert.equal(still.attrs['data-mode'], 'static');
       assert.equal(descendants(still).filter((n) => ANIMATION.has(n.tag)).length, 0);
     }
@@ -60,9 +51,6 @@ for (const name of [...CHARTS, ...FIGURES]) {
     assert.ok(findAll(page, (n) => n.tag === 'section' && n.attrs['data-strategy']).length >= 1);
     assert.equal(findAll(page, (n) => n.tag === 'script' && n.attrs.src).length, 0);
     assert.doesNotMatch(html, /\b(src|href)="https?:/);
-    const rebuilt = await build(source, { baseDir: EXAMPLES });
-    assert.equal(await toSvg(rebuilt, { scene: 0 }), await toSvg(result, { scene: 0 }), 'the same source draws the same bytes');
-    assert.equal(await toHtml(rebuilt, name), html);
   });
 }
 

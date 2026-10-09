@@ -65,6 +65,8 @@ test('V3 words are separated by spaces: "->" and "=" need the documented spacing
     ['box a "A" icon = server\n', 2],
     ['box a "A" icon=server icon=db\n', 2],
     ['box a "A" badge=api\n', 2],
+    ['box a "A" badge="LB"tone=red\n', 2],
+    ['box a "A"\nbox b "B"\na -> b quiet=yes\n', 4],
     ['box a ""\n', 2],
     ['box a "   "\n', 2],
     ['box a "unterminated\n', 2],
@@ -143,6 +145,34 @@ test('V6 every independent error is reported at once, in line order, with the sa
   assert.deepEqual(problems.map((p) => p.line), [2, 3, 4, 5]);
   assert.deepEqual(problems.map((p) => p.line), [...problems.map((p) => p.line)].sort((x, y) => x - y));
   for (const problem of problems) assert.deepEqual(Object.keys(problem).sort(), ['code', 'column', 'line', 'message', 'severity']);
+});
+
+test('V6 a malformed block header or a rejected name is one error: its inner lines and its group add none', async () => {
+  const cases = [
+    'table users {\n  id int pk\n}\n',
+    'api a {\n  id int\n}\n',
+    'class k {\n  field n "int"\n}\n',
+    'group g "G" {\n  grid Bad "x" {\n  }\n}\nbox a "A"\n',
+  ];
+  for (const body of cases) assert.equal((await reject(dap(body))).length, 1, body);
+});
+
+test('V6 each rejection names its real cause and counts what the limit counts', async () => {
+  const decimals = (value) => `chart c "T" bar {\n  x "x(u)"\n  decimals ${value}\n  series v "v"\n  row "A" v=1\n}\n`;
+  await build(dap(decimals('2')));
+  const cases = [
+    ['class k "K" abstract=yes {\n  field x "int"\n}\n', 2, /Found "abstract"/],
+    ['class k "K" {\n  field x "int" static=yes\n}\n', 3, /static takes no value/],
+    ['box a "A"\nscene "s" mode=once\n  light a "x"\n', 4, /"a" is a box, not a chart/],
+    ['state s "S"\nvalue v "V" on=s\n', 3, /Put a value on box, external, store, person, table, api/],
+    [`box a "A" badge="${'😀'.repeat(9)}"\n`, 2, /at most 8 characters\. Found 9/],
+    ['box a "A"\nvalue v "V" on=a from=1000000000000000000000\n', 3, /under 1e15/],
+    ...['0x2', '1e0', '2.0', '7'].map((value) => [decimals(value), 4, /whole number from 0 to 6/]),
+  ];
+  for (const [body, line, message] of cases) {
+    const problems = await reject(dap(body));
+    assert.ok(problems.some((p) => p.line === line && message.test(p.message)), `${JSON.stringify(body)} -> ${JSON.stringify(problems)}`);
+  }
 });
 
 test('V7 ports are card.part with exactly one dot; classes expose no ports and plain boxes have no parts', async () => {

@@ -66,7 +66,7 @@ export function collectCards(figure, valueTexts) {
 }
 
 /** 장면 하나의 재생 정보. 문자열이나 다른 모양은 없다. */
-export const stepInfo = ({ label, mode, speed }) => ({ label, mode, speed });
+const stepInfo = ({ label, mode, speed }) => ({ label, mode, speed });
 
 // cost: time O(b·(h + e + k)), heap O(b·(e + k)), stack O(1)
 // vars: b = 박자 수, h = 박자의 이동 수, e = 선 수, k = 카드 있는 도형 수
@@ -152,7 +152,7 @@ function beatSegs({ step, si, engine }, run, deps) {
     return beatSeg({ step, si, beat, bi, timed: started, endMs }, { memory, run }, deps);
   });
   if (engine) return { segs, moves: [] };
-  const moves = step.beats.flatMap((beat, bi) => beat.hops.map((hop) => ({ start: segs[bi].t0, ms: run.owned.get(hop), nodes: [hop.from, hop.to].map((id) => id.split('.')[0]), fracs: [0, 1], sets: hop.sets, lost: hop.lost })));
+  const moves = step.beats.flatMap((beat, bi) => beat.hops.map((hop) => ({ start: segs[bi].t0 + (hop.sequenceAt ?? 0), ms: run.owned.get(hop), nodes: [hop.from, hop.to].map((id) => id.split('.')[0]), fracs: [0, 1], sets: hop.sets, lost: hop.lost })));
   return { segs, moves };
 }
 
@@ -231,7 +231,6 @@ function cardTimes(hops, card) {
 // basis: estimate
 /**
  * 박자에서 밝은 도형과 그룹의 id. `light`가 명시한 대상뿐이다. 점이 닿은 도형은 밝히지 않고(도착 후광 seg.pulses가 테두리만 깜빡인다), 선 양 끝이나 카드가 찬 도형도 켜지지 않는다. HTML과 SVG가 같이 쓴다.
- * 두 번째 매개변수(선 목록)는 예전 호출을 위해 받고 읽지 않는다.
  */
 export function litIds(seg) {
   return new Set(seg.nodesOn);

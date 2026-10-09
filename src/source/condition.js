@@ -4,7 +4,7 @@ import { unknownName } from './problems.js';
 import { NUMBER_PATTERN } from './words.js';
 
 /** 조건식 글자 수 상한. 평가 비용에 상한을 두기 위해서다. */
-export const CONDITION_MAX = 200;
+const CONDITION_MAX = 200;
 
 const COMPARISONS = new Set(['=', '!=', '<', '<=', '>', '>=']);
 const ORDERED = new Set(['<', '<=', '>', '>=']);

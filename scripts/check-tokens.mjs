@@ -9,8 +9,8 @@
 import { readFileSync } from 'node:fs';
 import { extname } from 'node:path';
 import { commonTokenPaths } from './lib/design-tokens.mjs';
-import { findHardcoded, findLineNumber, findScriptValues, findSegments, stripJsComments } from './lib/find-hardcoded.mjs';
-import { compareText, findTokensFile, iterFiles } from './lib/walk-files.mjs';
+import { findHardcoded, findLineNumber, findScriptValues, findSegments, maskJs } from './lib/find-hardcoded.mjs';
+import { compareText, findTokensFile, iterFiles, TOKEN_SOURCES } from './lib/walk-files.mjs';
 import { ALLOW_MARK, GENERATED_MARK, REFERENCE_IN_VALUE, SCRIPT_EXTS, THEMED_TYPES } from './lib/tokens-patterns.mjs';
 
 const USAGE = 'usage: check-tokens.mjs [--tokens TOKENS] targets [targets ...]';
@@ -28,7 +28,7 @@ function main(argv) {
   const info = loadTokenInfo(tokensPath);
   if (tokensPath) mergeInfo(info, loadTokenInfo(commonTokenPaths().light));
   const results = [];
-  for (const path of iterFiles(args.targets)) results.push(...checkFile(path, info));
+  for (const path of iterFiles(args.targets, TOKEN_SOURCES)) results.push(...checkFile(path, info));
   results.sort((a, b) => compareText(a.path, b.path) || a.line - b.line);
   for (const { path, line, rule, snippet } of results) console.log(`${path}:${line}: ${rule}: ${snippet}`);
   console.log(`total ${results.length}`);
@@ -128,7 +128,7 @@ function checkFile(path, info) {
   const lines = text.split('\n');
   const lineStarts = [0];
   for (const line of lines.slice(0, -1)) lineStarts.push(lineStarts.at(-1) + line.length + 1);
-  if (SCRIPT_EXTS.has(ext)) text = stripJsComments(text);
+  if (SCRIPT_EXTS.has(ext)) text = maskJs(text);
   const found = [];
   for (const { offset, segment, isStyled } of findSegments(text, ext)) {
     for (const hit of findHardcoded(segment, info, isStyled)) found.push({ ...hit, position: offset + hit.position });

@@ -5,6 +5,7 @@ import { escapeXml, roundCoord as r } from '../text.js';
 import { values } from '../tokens.js';
 import { drawRules, finishRowChart, rowValueScale } from './axis.js';
 import { COPY } from './copy.js';
+import { valueRange } from './extent.js';
 import { inkGroup, rowLabelLayout, rowName, valueText } from './labels.js';
 import { BAR, ROW, SPACE, TEXT } from './metrics.js';
 import { valueFormat } from './scale.js';
@@ -36,12 +37,13 @@ function medianTexts(chart) {
 // cost: time O(r), heap O(1), stack O(1)
 // vars: r = 행 수
 // basis: estimate
-// 값 축 범위와 길이. 가운데 값 글자가 수염 끝 옆에 놓이므로 그 폭만큼 오른쪽을 남긴다. 값이 하나도 없으면 0~0 대체 범위다(어떤 표식에도 값을 주지 않는다).
+// 값 축 범위와 길이. 가운데 값 글자가 수염 끝 옆에 놓이므로 그 폭만큼 오른쪽을 남긴다. 값이 하나도 없으면 valueRange의 대체 범위다(어떤 표식에도 값을 주지 않는다).
 function boxScale(chart) {
   const ruled = [...chart.rows.flatMap(presentOf), ...chart.rules.map((x) => x.value)];
   const texts = medianTexts(chart);
-  const reaches = () => chart.layout ? [] : chart.rows.map((row, k) => ({ value: tipOf(row) ?? ruled[0] ?? 0, extra: SPACE['3'] + measure(texts[k], TEXT['11'], 'num') }));
-  return rowValueScale(chart, { kind: chart.scale, min: ruled.length ? Math.min(...ruled) : 0, max: ruled.length ? Math.max(...ruled) : 0, reaches });
+  const { min, max } = valueRange(ruled, chart.scale);
+  const reaches = () => chart.layout ? [] : chart.rows.map((row, k) => ({ value: tipOf(row) ?? min, extra: SPACE['3'] + measure(texts[k], TEXT['11'], 'num') }));
+  return rowValueScale(chart, { kind: chart.scale, min, max, reaches });
 }
 
 // cost: time O(1), heap O(1), stack O(1)

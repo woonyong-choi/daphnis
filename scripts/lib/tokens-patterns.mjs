@@ -14,8 +14,8 @@ export const FREE_NUMBERS = new Set(['0', '1']);
 export const THEMED_TYPES = new Set(['color', 'shadow']);
 
 // 유니코드 낱말 글자와 낱말 경계. 패턴 글자의 `\w`(글자 묶음 안에서만 씀)와 `\b`를 이것으로 바꾼다.
-export const WORD_CHARS = String.raw`\p{L}\p{N}_`;
-export const WORD_BOUNDARY = `(?:(?<=[${WORD_CHARS}])(?![${WORD_CHARS}])|(?<![${WORD_CHARS}])(?=[${WORD_CHARS}]))`;
+const WORD_CHARS = String.raw`\p{L}\p{N}_`;
+const WORD_BOUNDARY = `(?:(?<=[${WORD_CHARS}])(?![${WORD_CHARS}])|(?<![${WORD_CHARS}])(?=[${WORD_CHARS}]))`;
 
 const FONT_KEYWORDS = String.raw`(?:inherit|initial|unset|var\()`;
 export const HEX_COLOR = unicodePattern(String.raw`(?<![\w&/])#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})\b`);
@@ -31,7 +31,7 @@ export const UNITLESS_ATTRIBUTE = unicodePattern(
 export const CUSTOM_PROPERTY = unicodePattern(String.raw`(--[\w-]+)\s*:\s*(?!var\()([^;}\n]+)`);
 export const AT_CONDITION = /@(?:media|container)[^{]*/g;
 export const CONDITION_VALUE = unicodePattern(String.raw`(\d+(?:\.\d+)?)(px|em|rem)\b`);
-export const COMMENT = /\/\*[\s\S]*?\*\/|<!--[\s\S]*?-->/g;
+export const CSS_COMMENT = /\/\*[\s\S]*?\*\//g;
 export const STRING = /'(?:[^'\\\n]|\\[\s\S])*'|"(?:[^"\\\n]|\\[\s\S])*"|`(?:[^`\\]|\\[\s\S])*`/g;
 // CSS 선언(`속성: 값;`)이나 마크업 속성(`이름="값"`)이 든 문자열
 export const LOOKS_STYLED = unicodePattern(String.raw`[\w-]+\s*:\s*[^;]+;|<[\w][^>]*=|[\w-]+="`, '');
@@ -43,7 +43,6 @@ export const JS_TOKEN_PATH = unicodePattern(
   String.raw`\b(?:tokens|values)((?:\.[A-Za-z_$][\w$]*|\[\s*(?:['"\x60][^'"\x60]+['"\x60]|\d+)\s*\])+)`,
 );
 export const JS_PATH_PART = unicodePattern(String.raw`\.([A-Za-z_$][\w$]*)|\[\s*['"\x60]?([^'"\x60\]\s]+)['"\x60]?\s*\]`);
-export const JS_COMMENT_OR_STRING = /("(?:[^"\\\n]|\\[^\n])*"|'(?:[^'\\\n]|\\[^\n])*'|`(?:[^`\\]|\\[^\n])*`)|\/\/[^\n]*|\/\*[\s\S]*?\*\//g;
 // 일반 문자열. `['600']` 같은 경로 키 자리는 남긴다.
 export const PLAIN_STRING = /(?<!\[)\s*('(?:[^'\\\n]|\\[^\n])*'|"(?:[^"\\\n]|\\[^\n])*")/g;
 // 스타일 객체: `style={{`, `style: {`, `sx: {`, `css: {`, `styles = {` 뒤 중괄호 안만 숫자를 본다.

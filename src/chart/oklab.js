@@ -20,7 +20,7 @@ const fromLinear = (value) => {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /** `#rrggbb`의 OKLab [L, a, b] */
-export function hexToOklab(hex) {
+function hexToOklab(hex) {
   const n = parseInt(hex.slice(1), 16);
   const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(toLinear);
   const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
@@ -32,7 +32,7 @@ export function hexToOklab(hex) {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /** OKLab [L, a, b]의 `#rrggbb`. 색 영역 밖은 sRGB 가장자리로 자른다. */
-export function oklabToHex([L, a, b]) {
+function oklabToHex([L, a, b]) {
   const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
   const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
   const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;

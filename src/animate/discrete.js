@@ -9,9 +9,9 @@
  * 시각 구간(ms, 시작 순서, 겹치지 않음)에서만 보이는(불투명도 1, visible) SMIL 요소. 구간 끝과 다음 구간 시작이 같은 시각이면 켜진 채로 이어진다.
  * @param clock createClock 결과
  * @param spans [시작, 끝][]
- * @param options { holdEnd, withVisibility }. withVisibility가 거짓이면 불투명도만 바꾼다(글이 없는 배경 면처럼 접근성 트리에 오를 것이 없고, 보이는 변형 안에 들어 있는 요소). holdEnd면 장면 끝까지 이어지는 구간은 끝에서 꺼지지 않고 한 바퀴 끝(마지막 펄스까지 보여 주는 꼬리 포함)까지 켜져 있다. 장면이 끝난 뒤에도 보이는 상태(값 글자, 상태 알약)에 쓰고, 점처럼 끝나면 사라지는 것에는 쓰지 않는다
+ * @param options { holdEnd }. holdEnd면 장면 끝까지 이어지는 구간은 끝에서 꺼지지 않고 한 바퀴 끝(마지막 펄스까지 보여 주는 꼬리 포함)까지 켜져 있다. 장면이 끝난 뒤에도 보이는 상태(값 글자, 상태 알약)에 쓰고, 점처럼 끝나면 사라지는 것에는 쓰지 않는다
  */
-export function discreteWindows(clock, spans, { holdEnd = false, withVisibility = true } = {}) {
+export function discreteWindows(clock, spans, { holdEnd = false } = {}) {
   const keys = [[0, 0]];
   const add = ([at, on]) => {
     const last = keys.at(-1);
@@ -23,6 +23,6 @@ export function discreteWindows(clock, spans, { holdEnd = false, withVisibility 
   if (keys.length === 1) keys.push([1, keys[0][1]]);
   const times = keys.map(([at]) => at).join(';');
   const common = `dur="${clock.duration}" ${clock.smil} calcMode="discrete" keyTimes="${times}"`;
-  const hidden = withVisibility ? `<animate attributeName="visibility" ${common} values="${keys.map(([, on]) => (on ? 'visible' : 'hidden')).join(';')}"/>` : '';
+  const hidden = `<animate attributeName="visibility" ${common} values="${keys.map(([, on]) => (on ? 'visible' : 'hidden')).join(';')}"/>`;
   return `${hidden}<animate attributeName="opacity" ${common} values="${keys.map(([, on]) => on).join(';')}"/>`;
 }

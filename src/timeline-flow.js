@@ -40,11 +40,11 @@ const omitLengths = ({ lengths, joins, ...geometry }) => geometry;
 // cost: time O(m·l²), heap O(m·l), stack O(1)
 // vars: m = 다른 보기 수, l = 흐름의 선 수
 // basis: estimate
-// 첫 보기가 이동 시간(눈금에 올린 뒤의 ms)을 정한 다음, 다른 보기마다 같은 ms와 같은 도형 도착 시각을 갖는 plan을 만든다. 눈금에 올린 흐름이면 도착 눈금 번호도 같은 규칙으로 정한다.
+// 첫 보기가 이동 시간(눈금에 올린 뒤의 ms)을 정한 다음, 다른 보기마다 같은 ms와 같은 도형 도착 시각을 갖는 plan을 만든다. 도형 후광의 도착 시각은 첫 보기만 읽는다.
 function mirrorPlans(plan) {
   return plan.mirrors.map((mirror) => {
     const pace = mirrorPace(plan, plan.pace, mirror);
-    return { ...mirror, ms: plan.ms, ...(pace ? { pace } : {}), ...(plan.arrivals ? { arrivals: mirror.fracs.map((frac) => Math.round(arrivalOffsetMs(frac, plan.ms, pace) * TICKS_PER_MS)) } : {}) };
+    return { ...mirror, ms: plan.ms, ...(pace ? { pace } : {}) };
   });
 }
 

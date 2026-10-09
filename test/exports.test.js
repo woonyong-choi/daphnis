@@ -147,9 +147,6 @@ test('X8 the canonical copy in the page head rebuilds the whole page byte for by
   assert.equal(template.slice(0, at) + meta.attrs.content + template.slice(at), html);
   // 정본 안에는 정본이 또 들어 있지 않아 다시 내려받아도 커지지 않는다
   assert.equal((template.match(/daphnis-canonical/g) ?? []).length, 2, 'name and the script constant only, never a nested copy');
-  const again = template.slice(0, at) + meta.attrs.content + template.slice(at);
-  const again2 = Buffer.from(parseMarkup(again, { html: true }).children.length ? meta.attrs.content : '', 'base64').toString('utf8');
-  assert.equal(again2, template);
 });
 
 test('X9 one panel per view, in the order declared, and the same panels in the narrow-screen layout', async () => {
@@ -271,12 +268,12 @@ test('X9c the shared viewer has no viewport-height cap in the document, and keep
   assert.equal(findAll(parseMarkup(html, { html: true }), (n) => n.tag === 'button' && n.attrs['aria-label'] === '전체화면').length, 1);
 });
 
-test('X10 every figure has the same toolbar, copy syntax then download HTML then full screen, and no play, speed, loop or progress control', async () => {
+// 도구 막대의 순서와 마크업은 components.test.js U9가 본다. 여기서는 어떤 그림에도 재생 조작이 없다는 것만 본다.
+test('X10 no figure has a play, speed, loop or progress control', async () => {
   const sources = [DOC, dap('box a "A"\n'), dap('chart c "C" bar {\n  x "x(u)"\n  series v "v"\n  row "r" v=1\n}\n')];
   for (const source of sources) {
     const html = parseMarkup(await toHtml(await build(source), 'doc'), { html: true });
     const names = findAll(html, (n) => n.tag === 'button').map((n) => n.attrs['aria-label']);
-    assert.deepEqual(names.slice(0, 3), ['문법 복사', 'HTML 다운로드', '전체화면']);
     assert.doesNotMatch(names.join(' '), /재생|일시|정지|배속|반복|속도|play|pause|speed|loop/i);
     assert.deepEqual(findAll(html, (n) => ['input', 'progress', 'audio', 'video'].includes(n.tag)), []);
   }

@@ -20,11 +20,11 @@
 | `src/check.js`, `src/check/` | 그림 검사. 항목 목록(`items.js`)과 항목별 판정 파일 |
 | `src/styles.js`, `src/styles/`, `src/animate/` | 그림과 재생기의 CSS와 움직이는 SVG의 keyframes·SMIL. 켜짐과 평소의 모습은 `styles/figure.css`의 효과 한 벌(`--fx-*`)이 유일한 정의이고 `animate/animator.js`는 그 속성 이름만 읽는다. 차트 방향선 화살촉은 `styles.js`가 역할마다 정의 하나를 둔다 |
 | `src/svg.js`, `src/html.js`, `src/html/`, `src/href.js`, `src/cli.js` | 움직이는 SVG, HTML 재생기 문서와 목록, 그림 틀(도구 막대 하나와 탭 줄 하나, `html/player-script.js`), 파일 이름을 링크 주소로 바꾸기, 명령 |
-| `src/build-reported.js`, `src/md.js`, `src/md-run.js`, `src/md-owner.js`, `src/md-lock.js`, `src/md-write.js`, `src/md-fold.js`, `src/md-tags.js`, `src/md-blocks.js` | 원본 만들기와 진단 알림, 마크다운 블록 찾기와 이미지 줄 넣기(`md.js`는 파일을 다루지 않음), `md` 명령 실행, 원본 접기 배치(`md-fold.js`), 접기에 필요한 `<details>` 태그 세기와 그 블록 판별(`md-tags.js`, `md-blocks.js`), 만든 SVG의 소유 표시(`daphnis md v2`)와 판정, 출력 폴더 잠금, `md` 파일 쓰기(임시 파일과 rename, 실패 때 되돌리기) |
+| `src/build-reported.js`, `src/md.js`, `src/md-run.js`, `src/md-owner.js`, `src/md-lock.js`, `src/md-write.js`, `src/md-fold.js`, `src/md-tags.js`, `src/md-blocks.js` | 원본 읽기·만들기와 진단 알림, 쓸 파일 겹침 판정, 결과 파일 쓰기와 그 오류 알림(`render`, `gallery`, `md`가 같은 것을 쓴다), 마크다운 블록 찾기와 이미지 줄 넣기(`md.js`는 파일을 다루지 않음), `md` 명령 실행, 원본 접기 배치(`md-fold.js`), 문서 줄을 CommonMark 블록 구조로 한 번 따라가며 울타리(코드 블록)와 `<details>` 태그를 함께 읽는 걸음(`md-tags.js`)과 그 블록 판별(`md-blocks.js`), 만든 SVG의 소유 표시(`daphnis md v2`)와 판정, 출력 폴더 잠금, `md` 파일 쓰기(임시 파일과 rename, 실패 때 되돌리기) |
 | `action.yml`, `.github/workflows/` | GitHub Action(composite), CI, `v*` 태그 배포, design-tokens 새 버전 감지(`design-tokens-update.yml`) |
 | `src/player/` | 브라우저에서 도는 재생기: 시각의 순수 표본 추출(`sample.js`), 시계와 장면 들어가기(`play.js`), 모습 쓰기(`stage.js`, `effects.js`, `values.js`), 탭과 모든 그림이 같은 도구 막대(문법 복사, HTML 다운로드, 전체화면. `controls.js`), 전체 화면·확대(`view.js`), 폭에 따른 배치 바꾸기(`responsive.js`), HTML 다운로드(`export.js`), 이동 곡선(`curve.js`) |
 | `examples/` | 표현마다 하나인 예제 원본(`icons/`, `data/`는 예제가 읽는 자료). 결과는 `npm run catalog`가 `.local/examples/`에 생성 |
-| `scripts/` | 화면 확인 도구(`shoot.mjs`), 예제 갤러리 생성(`build-catalog.mjs`, `catalog.css`, `lib/catalog-page.mjs`, `lib/catalog-coverage.mjs`), 첫 화면 그림 생성(`build-showcase.mjs`), 토큰 생성과 낡음 검사(`build-tokens.mjs`), 팔레트 값 계산(`build-palette.mjs`), design-tokens 새 버전 판정, PR 본문, 이슈와 PR 올리기와 프로젝트 등록(`update-design-tokens.mjs`, `lib/design-tokens-board.mjs`), 하드코딩 검사(`check-tokens.mjs`), 유지보수 힌트(`check-cost-comments.mjs`, `check-size.mjs`, `npm run check:advisory`), 배치 무작위 시험(`fuzz-layout.mjs`), 빌드 시간 비교(`perf-chips.mjs`, 로컬 전용, 기준 파일이 없으면 비교하지 않고 실패하며 깨끗한 커밋에서 `--write`로 만든다), 문서 표 생성(`build-grammar-doc.mjs`, `build-check-doc.mjs`) |
+| `scripts/` | 화면 확인 도구(`shoot.mjs`), 예제 갤러리 생성(`build-catalog.mjs`, `catalog.css`, `lib/catalog-page.mjs`, `lib/catalog-coverage.mjs`), 첫 화면 그림 생성과 낡음 검사(`build-showcase.mjs`), 마크다운 문서 모두에 `md` 돌리기(`run-md.mjs`), 선택 테마 가져오기와 사본 무결성 검사(`sync-theme.mjs`, `theme-snapshot.mjs`), 토큰 생성과 낡음 검사(`build-tokens.mjs`), design-tokens 새 버전 판정, PR 본문, 이슈와 PR 올리기와 프로젝트 등록(`update-design-tokens.mjs`, `lib/design-tokens-board.mjs`), 하드코딩 검사(`check-tokens.mjs`), 유지보수 힌트(`check-cost-comments.mjs`, `check-size.mjs`, `npm run check:advisory`), 배치 무작위 시험(`fuzz-layout.mjs`), 빌드 시간 비교(`perf-chips.mjs`, 로컬 전용, 기준 파일이 없으면 비교하지 않고 실패하며 깨끗한 커밋에서 `--write`로 만든다), 문서 표 생성(`build-grammar-doc.mjs`, `build-check-doc.mjs`) |
 | `docs/` | 설계 문서, 그림 종류별 레퍼런스(`reference/`), README 그림(`assets/showcase/`) |
 
 ## 명령
@@ -32,12 +32,16 @@
 ```sh
 npm test
 npm run check
+npm run check:sources
+npm run check:figures
 npm run check:advisory
 ```
 
-`npm test`는 공개 진입점(`buildFigure`, `toSvg`, `toHtml`, 명령, 마크다운)과 실제 공통 부품의 진입점으로 계약을 확인하는 시험이고 브라우저를 열지 않는다. 같은 요소(카드, 필드, 선, 화살촉, 라벨, 아이콘, 탭, 도구 막대)는 한 부품이 모양과 상태를 소유하므로 그 부품의 시험도 한 곳에 한 번만 두고, 종류마다 같은 색, 두께, 모양 시험을 되풀이하지 않는다. 부품 시험은 둘이다. `test/components.test.js`는 부품의 기하와 구조(잰 값과 그린 값이 같다)를, `test/component-state.test.js`는 움직이는 SVG와 HTML 같은 출력 어댑터가 같은 상태 정의(`--fx-*`)와 표식을 읽는지를 본다. 같은 계약을 두 파일이 되풀이하지 않는다. `test/text.test.js`는 글 읽기와 글 자리(측정이 놓은 자리를 그리는 쪽과 검사가 그대로 읽는가, 긴 제목의 줄바꿈)를, `test/sampler.test.js`는 순수 표본 추출기(`player/sample.js`)를 바뀌지 않은 `curve.js`와 함께 Node의 격리 컨텍스트(`node:vm`)에서 돌려 본다. 브라우저 시계와 DOM에 쓰는 일은 이 시험이 보지 않는다. 종류별 시험은 그 종류만의 수학, 의미, 배치 계산을 보고, 조합 시험은 부품 사이의 데이터 전달과 연결만 본다. 시험이 부르는 부품 진입점은 코드가 실제로 쓰는 것이어야 하고, 시험만을 위한 내보내기나 훅을 만들지 않는다. 시험 개수를 목표로 삼지 않는다. 실제 Chrome에서 폭과 테마를 바꿔 가며 그림을 눈으로 보는 화면 검수는 자동 시험이 대신하지 않는 별도의 일이고, 통과한 시험을 화면 검수의 완료로 쓰지 않는다. CI(`ubuntu-latest`, Node 20과 22)는 `npm ci` 뒤 `npm test`와 `npm run check`를 돈다. 실행 결과와 날짜는 GitHub Actions 기록과 이슈에 있다.
+`npm test`는 공개 진입점(`buildFigure`, `toSvg`, `toHtml`, 명령, 마크다운)과 실제 공통 부품의 진입점으로 계약을 확인하는 시험이고 브라우저를 열지 않는다. 같은 요소(카드, 필드, 선, 화살촉, 라벨, 아이콘, 탭, 도구 막대)는 한 부품이 모양과 상태를 소유하므로 그 부품의 시험도 한 곳에 한 번만 두고, 종류마다 같은 색, 두께, 모양 시험을 되풀이하지 않는다. 부품 시험은 둘이다. `test/components.test.js`는 부품의 기하와 구조(잰 값과 그린 값이 같다)를, `test/component-state.test.js`는 움직이는 SVG와 HTML 같은 출력 어댑터가 같은 상태 정의(`--fx-*`)와 표식을 읽는지를 본다. 같은 계약을 두 파일이 되풀이하지 않는다. `test/text.test.js`는 글 읽기와 글 자리(측정이 놓은 자리를 그리는 쪽과 검사가 그대로 읽는가, 긴 제목의 줄바꿈)를, `test/sampler.test.js`는 순수 표본 추출기(`player/sample.js`)를 바뀌지 않은 `curve.js`와 함께 Node의 격리 컨텍스트(`node:vm`)에서 돌려 본다. 브라우저 시계와 DOM에 쓰는 일은 이 시험이 보지 않는다. 종류별 시험은 그 종류만의 수학, 의미, 배치 계산을 보고, 조합 시험은 부품 사이의 데이터 전달과 연결만 본다. 시험이 부르는 부품 진입점은 코드가 실제로 쓰는 것이어야 하고, 시험만을 위한 내보내기나 훅을 만들지 않는다. 시험 개수를 목표로 삼지 않는다. 실제 Chrome에서 폭과 테마를 바꿔 가며 그림을 눈으로 보는 화면 검수는 자동 시험이 대신하지 않는 별도의 일이고, 통과한 시험을 화면 검수의 완료로 쓰지 않는다. CI(`ubuntu-latest`, Node 20과 22)는 `npm ci` 뒤 `npm test`, `npm run check`, `npm run check:sources`, `npm run check:figures`를 돌고, `action` 작업이 추적하는 모든 `.dap`와 `.md`에 저장소 Action을 한 번 돈다. 실행 결과와 날짜는 GitHub Actions 기록과 이슈에 있다.
 
-`npm run check`는 정확성 관문이다. 토큰 생성물이 낡았거나 `src/tokens.json`이 design-tokens와 같은 이름을 다시 정의하거나 화면 값을 하드코딩하면 실패한다. 토큰이나 design-tokens 버전을 바꾼 뒤에는 `npm run palette`, `npm run tokens`, `npm run figures` 순서로 생성물을 다시 만든다.
+`npm run check:sources`는 예제, 문서 그림, showcase 원본(`examples`, `docs/assets`, `docs/assets/showcase`의 `.dap`)을 `--strict`로 확인하고, `npm run check:figures`는 폴더를 걸어 찾은 모든 마크다운 문서(`scripts/run-md.mjs`, 울타리 모양과 상관없고 블록을 모두 지운 문서도 포함)의 `md --check --strict`와 showcase·how-it-works SVG가 원본에서 다시 만든 결과와 같은지(`build-showcase.mjs --check`) 본다. 고칠 때는 `npm run figures`다.
+
+`npm run check`는 정확성 관문이다. 가져온 테마 사본이 매니페스트와 다르거나 사본의 출처 버전이 `package.json`의 design-tokens 태그와 다르거나 `src/tokens.json`이 사본과 다르고, 토큰 생성물이 낡았거나 `src/tokens.json`이 design-tokens와 같은 이름을 다시 정의하거나 화면 값을 하드코딩하면 실패한다. design-tokens 버전이나 테마를 바꾼 뒤에는 `npm run theme:sync -- --from <design-tokens-root>`, `npm run tokens`, `npm run figures` 순서로 사본과 생성물을 다시 만든다. 이 저장소는 팔레트 값을 다시 계산하지 않는다.
 
 `npm run check:advisory`는 유지보수 힌트를 알린다. 파일 300줄, 함수 40줄, 매개변수 3개(`check-size.mjs`)와 비용 주석 누락(`check-cost-comments.mjs`)을 찾고 항목이 있어도 0으로 끝난다. 두 검사는 줄 시작 모양을 정규식으로 읽어서 여러 줄 매개변수, 블록 주석 안의 중괄호, 메서드 호출 이름이 같은 재귀 판정 등을 틀리게 읽는다. 설계나 정확성의 증거가 아니므로 항목을 없애려고 일관된 코드를 쪼개거나 근거 없는 점근 표기를 적지 않는다. 실행 오류(없는 경로, 잘못된 옵션)는 이 명령도 2로 실패한다. 알고리즘의 실제 복잡도를 설명하는 비용 주석은 계속 쓴다.
 
@@ -64,5 +68,5 @@ npm run check:advisory
 - 오류가 있으면 결과 파일을 쓰지 않음
 - `src/player/`는 시간표를 읽기만 하고 상태를 다시 계산하지 않음
 - 화면 값은 토큰만 사용. 공통 토큰(색 역할, 기본 색 단계, 간격, 반지름, 글자 크기)은 `@woonyong-choi/design-tokens`가 정본이고 `src/tokens.json`은 선택한 테마의 그림 전용 토큰을 가져온 사본이다. 공통 정본 소유 저장소는 design-tokens(`themes/simple2`)이고 거기서만 수정한다. 같은 이름을 다시 정의하지 않는다
-- design-tokens 버전은 `package.json`의 `devDependencies` 태그로 고정하고, 올릴 때는 `design-tokens-update` 워크플로가 만드는 PR을 쓴다. 손으로 올리면 `npm run palette`, `npm run tokens`, `npm run figures`를 같은 PR에서 돌린다
+- design-tokens 버전은 `package.json`의 `devDependencies` 태그로 고정하고, 올릴 때는 `design-tokens-update` 워크플로가 만드는 PR을 쓴다. 손으로 올리면 `npm run theme:sync -- --from <design-tokens-root>`, `npm run tokens`, `npm run figures`를 같은 PR에서 돌린다
 - 생성 토큰(`tokens.css`, `tokens.js`와 가져온 `src/design-theme/` 사본)은 손으로 고치지 않는다. 값을 바꾸려면 정본을 고쳐 다시 만든다

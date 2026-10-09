@@ -1,7 +1,7 @@
 // 도형, 그룹, 상태, 테이블, API 카드와 선 선언 문장을 읽는다. 이름 확인과 겹침 확인은 validate.js가 파일을 다 읽은 뒤 한다.
 import { STATEMENTS, flagNames, valueNames } from './grammar.js';
 import { readGroup } from './group.js';
-import { checkId, parentFor, rejectName } from './names.js';
+import { checkId, parentFor, rejectName, skipBlock } from './names.js';
 import { readNode } from './node.js';
 import { readOptions } from './options.js';
 import { COLUMN_PATTERN, FK_PATTERN, ID_PATTERN, TABLE_PATTERN } from './words.js';
@@ -59,11 +59,12 @@ export function readTable({ tokens, line }, ctx) {
   const [, id, label, open, extra] = tokens;
   if (!checkId(id, { line, ctx }, TABLE_PATTERN)) {
     rejectName(id, ctx);
-    if (tokens.at(-1).type === 'open') ctx.block = { kind: 'table', card: { id: id?.value, columns: [], isRejected: true, line }, line };
+    skipBlock('table', { id: id?.value, columns: [] }, { tokens, line }, ctx);
     return;
   }
   if (label?.type !== 'text' || open?.type !== 'open' || extra) {
     ctx.problems.error(line, OPEN_FORM('table', id.value));
+    skipBlock('table', { id: id.value, columns: [] }, { tokens, line }, ctx);
     return;
   }
   pushBlockCard({ id: id.value, shape: 'table', label: label.value, icon: TABLE_ICON, columns: [], parent: parentFor(id, ctx), line }, 'table', ctx);
@@ -77,11 +78,12 @@ export function readApi({ tokens, line }, ctx) {
   const [, id, label, open, extra] = tokens;
   if (!checkId(id, { line, ctx }, ID_PATTERN)) {
     rejectName(id, ctx);
-    if (tokens.at(-1).type === 'open') ctx.block = { kind: 'api', card: { id: id?.value, columns: [], isRejected: true, line }, line };
+    skipBlock('api', { id: id?.value, columns: [] }, { tokens, line }, ctx);
     return;
   }
   if (label?.type !== 'text' || open?.type !== 'open' || extra) {
     ctx.problems.error(line, `write api as: api ${id.value} "POST /orders" {`);
+    skipBlock('api', { id: id.value, columns: [] }, { tokens, line }, ctx);
     return;
   }
   const form = API_LABEL.exec(label.value);

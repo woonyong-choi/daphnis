@@ -31,7 +31,7 @@ function tileBody(paint, size) {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /** 무늬 정의 하나: `{ id, markup }`. 층 0(단색)은 무늬가 없어 undefined다. */
-export function patternDef(paint) {
+function patternDef(paint) {
   if (paint.pattern === 'solid') return undefined;
   const size = SIZE.chart['pattern-spacing'] * paint.spacing;
   const id = `dp-pat-${paint.pattern}-${hash(`${paint.pattern}|${size}|${paint.on}`)}`;
@@ -42,7 +42,7 @@ export function patternDef(paint) {
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /** 면 위에 덮을 무늬 칠(`url(#id)`)을 정의와 함께 기록한다. 단색이면 undefined다. */
-export function patternFill(paint) {
+function patternFill(paint) {
   const def = patternDef(paint);
   if (!def) return undefined;
   collector?.set(def.id, def.markup);

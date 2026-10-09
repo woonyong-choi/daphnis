@@ -1,4 +1,4 @@
-// design-tokens 갱신 워크플로의 이슈 찾기·만들기와 프로젝트 진행판 등록(이슈 #106). gh 실행은 주입받아 가짜로 시험한다.
+// design-tokens 갱신 워크플로의 이슈 찾기·만들기와 프로젝트 진행판 등록(이슈 #106). gh 실행은 인자로 받는다.
 // gh 실행 함수의 모양: (args: string[]) => { status, stdout, stderr }
 import { spawnSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';

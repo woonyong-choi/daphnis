@@ -1,8 +1,7 @@
 // 원본 전체를 읽어 문서 모형(figure) 하나로 만든다. 줄을 머리, 선언, 시간 흐름 세 부분으로 나누고 문장마다 맡을 함수를 고른다.
 import { BLOCK_WORDS, STATEMENTS, VALUES, VERSION } from './grammar.js';
 import { BLOCK_READERS, openBlock } from './blocks.js';
-import { readEdge } from './declare.js';
-import { readDeclaration } from './declare.js';
+import { readDeclaration, readEdge } from './declare.js';
 import { closeGroup } from './group.js';
 import { readIcons } from './icons.js';
 import { tokenizeLine } from './lexer.js';
@@ -90,8 +89,6 @@ function emptyFigure(source) {
     values: [],
     // `on` 줄로 선언한 도착 값 바꾸기 { node, sets, line }
     arrivals: [],
-    // 읽기 식(`:=`)을 하나라도 썼는지. 안 쓴 원본은 시간표가 읽기 처리를 거치지 않는다.
-    hasRead: false,
     // `when`이나 `wait`를 하나라도 썼는지. 안 쓴 원본은 시간표가 이벤트 처리를 거치지 않는다.
     hasConditions: false,
     hasReserve: false,

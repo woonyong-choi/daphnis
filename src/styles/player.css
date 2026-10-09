@@ -64,7 +64,7 @@ html.embedded .fl-figure.full {
 }
 
 .fl-canvas:focus-visible {
-  outline: var(--border-tag) solid var(--color-ui-focus);
+  outline: var(--simple2-focus-width) solid var(--color-ui-focus);
   outline-offset: calc(-1 * var(--border-tag));
 }
 
@@ -131,6 +131,16 @@ html.embedded .fl-figure.full {
   letter-spacing: normal;
 }
 
+/* 떠 있는 조작 면: 도구 막대와 확대·축소가 같은 카드 면, 경계, 모서리, 그림자다. */
+.fl-view-tools,
+.fl-zoom {
+  padding: var(--space-1);
+  background: var(--color-card);
+  border: var(--border-thin) solid var(--simple2-separator);
+  border-radius: var(--simple2-control-radius);
+  box-shadow: var(--simple2-shadow);
+}
+
 /* 도구 막대: 문법 복사, HTML 다운로드, 전체화면(맨 오른쪽)이 모든 그림에서 같다. 마우스는 그림에 올리거나 키보드 초점이 들어올 때 서서히 나타나고, 터치(손가락)에서는 늘 보인다.
    결과 알림(.fl-tool-status)은 막대 맨 앞에 붙어 나타나는 동안은 마우스와 상관없이 보인다. */
 .fl-view-tools {
@@ -142,11 +152,6 @@ html.embedded .fl-figure.full {
   align-items: center;
   gap: var(--space-1);
   max-width: calc(100% - var(--space-6));
-  padding: var(--space-1);
-  background: var(--color-card);
-  border: var(--border-thin) solid var(--simple2-separator);
-  border-radius: var(--simple2-control-radius);
-  box-shadow: var(--simple2-shadow);
   opacity: 0;
   transition: opacity var(--duration-fast);
 }
@@ -262,11 +267,6 @@ html.embedded .fl-figure.full {
   display: none;
   flex-direction: column;
   gap: var(--space-1);
-  padding: var(--space-1);
-  background: var(--color-card);
-  border: var(--border-thin) solid var(--simple2-separator);
-  border-radius: var(--simple2-control-radius);
-  box-shadow: var(--simple2-shadow);
 }
 
 .fl-figure.full .fl-zoom {

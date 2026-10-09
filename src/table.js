@@ -8,7 +8,7 @@ export function columnKey(column) {
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 타입 글자 수
 // basis: estimate
-export function columnType(column) {
+function columnType(column) {
   return [column.type, ...columnRules(column)].join(' ');
 }
 

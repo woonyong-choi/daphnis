@@ -22,7 +22,7 @@ export function figureContent(result, glyphs) {
   // 장면이 없는 문서는 재생기가 그리지 않으므로(player/play.js) 선언한 처음 모습(카드 값 줄과 큐 찬 칸)을 처음부터 보이게 그린다. 정지 SVG와 같은 시간표 값 줄이다.
   const isStill = !timeline.segs.length;
   const shownCards = isStill ? declaredCards(timeline.values ?? []) : undefined;
-  const { body, pills } = drawScene({ ...withOverlays(scene), flashes: drawFlashes(scene, timeline, { windows: () => '' }), shownSi: 0, shownCards }, () => '', glyphs);
+  const { body, pills } = drawScene({ ...withOverlays(scene), flashes: drawFlashes(scene, timeline, {}), shownSi: 0, shownCards }, () => '', glyphs);
   const parts = {
     body,
     tracks: drawTrackPaths(timeline),

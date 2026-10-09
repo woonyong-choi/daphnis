@@ -23,10 +23,8 @@ const NOTO_MATH = '@expo-google-fonts/noto-sans-math';
 const ALL_WEIGHTS = '400 900';
 const FACES = {
   regular: { family: 'FigSans', weight: 400, file: `${PRETENDARD}/Pretendard-Regular.otf`, fallback: 'symRegular' },
-  medium: { family: 'FigSans', weight: 500, file: `${PRETENDARD}/Pretendard-Medium.otf`, fallback: 'symMedium' },
   semibold: { family: 'FigSans', weight: 600, file: `${PRETENDARD}/Pretendard-SemiBold.otf`, fallback: 'symSemibold' },
   symRegular: { family: 'FigSansSym', weight: 400, file: `${NOTO_LATIN}/400Regular/NotoSans_400Regular.ttf`, fallback: 'math' },
-  symMedium: { family: 'FigSansSym', weight: 500, file: `${NOTO_LATIN}/500Medium/NotoSans_500Medium.ttf`, fallback: 'math' },
   symSemibold: { family: 'FigSansSym', weight: 600, file: `${NOTO_LATIN}/600SemiBold/NotoSans_600SemiBold.ttf`, fallback: 'math' },
   math: { family: 'FigSansMath', weight: ALL_WEIGHTS, file: `${NOTO_MATH}/400Regular/NotoSansMath_400Regular.ttf` },
   // 차트 숫자는 Pretendard의 tnum(자리 폭이 같은 숫자)으로 그린다. 파일과 @font-face는 base 글꼴의 것을 쓴다.
@@ -93,7 +91,7 @@ function runsOf(text, face) {
 /**
  * 글 한 줄의 폭(px). 같은 글꼴과 글은 한 번만 잰다. 글꼴에 없는 글자는 대체 글꼴 폭으로 재서 글꼴이 바뀌는 구간마다 더한다.
  * 백틱으로 감싼 구간은 face와 상관없이 고정폭으로 잰다(표시 글자인 백틱은 폭이 없다). 글 그대로 읽는 글꼴(text.js isLiteralFace)이면 글 전체가 하나의 구간이라서 백틱은 표시 글자가 아니라 글자로 잰다.
- * @param face 'regular' | 'medium' | 'semibold' | 'semiboldLiteral' | 'num' | 'numSemibold' | 'mono'
+ * @param face 'regular' | 'semibold' | 'semiboldLiteral' | 'num' | 'numSemibold' | 'mono'
  * @throws Error 글꼴과 대체 글꼴 어디에도 없는 글자가 있을 때. 대신 그릴 글꼴의 폭을 알 수 없기 때문이다
  */
 export function measure(text, size, face = 'regular') {

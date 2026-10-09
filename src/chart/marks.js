@@ -6,7 +6,7 @@ import { escapeXml } from '../text.js';
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /** 계열 i의 이름 자리 */
-export const seriesName = (chart, i) => chart.series[i]?.id ?? '*';
+const seriesName =(chart, i) => chart.series[i]?.id ?? '*';
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate

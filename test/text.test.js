@@ -8,7 +8,7 @@ import { CONTENT } from '../src/measure/content.js';
 import { measure, wrap } from '../src/measure/fonts.js';
 import { STYLE, textSpan } from '../src/measure/texts.js';
 import { centerBaseline } from '../src/text.js';
-import { build, dap, findAll, num, parseMarkup, reject, textContent, toSvg } from './support.js';
+import { build, dap, findAll, findOne, num, parseMarkup, reject, textContent, toSvg } from './support.js';
 
 const TICK = '`';
 const EPS = 0.06; // SVG 좌표는 소수 첫째 자리로 줄여 쓴다
@@ -43,6 +43,34 @@ test('T1 backticks are code in prose and characters in literal text: an odd coun
   assert.equal(problems.length, 1);
   assert.equal(problems[0].line, 2, 'the prose backtick error is located');
   assert.match(problems[0].message, /not paired/);
+});
+
+test('T12 a literal type keeps its backticks and escaped characters on a class, an API and a table, and the card is as wide as the glyphs that are drawn', async () => {
+  // 고정폭 글꼴이라 같은 글자 수의 평범한 글과 같은 폭이어야 한다. 백틱이 글이 아니라 서식으로 읽히면 글자가 둘 사라지고 카드가 좁아진다. 기대 폭은 같은 글자 수의 평범한 글로 지은 카드에서 따로 얻는다.
+  const card = (literal) => dap(`
+    class k "K" {
+      field f "${literal.replaceAll('"', '\\"')}"
+    }
+    table t "T" {
+      memo "${literal.replaceAll('"', '\\"')}"
+    }
+    api ap "GET /x" {
+      body "${literal.replaceAll('"', '\\"')}"
+    }
+  `);
+  const literal = `a${TICK}b${TICK}c<d>&"e`;
+  const plain = literal.replaceAll(TICK, 'x');
+  const [withTicks, withLetters] = [await rendered(card(literal)), await rendered(card(plain))];
+  const classesOf = (node) => (node.attrs.class ?? '').split(/\s+/);
+  for (const [index, id] of ['k', 't', 'ap'].entries()) {
+    const [ticked, lettered] = [withTicks.result.scene.items[index], withLetters.result.scene.items[index]];
+    assert.equal(ticked.w, lettered.w, `${id}: the card is as wide as the same number of plain glyphs`);
+    const group = findOne(withTicks.dom, (n) => n.tag === 'g' && n.attrs.id === `n-${index}`, `node group n-${index}`);
+    const drawn = findAll(group, (n) => n.tag === 'text' && (classesOf(n).includes('type') || classesOf(n).includes('mono')));
+    const shown = drawn.map(textContent).filter((text) => text.includes('a') && text.includes('<'));
+    assert.deepEqual(shown, [id === 'k' ? `f: ${literal}` : literal], `${id}: drawn as written, with its backticks`);
+    assert.deepEqual(drawn.flatMap((n) => findAll(n, (child) => classesOf(child).includes('code'))), [], `${id}: no code markup in a literal`);
+  }
 });
 
 test('T2 a value is read as written by the measuring and the drawing: the face that reads it as characters has the width of the glyphs it draws', () => {
@@ -128,6 +156,38 @@ test('T5 the fit check reads the measured texts: a text outside its card is an i
   }
   const crowded = result.scene.items.map((it) => (it.id === 't' ? { ...it, tableRows: it.tableRows.map((row) => ({ ...row, texts: row.texts.map((t) => (t.role === 'cell type' ? { ...t, x: t.x - 60 } : t)) })) } : it));
   assert.ok(run({ ...result.scene, items: crowded }).some((message) => /column/.test(message)), 'a column name and its type must not overlap');
+});
+
+// 구조를 보이는 내용(관계 그래프)은 카드 종류와 상관없이 같은 하한 폭으로 카드를 넓힌다: 이름은 줄이거나 자르지 않고 열 사이는 겹치지 않는다.
+const GRAPH_CARDS = {
+  plain: 'box a "A"',
+  headed: 'box a "A" icon=server',
+  table: 'table a "A" {\n id bigint pk\n}',
+  api: 'api a "GET /a" {\n amount "int"\n}',
+};
+const GRAPH_CHAINS = {
+  'equal columns': ['service0', 'service1', 'service2', 'service3'],
+  'columns of different widths': ['db', 'a-service-with-a-very-long-name', 'cache', 'an-even-longer-service-name-than-the-one-before-it'],
+};
+
+test('T13 a relation graph row widens every card kind to fit its columns: no name is cut, columns do not overlap and the build fit check passes', async () => {
+  // 엄격한 빌드는 그림 검사(글이 카드 밖에 나가면 internal 오류)를 거치므로 빌드가 끝나는 것이 검사 통과다.
+  for (const [kind, card] of Object.entries(GRAPH_CARDS)) {
+    for (const [chain, names] of Object.entries(GRAPH_CHAINS)) {
+      const label = `${kind}, ${chain}`;
+      const graph = names.slice(1).map((name, i) => `${names[i]} -> ${name}`).join('; ');
+      const { result, dom } = await rendered(dap(`${card}\nview graph down\nscene "s" mode=static\n  show a graph "${graph}"`));
+      const item = result.scene.items.find((it) => it.id === 'a');
+      const [{ graph: laid }] = item.content.layouts.at(-1).rows;
+      assert.deepEqual(laid.nodes.map((n) => n.name), names, `${label}: every name is placed`);
+      laid.nodes.forEach((n, i) => {
+        assert.ok(n.w >= measure(n.name, STYLE.mini.size, STYLE.mini.face), `${label}: "${n.name}" is not cut`);
+        assert.ok(laid.at.x + n.x >= 0 && laid.at.x + n.x + n.w <= item.content.w + EPS, `${label}: "${n.name}" is inside the content face`);
+        if (i) assert.ok(n.x >= laid.nodes[i - 1].x + laid.nodes[i - 1].w, `${label}: "${n.name}" does not overlap the column before it`);
+      });
+      assert.deepEqual(textsWith(dom, 'mini').map((n) => textContent(n)), names, `${label}: every name is drawn`);
+    }
+  }
 });
 
 // ---- 머리 ----

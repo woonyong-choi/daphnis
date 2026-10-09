@@ -20,7 +20,7 @@ const markStroke = (size) => VIEW / size;
  * @param id 마커 id
  * @param size 마커 한 변이 몸통 굵기의 몇 배인지(토큰 `size.arrow.head`)
  */
-export function arrowMarker(id, size = values.size.arrow.head) {
+function arrowMarker(id, size = values.size.arrow.head) {
   const c = VIEW / 2;
   const d = `M ${ARM_X} ${c - ARM_HALF} L ${TIP_X} ${c} L ${ARM_X} ${c + ARM_HALF} Z`;
   return `<marker id="${id}" viewBox="0 0 ${VIEW} ${VIEW}" refX="${TIP_X}" refY="${c}" markerWidth="${size}" markerHeight="${size}" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="${d}" stroke-width="${markStroke(size)}"/></marker>`;

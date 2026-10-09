@@ -172,7 +172,8 @@ function paintEdges(stage, frame) {
     const tint = frame.edges[j]?.pill ?? 0;
     line.classList.toggle('is-current', Boolean(frame.edges[j]?.active));
     for (const el of [line, label]) el?.classList.toggle('on', held.has(j) || tint > 0);
-    if (label) writeStyle(stage, label, '--pill-tint', String(tint));
+    // 알약 색은 라벨 묶음과 선 묶음(관계 끝 글 `edgelabel`이 안에 있다)이 같은 세기를 읽는다.
+    for (const el of [line, label]) if (el) writeStyle(stage, el, '--pill-tint', String(tint));
   });
 }
 

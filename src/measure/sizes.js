@@ -7,7 +7,7 @@ import { values } from '../tokens.js';
 import { INNER_MAX, PAD, headerDecor, headerOf, placeHeader } from './card.js';
 import { BADGE_STYLE, DECOR, STACK_STEP, groupDecor, nodeDecor } from './decor.js';
 import { sizeClassifier } from './class.js';
-import { CONTENT, sizeContent } from './content.js';
+import { CONTENT, contentMinWidth, sizeContent } from './content.js';
 import { measure, wrap } from './fonts.js';
 import { planGridLinks } from './grid-links.js';
 import { sizeQueue } from './queue.js';
@@ -46,7 +46,7 @@ export function sizeNode(node, contents = [], lineCounts = { out: 0, in: 0 }, dr
   const decor = nodeDecor(node);
   const padX = node.tile ? SIZE.node['tile-pad'] : PAD.x;
   let w = Math.min(SIZE.node['max-width'], Math.max(node.tile ? SIZE.node['tile-width'] : SIZE.node['min-width'], textW + padX * 2, (decor?.w ?? 0) + padX * 2));
-  if (contents.length) w = Math.max(w, SIZE.node['card-width']);
+  w = Math.max(w, contentMinWidth(contents));
   const textH = labelLines.length * STYLE.label.line + subLines.length * STYLE.sub.line;
   if (node.shape === 'decision') {
     // 마름모 안에 글 사각형이 들어가려면 가로세로가 글의 두 배쯤 필요하다(마름모 내접 사각형 비율).
@@ -87,7 +87,7 @@ function sizeHeaded(node, contents) {
   const subLines = node.sub ? wrap(node.sub, room, STYLE.sub) : [];
   const column = Math.max(...labelLines.map((l) => measure(l, STYLE.label.size, STYLE.label.face)), ...subLines.map((l) => measure(l, STYLE.sub.size)));
   const decor = headerDecor(node, { titleW: column, titleH });
-  const w = Math.min(SIZE.node['max-width'], Math.max(contents.length ? SIZE.node['card-width'] : 0, SIZE.node['min-width'], decor.w + PAD.x * 2));
+  const w = Math.max(contentMinWidth(contents), Math.min(SIZE.node['max-width'], Math.max(SIZE.node['min-width'], decor.w + PAD.x * 2)));
   const first = (decor.h - titleH) / 2;
   const headH = Math.max(decor.h, first + labelLines.length * STYLE.label.line + subLines.length * STYLE.sub.line);
   const content = contents.length ? sizeContent(contents, w - CONTENT.margin * 2) : undefined;
@@ -112,7 +112,7 @@ function sizeCircle(node) {
 // basis: estimate
 // 테이블과 API: 머리 띠, 열 줄, 내용이 모두 배치 사각형 안이다. 카드 폭은 내용이 있으면 내용 폭 이상이고 열의 글은 그 폭에서 놓인다.
 function sizeTable(node, contents) {
-  const layout = tableLayout(node, { minWidth: contents.length ? SIZE.node['card-width'] : 0 });
+  const layout = tableLayout(node, { minWidth: contentMinWidth(contents) });
   const { w } = layout;
   const content = contents.length ? sizeContent(contents, w - CONTENT.margin * 2) : undefined;
   const h = layout.height + (content ? content.h + CONTENT.margin * 2 : 0);
@@ -209,7 +209,7 @@ export function sizePill(label, no) {
 }
 
 /** 선 번호 원 너비. 한 자리는 지름과 같은 원이고 두 자리 이상은 숫자 폭에 좌우 간격을 더한다. */
-export function numberBadgeWidth(no) {
+function numberBadgeWidth(no) {
   return Math.max(SIZE.pill.height - SPACE['1'] * 2, measure(String(no), BADGE_STYLE.size, BADGE_STYLE.face) + SPACE['4']);
 }
 

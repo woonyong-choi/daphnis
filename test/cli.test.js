@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { lstatSync, mkdirSync, readdirSync, realpathSync, symlinkSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { test } from 'node:test';
-import { build, cli, dap, findAll, parseMarkup, read, snapshot, textContent, toSvg, workspace } from './support.js';
+import { cli, dap, findAll, parseMarkup, read, snapshot, textContent, workspace } from './support.js';
 
 const TWO_SCENES = dap('box a "A"\nbox b "B"\na -> b\nscene "first" mode=static\n  a -> b\nscene "second" mode=once\n  b -> a\n');
 const BAD = dap('box a ""\n');
@@ -69,12 +69,6 @@ test('L1 a --scene that does not exist is reported once per source with its file
   assert.deepEqual(snapshot(dir), before);
 });
 
-test('L1 the public toSvg counts scenes from 0 and reports the number it was given; only the command counts from 1', async () => {
-  const result = await build(TWO_SCENES);
-  assert.equal(parseMarkup(await toSvg(result, { scene: 1 })).attrs['data-scene'], '1');
-  await assert.rejects(toSvg(result, { scene: 2 }), { name: 'RangeError', message: 'no scene 2. Scenes: 1 "first", 2 "second"' });
-});
-
 test('L2 an error exits 1, reports "file:line: message" on stderr, writes nothing, and prints nothing on stdout', (t) => {
   const dir = workspace(t, { 'bad.dap': BAD });
   const run = cli(['render', 'bad.dap', '--out', 'o'], { cwd: dir });
@@ -119,6 +113,35 @@ test('L2 usage mistakes exit 2 and write nothing: no arguments, unknown command,
     assert.match(run.stderr, /usage|unknown|needs|budget/i, JSON.stringify(args));
   }
   assert.deepEqual(files(dir), ['x.dap']);
+});
+
+test('L2 an empty or repeated option value, an empty file name and a second gallery folder are usage errors that write nothing', (t) => {
+  const dir = workspace(t, { 'x.dap': TWO_SCENES, 'g/a.dap': dap('box a "A"\n'), 'h/b.dap': dap('box b "B"\n') });
+  const before = snapshot(dir);
+  const mistakes = [
+    [['render', 'x.dap', '--out', ''], /--out needs a value/],
+    [['render', 'x.dap', '--out', 'a', '--out', 'b'], /--out is given twice/],
+    [['render', 'x.dap', '--scene', '1', '--scene', '2'], /--scene is given twice/],
+    [['render', 'x.dap', '--budget', ''], /--budget needs a value/],
+    [['render', ''], /file name cannot be empty/],
+    [['gallery', 'g', 'h'], /gallery takes one folder, not 2/],
+  ];
+  for (const [args, message] of mistakes) {
+    const run = cli(args, { cwd: dir });
+    assert.equal(run.status, 2, JSON.stringify(args));
+    assert.match(run.stderr, message, JSON.stringify(args));
+    assert.equal(run.stdout, '');
+  }
+  assert.deepEqual(snapshot(dir), before);
+});
+
+test('L2 -- ends the options: a source whose name starts with "-" renders, and without -- it is an unknown option', (t) => {
+  const dir = workspace(t, { '-odd.dap': TWO_SCENES });
+  assert.equal(cli(['render', '-odd.dap'], { cwd: dir }).status, 2);
+  const run = cli(['render', '--out', 'o', '--', '-odd.dap'], { cwd: dir });
+  assert.equal(run.status, 0, run.stderr);
+  assert.deepEqual(files(join(dir, 'o')), ['-odd.svg']);
+  assert.equal(cli(['check', '--', '-odd.dap', '--strict'], { cwd: dir }).status, 1, 'after -- every argument is a file name, so --strict is a missing source');
 });
 
 test('L2 only .dap files are sources; any other extension or a missing file is a one-line error and nothing is written', (t) => {

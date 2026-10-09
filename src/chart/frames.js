@@ -20,7 +20,7 @@ const textAfter = (tokens, index) => (tokens[index]?.type === 'open' && tokens[i
  * @returns { id, tag, isText, index, attrs, text, raw }[]
  * @throws Error 같은 이름이 둘 이상일 때
  */
-export function markedElements(body) {
+function markedElements(body) {
   const tokens = tokenize(body);
   const seen = new Set();
   return tokens.flatMap((token, index) => {

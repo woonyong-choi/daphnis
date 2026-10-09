@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { sanitizeIcon } from './sanitize.js';
-import { BRAND_ROLES, ICON_GRID, SYMBOLS } from './symbols.js';
+import { BRAND_ROLES, SYMBOLS } from './symbols.js';
 
 /** 이름 앞에 세트를 적지 않았을 때 찾는 세트. 저장소에 파일이 들어 있다. */
 export const DEFAULT_SET = 'builtin';
@@ -42,7 +42,7 @@ function readSvg(file) {
 // vars: n = 파일 글자 수
 // basis: estimate
 /**
- * 아이콘 하나를 읽어 { viewBox, body, role, name, symbol }로 돌려준다. symbol은 의미 아이콘 등록부의 도형이면 true다.
+ * 아이콘 하나를 읽어 { body, role, name, symbol }로 돌려준다. symbol은 의미 아이콘 등록부의 도형이면 true다.
  * @param ref { set, name }
  * @param sets 등록한 사용자 세트 목록 { name, path }[]
  * @param baseDir 사용자 세트 경로의 기준 폴더
@@ -51,7 +51,7 @@ function readSvg(file) {
 export function loadIcon(ref, sets, baseDir) {
   if (ref.set !== DEFAULT_SET) return { ...readSvg(resolve(baseDir, sets.find((s) => s.name === ref.set).path, `${ref.name}.svg`)), role: 'custom', name: undefined, symbol: false };
   const symbol = SYMBOLS[ref.name];
-  if (symbol) return { viewBox: [0, 0, ICON_GRID, ICON_GRID], body: symbol.body, role: symbol.role, name: ref.name, symbol: true };
+  if (symbol) return { body: symbol.body, role: symbol.role, name: ref.name, symbol: true };
   return { ...readSvg(fileURLToPath(new URL(`${BRANDS[ref.name]}.svg`, BRAND_DIR))), role: BRAND_ROLES[ref.name], name: ref.name, symbol: false };
 }
 
@@ -59,7 +59,7 @@ export function loadIcon(ref, sets, baseDir) {
 // vars: n = 도형과 그룹 수, f = 아이콘 파일 글자 수
 // basis: estimate
 /**
- * 도형과 그룹의 `icon=`을 읽어 iconData({ viewBox, body, role, name, symbol })로 붙인다. 파일을 못 읽거나 SVG를 정리할 수 없으면 그 줄의 오류다.
+ * 도형과 그룹의 `icon=`을 읽어 iconData({ body, role, name, symbol })로 붙인다. 파일을 못 읽거나 SVG를 정리할 수 없으면 그 줄의 오류다.
  * 그린 아이콘이 없는 도형은 범주색과 글자 배지가 대신한다(docs/design/layout.md 아이콘).
  */
 export function attachIcons(figure, baseDir, problems) {

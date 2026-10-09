@@ -50,7 +50,7 @@ export function drawContent(content, { box, i, shown }, { toneOf, decorate, glyp
     .map((layout, k) => `<g id="n-${i}-c${k}" opacity="${k === shown ? 1 : 0}"${hiddenAttr(k === shown)} class="fl-layer ${decorate('layer', i, k)}">${drawFace(layout, box)}${flashes?.card.get(`${i}:${k}`) ?? ''}${drawRows(layout, box, { toneOf, glyphs })}</g>`)
     .join('');
   return (
-    `${rectOpen(box, CORNER.inner)} fill="${tokens.color.node}" stroke="${tokens.simple2.separator}" stroke-width="${values.border.thin}" opacity="0" class="fl-card${shown === undefined ? '' : ' filled'} ${decorate('card', i)}"/>` +
+    `${rectOpen(box, CORNER.inner)} fill="${tokens.color.card}" opacity="0" class="fl-card${shown === undefined ? '' : ' filled'} ${decorate('card', i)}"/>` +
     layers
   );
 }
@@ -58,7 +58,7 @@ export function drawContent(content, { box, i, shown }, { toneOf, decorate, glyp
 // cost: time O(r), heap O(1), stack O(1)
 // vars: r = 줄 수
 // basis: estimate
-// 내용이 고른 모습(look.js faceOf). 그 내용의 줄 가운데 처음 고른 모습이 이 내용의 면이다. 칠하는 일은 CSS(draw/paint.js)가 하고, 내용 면의 테두리가 가려지지 않게 테두리 안쪽에 그린다. 고르지 않았으면 빈 글이다.
+// 내용이 고른 모습(look.js faceOf). 그 내용의 줄 가운데 처음 고른 모습이 이 내용의 면이다. 칠하는 일은 CSS(draw/paint.js)가 하고, 윤곽 표현의 경계 선이 내용 면 밖으로 나가지 않게 반 선 굵기 안쪽에 그린다. 고르지 않았으면 빈 글이다.
 function drawFace(layout, box) {
   const look = layout.rows.map(({ row }) => faceOf(row)).find(({ tone }) => tone !== undefined);
   if (!look) return '';

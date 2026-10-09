@@ -80,8 +80,12 @@ jobs:
           npm install --save-dev --ignore-scripts --no-audit --no-fund "github:woonyong-choi/design-tokens#$LATEST"
           sed -i 's|git+ssh://git@github.com/|git+https://github.com/|' package-lock.json
           npm ci --ignore-scripts --no-audit --no-fund
-          npm run theme:sync -- --from node_modules/@woonyong-choi/design-tokens
-          npm run palette
+          # 테마를 내보내는 scripts/export-theme.mjs는 npm 패키지에 들지 않는다. 감지한 태그를 저장소 밖(RUNNER_TEMP)에 따로 받아 그 안의 내보내기를 돌린다.
+          # 공개 저장소를 인증 없이 받고, 받은 폴더는 작업 트리 밖이라 커밋에 들지 않는다.
+          source="$RUNNER_TEMP/design-tokens"
+          git clone --quiet --depth 1 --branch "$LATEST" https://github.com/woonyong-choi/design-tokens.git "$source"
+          test "$(node -p 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).version' "$source/package.json")" = "${LATEST#v}"
+          npm run theme:sync -- --from "$source"
           npm run tokens
           npm run figures
 

@@ -2,7 +2,10 @@
 // 예제 원본은 examples.test.js가 읽는다. 시험 이름 첫 낱말(K-arch 등)이 요구사항 번호이고, 대응은 docs/design/expression-coverage.md의 시험 번호 표에 있다.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { FIGURE_PAD } from '../src/canvas.js';
 import { headReach } from '../src/draw/arrow.js';
+import { measure } from '../src/measure/fonts.js';
+import { STYLE } from '../src/measure/texts.js';
 import { values } from '../src/tokens.js';
 import { build, dap, finalValue, findAll, lineOf, num, parseMarkup, reject, stillDom, textContent, textsOf, toHtml, toSvg, visibleTexts } from './support.js';
 
@@ -54,8 +57,7 @@ test('K-arch edges to a group and its own members, to itself, or twice in one di
   await rejectedAt(dap('box a "A"\na -> a\n'), 'a -> a');
   await rejectedAt(dap('box a "A"\nbox b "B"\na -> b\na -> b "again"\n'), 'a -> b "again"', /already an edge/);
   await build(dap('box a "A"\nbox b "B"\na -> b\nb -> a\n'));
-  const empty = dap('group g "G" {\n}\n');
-  assert.ok((await reject(empty)).length);
+  await rejectedAt(dap('box a "A"\ngroup g "G" {\n}\n'), 'group g', /group "g" is empty/);
 });
 
 test('K-class members read as visibility marks; abstract and interface say so; multiplicity labels sit on their ends', async () => {
@@ -122,6 +124,42 @@ test('K-sequence messages run top to bottom in the order written; notes and bran
   const columns = ['A', 'B', 'C'].map((label) => at(dom, label).x);
   assert.deepEqual([...columns].sort((p, q) => p - q), columns, 'participants left to right in the view order');
   for (const word of ['memo', 'alt · pick']) assert.ok(textsOf(dom).includes(word), word);
+});
+
+test('K-view a panel is as wide as its title needs; a long Korean or Latin title stays inside the panel and the figure, and the content stays centered inside it', async () => {
+  const long = '매우 긴 한국어 패널 이름을 반복해서 적어도 그림 안에서 잘리지 않는지 확인하는 호출 순서 long-latin-identifier-name-for-a-view';
+  const views = (graphTitle) => dap(`
+    person a "A"
+    box b "B"
+    view graph ${graphTitle} {
+      a
+      b
+    }
+    view sequence "short" {
+      a
+      b
+    }
+    scene "s" mode=static
+      a -> b "one"
+  `);
+  const figure = await build(views(`"${long}"`));
+  const { scene } = figure;
+  const [graph, sequence] = scene.panels;
+  const need = measure(long, STYLE.group.size, STYLE.group.face) + FIGURE_PAD * 2;
+  assert.ok(graph.box.w >= need && scene.width >= need, `panel ${graph.box.w} and figure ${scene.width} hold the ${need}px title`);
+  assert.ok(graph.labelAt.x + measure(long, STYLE.group.size, STYLE.group.face) <= graph.box.x + graph.box.w - FIGURE_PAD + 1e-6, 'the title ends inside the panel padding');
+  const dom = parseMarkup(await toSvg(figure, { isStatic: true }));
+  const [title] = findAll(dom, (n) => n.tag === 'text' && n.attrs['data-view'] === graph.view);
+  assert.ok(num(title, 'x') >= 0 && num(title, 'x') + measure(long, STYLE.group.size, STYLE.group.face) <= scene.width, 'the drawn title is within the figure');
+  for (const panel of scene.panels) {
+    assert.ok(panel.box.x >= 0 && panel.box.x + panel.box.w <= scene.width + 1e-6, `${panel.view} panel inside the figure`);
+    for (const it of scene.items.filter((item) => item.panel === panel.index)) assert.ok(it.x >= panel.box.x && it.x + it.w <= panel.box.x + panel.box.w + 1e-6, `${it.id} inside the ${panel.view} panel`);
+  }
+  assert.ok(sequence.box.w <= graph.box.w, 'the narrow panel stays centered under the wide one');
+  // 제목이 짧으면 내용 자리는 제목 폭에 달라지지 않는다.
+  const plain = (await build(views('"ab"'))).scene;
+  const bare = (await build(views('"ab"').replace('view graph "ab"', 'view graph'))).scene;
+  assert.deepEqual(plain.items.map((it) => [it.id, it.x, it.w]), bare.items.map((it) => [it.id, it.x, it.w]), 'a short title leaves the content where it was');
 });
 
 test('K-sequence a message needs text; a fragment names a branch; an activation closes; an and-beat cannot carry messages', async () => {

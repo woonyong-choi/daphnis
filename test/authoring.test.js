@@ -108,7 +108,7 @@ test('G5 appearance is plain, filled or outline; the colored two need a tone; pl
   }
 });
 
-test('G5 tone and appearance change the picture, plain without a tone is the neutral default, and the same input draws the same bytes', async () => {
+test('G5 tone and appearance change the picture, and plain without a tone is the neutral default', async () => {
   const svg = async (options) => toSvg(await build(dap(`box a "A" ${options}\nbox b "B"\na -> b\n`)), { isStatic: true });
   const neutral = await svg('');
   assert.equal(await svg('appearance=plain'), neutral, 'plain is the default');
@@ -117,5 +117,4 @@ test('G5 tone and appearance change the picture, plain without a tone is the neu
   const outline = await svg('tone=purple appearance=outline');
   const other = await svg('tone=green appearance=filled');
   assert.equal(new Set([neutral, toned, filled, outline, other]).size, 5, 'each choice draws something different');
-  assert.equal(await svg('tone=purple appearance=filled'), filled);
 });

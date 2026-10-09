@@ -80,7 +80,7 @@ function schedule(beats, ctx, start) {
     if (beat.control) { at = scheduleControl(beat.control, ctx, at); continue; }
     let duration = 0;
     for (const hop of beat.hops) {
-      const timeMs = hop.timeMs ?? hopMs(ctx.scene.edges[hop.sequenceEdge].points, ctx.run.speed);
+      const timeMs = hop.timeMs ?? hopMs(ctx.scene.edges[hop.edge].points, ctx.run.speed);
       ctx.hops.push({ ...hop, timeMs, sequenceAt: at });
       duration = Math.max(duration, timeMs);
     }

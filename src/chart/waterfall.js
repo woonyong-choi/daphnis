@@ -9,6 +9,7 @@ import { inkGroup, rowLabelLayout, rowName, valueText } from './labels.js';
 import { markAttrs, markId } from './marks.js';
 import { BAR, PAD, ROW, SPACE, TEXT } from './metrics.js';
 import { valueFormat } from './scale.js';
+import { barRadius } from './shape.js';
 
 // cost: time O(r), heap O(r), stack O(1)
 // vars: r = 행 수
@@ -50,7 +51,9 @@ export function drawWaterfall(figure, top) {
   const lineHeight = TEXT['11'] * values.simple2['figure-leading'];
   const pitch = chart.layout ? names.space + BAR + SPACE['3'] + Math.max(...lines.map((row) => row.length)) * lineHeight + SPACE['11'] : ROW;
   const bottom = top + chart.rows.length * pitch;
-  const zero = `<line x1="${r(scale.at(0))}" x2="${r(scale.at(0))}" y1="${r(top)}" y2="${r(bottom)}" class="chart-zero"/>`;
+  // 0선: 넓은 배치는 전체 높이 한 줄이다. 좁은 배치는 이름과 계산식 줄의 글 가림 면이 행 사이를 덮어 눈금처럼 끊겨 보이므로 행마다 막대 높이 안에만 긋는다(기준선과 같다).
+  const zeroLine = (y1, y2) => `<line x1="${r(scale.at(0))}" x2="${r(scale.at(0))}" y1="${r(y1)}" y2="${r(y2)}" class="chart-zero"/>`;
+  const zero = chart.layout ? chart.rows.map((_, index) => zeroLine(top + index * pitch + names.space, top + index * pitch + names.space + BAR)).join('') : zeroLine(top, bottom);
   const rows = chart.rows.map((row, index) => waterfallRow(row, chart.ledger[index], { chart, names, top: top + index * pitch, pitch, scale, index, cy: top + index * pitch + (chart.layout ? names.space + BAR / 2 : ROW / 2), text: texts[index], lines: lines?.[index], lineHeight, next: chart.ledger[index + 1] }));
   const parts = chart.layout ? [zero, ...rows.map((row) => row.connector), ...rows.map((row) => row.mark)] : [zero, ...rows.map((row) => row.mark + row.connector)];
   return finishRowChart(chart, { parts, over: rows.map((row) => row.text), scale, top, bottom });
@@ -64,7 +67,8 @@ function waterfallRow(source, row, { chart, names, top, pitch, scale, index, cy,
   const isKnown = row.to !== null;
   const [from, to] = isKnown ? [scale.at(row.from), scale.at(row.to)] : [scale.at(0), scale.at(0)];
   const reach = scale.at(Math.max(0, ...knownEnds(row)));
-  const face = { x: Math.min(from, to), y: cy - BAR / 2, w: Math.abs(to - from), h: BAR, radius: values.radius.sm };
+  const width = Math.abs(to - from);
+  const face = { x: Math.min(from, to), y: cy - BAR / 2, w: width, h: BAR, radius: barRadius(width) };
   const decreasing = !row.total && row.change < 0;
   const color = decreasing ? tokens.color.data['compare-outline'] : tokens.color.data.main;
   // 갱신 효과 칠: 오르면 첫 범주 계열, 내리면 비교 색(면 compare-fill, 테두리 compare-outline)이다.

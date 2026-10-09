@@ -10,24 +10,12 @@ export const PULSE_MS = PULSE.rise + PULSE.hold + PULSE.fall;
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-/** 펄스 하나의 세기(0에서 1). elapsed는 펄스가 시작한 뒤 흐른 화면 ms다. 시작 전이나 끝난 뒤는 0이다. */
-export function pulseLevel(elapsed) {
+// 펄스 하나의 세기(0에서 1). elapsed는 펄스가 시작한 뒤 흐른 화면 ms다. 시작 전이나 끝난 뒤는 0이다.
+function pulseLevel(elapsed) {
   if (elapsed < 0 || elapsed >= PULSE_MS) return 0;
   if (elapsed < PULSE.rise) return elapsed / PULSE.rise;
   if (elapsed < PULSE.rise + PULSE.hold) return 1;
   return 1 - (elapsed - PULSE.rise - PULSE.hold) / PULSE.fall;
-}
-
-// cost: time O(p), heap O(1), stack O(1)
-// vars: p = 같은 대상의 펄스 수
-// basis: estimate
-/**
- * 한 대상의 시각 t(논리 ms)에서 펄스 세기. 펄스마다 세기를 구해 가장 큰 값을 쓴다(합하지 않는다).
- * @param ats 그 대상의 펄스 시작 시각(논리 ms) 목록
- * @param speed 장면의 재생 속도. 논리 시각은 speed로 나눈 화면 시각에 놓이고 펄스 길이는 그대로 화면 ms다
- */
-export function pulseAt(ats, t, speed = 1) {
-  return Math.max(0, ...ats.map((at) => pulseLevel(t / speed - at / speed)));
 }
 
 // cost: time O(p²), heap O(p), stack O(1)

@@ -179,6 +179,76 @@ test('I2 an icon file with code, outside resources or unknown content is rejecte
   }
 });
 
+test('I2 an icon root size is a finite positive viewBox, or width and height only when there is no viewBox; anything else is a located error', async (t) => {
+  const root = (attrs, inner = '<path d="M0 0h1"/>') => `<svg xmlns="http://www.w3.org/2000/svg"${attrs}>${inner}</svg>`;
+  const invalid = {
+    'viewBox three numbers': [' viewBox="0 0 24"', /invalid viewBox/],
+    'viewBox five numbers': [' viewBox="0 0 24 24 1"', /invalid viewBox/],
+    'viewBox zero width': [' viewBox="0 0 0 24"', /invalid viewBox/],
+    'viewBox negative height': [' viewBox="0 0 24 -1"', /invalid viewBox/],
+    'viewBox Infinity': [' viewBox="0 0 Infinity 24"', /invalid viewBox/],
+    'viewBox overflow': [' viewBox="0 0 1e309 24"', /invalid viewBox/],
+    'viewBox hex': [' viewBox="0 0 0x18 24"', /invalid viewBox/],
+    'viewBox trailing text': [' viewBox="0 0 24oops 24"', /invalid viewBox/],
+    'viewBox empty': [' viewBox=""', /invalid viewBox/],
+    'bad viewBox beside good width and height': [' viewBox="0 0 24" width="24" height="24"', /invalid viewBox/],
+    'width Infinity': [' width="Infinity" height="24"', /finite positive width and height/],
+    'width overflow': [' width="1e309" height="24"', /finite positive width and height/],
+    'width trailing text': [' width="12oops" height="24"', /finite positive width and height/],
+    'width hex': [' width="0x18" height="24"', /finite positive width and height/],
+    'width underflow to zero': [' width="1e-400" height="24"', /finite positive width and height/],
+    'width zero': [' width="0" height="24"', /finite positive width and height/],
+    'height negative': [' width="24" height="-5"', /finite positive width and height/],
+    'height percent': [' width="24" height="100%"', /finite positive width and height/],
+    'height missing': [' width="24"', /finite positive width and height/],
+    'no size at all': ['', /finite positive width and height/],
+    'viewBox too small to fit the grid': [' viewBox="0 0 1e-320 1e-320"', /too large or too small/],
+    'width and height too small to fit the grid': [' width="1e-320" height="1e-320"', /too large or too small/],
+  };
+  const dir = workspace(t, Object.fromEntries(Object.entries(invalid).map(([name, [attrs]], i) => [`icons/bad${i}.svg`, root(attrs)])));
+  for (const [i, [name, [, message]]] of Object.entries(invalid).entries()) {
+    const source = usingIcon(`bad${i}`);
+    const problems = await reject(source, { baseDir: dir });
+    assert.ok(problems.some((p) => p.line === lineOf(source, 'icon=custom:') && message.test(p.message)), `${name}: ${JSON.stringify(problems)}`);
+  }
+  // 같은 파일 모양에서 숫자 도형 속성도 무한대를 내보내지 않는다.
+  const shapes = { circle: root(' viewBox="0 0 24 24"', '<circle cx="5" cy="5" r="1e309"/>'), stroke: root(' viewBox="0 0 24 24"', '<path d="M0 0h1" stroke-width="Infinity"/>') };
+  const shapeDir = workspace(t, Object.fromEntries(Object.entries(shapes).map(([name, text]) => [`icons/${name}.svg`, text])));
+  for (const name of Object.keys(shapes)) {
+    const source = usingIcon(name);
+    assert.ok((await reject(source, { baseDir: shapeDir })).some((p) => p.line === lineOf(source, 'icon=custom:') && /unsupported/.test(p.message)), name);
+  }
+
+  // 올바른 크기는 같은 칸(24) 안에서 가장 긴 변이 같은 크기로 보이도록 그려진다: 비율 × 긴 변이 기준 아이콘과 같다.
+  const valid = {
+    'viewBox decimals': [' viewBox="0 0 24.5 12.25"', 24.5],
+    'viewBox commas': [' viewBox="0,0,48,24"', 48],
+    'viewBox exponent and leading dot': [' viewBox="0 0 2.4e1 .12e2"', 24],
+    'viewBox negative origin': [' viewBox="-4 -4 32 16"', 32],
+    'width and height': [' width="48" height="24"', 48],
+    'width and height px': [' width="48px" height="24px"', 48],
+    'width and height exponent': [' width="1.2E+1" height="6"', 12],
+    'huge viewBox': [' viewBox="0 0 1e308 1e308"', 1e308],
+    'huge width and height': [' width="1e308" height="1e308"', 1e308],
+    'tiny but representable': [' viewBox="0 0 1e-300 1e-300"', 1e-300],
+  };
+  const files = { 'icons/ref.svg': root(' viewBox="0 0 24 24"'), ...Object.fromEntries(Object.entries(valid).map(([, [attrs]], i) => [`icons/ok${i}.svg`, root(attrs)])) };
+  const okDir = workspace(t, files);
+  const scaleOf = async (name) => {
+    const svg = await toSvg(await build(usingIcon(name), { baseDir: okDir }), { isStatic: true });
+    const icon = findAll(parseMarkup(svg), (n) => /\bfl-icon\b/.test(n.attrs.class ?? ''))[0];
+    assert.ok(icon, `${name}: the icon is drawn`);
+    // 격자에 맞추는 배율은 아이콘 안쪽 그룹에 있다(없으면 1). 합친 배율이 그려진 크기다.
+    const inner = icon.children.find((n) => n.tag === 'g')?.attrs.transform;
+    return Number(/scale\(([^)]+)\)/.exec(icon.attrs.transform)[1]) * Number(/scale\(([^)]+)\)/.exec(inner ?? 'scale(1)')[1]);
+  };
+  const reference = await scaleOf('ref');
+  for (const [i, [name, [, longest]]] of Object.entries(valid).entries()) {
+    const scale = await scaleOf(`ok${i}`);
+    assert.ok(scale > 0 && Math.abs(scale * longest - reference * 24) < reference * 24 * 0.01, `${name}: scale ${scale} for longest side ${longest} vs reference ${reference}`);
+  }
+});
+
 test('I2 icon references that are missing, from an unknown set, or that reach outside the folder are located errors', async (t) => {
   const dir = workspace(t, { 'icons/mine.svg': ICON('<path d="M0 0h1"/>'), 'secret.svg': ICON('<path d="M0 0h1"/>') });
   for (const ref of ['custom:absent', 'custom:../secret', 'custom:/etc/passwd', 'nope:mine', 'nope', 'custom:']) {

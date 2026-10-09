@@ -53,7 +53,7 @@ function checkKeeps(figure, byId, problems) {
 function checkDeclaration(value, { byId, names, figure }, problems) {
   const target = names.get(value.on);
   if (value.on !== undefined && !target && !figure.rejectedNames.has(value.on)) problems.error(value.line, unknownName('node', value.on, figure.nodes.map((n) => n.id)));
-  else if (target && !CARD_SHAPES.includes(target.shape)) problems.error(value.line, `a ${target.shape} has no card. Put a value on ${CARD_SHAPES.slice(0, 4).join(', ')}`);
+  else if (target && !CARD_SHAPES.includes(target.shape)) problems.error(value.line, `a ${target.shape} has no card. Put a value on ${CARD_SHAPES.join(', ')}`);
   if (value.ref === undefined) return;
   if (!byId.has(value.ref)) problems.error(value.line, unknownName('value', value.ref, byId.keys()));
   else checkChain(value, byId, problems);

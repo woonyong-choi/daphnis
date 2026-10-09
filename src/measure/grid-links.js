@@ -3,7 +3,7 @@ import { values } from '../tokens.js';
 
 const SPACE = values.space;
 /** 통로 한 줄(선 하나가 지나는 줄) 사이 간격. 배치가 선 사이에 두는 간격(`elk.spacing.edgeEdge`)과 같은 값이다. */
-export const LANE_STEP = SPACE['5'];
+const LANE_STEP =SPACE['5'];
 // 제목 글 양옆으로 선이 비켜야 하는 여유
 const TITLE_CLEAR = SPACE['6'];
 const SIDES = { out: ['EAST', 'SOUTH'], in: ['WEST', 'NORTH'] };

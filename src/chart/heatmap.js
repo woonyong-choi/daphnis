@@ -35,7 +35,7 @@ function columnRoom(cellW) {
  * @param heat { low, high, ink, inkOn }. 칸 색 양끝과 글자 후보(`#rrggbb`)
  * @returns { strength, fill, isOn }. strength는 STRENGTH_PRECISION에 맞춰 줄인 강도다.
  */
-export function heatLook(rawStrength, heat) {
+function heatLook(rawStrength, heat) {
   const strength = roundToScale(rawStrength, STRENGTH_PRECISION);
   const fill = mixOklab(heat.low, heat.high, strength);
   return { strength, fill, isOn: pickInk(fill, heat.ink, heat.inkOn) === heat.inkOn };
@@ -63,7 +63,7 @@ function heatCell(grid, c, k) {
 function headerFits(chart, grid) {
   if (grid.names) {
     const fits = (names, { room, size, face, what }) => names.flatMap((lines) => lines.map((text) => ({ text, width: measure(text, size, face), room, line: chart.rows[0].line, what })));
-    return [...fits(grid.names.cols, { room: columnRoom(grid.cellW), size: TEXT['11'], face: 'num', what: 'column name' }), ...fits(grid.names.rows, { room: grid.plotX - PAD - SPACE['6'], size: TEXT['13'], face: 'medium', what: 'item name' }), ...chart.rows.map((c) => ({ text: grid.format(c.values.value), width: measure(grid.format(c.values.value), TEXT['11'], 'num'), room: grid.cellW - SPACE['1'] - SPACE['4'], line: c.line, what: 'cell value' }))];
+    return [...fits(grid.names.cols, { room: columnRoom(grid.cellW), size: TEXT['11'], face: 'num', what: 'column name' }), ...fits(grid.names.rows, { room: grid.plotX - PAD - SPACE['6'], size: TEXT['13'], face: 'regular', what: 'item name' }), ...chart.rows.map((c) => ({ text: grid.format(c.values.value), width: measure(grid.format(c.values.value), TEXT['11'], 'num'), room: grid.cellW - SPACE['1'] - SPACE['4'], line: c.line, what: 'cell value' }))];
   }
   const colFits = grid.cols.map((c) => ({ text: c, width: measure(c, TEXT['11'], 'num'), room: columnRoom(grid.cellW), line: chart.rows.find((row) => row.col === c).line, what: 'column name' }));
   return [...colFits, ...grid.rows.map((row) => labelFit(row, chart.rows.find((c) => c.row === row).line))];
@@ -80,11 +80,11 @@ export function drawHeatmap(figure, top) {
   const available = (chart.layout?.width ?? RIGHT + PAD) - PAD * 2;
   const valueRoom = Math.max(...chart.rows.map((c) => measure(format(c.values.value), TEXT['11'], 'num'))) + SPACE['4'] + SPACE['1'];
   // 좁은 폭에서 행 이름 칸은 가장 긴 행 이름이 한 줄로 들어갈 만큼만(기본 최소 너비 없이) 얻고 남는 폭은 열이 가져간다. 이름이 길어도 열과 같은 몫을 넘지 않는다.
-  const rowNeed = Math.max(...rows.map((row) => measure(row, TEXT['13'], 'medium'))) + SPACE['6'];
+  const rowNeed = Math.max(...rows.map((row) => measure(row, TEXT['13'], 'regular'))) + SPACE['6'];
   const labelW = chart.layout ? Math.max(SPACE['6'] + TEXT['13'], Math.min(rowNeed, available / (cols.length + 1), available - cols.length * valueRoom)) : labelColumn(rows);
   const plotX = labelW + PAD;
   const cellW = (available - labelW + SPACE['1']) / cols.length;
-  const names = chart.layout ? { rows: rows.map((row) => wrap(row, labelW - SPACE['6'], { size: TEXT['13'], face: 'medium' })), cols: cols.map((col) => wrap(col, columnRoom(cellW), { size: TEXT['11'], face: 'num' })) } : undefined;
+  const names = chart.layout ? { rows: rows.map((row) => wrap(row, labelW - SPACE['6'], { size: TEXT['13'], face: 'regular' })), cols: cols.map((col) => wrap(col, columnRoom(cellW), { size: TEXT['11'], face: 'num' })) } : undefined;
   const leading = values.simple2['figure-leading'];
   const headerH = names ? Math.max(...names.cols.map((lines) => lines.length)) * TEXT['11'] * leading : TEXT['11'];
   const cellH = names ? Math.max(SIZE.chart.cell, Math.max(...names.rows.map((lines) => lines.length)) * TEXT['13'] * leading + SPACE['4']) : SIZE.chart.cell;

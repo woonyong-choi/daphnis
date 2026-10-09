@@ -73,7 +73,7 @@ function finish(placed, texts, { figure, layoutWidth }, problems) {
 // cost: time O(s), heap O(1), stack O(1)
 // vars: s = 장면 수
 // basis: estimate
-// 재생 속도로 나눈 장면 길이가 1ms보다 짧으면 SMIL과 CSS의 길이가 0이 되어 재생할 수 없다. 그 장면의 줄에서 알린다. 다른 상한은 없다.
+// 재생 속도로 나눈 장면 길이를 ms로 반올림해 1보다 작아지면 SMIL과 CSS의 길이가 0이 되어 재생할 수 없다. 그 장면의 줄에서 알린다. 반올림 때문에 받는 가장 큰 속도는 장면 길이의 2배다. 다른 상한은 없다.
 function checkSpeeds(figure, timeline) {
   const spans = new Map();
   for (const seg of timeline.segs) spans.set(seg.si, { t0: spans.get(seg.si)?.t0 ?? seg.t0, t1: seg.t1 });
@@ -81,7 +81,7 @@ function checkSpeeds(figure, timeline) {
     const span = spans.get(si);
     // 길이 0인 장면(움직임이 없는 장면)은 흘릴 시간이 없어 SMIL이나 CSS의 길이도 쓰지 않는다. 길이가 있는데 1ms보다 짧아지는 속도만 막는다.
     const ms = span ? span.t1 - span.t0 : 0;
-    if (ms > 0 && Math.round(ms / step.speed) < 1) throw new FigureError([makeDiagnostic({ severity: 'error', line: step.line, message: `speed=${step.speed} makes scene "${step.label}" shorter than 1ms (max speed for this scene: ${ms})` }, { code: 'invalid-speed' })]);
+    if (ms > 0 && Math.round(ms / step.speed) < 1) throw new FigureError([makeDiagnostic({ severity: 'error', line: step.line, message: `speed=${step.speed} makes scene "${step.label}" shorter than 1ms (max speed for this scene: ${ms * 2})` }, { code: 'invalid-speed' })]);
   });
 }
 

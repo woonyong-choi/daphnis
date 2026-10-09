@@ -6,6 +6,7 @@ import { chmodSync, existsSync, lstatSync, readdirSync, symlinkSync, unlinkSync,
 import { hostname } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
+import { findBlocks } from '../src/md.js';
 import { cli, dap, read, snapshot, workspace } from './support.js';
 
 const FENCE = '```';
@@ -113,6 +114,74 @@ test('M4 other fences are not blocks: a muto fence, a dap line inside a text fen
   assert.deepEqual(svgs(bad), []);
 });
 
+test('M4 text the document shows literally is never read or rewritten: indented code, HTML comments, and a fence that a four-space line cannot close', (t) => {
+  const source = dap('box a "A"');
+  const literal = `${[
+    '# Doc',
+    'Indented code shows the tool\'s own lines:',
+    `    ![Flow](doc-flow.svg)<!-- dap -->\n\n    ${FENCE}dap name=indented\n    ${source.replaceAll('\n', '\n    ').trimEnd()}\n    ${FENCE}`,
+    '<!--\n![Old](doc-old.svg)<!-- dap -->',
+    `<!--\n${FENCE}dap name=hidden\n${source}${FENCE}\n-->`,
+    `\`\`\`\`text\n    \`\`\`\`\n${FENCE}dap name=inner\n${source}${FENCE}\n\`\`\`\``,
+    ...['     ', '\t'].map((closer, k) => `  ${FENCE}text\n${closer}${FENCE}\n  ${FENCE}dap name=held${k}\n  ${source.replaceAll('\n', '\n  ').trimEnd()}\n  ${FENCE}`),
+    'end',
+  ].join('\n\n')}\n`;
+  const dir = workspace(t, { 'doc.md': literal });
+  const run = md(dir, ['doc.md']);
+  assert.equal(run.status, 0, run.stderr);
+  assert.equal(read(dir, 'doc.md'), literal, 'every byte stays');
+  assert.deepEqual(svgs(dir), [], 'nothing inside them is drawn');
+  assert.equal(md(dir, ['doc.md', '--check']).status, 0);
+});
+
+test('M9 a fence is read where Markdown reads one: up to three spaces in, inside a list item whatever its indent, and behind ~~~', (t) => {
+  const body = dap('title "Flow"\nbox a "A"').trimEnd();
+  const fenced = (pad, name, fence = FENCE) => `${pad}${fence}dap name=${name}\n${body.replace(/^/gm, pad)}\n${pad}${fence}`;
+  const text = `${['1.  step', fenced('    ', 'item'), fenced('', 'tilde', '~~~'), fenced('  ', 'two')].join('\n\n')}\n`;
+  const dir = workspace(t, { 'doc.md': text });
+  const run = md(dir, ['doc.md']);
+  assert.equal(run.status, 0, run.stderr);
+  assert.deepEqual(svgs(dir), ['doc-item.svg', 'doc-tilde.svg', 'doc-two.svg']);
+  const result = read(dir, 'doc.md');
+  assert.match(result, /\n {4}```\n\n {4}!\[Flow\]\(doc-item\.svg\)<!-- dap -->\n/, 'the list image line keeps the item indent');
+  assert.match(result, /~~~\n\n!\[Flow\]\(doc-tilde\.svg\)<!-- dap -->\n/);
+  assert.match(result, /\n {2}```\n\n {2}!\[Flow\]\(doc-two\.svg\)<!-- dap -->\n/);
+  assert.equal(md(dir, ['doc.md']).stdout, '', 'a second run changes nothing');
+});
+
+test('M9 a closing fence is measured from its list or quote, not from the opener: the opener\'s own indent is not taken off, so five spaces or a tab never close', () => {
+  const lines = (opener, closer, quoted = '') => [`${quoted}${opener}${FENCE}dap`, `${quoted}${opener}daphnis 2`, `${quoted}${opener}box a "A"`, `${quoted}${closer}${FENCE}`];
+  // [opener indent, closer indent, closes?]. 목록 칸은 4칸(`1.  x`)이고 중첩 목록은 4칸(`- a` 안 `- b`)이다.
+  const flat = [['', '', true], ['', '   ', true], ['', '    ', false], ['  ', '', true], ['  ', '   ', true], ['  ', '     ', false], ['  ', '\t', false], ['   ', '       ', false], ['', '\t', false]];
+  for (const [opener, closer, closes] of flat) {
+    const found = findBlocks(lines(opener, closer));
+    assert.equal(found.blocks.length, closes ? 1 : 0, JSON.stringify({ opener, closer }));
+    assert.equal(found.errors.length, closes ? 0 : 1, JSON.stringify({ opener, closer }));
+  }
+  const listed = [['    ', '    ', true], ['    ', '       ', true], ['    ', '        ', false], ['     ', '       ', true], ['     ', '        ', false], ['    ', '\t', true], ['    ', '\t   ', true], ['    ', '\t\t', false]];
+  for (const [opener, closer, closes] of listed) {
+    const found = findBlocks(['1.  step', '', ...lines(opener, closer)]);
+    assert.equal(found.blocks.length, closes ? 1 : 0, JSON.stringify({ list: true, opener, closer }));
+  }
+  const nested = findBlocks(['- a', '  - b', '', ...lines('    ', '       ')]);
+  assert.equal(nested.blocks.length, 1, 'a nested list item whose fence closes up to three spaces past the item');
+  assert.equal(findBlocks(['- a', '  - b', '', ...lines('    ', '        ')]).blocks.length, 0);
+  assert.equal(findBlocks(lines('  ', '      ', '> '), true).blocks.length, 0, 'the quote mark is not indentation');
+  assert.equal(findBlocks(lines('  ', '   ', '> '), true).blocks.length, 1);
+});
+
+test('M9 a five-space or tab line cannot close a dap fence, so the document is reported and nothing is drawn or rewritten', (t) => {
+  for (const closer of ['     ', '\t']) {
+    const text = `intro\n\n  ${FENCE}dap name=open\n  daphnis 2\n  box a "A"\n${closer}${FENCE}\n`;
+    const dir = workspace(t, { 'doc.md': text });
+    const run = md(dir, ['doc.md']);
+    assert.equal(run.status, 1);
+    assert.match(run.stderr, /^doc\.md:3: .*never closed/m);
+    assert.equal(read(dir, 'doc.md'), text);
+    assert.deepEqual(svgs(dir), []);
+  }
+});
+
 test('M5 a block with an error reports the line in the document, writes nothing, and spares the good blocks of the same run', (t) => {
   const text = doc(block('good'), block('bad', 'box a ""\n'));
   const dir = workspace(t, { 'doc.md': text });
@@ -150,6 +219,17 @@ test('M6 a document opened through a symbolic link owns the same figures as the 
   assert.equal(md(dir, ['real/doc.md', '--check']).status, 0);
 });
 
+test('M6 the image link is relative to the real document, so a folder or a document opened through a symbolic link still gets a link that resolves', (t) => {
+  const dir = workspace(t, { 'real/sub/doc.md': doc(block('flow')), 'sub/b.md': doc(block('x')) });
+  symlinkSync(join(dir, 'real/sub'), join(dir, 'alias'));
+  assert.equal(md(dir, ['alias/doc.md', '--out-dir', 'out']).status, 0);
+  assert.match(read(dir, 'real/sub/doc.md'), /\]\(\.\.\/\.\.\/out\/doc-flow\.svg\)<!-- dap -->/);
+  assert.equal(md(dir, ['real/sub/doc.md', '--out-dir', 'out', '--check']).status, 0, 'the real path agrees with the alias');
+  symlinkSync('sub/b.md', join(dir, 'a.md'));
+  assert.equal(md(dir, ['a.md']).status, 0);
+  assert.match(read(dir, 'sub/b.md'), /\]\(\.\.\/a-x\.svg\)<!-- dap -->/, 'the figure sits next to the link and the document one folder deeper');
+});
+
 test('M6 #176 two blocks whose figures are symbolic links to one file clash before any write: both links, the target and the document stay as they were', (t) => {
   const dir = workspace(t, { 'doc.md': doc(block('one'), block('two')) });
   assert.equal(md(dir, ['doc.md']).status, 0);
@@ -160,7 +240,7 @@ test('M6 #176 two blocks whose figures are symbolic links to one file clash befo
   const run = md(dir, ['doc.md', '--json']);
   assert.equal(run.status, 1);
   const lines = run.stdout.trim().split('\n').map((line) => JSON.parse(line));
-  assert.ok(lines.some((d) => /is also written for/.test(d.message)), run.stdout);
+  assert.ok(lines.some((d) => /would be written twice: for .* and for /.test(d.message)), run.stdout);
   assert.deepEqual(snapshot(dir), before);
   assert.equal(md(dir, ['doc.md', '--check']).status, 1, '--check refuses it too');
   assert.deepEqual(snapshot(dir), before);
@@ -173,7 +253,7 @@ test('M6 a document and a symbolic link to it are one output: md a.md b.md is re
   const run = md(dir, ['a.md', 'b.md', '--json']);
   assert.equal(run.status, 1);
   const lines = run.stdout.trim().split('\n').map((line) => JSON.parse(line));
-  assert.ok(lines.some((d) => /is also written for/.test(d.message)), run.stdout);
+  assert.ok(lines.some((d) => /would be written twice: for .* and for /.test(d.message)), run.stdout);
   assert.deepEqual(snapshot(dir), before, 'no figure, no document write');
   assert.equal(md(dir, ['b.md', 'a.md', '--check']).status, 1, '--check refuses the other order too');
   assert.deepEqual(snapshot(dir), before);
@@ -217,6 +297,22 @@ test('M11 a figure whose file is a symbolic link to nothing is not replaced by a
   const lines = run.stdout.trim().split('\n').map((line) => JSON.parse(line));
   assert.ok(lines.some((d) => d.code === 'io' && /symbolic link/.test(d.message)), run.stdout);
   assert.deepEqual(snapshot(dir), before);
+});
+
+test('M11 an --out-dir that is a file, or sits under one, is one io line and exit 1 before anything is written, --check included', (t) => {
+  const dir = workspace(t, { 'doc.md': doc(block('flow')), 'plain.txt': 'a file' });
+  const before = snapshot(dir);
+  for (const out of ['plain.txt', 'plain.txt/inner']) {
+    for (const extra of [[], ['--check']]) {
+      const run = md(dir, ['doc.md', '--out-dir', out, ...extra]);
+      assert.equal(run.status, 1, `${out} ${extra}`);
+      assert.equal(run.stderr.trim().split('\n').length, 1, run.stderr);
+      assert.match(run.stderr, new RegExp(`^${out}: cannot be used as --out-dir: `));
+      assert.doesNotMatch(run.stderr, /\n\s+at |node:internal/);
+      assert.deepEqual(snapshot(dir), before, 'nothing written, no lock left behind');
+    }
+  }
+  assert.deepEqual(md(dir, ['doc.md', '--out-dir', 'plain.txt', '--json']).stdout.trim().split('\n').map((line) => JSON.parse(line).code), ['io']);
 });
 
 test('M12 --scene on a block with no scenes is refused with the block\'s line, as render refuses it; without --scene it is one still picture', (t) => {

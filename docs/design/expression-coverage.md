@@ -120,19 +120,20 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 | 페이지·조작 글꼴 | 시스템 글꼴 스택 | `font.sans`, `styles/control.css` | 직접 대응. 그림 글꼴과 분리 |
 | 그림·코드 글꼴 | 대응 요소 없음 | `font.figure-sans`, `font.figure-mono` | 측정과 SVG 포함을 위한 확장 |
 | 큰 제목 | `.fancysection-heading`, 36px·700 | `simple2.heading`, `simple2.heading-weight` | 크기·굵기 대응 |
-| 조작 글자 | `.navigation-button`, 15px·600 | `simple2.control`, `weight.semibold` | 역할 대응. 비선택 상태는 보통 굵기 |
+| 조작 글자 | `.navigation-button`, 15px·600. 분절 조작(탭)은 선택과 비선택 모두 600이고 실측 15.84px다 | `simple2.control`, `weight.semibold`, `styles/control.css` | 역할 대응. Daphnis의 탭도 선택과 비선택이 모두 semibold이고 크기는 `simple2.control`(15px)이라 공식 분절 조작의 15.84px와 같다고 적지 않는다 |
 | 본문 글자 | `body`, 18px·400 | `simple2.body`, `font.sans`, `styles/document.css` | 문서 본문 크기 대응 |
-| 그림 이름·상세·메타 | 대응 요소 없음 | `simple2.label-size`, `simple2.detail-size`, `simple2.micro-size` | 그림 밀도를 위한 확장 |
-| 캔버스 면 | `body`의 밝은 회색 면 | `simple2.canvas-fill` | 밝은 모드의 색 대응 |
-| 캔버스 카드 | `.productcard`의 18px 모서리 | `simple2.canvas-corner` | 바깥 카드 역할. 모든 내부 도형에 적용하지 않는다 |
+| 그림 이름·상세·메타 | 직접 대응 요소 없음. 역할 위계의 보조 참고(2017년 영상 스틸)에서 항목 제목은 보통 굵기, 구획 제목은 semibold다 | `simple2.label-size`, `simple2.detail-size`, `simple2.micro-size`, `measure/texts.js`의 `STYLE` | 그림 밀도를 위한 확장. 카드 제목은 15px regular, 그룹 제목은 같은 15px semibold, 그림 안 글의 굵기는 regular와 semibold 둘이다. 크기와 굵기를 `STYLE`이 재고 CSS가 같은 토큰으로 그린다 |
+| 캔버스 면 | 페이지 판의 면 역할. 공식 페이지는 `body`와 섹션마다 배경이 다르다 | `simple2.canvas-fill` | 페이지 판 면의 역할 대응이고 값은 같지 않다. 실제 Chrome에서 잰 공식 홈 `body`는 rgb(242, 245, 247), 기능 페이지 `body`는 rgb(213, 217, 222)이고 Daphnis 캔버스는 rgb(245, 245, 246)다. 사이트 `body` 값을 그림 캔버스에 복사하지 않는다 |
+| 캔버스 카드 | `.productcard`의 18px 모서리 | `simple2.canvas-corner` | 바깥 카드 역할. 모든 내부 도형에 적용하지 않는다. 그룹 틀과 순서 구획은 카드와 같은 바깥 모서리(`simple2.node-corner`)를 쓴다 |
 | 조작 모서리 | `.navigation-button`의 6px 모서리 | `simple2.control-radius` | 직접 대응 |
 | 도형 외곽선 | 대응 요소 없음 | `simple2.surface-edge`, `simple2.node-stroke`, `.fl-node > .fl-stroke` | 공통 경계 규칙으로 확장 |
 | 표·클래스 및 병합 격자의 내부 구분선 | 대응 요소 없음 | `simple2.separator`, `border.hair`, `.col-line` | 내부 경계를 한 규칙으로 통합 |
 | 관계선·화살촉 | 페이지 이동 표시의 방향성 | `border.edge`, `draw/arrow.js` | 관계 의미를 위한 확장. 채운 삼각형 화살촉과 UML 기호 구분 |
 | 생명선·활성 구간·소멸 | 대응 요소 없음 | `border.lifeline`, `draw/sequence-life.js` | 시퀀스 의미를 위한 확장 |
 | 시퀀스 제어 구획·대안 제목 | 대응 요소 없음 | `simple2.separator`, `color.card`, `draw/sequence-fragments.js` | 공통 중립 경계·글자 위계를 재사용한 확장 |
-| 내부 값 카드 | 대응 요소 없음 | `color.card`, `draw/card.js` | 그림자·테두리 없는 하위 면 |
-| 선택·호버·키보드 초점 | 페이지 링크의 조작 상태 | `simple2.selection-fill`, `simple2.hover-fill`, `simple2.focus-width` | 접근성을 포함한 확장 |
+| 내부 값 카드 | 대응 요소 없음 | `color.card`, `draw/content.js`(카드 내용 면), `.grid-tray`(격자 통로) | 그림자·테두리 없는 하위 면 |
+| 알약(선 라벨, 배지, 개수) | 대응 요소 없음 | `.pill`, `.badge-pill`(`styles/figure.css` 한 규칙) | 중립 면과 평소 경계를 한 규칙으로 쓰는 확장 |
+| 선택·호버·키보드 초점 | 페이지 링크의 조작 상태 | `simple2.row-selection`, `simple2.hover-fill`, `simple2.focus-width` | 접근성을 포함한 확장. 키보드 초점 고리 굵기는 조작부, 재생기 캔버스, 문서와 목록 링크 모두 `simple2.focus-width` 하나다 |
 | 조작 아이콘 | 영상 재생과 방향 아이콘 | `size.control.icon-stroke`, `icons/controls.js` | 굵기·크기 위계 대응. 도형은 저장소에서 다시 그렸으나 Lucide의 이름과 구성을 따르므로 Lucide와 독립이라고 적지 않고 `NOTICE`가 저작권 고지를 맡는다 |
 | 시스템·브랜드 아이콘 | 대응 요소 없음 | `icons/symbols.js`, `icons/brands.json`, 의미색 토큰 | 종류 구분을 위한 확장. 개념 아이콘은 저장소에서 24 격자에 그렸고 브랜드는 Simple Icons 파일이다 |
 | 데이터·상태 의미색 | 대응 요소 없음 | `color.tag`, `color.state`, 차트 역할색 | 오류·성공·계열 구분을 위한 확장 |
@@ -180,17 +181,18 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 | V | `test/grammar.test.js` | 판 표기, 줄과 낱말, 이름 공간, 연결점, 오류의 위치와 필드 | [그림 문법](figure-syntax.md) |
 | G | `test/authoring.test.js` | 이름 없는 보기와 기본 보기, 장면 `mode` 기본값, `tone`과 `appearance` | [그림 문법](figure-syntax.md) |
 | S | `test/cards.test.js` | 카드 연결점(표 열, API 칸, 격자 칸, 추적 구간), 여러 보기에 놓인 카드, 보기 규칙(#172, #175) | [그림 문법](figure-syntax.md), [그림 종류](figure-kinds.md), [칸 격자](grid.md) |
-| K, K-종류 | `test/charts.test.js`(K1~K9), `test/kinds.test.js`(K-arch, K-class, K-sequence, K-state, K-trace, K-queue, K-grid), `test/examples.test.js`(K30) | 종류만의 수학, 의미, 거절. 차트 열여섯 종류와 개발 그림 가족 | [차트](charts.md), [그림 종류](figure-kinds.md), [칸 격자](grid.md) |
+| K, K-종류 | `test/charts.test.js`(K1~K9), `test/kinds.test.js`(K-arch, K-class, K-sequence, K-state, K-trace, K-queue, K-grid, K-view), `test/examples.test.js`(K30) | 종류만의 수학, 의미, 거절. 차트 열여섯 종류와 개발 그림 가족. K-view는 종류가 아니라 판을 합치는 공통 한 곳(`layout/panels.js`)의 판 폭(제목이 잘리지 않고 내용은 가운데)을 그래프 판과 순서 판으로 읽고, 차트 판과 시간 판은 같은 경로여도 따로 읽지 않는다 | [차트](charts.md), [그림 종류](figure-kinds.md), [칸 격자](grid.md) |
 | C | `test/charts.test.js` | 값에 묶인 차트, `data` JSON(#171) | [차트](charts.md), [그림 문법](figure-syntax.md) |
 | E | `test/values.test.js` | 값, 이동, 조건, 대기, 예약(#173) | [그림 문법](figure-syntax.md), [재생](playback.md) |
 | X | `test/exports.test.js` | 장면 방식, 움직이는·멈춘 SVG, HTML의 마크업, 결정성, 정본 내려받기 | [재생](playback.md) |
 | I | `test/escaping.test.js` | 글 이스케이프와 사용자 아이콘의 안전 | [재생](playback.md), [배치](layout.md) |
 | L | `test/cli.test.js` | `render`, `check`, `gallery`의 파일, 종료 코드, 이름 겹침(#176), 쓰기 실패(#177) | [재생](playback.md#결과-파일) |
 | M | `test/markdown.test.js` | `md`의 블록, 소유 표시, 정리, 접기, 잠금, 쓰기 실패(#176) | [마크다운](markdown.md) |
+| G(도구) | `test/tooling.test.js`(G1~G3) | 이 저장소의 `npm run check`가 쓰는 도구: 하드코딩 검사가 JS의 정규식·문자열 뒤 색은 찾고 주석과 정규식 속은 건너뛰며(G1), CSS 주석 뒤의 선언은 계속 검사하는지(G2), 테마 사본의 출처 버전이 `package.json`의 design-tokens 태그와 다르면 두 버전을 밝히며 실패하는지(G3). `G` 번호는 위 `authoring` 시험과 겹치지만 파일이 다르다 | [아키텍처](../architecture.md#토큰-만들기) |
 | P | `test/package.test.js` | 패키지에 오르는 파일과 진입점 | [마크다운](markdown.md) |
-| T | `test/text.test.js` | 글을 읽는 방식(백틱이 글자인지 코드인지), 측정이 놓은 글 자리를 그리는 쪽과 그림 검사가 읽는 것, 긴 제목의 줄바꿈(카드 머리, 차트·시간 머리) | [배치](layout.md), [그림 문법](figure-syntax.md) |
+| T | `test/text.test.js` | 글을 읽는 방식(백틱이 글자인지 코드인지), 측정이 놓은 글 자리를 그리는 쪽과 그림 검사가 읽는 것, 긴 제목의 줄바꿈(카드 머리, 차트·시간 머리), 카드 내용의 관계 그래프 이름이 모든 카드 종류에서 잘리거나 겹치지 않는 폭(T13, 폭을 정하는 `measure/content.js` 한 곳) | [배치](layout.md), [그림 문법](figure-syntax.md) |
 | Q | `test/sampler.test.js`(Q1~Q8) | 순수 표본 추출기(`player/sample.js`)가 장면과 시각만으로 모습을 정하는 규칙 | [재생](playback.md) |
-| U | `test/components.test.js`, `test/component-state.test.js`(켜짐과 평소의 정의 `--fx-*`, 켜진 차트 카드의 바탕 색 `color`, 차트 방향선 화살촉의 역할별 표식. 번호 없이 파일로 가리킨다) | 공통 부품: 잰 카드와 그려진 카드가 같다(U1), 머리 규칙(U2), 머리와 필드의 구분(U3), 글 이스케이프(U4), 글꼴이 정하는 백틱 읽기(U5, U6), 보통 화살표와 의미 관계의 화살촉(U7), 개념 아이콘이 하나의 도형(U8), 그림 틀의 도구 막대와 탭 줄(U9), 차트 바탕 색이 차트 묶음의 `color`로 실려 `currentColor`로 읽힌다(U10) | [배치](layout.md), [재생](playback.md), [아키텍처](../architecture.md#부품-호출-지도) |
+| U | `test/components.test.js`, `test/component-state.test.js`(켜짐과 평소의 정의 `--fx-*`, 켜진 차트 카드의 바탕 색 `color`와 이를 읽는 지움 면, 움직이는 SVG의 선·알약·조용한 선의 시간, `light`가 켠 그룹의 경계, 차트 방향선 화살촉의 역할별 표식. 번호 없이 파일로 가리킨다) | 공통 부품: 잰 카드와 그려진 카드가 같다(U1), 머리 규칙(U2), 머리와 필드의 구분(U3), 글 이스케이프(U4), 라벨의 백틱 읽기(U6. 값과 형식의 글자 그대로 읽기는 T), 보통 화살표와 의미 관계의 화살촉(U7), 개념 아이콘이 하나의 도형(U8), 그림 틀의 도구 막대와 탭 줄(U9), 차트가 놓인 면 안에 그려지고 속 빈 기준 표식이 운반된 면을 읽는다(U10), 글 역할의 크기와 굵기를 `STYLE`이 재고 CSS가 같은 토큰으로 그린다(U11) | [배치](layout.md), [재생](playback.md), [아키텍처](../architecture.md#부품-호출-지도) |
 
 공통 부품(카드, 필드, 선, 화살촉, 라벨, 아이콘, 탭, 도구 막대)의 모양과 상태는 부품이 하나씩 소유하므로 그 시험도 부품마다 한 곳에 한 번만 둔다. 부품 시험은 둘로 나뉜다. `test/components.test.js`는 부품의 기하와 구조(잰 크기와 그린 모양이 같다, 글이 이스케이프된다, 같은 도형이 같은 모양이다)를 보고, 코드가 실제로 쓰는 진입점(`measure/card.js`, `measure/texts.js`, `draw/texts.js`, `draw/arrow.js`, `icons/`, `html/player-script.js`의 `figureFrame`)과 공개 진입점(`buildFigure`, `toSvg`, `toHtml`)을 부른다. `test/component-state.test.js`는 출력 어댑터 사이의 일치를 본다. 켜짐과 평소의 모습을 움직이는 SVG와 HTML이 같은 정의(`--fx-*`)로 읽는지, 차트 방향선의 화살촉이 역할마다 정의 하나인지를 공개 진입점의 출력에서만 읽는다. 시험만을 위한 내보내기나 훅은 없다. 종류별 시험이 같은 색, 두께, 모양을 다시 확인하지 않고, 조합 시험은 데이터 전달과 연결만 본다. 이 시험들은 부품이 약속한 기하와 구조, 출력이 읽는 정의를 읽을 뿐이고, 토큰 값이 자기 자신과 같은지나 소스 글을 읽지 않으며, 계산된 색이 화면에서 어떻게 보이는지는 보지 않는다. 부품 시험으로 아직 덮지 못한 것: 카드 내용(`show`) 줄의 면과 색(줄의 글 자리는 `test/text.test.js`가 측정과 그린 자리의 일치로 본다), 격자 칸과 큐 칸의 모양, 글꼴 조각에 백틱 글자가 실리는지(보이는 글자가 글꼴에 있는지는 화면에서 본다).
 
@@ -204,12 +206,12 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 | 멈춘 장면과 한 번 장면의 마지막 모습이 장면 끝의 박자를 읽는다(#174) | `test/exports.test.js`(X2)가 SVG의 재생 길이를, `test/sampler.test.js`(Q)가 순수 표본 추출기(`player/sample.js`)가 돌려주는 마지막 모습을 읽는다 | 브라우저의 시계가 표본을 부르는 일과 HTML 재생기가 그 모습을 DOM에 쓰는 일 |
 | 장면 탭: 장면이 둘 이상일 때만 아래 가운데에 놓이고, 눌러도 화면이 튀지 않고, 같은 탭을 다시 눌러도 되감지 않는다 | `test/components.test.js`(U9)가 페이지의 탭 줄이 비어 있고 그림 밖에 있다는 것과 재생기가 읽는 장면 수(`steps`)를 읽는다 | 재생기가 탭을 만들고, 장면이 하나이거나 시간 흐름이 없을 때 탭 줄을 숨기는 일(`player/play.js`), 눌림, 위치 |
 | 장면 방식의 시계, 문서가 가려질 때 얼림, 움직임 줄이기 | 없음 | 모두 |
-| 도구 막대의 실제 동작: 문법 복사(클립보드에 쓴 글, 실패 표시), HTML 다운로드(받은 파일), 전체화면(확대, 끌기, 장면과 시계 유지) | `test/exports.test.js`(X8, X10, X11)가 정본 복원, 단추 순서, 페이지에 실린 원본을 읽는다 | 클릭, 클립보드, 파일 저장, 44px 눌림 영역, 호버, 초점, 터치 노출 |
+| 도구 막대의 실제 동작: 문법 복사(클립보드에 쓴 글, 실패 표시), HTML 다운로드(받은 파일), 전체화면(확대, 끌기, 장면과 시계 유지) | `test/exports.test.js`(X8, X11)가 정본 복원과 페이지에 실린 원본을, `test/components.test.js`(U9)가 단추 순서를, X10이 재생 조작이 없다는 것을 읽는다 | 클릭, 클립보드, 파일 저장, 44px 눌림 영역, 호버, 초점, 터치 노출 |
 | 320·390·430px에서 도구 막대와 탭이 잘리지 않고 문서가 가로로 넘치지 않으며 좁은 배치로 바뀐다 | 없음 | 모두. 문서 가로 넘침과 판 경계는 Chrome에서 쟀다([예제와 검증 범위](#예제와-검증-범위)) |
 | 색과 면: `tone`·`appearance`가 구분되는 모습, 라이트·다크 대비 | `test/authoring.test.js`(G5)가 모형과 SVG의 차이를 읽는다 | 실제 화면에서 구분되는지, 대비 |
 | 켜진 도형·표 줄·격자 칸·알약과 차트 방향선 화살촉의 색이 움직이는 SVG와 HTML에서 같다 | `test/component-state.test.js`가 두 출력이 같은 `--fx-*` 정의와 역할별 표식(`fl-arrow-<역할>`)을 읽는지 읽는다 | 브라우저가 계산한 색, 라이트·다크, 표식이 문서 밖 정의에서 색을 받는지 |
-| 켜진 차트 카드의 글자 바탕과 받침 선이 정지 SVG, 움직이는 SVG, HTML에서 같은 켜진 면을 읽는다 | `test/component-state.test.js`(S3)가 차트 묶음의 `color`가 켜짐 구간에 `--fx-face-on`과 `--fx-face`로 바뀌고 keyframes가 사용자 정의 속성을 선언하지 않는지, `test/components.test.js`(U10)가 받는 쪽이 `currentColor`를 읽는지 읽는다. 둘은 선언을 읽는 시험이다 | 브라우저가 계산한 색과 재생 중 라이트·다크 전환의 보임. 실제 Chrome에서 본 범위는 [예제와 검증 범위](#예제와-검증-범위)의 "차트 바탕" 행이고 그 밖의 소비자와 상태는 검증 요구사항, 미완료 |
-| 효과의 시간(펄스, 선 켜짐·꺼짐, 점과 글 상자) | 없음 | 모두 |
+| 켜진 차트 카드의 글자 바탕과 받침 선이 정지 SVG, 움직이는 SVG, HTML에서 같은 켜진 면을 읽는다 | `test/component-state.test.js`(S3)가 별칭의 정의, 차트 묶음의 `color`가 켜짐 구간에 `--fx-face-on`과 `--fx-face`로 바뀌는지, keyframes가 사용자 정의 속성을 선언하지 않는지, 받는 쪽이 `currentColor`를 읽는지 읽는다. 선언을 읽는 시험이다 | 브라우저가 계산한 색과 재생 중 라이트·다크 전환의 보임. 실제 Chrome에서 본 범위는 [예제와 검증 범위](#예제와-검증-범위)의 "차트 바탕" 행이고 그 밖의 소비자와 상태는 검증 요구사항, 미완료 |
+| 효과의 시간(펄스, 선 켜짐·꺼짐, 점과 글 상자) | `test/component-state.test.js`(S4)가 움직이는 SVG의 keyframes를, `test/sampler.test.js`(Q)가 재생기의 순수 표본을 읽는다 | 브라우저의 시계가 표본을 DOM에 쓰는 일(`player/stage.js`가 알약 색 `--pill-tint`를 라벨 묶음과 선 묶음에 쓰는 일 포함), 실제 보임 |
 | 복사 글이 줄바꿈까지 원본과 같다 | `test/exports.test.js`(X11)가 페이지에 원본이 있음을 읽는다 | 실제로 클립보드에 들어간 글 |
 
 ### 예제와 검증 범위

@@ -2,6 +2,7 @@
 import { ratio } from '../format.js';
 import { BADGE_STYLE } from '../measure/decor.js';
 import { centerBaseline, escapeXml, roundCoord as r } from '../text.js';
+import { ICON_GRID } from '../icons/symbols.js';
 import { headBox } from '../layout/titles.js';
 import { values } from '../tokens.js';
 
@@ -11,7 +12,7 @@ import { values } from '../tokens.js';
 /**
  * 장식 한 줄을 그린다.
  * @param decor measure/decor.js의 layoutDecor 결과
- * @param place { x, y, iconData }. x, y는 줄 왼쪽 위(그림 좌표), iconData는 아이콘 { viewBox, body }
+ * @param place { x, y, iconData }. x, y는 줄 왼쪽 위(그림 좌표), iconData는 아이콘 { body }
  * @param glyphs 쓴 글자를 모으는 그릇
  */
 export function drawDecor(decor, place, glyphs) {
@@ -21,23 +22,19 @@ export function drawDecor(decor, place, glyphs) {
     .join('');
 }
 
-// 아이콘. 파일의 viewBox를 정사각 칸 안에 가운데로 맞춰 넣는다. 색은 class의 currentColor가 정한다.
+// 아이콘. 24 격자 아이콘을 정사각 칸에 맞춰 넣는다. 색은 class의 currentColor가 정한다.
 function drawIcon(item, { x, y, iconData }) {
   return drawSymbol(iconData, { x: x + item.x, y: y + item.y, size: item.w });
 }
 
 // 의미 아이콘(등록부 도형)은 자신의 실루엣에 면과 윤곽을 갖는다. 브랜드와 사용자 SVG에는 임의 배경을 붙이지 않는다. 두 가지 모두 같은 틀 맞춤(iconAt)을 쓴다.
-export function drawSymbol(iconData, { x, y, size }) {
+function drawSymbol(iconData, { x, y, size }) {
   return `<g class="fl-symbol fl-symbol-${iconData.role}">${iconAt(iconData, { x, y, size, className: iconData.symbol ? 'fl-symbol-glyph' : 'fl-icon' })}</g>`;
 }
 
-// 정사각 칸(왼쪽 위 x, y, 한 변 size) 안에 아이콘의 viewBox를 가운데 맞춰 그린다. 의미 아이콘의 viewBox는 등록부의 24 격자(ICON_GRID)라 여백이 모두 같다.
+// 정사각 칸(왼쪽 위 x, y, 한 변 size)에 아이콘의 24 격자(ICON_GRID)를 맞춰 그린다. 의미 아이콘은 격자 그대로이고 브랜드와 사용자 SVG는 읽을 때 격자에 맞춰 두어(icons/sanitize.js) 여백이 모두 같다.
 function iconAt(iconData, { x, y, size, className }) {
-  const [vx, vy, vw, vh] = iconData.viewBox;
-  const scale = size / Math.max(vw, vh);
-  const tx = x + (size - vw * scale) / 2 - vx * scale;
-  const ty = y + (size - vh * scale) / 2 - vy * scale;
-  return `<g class="${className}" transform="translate(${r(tx)} ${r(ty)}) scale(${ratio(scale)})">${iconData.body}</g>`;
+  return `<g class="${className}" transform="translate(${r(x)} ${r(y)}) scale(${ratio(size / ICON_GRID)})">${iconData.body}</g>`;
 }
 
 // cost: time O(1), heap O(out), stack O(1)

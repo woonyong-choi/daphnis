@@ -1,6 +1,6 @@
 // 차트 선언 문장을 읽는다. 값의 규칙(계열 수, 음수, log)은 validate.js가 모든 행을 읽은 뒤 확인한다.
 import { VALUES, optionsOf, valueNames } from './grammar.js';
-import { RANGE_MESSAGE, TINY_MESSAGE } from './chart-rules.js';
+import { RANGE_MESSAGE, TINY_MESSAGE } from './chart-limits.js';
 import { isOverflowNumber, isTinyNumber, parseNumber } from './values.js';
 import { readTotal } from './waterfall.js';
 import { readBins, readSample } from './histogram.js';

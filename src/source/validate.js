@@ -240,8 +240,8 @@ function checkBeat(beat, { figure, names, problems, usedEdges }) {
   }
   for (const op of beat.ops) checkCardTarget(op, deps, problems);
   for (const target of beat.light) checkLightTarget(target, { line: beat.line, ...deps }, problems);
-  for (const { chart, line } of [...beat.chartLight, ...beat.reveal]) if (names.get(chart)?.shape !== 'chart' && !figure.rejectedNames.has(chart)) problems.error(line, unknownName('chart', chart, figure.nodes.filter((n) => n.shape === 'chart').map((n) => n.id)));
-  for (const note of beat.notes) checkNoteParticipant(note, deps, problems);
+  for (const { chart, line } of [...beat.chartLight, ...beat.reveal]) checkChartTarget(chart, { line, ...deps }, problems);
+  for (const note of beat.notes) checkSequenceMember(note.node, `note ${note.node}`, { line: note.line, ...deps }, problems);
   for (const action of beat.activations ?? []) checkSequenceMember(action.node, `${action.kind} ${action.node}`, { line: action.line, ...deps }, problems);
 }
 
@@ -267,8 +267,15 @@ function checkSequenceMember(id, what, { line, figure, names }, problems) {
   return undefined;
 }
 
-function checkNoteParticipant(note, deps, problems) {
-  checkSequenceMember(note.node, `note ${note.node}`, { line: note.line, ...deps }, problems);
+// cost: time O(k), heap O(k), stack O(1)
+// vars: k = 이름 수(없는 이름 메시지)
+// basis: estimate
+// 차트 카드를 가리키는 light, reveal 대상. 이름이 있는데 차트가 아니면 그 도형을 알린다.
+function checkChartTarget(id, { line, figure, names }, problems) {
+  const target = names.get(id);
+  if (target?.shape === 'chart' || figure.rejectedNames.has(id)) return;
+  if (target) problems.error(line, `"${id}" is a ${target.shape}, not a chart. light "item" and reveal belong to a chart card`);
+  else problems.error(line, unknownName('chart', id, figure.nodes.filter((n) => n.shape === 'chart').map((n) => n.id)));
 }
 
 // cost: time O(e), heap O(1), stack O(1)
@@ -279,7 +286,7 @@ function checkNoteParticipant(note, deps, problems) {
  * 첫 투영이 시간표의 시간을 정하고 나머지는 같은 시각과 길이로 따라 움직인다. scope가 있으면 { only: 보기 이름들 }의 그래프 보기만 본다(흐름 경로의 구간)
  * 또는 { graphOnly: true }로 순서 보기를 보지 않는다(시간 초과 분기는 메시지가 아니라 선을 지난다).
  */
-export function resolveHop(hop, { figure, names, problems }, usedEdges, scope) {
+function resolveHop(hop, { figure, names, problems }, usedEdges, scope) {
   const [fromId] = hop.from.split('.');
   const [toId] = hop.to.split('.');
   if (!checkPartRefs([hop.from, hop.to], { names, line: hop.line }, problems)) return;

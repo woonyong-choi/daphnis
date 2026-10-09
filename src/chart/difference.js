@@ -24,9 +24,8 @@ function signedFormat(chart) {
   const id = chart.series[0].id;
   const format = valueFormat(chart.rows.map((row) => row.values[id]), chart.decimals);
   return (value) => {
-    const text = format(value);
-    if (value > 0) return `+${text}`;
-    return value < 0 ? `−${text.slice(1)}` : text;
+    if (value > 0) return `+${format(value)}`;
+    return value < 0 ? `−${format(-value)}` : format(value);
   };
 }
 

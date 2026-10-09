@@ -10,9 +10,6 @@ import { positionAt } from './easing.js';
 import { flattenRoute } from './route.js';
 import { values } from './tokens.js';
 
-export { CHIP_FRAME_MS, CHIP_VISIBLE_MIN, chipStateAt } from './chip-motion.js';
-export { CHIP_STEP_MAX } from './chip-slide.js';
-
 // 글 상자와 점 사이가 이보다 멀면 떨어졌다고 본다(가리는 것을 비켜 올린 최대 거리까지는 붙은 것이다)
 const DETACH_GAP = CHIP_GAP * 2 + CHIP_GAP * 4;
 // 비용 가중치. 겹침 > 자리 바꿈 > 떨어짐(DETACH_GAP을 넘은 px마다) > 가까운 선(넓이마다) > 위아래 끝 여백 > 선택 순서 순으로 크다. 바꿈 한 번이 지점 수백 개의 작은 비용 합보다 크다
@@ -23,7 +20,7 @@ const MARGIN_COST = 500;
 const ORDER_COST = 100;
 // 계획을 세울 때 이동 시간의 상한(ms). 이보다 긴 이동은 이 시간짜리 이동으로 계획을 세운다. 계획 지점과 후보는 이 시간에 비례해 늘므로 상한이 없으면 메모리가 이동 시간에 비례한다.
 // 계획 경로는 이동 진행 비율로 담고 점의 위치도 진행 비율의 함수라서, 같은 계획이 긴 이동에도 그대로 맞는다. 예제 가운데 가장 긴 이동(13.4초)보다 길어 기존 그림은 바뀌지 않는다.
-export const PLAN_MAX_MS = 20000;
+const PLAN_MAX_MS = 20000;
 // 글 상자(흐름과 박자 이동 모두)는 자기 점에서 이 거리(px, 상자 가장자리와 점 중심) 안에만 둔다. 이를 넘는 후보는 비용을 재지 않고 제외한다(점 옆 기본 자리는 늘 이 안이다)
 const ATTACH_MAX = values.size.packet['chip-reach'];
 // 박자 이동의 글 상자가 보여야 하는 비율의 하한. 못 넘으면 도형 윤곽을 덮는 자리도 쓴다(글자, 아이콘, 카드와 큐 안, 선 라벨 알약과 상태 알약은 어떤 경우에도 덮지 않는다)
@@ -81,7 +78,7 @@ export function issuesOfHop(scene, hop, avoid) {
  * 흐름(track) 이동은 이어 붙인 경로 hop.route를 따라가고, 지나는 선 모두(hop.edges)를 피할 대상에서 뺀다.
  * @returns { path, issues }. path는 이동 진행 비율 at(오름차순)마다 [at, dx, dy, opacity]이고, issues는 지점마다 { at, isOutside, hits }다
  */
-export function planChip(scene, realHop, avoid) {
+function planChip(scene, realHop, avoid) {
   return planWithin(scene, realHop, { avoid, limits: resolveBudget() });
 }
 

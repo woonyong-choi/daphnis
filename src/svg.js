@@ -105,7 +105,7 @@ export function selectScene(steps, option) {
 // vars: s = 장면 수
 // basis: estimate
 /** 장면 번호(0부터)나 이름을 장면 번호로. 없으면 있는 장면 이름을 알린다. */
-export function sceneIndex(steps, selector) {
+function sceneIndex(steps, selector) {
   const index = typeof selector === 'number' ? selector : steps.findIndex((s) => s.label === selector);
   if (!hasScene(steps, index)) throw new RangeError(noSceneMessage(steps, selector));
   return index;
@@ -129,12 +129,12 @@ function noSceneMessage(steps, shown) {
 /**
  * 시간표에서 장면 하나만 떼어 시각을 0부터 다시 센다. 값 줄, 펄스, 차트 프레임은 그 장면 것만 남는다. 장면이 없는 문서는 모든 것이 보이는 구간 하나다.
  */
-export function sliceTimeline(timeline, si, scene) {
+function sliceTimeline(timeline, si, scene) {
   const segs = timeline.segs.filter((s) => s.si === si);
   if (!segs.length) return { segs: [emptySeg(timeline.values ?? [])], total: 1, growMs: timeline.growMs, pulses: [], values: timeline.values ?? [], charts: {}, tracks: timeline.tracks };
   const t0 = segs[0].t0;
   const shift = (t) => t - t0;
-  const rebased = (row) => ({ ...row, t0: shift(row.t0), t1: shift(row.t1), changes: row.changes.map(([t, text]) => [shift(t), text]), periods: row.periods.map(([a, b, text]) => [shift(a), shift(b), text]), flashes: row.flashes.map(([a, b]) => [shift(a), shift(b)]) });
+  const rebased = (row) => ({ ...row, t0: shift(row.t0), t1: shift(row.t1), changes: row.changes.map(([t, text]) => [shift(t), text]), periods: row.periods.map(([a, b, text]) => [shift(a), shift(b), text]) });
   const total = segs.at(-1).t1 - t0;
   return {
     ...timeline,
@@ -165,7 +165,7 @@ function emptySeg(rows) {
  * 장면의 마지막 상태 하나로 줄인다: 마지막 구간의 카드, 지나온 선과 밝힌 도형과 밝힌 차트 행, 값 줄마다 마지막 글, 차트 프레임의 마지막 구간. 점, 펄스, 자라는 움직임은 없다. 밝히기(light)는 효과가 아니라 장면 끝까지 남는 상태다.
  * once 재생이 끝난 모습과 같다.
  */
-export function finalState(timeline) {
+function finalState(timeline) {
   const last = timeline.segs.at(-1);
   const seg = {
     ...last,
@@ -186,7 +186,7 @@ export function finalState(timeline) {
     total: 1,
     marks,
     pulses: [],
-    values: timeline.values.map((row) => ({ ...row, t0: 0, t1: 1, initial: lastText(row), changes: [], periods: [[0, 1, lastText(row)]], flashes: [] })),
+    values: timeline.values.map((row) => ({ ...row, t0: 0, t1: 1, initial: lastText(row), changes: [], periods: [[0, 1, lastText(row)]] })),
     charts: Object.fromEntries(Object.entries(timeline.charts).map(([id, chart]) => [id, { ...chart, rows: chart.rows.map((row) => ({ ...row, t0: 0, t1: 1, periods: row.periods.length ? [[0, 1, row.periods.at(-1)[2], []]] : [] })) }])),
   };
 }

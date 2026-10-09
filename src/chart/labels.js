@@ -22,7 +22,7 @@ const LABEL_ROOM = LABEL_MAX - LABEL_GAP;
 // basis: estimate
 /** 항목 이름 칸 너비. 가장 긴 이름에 맞추되 LABEL_W와 LABEL_MAX 사이다. 넘는 이름은 그림 검사 1번이 알린다. */
 export function labelColumn(names) {
-  return Math.min(LABEL_MAX, Math.max(LABEL_W, ...names.map((name) => measure(name, TEXT['13'], 'medium') + LABEL_GAP)));
+  return Math.min(LABEL_MAX, Math.max(LABEL_W, ...names.map((name) => measure(name, TEXT['13'], 'regular') + LABEL_GAP)));
 }
 
 // cost: time O(n), heap O(1), stack O(1)
@@ -30,7 +30,7 @@ export function labelColumn(names) {
 // basis: estimate
 /** 항목 이름이 이름 칸에 들어가야 한다는 그림 검사 항목 */
 export function labelFit(name, line) {
-  return { text: name, width: measure(name, TEXT['13'], 'medium'), room: LABEL_ROOM, line, what: 'item name' };
+  return { text: name, width: measure(name, TEXT['13'], 'regular'), room: LABEL_ROOM, line, what: 'item name' };
 }
 
 // cost: time O(n), heap O(n), stack O(1)
@@ -133,7 +133,7 @@ export function drawHeader(figure) {
 /** 좁은 행 차트의 이름 줄과 공통 높이. 모든 행이 같은 막대 시작 위치를 쓴다. */
 export function rowLabelLayout(chart) {
   if (!chart.layout) return { space: 0 };
-  const lines = chart.rows.map((row) => wrap(row.label, chart.layout.width - PAD * 2, { size: TEXT['13'], face: row.total ? 'semibold' : 'medium' }));
+  const lines = chart.rows.map((row) => wrap(row.label, chart.layout.width - PAD * 2, { size: TEXT['13'], face: row.total ? 'semibold' : 'regular' }));
   const lineHeight = TEXT['13'] * values.simple2['figure-leading'];
   return { lines, lineHeight, space: Math.max(...lines.map((row) => row.length)) * lineHeight + SPACE['6'] };
 }

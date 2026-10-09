@@ -7,9 +7,10 @@ import { centerBaseline, escapeXml, renderRich, roundCoord as r } from '../text.
 import { values } from '../tokens.js';
 import { COPY } from './copy.js';
 import { keyRoom, segmentKey } from './labels.js';
+import { fillSwatch } from './legend.js';
 import { markAttrs, markId } from './marks.js';
 import { PAD, SIZE, SPACE, TEXT, WIDTH } from './metrics.js';
-import { patternPath, patternRect } from './pattern.js';
+import { patternPath } from './pattern.js';
 import { SHARE_PLACES, valueFormat } from './scale.js';
 
 const TURN = Math.PI * 2;
@@ -125,12 +126,11 @@ function zeroNote(chart, { cx, cy, outer, inner }, isUndefined) {
 function partLabel({ label, detail, index, raw }, { y, width, paint, chart }) {
   const x = PAD + SIZE.chart.bar + SPACE['3'];
   const lineHeight = TEXT['13'] * values.simple2['figure-leading'];
-  const lines = wrap(label, width - PAD - x, { size: TEXT['13'], face: 'medium' });
+  const lines = wrap(label, width - PAD - x, { size: TEXT['13'], face: 'regular' });
   const name = lines.map((line, i) => `<text x="${r(x)}" y="${r(y + TEXT['13'] + i * lineHeight)}" class="chart-label cr-${index} ink">${renderRich(line)}</text>`).join('');
   const detailY = y + lines.length * lineHeight;
   const details = wrap(detail, width - PAD - x, { size: TEXT['11'] });
   const numbers = details.map((line, i) => `<text x="${r(x)}" y="${r(detailY + TEXT['11'] + i * lineHeight)}" class="chart-value cr-${index} ink"${i ? '' : markAttrs(chart, markId(chart, 0, index, '.d'), { raw, isText: true, paint })}>${renderRich(line)}</text>`).join('');
-  const box = { x: PAD, y: y + SPACE['2'], w: SIZE.chart.bar, h: SIZE.chart.bar, radius: values.radius.sm };
-  const swatch = `<g class="cr-${index}"><rect x="${PAD}" y="${r(box.y)}" width="${box.w}" height="${box.h}" rx="${box.radius}" fill="${paint.fill}" stroke="${paint.border}" stroke-width="${values.border.tag}"/>${patternRect(paint, box)}</g>`;
+  const swatch = `<g class="cr-${index}">${fillSwatch(paint, { x: PAD, y: y + SPACE['2'] })}</g>`;
   return { svg: swatch + name + numbers, bottom: detailY + details.length * lineHeight + SPACE['6'] };
 }

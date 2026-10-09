@@ -26,7 +26,6 @@ const NO_REFERENCE = ['stacked', 'percent', 'dumbbell'];
 const BOX_KEYS = CHART_TYPES.box.valueKeys;
 // 값 자리가 `value` 하나이고 `-`를 받는 종류
 const SINGLE_VALUE = ['ecdf', 'histogram', 'waterfall'];
-export { MAX_VALUE, MIN_VALUE, RANGE_MESSAGE, TINY_MESSAGE, isTiny } from './chart-limits.js';
 // 종류마다 고정 원소 키. 계열 키와 겹치면 JSON에서 둘을 가를 수 없다.
 const FIXED_KEYS = ['label', 'name', 'x', 'y', 'series', 'row', 'col', 'value'];
 
@@ -42,7 +41,7 @@ export function checkChart(figure, problems) {
   }
   if (checkSeriesRoles(figure, problems)) orderSeriesByRole(figure);
   if (chart.missing !== undefined && !CHART_TYPES[chartType].allowsMissing) problems.error(figure.line, `missing is only for charts whose values can be "-": ${MISSING_TYPES.join(', ')}`);
-  if (['bar', 'stacked', 'percent', 'histogram', 'waterfall'].includes(chartType) && chart.scale === 'log') problems.error(figure.line, `a ${chartType} chart starts at 0, so scale log is not allowed`);
+  if (['bar', 'stacked', 'percent', 'histogram', 'waterfall'].includes(chartType) && chart.scale === 'log') problems.error(chart.scaleLine ?? figure.line, `a ${chartType} chart starts at 0, so scale log is not allowed`);
   if (chartType === 'area' && chart.scale === 'log') problems.error(chart.scaleLine ?? figure.line, 'an area chart closes at 0, so scale log is not allowed');
   if (chartType === 'ecdf' && chart.scale === 'log') problems.error(chart.scaleLine ?? figure.line, 'an ecdf chart runs from 0 to 1 on its vertical axis, so scale log is not allowed');
   if (chartType === 'difference' && chart.scale === 'log') problems.error(chart.scaleLine ?? figure.line, 'a difference chart is centered on 0, so scale log is not allowed');

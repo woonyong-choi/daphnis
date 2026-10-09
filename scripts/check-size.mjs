@@ -5,8 +5,9 @@
 // 함수는 `function`, 블록 본문 화살표 함수, 클래스 메서드를 줄 시작 모양으로 찾고 중괄호 짝으로 끝을 찾는다. 생성 파일(첫 줄 표시)은 보지 않는다.
 // 이 수치는 읽기 어려운 곳을 가리키는 힌트이지 설계나 정확성의 증거가 아니다. 줄 시작 정규식으로 찾으므로 여러 줄 매개변수 목록,
 // 기본값 안의 괄호, 블록 주석 안의 중괄호, 여러 줄 템플릿 글자를 바르게 읽지 못한다. 항목을 없애려고 일관된 코드를 쪼개지 않는다.
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { extname, join } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { extname } from 'node:path';
+import { iterFiles } from './lib/walk-files.mjs';
 
 const USAGE = 'usage: check-size.mjs [--advisory] targets [targets ...]';
 const FILE_MAX = 300;
@@ -14,7 +15,8 @@ const FUNCTION_MAX = 40;
 const PARAMS_MAX = 3;
 const GENERATED_MARKS = ['생성물, 손으로 고치지 않음', '@generated'];
 const SCRIPT_EXTS = new Set(['.js', '.mjs', '.cjs']);
-const SKIP_DIRS = new Set(['node_modules', '.git', 'out']);
+// 이 검사가 보는 파일: `.js`, `.mjs`, `.cjs`. 건너뛰는 폴더는 설치물과 빌드 결과(`out`) 폴더다.
+const SOURCES = { wants: (name) => SCRIPT_EXTS.has(extname(name).toLowerCase()), skipDirs: new Set(['node_modules', '.git', 'out']) };
 const NOT_METHODS = new Set(['if', 'for', 'while', 'switch', 'catch', 'return', 'function']);
 const STRING = /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`|\/(?![/*])(?:[^/\\\n[]|\\.|\[(?:[^\]\\]|\\.)*\])+\/[a-z]*/g;
 // 선언 모양: 이름과 매개변수 목록을 `name`, `params`로 잡는다. isArrow인 선언은 본문이 식이면 줄 수를 세지 않는다.
@@ -30,7 +32,7 @@ const DECLARATIONS = [
 function main(argv) {
   const { targets, isAdvisory } = parseArgs(argv);
   const findings = [];
-  for (const path of targets.flatMap(listFiles)) findings.push(...checkFile(path));
+  for (const path of iterFiles(targets, SOURCES)) findings.push(...checkFile(path));
   for (const { path, line, name, reason } of findings) console.log(`${path}:${line}: ${name}: ${reason}`);
   console.log(`total ${findings.length}`);
   return findings.length && !isAdvisory ? 1 : 0;
@@ -50,15 +52,6 @@ function parseArgs(argv) {
     process.exit(2);
   }
   return { targets, isAdvisory: argv.includes('--advisory') };
-}
-
-// cost: time O(f), heap O(f), stack O(d), io f
-// vars: f = 파일 수, d = 폴더 깊이
-// basis: estimate
-function listFiles(target) {
-  const stat = statSync(target);
-  if (stat.isFile()) return SCRIPT_EXTS.has(extname(target)) ? [target] : [];
-  return readdirSync(target).sort().flatMap((name) => (SKIP_DIRS.has(name) ? [] : listFiles(join(target, name))));
 }
 
 // cost: time O(n·b), heap O(n), stack O(1), io 1

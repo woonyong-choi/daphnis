@@ -1,7 +1,6 @@
-// 선택 사항(`키=값`) 낱말을 문법 표(grammar.js의 OPTIONS)의 항목대로 읽는다. 값 종류는 정수(min), 낱말(값 목록), 글(maxLength)이고, 값 없는 낱말(flag)은 읽지 않는다.
+// 선택 사항(`키=값`) 낱말을 문법 표(grammar.js의 OPTIONS)의 항목대로 읽는다. 값 종류는 정수(min), 낱말(값 목록), 글(maxLength)이고, 값 없는 낱말(flag)은 읽지 않고, `키=값`으로 쓰면 오류다.
 import { VALUES, optionsOf, valueNames } from './grammar.js';
-
-const INTEGER_PATTERN = /^\d+$/;
+import { INTEGER_PATTERN } from './words.js';
 
 // cost: time O(t·s), heap O(t), stack O(1)
 // vars: t = 낱말 수, s = 범위 수
@@ -47,9 +46,11 @@ function readValue(token, spec, { line, ctx }) {
     const range = spec.max === undefined ? `${spec.min} or more` : `${spec.min} to ${spec.max}`;
     return isNumber ? Number(token.value) : bad(`${token.key} is a whole number of ${range}. Found "${token.value}"`);
   }
+  if (spec.type === 'flag') return bad(`${token.key} takes no value. Write ${token.key} without =value`);
   if (spec.type === 'text') {
     if (token.valueType !== 'text') return bad(`${token.key} is quoted text: ${token.key}="..."`);
-    return spec.maxLength === undefined || token.value.length <= spec.maxLength ? token.value : bad(`${token.key} is at most ${spec.maxLength} characters. Found ${token.value.length}`);
+    const length = [...token.value].length;
+    return spec.maxLength === undefined || length <= spec.maxLength ? token.value : bad(`${token.key} is at most ${spec.maxLength} characters. Found ${length}`);
   }
   if (!spec.values) return token.valueType === 'word' ? token.value : bad(`${token.key} is a ${spec.format}, not quoted text`);
   const isListed = token.valueType === 'word' && valueNames(spec.values).includes(token.value);

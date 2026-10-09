@@ -69,7 +69,7 @@ export function drawGridBody(it, { decorate, glyphs, index }) {
  * 무늬 칸은 단위 칸에 행 사이 통로 높이를 더한 크기이고, 칸 경계선(윗변과 왼쪽 변, 통로가 있으면 아랫변)을 굵기 절반만큼 비켜 그려 선이 무늬 칸 안에 온전히 들어간다.
  * 구간 경로는 굵기 절반만큼 사방으로 넓혀 구간 바깥 경계선도 온전히 보인다. 옛 그림처럼 칸마다 사각형을 그린 것과 같은 선 굵기와 자리다.
  */
-export function drawEmpties(it, index) {
+function drawEmpties(it, index) {
   if (!it.empties.length) return '';
   const { unit } = it;
   const stroke = values.border.thin;

@@ -2,7 +2,7 @@
 import { spawnSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { verifyTheme } from './theme-snapshot.mjs';
+import { verifyPin, verifyTheme } from './theme-snapshot.mjs';
 
 const ROOT = new URL('../', import.meta.url);
 const config = JSON.parse(readFileSync(new URL('theme.config.json', ROOT), 'utf8'));
@@ -16,7 +16,7 @@ if (!args.includes('--check')) {
   if (result.status !== 0) throw new Error('theme import failed');
   for (const name of ['tokens.json', 'tokens.dark.json']) writeFileSync(new URL(`src/${name}`, ROOT), readFileSync(new URL(`src/design-theme/diagram.${name}`, ROOT)));
 }
-verifyTheme();
+verifyPin(verifyTheme());
 checkCopies();
 
 // cost: time O(n), heap O(n), stack O(1), io 4

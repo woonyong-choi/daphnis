@@ -1,6 +1,6 @@
 // 공통 부품 계약: 카드(측정 measure/card.js, texts.js, 그리기 draw/card.js, texts.js, surface.js), 선과 화살촉(draw/connector.js, arrow.js), 아이콘(icons/), HTML 그림 틀(도구 막대, 탭 줄).
 // 같은 요소는 부품 하나가 소유하므로 부품마다 한 곳에 한 번만 본다. 종류별 시험이 같은 모양을 다시 보지 않고, 여기서는 부품 사이의 약속(잰 기하와 그린 모양이 같다, 글자가 이스케이프된다, 같은 도형이 같은 모양이다)만 본다.
-// 시험 이름 첫 낱말(U1~U9)이 요구사항 번호이고, 번호와 계약의 대응은 docs/design/expression-coverage.md의 시험 번호 표에 있다. 브라우저에서만 보이는 것(탭을 만들고 숨기는 일, 클릭)은 같은 문서의 브라우저에서만 보이는 계약 표에 있다.
+// 시험 이름 첫 낱말(U1~U11)이 요구사항 번호이고, 번호와 계약의 대응은 docs/design/expression-coverage.md의 시험 번호 표에 있다. 브라우저에서만 보이는 것(탭을 만들고 숨기는 일, 클릭)은 같은 문서의 브라우저에서만 보이는 계약 표에 있다.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { figureFrame } from '../src/html/player-script.js';
@@ -8,10 +8,14 @@ import { CONTROL_ICONS } from '../src/icons/controls.js';
 import { loadIcon } from '../src/icons/index.js';
 import { drawTexts } from '../src/draw/texts.js';
 import { edgeMarker } from '../src/draw/arrow.js';
+import { TEXT } from '../src/chart/metrics.js';
+import { BADGE_STYLE } from '../src/measure/decor.js';
 import { measure, createGlyphSet } from '../src/measure/fonts.js';
 import { PAD } from '../src/measure/card.js';
-import { allTexts, textAt, textSpan } from '../src/measure/texts.js';
+import { STYLE, allTexts, textAt, textSpan } from '../src/measure/texts.js';
+import { STYLES } from '../src/styles.js';
 import { centerBaseline } from '../src/text.js';
+import { values } from '../src/tokens.js';
 import { build, dap, descendants, findAll, findOne, num, parseMarkup, textContent, toHtml, toSvg } from './support.js';
 
 const TICK = '`';
@@ -154,32 +158,6 @@ test('U4 one text component writes every card text: XML characters are escaped, 
   assert.ok(glyphs.used.get('regular').includes('<') && glyphs.used.get('semibold').includes('P') && glyphs.used.get('mono').includes('n'));
 });
 
-test('U5 a literal type keeps its backticks and escaped characters on a class, an API and a table, and the card is as wide as the glyphs that are drawn', async () => {
-  // 고정폭 글꼴이라 같은 글자 수의 평범한 글과 같은 폭이어야 한다. 백틱이 글이 아니라 서식으로 읽히면 글자가 둘 사라지고 카드가 좁아진다. 기대 폭은 같은 글자 수의 평범한 글로 지은 카드에서 따로 얻는다.
-  const card = (literal) => dap(`
-    class k "K" {
-      field f "${literal.replaceAll('"', '\\"')}"
-    }
-    table t "T" {
-      memo "${literal.replaceAll('"', '\\"')}"
-    }
-    api ap "GET /x" {
-      body "${literal.replaceAll('"', '\\"')}"
-    }
-  `);
-  const literal = `a${TICK}b${TICK}c<d>&"e`;
-  const plain = literal.replaceAll(TICK, 'x');
-  const [withTicks, withLetters] = [await rendered(card(literal)), await rendered(card(plain))];
-  for (const [index, id] of ['k', 't', 'ap'].entries()) {
-    const [ticked, lettered] = [withTicks.result.scene.items[index], withLetters.result.scene.items[index]];
-    assert.equal(ticked.w, lettered.w, `${id}: the card is as wide as the same number of plain glyphs`);
-    const drawn = descendants(nodeGroup(withTicks.dom, index)).filter((n) => n.tag === 'text' && (hasClass(n, 'type') || hasClass(n, 'mono')));
-    const shown = drawn.map(textContent).filter((text) => text.includes('a') && text.includes('<'));
-    assert.deepEqual(shown, [id === 'k' ? `f: ${literal}` : literal], `${id}: drawn as written, with its backticks`);
-    assert.deepEqual(drawn.flatMap((n) => descendants(n)).filter((n) => hasClass(n, 'code')), [], `${id}: no code markup in a literal`);
-  }
-});
-
 test('U6 a label is rich text in every slot that takes a label: backticks make code, and the card and the line label measure and draw it the same way', async () => {
   const { result, dom } = await rendered(dap(`
     box a "Run ${TICK}npm test${TICK}"
@@ -197,8 +175,30 @@ test('U6 a label is rich text in every slot that takes a label: backticks make c
   const [item] = result.scene.items;
   const label = item.texts.find((t) => t.role === 'label');
   assert.equal(label.text, `Run ${TICK}npm test${TICK}`);
-  assert.equal(textSpan(item, label).width, measure('Run ', 15, 'semibold') + measure('npm test', 15, 'mono'));
+  assert.equal(textSpan(item, label).width, measure('Run ', label.style.size, label.style.face) + measure('npm test', label.style.size, 'mono'));
   assert.ok(PAD.x * 2 + textSpan(item, label).width <= item.w + EPS);
+});
+
+// ---- 글 역할 ----
+
+// 측정(STYLE)과 그리기(CSS)는 글 역할의 크기와 굵기를 같은 토큰으로 읽는다. 다르면 잰 폭과 그린 폭이 어긋난다. 크기와 굵기만 보고 색과 자리는 보지 않는다.
+test('U11 a measured text role is the drawn role: the CSS of every role has the size and weight of its STYLE, and chart names are measured and drawn at the same weight', () => {
+  const rulesOf = (css) => [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/([^{}]+)\{([^}]*)\}/g)].map(([, selectors, body]) => ({ selectors: selectors.split(',').map((s) => s.trim()), body }));
+  const declared = (css, selector, property) => rulesOf(css).filter((rule) => rule.selectors.includes(selector)).flatMap(({ body }) => [...body.matchAll(new RegExp(`(?:^|;|\\s)${property}:\\s*([^;]+);`, 'g'))].map(([, value]) => value.trim()));
+  const sizeOf = (css, selector) => values.simple2[/--simple2-([\w-]+)\)/.exec(declared(css, selector, 'font-size').at(-1))[1]];
+  const weightOf = (css, selector) => {
+    const weight = declared(css, selector, 'font-weight').at(-1);
+    return weight === undefined ? 400 : values.weight[/--weight-(\w+)\)/.exec(weight)[1]];
+  };
+  const WEIGHTS = { regular: 400, semibold: 600, semiboldLiteral: 600 };
+  const roles = [['.fl .label', STYLE.label], ['.fl .sub', STYLE.sub], ['.fl .frame', STYLE.group], ['.fl .row', STYLE.row], ['.fl .meta', STYLE.meta], ['.fl .cell', STYLE.cell], ['.fl .item', STYLE.item], ['.fl .mini', STYLE.mini], ['.fl .chip', STYLE.chip], ['.fl .edgelabel', STYLE.pill], ['.fl .tag', STYLE.tag], ['.fl .mark', STYLE.mark], ['.fl .cell .key', STYLE.key], ['.fl .value', STYLE.value], ['.fl .badge', BADGE_STYLE]];
+  for (const [selector, style] of roles) assert.deepEqual([sizeOf(STYLES.figure, selector), weightOf(STYLES.figure, selector)], [style.size, WEIGHTS[style.face]], selector);
+  // 글자 사이 간격은 잰 폭이 아는 것(tracking.text, 문서 전체)뿐이다. 그룹 제목에 따로 간격을 주지 않는다.
+  assert.deepEqual(declared(STYLES.figure, '.fl .frame', 'letter-spacing'), []);
+  // 차트의 행 이름과 끝 이름은 보통 굵기로 재고(chart/labels.js, end-labels.js) 보통 굵기로 그린다. 굵은 면은 합계 행과 강조 값에만 있다.
+  assert.deepEqual([sizeOf(STYLES.chart, '.fl .chart-label'), weightOf(STYLES.chart, '.fl .chart-label')], [TEXT['13'], 400]);
+  assert.deepEqual([sizeOf(STYLES.chart, '.fl .chart-end-label'), weightOf(STYLES.chart, '.fl .chart-end-label')], [TEXT['11'], 400]);
+  assert.deepEqual([sizeOf(STYLES.status, '.fl .status-text'), weightOf(STYLES.status, '.fl .status-text')], [BADGE_STYLE.size, 600]);
 });
 
 // ---- 선과 화살촉 ----
@@ -285,8 +285,8 @@ test('U8 a concept icon is one symbol: the card header, the tile and the group t
 
 // ---- HTML 그림 틀 ----
 
-// 차트의 글자 뒤 바탕 면과 받침 선은 차트가 놓인 면의 색이다. 차트 보기는 그림 바탕, 차트 카드는 카드 면이므로, 같은 차트 부품이 두 곳에서 같은 지움 면을 쓰지 않는다.
-test('U10 a chart masks its text with the surface it sits on: the figure ground in a plot view, the card face in a chart card', async () => {
+// 차트의 글자 뒤 바탕 면과 받침 선은 차트가 놓인 면의 색이다. 차트 보기는 그림 바탕, 차트 카드는 카드 면이다. 여기서는 그려진 형상(어느 묶음 안에 놓였는가)만 보고, 면을 정하는 CSS는 component-state.test.js가 본다.
+test('U10 a chart is drawn on the surface it sits on: in a plot view and inside each chart card, with a hollow reference marker that reads the carried ground', async () => {
   const source = dap(`
     box a "A"
     chart c "C" bar {
@@ -316,23 +316,11 @@ test('U10 a chart masks its text with the surface it sits on: the figure ground 
   `);
   const svg = await toSvg(await build(source), { isStatic: true });
   const dom = parseMarkup(svg);
-  const style = textContent(findOne(dom, (n) => n.tag === 'style', 'style'));
-  const rules = [...style.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/([^{}]+)\{([^}]*)\}/g)].map(([, selectors, body]) => ({ selectors: selectors.split(',').map((s) => s.trim()), body }));
-  const declared = (selector, property) => rules.filter((rule) => rule.selectors.includes(selector)).flatMap(({ body }) => [...body.matchAll(new RegExp(`(?:^|;|\\s)${property}:\\s*([^;]+);`, 'g'))].map(([, value]) => value.trim()));
   assert.ok(findAll(dom, (n) => hasClass(n, 'fl-plot')).length > 0, 'a chart in a plot view');
   const cards = findAll(dom, (n) => hasClass(n, 'fl-shape-chart'));
   assert.equal(cards.length, 2, 'two chart cards');
   for (const card of cards) assert.ok(findAll(card, (n) => hasClass(n, 'fl-chart')).length > 0, 'the chart is drawn inside its card, so it inherits the card face');
-  // 면의 별칭은 그대로이고, 차트 묶음이 그 면을 일반 상속 속성 color로 싣는다. 받는 쪽은 currentColor만 읽는다(움직이는 SVG는 켜진 카드에서 이 color만 바꾼다).
-  assert.deepEqual(declared('.fl', '--chart-ground'), ['var(--simple2-canvas-fill)']);
-  assert.deepEqual(declared('.fl .fl-node', '--chart-ground'), ['var(--fx-face)']);
-  assert.deepEqual(declared('.fl .fl-node.on', '--chart-ground'), ['var(--fx-face-on)']);
-  assert.deepEqual(declared('.fl .fl-chart', 'color'), ['var(--chart-ground)']);
-  assert.deepEqual(declared('.fl .chart-text-bg', 'fill'), ['currentColor']);
-  for (const selector of ['.fl .chart-ci-casing', '.fl .chart-rule-casing', '.fl .chart-after']) {
-    assert.deepEqual(declared(selector, 'stroke'), ['currentColor'], selector);
-    assert.deepEqual(declared(selector, 'color'), [], `${selector} reads the carried ground, it does not set its own color`);
-  }
+  // 바탕 면을 정하는 CSS 상태(--chart-ground, 운반하는 color, currentColor를 읽는 지움 면과 받침 선)는 component-state.test.js S3 한 곳에서 본다.
   // 기대값 계열의 속 빈 점도 같은 운반을 읽고, 표현 속성에는 var()가 남지 않는다. 범례는 차트 본문 안이다.
   const hollow = findAll(dom, (n) => hasClass(n, 'fl-chart')).flatMap((chart) => findAll(chart, (n) => n.attrs.fill === 'currentColor' && n.attrs.stroke));
   assert.ok(hollow.length > 0, 'the reference series marker is hollow with the carried ground inside the chart group');

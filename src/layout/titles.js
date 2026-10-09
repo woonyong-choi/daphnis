@@ -4,7 +4,7 @@ import { values } from '../tokens.js';
 
 const SIZE = values.size;
 /** 그룹 왼쪽 끝에서 제목 글까지 기본 거리 */
-export const TITLE_INSET = values.space['9'];
+const TITLE_INSET =values.space['9'];
 // 제목 덩어리(아이콘 탭과 제목 글)와 비켜 선 선 사이 간격. 선이 글자에 붙어 한 획처럼 읽히지 않을 만큼 둔다.
 const TITLE_CLEAR = values.space['4'];
 

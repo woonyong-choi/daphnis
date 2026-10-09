@@ -1,7 +1,7 @@
 // 흐름 조건과 대기(`when`, `wait`, `timeout`, `else`)의 이벤트 처리. 값, 조건, 대기를 시간표를 만들 때 한 번 계산한다(docs/design/playback.md 이벤트 순서).
 // 실제 시계, 난수, 재생 상태를 읽지 않는다. 조건을 쓰지 않는 단계는 이 파일을 거치지 않는다(createStepEngine이 불리지 않는다).
 import { eventBudgetError } from './budget.js';
-import { EventHeap, setTargets, stepReads, timeLimitError, typeError } from './event-support.js';
+import { EventHeap, setTargets, timeLimitError, typeError } from './event-support.js';
 import { isPassed } from './lost.js';
 import { evalCondition } from './source/condition.js';
 import { TIME_LIMIT_MS } from './source/values.js';
@@ -9,9 +9,6 @@ import { msOfTicks, TICKS_PER_MS } from './time-grid.js';
 import { applyReserve } from './flow-reserve.js';
 import { noteRowChanges, resetWriters, runUpdate, spansOf, startValues } from './timeline-values.js';
 import { rootOf, valueTable } from './values.js';
-
-/** 이벤트 처리를 시작한 단계 수. 조건을 쓰지 않는 그림에서 0이어야 한다(호출 수 시험이 읽는다). */
-export const engineStats = { steps: 0 };
 
 // 이벤트 시각은 시간표 눈금(0.00001ms)의 정수 번호다. 같은 번호여야 같은 시각이고 반올림하지 않는다(src/time-grid.js).
 // 시간표에 담는 값(변화, 대기, 건너뜀, 교착의 시각)만 ms로 바꾼다.
@@ -45,7 +42,6 @@ class StepEngine {
     this.state = new Map(figure.values.filter((v) => v.ref === undefined).map((v) => [v.id, v.from]));
     this.followers = new Map();
     for (const v of figure.values.filter((value) => value.ref !== undefined)) this.followers.set(this.root(v.id), (this.followers.get(this.root(v.id)) ?? 0) + 1);
-    this.isMerged = figure.hasRead && stepReads(figure, step);
     resetWriters(figure, { writers: run.writers, span: { t0 }, keep: start?.keep });
     if (start) startValues(start, { state: this.state, textOf: this.textOf, byId: this.byId, onWrite: (e) => run.writers.set(this.root(e.id), { line: e.line, at: t0, isSet: true }) });
     this.rows = figure.values.map((v) => ({ si, id: v.id, node: v.on, t0, t1: t0, initial: this.textOf(v.id), changes: [], ...(v.queue ? { slots: v.slots } : {}) }));
@@ -81,9 +77,9 @@ class StepEngine {
    * 점이 도형에 닿는 일은 값을 바꾸지 않아도 이벤트 하나라서, 대기가 남았는데 닿을 점이 있으면 처리할 이벤트가 남은 것이다.
    */
   scheduleArrivals(plan, { launch, startAt }) {
-    const { heap, figure, isMerged } = this;
+    const { heap, figure } = this;
     const at = (k) => startAt + plan.arrivals[k];
-    const push = ({ k, order, ei = 0 }, { kind, exprs, line }) => heap.push({ key: [at(k), 0, kind, launch.order, order, ei], kind: 'update', exprs, line, isMerged });
+    const push = ({ k, order, ei = 0 }, { kind, exprs, line }) => heap.push({ key: [at(k), 0, kind, launch.order, order, ei], kind: 'update', exprs, line });
     for (let k = 1; k < plan.nodes.length && isPassed(plan.fracs[k], plan.lost); k++) {
       push({ k, order: k }, { kind: 2, exprs: [], line: launch.line });
       figure.arrivals.forEach((a, ai) => a.node === plan.nodes[k] && a.sets.length && push({ k, order: ai }, { kind: 0, exprs: a.sets, line: a.line }));
@@ -158,12 +154,10 @@ class StepEngine {
   applyUpdates(items, t) {
     const { state, byId, rows, textOf } = this;
     this.prior.clear();
-    for (const { exprs, line, isMerged } of items) {
+    for (const { exprs, line } of items) {
       this.count(1, { line, t });
-      for (const group of isMerged ? [exprs] : exprs.map((e) => [e])) {
-        runUpdate(group, { state, textOf, byId, onWrite: this.noteWrite(t) });
-        noteRowChanges(rows, textOf, { t: msOfTicks(t), isMerged });
-      }
+      runUpdate(exprs, { state, textOf, byId, onWrite: this.noteWrite(t) });
+      noteRowChanges(rows, textOf, { t: msOfTicks(t) });
     }
     return new Set([...this.prior].filter(([id, text]) => state.get(id) !== text).map(([id]) => id));
   }
@@ -288,7 +282,7 @@ class StepEngine {
   // cost: time O(w), heap O(w), stack O(1)
   // vars: w = 값 수
   // basis: estimate
-  /** 단계가 끝난 시각 t1로 값 줄을 마무리한다. 값 줄마다 값이 보이는 구간(periods)과 밝히는 구간(flashes)이 붙는다. */
+  /** 단계가 끝난 시각 t1로 값 줄을 마무리한다. 값 줄마다 값이 보이는 구간(periods)이 붙는다. */
   finish(t1) {
     return this.rows.map((row) => {
       const done = { ...row, t1 };
@@ -305,6 +299,5 @@ class StepEngine {
  * @param args { figure, step, si, t0, start, run }. t0는 단계 시작 시각(그림 전체 ms), start는 단계 시작 값(`keep`, 단계 `set=`)이고 run은 시간표를 지나며 이어지는 값 { limits, conditions, writers }다
  */
 export function createStepEngine(args) {
-  engineStats.steps++;
   return new StepEngine(args);
 }

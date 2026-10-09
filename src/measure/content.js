@@ -5,7 +5,7 @@ import { plainText } from '../text.js';
 import { values } from '../tokens.js';
 import { widestText } from '../value-slots.js';
 import { measure, wrap } from './fonts.js';
-import { layoutMiniGraph } from './minigraph.js';
+import { layoutMiniGraph, miniGraphWidth } from './minigraph.js';
 import { STYLE, textAt } from './texts.js';
 
 const SPACE = values.space;
@@ -24,7 +24,20 @@ const TAG_GAP = SPACE['2-5'];
 const MARK_GAP = SPACE['3'];
 
 /** 줄 본문: 글 뒤에 덧붙임이 있으면 ` · `로 이어 붙인 글. 크기를 재는 글과 그리는 글이 같다. */
-export const rowBody = (row) => row.text + (row.meta !== undefined ? ` · ${row.meta}` : '');
+const rowBody = (row) => row.text + (row.meta !== undefined ? ` · ${row.meta}` : '');
+
+// cost: time O(k·g·(n·e + n²)), heap O(g·n), stack O(1)
+// vars: k = 카드 내용 수, g = 관계 그래프 줄 수, n = 이름 수, e = 관계 수
+// basis: estimate
+/**
+ * 내용이 있는 카드의 가장 좁은 폭(바깥 폭). 내용이 없으면 0이다. 카드 기본 내용 폭(`size.node.card-width`)과 관계 그래프 줄이 이름을 자르지 않고 놓이는 데 필요한 폭 가운데 넓은 쪽이다.
+ * 관계 그래프 같은 구조 내용은 `size.node.max-width`로 자르지 않고 카드를 넓힌다. 그 값은 글 줄바꿈 폭이다. 도형, 머리 있는 카드, 표, API가 모두 이 값을 하한으로 쓴다.
+ */
+export function contentMinWidth(contents) {
+  if (!contents.length) return 0;
+  const graphs = contents.flatMap((rows) => rows.filter((row) => row.graph).map((row) => miniGraphWidth(row.graph) + (CONTENT.side + CONTENT.margin) * 2));
+  return Math.max(values.size.node['card-width'], ...graphs);
+}
 
 // cost: time O(k·r·n²), heap O(k·r), stack O(1)
 // vars: k = 카드 내용 수, r = 줄 수, n = 줄 글자 수
@@ -114,7 +127,7 @@ function mutedFrom(lines, row, style) {
  * 글마다 그 자리 오른쪽 끝(at.x)에 놓인 text를 함께 담는다(valueText).
  * @returns { w, lines, x, center, texts: Map<글, text> }
  */
-export function fitValueSlot(texts, maxW, at) {
+function fitValueSlot(texts, maxW, at) {
   const w = Math.min(Math.ceil(widestText(texts)), maxW);
   const slot = { w, lines: 1, ...at, texts: new Map() };
   for (const text of texts) {

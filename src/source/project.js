@@ -63,7 +63,7 @@ export function viewsOfPath(figure, path) {
 // basis: estimate
 /**
  * 투영에 번호를 붙인다. 순서 보기의 메시지는 문서 순서로 번호를 받고, 보기마다 앞 보기들의 선·메시지 수를 더한 시작 번호(edgeBase)를 갖는다.
- * 이동의 edge와 isBack은 첫 투영의 값이고(시간표가 이 선으로 시간을 정한다), 순서 보기에 보이면 sequenceEdge가 그 메시지 번호다. 흐름 구간(leg)은 edge를 가진다.
+ * 이동의 edge와 isBack은 첫 투영의 값이고(시간표가 이 선으로 시간을 정한다). 흐름 구간(leg)은 edge를 가진다.
  */
 export function numberProjections(figure) {
   const messages = new Map(figure.views.filter((v) => v.strategy === 'sequence').map((v) => [v.id, []]));
@@ -97,8 +97,6 @@ export function numberProjections(figure) {
     if (!owner) continue;
     hop.edge = owner.edge;
     hop.isBack = owner.kind === 'graph' ? owner.isBack : false;
-    const sequence = hop.projections.find((p) => p.kind === 'sequence');
-    if (sequence) hop.sequenceEdge = sequence.edge;
   }
   for (const step of figure.steps) for (const track of step.tracks) numberTrack(track, composed);
 }

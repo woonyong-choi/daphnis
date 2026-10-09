@@ -5,9 +5,8 @@ import { readdirSync, readFileSync, realpathSync } from 'node:fs';
 import { basename, dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { BUDGET_NAMES, parseBudgetList } from './budget.js';
-import { buildReported, commitReported, pickScene, report } from './build-reported.js';
+import { buildReported, claimOutputs, commitReported, pickScene, readReported, report } from './build-reported.js';
 import { runMd } from './md-run.js';
-import { isLink, outputKey } from './md-write.js';
 import { makeDiagnostic } from './source/problems.js';
 import { toSvg } from './svg.js';
 
@@ -21,6 +20,7 @@ const USAGE = [
 ].join('\n');
 // gallery가 받는 옵션. --html은 gallery가 늘 HTML을 쓰므로 받기만 한다.
 const GALLERY_FLAGS = ['html', 'strict', 'require-data', 'require-ci'];
+const VALUE_OPTIONS = ['--out', '--title', '--out-dir', '--fold-title', '--scene'];
 const FLAGS = ['--html', '--static', '--strict', '--require-data', '--require-ci', '--json', '--check', '--fold', '--unfold'];
 // md 명령이 받지 않는 옵션과 md 명령만 받는 옵션
 const MD_REFUSED = ['out', 'title', 'html'];
@@ -56,27 +56,33 @@ function foldOptionError({ flags, ...values }) {
 // cost: time O(a), heap O(a), stack O(1)
 // vars: a = 인자 수
 // basis: estimate
-// 명령 인자를 읽는다. 틀리면 { error }다.
+// 명령 인자를 읽는다. 틀리면 { error }다. 값을 받는 옵션은 비어 있거나 `--`로 시작하는 값, 같은 옵션을 두 번 쓰는 것이 오류다. 인자 `--` 뒤는 모두 파일 이름이다(`-`로 시작하는 파일도 쓸 수 있다).
 function parseArgs(argv) {
   const [command, ...rest] = argv;
   if (!['render', 'check', 'gallery', 'md'].includes(command)) return { error: USAGE };
   const args = { command, inputs: [], out: undefined, title: undefined, flags: new Set() };
   const budgetItems = [];
+  let isOnlyFiles = false;
   for (let i = 0; i < rest.length; i++) {
     const arg = rest[i];
-    if (arg === '--budget') {
+    if (isOnlyFiles || !arg.startsWith('-')) {
+      if (arg === '') return { error: 'a file name cannot be empty' };
+      args.inputs.push(arg);
+    } else if (arg === '--') isOnlyFiles = true;
+    else if (arg === '--budget') {
       const value = rest[++i];
-      if (value === undefined || value.startsWith('--')) return { error: '--budget needs a value: --budget name=value' };
+      if (!value || value.startsWith('--')) return { error: '--budget needs a value: --budget name=value' };
       budgetItems.push(value);
-    } else if (arg === '--out' || arg === '--title' || arg === '--out-dir' || arg === '--fold-title' || arg === '--scene') {
+    } else if (VALUE_OPTIONS.includes(arg)) {
       const value = rest[++i];
-      if (value === undefined || value.startsWith('--')) return { error: `${arg} needs a value` };
+      if (!value || value.startsWith('--')) return { error: `${arg} needs a value` };
+      if (args[arg.slice(2)] !== undefined) return { error: `${arg} is given twice` };
       args[arg.slice(2)] = value;
     } else if (FLAGS.includes(arg)) args.flags.add(arg.slice(2));
-    else if (arg.startsWith('-')) return { error: `unknown option ${arg}\n${USAGE}` };
-    else args.inputs.push(arg);
+    else return { error: `unknown option ${arg}\n${USAGE}` };
   }
   if (!args.inputs.length) return { error: USAGE };
+  if (command === 'gallery' && args.inputs.length > 1) return { error: `gallery takes one folder, not ${args.inputs.length}\n${USAGE}` };
   const { budget, error } = parseBudgetList(budgetItems);
   if (error) return { error };
   args.budget = budget;
@@ -119,13 +125,13 @@ async function main(argv) {
 // cost: time O(f), heap O(f), stack O(1)
 // vars: f = 원본 수
 // basis: estimate
-// render가 쓸 파일 { path, shown, owner }. 확장자가 틀린 원본은 읽지 않으므로 빼고(그 오류는 만들 때 알린다), 장면 고르기는 보지 않는다.
+// render가 쓸 파일 { path, owner }. 확장자가 틀린 원본은 읽지 않으므로 빼고(그 오류는 만들 때 알린다), 장면 고르기는 보지 않는다.
 function renderOutputs({ inputs, out, flags }) {
   return inputs.filter((input) => SOURCE_EXT.test(input)).flatMap((input) => {
     const name = basename(input).replace(SOURCE_EXT, '');
     const folder = out ?? dirname(input);
     const files = [`${name}.svg`, ...(flags.has('html') ? [`${name}.html`] : [])];
-    return files.map((file) => ({ path: join(folder, file), shown: join(folder, file), owner: input }));
+    return files.map((file) => ({ path: join(folder, file), owner: input }));
   });
 }
 
@@ -145,13 +151,8 @@ function unsupportedExtension(input, json) {
 async function buildInput(input, args) {
   const json = args.flags.has('json');
   if (unsupportedExtension(input, json)) return undefined;
-  let source;
-  try {
-    source = readFileSync(input, 'utf8');
-  } catch (error) {
-    report(input, [makeDiagnostic({ severity: 'error', line: 0, message: `cannot read the file: ${error.code ?? error.message}` }, { code: 'io' })], json);
-    return undefined;
-  }
+  const source = readReported(input, json);
+  if (source === undefined) return undefined;
   return buildReported(source, input, { flags: args.flags, baseDir: dirname(input), budget: args.budget });
 }
 
@@ -183,32 +184,6 @@ function sourceFiles(names) {
 // 갤러리가 쓰는 재생 화면 이름. 원본 이름이 목록 쪽(index)이나 문서 미리보기(document)와 같으면(대소문자 무시, 대소문자를 가리지 않는 파일 시스템에서 같은 파일) `{이름}-player`다. 예약 파일 이름은 그대로 둔다.
 const playerPage = (name) => (RESERVED_PAGES.has(name.toLowerCase()) ? `${name}-player` : name);
 
-// cost: time O(f·d), heap O(f), stack O(1), io f·d
-// vars: f = 쓸 파일 수, d = 경로 깊이
-// basis: estimate
-/**
- * 쓸 파일 경로가 겹치는 곳을 찾아 알리고 겹침이 있으면 false다. 아무것도 쓰기 전에 부른다.
- * 대소문자나 유니코드 정규화만 다른 이름도 같은 파일로 센다(`outputKey`). 같은 원본을 두 번 줘도 겹친다.
- * @param entries { path, shown, owner }[]. path는 쓸 파일, shown은 알릴 이름, owner는 그 파일을 쓰려는 원본이다
- * @param reserved 이미 이름을 가진 파일 { path, owner }[]
- */
-function claimOutputs(entries, { json, reserved = [] }) {
-  const claimed = new Map(reserved.map(({ path, owner }) => [outputKey(path), { path, owner }]));
-  let ok = true;
-  for (const { path, shown, owner } of entries) {
-    const key = outputKey(path);
-    if (claimed.has(key)) {
-      const first = claimed.get(key);
-      const hint = isLink(path) || isLink(first.path) ? 'Rename one of the sources, or point the symbolic link at a different file' : 'Rename one of the sources';
-      const message = `${shown} would be written twice: for ${owner} and for ${first.owner}. ${hint}`;
-      if (json) report(shown, [makeDiagnostic({ severity: 'error', line: 0, message }, { code: 'output-collision' })], true);
-      else process.stderr.write(`${message}\n`);
-      ok = false;
-    } else claimed.set(key, { path, owner });
-  }
-  return ok;
-}
-
 // cost: time O(f·build), heap O(f·out), stack O(1), io 3f + 2
 // vars: f = 폴더 안 원본 수, build = 원본 하나를 만드는 비용, out = 그림 하나의 결과 글자 수
 // basis: estimate
@@ -230,8 +205,9 @@ async function writeGallery(args) {
     return 1;
   }
   const outputs = files.map((file) => file.replace(SOURCE_EXT, '')).flatMap((name) => [`${name}.svg`, `${playerPage(name)}.html`].map((file) => ({ path: join(out, file), shown: file, owner: name })));
-  const reserved = [...RESERVED_PAGES].map((page) => ({ path: join(out, `${page}.html`), owner: `the gallery ${page} page` }));
-  if (!claimOutputs(outputs, { json: false, reserved })) return 1;
+  const claimed = new Map();
+  claimOutputs([...RESERVED_PAGES].map((page) => ({ path: join(out, `${page}.html`), owner: `the gallery ${page} page` })), { json: false, claimed });
+  if (!claimOutputs(outputs, { json: false, claimed })) return 1;
   const galleryArgs = { ...args, command: 'render', out, flags: new Set([...args.flags, 'html']) };
   const built = [];
   for (const file of files) built.push({ file, input: join(folder, file), result: await buildInput(join(folder, file), galleryArgs) });

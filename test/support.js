@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdirSync, mkdtempSync, readdirSync, readFileSync, readlinkSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, readlinkSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,7 +12,7 @@ import { toHtml } from '../src/html.js';
 import { toSvg } from '../src/svg.js';
 
 export const ROOT = fileURLToPath(new URL('..', import.meta.url));
-export const CLI = join(ROOT, 'src', 'cli.js');
+const CLI = join(ROOT, 'src', 'cli.js');
 export const EXAMPLES = join(ROOT, 'examples');
 
 /** `daphnis 2` 머리를 붙인 원본. 본문 줄의 공통 들여쓰기는 걷어 낸다. */
@@ -243,7 +243,6 @@ export function snapshot(dir) {
 }
 
 export const read = (...parts) => readFileSync(join(...parts), 'utf8');
-export const exists = (...parts) => { try { return statSync(join(...parts)) !== undefined; } catch { return false; } };
 
 /** `daphnis` 명령을 새 프로세스로 돌린다. */
 export function cli(args, { cwd = ROOT, input } = {}) {

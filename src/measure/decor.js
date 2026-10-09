@@ -4,10 +4,9 @@ import { measure } from './fonts.js';
 
 const SPACE = values.space;
 const SIZE = values.size;
-const TEXT = values.size.text;
 
-/** 알약 안 글. 배지는 흑백에서도 도형의 뜻을 글자로 남기는 자리라 본문 글보다 작지 않다. */
-export const BADGE_STYLE = Object.freeze({ size: TEXT['11'], face: 'semibold' });
+/** 알약 안 글. 배지는 흑백에서도 도형의 뜻을 글자로 남기는 자리라 본문 글보다 작지 않다. 크기는 작은 표시(simple2.micro-size)이고 status.css와 figure.css의 `.badge`가 같은 토큰을 그린다. */
+export const BADGE_STYLE = Object.freeze({ size: values.simple2['micro-size'], face: 'semibold' });
 /** 장식 사이 간격과 알약 높이, 도형 윗줄과 이름 사이 간격 */
 export const DECOR = Object.freeze({ gap: SPACE['2'], pillH: SIZE.pill.height, rowGap: SPACE['2'], pillPad: SPACE['7'] });
 /** 복제 개수(count)를 가진 상자의 뒤 윤곽 한 겹 간격 */
@@ -17,7 +16,7 @@ export const STACK_STEP = SPACE['2'];
 // vars: n = 글자 수
 // basis: estimate
 /** 알약 너비. 글 폭에 좌우 안쪽 간격을 더한다. */
-export function pillWidth(text) {
+function pillWidth(text) {
   return measure(text, BADGE_STYLE.size, BADGE_STYLE.face) + DECOR.pillPad;
 }
 

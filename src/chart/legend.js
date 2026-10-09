@@ -21,7 +21,7 @@ export const isKeyed = (figure) => KEYED.has(figure.chartType) && figure.chart.s
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /** 계열 i의 범례 글: 번호 키가 있으면 번호가 앞에 붙고, 표본이 없는 누적분포 계열은 그 사실이 뒤에 붙는다. */
-export function legendText(figure, i) {
+function legendText(figure, i) {
   const { chart, chartType } = figure;
   const note = chartType === 'ecdf' && ecdfGroups(chart)[i]?.n === 0 ? ` · ${COPY.noSample}` : '';
   return `${isKeyed(figure) ? `${i + 1} ` : ''}${chart.series[i].label}${note}`;
@@ -43,17 +43,24 @@ export function dotAttrs(chart, i, extra = '') {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
+/** 채운 범례 칸. 칸의 왼쪽 위가 (x, y)이고 한 변이 BAR다. 계열 범례와 원·도넛 조각 목록이 같은 칸을 쓴다. */
+export function fillSwatch(paint, { x, y }) {
+  const box = { x, y, w: BAR, h: BAR, radius: values.radius.sm };
+  return `<rect x="${r(x)}" y="${r(y)}" width="${BAR}" height="${BAR}" rx="${box.radius}" fill="${paint.fill}" stroke="${paint.border}" stroke-width="${values.border.tag}"/>${patternRect(paint, box)}`;
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
 /**
  * 범례 칸 하나. 칸의 왼쪽 위가 (x, y)이고 높이는 BAR다.
  * @param kind 'fill' | 'line' | 'dot'
  */
-export function legendSwatch(chart, i, kind, { x, y }) {
+function legendSwatch(chart, i, kind, { x, y }) {
   const paint = seriesPaint(chart, i);
   const cy = y + BAR / 2;
   if (kind === 'fill') {
-    const box = { x, y, w: BAR, h: BAR, radius: values.radius.sm };
-    if (isReference(chart, i)) return `<rect x="${r(x)}" y="${r(y)}" width="${BAR}" height="${BAR}" rx="${box.radius}" fill="none" stroke="${paint.border}" stroke-width="${values.border.strong}"/>`;
-    return `<rect x="${r(x)}" y="${r(y)}" width="${BAR}" height="${BAR}" rx="${box.radius}" fill="${paint.fill}" stroke="${paint.border}" stroke-width="${values.border.tag}"/>${patternRect(paint, box)}`;
+    if (isReference(chart, i)) return `<rect x="${r(x)}" y="${r(y)}" width="${BAR}" height="${BAR}" rx="${values.radius.sm}" fill="none" stroke="${paint.border}" stroke-width="${values.border.strong}"/>`;
+    return fillSwatch(paint, { x, y });
   }
   const marker = markShape({ shape: paint.shape, cx: x + swatchWidth(kind) / 2, cy, radius: DOT, attrs: dotAttrs(chart, i) });
   if (kind === 'dot') return marker;

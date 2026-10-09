@@ -1,6 +1,6 @@
 // 히스토그램의 원시 관측값과 구간 선언, 집계 전 검증.
 import { countHistogram, histogramEdges, histogramValue } from '../histogram.js';
-import { MAX_VALUE, MIN_VALUE, RANGE_MESSAGE, TINY_MESSAGE } from './chart-limits.js';
+import { MAX_VALUE, RANGE_MESSAGE, TINY_MESSAGE, isTiny } from './chart-limits.js';
 import { valueNames } from './grammar.js';
 import { isTinyNumber, parseNumber } from './values.js';
 
@@ -61,14 +61,14 @@ export function prepareHistogram(figure, problems) {
   const edges = histogramEdges(spec);
   if (!edges) return problems.error(line, 'a histogram needs bins minimum maximum count, with minimum < maximum and 1 to 100 distinct bins');
   if (edges.some((value) => Math.abs(value) >= MAX_VALUE)) return problems.error(line, RANGE_MESSAGE);
-  if (edges.some((value) => value !== 0 && Math.abs(value) < MIN_VALUE)) return problems.error(line, TINY_MESSAGE);
+  if (edges.some(isTiny)) return problems.error(line, TINY_MESSAGE);
   const invalid = observed.find((row) => !Number.isFinite(row.values.value) || row.values.value < spec.min || row.values.value > spec.max);
   if (invalid) return problems.error(invalid.line, `every sample must be a finite number within bins ${spec.min} to ${spec.max}`);
   chart.binEdges = [edges[0], edges.at(-1)];
   chart.bins = observed.length ? countHistogram(observed, edges) : [];
   const heights = chart.bins.map((bin) => histogramValue(bin, chart));
   if (heights.some((value) => !Number.isFinite(value) || value >= MAX_VALUE)) problems.error(line, `normalized histogram: ${RANGE_MESSAGE}`);
-  if (heights.some((value) => value !== 0 && Math.abs(value) < MIN_VALUE)) problems.error(line, `normalized histogram: ${TINY_MESSAGE}`);
+  if (heights.some(isTiny)) problems.error(line, `normalized histogram: ${TINY_MESSAGE}`);
 }
 
 // cost: time O(r + b²), heap O(b), stack O(1)
@@ -90,7 +90,7 @@ function automaticBins(rows, line) {
   const spec = { min, max, count: requestedCount, requestedCount, constantRange, method: 'sturges', line };
   while (spec.count > 1) {
     const edges = histogramEdges(spec);
-    if (edges && edges.every((value) => value === 0 || Math.abs(value) >= MIN_VALUE)) break;
+    if (edges && !edges.some(isTiny)) break;
     spec.count--;
   }
   return spec;
