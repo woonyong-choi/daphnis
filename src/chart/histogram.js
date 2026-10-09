@@ -5,7 +5,7 @@ import { escapeXml, roundCoord as r } from '../text.js';
 import { values } from '../tokens.js';
 import { drawRules } from './axis.js';
 import { markAttrs, markId } from './marks.js';
-import { SPACE, seriesColor, seriesOutline, seriesPaint } from './metrics.js';
+import { SPACE, seriesFill, seriesOutline, seriesPaint } from './metrics.js';
 import { noDataNote, plotFrame } from './plot-frame.js';
 
 // cost: time O(b + t), heap O(b), stack O(1)
@@ -32,6 +32,6 @@ function binMark(chart, bin, { box, index, baseline, labels }) {
   // 보이는 이름은 입력 구간표와 같은 서식이다. data-value는 반올림 전 높이 그대로 둔 구조 자료다.
   const label = `${labels.range(bin)}: ${labels.height(bin)} ${bin.measure} (${bin.count}건)`;
   const inset = box.w > SPACE['1'] * 2 ? SPACE['0-5'] : 0;
-  const rect = `<rect x="${r(box.x + inset)}" y="${r(box.y)}" width="${r(box.w - inset * 2)}" height="${r(box.h)}" fill="${seriesColor(chart, 0)}" stroke="${seriesOutline(chart, 0)}" stroke-width="${values.border.tag}" class="chart-histogram-bin" data-count="${bin.count}" data-value="${bin.value}"${markAttrs(chart, markId(chart, 0, index), { raw: bin.count, paint: seriesPaint(chart, 0) })}/>`;
+  const rect = `<rect x="${r(box.x + inset)}" y="${r(box.y)}" width="${r(box.w - inset * 2)}" height="${r(box.h)}" fill="${seriesFill(chart, 0)}" stroke="${seriesOutline(chart, 0)}" stroke-width="${values.border.tag}" class="chart-histogram-bin" data-count="${bin.count}" data-value="${bin.value}"${markAttrs(chart, markId(chart, 0, index), { raw: bin.count, paint: seriesPaint(chart, 0) })}/>`;
   return `<g class="rise" style="transform-origin: ${r(box.x)}px ${r(baseline)}px"><g class="cr-${index}" role="img" aria-label="${escapeXml(label)}"><title>${escapeXml(label)}</title>${rect}</g></g>`;
 }

@@ -2,6 +2,7 @@
 // 장면의 mode가 재생 방식을 정한다: static은 마지막 상태 하나, once는 한 번 재생하고 마지막 상태에 머물며, loop는 되풀이한다. speed는 재생 속도일 뿐 시간표의 ms는 바꾸지 않는다.
 import { canvasOf, fitCanvas } from './canvas.js';
 import { chartCards } from './chart-frames.js';
+import { mapSceneCharts, sceneCharts } from './chart-scene.js';
 import { animateFrameBody } from './animate/frames.js';
 import { createAnimator } from './animate/animator.js';
 import { createClock } from './animate/clock.js';
@@ -15,7 +16,6 @@ import { STYLES, figureDefs, patternDefs } from './styles.js';
 import { WHOLE_CHART } from './timeline-charts.js';
 import { escapeXml, plainText, roundCoord as r } from './text.js';
 import { tokens, values } from './tokens.js';
-import { declaredCards } from './values.js';
 
 // cost: time O(g·b + b·h + out), heap O(out), stack O(1), io 1
 // vars: g = 켜고 끄는 요소 수, b = 박자 수, h = 박자의 이동 수, out = 만든 SVG 글자 수
@@ -131,7 +131,7 @@ function noSceneMessage(steps, shown) {
  */
 function sliceTimeline(timeline, si, scene) {
   const segs = timeline.segs.filter((s) => s.si === si);
-  if (!segs.length) return { segs: [emptySeg(timeline.values ?? [])], total: 1, growMs: timeline.growMs, pulses: [], values: timeline.values ?? [], charts: {}, tracks: timeline.tracks };
+  if (!segs.length) return { segs: [emptySeg(timeline.initialCards)], total: 1, growMs: timeline.growMs, pulses: [], values: timeline.values ?? [], charts: {}, tracks: timeline.tracks };
   const t0 = segs[0].t0;
   const shift = (t) => t - t0;
   const rebased = (row) => ({ ...row, t0: shift(row.t0), t1: shift(row.t1), changes: row.changes.map(([t, text]) => [shift(t), text]), periods: row.periods.map(([a, b, text]) => [shift(a), shift(b), text]) });
@@ -153,8 +153,7 @@ const arrivalsOf = (segs, shift) => segs.flatMap((seg) => (seg.pulses ?? []).map
 
 // 장면이 없는 문서의 구간: 카드는 선언한 값 줄이 놓인 내용(rows는 시간표의 선언한 값 줄)이고 모든 계열이 보이며 선과 도형은 켜지지 않는다.
 // 차트 상태(charts)는 비워 둔다. 상태가 없는 차트는 animateChart가 선언한 모든 계열(계열이 없으면 차트 전체)을 보이고, 밝힌 행과 자라는 계열은 없다.
-function emptySeg(rows) {
-  const cards = declaredCards(rows);
+function emptySeg(cards) {
   return { si: 0, bi: 0, t0: 0, t1: 1, move: 0, hops: [], nodesOn: [], partsOn: [], cards, cardsBefore: cards, cardsAt: {}, charts: {} };
 }
 
@@ -196,8 +195,9 @@ function finalState(timeline) {
 // basis: estimate
 // 장면에 그려진 차트 카드마다 { id, seriesIds, drawn }. 같은 차트가 차트 보기와 카드로 함께 놓이면 한 번이다.
 function chartDrawings({ figure, scene }) {
+  const drawings = sceneCharts(scene);
   return chartCards(figure).flatMap((card) => {
-    const drawn = scene.plots.find((p) => p.id === card.id)?.chart ?? scene.items.find((it) => it.id === card.id)?.chart;
+    const drawn = drawings.get(card.id);
     if (!drawn) return [];
     const series = card.plot.chart.series.map((s) => s.id);
     return [{ id: card.id, seriesIds: series.length ? series : [WHOLE_CHART], drawn }];
@@ -211,11 +211,7 @@ function chartDrawings({ figure, scene }) {
 function withFrames(scene, { timeline, clock }) {
   const frames = scene.chartFrames ?? {};
   const animate = (id, drawn) => (frames[id] ? { ...drawn, body: animateFrameBody(drawn.body, { id, chartFrames: frames[id], rows: timeline.charts[id]?.rows ?? [], clock, pulses: timeline.pulses }) } : drawn);
-  return {
-    ...scene,
-    items: scene.items.map((it) => (it.shape === 'chart' ? { ...it, chart: animate(it.id, it.chart) } : it)),
-    plots: scene.plots.map((p) => ({ ...p, chart: animate(p.id, p.chart) })),
-  };
+  return mapSceneCharts(scene, animate);
 }
 
 // cost: time O(scene + b·h), heap O(out), stack O(1)

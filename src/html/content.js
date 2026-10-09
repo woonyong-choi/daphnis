@@ -2,13 +2,13 @@
 // 도형 id는 논리 id로 넘긴다. 같은 카드가 여러 판에 그려지면 도형 번호(#n-번호)는 다르지만 논리 id는 같고, 재생기가 모든 그림 요소를 찾아 같은 모습으로 맞춘다.
 import { tokenize } from '../chart-tokens.js';
 import { chartCards } from '../chart-frames.js';
+import { mapSceneCharts, sceneCharts } from '../chart-scene.js';
 import { withPulseOverlays } from '../chart/pulse-overlay.js';
 import { drawScene } from '../draw/figure.js';
 import { drawStatusPills } from '../draw/status.js';
 import { drawTrackPaths } from '../draw/tracks.js';
 import { drawFlashes, drawValues } from '../draw/values.js';
 import { WHOLE_CHART } from '../timeline-charts.js';
-import { declaredCards } from '../values.js';
 import { figureViewBounds } from './view-bounds.js';
 import { FLOW_METRICS, PLAYER_METRICS } from './metrics.js';
 
@@ -21,7 +21,7 @@ export function figureContent(result, glyphs) {
   // 재생기는 장면 0에서 시작하므로 처음 그림은 장면 0의 순서 요소만 보인다(재생기가 장면이 바뀔 때 맞춘다).
   // 장면이 없는 문서는 재생기가 그리지 않으므로(player/play.js) 선언한 처음 모습(카드 값 줄과 큐 찬 칸)을 처음부터 보이게 그린다. 정지 SVG와 같은 시간표 값 줄이다.
   const isStill = !timeline.segs.length;
-  const shownCards = isStill ? declaredCards(timeline.values ?? []) : undefined;
+  const shownCards = isStill ? timeline.initialCards : undefined;
   const { body, pills } = drawScene({ ...withOverlays(scene), flashes: drawFlashes(scene, timeline, {}), shownSi: 0, shownCards }, () => '', glyphs);
   const parts = {
     body,
@@ -32,7 +32,7 @@ export function figureContent(result, glyphs) {
     pills,
   };
   const { panels, trackPanels } = splitPanels(scene, parts);
-  const drawn = drawnCharts(scene);
+  const drawn = sceneCharts(scene);
   const data = {
     tight: figureViewBounds(result),
     steps: timeline.steps,
@@ -62,12 +62,7 @@ export function figureContent(result, glyphs) {
 // 값에 묶인 차트의 그림에 갱신 효과 겹침(chart/pulse-overlay.js)을 넣은 장면. 겹침은 불투명도 0으로 있다가 재생기가 표식이 바뀐 때만 켠다.
 function withOverlays(scene) {
   const overlaid = (id, chart) => (scene.chartFrames?.[id] ? { ...chart, body: withPulseOverlays(chart.body) } : chart);
-  return { ...scene, items: scene.items.map((it) => (it.shape === 'chart' ? { ...it, chart: overlaid(it.id, it.chart) } : it)), plots: scene.plots.map((p) => ({ ...p, chart: overlaid(p.id, p.chart) })) };
-}
-
-// 장면에 그려진 차트 그림(차트 보기와 차트 카드). 같은 차트는 한 번만이다.
-function drawnCharts(scene) {
-  return new Map([...scene.plots.map((p) => [p.id, p.chart]), ...scene.items.filter((it) => it.shape === 'chart').map((it) => [it.id, it.chart])]);
+  return mapSceneCharts(scene, overlaid);
 }
 
 // 차트 카드마다 계열 id 목록(계열 번호 = class `cs-번호`)과 행 이름 목록(행 번호 = class `cr-번호`). 계열이 없는 차트는 차트 전체가 계열 하나다(timeline-charts.js와 같은 규칙).

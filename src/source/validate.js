@@ -35,6 +35,9 @@ export function validateFigure(figure, problems) {
   assignViewEdges(figure);
   checkDrawable(figure, names, problems);
   checkValuesShown(figure, names, problems);
+  for (const card of figure.nodes) for (const row of card.content ?? []) {
+    if (!row.valueId) checkCardTarget({ type: 'content', node: card.id, line: row.line }, { figure, names }, problems);
+  }
   checkChartCards(figure, names, problems);
   checkTimeline(figure, names, problems);
   if (problems.errors.length > before) return;
@@ -72,6 +75,7 @@ function checkEdges(figure, names, problems) {
     splitPartEnds(edge, names, problems);
     for (const end of [edge.from, edge.to]) if (!names.has(end) && !figure.rejectedNames.has(end)) problems.error(edge.line, unknownName('card', end, names.keys()));
     const [from, to] = [names.get(edge.from), names.get(edge.to)];
+    for (const end of [from, to]) if (end?.owner) problems.error(edge.line, `chart "${end.id}" belongs inside "${end.owner}". Connect its owner`);
     // 상태의 자기 전이와 클래스의 자기 관계를 허용한다. 나머지는 한 격자의 서로 다른 두 칸을 잇는 선만 허용한다.
     if (edge.from === edge.to && !['state', 'classifier'].includes(from?.shape)) checkSelfEdge(edge, from, problems);
     if (isInside(edge.from, edge.to) || isInside(edge.to, edge.from)) problems.error(edge.line, 'an edge cannot join a group and a node inside it');

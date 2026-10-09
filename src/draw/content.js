@@ -9,8 +9,10 @@ import { faceOf, lookClass } from './look.js';
 import { CORNER, rectOpen } from './surface.js';
 import { drawTexts } from './texts.js';
 import { hiddenAttr } from './visible.js';
+import { drawChartBody } from './chart.js';
 
 const RADIUS = values.radius;
+const contentLook = (layout) => layout.rows.map(({ row }) => faceOf(row)).find(({ tone }) => tone !== undefined) ?? faceOf({});
 
 // cost: time O(t), heap O(t), stack O(1)
 // vars: t = 태그 종류 수
@@ -47,7 +49,7 @@ export function contentBox(it) {
  */
 export function drawContent(content, { box, i, shown }, { toneOf, decorate, glyphs, flashes }) {
   const layers = content.layouts
-    .map((layout, k) => `<g id="n-${i}-c${k}" opacity="${k === shown ? 1 : 0}"${hiddenAttr(k === shown)} class="fl-layer ${decorate('layer', i, k)}">${drawFace(layout, box)}${flashes?.card.get(`${i}:${k}`) ?? ''}${drawRows(layout, box, { toneOf, glyphs })}</g>`)
+    .map((layout, k) => `<g id="n-${i}-c${k}" opacity="${k === shown ? 1 : 0}"${hiddenAttr(k === shown)} class="fl-layer${lookClass(contentLook(layout))} ${decorate('layer', i, k)}">${drawFace(layout, box)}${flashes?.card.get(`${i}:${k}`) ?? ''}${drawRows(layout, box, { toneOf, glyphs })}</g>`)
     .join('');
   return (
     `${rectOpen(box, CORNER.inner)} fill="${tokens.color.card}" opacity="0" class="fl-card${shown === undefined ? '' : ' filled'} ${decorate('card', i)}"/>` +
@@ -60,8 +62,8 @@ export function drawContent(content, { box, i, shown }, { toneOf, decorate, glyp
 // basis: estimate
 // 내용이 고른 모습(look.js faceOf). 그 내용의 줄 가운데 처음 고른 모습이 이 내용의 면이다. 칠하는 일은 CSS(draw/paint.js)가 하고, 윤곽 표현의 경계 선이 내용 면 밖으로 나가지 않게 반 선 굵기 안쪽에 그린다. 고르지 않았으면 빈 글이다.
 function drawFace(layout, box) {
-  const look = layout.rows.map(({ row }) => faceOf(row)).find(({ tone }) => tone !== undefined);
-  if (!look) return '';
+  const look = contentLook(layout);
+  if (look.tone === undefined) return '';
   const inset = values.border.thin / 2;
   return `${rectOpen({ x: box.x + inset, y: box.y + inset, w: box.w - inset * 2, h: box.h - inset * 2 }, CORNER.inner - inset)} class="face${lookClass(look)}"/>`;
 }
@@ -76,7 +78,10 @@ export function rowSpan(layout, box, index) {
 // basis: estimate
 // 줄마다 태그 알약(있으면), 관계 그래프의 선과 알약(있으면), 그 줄의 글. 글(태그, 표시, 본문, 그래프 이름)은 모두 측정이 놓은 text다.
 function drawRows(layout, box, { toneOf, glyphs }) {
-  return layout.rows.map((laid) => `${laid.tag ? drawTag(laid, box, toneOf(laid.row)) : ''}${laid.graph ? drawMiniGraph(laid.graph, box) : ''}${drawTexts(laid.texts, box, glyphs)}`).join('');
+  return layout.rows.map((laid) => {
+    if (laid.chart) return drawChartBody(laid.chart, { id: laid.id, x: box.x + (box.w - laid.chart.width) / 2, y: box.y + laid.top }, glyphs);
+    return `${laid.tag ? drawTag(laid, box, toneOf(laid.row)) : ''}${laid.graph ? drawMiniGraph(laid.graph, box) : ''}${drawTexts(laid.texts, box, glyphs)}`;
+  }).join('');
 }
 
 // 태그 알약. 알약은 줄 첫 줄의 세로 가운데에 놓이고 자리는 측정이 정했다.

@@ -2,6 +2,7 @@
 // 값 글자 자리는 값이 모든 장면에서 가질 글의 실제 폭이라 시간표에 기대고, 시간표는 배치에 기댄다. 그래서 자리가 더는 넓어지지 않을 때까지 되풀이한다(value-slots.js).
 import { checkChartFigure, checkFigure } from './check.js';
 import { buildChartFrames, chartCards, drawChartBase, extentOf } from './chart-frames.js';
+import { mapSceneCharts, sceneCharts } from './chart-scene.js';
 import { planClashes } from './chip-clash.js';
 import { planHops } from './chip-plan.js';
 import { roomByView, sweepByView, widenForHiddenChips } from './chip-room.js';
@@ -99,7 +100,7 @@ async function placeScene(figure, { texts, source, limits, layoutWidth, chartWid
   const cards = collectCards(figure, texts);
   const charts = new Map();
   for (const card of chartCards(figure)) charts.set(card.id, drawChartBase(card, { figure, texts, chartWidth, problems: createProblems(source) }));
-  const inputs = { cards, charts, source, limits, layoutWidth, reference };
+  const inputs = { cards, charts, source, limits, layoutWidth, chartWidth, reference };
   const graphs = figure.views.filter((v) => v.strategy === 'graph');
   const directions = new Map(graphs.map((v) => [v.id, v.direction]));
   const failures = (a) => a.local.errors.filter((d) => LAYOUT_CHECKS.has(d.code)).length;
@@ -128,25 +129,21 @@ async function attemptScene(figure, inputs, variant) {
   planChips(scene, timeline, limits);
   attachCharts(figure, { scene, timeline, charts }, local);
   // 태그 색은 원본에 처음 나온 순서로 정한다(docs/design/figure-syntax.md 카드 줄).
-  scene.tagOrder = figure.steps.flatMap((s) => s.beats.flatMap((b) => b.ops.filter((o) => o.row?.tag && !o.row.tone).map((o) => o.row.tag)));
+  const rows = [...figure.nodes.flatMap((node) => node.content ?? []), ...figure.steps.flatMap((s) => s.beats.flatMap((b) => b.ops.map((o) => o.row)))];
+  scene.tagOrder = rows.filter((row) => row?.tag && !row.tone).map((row) => row.tag);
   checkFigure({ figure, scene, timeline }, local);
-  for (const chart of drawnCharts(scene)) checkChartFigure(chart, local);
+  for (const chart of sceneCharts(scene).values()) checkChartFigure(chart, local);
   return { scene, timeline, local };
-}
-
-// 장면에 그려진 차트 그림(차트 보기와 차트 카드). 같은 차트는 한 번만이다.
-function drawnCharts(scene) {
-  return [...new Map([...scene.plots.map((p) => [p.id, p.chart]), ...scene.items.filter((it) => it.shape === 'chart').map((it) => [it.id, it.chart])]).values()];
 }
 
 // cost: time O(elk), heap O(s + e), stack O(d)
 // vars: elk = 배치 시간, s = 도형 수, e = 선 수, d = 그룹 깊이
 // basis: estimate
 // 보기 하나를 배치한다. 그래프는 elkjs, 순서는 격자 배치, 차트와 시간은 그림 크기대로다.
-async function layoutPanel(figure, view, { cards, charts, names, layoutWidth }, variant, local) {
+async function layoutPanel(figure, view, { cards, charts, names, layoutWidth, chartWidth }, variant, local) {
   const base = { view: view.id, strategy: view.strategy, label: view.label };
   if (view.strategy === 'plot') return { ...base, chart: { ...charts.get(view.cardIds[0]).drawn, id: view.cardIds[0] } };
-  if (view.strategy === 'time') return { ...base, time: layoutTime(figure.nodes.find((n) => n.id === view.cardIds[0]), names) };
+  if (view.strategy === 'time') return { ...base, time: layoutTime(figure.nodes.find((n) => n.id === view.cardIds[0]), names, chartWidth) };
   if (view.strategy === 'sequence') {
     const sequence = viewFigure(figure, view);
     // 순서 보기의 참여자는 머리 모양만 그린다(표, API, 클래스는 공통 카드 머리). 카드 내용은 같은 카드를 담은 그래프 보기가 보인다.
@@ -155,7 +152,8 @@ async function layoutPanel(figure, view, { cards, charts, names, layoutWidth }, 
   }
   const isSafe = variant.safe.has(view.id);
   const graph = { ...viewFigure(figure, view), ...(isSafe ? { aspect: undefined, safeLayout: true } : {}), chipRoom: variant.room.get(view.id), chipSweep: variant.sweep?.get(view.id) };
-  const sizes = new Map(graph.nodes.map((n) => [n.id, sizeNode(n, cards.contents.get(n.id), countLines(graph, n.id), charts.get(n.id)?.drawn)]));
+  const contentOf = (id) => (cards.contents.get(id) ?? []).map((rows) => rows.map((row) => row.chartId ? { ...row, chart: charts.get(row.chartId).drawn } : row));
+  const sizes = new Map(graph.nodes.map((n) => [n.id, sizeNode(n, contentOf(n.id), countLines(graph, n.id), charts.get(n.id)?.drawn)]));
   checkGridExtent(graph, sizes, local);
   local.throwIfAny();
   return { ...base, scene: await layoutOrFail(graph, sizes, { problems: local, width: layoutWidth }) };
@@ -203,15 +201,16 @@ function planChips(scene, timeline, limits) {
 function attachCharts(figure, { scene, timeline, charts }, local) {
   scene.chartFrames = {};
   timeline.charts = {};
+  const bodies = new Map();
   for (const card of chartCards(figure)) {
     const { drawn, pin } = charts.get(card.id);
     const built = buildChartFrames(card, { figure, timeline, base: drawn, pin }, local);
     if (!built) continue;
     scene.chartFrames[card.id] = { marks: built.marks, frames: built.frames };
     timeline.charts[card.id] = { id: card.id, rows: built.rows };
-    for (const it of scene.items) if (it.id === card.id) it.chart = { ...it.chart, body: built.body, defs: built.defs };
-    for (const p of scene.plots) if (p.id === card.id) p.chart = { ...p.chart, body: built.body, defs: built.defs };
+    bodies.set(card.id, { body: built.body, defs: built.defs });
   }
+  Object.assign(scene, mapSceneCharts(scene, (id, chart) => bodies.has(id) ? { ...chart, ...bodies.get(id) } : chart));
   timeline.marks = marksOf(timeline, { quiet: new Set(scene.edges.flatMap((edge, j) => (edge.quiet ? [j] : []))) });
   timeline.pulses = pulsesOf(timeline, timeline.charts);
   timeline.presentation = presentationOf(timeline);

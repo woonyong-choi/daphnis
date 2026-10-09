@@ -2,7 +2,7 @@
 //   Card = Surface(draw/surface.js) + 구분선 + 부분(표 열, 격자 칸) + 종류별 몸통(차트, 큐 칸, 격자 칸 묶음)
 //   Head = 장식(아이콘, 배지, 개수: draw/decor.js) + 글(draw/texts.js). 머리 제목, 부제, 열 이름, 형식, 제약, 클래스 멤버, 격자 칸 글이 모두 같은 text다.
 // 글과 구분선의 자리는 측정(measure/sizes.js)이 한 번 정한 값이고, 이동 글 상자가 피할 사각형(draw/boxes.js)도 같은 값을 읽는다. 종류별 코드는 어떤 글을 어디에 놓을지만 측정에 넘긴다.
-import { CHART_FACES } from '../chart/draw.js';
+import { drawChartBody } from './chart.js';
 import { STACK_STEP } from '../measure/decor.js';
 import { queueSlots } from '../measure/queue.js';
 import { roundCoord as r, escapeXml } from '../text.js';
@@ -77,9 +77,8 @@ function drawParts(it, { decorate, glyphs, index }) {
 // 차트 카드: 카드 면 안에 차트 그림을 그대로 놓는다. 차트의 id는 data-chart로 가려 같은 차트가 여러 곳에 그려져도 움직임이 모두 찾는다.
 // 면은 윤곽 요소가, 차트는 그 형제 묶음이 가지므로 켜진 카드의 글자 바탕과 받침 선(묶음의 color가 싣는 바탕 색, chart.css)이 켜진 면을 따르게 묶음에도 같은 켜짐 구간을 건다(HTML 재생기는 `.fl-node.on`이 맡아 class가 없다).
 function drawChart(it, stroke, { decorate, glyphs, index }) {
-  for (const face of CHART_FACES) glyphs.add(it.chart.text, face);
   const ground = decorate('node', index, 'ground');
-  return `${drawSurface(it, stroke)}<g class="fl-chart${ground && ` ${ground}`}" data-chart="${escapeXml(it.id)}" transform="translate(${r(it.x)} ${r(it.y)})">${it.chart.body}</g>`;
+  return drawSurface(it, stroke) + drawChartBody(it.chart, { ...it, className: ground }, glyphs);
 }
 
 // cost: time O(1), heap O(1), stack O(1)

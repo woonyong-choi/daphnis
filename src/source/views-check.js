@@ -7,13 +7,14 @@ import { unknownName } from './problems.js';
 // vars: v = 보기 수, n = 카드 수, g = 그룹 수, e = 선 수
 // basis: estimate
 /**
- * 보기를 정한다. 적은 보기를 먼저 읽고, 어느 보기에도 적히지 않은 카드는 기본 보기가 맡는다(추적은 시간 보기, 선이 없는 차트는 차트 보기, 나머지 그래프로 그릴 수 있는 카드는 그래프 하나).
+ * 보기를 정한다. 남은 차트만 있으면 차트 보기, 일반 카드와 섞이면 그래프 하나다. 추적은 시간 보기다.
  * 적은 보기의 구성원 규칙을 확인하고, 카드마다 보기에 놓였는지 본다. 오류가 있으면 모형을 믿을 수 없어 다음 단계가 건너뛴다.
  */
 export function resolveViews(figure, problems) {
-  const cards = figure.nodes.filter((c) => !c.isRejected);
+  const declared = figure.nodes.filter((c) => !c.isRejected);
+  const cards = declared.filter((c) => c.owner === undefined);
   // refused는 구성원으로 적었지만 이유가 있어 받지 못한 카드다. 이 카드는 이미 오류가 났으니 "어느 보기에도 없다"를 덧붙이지 않는다.
-  const context = { figure, cards, byId: new Map(cards.map((c) => [c.id, c])), groups: new Map(figure.groups.map((g) => [g.id, g])), problems, refused: new Set() };
+  const context = { figure, cards, byId: new Map(declared.map((c) => [c.id, c])), groups: new Map(figure.groups.map((g) => [g.id, g])), problems, refused: new Set() };
   const written = figure.views.filter((v) => !v.isRejected);
   const isWhole = (v) => v.strategy === 'graph' && v.members === undefined;
   for (const view of written) {
@@ -35,17 +36,17 @@ export function resolveViews(figure, problems) {
   }
 }
 
-// cost: time O(n·e), heap O(n), stack O(1)
-// vars: n = 카드 수, e = 선 수
+// cost: time O(n + v), heap O(n), stack O(1)
+// vars: n = 카드 수, v = 보기 수
 // basis: estimate
-// 어느 보기에도 적히지 않은 추적은 시간 보기 하나씩, 그룹 밖에서 어느 선에도 닿지 않고 적히지 않은 차트는 차트 보기 하나씩이다. order는 기본 보기끼리 카드 선언 순서로 늘어놓는 자리다.
+// 연결선은 보기 종류를 결정하지 않는다. 일반 카드와 섞이거나 그래프를 명시하면 차트도 그래프 카드다.
 function implicitSingles(figure, cards, listed) {
-  const touched = new Set(figure.edges.flatMap((e) => [e.from, e.to]));
+  const hasGraph = figure.views.some((view) => view.strategy === 'graph') || cards.some((card) => !listed.has(card.id) && (card.parent || !['chart', 'trace'].includes(card.shape)));
   const make = (card, strategy) => ({ strategy, direction: 'right', label: undefined, members: [{ id: card.id, line: card.line, column: 1 }], cardIds: [card.id], groupIds: [], isImplicit: true, line: card.line, order: cards.indexOf(card) });
   return cards.flatMap((card) => {
     if (listed.has(card.id)) return [];
     if (card.shape === 'trace') return [make(card, 'time')];
-    return card.shape === 'chart' && !card.parent && !touched.has(card.id) ? [make(card, 'plot')] : [];
+    return card.shape === 'chart' && !hasGraph ? [make(card, 'plot')] : [];
   });
 }
 
@@ -101,6 +102,7 @@ function resolveGraph(view, { figure, cards, byId, groups, problems, refused }, 
 function memberInGraph(m, { byId, groups, problems, included, addGroupTree, refused }) {
   if (groups.has(m.id)) addGroupTree(m.id);
   else if (!byId.has(m.id)) problems.error(m.line, unknownName('card', m.id, [...byId.keys(), ...groups.keys()]), { column: m.column });
+  else if (byId.get(m.id).owner) problems.error(m.line, `chart "${m.id}" belongs inside "${byId.get(m.id).owner}". Put its owner in the view`, { column: m.column });
   else if (byId.get(m.id).shape === 'trace') {
     refused.add(m.id);
     problems.error(m.line, `a trace card cannot be in a graph view. List "${m.id}" in a time view`, { column: m.column });
@@ -133,6 +135,7 @@ function pruneEmptyGroups(view, { figure, included, includedGroups }) {
 
 // 카드가 이 보기의 구성원이 될 수 없는 이유. 받을 수 있으면 undefined다.
 function refusal(view, card) {
+  if (card.owner) return `chart "${card.id}" belongs inside "${card.owner}". Put its owner in the view`;
   if (view.strategy === 'sequence' && !SEQUENCE_SHAPES.includes(card.shape)) return `a ${card.shape} card cannot be a sequence participant. Use ${SEQUENCE_SHAPES.join(', ')}`;
   if (view.strategy === 'plot' && card.shape !== 'chart') return `a plot view shows a chart card. "${card.id}" is a ${card.shape}`;
   if (view.strategy === 'time' && card.shape !== 'trace') return `a time view shows a trace card. "${card.id}" is a ${card.shape}`;

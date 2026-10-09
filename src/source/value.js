@@ -14,7 +14,7 @@ const DECIMALS = 6;
 // vars: t = 문장 낱말 수
 // basis: estimate
 /** 값 선언 하나를 읽는다. from이 없고 ref도 없으면 0에서 시작한다. 값 글자의 길이는 제한하지 않고, 카드의 값 자리가 실제 글꼴 폭으로 늘어난다. */
-export function readValue({ tokens, line }, ctx) {
+export function readValue({ tokens, line }, ctx, owner) {
   const [, id, label, ...rest] = tokens;
   if (!checkId(id, { line, ctx }, ID_PATTERN)) return;
   if (label?.type !== 'text') {
@@ -22,10 +22,13 @@ export function readValue({ tokens, line }, ctx) {
     return;
   }
   const found = readOptions(rest, { scopes: ['value'], what: 'a value', line, ctx });
+  if (owner !== undefined && found.on !== undefined) ctx.problems.error(line, `a value inside "${owner}" belongs to that card. Remove on=`);
   // on=이 없는 값은 카드에 보이지 않고 조건과 차트 묶음이 읽는다.
   if (found.from !== undefined && found.ref !== undefined) ctx.problems.error(line, 'a value takes from= or ref=, not both. A reference always shows the value it points at');
   const from = found.ref === undefined ? readLiteral(found.from ?? '0', { line, key: 'from', ctx }) : undefined;
-  ctx.figure.values.push({ id: id.value, label: label.value, on: found.on, from, ref: found.ref, line });
+  const value = { id: id.value, label: label.value, on: owner ?? found.on, from, ref: found.ref, line };
+  ctx.figure.values.push(value);
+  return value;
 }
 
 // cost: time O(n), heap O(n), stack O(1)

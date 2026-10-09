@@ -10,8 +10,8 @@ import { EXAMPLES, build, dap, descendants, finalValue, findAll, lineOf, num, pa
 
 const chart = (kind, body, head = 'x "x(u)"\n  y "y(u)"') => dap(`chart c "T-${kind}" ${kind} {\n  ${head}\n${body.split('\n').map((l) => `  ${l.trim()}`).join('\n')}\n}\n`);
 
-/** 범주 색으로 칠한 막대·조각 사각형(범례 표식인 정사각형은 뺀다). */
-const marks = (dom) => findAll(dom, (n) => n.tag === 'rect' && /^var\(--color-data-category-(outline-)?\d+\)$/.test(n.attrs.fill ?? '') && num(n, 'width') !== num(n, 'height'));
+/** 길이를 그리는 사각형. 색 이름이나 정사각형 여부는 값의 기하와 관계없다. */
+const marks = (dom) => findAll(dom, (n) => n.tag === 'rect' && /(?:^| )(grow|chart-histogram-bin)(?: |$)/.test(n.attrs.class ?? '') && !/(chart-pattern|fl-mark-pulse)/.test(n.attrs.class ?? ''));
 
 const ratio = (a, b) => a / b;
 const near = (actual, expected, message, tolerance = 0.02) => assert.ok(Math.abs(actual - expected) < tolerance * Math.abs(expected) + 0.01, `${message}: ${actual} vs ${expected}`);

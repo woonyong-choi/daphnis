@@ -47,7 +47,7 @@ export function readChartLine(statement, ctx) {
   const { card } = ctx.block;
   if (tokens[0].type === 'close') {
     if (tokens.length > 1) ctx.problems.error(line, 'put "}" on its own line');
-    ctx.block = undefined;
+    ctx.block = ctx.block.parent;
     return;
   }
   if (statement.hasLexError || card.isRejected) return;

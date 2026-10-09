@@ -61,6 +61,8 @@ export function readPalette({ ref = tokens.color.data, raw = values.color.data, 
   return orderedKeys(raw['category-family']).slice(0, revisionOf(raw, revision).family).map((key) => ({
     family: raw['category-family'][key],
     fill: ref.category[key],
+    area: ref['category-area'][key],
+    onArea: ref['category-on-area'][key],
     border: ref['category-outline'][key],
     on: ref['category-on'][key],
     ink: ref['category-ink'][key],
@@ -129,4 +131,10 @@ export function categoryPaint(index, { revision = BASE_REVISION, snapshots = SNA
     shape: shapes[index % shapes.length],
     needsLabel: family.needsLabel || tier > 0,
   };
+}
+
+/** 넓은 데이터 면과 그 위 글·무늬의 칠. 작은 의미 표식의 원색과 계열 순서는 categoryPaint가 그대로 소유한다. */
+export function areaPaint(index, options) {
+  const paint = categoryPaint(index, options);
+  return { ...paint, fill: paint.area, on: paint.onArea };
 }

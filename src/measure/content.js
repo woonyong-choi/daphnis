@@ -36,7 +36,8 @@ const rowBody = (row) => row.text + (row.meta !== undefined ? ` · ${row.meta}` 
 export function contentMinWidth(contents) {
   if (!contents.length) return 0;
   const graphs = contents.flatMap((rows) => rows.filter((row) => row.graph).map((row) => miniGraphWidth(row.graph) + (CONTENT.side + CONTENT.margin) * 2));
-  return Math.max(values.size.node['card-width'], ...graphs);
+  const charts = contents.flatMap((rows) => rows.filter((row) => row.chart).map((row) => row.chart.width + CONTENT.margin * 2));
+  return Math.max(values.size.node['card-width'], ...graphs, ...charts);
 }
 
 // cost: time O(k·r·n²), heap O(k·r), stack O(1)
@@ -61,7 +62,7 @@ function layoutContent(rows, width) {
   if (!rows.length) return { rows: [], height: STYLE.row.line + CONTENT.pad * 2 };
   let top = CONTENT.pad;
   const laid = rows.map((row) => {
-    const placed = row.graph ? placeGraph(row, { width, top }) : placeRow(row, { width, top });
+    const placed = row.chart ? { row, id: row.chartId, chart: row.chart, top, height: row.chart.height, texts: [] } : row.graph ? placeGraph(row, { width, top }) : placeRow(row, { width, top });
     top += placed.height + CONTENT.gap;
     return placed;
   });

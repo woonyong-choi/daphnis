@@ -131,6 +131,8 @@ export const STATEMENTS = table({
   item: { section: 'declare', in: 'grid' },
   gap: { section: 'declare', in: 'grid', scopes: ['gap', 'item'] },
   value: { section: 'declare' },
+  text: { section: 'declare', in: 'card', scopes: ['show'] },
+  graph: { section: 'declare', in: 'card', scopes: ['graph'] },
   on: { section: 'declare', display: 'on node id+N' },
   start: { section: 'declare' },
   final: { section: 'declare' },

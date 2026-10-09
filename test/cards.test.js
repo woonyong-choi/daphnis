@@ -228,8 +228,12 @@ test('S9 a view names its kind first and has no id of its own: the old "view id 
 test('S10 a default view appears when none is declared: a graph holding every card, plus one time view per trace', async () => {
   const source = dap(`box a "A"\ntrace t "T" {\n  span s1 "one" lane=a at=0 dur=10\n}\n`);
   const html = parseMarkup(await toHtml(await build(source), 'x'), { html: true });
-  const strategies = findAll(html, (n) => n.tag === 'section' && n.attrs['data-strategy']).map((n) => n.attrs['data-strategy']);
-  assert.deepEqual(strategies, ['graph', 'time']);
+  const variants = findAll(html, (n) => n.attrs.class?.split(' ').includes('dp-panels'));
+  assert.ok(variants.length);
+  for (const variant of variants) {
+    const strategies = findAll(variant, (n) => n.tag === 'section' && n.attrs['data-strategy']).map((n) => n.attrs['data-strategy']);
+    assert.deepEqual(strategies, ['graph', 'time'], 'every responsive layout preserves the default view roles');
+  }
 });
 
 test('S11 participants are listed in the order they first send: a different order is a warning (an error under strict) pointing into the view block', async () => {

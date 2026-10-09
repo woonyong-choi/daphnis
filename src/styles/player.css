@@ -52,6 +52,7 @@ html.embedded .fl-figure.full {
   flex: 1 1 auto;
   flex-direction: column;
   min-height: 0;
+  padding-top: calc(var(--size-control-inner) + var(--space-3) * 3);
 }
 
 /* 판을 담는 회색 판은 그림에서 유일한 회색 층이다. 카드는 이 위의 흰 면이고 그룹은 면이 없다. 문서 안에서는 자연 높이라 넘치지 않고, 전체 화면에서 그림이 영역보다 커지면 이 안에서 스크롤한다. */
@@ -203,14 +204,10 @@ html.embedded .fl-figure.full {
   opacity: 0;
 }
 
-/* 터치에서는 도구 막대가 늘 보이므로 그림 위에 겹치지 않도록 그 높이만큼 자리를 비운다. */
+/* 도구 막대 공간은 입력 방식과 관계없이 항상 예약한다. 터치에서만 표시를 유지하므로 좁은 마우스 창과 전체 화면에서도 첫 카드를 가리지 않는다. */
 @media (hover: none), (pointer: coarse) {
   .fl-view-tools {
     opacity: 1;
-  }
-
-  .fl-surface {
-    padding-top: calc(var(--size-control-inner) + var(--space-3) * 3);
   }
 }
 

@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { FIGURE_PAD } from '../src/canvas.js';
+import { reflowFigure } from '../src/build.js';
 import { headReach } from '../src/draw/arrow.js';
 import { measure } from '../src/measure/fonts.js';
 import { STYLE } from '../src/measure/texts.js';
@@ -245,6 +246,33 @@ test('K-trace spans sit on a linear time axis: position follows "at", length fol
     assert.ok(Math.abs(num(spans[0], 'x') - zero) < 1.5 && Math.abs(num(spans[0], 'width') - unitWidth) < 1.5, 'ONE starts at 0 and lasts 100');
     assert.ok(Math.abs(num(spans[1], 'x') - hundred) < 1.5 && Math.abs(num(spans[1], 'width') - 3 * unitWidth) < 3, 'TWO starts at 100 and lasts 300');
   }
+});
+
+test('K-trace #170 a narrow time panel preserves duration ratios and puts long labels above their spans', async () => {
+  const source = dap(`
+    box a "긴 한국어 서비스 이름이 있는 레인"
+    trace t "요청 시간 추적" unit=ms {
+      span first "POST /api/orders/long-request-identifier/subscriptions/long-lived-reference" lane=a at=0 dur=100
+      span second "긴 작업 이름을 생략하지 않고 모두 표시하며 다른 구간과 글자가 겹치지 않아야 한다" lane=a at=50 dur=300
+    }
+  `);
+  const base = await build(source);
+  const narrow = await reflowFigure(base, { chartWidth: 272 });
+  const panel = narrow.scene.times[0];
+  assert.equal(panel.width, 272, 'time participates in the compact layout');
+  const spans = panel.lanes[0].spans;
+  assert.ok(Math.abs(spans[1].w / spans[0].w - 3) < 0.001, '100ms and 300ms retain their ratio');
+  assert.ok(spans[1].y > spans[0].y + spans[0].h, 'overlapping times use different rows');
+  for (const span of spans) {
+    assert.ok(span.texts.length > 1, 'long names wrap instead of widening the panel');
+    assert.equal(span.texts.map((text) => text.text).join('').replace(/\s/g, ''), span.label.replace(/\s/g, ''));
+    for (const text of span.texts) {
+      assert.ok(text.center < span.y, 'the name is above its bar');
+      assert.ok(text.x >= 0 && text.x + measure(text.text, text.style.size, text.style.face) <= panel.width, 'the complete name stays inside the panel');
+    }
+  }
+  const html = await toHtml(base, 'trace');
+  assert.ok(html.includes('fl-narrow'), 'a time-only wide panel can carry its compact counterpart');
 });
 
 test('K-trace span rules: all three options are required, lanes are declared cards, ids are unique, the unit is one of three', async () => {

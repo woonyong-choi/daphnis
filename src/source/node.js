@@ -1,6 +1,6 @@
 // 도형 선언(`box id "이름" ["부제"] [shape=circle|tile] [badge="LB"] [icon=server] [count=3] [tone=red] [appearance=plain|filled|outline]`)을 읽는다.
-import { STATEMENTS } from './grammar.js';
-import { checkId, parentFor, rejectName } from './names.js';
+import { CARD_SHAPES, STATEMENTS } from './grammar.js';
+import { checkId, parentFor, rejectName, skipBlock } from './names.js';
 import { readLook, readOptions } from './options.js';
 import { ID_PATTERN } from './words.js';
 
@@ -11,13 +11,21 @@ const PERSON_ICON = 'user';
 // vars: t = 문장 낱말 수
 // basis: estimate
 // `box id "이름" ["부제"] [선택 사항...]`. 사람, 갈림길, 상태는 부제가 없다. 선택 사항은 도형 낱말의 scopes가 정한다(모양 shape는 box만, 원은 부제가 없다).
-export function readNode({ tokens, line }, ctx) {
+export function readNode(statement, ctx) {
+  const { tokens, line } = statement;
   const [head, id, label, ...tail] = tokens;
+  const hasBody = tail.at(-1)?.type === 'open';
+  if (hasBody) tail.pop();
   const shape = head.value;
   const takesSub = STATEMENTS[shape].node.hasSub;
-  if (!checkId(id, { line, ctx }, ID_PATTERN)) return rejectName(id, ctx);
+  if (!checkId(id, { line, ctx }, ID_PATTERN)) {
+    rejectName(id, ctx);
+    skipBlock('card', {}, statement, ctx);
+    return;
+  }
   if (label?.type !== 'text') {
     ctx.problems.error(line, `write ${shape} as: ${shape} ${id.value} "${shape === 'decision' ? 'question' : 'name'}"`);
+    skipBlock('card', {}, statement, ctx);
     return;
   }
   const scopes = STATEMENTS[shape].scopes ?? [];
@@ -33,7 +41,16 @@ export function readNode({ tokens, line }, ctx) {
   const look = readLook(found, { line, ctx });
   const icon = found.icon ?? (shape === 'person' ? PERSON_ICON : undefined);
   const queue = shape === 'queue' ? readQueue({ found, id: id.value, label: label.value, line }, ctx) : undefined;
-  ctx.figure.nodes.push({ id: id.value, shape: form ?? shape, label: label.value, sub: sub?.type === 'text' ? sub.value : undefined, badge, icon, count, ...look, tile: isTile || undefined, ...queue, parent: parentFor(id, ctx), line });
+  const card = { id: id.value, shape: form ?? shape, label: label.value, sub: sub?.type === 'text' ? sub.value : undefined, badge, icon, count, ...look, tile: isTile || undefined, ...queue, parent: parentFor(id, ctx), line };
+  ctx.figure.nodes.push(card);
+  if (!hasBody) return;
+  if (!CARD_SHAPES.includes(card.shape)) {
+    ctx.problems.error(line, `a ${card.shape} takes no body. Use a box, person, external, or store`);
+    skipBlock('card', {}, statement, ctx);
+    return;
+  }
+  card.content = [];
+  ctx.block = { kind: 'card', card, line };
 }
 
 // cost: time O(1), heap O(1), stack O(1)

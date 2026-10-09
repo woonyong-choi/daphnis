@@ -107,7 +107,7 @@
   --color-bg: var(--primitive-simple2-bg);
   --color-node: var(--primitive-simple2-node);
   --color-surface: var(--primitive-simple2-surface);
-  --color-card: var(--primitive-simple2-card);
+  --color-card: var(--primitive-simple2-node);
   --color-card-on: var(--color-blue-light-fill);
   --color-page: var(--primitive-simple2-page);
   --color-outline: var(--primitive-simple2-light-outline);
@@ -209,6 +209,20 @@
   --color-data-category-label-5: optional;
   --color-data-category-label-6: optional;
   --color-data-category-label-7: optional;
+  --color-data-category-area-1: var(--color-category-blue-area);
+  --color-data-category-area-2: var(--color-category-yellow-area);
+  --color-data-category-area-3: var(--color-category-red-area);
+  --color-data-category-area-4: var(--color-category-green-area);
+  --color-data-category-area-5: var(--color-category-orange-area);
+  --color-data-category-area-6: var(--color-category-purple-area);
+  --color-data-category-area-7: var(--color-category-cyan-area);
+  --color-data-category-on-area-1: var(--color-category-blue-on-area);
+  --color-data-category-on-area-2: var(--color-category-yellow-on-area);
+  --color-data-category-on-area-3: var(--color-category-red-on-area);
+  --color-data-category-on-area-4: var(--color-category-green-on-area);
+  --color-data-category-on-area-5: var(--color-category-orange-on-area);
+  --color-data-category-on-area-6: var(--color-category-purple-on-area);
+  --color-data-category-on-area-7: var(--color-category-cyan-on-area);
   --color-accent: var(--color-blue-light-stroke);
   --color-figure-icon-service-ink: var(--color-category-blue-fill);
   --color-figure-icon-service-surface: var(--color-category-blue-on);
@@ -237,6 +251,8 @@
   --color-category-blue-dark-tint-3: #303d54;
   --color-category-blue-light-effect: #3984f2;
   --color-category-blue-dark-effect: #60a0ff;
+  --color-category-blue-area: #4370b3;
+  --color-category-blue-on-area: var(--color-gray-0);
   --color-category-yellow-anchor: #f2d024;
   --color-category-yellow-fill: var(--color-category-yellow-anchor);
   --color-category-yellow-on: var(--color-gray-1000);
@@ -252,6 +268,8 @@
   --color-category-yellow-dark-tint-3: #3c3c39;
   --color-category-yellow-light-effect: #f0d03b;
   --color-category-yellow-dark-effect: #ffec9a;
+  --color-category-yellow-area: #e6d27a;
+  --color-category-yellow-on-area: var(--color-gray-1000);
   --color-category-red-anchor: #fa1955;
   --color-category-red-fill: var(--color-category-red-anchor);
   --color-category-red-on: var(--color-gray-1000);
@@ -267,6 +285,8 @@
   --color-category-red-dark-tint-3: #4e363b;
   --color-category-red-light-effect: #ff697b;
   --color-category-red-dark-effect: #ff7785;
+  --color-category-red-area: #d85a69;
+  --color-category-red-on-area: var(--color-gray-1000);
   --color-category-green-anchor: #269c6e;
   --color-category-green-fill: var(--color-category-green-anchor);
   --color-category-green-on: var(--color-gray-1000);
@@ -282,6 +302,8 @@
   --color-category-green-dark-tint-3: #333f3e;
   --color-category-green-light-effect: #3aab7c;
   --color-category-green-dark-effect: #46b586;
+  --color-category-green-area: #569576;
+  --color-category-green-on-area: var(--color-gray-1000);
   --color-category-orange-anchor: #ff8906;
   --color-category-orange-fill: var(--color-category-orange-anchor);
   --color-category-orange-on: var(--color-gray-1000);
@@ -297,6 +319,8 @@
   --color-category-orange-dark-tint-3: #433a38;
   --color-category-orange-light-effect: #df812e;
   --color-category-orange-dark-effect: #ffb27a;
+  --color-category-orange-area: #e59960;
+  --color-category-orange-on-area: var(--color-gray-1000);
   --color-category-purple-anchor: #7d40c8;
   --color-category-purple-fill: var(--color-category-purple-anchor);
   --color-category-purple-on: var(--color-gray-0);
@@ -312,6 +336,8 @@
   --color-category-purple-dark-tint-3: #403756;
   --color-category-purple-light-effect: #945ae3;
   --color-category-purple-dark-effect: #b78aff;
+  --color-category-purple-area: #7554a8;
+  --color-category-purple-on-area: var(--color-gray-0);
   --color-category-cyan-anchor: #25c0cf;
   --color-category-cyan-fill: var(--color-category-cyan-anchor);
   --color-category-cyan-on: var(--color-gray-1000);
@@ -327,6 +353,8 @@
   --color-category-cyan-dark-tint-3: #343e44;
   --color-category-cyan-light-effect: #33a7b3;
   --color-category-cyan-dark-effect: #4ddae9;
+  --color-category-cyan-area: #6bb9c2;
+  --color-category-cyan-on-area: var(--color-gray-1000);
   --color-sequential-light-low: #b2cbf1;
   --color-sequential-dark-low: #32445e;
   --color-sequential-high: var(--color-category-blue-anchor);
@@ -428,7 +456,6 @@
   --primitive-simple2-bg: #f2f5f7;
   --primitive-simple2-page: #ffffff;
   --primitive-simple2-node: #ffffff;
-  --primitive-simple2-card: #f2f3f5;
   --primitive-simple2-surface: #eef0f3;
   --primitive-simple2-plate-border: #d4d8de;
   --primitive-simple2-border: #838b96;
@@ -689,7 +716,7 @@
     --color-bg: var(--primitive-simple2-dark-bg);
     --color-node: var(--primitive-simple2-dark-node);
     --color-surface: var(--primitive-simple2-dark-card);
-    --color-card: var(--primitive-simple2-dark-card);
+    --color-card: var(--primitive-simple2-dark-node);
     --color-card-on: var(--color-blue-dark-fill);
     --color-page: var(--primitive-simple2-dark-page);
     --color-outline: var(--primitive-simple2-dark-outline);
@@ -852,7 +879,7 @@
   --color-bg: var(--primitive-simple2-dark-bg);
   --color-node: var(--primitive-simple2-dark-node);
   --color-surface: var(--primitive-simple2-dark-card);
-  --color-card: var(--primitive-simple2-dark-card);
+  --color-card: var(--primitive-simple2-dark-node);
   --color-card-on: var(--color-blue-dark-fill);
   --color-page: var(--primitive-simple2-dark-page);
   --color-outline: var(--primitive-simple2-dark-outline);

@@ -9,7 +9,7 @@ import { plainText } from './text.js';
 // 한 줄의 보이는 글. 값 줄은 값이 맡으므로 없다. 관계 그래프 줄은 그래프 모양 전체가 글이다.
 // 그려지는 글(draw/content.js)과 같이 읽는다: 본문과 덧붙임은 줄의 글꼴(`mono`면 백틱도 글자)로, 태그와 표시는 산문으로 읽는다.
 function visibleText(row) {
-  if (row.isValue) return undefined;
+  if (row.isValue || row.chartId) return undefined;
   if (row.graph) return `graph:${JSON.stringify(row.graph.nodes?.map((n) => [n.name, n.isLit]) ?? [])}`;
   const face = row.isMono ? STYLE.mono.face : STYLE.row.face;
   const shown = [[row.tag], [row.text, face], [row.meta, face], [row.mark]];

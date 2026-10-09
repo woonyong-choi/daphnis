@@ -89,6 +89,7 @@ function checkContentFits(it, fail) {
 function checkRowFits(laid, { it, within }, fail) {
   const where = `the card of "${it.id}"`;
   const line = laid.row.line ?? it.line;
+  if (laid.chart && (!fits(laid.chart.width, it.content.w) || !fits(laid.chart.height, laid.height))) fail(line, 'embedded chart', where);
   if (laid.graph && laid.graph.nodes.some((n) => !isInside({ x: laid.graph.at.x + n.x, width: n.w }, within))) fail(line, 'mini graph', where);
   const spans = laid.texts.map((t) => ({ t, ...textSpan(ORIGIN, t) }));
   const valued = [...(laid.valueSlot?.texts.values() ?? [])].map((t) => ({ t, ...textSpan(ORIGIN, t) }));

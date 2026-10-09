@@ -2,19 +2,122 @@
 // 문법 단순화(G2, G3, G5) 계약이다. 시험 이름 첫 낱말이 요구사항 번호이고, 대응은 docs/design/expression-coverage.md의 시험 번호 표에 있다. (G1, 이름 있는 보기의 거절은 cards.test.js의 S9가 본다.)
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { build, dap, lineOf, panelStrategies, reject, toSvg } from './support.js';
+import { reflowFigure } from '../src/build.js';
+import { build, dap, findAll, findOne, lineOf, num, panelStrategies, parseMarkup, reject, textsOf, toHtml, toSvg, valueOf } from './support.js';
 
 const CHART = 'chart c "C" bar {\n  x "x(u)"\n  series v "v"\n  row "r" v=1\n}\n';
 const TRACE = 'trace t "T" {\n  span s "s" lane=a at=0 dur=1\n}\n';
+const BODY_CHART = `box api "API" {
+  text "현재 주문"
+  value pending "진행 중" from=10
+  chart counts "처리량" bar {
+    x "주문 수(건)"
+    series orders "주문"
+    row "기준" orders=20
+    row "현재" orders=pending
+  }
+}
+box user "고객"
+user -> api
+`;
 
-test('G2 views no one listed appear on their own: a trace gets a time view, an edge-less chart a plot, the rest one graph', async () => {
+test('#186 a card body renders in declaration order without a scene in SVG and HTML', async () => {
+  for (const shape of ['box', 'person', 'external', 'store']) {
+    const source = dap(`${shape} a "주문 API" {\n  text "주문을 검증합니다"\n  value pending "처리 중" from=7\n  graph "검증 -> 저장"\n}\n`);
+    const result = await build(source);
+    const outputs = [parseMarkup(await toSvg(result)), parseMarkup(await toHtml(result), { html: true })];
+    for (const dom of outputs) {
+      const texts = textsOf(dom);
+      assert.ok(texts.includes('주문을 검증합니다'), shape);
+      assert.ok(texts.includes('검증') && texts.includes('저장'), shape);
+      assert.ok(texts.indexOf('주문을 검증합니다') < texts.indexOf('처리 중'), 'body follows source order');
+      assert.equal(valueOf(dom, '처리 중'), '7', shape);
+    }
+    assert.equal(result.timeline.steps.length, 0);
+  }
+});
+
+test('#186 clearing a body preserves values and every scene starts from its declaration', async () => {
+  const result = await build(dap(`
+    box a "API" {
+      text "검증 전"
+      value n "처리 중" from=0
+    }
+    box b "사용자"
+    b -> a
+    scene "교체" mode=static
+      clear a
+      show a "검증 완료"
+    scene "초기 구성"
+    scene "값 변경"
+      b -> a set="n=3"
+  `));
+  for (const [scene, expected, absent, value] of [[0, '검증 완료', '검증 전', '0'], [1, '검증 전', '검증 완료', '0'], [2, '검증 전', '검증 완료', '3']]) {
+    const dom = parseMarkup(await toSvg(result, { scene, isStatic: true }));
+    assert.ok(textsOf(dom).includes(expected));
+    assert.ok(!textsOf(dom).includes(absent));
+    assert.equal(valueOf(dom, '처리 중'), value);
+  }
+});
+
+test('#186 invalid body syntax and a body hidden by a sequence-only view are located errors', async () => {
+  const cases = [
+    ['box a "A" {\n text bare\n}\n', 'text bare'],
+    ['box a "A" {\n value n "N" on=a\n}\n', 'value n'],
+    ['box a "A" {\n text "T" mark="123456789"\n}\n', 'text "T"'],
+    ['box a "A" shape=circle {\n text "T"\n}\n', 'box a'],
+    ['box a "A" {\n text "T"\n', 'box a'],
+    ['box a "A" {\n text "T"\n}\nview sequence {\n a\n}\n', 'text "T"'],
+  ];
+  for (const [body, line] of cases) {
+    const source = dap(body);
+    assert.ok((await reject(source)).some((p) => p.line === lineOf(source, line)), body);
+  }
+});
+
+test('#188 an embedded chart stays inside its owner and shares value changes, fixed axes and responsive layout', async () => {
+  const base = await build(dap(`${BODY_CHART}scene "초기"\nscene "접수"\n  user -> api set="pending=30"\n`));
+  for (const result of [base, await reflowFigure(base, { layoutWidth: 320, chartWidth: 224 })]) {
+    const before = await toSvg(result, { scene: 0 });
+    const after = await toSvg(result, { scene: 1, isStatic: true });
+    const bars = (markup) => {
+      const dom = parseMarkup(markup);
+      const owner = findOne(dom, (n) => n.attrs['data-id'] === 'api');
+      assert.equal(findAll(dom, (n) => n.attrs['data-id'] === 'counts').length, 0, 'no extra chart card');
+      const chart = findOne(owner, (n) => n.attrs['data-chart'] === 'counts');
+      return findAll(chart, (n) => n.tag === 'rect' && n.attrs['data-mark'] && !n.attrs['data-mark'].includes('.')).map((n) => num(n, 'width'));
+    };
+    const [fixed0, changed0] = bars(before);
+    const [fixed1, changed1] = bars(after);
+    assert.equal(fixed0, fixed1, 'axis is reserved across scenes');
+    assert.ok(Math.abs(changed0 / fixed0 - 0.5) < 0.02);
+    assert.ok(Math.abs(changed1 / fixed1 - 1.5) < 0.02);
+    assert.equal(valueOf(parseMarkup(after), '진행 중'), '30');
+    assert.equal(await toSvg(result, { scene: 0 }), before, 'exporting another scene did not mutate the initial chart');
+  }
+});
+
+test('#188 embedded chart errors retain their source line and ownership cannot be bypassed by an edge or a view', async () => {
+  for (const [extra, needle] of [['view plot {\n counts\n}', ' counts'], ['user -> counts', 'user -> counts']]) {
+    const source = dap(`${BODY_CHART}${extra}`);
+    const line = source.split('\n').findIndex((text) => text === needle) + 1;
+    assert.ok((await reject(source)).some((p) => p.line === line && p.message.includes('owner')));
+  }
+  const source = dap(BODY_CHART.replace('orders=20', 'orders=-20'));
+  assert.ok((await reject(source)).some((p) => p.line === lineOf(source, 'orders=-20') && p.message.includes('negative')));
+});
+
+test('G2 #187 default views follow the declared composition, independently of edges', async () => {
   const cases = [
     ['box a "A"\n', ['graph']],
     [CHART, ['plot']],
-    [`box a "A"\n${CHART}`, ['graph', 'plot']],
+    [`box a "A"\n${CHART}`, ['graph']],
     [`box a "A"\n${CHART}a -> c\n`, ['graph']],
     [`box a "A"\n${TRACE}`, ['graph', 'time']],
-    [`${CHART}box a "A"\n${TRACE}`, ['plot', 'graph', 'time']],
+    [`${CHART}box a "A"\n${TRACE}`, ['graph', 'time']],
+    [`${CHART}view graph\n`, ['graph']],
+    [`box a "A"\n${CHART}view graph\n`, ['graph']],
+    [`${CHART}${CHART.replaceAll('chart c ', 'chart d ')}`, ['plot', 'plot']],
   ];
   for (const [body, expected] of cases) assert.deepEqual(await panelStrategies(dap(body)), expected, body);
 });

@@ -1,6 +1,6 @@
 // 차트 그리기가 함께 쓰는 크기 상수와 색. 값은 모두 토큰에서 온다.
 import { FIGURE_PAD } from '../canvas.js';
-import { SNAPSHOTS, categoryPaint } from '../chart-palette.js';
+import { SNAPSHOTS, areaPaint, categoryPaint } from '../chart-palette.js';
 import { values } from '../tokens.js';
 
 export const SPACE = values.space;
@@ -36,7 +36,7 @@ function categoryIndex(chart, i) {
 // basis: estimate
 /** 계열 번호 i의 범주 색과 구분 방법. 색 수를 넘으면 층이 오르고 무늬와 모양이 달라진다(chart-palette.js). 판은 기본 1판이다. */
 export function seriesPaint(chart, i) {
-  return categoryPaint(categoryIndex(chart, i));
+  return areaPaint(categoryIndex(chart, i));
 }
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -71,12 +71,12 @@ export function seriesStroke(chart, i) {
 /** 점, 띠, 범례 점의 면 색. 밝은 계열은 밝은 원색 면이고 경계가 있으며, 나머지는 대비를 맞춘 같은 계열의 테두리 색이다. 기대값 계열은 테두리 색이다. */
 export function seriesColor(chart, i) {
   const paint = seriesPaint(chart, i);
-  return hasBoundary(chart, i) ? paint.fill : paint.border;
+  return hasBoundary(chart, i) ? categoryPaint(categoryIndex(chart, i)).fill : paint.border;
 }
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-/** 막대와 면의 색은 어느 모드에서나 범주의 원색이다. */
+/** 넓은 막대와 면은 원색의 밝기·색상각을 보존한 데이터 면 역할이다. */
 export function seriesFill(chart, i) {
   return seriesPaint(chart, i).fill;
 }

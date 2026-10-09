@@ -500,8 +500,8 @@
     },
     "card": {
       "$type": "color",
-      "$value": "{primitive.simple2.dark-card}",
-      "$description": "Default card surface. Within a small OKLab distance of node."
+      "$value": "{primitive.simple2.dark-node}",
+      "$description": "Card body shares the paper surface. Do not add a second gray container inside each card."
     },
     "card-on": {
       "$type": "color",
@@ -965,6 +965,66 @@
         "7": {
           "$type": "color",
           "$value": "{color.category.cyan.dark-effect}"
+        }
+      },
+      "category-area": {
+        "1": {
+          "$type": "color",
+          "$value": "{color.category.blue.area}"
+        },
+        "2": {
+          "$type": "color",
+          "$value": "{color.category.yellow.area}"
+        },
+        "3": {
+          "$type": "color",
+          "$value": "{color.category.red.area}"
+        },
+        "4": {
+          "$type": "color",
+          "$value": "{color.category.green.area}"
+        },
+        "5": {
+          "$type": "color",
+          "$value": "{color.category.orange.area}"
+        },
+        "6": {
+          "$type": "color",
+          "$value": "{color.category.purple.area}"
+        },
+        "7": {
+          "$type": "color",
+          "$value": "{color.category.cyan.area}"
+        }
+      },
+      "category-on-area": {
+        "1": {
+          "$type": "color",
+          "$value": "{color.category.blue.on-area}"
+        },
+        "2": {
+          "$type": "color",
+          "$value": "{color.category.yellow.on-area}"
+        },
+        "3": {
+          "$type": "color",
+          "$value": "{color.category.red.on-area}"
+        },
+        "4": {
+          "$type": "color",
+          "$value": "{color.category.green.on-area}"
+        },
+        "5": {
+          "$type": "color",
+          "$value": "{color.category.orange.on-area}"
+        },
+        "6": {
+          "$type": "color",
+          "$value": "{color.category.purple.on-area}"
+        },
+        "7": {
+          "$type": "color",
+          "$value": "{color.category.cyan.on-area}"
         }
       }
     },
@@ -1841,6 +1901,14 @@
           "$type": "color",
           "$value": "#60a0ff",
           "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "area": {
+          "$type": "color",
+          "$value": "#4370b3"
+        },
+        "on-area": {
+          "$type": "color",
+          "$value": "{color.gray.0}"
         }
       },
       "yellow": {
@@ -1936,6 +2004,14 @@
           "$type": "color",
           "$value": "#ffec9a",
           "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "area": {
+          "$type": "color",
+          "$value": "#e6d27a"
+        },
+        "on-area": {
+          "$type": "color",
+          "$value": "{color.gray.1000}"
         }
       },
       "red": {
@@ -2021,6 +2097,14 @@
           "$type": "color",
           "$value": "#ff7785",
           "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "area": {
+          "$type": "color",
+          "$value": "#d85a69"
+        },
+        "on-area": {
+          "$type": "color",
+          "$value": "{color.gray.1000}"
         }
       },
       "green": {
@@ -2106,6 +2190,14 @@
           "$type": "color",
           "$value": "#46b586",
           "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "area": {
+          "$type": "color",
+          "$value": "#569576"
+        },
+        "on-area": {
+          "$type": "color",
+          "$value": "{color.gray.1000}"
         }
       },
       "orange": {
@@ -2190,6 +2282,14 @@
           "$type": "color",
           "$value": "#ffb27a",
           "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "area": {
+          "$type": "color",
+          "$value": "#e59960"
+        },
+        "on-area": {
+          "$type": "color",
+          "$value": "{color.gray.1000}"
         }
       },
       "purple": {
@@ -2282,6 +2382,14 @@
           "$type": "color",
           "$value": "#b78aff",
           "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "area": {
+          "$type": "color",
+          "$value": "#7554a8"
+        },
+        "on-area": {
+          "$type": "color",
+          "$value": "{color.gray.0}"
         }
       },
       "cyan": {
@@ -2374,6 +2482,14 @@
           "$type": "color",
           "$value": "#4ddae9",
           "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "area": {
+          "$type": "color",
+          "$value": "#6bb9c2"
+        },
+        "on-area": {
+          "$type": "color",
+          "$value": "{color.gray.1000}"
         }
       }
     },
@@ -3015,10 +3131,6 @@
         "$type": "color",
         "$value": "#ffffff"
       },
-      "card": {
-        "$type": "color",
-        "$value": "#f2f3f5"
-      },
       "surface": {
         "$type": "color",
         "$value": "#eef0f3"
@@ -3191,6 +3303,11 @@
       "chart-hole": {
         "$type": "number",
         "$value": 0.55
+      },
+      "data-chroma-share": {
+        "$type": "number",
+        "$value": 0.65,
+        "$description": "Wide data faces retain each anchor lightness and hue with reduced chroma. Small semantic icons keep their original color."
       }
     }
   },

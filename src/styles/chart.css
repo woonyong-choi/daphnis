@@ -29,6 +29,11 @@
   --chart-ground: var(--fx-face-on);
 }
 
+/* 카드 본문의 차트는 바깥 카드의 강조 면이 아니라 실제로 놓인 본문 면을 따른다. */
+.fl .fl-layer {
+  --chart-ground: var(--color-card);
+}
+
 /* 바탕 색은 차트 묶음의 color로 내려 보낸다. 움직이는 SVG는 켜진 카드에서 이 color만 바꾸고(사용자 정의 속성 keyframes는 시작 때 값이 굳어 테마가 바뀌어도 따라가지 않는다), 받는 쪽은 currentColor로 읽는다. 차트 안에서 color를 정하는 요소(방향선 역할 class)는 받는 쪽을 감싸지 않는다. */
 .fl .fl-chart {
   color: var(--chart-ground);

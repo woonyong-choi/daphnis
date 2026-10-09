@@ -11,16 +11,20 @@ import { createSeg } from './timeline-seg.js';
 import { lightBeat, startedHops, timedHop } from './timeline-timed.js';
 import { valueRows } from './timeline-values.js';
 import { values } from './tokens.js';
-import { valueRowsByNode } from './values.js';
+import { initialCardRows } from './values.js';
 
 const DURATION = values.duration;
 
 // cost: time O(r), heap O(r), stack O(1)
 // vars: r = 도형의 카드 줄 수
 // basis: estimate
-// 카드 줄 하나를 도형별 줄 목록(rows)에 적용한다. clear는 그 도형의 줄을 비우고 아니면 줄을 더한다.
+// clear는 값 줄을 남기고 본문을 비운다. show는 본문 끝에 한 줄 더한다.
 function applyCardOp(rows, op) {
-  if (op.type === 'clear') rows.delete(op.node);
+  if (op.type === 'clear') {
+    const kept = (rows.get(op.node) ?? []).filter((row) => row.isValue);
+    if (kept.length) rows.set(op.node, kept);
+    else rows.delete(op.node);
+  }
   else rows.set(op.node, [...(rows.get(op.node) ?? []), op.row]);
 }
 
@@ -28,9 +32,9 @@ function applyCardOp(rows, op) {
 // vars: b = 박자 수, o = 박자의 카드 줄 수, k = 카드 있는 도형 수, c = 카드 내용 수, r = 줄 수
 // basis: estimate
 /**
- * 박자마다 도형 카드에 보일 내용을 모은다. 크기 계산(가장 큰 내용)과 시간표가 같이 쓴다. 값 카드 줄(`value`)은 그 장면이 보이는 값만, show 줄 앞에 둔다.
+ * 박자마다 도형 카드에 보일 내용을 모은다. 크기 계산과 시간표가 공유하며, 각 장면은 선언한 본문에서 시작한다.
  * @param valueTexts 값 이름 → 가질 글 집합. 값 글자 자리의 폭을 정한다(values.js)
- * @returns { contents: Map<도형 id, 줄 목록[]>, beats: Map<beat, { before, after }>, starts: Map<step, 장면 처음 카드>, initial }. before, after, 장면 처음 카드, initial(선언한 값 줄만 담은 카드)은 { 도형 id: 내용 번호 }
+ * @returns { contents: Map<도형 id, 줄 목록[]>, beats: Map<beat, { before, after }>, starts: Map<step, 장면 처음 카드>, initial }. before, after, 장면 처음 카드, initial(선언한 본문과 값 줄을 담은 카드)은 { 도형 id: 내용 번호 }
  */
 export function collectCards(figure, valueTexts) {
   const contents = new Map();
@@ -47,18 +51,17 @@ export function collectCards(figure, valueTexts) {
     if (i < 0) i = list.push(rows) - 1;
     return i;
   };
-  const valueRowsOf = valueRowsByNode(figure, valueTexts);
-  // 선언한 값 줄만 담은 카드. 장면마다의 처음 카드와 같은 내용이라 장면이 있는 문서에서는 같은 번호를 다시 쓴다. 장면이 없는 문서는 이 카드를 그린다.
-  const initial = Object.fromEntries([...valueRowsOf].map(([id, rows]) => [id, indexOf(id, rows)]));
+  const declared = initialCardRows(figure, valueTexts);
+  const stateOf = (rows) => Object.fromEntries([...rows].map(([id, body]) => [id, indexOf(id, body)]));
+  const initial = stateOf(declared);
   for (const step of figure.steps) {
-    const rows = new Map();
-    const stateOf = () => Object.fromEntries([...new Set([...valueRowsOf.keys(), ...rows.keys()])].map((id) => [id, indexOf(id, [...(valueRowsOf.get(id) ?? []), ...(rows.get(id) ?? [])])]));
-    let state = stateOf();
+    const rows = new Map(declared);
+    let state = initial;
     starts.set(step, state);
     for (const beat of planBeats(step)) {
       const before = state;
       for (const op of beat.ops) applyCardOp(rows, op);
-      state = stateOf();
+      state = stateOf(rows);
       beats.set(beat, { before, after: state });
     }
   }
@@ -103,7 +106,7 @@ export function buildTimeline(figure, deps) {
   if (!figure.steps.length && figure.values.length) run.values.push(...declaredRows(figure, deps.cards));
   const { waits, skips, stalls, events, reserves } = run.conditions ?? {};
   const extra = { ...(run.tracks.length ? { tracks: run.tracks } : {}), ...(run.values.length ? { values: run.values } : {}), ...(run.conditions ? { waits, skips, stalls, events, ...(reserves ? { reserves } : {}) } : {}) };
-  return { segs, total: run.t, steps: figure.steps.map(stepInfo), growMs, rowPulses: rowPulses(segs, deps.cards.contents), ...extra };
+  return { segs, total: run.t, steps: figure.steps.map(stepInfo), initialCards: deps.cards.initial, growMs, rowPulses: rowPulses(segs, deps.cards.contents), ...extra };
 }
 
 // cost: time O(b·(h + e + k) + w·e), heap O(b·(e + k)), stack O(1)

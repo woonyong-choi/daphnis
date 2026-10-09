@@ -121,7 +121,8 @@ function readClear({ tokens, line }, ctx) {
     ctx.problems.error(line, 'write clear as: clear id');
     return;
   }
-  if (!ctx.step.beats.length) {
+  const hasContent = ctx.figure.nodes.some((node) => node.id === id.value && node.content?.length);
+  if (!ctx.step.beats.length && !hasContent) {
     ctx.problems.error(line, 'a scene cannot start with clear. There is no card to clear yet');
     ctx.step.hasError = true;
     return;

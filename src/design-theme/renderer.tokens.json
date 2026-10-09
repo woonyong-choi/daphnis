@@ -421,7 +421,7 @@
       "$type": "color"
     },
     "card": {
-      "$value": "{primitive.simple2.card}",
+      "$value": "{primitive.simple2.node}",
       "$type": "color"
     },
     "card-on": {
@@ -858,6 +858,66 @@
           "$value": "optional",
           "$type": "string"
         }
+      },
+      "category-area": {
+        "1": {
+          "$value": "{color.category.blue.area}",
+          "$type": "color"
+        },
+        "2": {
+          "$value": "{color.category.yellow.area}",
+          "$type": "color"
+        },
+        "3": {
+          "$value": "{color.category.red.area}",
+          "$type": "color"
+        },
+        "4": {
+          "$value": "{color.category.green.area}",
+          "$type": "color"
+        },
+        "5": {
+          "$value": "{color.category.orange.area}",
+          "$type": "color"
+        },
+        "6": {
+          "$value": "{color.category.purple.area}",
+          "$type": "color"
+        },
+        "7": {
+          "$value": "{color.category.cyan.area}",
+          "$type": "color"
+        }
+      },
+      "category-on-area": {
+        "1": {
+          "$value": "{color.category.blue.on-area}",
+          "$type": "color"
+        },
+        "2": {
+          "$value": "{color.category.yellow.on-area}",
+          "$type": "color"
+        },
+        "3": {
+          "$value": "{color.category.red.on-area}",
+          "$type": "color"
+        },
+        "4": {
+          "$value": "{color.category.green.on-area}",
+          "$type": "color"
+        },
+        "5": {
+          "$value": "{color.category.orange.on-area}",
+          "$type": "color"
+        },
+        "6": {
+          "$value": "{color.category.purple.on-area}",
+          "$type": "color"
+        },
+        "7": {
+          "$value": "{color.category.cyan.on-area}",
+          "$type": "color"
+        }
       }
     },
     "accent": {
@@ -975,6 +1035,14 @@
         "dark-effect": {
           "$value": "#60a0ff",
           "$type": "color"
+        },
+        "area": {
+          "$value": "#4370b3",
+          "$type": "color"
+        },
+        "on-area": {
+          "$value": "{color.gray.0}",
+          "$type": "color"
         }
       },
       "yellow": {
@@ -1036,6 +1104,14 @@
         },
         "dark-effect": {
           "$value": "#ffec9a",
+          "$type": "color"
+        },
+        "area": {
+          "$value": "#e6d27a",
+          "$type": "color"
+        },
+        "on-area": {
+          "$value": "{color.gray.1000}",
           "$type": "color"
         }
       },
@@ -1099,6 +1175,14 @@
         "dark-effect": {
           "$value": "#ff7785",
           "$type": "color"
+        },
+        "area": {
+          "$value": "#d85a69",
+          "$type": "color"
+        },
+        "on-area": {
+          "$value": "{color.gray.1000}",
+          "$type": "color"
         }
       },
       "green": {
@@ -1160,6 +1244,14 @@
         },
         "dark-effect": {
           "$value": "#46b586",
+          "$type": "color"
+        },
+        "area": {
+          "$value": "#569576",
+          "$type": "color"
+        },
+        "on-area": {
+          "$value": "{color.gray.1000}",
           "$type": "color"
         }
       },
@@ -1223,6 +1315,14 @@
         "dark-effect": {
           "$value": "#ffb27a",
           "$type": "color"
+        },
+        "area": {
+          "$value": "#e59960",
+          "$type": "color"
+        },
+        "on-area": {
+          "$value": "{color.gray.1000}",
+          "$type": "color"
         }
       },
       "purple": {
@@ -1285,6 +1385,14 @@
         "dark-effect": {
           "$value": "#b78aff",
           "$type": "color"
+        },
+        "area": {
+          "$value": "#7554a8",
+          "$type": "color"
+        },
+        "on-area": {
+          "$value": "{color.gray.0}",
+          "$type": "color"
         }
       },
       "cyan": {
@@ -1346,6 +1454,14 @@
         },
         "dark-effect": {
           "$value": "#4ddae9",
+          "$type": "color"
+        },
+        "area": {
+          "$value": "#6bb9c2",
+          "$type": "color"
+        },
+        "on-area": {
+          "$value": "{color.gray.1000}",
           "$type": "color"
         }
       }
@@ -1913,10 +2029,6 @@
       },
       "node": {
         "$value": "#ffffff",
-        "$type": "color"
-      },
-      "card": {
-        "$value": "#f2f3f5",
         "$type": "color"
       },
       "surface": {

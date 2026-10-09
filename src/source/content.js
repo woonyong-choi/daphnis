@@ -11,7 +11,7 @@ export function readContent({ tokens, line }, ctx) {
   if (first?.type === 'word' && first.value === 'graph') {
     const [text, ...more] = rest;
     if (text?.type !== 'text') {
-      ctx.problems.error(line, 'write a graph row as: show id graph "a -> b; a -> c" [lit="a"]');
+      ctx.problems.error(line, 'a graph row needs graph "a -> b; a -> c" [lit="a"]');
       return;
     }
     const lit = more.find((t) => t.type === 'option' && t.key === 'lit' && t.valueType === 'text');
@@ -22,7 +22,7 @@ export function readContent({ tokens, line }, ctx) {
     return;
   }
   if (first?.type !== 'text') {
-    ctx.problems.error(line, 'write show as: show id "text"');
+    ctx.problems.error(line, 'a text row needs quoted text: "text"');
     return;
   }
   const row = { text: first.value };

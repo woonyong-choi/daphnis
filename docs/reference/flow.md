@@ -1,6 +1,6 @@
 # 구조 그림
 
-구조 그림은 카드를 선으로 잇고 그래프 보기(`view graph`)로 보이는 그림입니다. 구성 요소와 요청이 가는 길을 그립니다. 카드를 선언하고, 선을 잇고, 보기를 고른 다음, 장면(`scene`)마다 점이 어느 선을 지나는지 적습니다.
+구조 그림은 카드를 선으로 잇고 그래프 보기(`view graph`)로 보이는 그림입니다. 구성 요소와 요청이 가는 길을 그립니다. 카드와 선만 적으면 정지 그림이 됩니다. 배치를 바꿀 때 보기(`view`), 움직임을 넣을 때 장면(`scene`)을 더합니다.
 
 ## 최소 예제
 
@@ -9,18 +9,19 @@ daphnis 2
 title "요청 경로"
 
 box client "클라이언트"
-box server "서버"
+box server "서버" {
+  text "주문을 확인하고 저장합니다"
+  value pending "처리 중" from=0
+}
 store db "데이터베이스"
 
 client -> server "GET /orders"
 server -> db "SELECT"
-
-scene "요청"
-  client -> server time=700ms
-  server -> db time=700ms
 ```
 
 ![요청 경로](flow-minimal.svg)<!-- dap -->
+
+설명과 값은 카드의 `{ }` 안에 놓습니다. 정지 그림에는 `scene`이 필요하지 않습니다.
 
 첫 줄은 언제나 `daphnis 2`입니다. 그다음 카드 줄, 선 줄, 필요하면 보기 줄(`view graph down`), 장면 줄 순서로 적습니다. 보기 줄을 생략하면 모든 카드를 담은 왼쪽에서 오른쪽 그래프 보기 하나가 기본으로 생기고, 방향이나 라벨이 필요할 때만 `view graph down "라벨"`처럼 적습니다. 장면의 `mode`는 `static`(마지막 상태 하나), `once`(한 번 재생), `loop`(되풀이)이고, 생략하면 줄이 있는 장면은 `once`, 줄이 없는 장면은 `static`입니다. 장면 안의 이동에 글을 붙이지 않은 것은 선 라벨이 이미 그 글을 보이기 때문입니다.
 
@@ -40,11 +41,18 @@ title "주문이 몰릴 때"
 
 box web "웹"
 box app "앱"
-box api "주문 API"
+box api "주문 API" {
+  text "접수한 주문을 저장소에 보냅니다"
+  value pending "처리 중"
+  chart traffic "처리량" bar "예시 데이터. 처리 중인 주문 수" {
+    x "주문 수(건)"
+    series orders "진행 중"
+    row "현재" orders=pending
+  }
+}
 store db "재고 DB"
 
 value stock "재고" on=db from=120
-value pending "처리 중" on=api
 on api pending+1
 on db pending-1, stock-1
 

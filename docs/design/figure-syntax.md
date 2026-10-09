@@ -19,6 +19,22 @@ D2와 Mermaid는 같은 뜻을 여러 모양으로 적을 수 있다. D2는 오�
 
 ## 예시
 
+### 장면 없이 카드와 선 그리기
+
+```text
+daphnis 2
+person user "고객"
+box api "주문 API" {
+  text "주문을 검증하고 저장합니다"
+  value pending "처리 중" from=0
+}
+store db "저장소"
+user -> api "주문"
+api -> db "저장"
+```
+
+카드와 선만으로 정지 그림을 만든다. 카드의 본문은 선언 안에서 적으며 `value`에 `on=`을 쓰지 않는다. 움직임이 필요하면 선언 뒤에 `scene "요청"`과 이동 줄을 더한다. 장면이 여러 개여도 같은 본문을 다시 쓰지 않는다.
+
 ### 한 문서에 여러 카드와 보기 놓기
 
 ```text
@@ -83,7 +99,7 @@ scene "주문 한 건" mode=loop speed=1.5
 
 1. 사람(`user`)은 표준 카드에 사용자 아이콘(`icon=user`)이 붙은 카드다. 그래프의 `user -> create.body`는 API 카드(`create`)의 칸 `body`에, `create.body -> orders.id`는 테이블 `orders`의 열 `id`에 닿는다.
 2. `value p95`는 카드에 놓이지 않은 값(`on=` 없음)이다. 막대 차트 `lag`의 행 `ms=p95`와 선 차트 `trend`의 점 `p95=p95`가 이 값을 읽는다. 값이 바뀌면 차트가 프레임을 바꾼다.
-3. 첫 `view graph`는 블록이 없어서, 차트 보기에 놓인 `trend`와 추적 `t`를 뺀 모든 카드를 담는다. `lag`는 어느 선에도 닿지 않고 어느 보기에도 적히지 않은 차트라 기본 차트 보기를 따로 받아 그래프에 들어가지 않는다. `view sequence`는 `user gw pay`를 참여자로 한 순서 보기다.
+3. 첫 `view graph`는 블록이 없어서, 차트 보기에 놓인 `trend`와 추적 `t`를 뺀 모든 카드를 담는다. `lag`는 차트 보기에 따로 적지 않았으므로 그래프 안의 차트 카드로 놓인다. `view sequence`는 `user gw pay`를 참여자로 한 순서 보기다.
 4. `user -> gw "POST /pay"`는 그래프의 선 하나와 순서 보기의 메시지 하나로 함께 보인다. 두 투영은 같은 시각에 같은 시간으로 움직이고, 시간은 먼저 놓인 투영(그래프의 선)이 한 번 정한다. `gw -> pay`의 `set="p95=150"`은 그 이동이 `pay`에 닿는 시각에 한 번만 값을 바꾼다.
 5. `pay -> gw "ok" dashed`는 선언한 선 `gw -> pay`를 거꾸로 지나고, 순서 보기에서는 점선 메시지다.
 6. `light t.s2`는 시간 보기에서 구간 `s2`를 밝힌다. 구간의 가로 위치와 길이는 시작 시각 `at`과 `dur`에 비례한다.
@@ -300,6 +316,18 @@ scene "소비자 하나가 느려진다" for=6s status="slow=warn"
 
 ### 카드 선언
 
+`box`, `person`, `external`, `store`는 선언 끝에 `{`를 붙여 본문을 담는다. 본문이 없는 카드의 한 줄 선언도 그대로 쓴다. 원(`shape=circle`), 갈림길, 상태, 큐는 본문 블록을 받지 않는다.
+
+| 본문 줄 | 뜻 |
+|---|---|
+| `text "글"` | `show`와 같은 글·태그·덧붙임·표시·색 선택 사항을 가진 줄 |
+| `value id "이름" [from=값 또는 ref=값]` | 이 카드의 값. `on=`은 오류이고 이름은 문서 전체에서 유일하다 |
+| `graph "가 -> 나; 가 -> 다" [lit="가"]` | `show id graph`와 같은 작은 관계 그래프 |
+| `chart id "제목" 종류 { ... }` | 독립 차트와 같은 문법을 쓰는 내부 차트 |
+
+본문은 적은 순서대로 놓인다. 블록 밖에서 `value ... on=카드`로 붙인 값은 본문 앞에 놓인다. 장면마다 선언한 본문에서 시작하고 `show`는 끝에 줄을 더하며, `clear`는 값 줄을 남기고 글·관계 그래프를 비운다. 처음 본문이 있는 카드는 장면 첫 줄에서도 `clear`할 수 있다. 다음 장면에서는 선언한 본문이 복원된다. 내부 차트는 카드 본문의 한 줄이고 별도 노드나 판이 아니다. 차트 이름은 문서 전체에서 유일하며 `reveal`, `light`와 값 묶음은 같은 이름을 쓴다. 선과 보기는 차트의 바깥 카드를 가리킨다. 내부 차트를 별도 보기에 넣거나 직접 연결하면 줄 번호 오류다. 내부 차트의 계산·축·표식·효과는 독립 차트와 같다. 본문은 그래프 보기에 그리므로 순서 보기에만 둔 카드의 본문은 해당 줄 오류다.
+
+
 모든 카드는 같은 틀(테두리, 머리, 줄, 연결점)을 쓰고 모양만 다르다. 줄 하나로 끝나는 카드와 `{`로 여는 블록 카드가 있다.
 
 | 줄 | 뜻 |
@@ -407,7 +435,7 @@ view time ["라벨"] {
 - `view main graph`처럼 보기 방식 앞에 이름을 쓰면 `a view is one of graph, sequence, plot, time. Found "main"` 오류다.
 - 기본 보기. 적은 보기가 먼저 구성원을 정하고(적은 순서가 판 순서), 어느 보기에도 적히지 않은 카드는 다음 규칙으로 기본 보기를 받는다. 기본 보기는 적은 보기 뒤에 카드 선언 순서로 쌓인다. 같은 카드가 기본 보기와 적은 보기에 겹쳐 그려지는 일은 없다.
   1. 추적 카드는 카드마다 `time` 보기 하나.
-  2. 그룹 밖에 있고 어느 선에도 닿지 않는 차트 카드는 카드마다 `plot` 보기 하나. 그래프 안에 작게 두려면 그래프 블록에 적는다.
+  2. 남은 카드가 차트뿐이고 그래프 보기를 적지 않았으며 그룹 안 차트도 없으면 차트마다 `plot` 보기 하나. 일반 카드와 섞이거나 그래프 보기를 적으면 차트도 그래프 카드다. 연결선 유무는 보기 종류를 바꾸지 않는다.
   3. 나머지 그래프로 그릴 수 있는 카드(그룹 나무는 온전히)는 `graph right` 하나. 블록 없는 `view graph`를 적었으면 그 보기가 맡으므로 만들지 않는다.
   - 순서, 차트, 시간 보기에 적은 카드는 "적힌" 카드라 기본 그래프에 들어가지 않는다. 그 카드를 그래프에도 보이려면 그래프 블록에 적는다.
   - 보기 줄이 하나도 없으면 위 규칙만으로 보기가 정해진다. 카드가 차트 하나뿐이면 그 `plot` 하나다.
@@ -481,7 +509,7 @@ trace t "결제 추적" unit=ms {
 | `a -> b "글" & c -> d time=2s` | 한 박자 안의 여러 이동 |
 | `show id "글" [tag="태그"] [tone=purple] [appearance=모양] [meta="덧붙임"] [mark="표시"] [mono]` | 카드 줄 하나를 바로 앞 박자에 더한다. 카드를 그리는 그래프 보기에 놓인 카드만 쓸 수 있다 |
 | `show id graph "가 -> 나; 가 -> 다" [lit="가, 나"]` | 카드에 작은 관계 그래프 줄 하나를 더한다 |
-| `clear id` | 바로 앞 박자에서 카드를 비운다 |
+| `clear id` | 바로 앞 박자에서 값 줄을 남기고 카드 본문을 비운다 |
 | `light 이름 ...` | 점 없이 카드, 그룹, 칸을 밝히는 박자. 칸은 `카드.칸`(테이블·API의 칸, 격자의 `item`, 추적의 구간)이다 |
 | `light 차트 "행"`, `light 차트 x=값`, `light 차트 "행" "열"` | 차트 카드의 행을 밝힌다 |
 | `reveal 차트.계열 ...` | 차트 카드의 계열을 드러낸다 |
@@ -679,6 +707,7 @@ scene "같은 시각에 요청한다" for=8s
 | 머리 | 문서 줄 | `title`, `subtitle`, `pace`, `aspect`, `width` |
 | 선언 | 문서 줄 | `person`, `box`, `external`, `store`, `decision`, `queue`, `state`, `group`, `grid`, `icons`, `value`, `on node id+N`, `start`, `final`, `table`, `api id "METHOD /url" {`, `class`, `interface`, `chart id "title" type ["subtitle"] {`, `trace id "title" [unit=ms] {`, `view graph|sequence|plot|time ["label"] [{]`, `a -> b` |
 | 선언 | 격자 블록 안 | `item`, `gap` |
+| 선언 | 카드 본문 안 | `text`, `graph` |
 | 선언 | 클래스 블록 안 | `field`, `method` |
 | 선언 | 추적 블록 안 | `span` |
 | 선언 | 차트 블록 안 | `x`, `y`, `scale`, `zero`, `decimals`, `series`, `rule`, `missing`, `data`, `row`, `point`, `cell`, `sample`, `bins minimum maximum count [measure=count|probability|density] or bins auto [measure=count|probability|density]`, `total`, `link` |

@@ -18,30 +18,32 @@ export function rootOf(byId, id) {
   return ref === undefined ? id : rootOf(byId, ref);
 }
 
-// cost: time O(v), heap O(v), stack O(1)
-// vars: v = 값 수
+// cost: time O(v + r), heap O(v + r), stack O(1)
+// vars: v = 값 수, r = 카드 선언의 본문 줄 수
 // basis: estimate
 /**
- * 값 카드 줄을 도형별로. 큐가 스스로 가진 값과 카드에 놓이지 않은 값(`on=` 없음)은 카드 줄이 없다. 선언한 값은 모든 장면의 카드에 늘 올라 있다.
+ * 카드의 처음 본문을 도형별로. 카드 블록의 줄은 선언 순서를 지키고, 블록 밖에서 on=으로 붙인 값은 그 앞에 놓인다. 값 줄은 모든 장면에 남는다.
  * 줄은 `이름` 글이고, 값 글자는 시간표의 변화 목록이 따로 그린다. 오른쪽 끝 자리는 그 값이 가질 모든 글(texts)의 실제 폭이 정한다.
  * @param texts 값 이름 → 가질 글 목록. 없으면 처음 글만이다
  */
-export function valueRowsByNode(figure, texts = new Map()) {
+export function initialCardRows(figure, texts = new Map()) {
   const rows = new Map();
   const byId = valueTable(figure);
   for (const v of figure.values.filter((value) => !value.queue && value.on !== undefined)) {
     const own = texts.get(v.id) ?? [byId.get(rootOf(byId, v.id)).from];
     rows.set(v.on, [...(rows.get(v.on) ?? []), { text: v.label, isValue: true, valueId: v.id, valueTexts: [...own] }]);
   }
+  for (const card of figure.nodes.filter((node) => node.content?.length)) {
+    const values = new Map((rows.get(card.id) ?? []).map((row) => [row.valueId, row]));
+    const body = card.content.map((row) => {
+      if (!row.valueId) return row;
+      const value = values.get(row.valueId);
+      values.delete(row.valueId);
+      return value;
+    });
+    rows.set(card.id, [...values.values(), ...body]);
+  }
   return rows;
-}
-
-// cost: time O(r), heap O(r), stack O(1)
-// vars: r = 값 줄 수
-// basis: estimate
-/** 장면이 없는 문서에서 도형마다 보일 카드 내용 번호 { 도형 id: 내용 번호 }. 그 카드 내용은 선언한 값 줄뿐이라 값 줄이 놓인 카드(row.card)에서 읽는다. 큐의 값은 카드가 없다. */
-export function declaredCards(rows) {
-  return Object.fromEntries(rows.filter((row) => row.card !== undefined).map((row) => [row.node, row.card]));
 }
 
 // cost: time O(p), heap O(t), stack O(1)

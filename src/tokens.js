@@ -253,6 +253,24 @@ export const tokens = freeze({
         "5": "var(--color-data-category-label-5)",
         "6": "var(--color-data-category-label-6)",
         "7": "var(--color-data-category-label-7)"
+      },
+      "category-area": {
+        "1": "var(--color-data-category-area-1)",
+        "2": "var(--color-data-category-area-2)",
+        "3": "var(--color-data-category-area-3)",
+        "4": "var(--color-data-category-area-4)",
+        "5": "var(--color-data-category-area-5)",
+        "6": "var(--color-data-category-area-6)",
+        "7": "var(--color-data-category-area-7)"
+      },
+      "category-on-area": {
+        "1": "var(--color-data-category-on-area-1)",
+        "2": "var(--color-data-category-on-area-2)",
+        "3": "var(--color-data-category-on-area-3)",
+        "4": "var(--color-data-category-on-area-4)",
+        "5": "var(--color-data-category-on-area-5)",
+        "6": "var(--color-data-category-on-area-6)",
+        "7": "var(--color-data-category-on-area-7)"
       }
     },
     "accent": "var(--color-accent)",
@@ -290,7 +308,9 @@ export const tokens = freeze({
         "dark-tint-2": "var(--color-category-blue-dark-tint-2)",
         "dark-tint-3": "var(--color-category-blue-dark-tint-3)",
         "light-effect": "var(--color-category-blue-light-effect)",
-        "dark-effect": "var(--color-category-blue-dark-effect)"
+        "dark-effect": "var(--color-category-blue-dark-effect)",
+        "area": "var(--color-category-blue-area)",
+        "on-area": "var(--color-category-blue-on-area)"
       },
       "yellow": {
         "anchor": "var(--color-category-yellow-anchor)",
@@ -307,7 +327,9 @@ export const tokens = freeze({
         "dark-tint-2": "var(--color-category-yellow-dark-tint-2)",
         "dark-tint-3": "var(--color-category-yellow-dark-tint-3)",
         "light-effect": "var(--color-category-yellow-light-effect)",
-        "dark-effect": "var(--color-category-yellow-dark-effect)"
+        "dark-effect": "var(--color-category-yellow-dark-effect)",
+        "area": "var(--color-category-yellow-area)",
+        "on-area": "var(--color-category-yellow-on-area)"
       },
       "red": {
         "anchor": "var(--color-category-red-anchor)",
@@ -324,7 +346,9 @@ export const tokens = freeze({
         "dark-tint-2": "var(--color-category-red-dark-tint-2)",
         "dark-tint-3": "var(--color-category-red-dark-tint-3)",
         "light-effect": "var(--color-category-red-light-effect)",
-        "dark-effect": "var(--color-category-red-dark-effect)"
+        "dark-effect": "var(--color-category-red-dark-effect)",
+        "area": "var(--color-category-red-area)",
+        "on-area": "var(--color-category-red-on-area)"
       },
       "green": {
         "anchor": "var(--color-category-green-anchor)",
@@ -341,7 +365,9 @@ export const tokens = freeze({
         "dark-tint-2": "var(--color-category-green-dark-tint-2)",
         "dark-tint-3": "var(--color-category-green-dark-tint-3)",
         "light-effect": "var(--color-category-green-light-effect)",
-        "dark-effect": "var(--color-category-green-dark-effect)"
+        "dark-effect": "var(--color-category-green-dark-effect)",
+        "area": "var(--color-category-green-area)",
+        "on-area": "var(--color-category-green-on-area)"
       },
       "orange": {
         "anchor": "var(--color-category-orange-anchor)",
@@ -358,7 +384,9 @@ export const tokens = freeze({
         "dark-tint-2": "var(--color-category-orange-dark-tint-2)",
         "dark-tint-3": "var(--color-category-orange-dark-tint-3)",
         "light-effect": "var(--color-category-orange-light-effect)",
-        "dark-effect": "var(--color-category-orange-dark-effect)"
+        "dark-effect": "var(--color-category-orange-dark-effect)",
+        "area": "var(--color-category-orange-area)",
+        "on-area": "var(--color-category-orange-on-area)"
       },
       "purple": {
         "anchor": "var(--color-category-purple-anchor)",
@@ -375,7 +403,9 @@ export const tokens = freeze({
         "dark-tint-2": "var(--color-category-purple-dark-tint-2)",
         "dark-tint-3": "var(--color-category-purple-dark-tint-3)",
         "light-effect": "var(--color-category-purple-light-effect)",
-        "dark-effect": "var(--color-category-purple-dark-effect)"
+        "dark-effect": "var(--color-category-purple-dark-effect)",
+        "area": "var(--color-category-purple-area)",
+        "on-area": "var(--color-category-purple-on-area)"
       },
       "cyan": {
         "anchor": "var(--color-category-cyan-anchor)",
@@ -392,7 +422,9 @@ export const tokens = freeze({
         "dark-tint-2": "var(--color-category-cyan-dark-tint-2)",
         "dark-tint-3": "var(--color-category-cyan-dark-tint-3)",
         "light-effect": "var(--color-category-cyan-light-effect)",
-        "dark-effect": "var(--color-category-cyan-dark-effect)"
+        "dark-effect": "var(--color-category-cyan-dark-effect)",
+        "area": "var(--color-category-cyan-area)",
+        "on-area": "var(--color-category-cyan-on-area)"
       }
     },
     "sequential": {
@@ -776,7 +808,6 @@ export const tokens = freeze({
       "bg": "var(--primitive-simple2-bg)",
       "page": "var(--primitive-simple2-page)",
       "node": "var(--primitive-simple2-node)",
-      "card": "var(--primitive-simple2-card)",
       "surface": "var(--primitive-simple2-surface)",
       "plate-border": "var(--primitive-simple2-plate-border)",
       "border": "var(--primitive-simple2-border)",
@@ -974,7 +1005,7 @@ export const values = freeze({
     "bg": "#f2f5f7",
     "node": "#ffffff",
     "surface": "#eef0f3",
-    "card": "#f2f3f5",
+    "card": "#ffffff",
     "card-on": "#f7fafe",
     "page": "#ffffff",
     "outline": "#818181",
@@ -1106,6 +1137,24 @@ export const values = freeze({
         "5": "optional",
         "6": "optional",
         "7": "optional"
+      },
+      "category-area": {
+        "1": "#4370b3",
+        "2": "#e6d27a",
+        "3": "#d85a69",
+        "4": "#569576",
+        "5": "#e59960",
+        "6": "#7554a8",
+        "7": "#6bb9c2"
+      },
+      "category-on-area": {
+        "1": "#ffffff",
+        "2": "#000000",
+        "3": "#000000",
+        "4": "#000000",
+        "5": "#000000",
+        "6": "#ffffff",
+        "7": "#000000"
       }
     },
     "accent": "#1e6bd6",
@@ -1143,7 +1192,9 @@ export const values = freeze({
         "dark-tint-2": "#303b4e",
         "dark-tint-3": "#303d54",
         "light-effect": "#3984f2",
-        "dark-effect": "#60a0ff"
+        "dark-effect": "#60a0ff",
+        "area": "#4370b3",
+        "on-area": "#ffffff"
       },
       "yellow": {
         "anchor": "#f2d024",
@@ -1160,7 +1211,9 @@ export const values = freeze({
         "dark-tint-2": "#3b3a39",
         "dark-tint-3": "#3c3c39",
         "light-effect": "#f0d03b",
-        "dark-effect": "#ffec9a"
+        "dark-effect": "#ffec9a",
+        "area": "#e6d27a",
+        "on-area": "#000000"
       },
       "red": {
         "anchor": "#fa1955",
@@ -1177,7 +1230,9 @@ export const values = freeze({
         "dark-tint-2": "#48353a",
         "dark-tint-3": "#4e363b",
         "light-effect": "#ff697b",
-        "dark-effect": "#ff7785"
+        "dark-effect": "#ff7785",
+        "area": "#d85a69",
+        "on-area": "#000000"
       },
       "green": {
         "anchor": "#269c6e",
@@ -1194,7 +1249,9 @@ export const values = freeze({
         "dark-tint-2": "#333d3d",
         "dark-tint-3": "#333f3e",
         "light-effect": "#3aab7c",
-        "dark-effect": "#46b586"
+        "dark-effect": "#46b586",
+        "area": "#569576",
+        "on-area": "#000000"
       },
       "orange": {
         "anchor": "#ff8906",
@@ -1211,7 +1268,9 @@ export const values = freeze({
         "dark-tint-2": "#403938",
         "dark-tint-3": "#433a38",
         "light-effect": "#df812e",
-        "dark-effect": "#ffb27a"
+        "dark-effect": "#ffb27a",
+        "area": "#e59960",
+        "on-area": "#000000"
       },
       "purple": {
         "anchor": "#7d40c8",
@@ -1228,7 +1287,9 @@ export const values = freeze({
         "dark-tint-2": "#3c364e",
         "dark-tint-3": "#403756",
         "light-effect": "#945ae3",
-        "dark-effect": "#b78aff"
+        "dark-effect": "#b78aff",
+        "area": "#7554a8",
+        "on-area": "#ffffff"
       },
       "cyan": {
         "anchor": "#25c0cf",
@@ -1245,7 +1306,9 @@ export const values = freeze({
         "dark-tint-2": "#333c42",
         "dark-tint-3": "#343e44",
         "light-effect": "#33a7b3",
-        "dark-effect": "#4ddae9"
+        "dark-effect": "#4ddae9",
+        "area": "#6bb9c2",
+        "on-area": "#000000"
       }
     },
     "sequential": {
@@ -1629,7 +1692,6 @@ export const values = freeze({
       "bg": "#f2f5f7",
       "page": "#ffffff",
       "node": "#ffffff",
-      "card": "#f2f3f5",
       "surface": "#eef0f3",
       "plate-border": "#d4d8de",
       "border": "#838b96",
