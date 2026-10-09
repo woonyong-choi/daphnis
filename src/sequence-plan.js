@@ -13,8 +13,17 @@ export function sequenceStep(step, run, deps) {
   const needed = (run.sequenceEvents ?? 0) + countEvents(step.sequencePlan);
   if (needed > limit) throw eventBudgetError('events', limit, { line: step.line, ...(Number.isSafeInteger(needed) ? { needed } : { t: run.t }) });
   run.sequenceEvents = needed;
-  return { ...step, beats: step.sequencePlan.flatMap((beat) => beat.control ? packedBeat(beat.control, { run, scene: deps.scene }) : [beat]) };
+  if (planBeats(step) === step.beats) return step;
+  const beats = step.sequencePlan.flatMap((beat) => beat.control ? packedBeat(beat, { run, scene: deps.scene }) : [beat]);
+  // 건너뛴 구획뿐이라 박자가 없는 장면도 길이 0인 빈 박자 하나의 정지 모습을 갖는다(줄 없는 정지 장면의 빈 박자와 같다). 구획 안에는 카드 줄이 없어 어느 구획 자리든 처음 카드와 같다.
+  return { ...step, beats: beats.length ? beats : [{ ...emptyBeat(step.line), planned: step.sequencePlan[0] }] };
 }
+
+/**
+ * 카드 상태(collectCards)가 따라갈 박자 목록. 구획이 있는 장면은 접기 전의 계획이고, 구획이 없는 장면은 검사가 더한 빈 박자까지 든 step.beats다.
+ * 구획 박자는 카드 줄이 없어 그 자리의 카드 상태를 앞 박자에서 그대로 이어받는다.
+ */
+export const planBeats = (step) => step.sequencePlan?.some((beat) => beat.control) ? step.sequencePlan : step.beats;
 
 // cost: time O(b), heap O(d), stack O(d)
 // vars: b = 선택된 원본 박자 수, d = 구획 깊이
@@ -40,11 +49,13 @@ function operands(control) {
 // cost: time O(h·p), heap O(h), stack O(d)
 // vars: h = 펼친 메시지 수, p = 경로 점 수, d = 구획 깊이
 // basis: estimate
-function packedBeat(control, ctx) {
+// 구획 하나를 박자 하나로 묶는다. planned는 계획에서 이 자리를 차지한 구획 박자라서 카드 상태(collectCards)를 그 박자에서 읽는다.
+function packedBeat(planned, ctx) {
+  const { control } = planned;
   const hops = [];
   const end = scheduleControl(control, { ...ctx, hops }, 0);
   const lastArrival = hops.reduce((last, hop) => Math.max(last, hop.sequenceAt + hop.timeMs), 0);
-  return end ? [{ ...emptyBeat(control.line), hops, waitMs: Math.max(0, end - lastArrival) }] : [];
+  return end ? [{ ...emptyBeat(control.line), hops, waitMs: Math.max(0, end - lastArrival), planned }] : [];
 }
 
 // cost: time O(h·p), heap O(h), stack O(d)

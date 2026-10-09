@@ -2,7 +2,8 @@
 
 // ---- 탭 ----
 
-// 장면마다 탭 하나. 누르면 onSelect(장면 번호)를 부르고, 같은 장면을 다시 누를 때의 처리는 부른 쪽이 정한다.
+// 장면마다 탭 하나. 탭은 캔버스 아래 가운데에 놓는 분절 조작이다(CSS .fl-tabs). 누르면 onSelect(장면 번호)를 부르고, 같은 장면을 다시 누를 때의 처리는 부른 쪽이 정한다.
+// 탭이 줄 폭보다 많으면 줄을 바꿔 모두 보인다. 탭을 위해 스크롤하거나 가장자리를 흐리지 않는다.
 function createTabs(container, scenes, onSelect) {
   const buttons = scenes.map(({ label }, si) => createTab(label, () => onSelect(si)));
   container.addEventListener('keydown', (event) => moveTab(event, buttons));

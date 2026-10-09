@@ -7,7 +7,7 @@ box app "App"
 box auth "Auth server"
 external api "Resource API"
 
-view flow sequence {
+view sequence {
   user app auth api
 }
 

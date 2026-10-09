@@ -26,11 +26,11 @@ box app "앱"
 box auth "인가 서버"
 external api "리소스 API"
 
-view flow sequence {
+view sequence {
   user app auth api
 }
 
-scene "인가와 토큰" mode=once
+scene "인가와 토큰"
   user -> app "로그인 누름"
   app -> auth "authorize?code_challenge"
   note auth "challenge = S256(verifier)"
@@ -62,12 +62,12 @@ table orders "orders" {
 user -> create.body "주문"
 create.body -> orders.id "저장"
 
-view arch graph down "구조"
-view calls sequence "호출 순서" {
+view graph down "구조"
+view sequence "호출 순서" {
   user create
 }
 
-scene "주문 한 건" mode=once
+scene "주문 한 건"
   user -> create.body "주문 요청" time=700ms
   create.body -> orders.id time=700ms
 ```
@@ -81,7 +81,7 @@ scene "주문 한 건" mode=once
 
 | 줄 | 뜻 |
 |---|---|
-| `view id sequence ["라벨"] {` 참여자 이름들 `}` | 순서 보기. 적은 순서가 왼쪽부터의 순서 |
+| `view sequence ["라벨"] {` 참여자 이름들 `}` | 순서 보기. 적은 순서가 왼쪽부터의 순서 |
 | `a -> b "메시지" [dashed] [time=2s]` | 메시지 하나. 한 줄이 한 박자이고 한 행이다. `dashed`는 응답 |
 | `a -> a "메시지"` | 자기 자신에게 보내는 메시지. 오른쪽으로 돌아 나오는 고리 |
 | `a -> b "메시지" create`, `destroy` | 받는 참여자의 생성 또는 소멸 |
@@ -93,8 +93,9 @@ scene "주문 한 건" mode=once
 - 메시지는 장면 안에만 쓴다. 한 장면의 메시지는 그 장면의 첫 행부터 놓이고 다른 장면의 메시지는 그 장면에서 보이지 않는다(정지 장면과 마지막 모습도 같다). 메시지는 선이 아니라 행이다. 그래서 같은 두 참여자 사이 같은 방향 메시지를 여러 번 쓸 수 있고 `a -> a`도 쓸 수 있다. 메시지가 있는 박자에는 이동이 하나뿐이다(`&` 불가).
 - 메시지 글은 필수다. 화살표 위 라벨로 늘 보인다. 점에는 글 상자를 붙이지 않는다. 같은 글이 두 번 보이기 때문이다.
 - `note`는 메시지 줄 바로 다음 줄에만 쓰고, 그 메시지의 보내는 쪽이나 받는 쪽 참여자만 가리킨다. 박자를 만들지 않는다. 자기 자신에게 보내는 메시지 행이면 메모는 고리 반대편에 놓인다.
-- 참여자 순서가 처음 메시지를 보내는 순서와 다르면 오류다(`declare participants in the order they first send: a, b`). 메시지를 보내지 않는 참여자는 보내는 참여자 뒤에 오면 된다.
+- 참여자 순서가 처음 메시지를 보내는 순서와 다르면 경고다(`declare participants in the order they first send: a, b`). `--strict`에서는 오류가 된다. 경고는 순서가 처음 어긋난 참여자를 적은 보기 블록의 줄과 자리에 붙는다. 메시지를 보내지 않는 참여자는 보내는 참여자 뒤에 오면 된다.
 - 순서 보기 전용 줄(`note`, `activate`, `deactivate`, `fragment`, 이동의 `dashed`, `create`, `destroy`)은 그 카드가 어떤 순서 보기에든 놓여야 한다.
+- 순서 보기는 참여자 머리(아이콘과 이름)만 그린다. 카드 줄과 값 줄이 들어갈 자리가 없어서, 순서 보기에만 놓인 카드에 값 `on=`, `show`, `clear`를 쓰면 줄 번호가 붙은 오류다. 같은 카드를 그래프 보기에도 놓으면 그래프 보기가 그 카드와 값을 그리고, 순서 보기에는 머리만 보인다. 상태 알약(`status`)은 머리에 그려져 이 제한이 없다.
 
 생성 메시지는 점선이며 참여자 머리에서 끝난다. 생명선은 그 머리 아래에서 시작한다. 소멸 메시지는 X 표식에서 끝나며 열린 활성 구간도 닫는다. 생성 전과 소멸 후 메시지, 같은 장면 안의 중복 생성, 짝 없는 활성 종료는 오류다. 생명주기와 활성 구간은 장면마다 따로 검사한다. 장면은 서로 이어지지 않는 대안이라 한 장면의 생성, 소멸, 열린 활성 구간이 다른 장면의 처음 상태에 영향을 주지 않는다. 어떤 장면에서 생성 메시지를 받는 참여자는 그 장면에서만 그 메시지 전까지 없고 다른 장면에서는 처음부터 있다. 같은 참여자를 둘 이상의 장면이 만들어도 된다. 활성 구간은 장면 끝에서 모두 닫혀야 한다. 메시지와 같은 행에서 여닫는 구간은 짧은 막대로 표시한다. 전체 호출 구조를 표시하며 재생 도중 참여자를 숨기는 애니메이션은 아니다.
 
@@ -110,6 +111,8 @@ scene "주문 한 건" mode=once
 | `par` | 없음 | 대안들이 동시에 시작해 각자 메시지 순서와 대기를 진행한다. 다음 메시지는 가장 늦은 대안이 끝난 뒤 시작한다 |
 
 구획 안에는 메시지, 바로 앞 메시지에 붙인 `note`, `wait`, 중첩 구획을 쓴다. 생성·소멸 메시지와 `activate`·`deactivate`는 구획 밖에 쓴다. 선택하지 않은 대안과 생략한 `opt` 본문도 이름, 메시지, 메모, 중첩 구조를 모두 검증한다.
+
+구획은 카드가 보여 주는 내용(`show`, `clear`, 값 줄)을 바꾸지 않는다(#179). 카드 내용은 구획을 접기 전의 박자 계획을 따라가므로 구획 앞, 사이, 뒤의 `show`와 값이 구획 박자에서도 그 자리의 내용으로 보이고, 구획으로 시작하는 장면, 중첩 구획, 건너뛴(`run=off`) 구획, 길이가 다른 대안, 구획 다음 장면도 같다. 건너뛴 구획뿐인 장면은 길이 0의 빈 박자 하나의 정지 모습을 갖는다.
 
 `choose`와 `opt`의 `run`은 예제의 경로를 고정하는 선언이다. 조건식을 평가하거나 실제 서비스의 상태를 읽지 않는다. 반복은 종료 조건을 계산하지 않고 정해진 횟수를 실행한다. `break`, `critical`, `ref`와 표준의 모든 제어 연산자를 지원한다고 표시하지 않는다.
 
@@ -182,21 +185,22 @@ scene "주문 한 건" mode=once
 | `trace` | 오류 | 오류 | 오류 | 정확히 하나 |
 
 - 표의 `오류`는 그 보기의 구성원 이름 자리에서 `a table card cannot be a sequence participant` 같은 줄 번호가 붙은 오류라는 뜻이다. 문서 모양 규칙은 [그림 문법](figure-syntax.md#보기)가 정한다.
-- 줄 종류와 카드는 문서 하나에 섞을 수 있다. 어떤 보기에도 놓이지 않은 카드는 오류다.
+- 줄 종류와 카드는 문서 하나에 섞을 수 있다. 보기에 적지 않은 카드는 기본 보기를 받는다(추적은 시간 보기, 선이 없는 차트는 차트 보기, 나머지는 그래프). 순서 보기에 적은 카드는 적힌 카드라 기본 그래프에 들어가지 않는다. 그 규칙은 [그림 문법](figure-syntax.md#보기)에 있다.
 - 차트의 줄은 [차트](charts.md)에 있다.
 
 ### 요구사항
 
 | 요구사항 | 검증 계획 |
 |---|---|
-| 클래스의 세 구획, 멤버 가시성·정적·추상 표시와 여섯 관계 기호와 양끝 다중성을 보인다. | `test/class.test.js`의 렌더링 검사, `test/demo-v2.test.js`의 `class` 예제 검사 |
-| 클래스 관계의 끝 종류, 멤버 중복, 순환 상속, 닫지 않은 구획을 거부한다. | `test/class.test.js`의 잘못된 선언 검사 |
-| 명시한 키, NULL 허용 여부와 삭제 정책을 모두 표시하고 서로 모순된 제약을 거부한다. | `test/data-constraints.test.js`, `test/demo-v2.test.js`의 `schema` 예제 검사 |
-| 순서 보기의 메시지, 구획, 생명주기와 참여자 순서 규칙을 줄 번호와 함께 알린다. | `test/sequence-fragments.test.js`, `test/sequence-life.test.js`, `test/v2-document.test.js` |
-| 문서의 예시 원본이 오류와 경고 없이 읽힌다. | `test/grammar.test.js`의 `docExamples_every_design_doc_example_builds_without_errors_or_warnings`. 예시 원본을 뽑아 strict로 읽는다 |
-| 순서 그림 메시지는 적은 순서대로 위에서 아래로 놓인다. | `test/layout.test.js`의 `layoutSequence_messages_go_down_in_the_written_order` |
-| 외래 키 선은 두 열의 행 높이에 붙는다. | `test/layout.test.js`의 `buildFigure_table_column_edges_of_a_stack_leave_and_enter_on_the_right_face_at_the_row` |
-| 같은 테이블의 서로 다른 두 열을 잇는 자기 참조 외래 키가 열 줄에 붙는 고리로 그려지고, 같은 열이나 카드 전체를 잇는 자기 선은 오류다. | `examples/schema.dap`의 strict 빌드(`test/demo-v2.test.js`). 고리 경로의 기하를 직접 재는 시험은 아직 확인되지 않았다(검증 요구사항, 미완료) |
+| 클래스의 세 구획, 멤버 가시성·정적·추상 표시와 여섯 관계 기호와 양끝 다중성을 보인다. | `test/kinds.test.js`(K-class), `class` 예제는 `test/examples.test.js` |
+| 클래스 관계의 끝 종류, 멤버 중복, 순환 상속, 닫지 않은 구획을 거부한다. | `test/kinds.test.js`(K-class relations) |
+| 명시한 키, NULL 허용 여부와 삭제 정책을 모두 표시하고 서로 모순된 제약을 거부한다. | 외래 키는 `test/cards.test.js`, `schema` 예제는 `test/examples.test.js`. NULL 허용과 삭제 정책의 표시와 모순 거부를 직접 확인하는 시험은 확인되지 않았다(검증 요구사항, 미완료) |
+| 순서 보기의 메시지, 구획, 생명주기와 참여자 순서 규칙을 줄 번호와 함께 알린다. 순서 보기에만 놓인 카드의 값 `on=`, `show`, `clear`는 줄 번호가 붙은 오류다. | `test/kinds.test.js`(K-sequence), `test/cards.test.js`(순서 보기 전용 줄, 순서 보기에만 있는 카드, 참여자 순서) |
+| 예제 원본과 문서의 ` ```dap ` 블록이 오류와 경고 없이 읽힌다. | `test/examples.test.js`, ` ```dap ` 블록은 `daphnis md --check`. 설계 문서의 ` ```text ` 예시는 자동 시험이 읽지 않는다(검증 요구사항, 미완료) |
+| 순서 그림 메시지는 적은 순서대로 위에서 아래로 놓인다. | `test/kinds.test.js`(K-sequence) |
+| 구획은 카드 내용을 바꾸지 않는다. 구획 앞, 사이, 뒤의 `show`와 값 줄이 남고, 구획으로 시작하는 장면과 건너뛴 구획뿐인 장면도 멈춘·움직이는 SVG와 HTML로 만들어진다(#179). | `test/kinds.test.js`(K-sequence #179). 재생기가 구획 박자에서 카드를 칠하는 모습은 검증 요구사항, 미완료 |
+| 외래 키 선은 두 열의 행 높이에 붙는다. | `test/cards.test.js` |
+| 같은 테이블의 서로 다른 두 열을 잇는 자기 참조 외래 키가 열 줄에 붙는 고리로 그려지고, 같은 열이나 카드 전체를 잇는 자기 선은 오류다. | `examples/schema.dap`의 빌드(`test/examples.test.js`)와 `test/cards.test.js`(S4). 고리 경로의 기하를 직접 재는 시험은 아직 확인되지 않았다(검증 요구사항, 미완료) |
 
 ## 단점
 

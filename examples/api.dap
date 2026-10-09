@@ -32,18 +32,17 @@ charge.approved -> orders.status "결제 결과"
 create.body -> orders.total_amount "합계 저장"
 read.found -> orders.id "행 읽기"
 
-view main graph down
+view graph down
 
-scene "계약 전체" mode=static
-  wait 1s
+scene "계약 전체"
 
-scene "주문 생성" mode=once
+scene "주문 생성"
   app -> create.body time=700ms
   create.body -> charge.amount time=700ms
   charge.approved -> orders.status time=700ms
   light create.created
 
-scene "주문 조회" mode=once
+scene "주문 조회"
   app -> read.path time=700ms
   read.found -> orders.id time=700ms
   light read.found read.missing

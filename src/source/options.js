@@ -17,7 +17,7 @@ export function readOptions(tokens, { scopes, what, line, ctx }) {
   const tables = scopes.map((s) => optionsOf(s));
   for (const t of tokens) {
     const spec = t.type === 'option' ? tables.map((table) => table[t.key]).find(Boolean) : undefined;
-    if (!spec) ctx.problems.error(line, `${what} takes ${listKeys(scopes)}. Found "${t.key ?? t.value}"`);
+    if (!spec) ctx.problems.error(line, `${what} takes ${listKeys(scopes) || 'no options'}. Found "${t.key ?? t.value}"`);
     else if (Object.hasOwn(found, t.key)) ctx.problems.error(line, `"${t.key}" is written twice`);
     else {
       const value = readValue(t, spec, { line, ctx });
@@ -25,6 +25,15 @@ export function readOptions(tokens, { scopes, what, line, ctx }) {
     }
   }
   return found;
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+/** 도형과 그룹의 색 선택 사항 둘을 모형 값 { tone, appearance }로 읽는다. appearance를 적지 않으면 plain이고, filled와 outline은 칠할 색(tone)이 있어야 한다. */
+export function readLook(found, { line, ctx }) {
+  const appearance = found.appearance ?? VALUES.appearance.default;
+  if (appearance !== 'plain' && found.tone === undefined) ctx.problems.error(line, `appearance=${appearance} needs tone. Add tone=name or use appearance=plain`);
+  return { tone: found.tone, appearance };
 }
 
 // cost: time O(v), heap O(1), stack O(1)

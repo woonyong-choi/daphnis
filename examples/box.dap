@@ -10,14 +10,9 @@ chart spread "응답 시간 분포" box "예시 데이터. 상자는 가운데 5
   row "POST /payments" min=180 q1=260 median=340 q3=520 max=1900
 }
 
-view main plot {
-  spread
-}
+scene "전체 분포"
 
-scene "전체 분포" mode=static
-  wait 1s
-
-scene "퍼짐이 큰 쪽" mode=once
+scene "퍼짐이 큰 쪽"
   light spread "POST /payments"
   wait 1s
   light spread "GET /products"

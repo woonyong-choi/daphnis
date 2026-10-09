@@ -12,7 +12,7 @@ box settle "정산 큐" icon=mq
 value mails "메일 대기" on=mail from=12
 value reports "리포트 대기" on=report from=7
 value images "이미지 대기" on=image from=20
-value settles "정산 대기" on=settle from=0
+value settles "정산 대기" on=settle
 
 on mail mails+1
 on report reports+1
@@ -35,8 +35,8 @@ chart share "큐별 대기 작업" donut "예시 데이터. 대기 작업 수 �
   row "정산" value=settles
 }
 
-view flow graph down "작업 흐름"
-view ratio plot "대기 비율" {
+view graph down "작업 흐름"
+view plot "대기 비율" {
   share
 }
 
@@ -45,7 +45,7 @@ scene "평소 접수" mode=static
   api -> image "썸네일" time=700ms
   api -> report "일간 집계" time=700ms
 
-scene "정산 마감" mode=once keep="mails, reports, images"
+scene "정산 마감" keep="mails, reports, images"
   api -> settle "정산 요청" time=700ms
   api -> settle "정산 요청" time=700ms
   api -> settle "정산 요청" time=700ms

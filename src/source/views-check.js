@@ -1,50 +1,81 @@
-// 보기(view)의 기본값, 구성원 규칙, 카드가 어느 보기에든 보이는지를 확인한다. 보기가 정해지면 view.cardIds와 view.groupIds가 채워진다.
+// 보기(view)의 기본 보기, 구성원 규칙, 카드가 어느 보기에든 보이는지를 확인한다. 보기가 정해지면 view.cardIds와 view.groupIds가 채워진다.
+// 보기는 이름이 없어서 정해진 순서(적은 보기, 이어서 기본 보기)대로 v1, v2, ...를 붙인다. 이 번호는 시간표와 장면이 보기를 가리키는 내부 열쇠다.
 import { SEQUENCE_SHAPES } from './grammar.js';
 import { unknownName } from './problems.js';
 
-// cost: time O(v·(n + g)), heap O(n + g), stack O(1)
-// vars: v = 보기 수, n = 카드 수, g = 그룹 수
+// cost: time O(v·(n + g) + n·e), heap O(n + g), stack O(1)
+// vars: v = 보기 수, n = 카드 수, g = 그룹 수, e = 선 수
 // basis: estimate
 /**
- * 보기를 정한다. 보기 줄이 없으면 기본 보기를 만들고, 구성원 규칙을 확인하고, 카드마다 보기에 놓였는지 본다.
- * 오류가 있으면 모형을 믿을 수 없어 다음 단계가 건너뛴다.
+ * 보기를 정한다. 적은 보기를 먼저 읽고, 어느 보기에도 적히지 않은 카드는 기본 보기가 맡는다(추적은 시간 보기, 선이 없는 차트는 차트 보기, 나머지 그래프로 그릴 수 있는 카드는 그래프 하나).
+ * 적은 보기의 구성원 규칙을 확인하고, 카드마다 보기에 놓였는지 본다. 오류가 있으면 모형을 믿을 수 없어 다음 단계가 건너뛴다.
  */
 export function resolveViews(figure, problems) {
   const cards = figure.nodes.filter((c) => !c.isRejected);
-  if (!figure.views.length) figure.views = implicitViews(figure, cards);
   // refused는 구성원으로 적었지만 이유가 있어 받지 못한 카드다. 이 카드는 이미 오류가 났으니 "어느 보기에도 없다"를 덧붙이지 않는다.
   const context = { figure, cards, byId: new Map(cards.map((c) => [c.id, c])), groups: new Map(figure.groups.map((g) => [g.id, g])), problems, refused: new Set() };
-  const plotOwned = new Set(figure.views.filter((v) => v.strategy === 'plot').flatMap((v) => (v.members ?? []).map((m) => m.id)));
-  for (const view of figure.views) {
-    if (view.isRejected) continue;
-    if (view.strategy === 'graph') resolveGraph(view, context, plotOwned);
-    else resolveSingle(view, context);
+  const written = figure.views.filter((v) => !v.isRejected);
+  const isWhole = (v) => v.strategy === 'graph' && v.members === undefined;
+  for (const view of written) {
+    if (view.strategy !== 'graph') resolveSingle(view, context);
+    else if (!isWhole(view)) resolveGraph(view, context, { plotOwned: new Set() });
   }
+  const listed = new Set([...written.flatMap((v) => v.cardIds ?? []), ...context.refused]);
+  const implicit = implicitSingles(figure, cards, listed);
+  const plotOwned = new Set([...written, ...implicit].filter((v) => v.strategy === 'plot').flatMap((v) => v.cardIds));
+  for (const view of written.filter(isWhole)) resolveGraph(view, context, { plotOwned });
+  const rest = cards.filter((c) => !listed.has(c.id) && c.shape !== 'trace' && !plotOwned.has(c.id));
+  if (rest.length && !written.some(isWhole)) implicit.push(implicitGraph(rest, context, plotOwned));
+  figure.views = [...figure.views, ...implicit.sort((a, b) => a.order - b.order).map(({ order, ...view }) => view)];
+  figure.views.forEach((view, i) => {
+    view.id = `v${i + 1}`;
+  });
   for (const card of cards) {
     if (!figure.views.some((v) => v.cardIds?.includes(card.id)) && !context.refused.has(card.id)) problems.error(card.line, `card "${card.id}" is not shown in any view. Add it to a view`);
   }
 }
 
-// cost: time O(n), heap O(n), stack O(1)
-// vars: n = 카드 수
+// cost: time O(n·e), heap O(n), stack O(1)
+// vars: n = 카드 수, e = 선 수
 // basis: estimate
-// 보기 줄이 없을 때의 기본 보기. 카드가 차트 하나뿐이고 선이 없으면 차트 보기 하나, 아니면 모든 카드를 담는 그래프 하나와 추적 카드마다 시간 보기 하나다. 기본 보기의 이름은 이름 공간에 들지 않아 가리킬 수 없다.
-function implicitViews(figure, cards) {
-  if (!cards.length) return [];
-  const views = [];
-  if (cards.length === 1 && cards[0].shape === 'chart' && !figure.edges.length) {
-    return [{ id: 'main', strategy: 'plot', direction: 'right', label: undefined, members: [{ id: cards[0].id, line: cards[0].line, column: 1 }], isImplicit: true, line: figure.line }];
-  }
-  views.push({ id: 'main', strategy: 'graph', direction: 'right', label: undefined, members: undefined, isImplicit: true, line: figure.line });
-  for (const trace of cards.filter((c) => c.shape === 'trace')) views.push({ id: `time-${trace.id}`, strategy: 'time', direction: 'right', label: undefined, members: [{ id: trace.id, line: trace.line, column: 1 }], isImplicit: true, line: trace.line });
-  return views;
+// 어느 보기에도 적히지 않은 추적은 시간 보기 하나씩, 그룹 밖에서 어느 선에도 닿지 않고 적히지 않은 차트는 차트 보기 하나씩이다. order는 기본 보기끼리 카드 선언 순서로 늘어놓는 자리다.
+function implicitSingles(figure, cards, listed) {
+  const touched = new Set(figure.edges.flatMap((e) => [e.from, e.to]));
+  const make = (card, strategy) => ({ strategy, direction: 'right', label: undefined, members: [{ id: card.id, line: card.line, column: 1 }], cardIds: [card.id], groupIds: [], isImplicit: true, line: card.line, order: cards.indexOf(card) });
+  return cards.flatMap((card) => {
+    if (listed.has(card.id)) return [];
+    if (card.shape === 'trace') return [make(card, 'time')];
+    return card.shape === 'chart' && !card.parent && !touched.has(card.id) ? [make(card, 'plot')] : [];
+  });
+}
+
+// cost: time O(n + g), heap O(n + g), stack O(1)
+// vars: n = 카드 수, g = 그룹 수
+// basis: estimate
+// 적힌 그래프 보기가 맡지 않은 카드를 담는 기본 그래프. 그룹 안 카드는 그 그룹 나무를 온전히 담는다.
+function implicitGraph(rest, context, plotOwned) {
+  const view = { strategy: 'graph', direction: 'right', label: undefined, members: undefined, isImplicit: true, line: rest[0].line, order: context.cards.indexOf(rest[0]) };
+  const roots = new Set(rest.map((card) => topOf(card, context.groups)));
+  resolveGraph(view, context, { plotOwned, roots });
+  return view;
+}
+
+// cost: time O(d), heap O(1), stack O(1)
+// vars: d = 그룹 깊이
+// basis: estimate
+// 카드나 그룹이 들어 있는 가장 바깥 그룹(없으면 자기 자신)의 이름
+function topOf(item, groups) {
+  let top = item;
+  while (top.parent) top = groups.get(top.parent);
+  return top.id;
 }
 
 // cost: time O(m·d + n + g), heap O(n + g), stack O(1)
 // vars: m = 구성원 수, d = 그룹 깊이, n = 카드 수, g = 그룹 수
 // basis: estimate
 // 그래프 보기. 구성원을 적었으면 그 카드와 그룹(안쪽 전부), 적지 않았으면 추적 카드와 차트 보기에 놓인 차트를 뺀 모든 카드다. 그룹 나무는 온전히 담긴다.
-function resolveGraph(view, { figure, cards, byId, groups, problems, refused }, plotOwned) {
+// scope는 { plotOwned, roots }이고 roots를 주면 적지 않은 보기가 그 바깥 이름의 카드와 그룹 나무만 담는다(기본 그래프).
+function resolveGraph(view, { figure, cards, byId, groups, problems, refused }, { plotOwned, roots }) {
   const included = new Set();
   const includedGroups = new Set();
   const addGroupTree = (id) => {
@@ -53,8 +84,9 @@ function resolveGraph(view, { figure, cards, byId, groups, problems, refused }, 
     for (const c of cards) if (c.parent === id) included.add(c.id);
   };
   if (view.members === undefined) {
-    for (const c of cards.filter((card) => !card.parent)) included.add(c.id);
-    for (const g of figure.groups.filter((group) => !group.parent)) addGroupTree(g.id);
+    const isRoot = (id) => !roots || roots.has(id);
+    for (const c of cards.filter((card) => !card.parent && isRoot(card.id))) included.add(c.id);
+    for (const g of figure.groups.filter((group) => !group.parent && isRoot(group.id))) addGroupTree(g.id);
     for (const c of cards) if (c.shape === 'trace' || plotOwned.has(c.id)) included.delete(c.id);
     pruneEmptyGroups(view, { figure, included, includedGroups });
   } else {

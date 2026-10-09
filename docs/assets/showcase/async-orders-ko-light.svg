@@ -104,9 +104,6 @@
   --color-muted: var(--primitive-simple2-muted);
   --color-group-title: var(--primitive-simple2-group-title);
   --color-bg: var(--primitive-simple2-bg);
-  --color-group-1: var(--primitive-simple2-group-1);
-  --color-group-2: var(--primitive-simple2-group-2);
-  --color-group-3: var(--primitive-simple2-group-3);
   --color-node: var(--primitive-simple2-node);
   --color-surface: var(--primitive-simple2-surface);
   --color-card: var(--primitive-simple2-card);
@@ -116,7 +113,7 @@
   --color-border: var(--primitive-simple2-border);
   --color-plate-border: var(--primitive-simple2-plate-border);
   --color-line: var(--primitive-simple2-line);
-  --color-state-active: var(--color-blue-light-stroke);
+  --color-state-active: var(--primitive-simple2-ui-accent);
   --color-state-active-fill: var(--color-category-blue-fill);
   --color-state-active-text: var(--color-blue-light-ink);
   --color-state-on-active: var(--color-category-blue-on);
@@ -131,9 +128,9 @@
   --color-flow-red: var(--color-category-red-fill);
   --color-flow-amber: var(--color-category-yellow-fill);
   --color-ui-link: var(--color-blue-light-ink);
-  --color-ui-focus: var(--color-blue-light-stroke);
+  --color-ui-focus: var(--primitive-simple2-ui-accent);
   --color-ui-progress: var(--color-blue-light-stroke);
-  --color-ui-control-on: var(--color-gray-0);
+  --color-ui-control-on: var(--primitive-simple2-ui-accent);
   --color-data-main: var(--color-category-blue-light-border);
   --color-data-compare: var(--color-category-yellow-fill);
   --color-data-heat-low: var(--color-blue-light-heat-low);
@@ -379,6 +376,7 @@
   --duration-effect-rise: 80ms;
   --duration-effect-hold: 80ms;
   --duration-effect-decay: 240ms;
+  --duration-notice: 2400ms;
   --easing-move: cubic-bezier(0.455, 0.03, 0.515, 0.955);
   --easing-reveal: cubic-bezier(0, 0, 0.58, 1);
   --simple2-heading: 36px;
@@ -406,15 +404,22 @@
   --simple2-canvas-corner: 18px;
   --simple2-canvas-fill: var(--primitive-simple2-canvas);
   --simple2-symbol-stroke: 1.5px;
-  --simple2-selection-fill: var(--primitive-simple2-selection-fill);
-  --simple2-selection-ink: var(--primitive-simple2-selection-ink);
-  --simple2-tab-fill: var(--primitive-simple2-tab-fill);
+  --simple2-segment-track: rgba(0, 25, 61, 0.1);
+  --simple2-segment-ink: rgba(0, 4, 9, 0.78);
+  --simple2-segment-hover: rgba(0, 25, 61, 0.08);
+  --simple2-segment-on: var(--primitive-simple2-ui-accent);
+  --simple2-segment-on-hover: var(--primitive-simple2-ui-accent-hover);
+  --simple2-segment-on-ink: var(--primitive-simple2-on-ui-accent);
+  --simple2-segment-radius: 12px;
+  --simple2-segment-item-radius: 9px;
+  --simple2-segment-pad: 4px;
   --simple2-label-size: 15px;
   --simple2-detail-size: 13px;
   --simple2-micro-size: 11px;
   --simple2-surface-edge: var(--primitive-simple2-plate-border);
   --simple2-hover-fill: var(--primitive-simple2-hover-fill);
   --simple2-row-selection: var(--primitive-simple2-row-selection);
+  --simple2-card-active-fill: var(--primitive-simple2-card-active-fill);
   --simple2-data-line: var(--primitive-simple2-data-line);
   --simple2-chart-hole: var(--primitive-simple2-chart-hole);
   --primitive-simple2-fg: #303336;
@@ -429,15 +434,13 @@
   --primitive-simple2-shadow: 0 2px 8px rgba(0,0,0,.10), 0 0 2px rgba(0,0,0,.10);
   --primitive-simple2-node-shadow: drop-shadow(0px 1px 1px rgba(0,0,0,.07));
   --primitive-simple2-group-title: #566170;
-  --primitive-simple2-canvas: #f2f5f7;
-  --primitive-simple2-selection-fill: #e3e4e8;
-  --primitive-simple2-selection-ink: #303336;
-  --primitive-simple2-tab-fill: #f5f5f7;
-  --primitive-simple2-group-1: #eef0f3;
-  --primitive-simple2-group-2: #e7eaee;
-  --primitive-simple2-group-3: #e0e4e9;
+  --primitive-simple2-canvas: #f5f5f6;
+  --primitive-simple2-ui-accent: #3c84f3;
+  --primitive-simple2-ui-accent-hover: #3779e0;
+  --primitive-simple2-on-ui-accent: #ffffff;
   --primitive-simple2-hover-fill: #eef4fc;
   --primitive-simple2-row-selection: #cee2fd;
+  --primitive-simple2-card-active-fill: #f3f7fd;
   --primitive-simple2-line: #9da5b0;
   --primitive-simple2-data-line: #737e8b;
   --primitive-simple2-dark-bg: #26272b;
@@ -448,10 +451,8 @@
   --primitive-simple2-dark-separator: #454850;
   --primitive-simple2-dark-hover: #343e50;
   --primitive-simple2-dark-selection: #274174;
+  --primitive-simple2-dark-card-active-fill: #333a48;
   --primitive-simple2-dark-muted: #a9adb6;
-  --primitive-simple2-dark-group-1: #2c2d32;
-  --primitive-simple2-dark-group-2: #32343a;
-  --primitive-simple2-dark-group-3: #393c43;
   --primitive-simple2-dark-line: #7f8793;
   --primitive-simple2-dark-data-line: #acb4c0;
   --primitive-simple2-light-outline: #818181;
@@ -685,9 +686,6 @@
   --color-muted: var(--primitive-simple2-dark-muted);
   --color-group-title: var(--primitive-simple2-dark-muted);
   --color-bg: var(--primitive-simple2-dark-bg);
-  --color-group-1: var(--primitive-simple2-dark-group-1);
-  --color-group-2: var(--primitive-simple2-dark-group-2);
-  --color-group-3: var(--primitive-simple2-dark-group-3);
   --color-node: var(--primitive-simple2-dark-node);
   --color-surface: var(--primitive-simple2-dark-card);
   --color-card: var(--primitive-simple2-dark-card);
@@ -697,7 +695,7 @@
   --color-border: var(--primitive-simple2-border);
   --color-plate-border: var(--primitive-simple2-dark-edge);
   --color-line: var(--primitive-simple2-dark-line);
-  --color-state-active: var(--color-blue-dark-stroke);
+  --color-state-active: var(--primitive-simple2-ui-accent);
   --color-state-active-fill: var(--color-category-blue-fill);
   --color-state-active-text: var(--color-blue-dark-ink);
   --color-state-on-active: var(--color-category-blue-on);
@@ -706,9 +704,9 @@
   --color-state-warning: var(--color-category-yellow-dark-border);
   --color-state-glow: var(--color-blue-dark-fill);
   --color-ui-link: var(--color-blue-dark-ink);
-  --color-ui-focus: var(--color-blue-dark-stroke);
+  --color-ui-focus: var(--primitive-simple2-ui-accent);
   --color-ui-progress: var(--color-blue-dark-stroke);
-  --color-ui-control-on: var(--color-gray-776);
+  --color-ui-control-on: var(--primitive-simple2-ui-accent);
   --color-data-main: var(--color-category-blue-dark-border);
   --color-data-heat-low: var(--color-blue-dark-heat-low);
   --color-data-heat-high: var(--color-blue-dark-heat-high);
@@ -760,12 +758,13 @@
   --simple2-node-shadow: var(--primitive-simple2-node-shadow);
   --simple2-separator: var(--primitive-simple2-dark-separator);
   --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
-  --simple2-selection-fill: var(--primitive-simple2-dark-edge);
-  --simple2-selection-ink: var(--color-gray-0);
-  --simple2-tab-fill: var(--primitive-simple2-dark-node);
+  --simple2-segment-track: rgba(255, 255, 255, 0.12);
+  --simple2-segment-ink: rgba(255, 255, 255, 0.78);
+  --simple2-segment-hover: rgba(255, 255, 255, 0.1);
   --simple2-surface-edge: var(--primitive-simple2-dark-edge);
   --simple2-hover-fill: var(--primitive-simple2-dark-hover);
   --simple2-row-selection: var(--primitive-simple2-dark-selection);
+  --simple2-card-active-fill: var(--primitive-simple2-dark-card-active-fill);
   --simple2-data-line: var(--primitive-simple2-dark-data-line);
   --color-figure-icon: var(--color-blue-dark-stroke);
   --color-figure-icon-tile: var(--color-blue-dark-fill);
@@ -845,7 +844,8 @@
   --color-flow-ink-gray: var(--color-gray-933);
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
-/* 글 위계는 셋이다: 제목(simple2.label-size, semibold), 핵심 필드(detail-size), 메타(micro-size). 크기는 measure/sizes.js의 STYLE이 같은 토큰으로 잰다. */
+/* 카드 안 글(label, sub, meta, cell, item, row)의 기준 점(text-anchor)은 글이 정한다(measure/texts.js의 anchor). 여기서는 글꼴과 색만 정한다. */
+/* 글 위계는 셋이다: 제목(simple2.label-size 15, semibold), 문장과 이름표(detail-size 13: 부제, 선 라벨, 메모, 이동 글, 카드 줄, 제약, 형식), 작은 표시(micro-size 11: 번호, 태그, 표식, 키, 눈금, 단위). 크기는 measure/texts.js의 STYLE이 같은 토큰으로 잰다. */
 .fl text {
   font-family: var(--font-figure-sans);
   letter-spacing: var(--tracking-text);
@@ -854,27 +854,25 @@
 .fl .label {
   font-size: var(--simple2-label-size);
   font-weight: var(--weight-semibold);
-  text-anchor: middle;
   fill: var(--color-fg);
 }
 
 .fl .sub {
-  font-size: var(--simple2-micro-size);
-  text-anchor: middle;
+  font-size: var(--simple2-detail-size);
   fill: var(--color-muted);
 }
 
 .fl .frame {
-  font-size: var(--simple2-micro-size);
+  font-size: var(--simple2-detail-size);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-frame);
   fill: var(--color-group-title);
 }
 
 .fl .edgelabel {
-  font-size: var(--simple2-micro-size);
+  font-size: var(--simple2-detail-size);
   text-anchor: middle;
-  fill: var(--color-muted);
+  fill: var(--fx-ink-rest);
 }
 
 .fl .row {
@@ -888,9 +886,9 @@
   font-size: var(--simple2-detail-size);
 }
 
-/* 메모와 구획 제목 같은 덧붙임 글은 메타 크기다. */
+/* 메모와 구획 제목 같은 덧붙임 글은 문장이라 같은 크기다. */
 .fl .meta {
-  font-size: var(--simple2-micro-size);
+  font-size: var(--simple2-detail-size);
   fill: var(--color-fg);
 }
 
@@ -908,33 +906,29 @@
   font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-tag);
-  text-anchor: middle;
   fill: var(--color-fg);
 }
 
 .fl .mark {
   font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
-  text-anchor: end;
   fill: var(--color-state-active-text);
 }
 
-/* 값 카드 줄의 값 글자. 줄의 이름(row)은 카드 층이 그리고 값은 오른쪽 끝에 얹힌다. 핵심 필드라 필드 크기다. */
+/* 값 카드 줄의 값 글자. 줄의 이름(row)은 카드 층이 그리고 값은 오른쪽 끝에 얹힌다. 이름과 같은 크기이고 굵기만 다르다. */
 .fl .value {
   font-size: var(--simple2-detail-size);
   font-weight: var(--weight-semibold);
-  text-anchor: end;
   fill: var(--color-fg);
 }
 
 .fl .mini {
-  font-size: var(--simple2-micro-size);
-  text-anchor: middle;
+  font-size: var(--simple2-detail-size);
   fill: var(--color-fg);
 }
 
 .fl .chip {
-  font-size: var(--simple2-micro-size);
+  font-size: var(--simple2-detail-size);
   text-anchor: middle;
 }
 
@@ -945,7 +939,6 @@
 
 .fl .item {
   font-size: var(--simple2-detail-size);
-  text-anchor: middle;
   fill: var(--color-fg);
 }
 
@@ -953,21 +946,15 @@
   fill: var(--color-muted);
 }
 
-.fl .cell.type,
-.fl .cell.rule {
+/* 열 형식(타입)은 코드 글이라 코드 글꼴의 오른쪽 열이다. 제약 줄(NOT NULL, ON DELETE 등)은 문장이라 일반 글꼴이다. 둘 다 이름보다 옅다. */
+.fl .cell.type {
   font-family: var(--font-figure-mono);
   letter-spacing: normal;
-  font-size: var(--simple2-micro-size);
   fill: var(--color-muted);
 }
 
-.fl .cell.type {
-  text-anchor: end;
-}
-
-.fl .fl-stroke {
-  stroke: var(--color-outline);
-  stroke-width: var(--border-thin);
+.fl .cell.rule {
+  fill: var(--color-muted);
 }
 
 /* 순서 보기의 메시지, 메모, 구획, 활성 막대는 자기 장면이 보일 때만 보인다. 자리는 늘 같아 판 크기가 변하지 않는다. */
@@ -976,7 +963,7 @@
 }
 
 .fl .fl-edge {
-  color: var(--color-line);
+  color: var(--fx-line-rest);
 }
 
 .fl .fl-path {
@@ -985,32 +972,18 @@
   stroke-width: var(--border-edge);
 }
 
-/* 머리 면은 중립 면이다. 파랑은 선택되거나 켜진 칸(part-bg)만 쓰고 정적 머리는 선택처럼 보이지 않는다. */
-.fl .schema-heading {
-  fill: var(--color-surface);
-}
-
+/* 열 키(PK, FK, UNQ)는 작은 표시이고 글자색이다. 파랑은 켜진 상태에만 쓴다. */
 .fl .cell .key {
   font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
-  fill: var(--color-state-active-text);
+  fill: var(--color-fg);
 }
 
+/* 그룹은 면이 없다(투명). 경계와 제목만 있고, 깊이에 따라 회색 면을 겹치지 않는다. 고른 색의 면과 경계는 draw/paint.js가 쓴 색에만 더한다. */
 .fl .frame-box {
-  fill: var(--color-group-1);
-  stroke: none;
-}
-
-.fl .frame-box.d2 {
-  fill: var(--color-group-2);
-}
-
-.fl .frame-box.d3 {
-  fill: var(--color-group-3);
-}
-
-.fl .frame-box.dashed {
+  fill: none;
   stroke: var(--color-line);
+  stroke-width: var(--border-thin);
 }
 
 .fl .lifeline {
@@ -1020,18 +993,21 @@
 }
 
 .fl .note-box {
-  fill: var(--color-surface);
+  fill: var(--color-node);
   stroke: var(--color-line);
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
 
+/* 판 위 면은 모두 같은 중립 흰 면과 같은 경계다: 선 라벨 알약, 카드 안 틀. */
 .fl .pill {
-  fill: var(--color-card);
-  stroke: var(--simple2-separator);
+  fill: var(--color-node);
+  stroke: var(--fx-edge-rest);
 }
 
 .fl .part-bg {
-  fill: transparent;
+  --fx-face: transparent;
+  --fx-face-on: var(--fx-row);
+  fill: var(--fx-face);
 }
 
 .fl .col-line {
@@ -1040,7 +1016,9 @@
 }
 
 .fl .grid-cell {
-  fill: var(--color-node);
+  --fx-face: var(--color-node);
+  --fx-face-on: var(--fx-row);
+  fill: var(--fx-face);
   stroke: var(--simple2-separator);
   stroke-width: var(--border-thin);
 }
@@ -1052,18 +1030,24 @@
 }
 
 .fl .grid-cell.gap {
-  fill: var(--color-card);
+  --fx-face: var(--color-card);
   stroke: var(--simple2-separator);
 }
 
 .fl .grid-cell.empty {
-  fill: none;
+  --fx-face: none;
   stroke: var(--color-line);
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
 
 .fl .fl-edge.mark {
-  color: var(--color-fg);
+  --fx-line-rest: var(--color-fg);
+}
+
+/* 카드 안 틀: 내용이 있을 때 보이는 흰 면과 가는 경계. 고른 카드 모습(face)은 이 위에 옅은 면이나 경계를 더한다. */
+.fl .face {
+  fill: none;
+  stroke: none;
 }
 
 /* 도형 윗줄과 그룹 제목 줄의 장식: 글자 배지, 아이콘 */
@@ -1088,7 +1072,7 @@
   color: inherit;
 }
 
-/* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
+/* 선 번호 원. 흑백 번호이고 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
 .fl .number-pill {
   fill: var(--color-figure-number-fill);
 }
@@ -1102,7 +1086,7 @@
 
 /* 도형은 그림자 없는 평면이다. 그림자는 떠 있는 메뉴 같은 조작에만 둔다. */
 .fl :where(.fl-node) > .fl-stroke {
-  stroke: var(--simple2-surface-edge);
+  stroke: var(--fx-edge-rest);
   stroke-width: var(--simple2-node-stroke);
 }
 
@@ -1118,15 +1102,16 @@
   stroke-linejoin: round;
 }
 
-/* 화살촉과 몸통은 같은 관계선 묶음의 색을 상속한다. 마커 정의는 각 묶음 안에 있어 모든 브라우저에서 상태색이 같다. */
-.fl .fl-arrowhead {
+/* 화살촉과 몸통은 같은 소유자의 색을 상속한다(draw/arrow.js). 화살촉은 채운 삼각형이다. 연결선은 선 묶음이, 차트 방향선은 역할 class(.arrow-main 등, chart.css)가 소유자다.
+   HTML 문서의 차트 마커 정의는 판 SVG 밖의 정의 전용 SVG에 있어 `.fl` 아래가 아니므로 이 규칙은 `.fl` 범위를 걸지 않는다. */
+.fl-arrowhead {
   fill: currentColor;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-/* 조작 아이콘과 달리 의미 아이콘은 역할색으로 채운 실루엣과 그 안의 밝은 세부를 함께 가진다. */
+/* 의미 아이콘은 역할색으로 채운 실루엣과 그 안의 밝은 세부를 함께 가진다. 기술 브랜드도 자기 개념의 역할(icons/symbols.js)을 따른다. */
 .fl .fl-symbol-glyph {
   fill: none;
   stroke: currentColor;
@@ -1157,17 +1142,9 @@
   --symbol-detail: var(--color-figure-icon-service-surface);
 }
 
-.fl .fl-symbol-service .symbol-face {
-  fill: currentColor;
-}
-
 .fl .fl-symbol-data {
   color: var(--color-figure-icon-data-ink);
   --symbol-detail: var(--color-figure-icon-data-surface);
-}
-
-.fl .fl-symbol-data .symbol-face {
-  fill: currentColor;
 }
 
 .fl .fl-symbol-access {
@@ -1175,31 +1152,69 @@
   --symbol-detail: var(--color-figure-icon-access-surface);
 }
 
-.fl .fl-symbol-access .symbol-face {
-  fill: currentColor;
-}
-
 .fl .fl-symbol-person {
   color: var(--color-figure-icon-person-ink);
   --symbol-detail: var(--color-figure-icon-person-surface);
 }
 
-.fl .fl-symbol-person .symbol-face {
+.fl .symbol-face {
   fill: currentColor;
 }
 
-.fl .fl-symbol-brand {
-  color: var(--color-figure-icon-brand-ink);
-  --symbol-detail: var(--color-figure-icon-brand-surface);
+.fl .symbol-detail {
+  fill: var(--symbol-detail);
+  stroke: none;
 }
 
-.fl .fl-symbol-brand .symbol-face {
-  fill: currentColor;
+/* 효과 한 벌: 켜짐과 평소의 모습을 정하는 유일한 정의다. 움직이는 SVG(animate/animator.js)의 keyframes와 HTML 재생기의 `.on` 규칙이 같은 `--fx-*`를 읽으므로 두 출력과 정지 그림이 늘 같다.
+   - 켜짐(on): --fx-edge 윤곽·선·알약 테두리, --fx-ink 알약 글자, --fx-row 표 줄과 격자 칸의 면, --fx-face-on 요소의 켜진 면(도형은 아래), --fx-flash 값이 바뀐 순간의 면.
+   - 평소(rest): --fx-edge-rest 도형과 알약의 경계, --fx-ink-rest 알약 글자, --fx-line-rest 선, --fx-face 요소의 평소 면.
+   효과는 도형이 고른 색(tone)이나 표현(appearance)과 상관없다. 고른 색은 평소 값(--fx-face, --fx-edge-rest)만 바꾸고(draw/paint.js), 켜진 동안은 강조 윤곽에 자리를 내준다. */
+.fl {
+  --fx-edge: var(--color-state-active);
+  --fx-ink: var(--color-state-active-text);
+  --fx-row: var(--simple2-row-selection);
+  --fx-flash: var(--simple2-row-selection);
+  --fx-edge-rest: var(--simple2-surface-edge);
+  --fx-ink-rest: var(--color-muted);
+  --fx-line-rest: var(--color-line);
 }
 
-/* `light`가 명시한 도형만 윤곽을 그대로 두고 옅은 면을 바꾼다(명시한 상태의 고유 역할). 점이 닿은 도형은 면이 아니라 테두리 후광(.fl-pulse)만 쓴다. 색을 직접 고른 도형(ps-)의 면과 윤곽은 덮지 않는다. */
-.fl .fl-node.on > .fl-stroke:not([fill="none"], [class*="ps-"]) {
-  fill: color-mix(in srgb, var(--simple2-hover-fill) 70%, var(--color-node));
+/* 도형의 평소 면과 켜진 면. 옅은 면으로 고른 도형(filled)은 켜져도 면이 같다. 면이 없는 윤곽(fill='none')과 점은 자기 면이 없거나 자기 색이다. */
+.fl .fl-node {
+  --fx-face: var(--color-node);
+  --fx-face-on: var(--simple2-card-active-fill);
+}
+
+.fl .fl-node.ap-filled {
+  --fx-face-on: var(--fx-face);
+}
+
+.fl .fl-shape-start {
+  --fx-face: var(--color-fg);
+}
+
+.fl .fl-node > .fl-stroke[fill='none'] {
+  --fx-face: none;
+  --fx-face-on: none;
+}
+
+.fl .fl-node.ap-filled > .fl-stroke:not([fill='none']) {
+  fill: var(--fx-face);
+}
+
+/* `light`가 명시한 도형: 윤곽이 강조 색이 되고 면은 옅은 강조 면이다(옅은 면으로 고른 도형은 면을 그대로 둔다). 점이 닿은 도형은 도착 후광(.fl-pulse)만 쓴다. */
+.fl .fl-node.on > .fl-stroke {
+  stroke: var(--fx-edge);
+}
+
+.fl .fl-node.on > .fl-stroke:not([fill='none']) {
+  fill: var(--fx-face-on);
+}
+
+/* 켜진 표 줄(칸)과 격자 칸의 면. 모든 카드가 같은 규칙이다. */
+.fl .fl-part.on :is(.part-bg, .grid-cell) {
+  fill: var(--fx-face-on);
 }
 
 /* 도형에 마우스를 올려도 면이나 선이 켜지지 않는다(장식용 호버 활성 없음). 키보드 초점은 같은 외부 형상 위의 초점 표시이고 윤곽을 두 겹으로 만들지 않는다. */
@@ -1214,18 +1229,13 @@
   stroke-width: var(--simple2-focus-width);
 }
 
-.fl .symbol-detail {
-  fill: var(--symbol-detail);
-  stroke: none;
-}
-
 /* 값이 바뀔 때 켜지는 배경 면. 도형과 같은 윤곽을 쓰고 테두리를 더하지 않는다. */
 .fl .fl-flash-face {
   fill-opacity: var(--opacity-range);
 }
 
 .fl .fl-flash {
-  fill: var(--simple2-row-selection);
+  fill: var(--fx-flash);
   stroke: none;
   pointer-events: none;
 }
@@ -1239,7 +1249,7 @@
 /* 점이 도형에 닿을 때의 테두리 후광: 도형 윤곽과 같은 모양의 겹침 선이다. 면을 칠하지 않고 선 굵기가 윤곽과 같아 도형이 커지지 않는다. 불투명도(80/80/240ms)는 SMIL이나 재생기가 정한다. */
 .fl .fl-pulse {
   fill: none;
-  stroke: var(--color-state-active);
+  stroke: var(--fx-edge);
   stroke-width: var(--simple2-node-stroke);
   pointer-events: none;
 }
@@ -1259,36 +1269,36 @@
 }
 
 .fl .fl-fragment-heading {
-  fill: var(--color-card);
+  fill: var(--color-node);
 }
 
 .fl .fl-fragment-label {
   font-weight: var(--weight-semibold);
 }
 
-@keyframes a0 { 0%,100% { fill: var(--color-node) } }
+@keyframes a0 { 0%,100% { fill: var(--fx-face); stroke: var(--fx-edge-rest) } }
 .fl .a0 { animation: a0 12.4s infinite linear; }
 @keyframes a1 { 0%,100% { opacity: 1; visibility: visible } }
 .fl .a1 { animation: a1 12.4s infinite linear; }
 @keyframes a2 { 0%,100% { opacity: 1 } }
 .fl .a2 { animation: a2 12.4s infinite linear; }
-@keyframes a3 { 0%,11.511% { color: var(--color-state-active) } 11.511%,16.128% { color: var(--color-line) } 16.129%,27.64% { color: var(--color-state-active) } 27.64%,32.257% { color: var(--color-line) } 32.258%,43.769% { color: var(--color-state-active) } 43.769%,48.386% { color: var(--color-line) } 48.387%,59.898% { color: var(--color-state-active) } 59.898%,64.515% { color: var(--color-line) } 64.516%,76.027% { color: var(--color-state-active) } 76.027%,80.644% { color: var(--color-line) } 80.645%,92.156% { color: var(--color-state-active) } 92.157%,100% { color: var(--color-line) } }
+@keyframes a3 { 0%,11.511% { color: var(--fx-edge) } 11.511%,16.128% { color: var(--fx-line-rest) } 16.129%,27.64% { color: var(--fx-edge) } 27.64%,32.257% { color: var(--fx-line-rest) } 32.258%,43.769% { color: var(--fx-edge) } 43.769%,48.386% { color: var(--fx-line-rest) } 48.387%,59.898% { color: var(--fx-edge) } 59.898%,64.515% { color: var(--fx-line-rest) } 64.516%,76.027% { color: var(--fx-edge) } 76.027%,80.644% { color: var(--fx-line-rest) } 80.645%,92.156% { color: var(--fx-edge) } 92.157%,100% { color: var(--fx-line-rest) } }
 .fl .a3 { animation: a3 12.4s infinite linear; }
-@keyframes a4 { 0%,4.031% { color: var(--color-line) } 4.032%,12.935% { color: var(--color-state-active) } 12.936%,20.16% { color: var(--color-line) } 20.161%,29.064% { color: var(--color-state-active) } 29.065%,36.29% { color: var(--color-line) } 36.29%,45.193% { color: var(--color-state-active) } 45.194%,52.419% { color: var(--color-line) } 52.419%,61.322% { color: var(--color-state-active) } 61.323%,68.548% { color: var(--color-line) } 68.548%,77.451% { color: var(--color-state-active) } 77.452%,84.677% { color: var(--color-line) } 84.677%,93.58% { color: var(--color-state-active) } 93.581%,100% { color: var(--color-line) } }
+@keyframes a4 { 0%,4.031% { color: var(--fx-line-rest) } 4.032%,12.935% { color: var(--fx-edge) } 12.936%,20.16% { color: var(--fx-line-rest) } 20.161%,29.064% { color: var(--fx-edge) } 29.065%,36.29% { color: var(--fx-line-rest) } 36.29%,45.193% { color: var(--fx-edge) } 45.194%,52.419% { color: var(--fx-line-rest) } 52.419%,61.322% { color: var(--fx-edge) } 61.323%,68.548% { color: var(--fx-line-rest) } 68.548%,77.451% { color: var(--fx-edge) } 77.452%,84.677% { color: var(--fx-line-rest) } 84.677%,93.58% { color: var(--fx-edge) } 93.581%,100% { color: var(--fx-line-rest) } }
 .fl .a4 { animation: a4 12.4s infinite linear; }
-@keyframes a5 { 0%,8.064% { color: var(--color-line) } 8.065%,19.868% { color: var(--color-state-active) } 19.869%,24.193% { color: var(--color-line) } 24.194%,35.997% { color: var(--color-state-active) } 35.998%,40.322% { color: var(--color-line) } 40.323%,52.126% { color: var(--color-state-active) } 52.127%,56.451% { color: var(--color-line) } 56.452%,68.255% { color: var(--color-state-active) } 68.256%,72.58% { color: var(--color-line) } 72.581%,84.384% { color: var(--color-state-active) } 84.385%,88.709% { color: var(--color-line) } 88.71%,100% { color: var(--color-state-active) } }
+@keyframes a5 { 0%,8.064% { color: var(--fx-line-rest) } 8.065%,19.868% { color: var(--fx-edge) } 19.869%,24.193% { color: var(--fx-line-rest) } 24.194%,35.997% { color: var(--fx-edge) } 35.998%,40.322% { color: var(--fx-line-rest) } 40.323%,52.126% { color: var(--fx-edge) } 52.127%,56.451% { color: var(--fx-line-rest) } 56.452%,68.255% { color: var(--fx-edge) } 68.256%,72.58% { color: var(--fx-line-rest) } 72.581%,84.384% { color: var(--fx-edge) } 84.385%,88.709% { color: var(--fx-line-rest) } 88.71%,100% { color: var(--fx-edge) } }
 .fl .a5 { animation: a5 12.4s infinite linear; }
-@keyframes a6 { 0%,12.096% { color: var(--color-line) } 12.097%,25.336% { color: var(--color-state-active) } 25.337%,28.225% { color: var(--color-line) } 28.226%,41.465% { color: var(--color-state-active) } 41.466%,44.354% { color: var(--color-line) } 44.355%,57.594% { color: var(--color-state-active) } 57.595%,60.483% { color: var(--color-line) } 60.484%,73.723% { color: var(--color-state-active) } 73.724%,76.612% { color: var(--color-line) } 76.613%,89.852% { color: var(--color-state-active) } 89.853%,92.741% { color: var(--color-line) } 92.742%,100% { color: var(--color-state-active) } }
+@keyframes a6 { 0%,12.096% { color: var(--fx-line-rest) } 12.097%,25.336% { color: var(--fx-edge) } 25.337%,28.225% { color: var(--fx-line-rest) } 28.226%,41.465% { color: var(--fx-edge) } 41.466%,44.354% { color: var(--fx-line-rest) } 44.355%,57.594% { color: var(--fx-edge) } 57.595%,60.483% { color: var(--fx-line-rest) } 60.484%,73.723% { color: var(--fx-edge) } 73.724%,76.612% { color: var(--fx-line-rest) } 76.613%,89.852% { color: var(--fx-edge) } 89.853%,92.741% { color: var(--fx-line-rest) } 92.742%,100% { color: var(--fx-edge) } }
 .fl .a6 { animation: a6 12.4s infinite linear; }
-@keyframes a7 { 0%,16.542% { color: var(--color-line) } 16.543%,100% { color: var(--color-state-active) } }
+@keyframes a7 { 0%,16.542% { color: var(--fx-line-rest) } 16.543%,100% { color: var(--fx-edge) } }
 .fl .a7 { animation: a7 12.4s infinite linear; }
-@keyframes a8 { 0%,100% { color: var(--color-state-active) } }
+@keyframes a8 { 0%,100% { color: var(--fx-edge) } }
 .fl .a8 { animation: a8 12.4s infinite linear; }
-@keyframes a9 { 0%,1.209% { color: var(--color-line) } 1.21%,23.79% { color: var(--color-state-active) } 23.79%,25.402% { color: var(--color-line) } 25.403%,47.983% { color: var(--color-state-active) } 47.984%,49.596% { color: var(--color-line) } 49.597%,72.177% { color: var(--color-state-active) } 72.177%,73.79% { color: var(--color-line) } 73.79%,96.37% { color: var(--color-state-active) } 96.371%,100% { color: var(--color-line) } }
+@keyframes a9 { 0%,1.209% { color: var(--fx-line-rest) } 1.21%,23.79% { color: var(--fx-edge) } 23.79%,25.402% { color: var(--fx-line-rest) } 25.403%,47.983% { color: var(--fx-edge) } 47.984%,49.596% { color: var(--fx-line-rest) } 49.597%,72.177% { color: var(--fx-edge) } 72.177%,73.79% { color: var(--fx-line-rest) } 73.79%,96.37% { color: var(--fx-edge) } 96.371%,100% { color: var(--fx-line-rest) } }
 .fl .a9 { animation: a9 12.4s infinite linear; }
-@keyframes a10 { 0%,2.419% { color: var(--color-line) } 2.419%,22.58% { color: var(--color-state-active) } 22.581%,42.741% { color: var(--color-line) } 42.742%,73.333% { color: var(--color-state-active) } 73.334%,83.064% { color: var(--color-line) } 83.065%,100% { color: var(--color-state-active) } }
+@keyframes a10 { 0%,2.419% { color: var(--fx-line-rest) } 2.419%,22.58% { color: var(--fx-edge) } 22.581%,42.741% { color: var(--fx-line-rest) } 42.742%,73.333% { color: var(--fx-edge) } 73.334%,83.064% { color: var(--fx-line-rest) } 83.065%,100% { color: var(--fx-edge) } }
 .fl .a10 { animation: a10 12.4s infinite linear; }
-.fl .sa0 { fill: var(--color-node); }
+.fl .sa0 { fill: var(--fx-face); stroke: var(--fx-edge-rest); }
 .fl .sa1 { opacity: 1; visibility: visible; }
 .fl .sa2 { opacity: 1; }
 .fl .fl-still { display: none; }
@@ -1301,15 +1311,15 @@
 <rect x="0.5" y="0.5" width="959" height="545" rx="18" fill="var(--simple2-canvas-fill)"/>
 <g class="fl-motion" transform="translate(124.2 0)">
 
-<g id="n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹" data-id="web"><rect x="28" y="28" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(57.7 41.5) scale(0.83333)"><rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path class="symbol-line" d="M8 21h8M12 17v4"/></g></g><text x="92" y="56.9" class="label">웹</text></g>
-<g id="n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="앱" data-id="app"><rect x="160" y="28" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(189.7 41.5) scale(0.83333)"><rect class="symbol-face" x="6" y="2" width="12" height="20" rx="3"/><path class="symbol-cut" d="M10 5h4M10 19h4"/></g></g><text x="224" y="56.9" class="label">앱</text></g>
-<g id="n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="제휴사" data-id="partner"><rect x="292" y="28" width="102" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(310 41.5) scale(0.83333)"><path class="symbol-face" d="M4 21V5l8-3 8 3v16Z"/><path class="symbol-cut" d="M8 21V10h8v11"/></g></g><text x="357" y="56.9" class="label">제휴사</text></g>
-<g id="n-3" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="배치" data-id="batch"><rect x="426" y="28" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(449.3 41.5) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="490" y="56.9" class="label">배치</text></g>
-<g id="n-4" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="주문 API" data-id="api"><rect x="139.6" y="135" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="139.6" y="135" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.11511;0.12157;0.12802;0.12936;0.13386;0.13581;0.14226;0.14737;0.16162;0.19869;0.20514;0.21159;0.23095;0.25337;0.25982;0.26627;0.2764;0.27871;0.28286;0.28563;0.28931;0.29065;0.29515;0.2971;0.30355;0.30866;0.32291;0.35998;0.36643;0.37288;0.39224;0.41466;0.42111;0.42756;0.43769;0.44;0.44415;0.44692;0.4506;0.45194;0.45644;0.45839;0.46484;0.46995;0.4842;0.52127;0.52772;0.53417;0.55353;0.57595;0.5824;0.58885;0.59898;0.60129;0.60544;0.60821;0.61189;0.61323;0.61773;0.61968;0.62613;0.63124;0.64549;0.68256;0.68901;0.69546;0.71482;0.73724;0.74369;0.75014;0.76027;0.76258;0.76673;0.7695;0.77318;0.77452;0.77902;0.78097;0.78742;0.79253;0.80678;0.84385;0.8503;0.85675;0.87611;0.89853;0.90498;0.91144;0.92157;0.92387;0.92802;0.93079;0.93447;0.93581;0.94031;0.94226;0.94871;0.95382;0.96807;1" values="0;0;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0"/></rect><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(188 148.5) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="241.6" y="163.9" class="label">주문 API</text><rect x="149.6" y="182" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card a2"/><g id="n-4-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M155.6 182H299.6a6 6 0 0 1 6 6V208a6 6 0 0 1 -6 6H155.6a6 6 0 0 1 -6 -6V188a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="4"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.11511;0.12157;0.12802;0.12936;0.13386;0.13581;0.14226;0.14737;0.16162;0.19869;0.20514;0.21159;0.23095;0.25337;0.25982;0.26627;0.2764;0.27871;0.28286;0.28563;0.28931;0.29065;0.29515;0.2971;0.30355;0.30866;0.32291;0.35998;0.36643;0.37288;0.39224;0.41466;0.42111;0.42756;0.43769;0.44;0.44415;0.44692;0.4506;0.45194;0.45644;0.45839;0.46484;0.46995;0.4842;0.52127;0.52772;0.53417;0.55353;0.57595;0.5824;0.58885;0.59898;0.60129;0.60544;0.60821;0.61189;0.61323;0.61773;0.61968;0.62613;0.63124;0.64549;0.68256;0.68901;0.69546;0.71482;0.73724;0.74369;0.75014;0.76027;0.76258;0.76673;0.7695;0.77318;0.77452;0.77902;0.78097;0.78742;0.79253;0.80678;0.84385;0.8503;0.85675;0.87611;0.89853;0.90498;0.91144;0.92157;0.92387;0.92802;0.93079;0.93447;0.93581;0.94031;0.94226;0.94871;0.95382;0.96807;1" values="0;0;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0"/></path><text x="157.6" y="202.7" class="row">접수 수</text></g></g>
-<g id="n-5" class="fl-node fl-shape-queue" tabindex="0" role="img" aria-label="주문 이벤트" data-id="q"><rect x="131.6" y="284" width="192" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="149.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="169.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="189.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="209.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="229.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="249.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="269.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="289.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="149.6" y="343" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="169.6" y="343" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="131.6" y="284" width="192" height="85" rx="8" class="fl-flash fl-flash-face" opacity="0" data-vf="0"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.00645;0.0121;0.0129;0.01714;0.01855;0.02419;0.025;0.02621;0.02923;0.03065;0.03226;0.03629;0.0371;0.03831;0.04133;0.04274;0.04435;0.04919;0.05645;0.06855;0.12097;0.12742;0.13387;0.15323;0.25403;0.26048;0.26694;0.28226;0.28327;0.28629;0.28871;0.29516;0.31452;0.32258;0.32903;0.33548;0.35484;0.40323;0.40968;0.41613;0.42742;0.42944;0.43387;0.43548;0.44032;0.44355;0.44758;0.45;0.45645;0.45968;0.47581;0.49597;0.50242;0.50887;0.52419;0.5252;0.52823;0.53065;0.5371;0.55645;0.56452;0.57097;0.57742;0.59677;0.60081;0.60726;0.61371;0.63306;0.64516;0.65161;0.65806;0.67742;0.68548;0.69194;0.69839;0.71774;0.7379;0.74435;0.75081;0.76613;0.76714;0.77016;0.77258;0.77903;0.79839;0.80645;0.8129;0.81935;0.83065;0.83266;0.8371;0.83871;0.84355;0.8629;0.8871;0.89355;0.9;0.91935;0.92742;0.93387;0.94032;0.95968;0.96774;0.97419;0.98065;1" values="0;1;1;1;0.78125;1;1;1;0.9375;0.78125;1;1;1;1;0.9375;0.78125;1;1;1;0.625;0;0;1;1;0;0;1;1;0.20833;0.15625;0.625;1;1;0;0;1;1;0;0;1;1;0.41667;0.3125;1;1;1;0.83333;0.625;1;1;0.83333;0;0;1;1;0.20833;0.15625;0.625;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0.20833;0.15625;0.625;1;1;0;0;1;1;0.41667;0.3125;1;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0"/></rect><rect x="131.6" y="284" width="192" height="85" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.24194;0.24839;0.25484;0.27419;0.28226;0.28871;0.29516;0.31452;0.32258;0.32903;0.33548;0.35484;0.3629;0.36935;0.37581;0.39516;0.40323;0.40968;0.41613;0.43548;0.44355;0.45;0.45645;0.47581;0.48387;0.49032;0.49677;0.51613;0.52419;0.53065;0.5371;0.55645;0.56452;0.57097;0.57742;0.59677;0.60484;0.61129;0.61774;0.6371;0.64516;0.65161;0.65806;0.67742;0.68548;0.69194;0.69839;0.71774;0.72581;0.73226;0.73871;0.75806;0.76613;0.77258;0.77903;0.79839;0.80645;0.8129;0.81935;0.83871;0.84677;0.85323;0.85968;0.87903;0.8871;0.89355;0.9;0.91935;0.92742;0.93387;0.94032;0.95968;0.96774;0.97419;0.98065;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0"/></rect><text x="227.6" y="312.9" class="label">주문 이벤트</text></g>
-<g id="n-6" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="재고" data-id="stock"><rect x="91.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="91.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.17742;0.18387;0.19032;0.20968;0.29839;0.30484;0.31129;0.33065;0.41935;0.42581;0.43226;0.45161;0.54032;0.54677;0.55323;0.57258;0.66129;0.66774;0.67419;0.69355;0.78226;0.78871;0.79516;0.81452;0.90323;0.90968;0.91613;0.93548;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></rect><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(152.9 442.5) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="193.6" y="457.9" class="label">재고</text><rect x="101.6" y="476" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card a2"/><g id="n-6-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M107.6 476H251.6a6 6 0 0 1 6 6V502a6 6 0 0 1 -6 6H107.6a6 6 0 0 1 -6 -6V482a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="1"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.17742;0.18387;0.19032;0.20968;0.29839;0.30484;0.31129;0.33065;0.41935;0.42581;0.43226;0.45161;0.54032;0.54677;0.55323;0.57258;0.66129;0.66774;0.67419;0.69355;0.78226;0.78871;0.79516;0.81452;0.90323;0.90968;0.91613;0.93548;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></path><text x="109.6" y="496.7" class="row">남은 수</text></g></g>
-<g id="n-7" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="결제" data-id="pay"><rect x="299.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="299.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.2379;0.24435;0.25081;0.27016;0.47984;0.48629;0.49274;0.5121;0.72177;0.72823;0.73468;0.75403;0.96371;0.97016;0.97661;0.99597;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></rect><text x="387.6" y="457.9" class="label">결제</text><rect x="309.6" y="476" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card a2"/><g id="n-7-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M315.6 476H459.6a6 6 0 0 1 6 6V502a6 6 0 0 1 -6 6H315.6a6 6 0 0 1 -6 -6V482a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="2"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.2379;0.24435;0.25081;0.27016;0.47984;0.48629;0.49274;0.5121;0.72177;0.72823;0.73468;0.75403;0.96371;0.97016;0.97661;0.99597;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></path><text x="317.6" y="496.7" class="row">결제 수</text></g></g>
-<g id="n-8" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="알림" data-id="notify"><rect x="507.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="507.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.22581;0.23226;0.23871;0.25806;0.62903;0.63548;0.64194;0.66129;1" values="0;0;1;1;0;0;1;1;0;0"/></rect><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(568.9 442.5) scale(0.83333)"><rect class="symbol-face" x="6" y="2" width="12" height="20" rx="3"/><path class="symbol-cut" d="M10 5h4M10 19h4"/></g></g><text x="609.6" y="457.9" class="label">알림</text><rect x="517.6" y="476" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card a2"/><g id="n-8-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M523.6 476H667.6a6 6 0 0 1 6 6V502a6 6 0 0 1 -6 6H523.6a6 6 0 0 1 -6 -6V482a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="3"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.22581;0.23226;0.23871;0.25806;0.62903;0.63548;0.64194;0.66129;1" values="0;0;1;1;0;0;1;1;0;0"/></path><text x="525.6" y="496.7" class="row">발송 수</text></g></g>
+<g id="n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹" data-id="web"><rect x="28" y="28" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(57.7 41.5) scale(0.83333)"><rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path class="symbol-line" d="M8 21h8M12 17v4"/></g></g><text x="92" y="56.9" class="label" text-anchor="middle">웹</text></g>
+<g id="n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="앱" data-id="app"><rect x="160" y="28" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(189.7 41.5) scale(0.83333)"><rect class="symbol-face" x="6" y="2" width="12" height="20" rx="3"/><path class="symbol-cut" d="M10 5h4M10 19h4"/></g></g><text x="224" y="56.9" class="label" text-anchor="middle">앱</text></g>
+<g id="n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="제휴사" data-id="partner"><rect x="292" y="28" width="102" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(310 41.5) scale(0.83333)"><path class="symbol-face" d="M4 21V5l8-3 8 3v16Z"/><path class="symbol-cut" d="M8 21V10h8v11"/></g></g><text x="357" y="56.9" class="label" text-anchor="middle">제휴사</text></g>
+<g id="n-3" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="배치" data-id="batch"><rect x="426" y="28" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(449.3 41.5) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="490" y="56.9" class="label" text-anchor="middle">배치</text></g>
+<g id="n-4" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="주문 API" data-id="api"><rect x="139.6" y="135" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="139.6" y="135" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.11511;0.12157;0.12802;0.12936;0.13386;0.13581;0.14226;0.14737;0.16162;0.19869;0.20514;0.21159;0.23095;0.25337;0.25982;0.26627;0.2764;0.27871;0.28286;0.28563;0.28931;0.29065;0.29515;0.2971;0.30355;0.30866;0.32291;0.35998;0.36643;0.37288;0.39224;0.41466;0.42111;0.42756;0.43769;0.44;0.44415;0.44692;0.4506;0.45194;0.45644;0.45839;0.46484;0.46995;0.4842;0.52127;0.52772;0.53417;0.55353;0.57595;0.5824;0.58885;0.59898;0.60129;0.60544;0.60821;0.61189;0.61323;0.61773;0.61968;0.62613;0.63124;0.64549;0.68256;0.68901;0.69546;0.71482;0.73724;0.74369;0.75014;0.76027;0.76258;0.76673;0.7695;0.77318;0.77452;0.77902;0.78097;0.78742;0.79253;0.80678;0.84385;0.8503;0.85675;0.87611;0.89853;0.90498;0.91144;0.92157;0.92387;0.92802;0.93079;0.93447;0.93581;0.94031;0.94226;0.94871;0.95382;0.96807;1" values="0;0;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0"/></rect><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(188 148.5) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="241.6" y="163.9" class="label" text-anchor="middle">주문 API</text><rect x="149.6" y="182" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card a2"/><g id="n-4-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M155.6 182H299.6a6 6 0 0 1 6 6V208a6 6 0 0 1 -6 6H155.6a6 6 0 0 1 -6 -6V188a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="4"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.11511;0.12157;0.12802;0.12936;0.13386;0.13581;0.14226;0.14737;0.16162;0.19869;0.20514;0.21159;0.23095;0.25337;0.25982;0.26627;0.2764;0.27871;0.28286;0.28563;0.28931;0.29065;0.29515;0.2971;0.30355;0.30866;0.32291;0.35998;0.36643;0.37288;0.39224;0.41466;0.42111;0.42756;0.43769;0.44;0.44415;0.44692;0.4506;0.45194;0.45644;0.45839;0.46484;0.46995;0.4842;0.52127;0.52772;0.53417;0.55353;0.57595;0.5824;0.58885;0.59898;0.60129;0.60544;0.60821;0.61189;0.61323;0.61773;0.61968;0.62613;0.63124;0.64549;0.68256;0.68901;0.69546;0.71482;0.73724;0.74369;0.75014;0.76027;0.76258;0.76673;0.7695;0.77318;0.77452;0.77902;0.78097;0.78742;0.79253;0.80678;0.84385;0.8503;0.85675;0.87611;0.89853;0.90498;0.91144;0.92157;0.92387;0.92802;0.93079;0.93447;0.93581;0.94031;0.94226;0.94871;0.95382;0.96807;1" values="0;0;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0;1;1;0;0;1;1;0.47662;0.35747;1;1;1;0.93068;0.69801;1;1;0.73598;0;0"/></path><text x="157.6" y="202.7" class="row">접수 수</text></g></g>
+<g id="n-5" class="fl-node fl-shape-queue" tabindex="0" role="img" aria-label="주문 이벤트" data-id="q"><rect x="131.6" y="284" width="192" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="149.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="169.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="189.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="209.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="229.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="249.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="269.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="289.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="149.6" y="343" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="169.6" y="343" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="131.6" y="284" width="192" height="85" rx="8" class="fl-flash fl-flash-face" opacity="0" data-vf="0"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.00645;0.0121;0.0129;0.01714;0.01855;0.02419;0.025;0.02621;0.02923;0.03065;0.03226;0.03629;0.0371;0.03831;0.04133;0.04274;0.04435;0.04919;0.05645;0.06855;0.12097;0.12742;0.13387;0.15323;0.25403;0.26048;0.26694;0.28226;0.28327;0.28629;0.28871;0.29516;0.31452;0.32258;0.32903;0.33548;0.35484;0.40323;0.40968;0.41613;0.42742;0.42944;0.43387;0.43548;0.44032;0.44355;0.44758;0.45;0.45645;0.45968;0.47581;0.49597;0.50242;0.50887;0.52419;0.5252;0.52823;0.53065;0.5371;0.55645;0.56452;0.57097;0.57742;0.59677;0.60081;0.60726;0.61371;0.63306;0.64516;0.65161;0.65806;0.67742;0.68548;0.69194;0.69839;0.71774;0.7379;0.74435;0.75081;0.76613;0.76714;0.77016;0.77258;0.77903;0.79839;0.80645;0.8129;0.81935;0.83065;0.83266;0.8371;0.83871;0.84355;0.8629;0.8871;0.89355;0.9;0.91935;0.92742;0.93387;0.94032;0.95968;0.96774;0.97419;0.98065;1" values="0;1;1;1;0.78125;1;1;1;0.9375;0.78125;1;1;1;1;0.9375;0.78125;1;1;1;0.625;0;0;1;1;0;0;1;1;0.20833;0.15625;0.625;1;1;0;0;1;1;0;0;1;1;0.41667;0.3125;1;1;1;0.83333;0.625;1;1;0.83333;0;0;1;1;0.20833;0.15625;0.625;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0.20833;0.15625;0.625;1;1;0;0;1;1;0.41667;0.3125;1;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0"/></rect><rect x="131.6" y="284" width="192" height="85" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.24194;0.24839;0.25484;0.27419;0.28226;0.28871;0.29516;0.31452;0.32258;0.32903;0.33548;0.35484;0.3629;0.36935;0.37581;0.39516;0.40323;0.40968;0.41613;0.43548;0.44355;0.45;0.45645;0.47581;0.48387;0.49032;0.49677;0.51613;0.52419;0.53065;0.5371;0.55645;0.56452;0.57097;0.57742;0.59677;0.60484;0.61129;0.61774;0.6371;0.64516;0.65161;0.65806;0.67742;0.68548;0.69194;0.69839;0.71774;0.72581;0.73226;0.73871;0.75806;0.76613;0.77258;0.77903;0.79839;0.80645;0.8129;0.81935;0.83871;0.84677;0.85323;0.85968;0.87903;0.8871;0.89355;0.9;0.91935;0.92742;0.93387;0.94032;0.95968;0.96774;0.97419;0.98065;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0"/></rect><text x="227.6" y="312.9" class="label" text-anchor="middle">주문 이벤트</text></g>
+<g id="n-6" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="재고" data-id="stock"><rect x="91.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="91.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.17742;0.18387;0.19032;0.20968;0.29839;0.30484;0.31129;0.33065;0.41935;0.42581;0.43226;0.45161;0.54032;0.54677;0.55323;0.57258;0.66129;0.66774;0.67419;0.69355;0.78226;0.78871;0.79516;0.81452;0.90323;0.90968;0.91613;0.93548;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></rect><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(152.9 442.5) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="193.6" y="457.9" class="label" text-anchor="middle">재고</text><rect x="101.6" y="476" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card a2"/><g id="n-6-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M107.6 476H251.6a6 6 0 0 1 6 6V502a6 6 0 0 1 -6 6H107.6a6 6 0 0 1 -6 -6V482a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="1"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.17742;0.18387;0.19032;0.20968;0.29839;0.30484;0.31129;0.33065;0.41935;0.42581;0.43226;0.45161;0.54032;0.54677;0.55323;0.57258;0.66129;0.66774;0.67419;0.69355;0.78226;0.78871;0.79516;0.81452;0.90323;0.90968;0.91613;0.93548;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></path><text x="109.6" y="496.7" class="row">남은 수</text></g></g>
+<g id="n-7" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="결제" data-id="pay"><rect x="299.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="299.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.2379;0.24435;0.25081;0.27016;0.47984;0.48629;0.49274;0.5121;0.72177;0.72823;0.73468;0.75403;0.96371;0.97016;0.97661;0.99597;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></rect><text x="387.6" y="457.9" class="label" text-anchor="middle">결제</text><rect x="309.6" y="476" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card a2"/><g id="n-7-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M315.6 476H459.6a6 6 0 0 1 6 6V502a6 6 0 0 1 -6 6H315.6a6 6 0 0 1 -6 -6V482a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="2"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.2379;0.24435;0.25081;0.27016;0.47984;0.48629;0.49274;0.5121;0.72177;0.72823;0.73468;0.75403;0.96371;0.97016;0.97661;0.99597;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></path><text x="317.6" y="496.7" class="row">결제 수</text></g></g>
+<g id="n-8" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="알림" data-id="notify"><rect x="507.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="507.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.22581;0.23226;0.23871;0.25806;0.62903;0.63548;0.64194;0.66129;1" values="0;0;1;1;0;0;1;1;0;0"/></rect><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(568.9 442.5) scale(0.83333)"><rect class="symbol-face" x="6" y="2" width="12" height="20" rx="3"/><path class="symbol-cut" d="M10 5h4M10 19h4"/></g></g><text x="609.6" y="457.9" class="label" text-anchor="middle">알림</text><rect x="517.6" y="476" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card a2"/><g id="n-8-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M523.6 476H667.6a6 6 0 0 1 6 6V502a6 6 0 0 1 -6 6H523.6a6 6 0 0 1 -6 -6V482a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="3"><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.22581;0.23226;0.23871;0.25806;0.62903;0.63548;0.64194;0.66129;1" values="0;0;1;1;0;0;1;1;0;0"/></path><text x="525.6" y="496.7" class="row">발송 수</text></g></g>
 <g id="e-0" class="fl-edge a3"><defs><marker id="fl-arrow-0" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-0" d="M 78 75 L 78 83 Q 78 91, 86 91 L 152.8 91 Q 174.8 91, 174.8 113 L 174.8 135" class="fl-path" marker-end="url(#fl-arrow-0)"/></g>
 <g id="e-1" class="fl-edge a4"><defs><marker id="fl-arrow-1" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-1" d="M 210 75 L 210 135" class="fl-path" marker-end="url(#fl-arrow-1)"/></g>
 <g id="e-2" class="fl-edge a5"><defs><marker id="fl-arrow-2" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-2" d="M 343 75 L 343 83 Q 343 91, 335 91 L 267.2 91 Q 245.2 91, 245.2 113 L 245.2 135" class="fl-path" marker-end="url(#fl-arrow-2)"/></g>
@@ -1319,10 +1329,10 @@
 <g id="e-6" class="fl-edge a9"><defs><marker id="fl-arrow-6" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-6" d="M 227.6 369 L 227.6 382 Q 227.6 395, 240.6 395 L 370.6 395 Q 387.6 395, 387.6 412 L 387.6 429" class="fl-path" marker-end="url(#fl-arrow-6)"/></g>
 <g id="e-7" class="fl-edge a10"><defs><marker id="fl-arrow-7" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-7" d="M 275.6 369 L 275.6 377 Q 275.6 385, 283.6 385 L 573.6 385 Q 595.6 385, 595.6 407 L 595.6 429" class="fl-path" marker-end="url(#fl-arrow-7)"/></g>
 <defs><path id="tp-0" class="fl-track-path" d="M 78 75 L 78 83 Q 78 91, 86 91 L 152.8 91 Q 174.8 91, 174.8 113 L 174.8 135 L 227.6 224 L 227.6 284" fill="none"/><path id="tp-1" class="fl-track-path" d="M 210 75 L 210 135 L 227.6 224 L 227.6 284" fill="none"/><path id="tp-2" class="fl-track-path" d="M 343 75 L 343 83 Q 343 91, 335 91 L 267.2 91 Q 245.2 91, 245.2 113 L 245.2 135 L 227.6 224 L 227.6 284" fill="none"/><path id="tp-3" class="fl-track-path" d="M 476 75 L 476 88 Q 476 101, 463 101 L 297.4 101 Q 280.4 101, 280.4 118 L 280.4 135 L 227.6 224 L 227.6 284" fill="none"/><path id="tp-4" class="fl-track-path" d="M 179.6 369 L 179.6 429" fill="none"/><path id="tp-5" class="fl-track-path" d="M 227.6 369 L 227.6 382 Q 227.6 395, 240.6 395 L 370.6 395 Q 387.6 395, 387.6 412 L 387.6 429" fill="none"/><path id="tp-6" class="fl-track-path" d="M 275.6 369 L 275.6 377 Q 275.6 385, 283.6 385 L 573.6 385 Q 595.6 385, 595.6 407 L 595.6 429" fill="none"/><path id="tp-7" class="fl-track-path" d="M 275.6 369 L 275.6 377 Q 275.6 385, 283.6 385 L 573.6 385 Q 595.6 385, 595.6 407 L 595.6 429" fill="none"/></defs><g class="fl-value"><g class="queue-fill" opacity="0" visibility="hidden" data-v="0" data-t="6"><rect x="149.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="169.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="189.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="209.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="229.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="249.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.72581;0.80645;0.83065;0.84677;0.8871;0.92742" values="hidden;hidden;visible;hidden;hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.72581;0.80645;0.83065;0.84677;0.8871;0.92742" values="0;0;1;0;0;1;0"/></g><g class="queue-fill" opacity="0" visibility="hidden" data-v="0" data-t="5"><rect x="149.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="169.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="189.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="209.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="229.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.0121;0.68548;0.72581;0.7379;0.76613;0.80645;0.83065;0.84677;0.8871" values="visible;hidden;visible;visible;hidden;visible;hidden;visible;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.0121;0.68548;0.72581;0.7379;0.76613;0.80645;0.83065;0.84677;0.8871" values="1;0;1;1;0;1;0;1;1;0"/></g><g class="queue-fill" opacity="0" visibility="hidden" data-v="0" data-t="4"><rect x="149.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="169.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="189.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="209.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.0121;0.02419;0.48387;0.56452;0.60081;0.60484;0.64516;0.68548;0.7379;0.76613" values="hidden;visible;hidden;hidden;visible;hidden;hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.0121;0.02419;0.48387;0.56452;0.60081;0.60484;0.64516;0.68548;0.7379;0.76613" values="0;1;0;0;1;0;0;1;0;1;0"/></g><g class="queue-fill" opacity="0" visibility="hidden" data-v="0" data-t="3"><rect x="149.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="169.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="189.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.02419;0.03629;0.3629;0.40323;0.42742;0.44355;0.48387;0.49597;0.52419;0.56452;0.60081;0.60484;0.64516" values="hidden;visible;hidden;hidden;visible;hidden;visible;visible;hidden;visible;hidden;visible;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.02419;0.03629;0.3629;0.40323;0.42742;0.44355;0.48387;0.49597;0.52419;0.56452;0.60081;0.60484;0.64516" values="0;1;0;0;1;0;1;1;0;1;0;1;1;0"/></g><g class="queue-fill" opacity="0" visibility="hidden" data-v="0" data-t="2"><rect x="149.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="169.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.03629;0.12097;0.24194;0.32258;0.3629;0.40323;0.42742;0.44355;0.49597;0.52419" values="hidden;visible;hidden;hidden;visible;visible;hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.03629;0.12097;0.24194;0.32258;0.3629;0.40323;0.42742;0.44355;0.49597;0.52419" values="0;1;0;0;1;1;0;1;0;1;0"/></g><g class="queue-fill" opacity="0" visibility="hidden" data-v="0" data-t="1"><rect x="149.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.12097;0.24194;0.25403;0.28226;0.32258" values="hidden;visible;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.12097;0.24194;0.25403;0.28226;0.32258" values="0;1;1;0;1;0"/></g><g class="queue-fill" opacity="0" visibility="hidden" data-v="0" data-t="0"><animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.25403;0.28226" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.25403;0.28226" values="0;1;0"/></g><g class="queue-fill" opacity="0" visibility="hidden" data-v="0" data-t="7"><rect x="149.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="169.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="189.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="209.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="229.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="249.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="269.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.92742;0.96774" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.92742;0.96774" values="0;1;0"/></g><g class="queue-fill" opacity="0" visibility="hidden" data-v="0" data-t="8"><rect x="149.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="169.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="189.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="209.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="229.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="249.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="269.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="289.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.96774" values="hidden;visible"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.96774" values="0;1"/></g></g>
-<g class="fl-value"><text x="249.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="120">120<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.17742" values="visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.17742" values="1;0"/></text><text x="249.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="119">119<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.17742;0.29839" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.17742;0.29839" values="0;1;0"/></text><text x="249.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="118">118<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.29839;0.41935" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.29839;0.41935" values="0;1;0"/></text><text x="249.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="117">117<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.41935;0.54032" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.41935;0.54032" values="0;1;0"/></text><text x="249.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="116">116<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.54032;0.66129" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.54032;0.66129" values="0;1;0"/></text><text x="249.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="115">115<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.66129;0.78226" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.66129;0.78226" values="0;1;0"/></text><text x="249.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="114">114<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.78226;0.90323" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.78226;0.90323" values="0;1;0"/></text><text x="249.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="113">113<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.90323" values="hidden;visible"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.90323" values="0;1"/></text></g>
-<g class="fl-value"><text x="457.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="2" data-t="0">0<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.2379" values="visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.2379" values="1;0"/></text><text x="457.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="2" data-t="1">1<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.2379;0.47984" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.2379;0.47984" values="0;1;0"/></text><text x="457.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="2" data-t="2">2<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.47984;0.72177" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.47984;0.72177" values="0;1;0"/></text><text x="457.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="2" data-t="3">3<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.72177;0.96371" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.72177;0.96371" values="0;1;0"/></text><text x="457.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="2" data-t="4">4<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.96371" values="hidden;visible"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.96371" values="0;1"/></text></g>
-<g class="fl-value"><text x="665.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="3" data-t="0">0<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.22581" values="visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.22581" values="1;0"/></text><text x="665.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="3" data-t="1">1<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.22581;0.62903" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.22581;0.62903" values="0;1;0"/></text><text x="665.6" y="496.7" class="value" opacity="0" visibility="hidden" data-v="3" data-t="2">2<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.62903" values="hidden;visible"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.62903" values="0;1"/></text></g>
-<g class="fl-value"><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="0">0<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.11511" values="visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.11511" values="1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="1">1<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.11511;0.12936" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.11511;0.12936" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="2">2<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.12936;0.19869" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.12936;0.19869" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="3">3<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19869;0.25337" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19869;0.25337" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="4">4<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.25337;0.2764" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.25337;0.2764" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="5">5<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.2764;0.29065" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.2764;0.29065" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="6">6<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.29065;0.35998" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.29065;0.35998" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="7">7<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.35998;0.41466" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.35998;0.41466" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="8">8<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.41466;0.43769" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.41466;0.43769" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="9">9<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.43769;0.45194" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.43769;0.45194" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="10">10<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.45194;0.52127" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.45194;0.52127" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="11">11<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.52127;0.57595" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.52127;0.57595" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="12">12<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.57595;0.59898" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.57595;0.59898" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="13">13<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.59898;0.61323" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.59898;0.61323" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="14">14<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.61323;0.68256" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.61323;0.68256" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="15">15<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.68256;0.73724" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.68256;0.73724" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="16">16<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.73724;0.76027" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.73724;0.76027" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="17">17<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.76027;0.77452" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.76027;0.77452" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="18">18<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.77452;0.84385" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.77452;0.84385" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="19">19<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.84385;0.89853" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.84385;0.89853" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="20">20<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.89853;0.92157" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.89853;0.92157" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="21">21<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.92157;0.93581" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.92157;0.93581" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" opacity="0" visibility="hidden" data-v="4" data-t="22">22<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.93581" values="hidden;visible"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.93581" values="0;1"/></text></g>
+<g class="fl-value"><text x="249.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="120">120<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.17742" values="visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.17742" values="1;0"/></text><text x="249.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="119">119<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.17742;0.29839" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.17742;0.29839" values="0;1;0"/></text><text x="249.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="118">118<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.29839;0.41935" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.29839;0.41935" values="0;1;0"/></text><text x="249.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="117">117<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.41935;0.54032" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.41935;0.54032" values="0;1;0"/></text><text x="249.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="116">116<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.54032;0.66129" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.54032;0.66129" values="0;1;0"/></text><text x="249.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="115">115<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.66129;0.78226" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.66129;0.78226" values="0;1;0"/></text><text x="249.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="114">114<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.78226;0.90323" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.78226;0.90323" values="0;1;0"/></text><text x="249.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="113">113<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.90323" values="hidden;visible"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.90323" values="0;1"/></text></g>
+<g class="fl-value"><text x="457.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="2" data-t="0">0<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.2379" values="visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.2379" values="1;0"/></text><text x="457.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="2" data-t="1">1<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.2379;0.47984" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.2379;0.47984" values="0;1;0"/></text><text x="457.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="2" data-t="2">2<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.47984;0.72177" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.47984;0.72177" values="0;1;0"/></text><text x="457.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="2" data-t="3">3<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.72177;0.96371" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.72177;0.96371" values="0;1;0"/></text><text x="457.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="2" data-t="4">4<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.96371" values="hidden;visible"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.96371" values="0;1"/></text></g>
+<g class="fl-value"><text x="665.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="3" data-t="0">0<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.22581" values="visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.22581" values="1;0"/></text><text x="665.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="3" data-t="1">1<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.22581;0.62903" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.22581;0.62903" values="0;1;0"/></text><text x="665.6" y="496.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="3" data-t="2">2<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.62903" values="hidden;visible"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.62903" values="0;1"/></text></g>
+<g class="fl-value"><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="0">0<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.11511" values="visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.11511" values="1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="1">1<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.11511;0.12936" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.11511;0.12936" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="2">2<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.12936;0.19869" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.12936;0.19869" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="3">3<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19869;0.25337" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19869;0.25337" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="4">4<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.25337;0.2764" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.25337;0.2764" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="5">5<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.2764;0.29065" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.2764;0.29065" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="6">6<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.29065;0.35998" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.29065;0.35998" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="7">7<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.35998;0.41466" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.35998;0.41466" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="8">8<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.41466;0.43769" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.41466;0.43769" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="9">9<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.43769;0.45194" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.43769;0.45194" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="10">10<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.45194;0.52127" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.45194;0.52127" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="11">11<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.52127;0.57595" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.52127;0.57595" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="12">12<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.57595;0.59898" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.57595;0.59898" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="13">13<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.59898;0.61323" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.59898;0.61323" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="14">14<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.61323;0.68256" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.61323;0.68256" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="15">15<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.68256;0.73724" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.68256;0.73724" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="16">16<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.73724;0.76027" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.73724;0.76027" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="17">17<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.76027;0.77452" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.76027;0.77452" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="18">18<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.77452;0.84385" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.77452;0.84385" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="19">19<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.84385;0.89853" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.84385;0.89853" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="20">20<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.89853;0.92157" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.89853;0.92157" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="21">21<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.92157;0.93581" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.92157;0.93581" values="0;1;0"/></text><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="4" data-t="22">22<animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.93581" values="hidden;visible"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.93581" values="0;1"/></text></g>
 <g class="p0-0" opacity="0" fill="var(--color-data-category-on-1)"><circle r="10" fill="var(--color-data-category-1)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.11511;0.16543;0.24194" values="visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.11511;0.16543;0.24194" values="1;0;1;0"/><animateMotion dur="12.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.24194;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#tp-0" xlink:href="#tp-0"/></animateMotion></g>
 <g class="p0-1" opacity="0" fill="var(--color-data-category-on-1)"><circle r="10" fill="var(--color-data-category-1)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.16129;0.2764;0.32672;0.40323" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.16129;0.2764;0.32672;0.40323" values="0;1;0;1;0"/><animateMotion dur="12.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.16129;0.40323;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-0" xlink:href="#tp-0"/></animateMotion></g>
 <g class="p0-2" opacity="0" fill="var(--color-data-category-on-1)"><circle r="10" fill="var(--color-data-category-1)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><animate attributeName="visibility" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.32258;0.43769;0.48801;0.56452" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.32258;0.43769;0.48801;0.56452" values="0;1;0;1;0"/><animateMotion dur="12.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.32258;0.56452;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-0" xlink:href="#tp-0"/></animateMotion></g>
@@ -1362,21 +1372,21 @@
 <g class="p0-36" opacity="0" fill="var(--color-flow-ink-gray)"><circle r="10" fill="var(--color-flow-gray)" opacity="0.2"/><circle r="4.5" fill="var(--color-flow-gray)"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.02419;0.22581" values="0;1;0"/><animateMotion dur="12.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.02419;0.22581;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-6" xlink:href="#tp-6"/></animateMotion></g>
 <g class="p0-37" opacity="0" fill="var(--color-flow-ink-gray)"><circle r="10" fill="var(--color-flow-gray)" opacity="0.2"/><circle r="4.5" fill="var(--color-flow-gray)"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.42742;0.62903" values="0;1;0"/><animateMotion dur="12.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.42742;0.62903;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-6" xlink:href="#tp-6"/></animateMotion></g>
 <g><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.91935;0.96774;1" values="1;1;0;0"/><g class="p0-38" opacity="0" fill="var(--color-flow-ink-gray)"><circle r="10" fill="var(--color-flow-gray)" opacity="0.2"/><circle r="4.5" fill="var(--color-flow-gray)"/><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.83065;0.96774" values="0;1;0"/><animateMotion dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.83065;0.83636;0.84207;0.84778;0.85349;0.85921;0.86492;0.87063;0.87634;0.88206;0.88777;0.89348;0.89919;0.90491;0.91062;0.91633;0.92204;0.92776;0.93347;0.93918;0.94489;0.9506;0.95632;0.96203;0.96774;1" keyPoints="0;0;0.00309;0.00872;0.01707;0.02832;0.04266;0.06027;0.08133;0.10599;0.13438;0.16656;0.20253;0.24217;0.28524;0.33133;0.3799;0.43023;0.48151;0.53286;0.58342;0.63238;0.67908;0.72299;0.76374;0.80109;0.80109"><mpath href="#tp-6" xlink:href="#tp-6"/></animateMotion></g></g>
-<g><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.12044;0.16882;1" values="1;1;0;0"/><g class="p0-39" opacity="0" fill="var(--color-data-category-on-3)"><circle r="10" fill="var(--color-data-category-3)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><g><rect x="-28.6" y="-35" width="57.3" height="23" rx="8" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><text x="0" y="-20" class="chip">메일 유실</text><animateTransform attributeName="transform" type="translate" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.03629;0.04973;0.14651;0.16882;1" values="-13.4 47;-13.4 47;-13.4 47;0 51;0 51;0 51"/></g><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.03629;0.16882" values="0;1;0"/><animateMotion dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.03629;0.04181;0.04733;0.05286;0.05838;0.0639;0.06942;0.07495;0.08047;0.08599;0.09151;0.09703;0.10256;0.10808;0.1136;0.11912;0.12465;0.13017;0.13569;0.14121;0.14673;0.15226;0.15778;0.1633;0.16882;1" keyPoints="0;0;0.00229;0.00621;0.01186;0.01931;0.02868;0.04005;0.05353;0.0692;0.08716;0.10748;0.13022;0.15543;0.1831;0.2132;0.24566;0.28032;0.31699;0.35538;0.39516;0.43594;0.47726;0.51868;0.55974;0.6;0.6"><mpath href="#tp-7" xlink:href="#tp-7"/></animateMotion></g></g>
-<g><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.68495;0.73334;1" values="1;1;0;0"/><g class="p0-40" opacity="0" fill="var(--color-data-category-on-3)"><circle r="10" fill="var(--color-data-category-3)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><g><rect x="-28.6" y="-35" width="57.3" height="23" rx="8" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><text x="0" y="-20" class="chip">메일 유실</text><animateTransform attributeName="transform" type="translate" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.60081;0.61425;0.71102;0.73334;1" values="-13.4 47;-13.4 47;-13.4 47;0 51;0 51;0 51"/></g><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.60081;0.73334" values="0;1;0"/><animateMotion dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.60081;0.60633;0.61185;0.61737;0.6229;0.62842;0.63394;0.63946;0.64498;0.65051;0.65603;0.66155;0.66707;0.6726;0.67812;0.68364;0.68916;0.69468;0.70021;0.70573;0.71125;0.71677;0.7223;0.72782;0.73334;1" keyPoints="0;0;0.00229;0.00621;0.01186;0.01931;0.02868;0.04005;0.05353;0.0692;0.08716;0.10748;0.13022;0.15543;0.1831;0.2132;0.24566;0.28032;0.31699;0.35538;0.39516;0.43594;0.47726;0.51868;0.55974;0.6;0.6"><mpath href="#tp-7" xlink:href="#tp-7"/></animateMotion></g></g>
+<g><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.12044;0.16882;1" values="1;1;0;0"/><g class="p0-39" opacity="0" fill="var(--color-data-category-on-3)"><circle r="10" fill="var(--color-data-category-3)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><g><rect x="-32.4" y="-38" width="64.7" height="26" rx="8" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><text x="0" y="-20" class="chip">메일 유실</text><animateTransform attributeName="transform" type="translate" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.03629;0.05242;0.14919;0.16882;1" values="-9.6 50;-9.6 50;-9.6 50;0 52;0 52;0 52"/></g><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.03629;0.16882" values="0;1;0"/><animateMotion dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.03629;0.04181;0.04733;0.05286;0.05838;0.0639;0.06942;0.07495;0.08047;0.08599;0.09151;0.09703;0.10256;0.10808;0.1136;0.11912;0.12465;0.13017;0.13569;0.14121;0.14673;0.15226;0.15778;0.1633;0.16882;1" keyPoints="0;0;0.00229;0.00621;0.01186;0.01931;0.02868;0.04005;0.05353;0.0692;0.08716;0.10748;0.13022;0.15543;0.1831;0.2132;0.24566;0.28032;0.31699;0.35538;0.39516;0.43594;0.47726;0.51868;0.55974;0.6;0.6"><mpath href="#tp-7" xlink:href="#tp-7"/></animateMotion></g></g>
+<g><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.68495;0.73334;1" values="1;1;0;0"/><g class="p0-40" opacity="0" fill="var(--color-data-category-on-3)"><circle r="10" fill="var(--color-data-category-3)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><g><rect x="-32.4" y="-38" width="64.7" height="26" rx="8" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><text x="0" y="-20" class="chip">메일 유실</text><animateTransform attributeName="transform" type="translate" dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.60081;0.61694;0.71371;0.73334;1" values="-9.6 50;-9.6 50;-9.6 50;0 52;0 52;0 52"/></g><animate attributeName="opacity" dur="12.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.60081;0.73334" values="0;1;0"/><animateMotion dur="12.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.60081;0.60633;0.61185;0.61737;0.6229;0.62842;0.63394;0.63946;0.64498;0.65051;0.65603;0.66155;0.66707;0.6726;0.67812;0.68364;0.68916;0.69468;0.70021;0.70573;0.71125;0.71677;0.7223;0.72782;0.73334;1" keyPoints="0;0;0.00229;0.00621;0.01186;0.01931;0.02868;0.04005;0.05353;0.0692;0.08716;0.10748;0.13022;0.15543;0.1831;0.2132;0.24566;0.28032;0.31699;0.35538;0.39516;0.43594;0.47726;0.51868;0.55974;0.6;0.6"><mpath href="#tp-7" xlink:href="#tp-7"/></animateMotion></g></g>
 
 </g>
 <g class="fl-still" transform="translate(124.2 0)">
 
-<g id="still-n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹" data-id="web"><rect x="28" y="28" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(57.7 41.5) scale(0.83333)"><rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path class="symbol-line" d="M8 21h8M12 17v4"/></g></g><text x="92" y="56.9" class="label">웹</text></g>
-<g id="still-n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="앱" data-id="app"><rect x="160" y="28" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(189.7 41.5) scale(0.83333)"><rect class="symbol-face" x="6" y="2" width="12" height="20" rx="3"/><path class="symbol-cut" d="M10 5h4M10 19h4"/></g></g><text x="224" y="56.9" class="label">앱</text></g>
-<g id="still-n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="제휴사" data-id="partner"><rect x="292" y="28" width="102" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(310 41.5) scale(0.83333)"><path class="symbol-face" d="M4 21V5l8-3 8 3v16Z"/><path class="symbol-cut" d="M8 21V10h8v11"/></g></g><text x="357" y="56.9" class="label">제휴사</text></g>
-<g id="still-n-3" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="배치" data-id="batch"><rect x="426" y="28" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(449.3 41.5) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="490" y="56.9" class="label">배치</text></g>
-<g id="still-n-4" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="주문 API" data-id="api"><rect x="139.6" y="135" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(188 148.5) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="241.6" y="163.9" class="label">주문 API</text><rect x="149.6" y="182" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card sa2"/><g id="still-n-4-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="157.6" y="202.7" class="row">접수 수</text></g></g>
-<g id="still-n-5" class="fl-node fl-shape-queue" tabindex="0" role="img" aria-label="주문 이벤트" data-id="q"><rect x="131.6" y="284" width="192" height="85" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><rect x="149.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="169.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="189.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="209.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="229.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="249.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="269.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="289.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="149.6" y="343" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="169.6" y="343" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><text x="227.6" y="312.9" class="label">주문 이벤트</text></g>
-<g id="still-n-6" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="재고" data-id="stock"><rect x="91.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(152.9 442.5) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="193.6" y="457.9" class="label">재고</text><rect x="101.6" y="476" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card sa2"/><g id="still-n-6-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="109.6" y="496.7" class="row">남은 수</text></g></g>
-<g id="still-n-7" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="결제" data-id="pay"><rect x="299.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><text x="387.6" y="457.9" class="label">결제</text><rect x="309.6" y="476" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card sa2"/><g id="still-n-7-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="317.6" y="496.7" class="row">결제 수</text></g></g>
-<g id="still-n-8" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="알림" data-id="notify"><rect x="507.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(568.9 442.5) scale(0.83333)"><rect class="symbol-face" x="6" y="2" width="12" height="20" rx="3"/><path class="symbol-cut" d="M10 5h4M10 19h4"/></g></g><text x="609.6" y="457.9" class="label">알림</text><rect x="517.6" y="476" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card sa2"/><g id="still-n-8-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="525.6" y="496.7" class="row">발송 수</text></g></g>
+<g id="still-n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹" data-id="web"><rect x="28" y="28" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(57.7 41.5) scale(0.83333)"><rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path class="symbol-line" d="M8 21h8M12 17v4"/></g></g><text x="92" y="56.9" class="label" text-anchor="middle">웹</text></g>
+<g id="still-n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="앱" data-id="app"><rect x="160" y="28" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(189.7 41.5) scale(0.83333)"><rect class="symbol-face" x="6" y="2" width="12" height="20" rx="3"/><path class="symbol-cut" d="M10 5h4M10 19h4"/></g></g><text x="224" y="56.9" class="label" text-anchor="middle">앱</text></g>
+<g id="still-n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="제휴사" data-id="partner"><rect x="292" y="28" width="102" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(310 41.5) scale(0.83333)"><path class="symbol-face" d="M4 21V5l8-3 8 3v16Z"/><path class="symbol-cut" d="M8 21V10h8v11"/></g></g><text x="357" y="56.9" class="label" text-anchor="middle">제휴사</text></g>
+<g id="still-n-3" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="배치" data-id="batch"><rect x="426" y="28" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(449.3 41.5) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="490" y="56.9" class="label" text-anchor="middle">배치</text></g>
+<g id="still-n-4" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="주문 API" data-id="api"><rect x="139.6" y="135" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(188 148.5) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="241.6" y="163.9" class="label" text-anchor="middle">주문 API</text><rect x="149.6" y="182" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card sa2"/><g id="still-n-4-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="157.6" y="202.7" class="row">접수 수</text></g></g>
+<g id="still-n-5" class="fl-node fl-shape-queue" tabindex="0" role="img" aria-label="주문 이벤트" data-id="q"><rect x="131.6" y="284" width="192" height="85" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><rect x="149.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="169.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="189.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="209.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="229.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="249.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="269.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="289.6" y="325" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="149.6" y="343" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><rect x="169.6" y="343" width="16" height="14" rx="4" fill="var(--color-figure-queue-empty)" stroke="var(--color-outline)" stroke-width="1"/><text x="227.6" y="312.9" class="label" text-anchor="middle">주문 이벤트</text></g>
+<g id="still-n-6" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="재고" data-id="stock"><rect x="91.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(152.9 442.5) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="193.6" y="457.9" class="label" text-anchor="middle">재고</text><rect x="101.6" y="476" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card sa2"/><g id="still-n-6-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="109.6" y="496.7" class="row">남은 수</text></g></g>
+<g id="still-n-7" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="결제" data-id="pay"><rect x="299.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><text x="387.6" y="457.9" class="label" text-anchor="middle">결제</text><rect x="309.6" y="476" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card sa2"/><g id="still-n-7-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="317.6" y="496.7" class="row">결제 수</text></g></g>
+<g id="still-n-8" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="알림" data-id="notify"><rect x="507.6" y="429" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(568.9 442.5) scale(0.83333)"><rect class="symbol-face" x="6" y="2" width="12" height="20" rx="3"/><path class="symbol-cut" d="M10 5h4M10 19h4"/></g></g><text x="609.6" y="457.9" class="label" text-anchor="middle">알림</text><rect x="517.6" y="476" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card sa2"/><g id="still-n-8-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="525.6" y="496.7" class="row">발송 수</text></g></g>
 <g id="still-e-0" class="fl-edge "><defs><marker id="still-fl-arrow-0" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-0" d="M 78 75 L 78 83 Q 78 91, 86 91 L 152.8 91 Q 174.8 91, 174.8 113 L 174.8 135" class="fl-path" marker-end="url(#still-fl-arrow-0)"/></g>
 <g id="still-e-1" class="fl-edge "><defs><marker id="still-fl-arrow-1" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-1" d="M 210 75 L 210 135" class="fl-path" marker-end="url(#still-fl-arrow-1)"/></g>
 <g id="still-e-2" class="fl-edge "><defs><marker id="still-fl-arrow-2" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-2" d="M 343 75 L 343 83 Q 343 91, 335 91 L 267.2 91 Q 245.2 91, 245.2 113 L 245.2 135" class="fl-path" marker-end="url(#still-fl-arrow-2)"/></g>
@@ -1386,10 +1396,10 @@
 <g id="still-e-6" class="fl-edge "><defs><marker id="still-fl-arrow-6" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-6" d="M 227.6 369 L 227.6 382 Q 227.6 395, 240.6 395 L 370.6 395 Q 387.6 395, 387.6 412 L 387.6 429" class="fl-path" marker-end="url(#still-fl-arrow-6)"/></g>
 <g id="still-e-7" class="fl-edge "><defs><marker id="still-fl-arrow-7" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-7" d="M 275.6 369 L 275.6 377 Q 275.6 385, 283.6 385 L 573.6 385 Q 595.6 385, 595.6 407 L 595.6 429" class="fl-path" marker-end="url(#still-fl-arrow-7)"/></g>
 <g class="fl-value"><g class="queue-fill" opacity="1" data-v="0" data-t="8"><rect x="149.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="169.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="189.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="209.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="229.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="249.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="269.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/><rect x="289.6" y="325" width="16" height="14" rx="4" fill="var(--color-data-category-1)" stroke="var(--color-data-category-1)" stroke-width="1"/></g></g>
-<g class="fl-value"><text x="249.6" y="496.7" class="value" opacity="1" data-v="1" data-t="113">113</text></g>
-<g class="fl-value"><text x="457.6" y="496.7" class="value" opacity="1" data-v="2" data-t="4">4</text></g>
-<g class="fl-value"><text x="665.6" y="496.7" class="value" opacity="1" data-v="3" data-t="2">2</text></g>
-<g class="fl-value"><text x="297.6" y="202.7" class="value" opacity="1" data-v="4" data-t="22">22</text></g>
+<g class="fl-value"><text x="249.6" y="496.7" class="value" text-anchor="end" opacity="1" data-v="1" data-t="113">113</text></g>
+<g class="fl-value"><text x="457.6" y="496.7" class="value" text-anchor="end" opacity="1" data-v="2" data-t="4">4</text></g>
+<g class="fl-value"><text x="665.6" y="496.7" class="value" text-anchor="end" opacity="1" data-v="3" data-t="2">2</text></g>
+<g class="fl-value"><text x="297.6" y="202.7" class="value" text-anchor="end" opacity="1" data-v="4" data-t="22">22</text></g>
 
 
 </g>

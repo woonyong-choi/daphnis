@@ -3,7 +3,7 @@
 // 막대 종류와 산점도의 둘 이상의 계열은 `1 이름`처럼 번호 키를 달아 색 없이도 조각과 점 이름에 이어 읽게 한다(번호는 계열 목록 순서다. 원본 해석이 main을 앞에 세우고 나머지는 선언 순서를 지킨다).
 import { measure, wrap } from '../measure/fonts.js';
 import { renderRich, roundCoord as r } from '../text.js';
-import { tokens, values } from '../tokens.js';
+import { values } from '../tokens.js';
 import { COPY } from './copy.js';
 import { ecdfGroups } from './data.js';
 import { BAR, DOT, PAD, SPACE, TEXT, WIDTH, isReference, seriesBoundary, seriesColor, seriesPaint, seriesStroke } from './metrics.js';
@@ -34,10 +34,10 @@ const swatchWidth = (kind) => (kind === 'line' ? BAR * 2 : BAR);
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 점 표식의 속성. 기대값 계열은 속이 비어 있고(바탕색 면, 선 색 테두리), 실제값은 채워져 있다(밝은 계열은 같은 계열의 경계가 받친다).
+// 점 표식의 속성. 기대값 계열은 속이 비어 있고(차트 묶음(.fl-chart)의 color가 싣는 차트가 놓인 면의 색, 선 색 테두리), 실제값은 채워져 있다(밝은 계열은 같은 계열의 경계가 받친다).
 export function dotAttrs(chart, i, extra = '') {
   const color = seriesColor(chart, i);
-  if (isReference(chart, i)) return ` fill="${tokens.color.bg}" stroke="${color}" stroke-width="${values.border.strong}"${extra}`;
+  if (isReference(chart, i)) return ` fill="currentColor" stroke="${color}" stroke-width="${values.border.strong}"${extra}`;
   return ` fill="${color}"${seriesBoundary(chart, i)}${extra}`;
 }
 

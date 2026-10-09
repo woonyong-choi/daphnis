@@ -17,7 +17,7 @@ shipped -> delivered "수령 확인"
 created -> cancelled "결제 실패"
 paid -> cancelled "고객 취소" dashed
 
-view main graph down
+view graph down
 
 scene "정상 주문" mode=static
   created -> paid time=700ms

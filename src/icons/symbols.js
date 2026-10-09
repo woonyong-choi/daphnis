@@ -61,3 +61,42 @@ const BY_ROLE = {
 export const SYMBOLS = Object.freeze(
   Object.fromEntries(Object.entries(BY_ROLE).flatMap(([role, bodies]) => Object.entries(bodies).map(([name, body]) => [name, Object.freeze({ role, body })]))),
 );
+
+/**
+ * 기술 브랜드의 개념 역할. 브랜드(icons/brands.json의 이름)도 개념 아이콘과 같은 역할 색 묶음(service, data, access)을 쓰므로 같은 개념이 같은 색이다.
+ * 브랜드 글리프는 원래 모양 그대로이고 색만 역할을 따른다. 사용자 SVG(`icons` 세트)는 역할이 없다.
+ */
+export const BRAND_ROLES = Object.freeze({
+  ansible: 'service',
+  argo: 'service',
+  bitbucket: 'service',
+  cloudflare: 'service',
+  docker: 'service',
+  elasticsearch: 'data',
+  git: 'service',
+  github: 'service',
+  githubactions: 'service',
+  gitlab: 'service',
+  go: 'service',
+  grafana: 'service',
+  helm: 'service',
+  kafka: 'data',
+  kubernetes: 'service',
+  linux: 'service',
+  mariadb: 'data',
+  mongodb: 'data',
+  mysql: 'data',
+  nginx: 'service',
+  nodejs: 'service',
+  postgresql: 'data',
+  prometheus: 'service',
+  python: 'service',
+  rabbitmq: 'data',
+  react: 'service',
+  redis: 'data',
+  spring: 'service',
+  terraform: 'service',
+  typescript: 'service',
+  ubuntu: 'service',
+  vercel: 'service',
+});

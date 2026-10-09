@@ -22,11 +22,30 @@
 | `player` | HTML 안에서 시간표대로 상태를 바꾸고 점을 옮기는 재생기, 전체 화면과 확대 | 브라우저 JavaScript | `src/player/` |
 | `svg` | 시간표를 CSS keyframes와 SMIL로 바꾼 움직이는 SVG | SVG, CSS | `src/svg.js`, `src/animate/` |
 
+### 부품 호출 지도
+
+공통 부품이 어느 파일에 있고 누가 부르는지다. 종류별 코드는 데이터와 배치 결과만 넘기고, 같은 모양을 자기 파일에서 다시 만들지 않는다. 화살표는 부르는 쪽에서 부품으로 간다.
+
+| 부품 | 측정(잰 값을 배치에 넘긴다) | 그리기(잰 값을 그대로 그린다) | 시험 |
+|---|---|---|---|
+| 카드 면과 구분선 | `measure/sizes.js`의 `sizeNode`(상자, 사람, 외부, 원통, 갈림길, 원), `table.js`(표, API), `class.js`(클래스, 인터페이스), `sizeParticipant`(순서 보기 참여자), 큐와 격자. `build-scene.js`가 도형마다 한 번 부른다 | `draw/figure.js`의 `drawScene` → `draw/shape.js` → `draw/card.js`의 `drawCard` → `draw/surface.js`의 `drawSurface`. 원통, 갈림길, 원, 상태 점만 `shape.js`가 모양 자체를 그린다 | `test/components.test.js`(U1) |
+| 카드 머리 | `measure/card.js`의 `headerOf`와 `placeHeader`(표, API, 클래스, 순서 보기 참여자가 같은 머리), 상자와 사람은 같은 `headerDecor`. 폭과 안쪽 여백(`PAD`)을 한 곳에서 정한다. 제목은 아이콘과 배지를 뺀 폭(`room`)에서 줄을 나눈다 | `draw/card.js`의 `drawHead` → `draw/decor.js`의 `drawDecor`(아이콘, 배지, 개수)와 `draw/texts.js` | `test/components.test.js`(U2, U3), `test/text.test.js`(T6~T8) |
+| 글 한 줄(text) | `measure/texts.js`의 `STYLE`(글 역할과 크기), `textAt`(제목, 열 이름, 형식, 제약, 클래스 멤버, 격자 칸이 모두 같은 모양), `stackTexts`, `titleTexts`, `textBlock`(메모와 구획 제목), `textWidth`, `textSpan`, `allTexts`. 글을 읽는 방식은 `text.js`의 `isLiteralFace`가 글꼴로 정한다 | `draw/texts.js`의 `drawTexts`. 이동 글 상자가 피할 사각형(`draw/boxes.js`)과 그림 검사 1번(`check/fit.js`)도 같은 `textSpan`을 읽는다 | `test/components.test.js`(U1, U4, U5, U6), `test/text.test.js`(T1~T3, T5) |
+| 카드 내용(`show`) | `measure/content.js`의 `sizeContent`가 줄마다 태그, 표시, 본문, 관계 그래프 이름, 값을 text로 재고 `fitValueSlot`, `valueText`가 값 글을 재어 돌려준다 | `draw/content.js`의 `drawContent`와 `draw/values.js`는 잰 text를 `drawTexts`로 그리고 태그 알약, 그래프 도형만 따로 그린다 | `test/cards.test.js`(S8), `test/text.test.js`(T4) |
+| 차트와 시간 머리 | `chart/labels.js`의 `drawHeader`가 제목(`label`)과 부제(`sub`)를 `stackTexts`로 쌓고 높이를 정한다. 차트(`chart/draw.js`)와 시간 보기(`layout/time.js`)가 같은 함수다 | 같은 함수가 `textMarkup`으로 그린다. 긴 글은 `chart.layout.width`나 없으면 `WIDTH`에서 줄을 나눈다 | `test/text.test.js`(T10, T11) |
+| 연결선과 선 라벨 | 라벨 알약 크기 `measure/sizes.js`의 `sizePill`. 선 경로는 `layout/`이 정하고 건드리지 않는다 | `draw/connector.js`의 `drawEdge`, `drawEdgeLabel` | `test/components.test.js`(U6, U7) |
+| 화살촉 | `draw/arrow.js`의 `headReach`(선 끝이 차지하는 크기). 차트 산점도와 덤벨이 읽는다 | 모양은 `arrowMarker` 하나다. 연결선은 `draw/connector.js`가 `edgeMarker`(보통 화살표와 클래스 관계의 머리)로 선 묶음 안에 정의를 두고 묶음의 `color`를 상속한다. 차트 방향선은 종류가 `CHART_ARROW`로 색 역할을 고르고(덤벨 main, 산점도 muted), `chart/dumbbell.js`와 `chart/scatter.js`가 `roleArrow`의 class와 끝 표식을 달며, `styles.js`가 `roleArrowDefs`로 쓰인 역할마다 정의 하나를 문서에 한 번 둔다. 역할 색은 `styles/chart.css`의 `.arrow-<역할>`이 한 번 정한다 | `test/components.test.js`(U7), `test/component-state.test.js` |
+| 켜짐과 평소의 모습 | 없음 | `styles/figure.css`의 효과 한 벌(`--fx-*`)이 유일한 정의다. 정지 그림의 평소 규칙, HTML 재생기의 `.on` 규칙(`figure.css`, `styles/player.css`), 움직이는 SVG의 keyframes(`animate/animator.js`, 속성 이름만 쓴다)가 같은 속성을 읽는다. 고른 색(`tone`, `appearance`)은 `draw/paint.js`가 평소 값(`--fx-face`, `--fx-edge-rest`)만 바꾼다. 차트의 글자 바탕과 받침 선은 차트 묶음(`.fl-chart`)의 `color`가 싣는 면의 색(`--chart-ground`, `styles/chart.css`)을 `currentColor`로 읽고, 움직이는 SVG는 켜진 차트 카드에서 이 `color`만 켜짐 구간에 맞춰 바꾼다([차트](design/charts.md#그리기)) | `test/component-state.test.js`, `test/components.test.js`(U10). 둘은 선언을 읽는 시험이고 계산된 색은 Chrome에서 본 범위만 있다([표현 범위](design/expression-coverage.md#예제와-검증-범위)) |
+| 아이콘 | `measure/decor.js`의 `layoutDecor`가 아이콘 칸 자리를 정한다 | `icons/symbols.js`(개념 이름의 도형과 역할)와 `icons/index.js`의 `loadIcon`이 `iconData`를 만들고 `draw/decor.js`의 `drawSymbol`이 상자 머리, 그룹 탭, 타일에서 같은 도형을 그린다 | `test/components.test.js`(U8), `test/escaping.test.js`(I2, 사용자 SVG의 안전) |
+| 장면 탭과 도구 막대 | 없음 | `html/player-script.js`의 `figureFrame`이 도구 막대 한 벌(문법 복사, HTML 다운로드, 전체화면, 확대·축소)과 빈 탭 줄 하나를 둔다. 탭은 브라우저의 `player/controls.js`가 장면마다 만들고, 장면이 둘 미만이면 `player/play.js`가 탭 줄을 숨긴다. 아이콘은 `icons/controls.js` | `test/components.test.js`(U9)와 `test/exports.test.js`(X10, X11). 탭 만들기·숨기기·클릭은 시험이 없다([브라우저에서만 보이는 계약](design/expression-coverage.md#브라우저에서만-보이는-계약)) |
+
+호출의 방향은 `build-scene.js` → `measure/` → `layout/` → `draw/` → `svg.js`, `html/content.js` → `html.js`다. `measure/`는 `draw/`를 부르지 않고, `draw/`가 `measure/`의 `texts.js`, `content.js`, `decor.js`, `sizes.js`의 값(`STYLE`, `CONTENT`)을 읽어 잰 값과 그린 값이 같은 출처를 갖는다.
+
 ## 실행 흐름
 
 ### 그림 만들기
 
-1. `cli`가 원본을 읽어 문서 모형 하나(`figure`)로 만든다. 첫 문장이 `daphnis 2`인지 보고(`source/version.js`), 줄을 머리, 선언, 시간 흐름으로 나눠 읽는다. 카드, 칸, 선, 값, 보기, 장면이 모든 카드에 같은 규칙으로 놓이고 그림 종류는 없다. 파일을 다 읽은 뒤 이름 공간, 연결점(`카드.칸`), 보기 구성원, 선의 그릴 수 있음, 차트 묶음, 이동의 보기별 투영을 확인한다(`source/validate.js`, `views-check.js`, `project.js`. [그림 문법](design/figure-syntax.md)).
+1. `cli`가 원본을 읽어 문서 모형 하나(`figure`)로 만든다. 첫 문장이 `daphnis 2`인지 보고(`source/version.js`), 줄을 머리, 선언, 시간 흐름으로 나눠 읽는다. 카드, 칸, 선, 값, 보기, 장면이 모든 카드에 같은 규칙으로 놓이고 그림 종류는 없다. 모형은 받은 원본 글을 그대로(`figure.source`, 줄바꿈과 첫 글자 포함) 간직해, 재생기의 문법 복사가 같은 글을 쓴다. 보기는 이름이 없고, 어느 보기에도 적히지 않은 카드는 기본 보기를 받으며, 보기에는 정해진 순서대로 내부 열쇠 `v1`, `v2`, ...가 붙는다(`views-check.js`). 도형과 그룹, `show` 줄의 색은 `tone`과 `appearance`로 모형에 들어간다. 파일을 다 읽은 뒤 이름 공간, 연결점(`카드.칸`), 보기 구성원, 선의 그릴 수 있음, 차트 묶음, 이동의 보기별 투영을 확인한다(`source/validate.js`, `views-check.js`, `project.js`. [그림 문법](design/figure-syntax.md)).
 2. 값 글자 자리는 값이 모든 장면에서 가질 글의 실제 폭이라 시간표에 기대고 시간표는 배치에 기대므로, `build-scene.js`가 배치와 시간표를 되풀이하되 자리가 줄어들지 않고 네 번을 넘지 않는다(`value-slots.js`, 못 맞추면 `layout-unstable`).
 3. 한 번의 되풀이 안에서: 글꼴 파일로 모든 글의 폭을 재 카드 크기와 연결점을 정하고(차트 카드는 모든 프레임 가운데 가장 큰 차트 크기), 보기마다 배치한다. 그래프는 그룹마다 그다음 바깥을 elkjs로 배치하고 경로 조각을 잇는다([배치](design/layout.md)). 순서는 격자 배치, 차트는 그림 크기, 시간 보기는 `layout/time.js`다. `layout/panels.js`가 판을 위에서 아래로 쌓아 장면 하나로 합친다.
 4. `views.js`가 보기마다 모형을 줄이고(`viewFigure`), 합친 장면에서 시간표를 만든다. 점 이동 시간은 선 길이에 비례해 배치 뒤에 만들고, 이동 하나는 보기마다 hop 하나로 펼치되 시간은 첫 투영이 한 번만 정한다. 값에 묶인 차트는 프레임과 시간표 구간을 만든다(`chart-frames.js`). 모든 선과 가장 큰 카드가 보이는 상태에서 화면 오류를 검사한다([그림 검사](design/figure-check.md)).
@@ -45,7 +64,7 @@
 - `timeline.marks`: `{ [키]: [[from, to, si], ...] }`. 조용한 선이 보이는 구간이다(`quiet:번호`). 같은 장면 안에서만 합치고 길이 0 구간도 남기며, 세 번째 값이 구간을 소유한 장면이다. 점이 지나는 동안의 선은 이동 목록(`hops`)에서 구하고, 켜 둔 도형과 부분, 차트 행은 구간(`nodesOn`, `partsOn`, `charts[id].lights`)이 가진다.
 - `timeline.pulses`: `[{ key, at, si }]` 시각 순. 키는 `value:값 줄 번호`나 `chart:차트:표식 id`이고 `si`는 출처 장면이다. 펄스 모양은 `src/pulse.js`다(`PULSE`, `PULSE_MS`, `pulseAt`, `envelopeKeys`).
 - `timeline.presentation[si]`: 장면마다 표시 길이(화면 ms). 논리 길이를 `speed`로 나눈 값과 마지막 펄스·선 이탈에 `PULSE_MS`를 더한 값 가운데 큰 것이고, 컴파일러가 한 번 정해(`timeline-marks.js`의 `presentationOf`) 재생기와 SVG가 읽는다([재생](design/playback.md#장면과-재생-방식)).
-- `scene`: `{ items, groups, edges, lifelines, notes, activations, destructions, fragments, plots, times, panels, chartFrames, width, height, tagOrder }`. 도형, 그룹, 선에는 `view`가 있고 선에는 `strategy`가 있다. 같은 카드가 여러 보기에 그려지면 `items`에 같은 `id`가 여러 번 있다. `panels[]`는 `{ index, view, strategy, box: { x, y, w, h }, label?, labelAt?, minWidth }`이고 `minWidth`는 글이 12px 아래로 줄지 않는 판의 최소 폭이다. `plots[]`와 `times[]`는 차트 보기와 시간 보기 판이다.
+- `scene`: `{ items, groups, edges, lifelines, notes, activations, destructions, fragments, plots, times, panels, chartFrames, width, height, tagOrder }`. 도형, 그룹, 선에는 `view`(보기의 내부 열쇠 `v1`, `v2`, ...)가 있고 선에는 `strategy`가 있다. 같은 카드가 여러 보기에 그려지면 `items`에 같은 `id`가 여러 번 있다. `panels[]`는 `{ index, view, strategy, box: { x, y, w, h }, label?, labelAt? }`이고 `box.w`는 판의 자연 폭이다. `plots[]`와 `times[]`는 차트 보기와 시간 보기 판이다.
 - 재생기가 해야 할 일: 같은 `id`의 요소는 `querySelectorAll`로 모두 찾고, 시각의 상태는 `periods`와 `charts`의 같은 규칙으로 정하고, 펄스는 `timeline.pulses`로 건다. 애니메이션 끝 이벤트는 논리 상태를 정하지 않는다.
 
 장면 생성은 `build-scene.js`가 맡고 최초 빌드와 재배치가 같은 카드 크기·배치·충돌 검사를 사용한다.
@@ -80,6 +99,7 @@
 - 값 글자와 차트 카드 크기는 실제 글꼴로 잰 글 폭이다. 렌더러가 같은 글꼴로 같은 줄 나눔을 쓴다.
 - 점 이동 곡선, 글 상자 밀어 넣기, 차트 자라기는 HTML과 SVG가 같은 토큰과 같은 규칙을 쓴다. 규칙은 `src/easing.js`, `src/chip.js`, `src/chart/motion.js`에 있고, 브라우저 코드(`player/`)는 불러올 수 없어 같은 계산을 따로 둔다. 글 상자 자리는 예외로, 빌드 때 시간표에 담은 계획을 재생기가 보간만 한다.
 - 크기, 간격, 색, 시간 값은 토큰만 쓴다. 공통 토큰은 design-tokens가, 그림 전용 토큰은 `src/tokens.json`이 정본이고 같은 이름을 두 곳에 두지 않는다. `src/tokens.css`, `src/tokens.js`는 둘을 합친 생성물이라 손으로 고치지 않는다.
+- 그림은 정의된 부품을 가져다 조립한다(React처럼 합성하되 React에 기대지 않는다). 흐름은 원본 문법 → 공통 모형 → 필요한 배치 → 공통 부품 → 조작부 하나다. 카드(머리와 필드 줄), 연결선과 라벨, 화살촉, 아이콘, 장면 탭, 도구 막대는 모양과 상태를 부품 하나가 소유하고, 종류별 렌더러는 데이터와 필요한 배치 결과만 넘긴다. 같은 토큰을 읽는 것만으로 같은 부품이라 하지 않고, 측정과 그리기는 같은 부품의 역할 규약을 쓴다. 같은 모양이 종류마다 복제되는 일과 같은 시험이 종류마다 되풀이되는 일을 막기 위해서다. 부품이 코드의 어느 파일에 있는지는 [부품 호출 지도](#부품-호출-지도)에 있다.
 - 변환 중 네트워크에 접근하지 않는다. 글꼴과 배치 엔진을 모두 함께 배포한다.
 
 ## 기술 선택
@@ -102,6 +122,6 @@
 
 `buildFigure`는 원본의 의미와 배치에서 시간표를 만들며, `reflowFigure`는 기존 시간표의 사건을 보존하고 그래프 보기의 새 배치에 경로만 대응하며, `chartWidth`가 있으면 차트를 그 폭 이하로 다시 그린다. `track-geometry.js`는 경로 기하만 계산하고 `reflow-timeline.js`는 중간 도착 시각을 유지하는 거리 비율을 만든다. 브라우저가 새 사건이나 값을 계산하지 않는 규칙은 같다. 자세한 계약은 [좁은 화면 배치](design/layout.md#좁은-화면을-위한-배치-목표-폭)에 있다.
 
-HTML은 `html/responsive.js`가 좁은 배치를 미리 만들고 `player/responsive.js`가 같은 시계에서 그림만 전환한다. 비활성 template을 사용해 표시 SVG와 ID를 중복하지 않는다. 사건을 다시 실행하거나 탭·조작부를 다시 만들지 않는다. 세부 계약과 남은 가로 넘침은 [배치 설계](design/layout.md)에 적는다.
+HTML은 `html/responsive.js`가 좁은 배치 후보를 미리 만들고 `player/responsive.js`가 같은 시계에서 그림만 전환한다. 비활성 template을 사용해 표시 SVG와 ID를 중복하지 않는다. 사건을 다시 실행하거나 탭·조작부를 다시 만들지 않는다. 후보는 이동 글 경고(그림 검사 7번)가 원본 배치보다 늘지 않을 때만 싣고, 그래프 후보가 안 되면 차트만 좁힌 후보를 같은 기준으로 본다. 둘 다 안 되면 좁은 배치 없이 원본 배치 하나를 폭에 맞춰 줄인다. 세부 계약과 남은 가로 넘침은 [배치 설계](design/layout.md)에 적는다.
 
 토큰 생성기는 문자열 dimension의 px와 duration의 ms를 배치용 숫자로 읽는다. rem·s처럼 환산 기준이 필요한 문자열과 타입에 맞지 않는 단위는 거절한다. 기존 객체형 값은 선언된 단위의 수치를 보존한다. 예를 들어 tracking의 em 수치는 글꼴 측정기가 글자 크기와 곱한다. CSS 출력은 원래 단위를 유지한다.

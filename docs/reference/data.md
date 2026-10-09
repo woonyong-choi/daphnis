@@ -18,9 +18,7 @@ table orders "orders" {
   total "numeric(10, 2)"
 }
 
-view main graph right
-
-scene "주문" mode=once
+scene "주문"
   light orders.user_id users.id
   orders -> users time=900ms
   show users "id 7 · kim@example.com" tag="행"

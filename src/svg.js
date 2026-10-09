@@ -93,10 +93,12 @@ function scopeIds(markup, prefix) {
 // cost: time O(s), heap O(1), stack O(1)
 // vars: s = 장면 수
 // basis: estimate
-/** 명령줄 `--scene`의 값(1부터 센 번호나 장면 이름)을 장면 번호(0부터)로. 없으면 첫 장면이다. 없는 장면이면 RangeError다. */
+/** 명령줄 `--scene`의 값(1부터 센 번호나 장면 이름)을 장면 번호(0부터)로. 없으면 첫 장면이다. 없는 장면이면 사용자가 쓴 값을 알리는 RangeError다. 장면이 없는 그림에 값을 주면 고를 장면이 없어 RangeError다. */
 export function selectScene(steps, option) {
   if (option === undefined) return 0;
-  return sceneIndex(steps, /^\d+$/.test(option) ? Number(option) - 1 : option);
+  const index = /^\d+$/.test(option) ? Number(option) - 1 : steps.findIndex((s) => s.label === option);
+  if (!hasScene(steps, index)) throw new RangeError(noSceneMessage(steps, option));
+  return index;
 }
 
 // cost: time O(s), heap O(1), stack O(1)
@@ -105,8 +107,20 @@ export function selectScene(steps, option) {
 /** 장면 번호(0부터)나 이름을 장면 번호로. 없으면 있는 장면 이름을 알린다. */
 export function sceneIndex(steps, selector) {
   const index = typeof selector === 'number' ? selector : steps.findIndex((s) => s.label === selector);
-  if (!Number.isInteger(index) || index < 0 || index >= steps.length) throw new RangeError(`no scene ${JSON.stringify(selector)}. Scenes: ${steps.map((s, i) => `${i + 1} "${s.label}"`).join(', ')}`);
+  if (!hasScene(steps, index)) throw new RangeError(noSceneMessage(steps, selector));
   return index;
+}
+
+function hasScene(steps, index) {
+  return Number.isInteger(index) && index >= 0 && index < steps.length;
+}
+
+// cost: time O(s), heap O(s), stack O(1)
+// vars: s = 장면 수
+// basis: estimate
+// 없는 장면 오류 글. shown은 부른 쪽이 받은 값 그대로다(명령줄은 1부터 센 입력, 공개 API는 0부터 센 번호).
+function noSceneMessage(steps, shown) {
+  return `no scene ${JSON.stringify(shown)}. ${steps.length ? `Scenes: ${steps.map((s, i) => `${i + 1} "${s.label}"`).join(', ')}` : 'This figure has no scenes'}`;
 }
 
 // cost: time O(b + v·c + f), heap O(b + v·c + f), stack O(1)

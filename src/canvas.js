@@ -34,8 +34,8 @@ export const canvasOf = (figure) => (figure?.width === 'wide' ? CANVAS_WIDE : CA
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /**
- * 그림이 보이는 모양의 가로세로 비율. 내용이 캔버스보다 좁으면 viewBox만 캔버스 폭으로 넓어지므로 보이는 폭은 내용 폭과 캔버스 폭 중 큰 쪽이다.
- * 좁고 긴 그림(451x986)은 내용 비율이 0.46이지만 960x986으로 보이므로 보이는 비율은 0.97이다.
+ * 그림 틀(회색 판)의 가로세로 비율. 틀은 내용이 캔버스보다 좁아도 캔버스 폭을 유지하므로 폭은 내용 폭과 캔버스 폭 중 큰 쪽이다. 내용은 자연 크기로 그 안에 놓이고 틀만 넓다.
+ * 좁고 긴 그림(451x986)은 내용 비율이 0.46이지만 틀은 960x986이라 비율은 0.97이다. 계산은 바꾸지 않는다.
  */
 export function displayRatio(width, height, canvas = CANVAS) {
   return Math.max(width, canvas) / height;

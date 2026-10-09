@@ -8,7 +8,8 @@ import { chartCards } from './chart-frames.js';
 import { attachIcons } from './icons/index.js';
 import { checkLayoutWidth } from './layout/graph.js';
 import { findMissingGlyph } from './measure/fonts.js';
-import { hasUnpairedBacktick } from './text.js';
+import { STYLE } from './measure/texts.js';
+import { hasUnpairedBacktick, isLiteralFace } from './text.js';
 import { INTERVAL_TYPES, checkChartLightTargets, checkChartRows, hasRowRule } from './source/chart-rules.js';
 import { readFigure } from './source/parse.js';
 import { createProblems, FigureError } from './source/problems.js';
@@ -25,7 +26,7 @@ const LABEL_KEY = { bar: 'label', stacked: 'label', percent: 'label', dumbbell: 
  * @param strict 경고도 오류로 올린다
  * @param budget 올린 예산 { 이름: 값 }. 이름 없는 예산은 기본 한도다(src/budget.js)
  * @param layoutWidth 그래프 보기의 배치 목표 폭. 들어가지 못하면 경고하고 글자·도형 크기는 유지한다
- * @returns { figure, scene, timeline, warnings, valueTexts }. scene은 보기마다의 판을 합친 장면(scene.panels, scene.plots, scene.times, scene.chartFrames)이고 timeline은 문서 하나의 시간표다
+ * @returns { figure, scene, timeline, warnings, valueTexts }. figure.source는 받은 원본 글 그대로(CRLF 포함)이고 reflowFigure도 같은 figure를 쓴다. scene은 보기마다의 판을 합친 장면(scene.panels, scene.plots, scene.times, scene.chartFrames)이고 timeline은 문서 하나의 시간표다
  * @throws FigureError 원본 오류나 그림 검사 오류가 있을 때. 모든 문제를 담는다
  */
 export async function buildFigure(source, { baseDir = '.', strict = false, requireData = false, requireCi = false, budget, layoutWidth } = {}) {
@@ -79,11 +80,13 @@ function finish(result, problems, { strict }) {
 function loadChartData(plot, baseDir, problems) {
   const { chart, chartType } = plot;
   const { line } = chart.data;
+  const where = `data "${chart.data.path}" at "${chart.data.pointer}"`;
   let records;
   try {
-    records = pointer(JSON.parse(readFileSync(resolve(baseDir, chart.data.path), 'utf8').replace(/^﻿/, '')), chart.data.pointer);
+    records = pointer(parseJson(readFileSync(resolve(baseDir, chart.data.path), 'utf8')), chart.data.pointer);
   } catch (error) {
-    problems.error(line, `cannot read data "${chart.data.path}" at "${chart.data.pointer}": ${error.message}`);
+    // 파일 시스템 오류는 코드만, JSON 오류는 위치만 알린다. 읽은 파일의 글은 진단에 싣지 않는다.
+    problems.error(line, `cannot read ${where}: ${error.code ?? error.message}`);
     return;
   }
   if (!Array.isArray(records)) {
@@ -96,6 +99,19 @@ function loadChartData(plot, baseDir, problems) {
   if (chart.rows.length < records.length) return;
   checkChartRows(plot, problems);
   checkChartLightTargets(plot, problems);
+}
+
+// cost: time O(j), heap O(j), stack O(d)
+// vars: j = JSON 글자 수, d = JSON 깊이
+// basis: estimate
+// JSON 글을 읽는다. 실패하면 읽은 글이 든 엔진의 메시지(`Unexpected token 'T', "TOKEN=…" is not valid JSON`) 대신 `not valid JSON`과 엔진이 알린 위치만 담은 오류를 던진다.
+function parseJson(text) {
+  try {
+    return JSON.parse(text.replace(/^﻿/, ''));
+  } catch (error) {
+    const at = /position (\d+)(?: \(line (\d+) column (\d+)\))?/.exec(error.message);
+    throw new Error(`not valid JSON${at ? ` at position ${at[1]}${at[2] ? ` (line ${at[2]} column ${at[3]})` : ''}` : ''}`);
+  }
 }
 
 // cost: time O(k), heap O(k), stack O(1)
@@ -175,15 +191,15 @@ function pointer(document, path) {
 // vars: n = 문서 모형의 글 글자 수, t = 글 수, d = 모형 깊이
 // basis: estimate
 // 그림 글꼴에 없는 글자를 줄 번호와 함께 알린다. 대신 그릴 글꼴의 폭을 알 수 없기 때문이다.
-// 모형의 모든 글을 본문 글꼴로, 테이블과 API 칸 타입은 고정폭 글꼴로도 본다. 백틱 구간은 글 안에서 고정폭으로 보고, 짝이 안 맞는 백틱은 오류다. 글 종류를 빠뜨리지 않기 위해 모형 전체를 훑는다.
+// 모형의 글은 그려지는 역할의 글꼴로 한 번만 본다(LITERAL_KEYS: 클래스 멤버, 열 형식, mono 줄, 값 글. 나머지는 산문). 산문은 백틱 구간이 코드라서 짝이 안 맞으면 오류이고,
+// 글 그대로 읽는 글(text.js isLiteralFace)은 백틱도 글자라 홀수 개여도 받는다. 글 종류를 빠뜨리지 않기 위해 모형 전체를 훑는다.
 function checkGlyphs(figure, problems) {
   const texts = [];
-  collectTexts(figure.nodes, figure.line ?? 1, texts);
-  collectTexts([figure.groups, figure.edges, figure.views, figure.values, figure.steps, figure.title, figure.subtitle], figure.line ?? 1, texts);
-  const mono = figure.nodes.flatMap((n) => (n.columns ?? []).map((c) => [c.type, c.line ?? n.line]));
+  for (const key of ['nodes', 'groups', 'edges', 'views', 'values', 'steps']) collectTexts(figure[key], figure.line ?? 1, texts, { owner: key });
+  for (const text of [figure.title, figure.subtitle]) collectTexts(text, figure.line ?? 1, texts);
   const reported = new Set();
-  for (const [text, line, face] of [...texts.map(([t, l]) => [t, l, 'regular']), ...mono.map(([t, l]) => [t, l, 'mono'])]) {
-    if (hasUnpairedBacktick(text) && !reported.has(`${line}\u0000${text}`)) {
+  for (const [text, line, face] of texts) {
+    if (!isLiteralFace(face) && hasUnpairedBacktick(text) && !reported.has(`${line}\u0000${text}`)) {
       reported.add(`${line}\u0000${text}`);
       problems.error(line, `the backticks in "${text}" are not paired. Close the code span with a second backtick`);
     }
@@ -197,15 +213,30 @@ function checkGlyphs(figure, problems) {
 // cost: time O(n), heap O(t), stack O(d)
 // vars: n = 모형 원소 수, t = 글 수, d = 모형 깊이
 // basis: estimate
-function collectTexts(value, line, out, seen = new Set()) {
+function collectTexts(value, line, out, { owner, face = PROSE_FACE } = {}, seen = new Set()) {
   // 차트 행 이름처럼 \u0000으로 이은 안쪽 키는 그리지 않는 글이라 이음 글자를 빼고 본다.
-  if (typeof value === 'string') out.push([value.replaceAll('\u0000', ' '), line]);
+  if (typeof value === 'string') out.push([value.replaceAll('\u0000', ' '), line, face]);
   else if (value && typeof value === 'object' && !seen.has(value)) {
     seen.add(value);
     const own = typeof value.line === 'number' ? value.line : line;
-    if (Array.isArray(value)) for (const item of value) collectTexts(item, line, out, seen);
-    else for (const item of Object.values(value)) collectTexts(item, own, out, seen);
+    if (Array.isArray(value)) for (const item of value) collectTexts(item, line, out, { owner, face }, seen);
+    else for (const [key, item] of Object.entries(value)) collectTexts(item, own, out, { owner: key, face: faceOfKey(owner, value, key) }, seen);
   }
+}
+
+// 모형에서 산문이 아닌 글의 자리: 담고 있는 키 → 글 키 → 그려지는 역할의 글꼴. 클래스 멤버의 표기, 표·API 열 형식, 값 글은 글 그대로 그린다.
+const LITERAL_KEYS = {
+  members: { id: STYLE.mono.face, signature: STYLE.mono.face },
+  columns: { type: STYLE.type.face },
+  values: { from: STYLE.value.face },
+  sets: { operand: STYLE.value.face },
+};
+const PROSE_FACE = STYLE.row.face;
+
+// 글 키가 그려지는 글꼴. `show ... mono` 줄(row)의 글과 덧붙임도 고정폭 글꼴이다.
+function faceOfKey(owner, parent, key) {
+  if (owner === 'row' && parent.isMono && (key === 'text' || key === 'meta')) return STYLE.mono.face;
+  return LITERAL_KEYS[owner]?.[key] ?? PROSE_FACE;
 }
 
 export { FigureError };

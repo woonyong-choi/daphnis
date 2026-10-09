@@ -14,17 +14,12 @@ chart latency "쿼리 p50 지연" dumbbell "예시 데이터. 쿼리마다 1,000
   row "회원 단건 조회" before=6 before.low=5 before.high=7 after=6.5 after.low=5.5 after.high=7.5
 }
 
-view main plot {
-  latency
-}
+scene "전체 비교"
 
-scene "전체 비교" mode=static
-  wait 1s
-
-scene "전에서 후로" mode=once
+scene "전에서 후로"
   reveal latency.before
   wait 1s
   reveal latency.after
 
-scene "달라지지 않은 쿼리" mode=once
+scene "달라지지 않은 쿼리"
   light latency "회원 단건 조회"

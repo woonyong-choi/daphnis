@@ -1,14 +1,14 @@
 // 값 카드 줄의 값 글자와 바뀔 때 밝히는 테두리. 줄의 이름은 카드 층이 그리고, 값은 시간표(timeline.values)의 변화 목록대로 글자 요소를 값마다 하나씩 두고 불투명도로 바꾼다(docs/design/playback.md 값 변화).
 // 같은 카드가 여러 보기에 그려지면 도형마다 같은 값 글자를 한 벌씩 그린다(data-v는 같다). 카드에 놓이지 않은 값(`on=` 없음)은 그리지 않는다.
+import { CONTENT, valueText } from '../measure/content.js';
 import { filledSlots, queueSlots } from '../measure/queue.js';
-import { CARD, STYLE } from '../measure/sizes.js';
-import { wrap } from '../measure/fonts.js';
 import { categoryPaint } from '../chart-palette.js';
-import { centerBaseline, escapeXml, roundCoord as r } from '../text.js';
-import { values } from '../tokens.js';
-import { rowSlot } from './card.js';
-import { cardBox } from './figure.js';
+import { escapeXml, roundCoord as r } from '../text.js';
+import { drawSlot } from './card.js';
+import { contentBox, rowSpan } from './content.js';
 import { outlineOf } from './shape.js';
+import { CORNER } from './surface.js';
+import { drawText } from './texts.js';
 import { hiddenAttr } from './visible.js';
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -20,7 +20,7 @@ const isLastText = (row, text) => row.periods.at(-1)[2] === text;
 // vars: i = 도형 수
 // basis: estimate
 // 값 줄이 놓인 도형들: 같은 이름의 도형 가운데 카드(큐는 칸)를 가진 것. 보기마다 한 도형씩이다.
-const instancesOf = (scene, row) => scene.items.flatMap((item, index) => (item.id === row.node && (row.slots !== undefined || item.card) ? [{ item, index }] : []));
+const instancesOf = (scene, row) => scene.items.flatMap((item, index) => (item.id === row.node && (row.slots !== undefined || item.content) ? [{ item, index }] : []));
 
 // cost: time O(v), heap O(v), stack O(1)
 // vars: v = 값 줄 수
@@ -39,16 +39,16 @@ export function drawFlashes(scene, timeline, { windows, pulse, row }) {
     const anim = pulse ? pulse(vi) : windows(row.flashes);
     for (const { item, index } of instancesOf(scene, row)) {
       if (row.slots !== undefined) {
-        flashes.shape.set(index, `${flashes.shape.get(index) ?? ''}${outlineOf(item)[0]} class="fl-flash fl-flash-face" opacity="0" data-vf="${vi}">${anim}</rect>`);
+        flashes.shape.set(index, `${flashes.shape.get(index) ?? ''}${outlineOf(item)} class="fl-flash fl-flash-face" opacity="0" data-vf="${vi}">${anim}</rect>`);
         continue;
       }
-      const box = cardBox(item);
-      const layout = item.card.layouts[row.card];
+      const box = contentBox(item);
+      const layout = item.content.layouts[row.card];
       const at = layout.rows.findIndex((laid) => laid.row.valueId === row.id);
       if (at < 0) continue;
-      const slot = rowSlot(layout, box, at);
+      const span = rowSpan(layout, box, at);
       const key = `${index}:${row.card}`;
-      flashes.card.set(key, `${flashes.card.get(key) ?? ''}${flashFrame({ box, slot, attr: `data-vf="${vi}"`, anim, isFirst: at === 0, isLast: at === layout.rows.length - 1 })}`);
+      flashes.card.set(key, `${flashes.card.get(key) ?? ''}${flashFrame({ box, span, attr: `data-vf="${vi}"`, anim, isFirst: at === 0, isLast: at === layout.rows.length - 1 })}`);
     }
   });
   return flashes;
@@ -66,39 +66,29 @@ export function drawValues(scene, timeline, { glyphs, windows, isStatic = false 
   return (timeline.values ?? [])
     .flatMap((row, vi) => instancesOf(scene, row).map(({ item }) => {
       if (row.slots !== undefined) return drawQueueValue(row, { item, vi, shown }, windows);
-      const box = cardBox(item);
-      const layout = item.card.layouts[row.card];
+      const box = contentBox(item);
+      const layout = item.content.layouts[row.card];
       const at = layout.rows.findIndex((laid) => laid.row.valueId === row.id);
       if (at < 0) return '';
-      const slot = rowSlot(layout, box, at);
+      const slot = layout.rows[at].valueSlot;
       const texts = [...new Set(row.periods.map(([, , text]) => text))].map((text) => {
-        glyphs.add(text, STYLE.value.face);
         const spans = row.periods.filter(([, , t]) => t === text).map(([start, end]) => [start, end]);
-        return `<text x="${r(box.x + box.w - CARD.side)}" y="${r(centerBaseline(slot.y + STYLE.row.line / 2, STYLE.value.size))}" class="value" opacity="${shown}"${hiddenAttr(shown)} data-v="${vi}" data-t="${escapeXml(text)}">${valueLines(text, layout.rows[at].valueSlot, { x: box.x + box.w - CARD.side })}${windows(spans, { holdEnd: isLastText(row, text) })}</text>`;
+        const extra = { attrs: ` opacity="${shown}"${hiddenAttr(shown)} data-v="${vi}" data-t="${escapeXml(text)}"`, inner: windows(spans, { holdEnd: isLastText(row, text) }) };
+        return drawText(valueText(slot, text), box, glyphs, extra);
       });
       return `<g class="fl-value">${texts.join('')}</g>`;
     }))
     .join('\n');
 }
 
-// cost: time O(n²), heap O(n), stack O(1)
-// vars: n = 값 글자 수
-// basis: estimate
-// 값 글자 본문. 자리 폭 안에 한 줄이면 글 그대로이고, 아니면 자리 폭에서 나눈 줄마다 오른쪽 끝에 맞춘 tspan이다. 크기를 정할 때와 같은 함수와 폭을 쓴다(measure/sizes.js fitValueSlot).
-function valueLines(text, slot, { x }) {
-  const lines = slot ? wrap(text, slot.w, STYLE.value) : [text];
-  if (lines.length === 1) return escapeXml(text);
-  return lines.map((line, k) => `<tspan x="${r(x)}" dy="${k === 0 ? 0 : STYLE.row.line}">${escapeXml(line)}</tspan>`).join('');
-}
-
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 // 값이 바뀔 때 그 카드 줄 뒤에 잠깐 켜지는 배경색(테두리 없음). 줄의 실제 자리 전체(카드 왼쪽 끝에서 오른쪽 끝, 위아래는 이웃 줄과 줄 간격 절반씩 나눈 곳)를 칠하고 카드 모서리에 닿는 첫 줄과 마지막 줄만 카드와 같은 반지름이라 면 둘레에 카드 색 띠(흰 테두리처럼 보이는 것)가 남지 않는다.
-function flashFrame({ box, slot, attr, anim, isFirst, isLast }) {
-  const top = isFirst ? box.y : slot.y - CARD.gap / 2;
-  const bottom = isLast ? box.y + box.h : slot.y + slot.h + CARD.gap / 2;
+function flashFrame({ box, span, attr, anim, isFirst, isLast }) {
+  const top = isFirst ? box.y : span.y - CONTENT.gap / 2;
+  const bottom = isLast ? box.y + box.h : span.y + span.h + CONTENT.gap / 2;
   const [left, right] = [box.x, box.x + box.w];
-  const [rt, rb] = [isFirst ? values.radius.md : 0, isLast ? values.radius.md : 0];
+  const [rt, rb] = [isFirst ? CORNER.inner : 0, isLast ? CORNER.inner : 0];
   const corner = (radius, dx, dy) => (radius ? `a${radius} ${radius} 0 0 1 ${dx * radius} ${dy * radius}` : '');
   const d = `M${r(left + rt)} ${r(top)}H${r(right - rt)}${corner(rt, 1, 1)}V${r(bottom - rb)}${corner(rb, -1, 1)}H${r(left + rb)}${corner(rb, -1, -1)}V${r(top + rt)}${corner(rt, 1, -1)}Z`;
   return `<path d="${d}" class="fl-flash" opacity="0" ${attr}>${anim}</path>`;
@@ -113,11 +103,11 @@ function addRowFlashes(flashes, scene, timeline, anim) {
     const [, node, number] = /^row:(.*):(\d+)$/.exec(key);
     const at = Number(number);
     scene.items.forEach((item, index) => {
-      if (item.id !== node || !item.card) return;
-      item.card.layouts.forEach((layout, k) => {
+      if (item.id !== node || !item.content) return;
+      item.content.layouts.forEach((layout, k) => {
         if (!layout.rows[at] || layout.rows[at].row?.isValue) return;
-        const box = cardBox(item);
-        const frame = flashFrame({ box, slot: rowSlot(layout, box, at), attr: `data-rf="${escapeXml(node)}:${at}"`, anim: anim?.(key) ?? '', isFirst: at === 0, isLast: at === layout.rows.length - 1 });
+        const box = contentBox(item);
+        const frame = flashFrame({ box, span: rowSpan(layout, box, at), attr: `data-rf="${escapeXml(node)}:${at}"`, anim: anim?.(key) ?? '', isFirst: at === 0, isLast: at === layout.rows.length - 1 });
         flashes.card.set(`${index}:${k}`, `${flashes.card.get(`${index}:${k}`) ?? ''}${frame}`);
       });
     });
@@ -144,6 +134,6 @@ function filledRects(item, count) {
   const { fill } = categoryPaint(0);
   return queueSlots(item)
     .slice(0, count)
-    .map((s) => `<rect x="${r(s.x)}" y="${r(s.y)}" width="${r(s.w)}" height="${r(s.h)}" rx="${values.radius.sm}" fill="${fill}" stroke="${fill}" stroke-width="${values.border.thin}"/>`)
+    .map((s) => drawSlot(s, { fill, stroke: fill }))
     .join('');
 }

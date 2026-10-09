@@ -10,7 +10,7 @@ import { assignViewEdges, projectMove, numberProjections, viewHas } from './proj
 import { emptyBeat } from './steps.js';
 import { resolveViews } from './views-check.js';
 import { unknownName } from './problems.js';
-import { checkValues } from './value-check.js';
+import { checkValues, checkValuesShown, isCardDrawn } from './value-check.js';
 
 // cost: time O(s·k + e² + h·e), heap O(k + e), stack O(1)
 // vars: s = 문장 수, k = 이름 수, e = 선 수, h = 이동 수
@@ -34,6 +34,7 @@ export function validateFigure(figure, problems) {
   if (problems.errors.length > viewsBefore) return;
   assignViewEdges(figure);
   checkDrawable(figure, names, problems);
+  checkValuesShown(figure, names, problems);
   checkChartCards(figure, names, problems);
   checkTimeline(figure, names, problems);
   if (problems.errors.length > before) return;
@@ -44,10 +45,10 @@ export function validateFigure(figure, problems) {
 // cost: time O(k), heap O(k), stack O(1)
 // vars: k = 이름 수
 // basis: estimate
-// 카드, 그룹, 값, 보기 이름이 겹치지 않는지 보고 이름 → 선언을 돌려준다. 칸(열, 멤버, 칸 격자의 칸, 구간)과 차트 계열은 카드 안의 이름이라 여기 들지 않는다.
+// 카드, 그룹, 값 이름이 겹치지 않는지 보고 이름 → 선언을 돌려준다. 칸(열, 멤버, 칸 격자의 칸, 구간)과 차트 계열은 카드 안의 이름이라 여기 들지 않고, 보기는 이름이 없다.
 function collectNames(figure, problems) {
   const names = new Map();
-  const items = [...figure.nodes, ...figure.groups.map((g) => ({ ...g, shape: 'group' })), ...figure.values.filter((v) => !v.queue).map((v) => ({ ...v, shape: 'value' })), ...figure.views.map((v) => ({ ...v, shape: 'view' }))];
+  const items = [...figure.nodes, ...figure.groups.map((g) => ({ ...g, shape: 'group' })), ...figure.values.filter((v) => !v.queue).map((v) => ({ ...v, shape: 'value' }))];
   for (const item of items) {
     const known = names.get(item.id);
     if (known) problems.error(item.line, `the name "${item.id}" is already used (line ${known.line})`);
@@ -207,9 +208,12 @@ function checkStateMarks(figure, names, problems) {
 function checkTimeline(figure, names, problems) {
   const usedEdges = new Set();
   for (const step of figure.steps) {
-    // 정지(static) 장면은 줄이 없어도 된다: 처음 구성 그대로의 정지 모습이다. 길이 0인 빈 박자 하나로 두어, 시간표와 그리기가 다른 장면과 같은 길을 간다(움직임도 효과도 없어 표시 길이 0).
+    // mode를 적지 않은 장면은 줄이 없으면 정지(static), 줄이 있으면 한 번 재생(once)한다. 적은 mode가 우선한다.
+    // 정지 장면은 줄이 없어도 된다: 처음 구성 그대로의 정지 모습이다. 길이 0인 빈 박자 하나로 두어, 시간표와 그리기가 다른 장면과 같은 길을 간다(움직임도 효과도 없어 표시 길이 0).
     // 재생하는 장면(once, loop)은 줄이 없으면 재생할 것이 없어 오류다.
-    if (!step.beats.length && !step.tracks.length && !step.hasError) {
+    const isEmpty = !step.beats.length && !step.tracks.length;
+    step.mode ??= isEmpty ? 'static' : 'once';
+    if (isEmpty && !step.hasError) {
       if (step.mode === 'static') step.beats.push(emptyBeat(step.line));
       else problems.error(step.line, `scene "${step.label}" has no lines. Add a move, show, light, reveal, or wait, or write mode=static for a still composition`);
     }
@@ -304,11 +308,12 @@ export function resolveHop(hop, { figure, names, problems }, usedEdges, scope) {
 // cost: time O(k), heap O(k), stack O(1)
 // vars: k = 이름 수(없는 이름 메시지)
 // basis: estimate
-// show, clear 대상: 카드를 쓰는 도형(상자, 외부, 저장소, 사람, 테이블, API)
+// show, clear 대상: 카드를 쓰는 도형(상자, 외부, 저장소, 사람, 테이블, API)이고 카드를 그리는 그래프 보기에 놓인 것
 function checkCardTarget(op, { figure, names }, problems) {
   const target = names.get(op.node);
   if (!target && !figure.rejectedNames.has(op.node)) problems.error(op.line, unknownName('card', op.node, names.keys()));
   else if (target && !CARD_SHAPES.includes(target.shape)) problems.error(op.line, `a ${target.shape} has no card. Use show on ${CARD_SHAPES.join(', ')}`);
+  else if (target && !isCardDrawn(figure, op.node)) problems.error(op.line, `${op.type} "${op.node}" needs a card, and no graph view shows "${op.node}". A sequence view draws only the head. Put "${op.node}" in a graph view`);
 }
 
 // cost: time O(k), heap O(k), stack O(1)

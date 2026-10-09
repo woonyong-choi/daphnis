@@ -18,6 +18,15 @@ const HEAT_PAINT = { tint: tokens.color.data['heat-low'], border: tokens.color.d
 const LIGHT_HEAT = { low: values.color.data['heat-low'], high: values.color.data['heat-high'], ink: values.color.data['heat-ink'], inkOn: values.color.data['heat-ink-on'] };
 // 칸 강도(0~1)를 `--s`에 담을 때 줄이는 자릿수 배율(소수 셋째 자리)
 const STRENGTH_PRECISION = 1000;
+// 이웃한 열 이름 사이에 남기는 간격
+const COLUMN_GAP = SPACE['4'];
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 열 이름이 쓸 수 있는 폭. 이름은 칸 가운데에 놓이므로 칸 너비에서 이웃 이름과의 간격을 뺀 폭이면 이웃 이름과 COLUMN_GAP 이상 떨어진다. 줄바꿈과 그림 검사가 이 폭 하나를 읽는다.
+function columnRoom(cellW) {
+  return cellW - COLUMN_GAP;
+}
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -54,9 +63,9 @@ function heatCell(grid, c, k) {
 function headerFits(chart, grid) {
   if (grid.names) {
     const fits = (names, { room, size, face, what }) => names.flatMap((lines) => lines.map((text) => ({ text, width: measure(text, size, face), room, line: chart.rows[0].line, what })));
-    return [...fits(grid.names.cols, { room: grid.cellW - SPACE['1'], size: TEXT['11'], face: 'num', what: 'column name' }), ...fits(grid.names.rows, { room: grid.plotX - PAD - SPACE['6'], size: TEXT['13'], face: 'medium', what: 'item name' }), ...chart.rows.map((c) => ({ text: grid.format(c.values.value), width: measure(grid.format(c.values.value), TEXT['11'], 'num'), room: grid.cellW - SPACE['1'] - SPACE['4'], line: c.line, what: 'cell value' }))];
+    return [...fits(grid.names.cols, { room: columnRoom(grid.cellW), size: TEXT['11'], face: 'num', what: 'column name' }), ...fits(grid.names.rows, { room: grid.plotX - PAD - SPACE['6'], size: TEXT['13'], face: 'medium', what: 'item name' }), ...chart.rows.map((c) => ({ text: grid.format(c.values.value), width: measure(grid.format(c.values.value), TEXT['11'], 'num'), room: grid.cellW - SPACE['1'] - SPACE['4'], line: c.line, what: 'cell value' }))];
   }
-  const colFits = grid.cols.map((c) => ({ text: c, width: measure(c, TEXT['11'], 'num'), room: grid.cellW - SPACE['1'], line: chart.rows.find((row) => row.col === c).line, what: 'column name' }));
+  const colFits = grid.cols.map((c) => ({ text: c, width: measure(c, TEXT['11'], 'num'), room: columnRoom(grid.cellW), line: chart.rows.find((row) => row.col === c).line, what: 'column name' }));
   return [...colFits, ...grid.rows.map((row) => labelFit(row, chart.rows.find((c) => c.row === row).line))];
 }
 
@@ -70,10 +79,12 @@ export function drawHeatmap(figure, top) {
   const format = valueFormat(chart.rows.map((c) => c.values.value), chart.decimals);
   const available = (chart.layout?.width ?? RIGHT + PAD) - PAD * 2;
   const valueRoom = Math.max(...chart.rows.map((c) => measure(format(c.values.value), TEXT['11'], 'num'))) + SPACE['4'] + SPACE['1'];
-  const labelW = chart.layout ? Math.max(SPACE['6'] + TEXT['13'], Math.min(labelColumn(rows), available / (cols.length + 1), available - cols.length * valueRoom)) : labelColumn(rows);
+  // 좁은 폭에서 행 이름 칸은 가장 긴 행 이름이 한 줄로 들어갈 만큼만(기본 최소 너비 없이) 얻고 남는 폭은 열이 가져간다. 이름이 길어도 열과 같은 몫을 넘지 않는다.
+  const rowNeed = Math.max(...rows.map((row) => measure(row, TEXT['13'], 'medium'))) + SPACE['6'];
+  const labelW = chart.layout ? Math.max(SPACE['6'] + TEXT['13'], Math.min(rowNeed, available / (cols.length + 1), available - cols.length * valueRoom)) : labelColumn(rows);
   const plotX = labelW + PAD;
   const cellW = (available - labelW + SPACE['1']) / cols.length;
-  const names = chart.layout ? { rows: rows.map((row) => wrap(row, labelW - SPACE['6'], { size: TEXT['13'], face: 'medium' })), cols: cols.map((col) => wrap(col, cellW - SPACE['1'], { size: TEXT['11'], face: 'num' })) } : undefined;
+  const names = chart.layout ? { rows: rows.map((row) => wrap(row, labelW - SPACE['6'], { size: TEXT['13'], face: 'medium' })), cols: cols.map((col) => wrap(col, columnRoom(cellW), { size: TEXT['11'], face: 'num' })) } : undefined;
   const leading = values.simple2['figure-leading'];
   const headerH = names ? Math.max(...names.cols.map((lines) => lines.length)) * TEXT['11'] * leading : TEXT['11'];
   const cellH = names ? Math.max(SIZE.chart.cell, Math.max(...names.rows.map((lines) => lines.length)) * TEXT['13'] * leading + SPACE['4']) : SIZE.chart.cell;

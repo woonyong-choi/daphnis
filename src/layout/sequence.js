@@ -1,9 +1,9 @@
 // 순서 그림 배치. 참여자 열과 메시지 행이 정해진 격자라 elkjs를 쓰지 않는다(docs/design/layout.md 순서 그림 배치).
 import { fragmentRows, finishFragments } from './sequence-fragments.js';
 import { placeSequenceLife } from './sequence-life.js';
-import { measure, wrap } from '../measure/fonts.js';
 import { FIGURE_PAD } from '../canvas.js';
-import { STYLE, sizePill } from '../measure/sizes.js';
+import { sizePill } from '../measure/sizes.js';
+import { STYLE, textBlock } from '../measure/texts.js';
 import { values } from '../tokens.js';
 
 const SPACE = values.space;
@@ -143,9 +143,8 @@ function placeColumns({ participants, sizes, index }, messages, noteBoxes) {
 // cost: time O(n²), heap O(n), stack O(1)
 // vars: n = 메모 글자 수
 // basis: estimate
-// 메모 상자 크기. 너비 NOTE_MAX에서 줄을 나눈다.
+// 메모 상자 크기와 글. 너비 NOTE_MAX에서 줄을 나누고 글은 상자 왼쪽 위 기준 text다(measure/texts.js textBlock).
 function sizeNote(text) {
-  const lines = wrap(text, NOTE_MAX - NOTE_PAD * 2, STYLE.meta);
-  const w = Math.max(...lines.map((l) => measure(l, STYLE.meta.size))) + NOTE_PAD * 2;
-  return { lines, w, h: lines.length * STYLE.meta.line + NOTE_PAD * 2 };
+  const { w, h, texts } = textBlock(text, { textW: NOTE_MAX - NOTE_PAD * 2, pad: NOTE_PAD, style: STYLE.meta });
+  return { w, h, texts };
 }

@@ -1,15 +1,19 @@
 // 카드 글 줄의 갱신 효과. `show`와 `clear`는 장면 구성이지만, 실제로 보이는 글이 바뀐 줄은 작은 배경 피드백을 받는다(값 줄의 배경 후광과 같은 면).
 // 보이는 글은 정규화한 글이다(태그, 글, 덧붙임, 표시를 `plainText`로 풀어 붙인 것). 같은 장면의 같은 시각(박자가 길이 0으로 이어져도 같다)에 지웠다 다시 쓴 줄은 순변화가 없어 효과가 없다.
 // 지운 줄과 값 줄은 효과가 없고(값 줄은 값의 후광이 맡는다), 카드 전체를 깜빡이지 않으며 새 id도 만들지 않는다.
+import { STYLE } from './measure/texts.js';
 import { plainText } from './text.js';
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 // 한 줄의 보이는 글. 값 줄은 값이 맡으므로 없다. 관계 그래프 줄은 그래프 모양 전체가 글이다.
+// 그려지는 글(draw/content.js)과 같이 읽는다: 본문과 덧붙임은 줄의 글꼴(`mono`면 백틱도 글자)로, 태그와 표시는 산문으로 읽는다.
 function visibleText(row) {
   if (row.isValue) return undefined;
   if (row.graph) return `graph:${JSON.stringify(row.graph.nodes?.map((n) => [n.name, n.isLit]) ?? [])}`;
-  return [row.tag, row.text, row.meta, row.mark].filter((part) => part !== undefined).map((part) => plainText(String(part)).trim()).join(' ').trim();
+  const face = row.isMono ? STYLE.mono.face : STYLE.row.face;
+  const shown = [[row.tag], [row.text, face], [row.meta, face], [row.mark]];
+  return shown.filter(([part]) => part !== undefined).map(([part, partFace]) => plainText(String(part), partFace).trim()).join(' ').trim();
 }
 
 // cost: time O(r), heap O(r), stack O(1)

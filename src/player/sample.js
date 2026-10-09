@@ -161,7 +161,9 @@ function clockOf(scene, elapsed, isSettled) {
  */
 function sampleScene(scene, data, elapsed, isSettled = false) {
   const { phase, d } = clockOf(scene, elapsed, isSettled);
-  const logical = scene.t0 + d * scene.speed;
+  // 표시 길이는 반올림되어 있어 d·speed가 장면 끝보다 조금 모자랄 수 있다. 마지막 모습은 늘 장면 끝 시각을 읽는다(끝 시각의 길이 0 박자를 잃지 않는다).
+  const isFinal = phase === 'final';
+  const logical = isFinal ? Math.max(scene.t0 + d * scene.speed, scene.t1) : scene.t0 + d * scene.speed;
   const held = Math.min(logical, scene.t1);
   const seg = scene.segs.findLast((s) => s.t0 <= held);
   const local = Math.min(held - seg.t0, seg.t1 - seg.t0);
@@ -172,9 +174,10 @@ function sampleScene(scene, data, elapsed, isSettled = false) {
     seg: scene.first + scene.segs.indexOf(seg),
     elapsed: local,
     cards: cardsAt(seg, local),
-    edges: edgeStatesAt(scene, logical),
+    // 마지막 모습은 정의상 쉼이다. 표시 길이는 마지막 효과가 끝나는 시각이라 알약과 후광은 남지 않으며, 표시 길이를 반올림한 끝자리의 양수 찌꺼기를 항목으로 내지 않는다.
+    edges: isFinal ? {} : edgeStatesAt(scene, logical),
     held: heldAt(scene, held, seg),
-    pulses: pulsesAt(scene, d),
+    pulses: isFinal ? {} : pulsesAt(scene, d),
     values: valuesAt(data, scene.si, held),
     charts: chartsAt(data, scene.si, held),
   };

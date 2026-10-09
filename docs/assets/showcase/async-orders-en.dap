@@ -31,7 +31,7 @@ q -> stock
 q -> pay
 q -> notify
 
-view main graph down
+view graph down
 
 scene "Events in flight" mode=loop
   track web -> api -> q at=0s every=2s time=3s

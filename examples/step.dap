@@ -18,21 +18,16 @@ chart scale "인스턴스 수 변화" step "예시 데이터. 점선은 정책�
   point x=35 running=5 want=5 warm=2
 }
 
-view main plot {
-  scale
-}
+scene "수요와 실제"
 
-scene "수요와 실제" mode=static
-  wait 1s
-
-scene "정책이 먼저" mode=once
+scene "정책이 먼저"
   reveal scale.want
   wait 1s
   reveal scale.running
   wait 1s
   reveal scale.warm
 
-scene "스케일 아웃 구간" mode=once
+scene "스케일 아웃 구간"
   light scale x=10
   wait 1s
   light scale x=20

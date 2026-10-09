@@ -21,19 +21,14 @@ chart kinds "오류 유형 구성" percent "예시 데이터. 최근 7일 오류
   row "정산 배치" timeout=0 refused=0 auth=0 bad=0 notfound=0 conflict=0 limit=0 fault=0 dep=0
 }
 
-view main plot {
-  kinds
-}
+scene "전체 구성"
 
-scene "전체 구성" mode=static
-  wait 1s
-
-scene "유형 하나씩" mode=once
+scene "유형 하나씩"
   reveal kinds.timeout kinds.refused
   wait 1s
   reveal kinds.auth kinds.bad kinds.notfound
   wait 1s
   reveal kinds.conflict kinds.limit kinds.fault kinds.dep
 
-scene "결제 API" mode=once
+scene "결제 API"
   light kinds "결제 API"

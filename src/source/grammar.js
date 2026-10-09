@@ -22,8 +22,10 @@ const INDEX = { type: 'number', format: '0 이상 정수', min: 0 };
 const ICON = { type: 'word', format: '이름 또는 세트:이름' };
 /** 같은 역할 복제 개수. 하나는 겹칠 것이 없어 2부터 받는다. */
 const PLURAL = { type: 'number', format: '2 이상 정수', min: 2 };
-/** 도형 면, 테두리와 카드 바탕 색. 값은 `paint` 목록의 이름뿐이다. */
-const PAINT = { type: 'word', values: 'paint' };
+/** 도형, 그룹, 카드 줄이 고르는 색 이름. 값은 `tone` 목록의 이름뿐이다. */
+const TONE = { type: 'word', values: 'tone' };
+/** 도형, 그룹, 카드 줄의 색 표현 방식. 값은 `appearance` 목록의 이름뿐이다. */
+const APPEARANCE = { type: 'word', values: 'appearance' };
 /** 시간 선택 사항. 값은 `900ms`, `2s` 꼴이다. */
 const TIME = { type: 'word', format: '시간' };
 /** 도형 글자 배지의 글자 수 상한. 도형 윗줄에 이름 글과 함께 들어갈 만큼이다. */
@@ -60,7 +62,7 @@ export const VALUES = {
   fragmentRun: { items: table({ on: {}, off: {} }) },
   direction: { default: 'right', items: table({ right: {}, down: {} }) },
   viewStrategy: { items: table({ graph: {}, sequence: {}, plot: {}, time: {} }) },
-  sceneMode: { default: 'static', items: table({ static: {}, once: {}, loop: {} }) },
+  sceneMode: { items: table({ static: {}, once: {}, loop: {} }) },
   traceUnit: { default: 'ms', items: table({ ms: {}, us: {}, s: {} }) },
   scale: { default: 'linear', items: table({ linear: {}, log: {} }) },
   zero: { default: 'on', items: table({ on: {}, off: {} }) },
@@ -87,12 +89,13 @@ export const VALUES = {
     }),
   },
   // 색 이름은 범주 색 도우미의 계열과 무채색 gray다(tone.js). 이름이 계열을 따라 늘어난다.
-  tone: { items: table(Object.fromEntries(TONES.map((name) => [name, {}]))) },
-  role: { items: table({ main: {}, compare: {}, reference: {} }) },
-  paint: {
+  tone: {
     hint: 'Colors are names, not hex, so the contrast rules hold',
     items: table(Object.fromEntries(TONES.map((name) => [name, {}]))),
   },
+  // plain은 중립 면에 색 아이콘과 작은 표식, filled는 같은 계열의 옅은 면, outline은 같은 계열 경계와 중립 면이다. filled와 outline은 tone이 있어야 한다.
+  appearance: { default: 'plain', items: table({ plain: {}, filled: {}, outline: {} }) },
+  role: { items: table({ main: {}, compare: {}, reference: {} }) },
   head: { default: 'end', items: table({ end: {}, both: {}, none: {} }) },
   shape: { default: 'rect', items: table({ rect: {}, circle: {}, tile: {} }) },
   width: { default: 'standard', items: table({ standard: {}, wide: {} }) },
@@ -140,7 +143,7 @@ export const STATEMENTS = table({
   chart: { section: 'declare', display: 'chart id "title" type ["subtitle"] {' },
   trace: { section: 'declare', display: 'trace id "title" [unit=ms] {', scopes: ['trace'] },
   span: { section: 'declare', in: 'trace' },
-  view: { section: 'declare', display: 'view id graph|sequence|plot|time ["label"]' },
+  view: { section: 'declare', display: 'view graph|sequence|plot|time ["label"] [{]' },
   edge: { section: 'declare', scopes: ['edge', 'relation'], display: 'a -> b' },
   x: { section: 'declare', in: 'chart' },
   y: { section: 'declare', in: 'chart' },
@@ -190,12 +193,12 @@ export const OPTIONS = table({
   'group.border': { type: 'word', values: 'border' },
   'group.badge': { ...TEXT, maxLength: BADGE_MAX },
   'group.icon': ICON,
-  'group.fill': PAINT,
-  'group.stroke': PAINT,
+  'group.tone': TONE,
+  'group.appearance': APPEARANCE,
   'node.badge': { ...TEXT, maxLength: BADGE_MAX },
   'node.icon': ICON,
-  'node.fill': PAINT,
-  'node.stroke': PAINT,
+  'node.tone': TONE,
+  'node.appearance': APPEARANCE,
   'box.count': PLURAL,
   'queue.slots': { ...COUNT, format: `1 이상 ${QUEUE_SLOTS_MAX} 이하 정수`, max: QUEUE_SLOTS_MAX },
   'queue.from': { ...INDEX, format: '0 이상 slots 이하 정수' },
@@ -240,8 +243,8 @@ export const OPTIONS = table({
   'edge.head': { type: 'word', values: 'head' },
   'box.shape': { type: 'word', values: 'shape' },
   'show.tag': TEXT,
-  'show.tone': { type: 'word', values: 'tone' },
-  'show.card': PAINT,
+  'show.tone': TONE,
+  'show.appearance': APPEARANCE,
   'show.meta': TEXT,
   'show.mark': { ...TEXT, maxLength: 8 },
   'show.mono': FLAG,

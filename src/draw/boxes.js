@@ -1,64 +1,27 @@
-// 이동 글 상자가 피할 사각형. 글자(도형 이름과 부제, 테이블 머리와 열, 그룹 제목), 아이콘과 알약 장식, 카드와 큐 안, 도형 테두리(사람 머리와 몸통, 원통 뚜껑 포함), 선 라벨 알약이다.
-import { measure } from '../measure/fonts.js';
-import { STYLE, groupHead, hasPill, sizePill } from '../measure/sizes.js';
+// 이동 글 상자가 피할 사각형. 글자(도형 이름과 부제, 테이블 머리와 열, 그룹 제목), 아이콘과 알약 장식, 카드와 큐 안, 도형 테두리(원통 뚜껑 포함), 선 라벨 알약이다.
+import { hasPill, placeGroupHead, sizePill } from '../measure/sizes.js';
+import { STYLE, allTexts, textSpan } from '../measure/texts.js';
 import { plainText } from '../text.js';
-import { columnKey } from '../table.js';
 import { values } from '../tokens.js';
 import { queueSlots } from '../measure/queue.js';
-import { cardBox, labelRows } from './figure.js';
-import { gridRows } from './grid.js';
+import { contentBox } from './content.js';
 import { statusBoxes } from './status.js';
 
 const SPACE = values.space;
-const INNER_X = SPACE['9'];
-const SIZE = values.size;
 
-// cost: time O(s·l + c + g + e), heap O(s·l + c + g + e), stack O(1)
-// vars: s = 도형 수, l = 도형 이름·멤버 줄 수, c = 테이블 열 수, g = 그룹 수, e = 선 수
+// cost: time O(s·l + g + e), heap O(s·l + g + e), stack O(1)
+// vars: s = 도형 수, l = 도형 글 줄 수, g = 그룹 수, e = 선 수
 // basis: estimate
 /**
  * 장면의 글자 사각형 목록. 가로는 잰 글 폭이고 높이는 글자 크기에 위아래 `space.1`씩 더한 값이다(글자 위아래 내림과 올림).
+ * 도형의 글은 모두 카드가 그리는 text(measure/texts.js)라서 그리는 자리와 같은 값을 읽는다.
  * @returns { x, y, w, h, name }[]. name은 알림 메시지에 쓸 표시 글이다
  */
 export function textBoxes(scene) {
   const boxes = [];
-  const add = ({ x, center, width }, style, name) => boxes.push({ x, y: center - style.size / 2 - SPACE['1'], w: width, h: style.size + SPACE['1'] * 2, name: plainText(name) });
-  for (const it of scene.items) {
-    if (it.headerOnly || it.shape === 'table' || it.shape === 'api') {
-      const labelW = measure(it.label, STYLE.label.size, STYLE.label.face);
-      add({ x: it.x + (it.w - it.head.w) / 2 + it.head.titleX - labelW / 2, center: it.y + (it.headerTop ?? 0) + it.headerH / 2, width: labelW }, STYLE.label, it.label);
-      if (it.stereotype) {
-        const markW = measure(it.stereotype, STYLE.meta.size, STYLE.meta.face);
-        add({ x: it.x + (it.w - markW) / 2, center: it.y + it.headerTop / 2, width: markW }, STYLE.meta, it.stereotype);
-      }
-    }
-    if (it.headerOnly) continue;
-    if (it.shape === 'classifier') {
-      for (const row of it.classifierRows) {
-        const width = measure(row.text, row.style.size, row.style.face);
-        add({ x: it.x + row.x - (row.centered ? width / 2 : 0), center: it.y + row.center, width }, row.style, row.text);
-      }
-      continue;
-    }
-    if (it.shape === 'table' || it.shape === 'api') {
-      it.columns.forEach((c, k) => {
-        const row = it.tableRows[k];
-        const center = it.y + row.center;
-        const key = columnKey(c);
-        const nameW = measure(c.name, STYLE.cell.size) + (key ? SPACE['3'] + measure(key, STYLE.key.size, STYLE.key.face) : 0);
-        const typeW = measure(c.type, STYLE.type.size, STYLE.type.face);
-        add({ x: it.x + INNER_X, center, width: nameW }, STYLE.cell, c.name);
-        add({ x: it.x + it.w - INNER_X - typeW, center, width: typeW }, STYLE.type, c.type);
-        for (const rule of row.rules) add({ x: it.x + INNER_X, center: it.y + rule.center, width: measure(rule.text, STYLE.type.size, STYLE.type.face) }, STYLE.type, rule.text);
-      });
-      continue;
-    }
-    for (const row of it.shape === 'grid' ? gridRows(it) : labelRows(it)) {
-      const width = measure(row.text, row.style.size, row.style.face);
-      add({ x: row.cx - width / 2, center: row.center, width }, row.style, row.text);
-    }
-  }
-  for (const g of scene.groups) if (g.label) add({ x: g.x + g.titleDx + groupHead(g).textDx, center: g.y + values.size.group.title / 2, width: measure(g.label, STYLE.group.size, STYLE.group.face) }, STYLE.group, g.label);
+  const add = ({ x, center, width }, style, name) => boxes.push({ x, y: center - style.size / 2 - SPACE['1'], w: width, h: style.size + SPACE['1'] * 2, name: plainText(name, style.face) });
+  for (const it of scene.items) for (const t of allTexts(it)) add(textSpan(it, t), t.style, t.text);
+  for (const g of scene.groups) if (g.label) add(textSpan(g, placeGroupHead(g).text), STYLE.group, g.label);
   for (const edge of scene.edges ?? []) for (const label of edge.endpointLabels ?? []) add({ x: label.x - label.w / 2, center: label.y, width: label.w }, STYLE.pill, label.text);
   return boxes;
 }
@@ -82,7 +45,7 @@ export function chipObstacles(scene, timeline) {
 function innerBoxes(scene) {
   return scene.items.flatMap((it) => {
     const name = plainText(it.label ?? it.id);
-    const card = it.card ? [{ ...cardBox(it), name, isInner: true }] : [];
+    const card = it.content ? [{ ...contentBox(it), name, isInner: true }] : [];
     if (it.shape !== 'queue') return card;
     const slots = queueSlots(it);
     const [x0, y0] = [Math.min(...slots.map((s) => s.x)), Math.min(...slots.map((s) => s.y))];
@@ -105,7 +68,10 @@ function statusObstacles(scene, timeline) {
 function decorBoxes(scene) {
   const place = (decor, origin, name) => decor.items.filter((i) => i.kind !== 'title').map((i) => ({ x: origin.x + i.x, y: origin.y + i.y, w: i.w, h: i.h, name: plainText(i.text ?? name) }));
   const nodes = scene.items.filter((it) => it.decor).flatMap((it) => place(it.decor, { x: it.x + it.decor.x, y: it.y + it.decor.y }, it.label));
-  const groups = scene.groups.flatMap((g) => (groupHead(g).decor ? place(groupHead(g).decor, { x: g.x + g.titleDx, y: g.y + (values.size.group.title - groupHead(g).decor.h) / 2 }, g.label) : []));
+  const groups = scene.groups.flatMap((g) => {
+    const { decor } = placeGroupHead(g);
+    return decor ? place(decor, { x: g.x + decor.x, y: g.y + decor.y }, g.label) : [];
+  });
   return [...nodes, ...groups];
 }
 

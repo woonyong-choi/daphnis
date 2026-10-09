@@ -33,6 +33,8 @@ function readScene({ tokens, line }, ctx) {
     const column = label?.type === 'text' ? surplus.column : undefined;
     ctx.problems.error(line, 'write a scene as: scene "name" [mode=static|once|loop] [speed=1] [for=12s] [keep=names] [set=exprs] [status=list]', { column });
   }
+  // `--scene`은 숫자 모양 값을 장면 번호로 읽는다. 숫자만으로 된 이름은 번호와 겹쳐 이름으로 고를 수 없으므로 받지 않는다.
+  if (label?.type === 'text' && /^\d+$/.test(label.value)) ctx.problems.error(line, `scene "${label.value}" is only digits, which --scene reads as a scene number. Add a word to the name, such as "step ${label.value}"`);
   const options = tokens.filter((t) => t.type === 'option');
   const { forMs, keep, sets, status } = readStepOptions(options.filter((t) => t.key !== 'mode' && t.key !== 'speed'), { line, ctx });
   const { mode, speed } = readPlayback(options, { line, ctx });
@@ -43,12 +45,13 @@ function readScene({ tokens, line }, ctx) {
 // cost: time O(t), heap O(1), stack O(1)
 // vars: t = 선택 사항 수
 // basis: estimate
-// 장면의 재생 방식. mode는 static(기본), once, loop이고 speed는 0보다 큰 유한한 숫자(기본 1)다. 재생 속도일 뿐 시간표의 ms는 바꾸지 않는다.
+// 장면의 재생 방식. mode는 static, once, loop이고 적지 않으면 줄이 있는 장면은 once, 줄이 없는 장면은 static이다(validate.js가 줄을 센 뒤 정한다).
+// speed는 0보다 큰 유한한 숫자(기본 1)다. 재생 속도일 뿐 시간표의 ms는 바꾸지 않는다.
 function readPlayback(options, { line, ctx }) {
   const modeToken = options.find((t) => t.key === 'mode');
   const speedToken = options.find((t) => t.key === 'speed');
   for (const key of ['mode', 'speed']) if (options.filter((t) => t.key === key).length > 1) ctx.problems.error(line, `"${key}" is written twice`);
-  let mode = VALUES.sceneMode.default;
+  let mode;
   if (modeToken) {
     if (modeToken.valueType !== 'word' || !valueNames('sceneMode').includes(modeToken.value)) ctx.problems.error(line, `mode is one of ${valueNames('sceneMode').join(', ')}. Found "${modeToken.value}"`);
     else mode = modeToken.value;
@@ -130,8 +133,18 @@ function readShow({ tokens, line }, ctx) {
   const row = { text: first.value };
   for (const t of rest) readRowOption(t, row, { line, ctx });
   checkRowLengths(row, line, ctx);
-  if (row.tone !== undefined && row.tag === undefined) ctx.problems.error(line, 'tone colors a tag. Add tag="..." or remove tone');
+  checkRowTone(row, line, ctx);
+  row.appearance ??= VALUES.appearance.default;
   beat.ops.push({ type: 'show', node: id.value, row, line });
+}
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+// 색 선택 사항 둘의 짝. tone은 태그 알약을 칠하거나(plain), appearance=filled|outline일 때 카드 줄 내용의 면과 경계를 칠한다. filled와 outline은 칠할 색(tone)이 있어야 한다.
+function checkRowTone(row, line, ctx) {
+  const isPlain = (row.appearance ?? VALUES.appearance.default) === 'plain';
+  if (!isPlain && row.tone === undefined) ctx.problems.error(line, `appearance=${row.appearance} needs tone. Add tone=name or use appearance=plain`);
+  else if (row.tone !== undefined && row.tag === undefined && isPlain) ctx.problems.error(line, 'tone colors a tag or, with appearance=filled|outline, the card. Add tag="..." or appearance, or remove tone');
 }
 
 // cost: time O(k), heap O(1), stack O(1)

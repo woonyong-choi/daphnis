@@ -1,12 +1,14 @@
 // 차트의 제목, 범례, 행 이름, 값 글자. 종류마다 같은 글자 규칙을 한 곳에 둔다.
+import { textMarkup } from '../draw/texts.js';
 import { measure, wrap } from '../measure/fonts.js';
+import { STYLE, stackTexts } from '../measure/texts.js';
 import { centerBaseline, plainText, renderRich, roundCoord as r } from '../text.js';
 import { values } from '../tokens.js';
 import { COPY } from './copy.js';
 import { ecdfGroups } from './data.js';
 import { drawLegend } from './legend.js';
 import { markAttrs } from './marks.js';
-import { PAD, SIZE, SPACE, TEXT } from './metrics.js';
+import { PAD, SIZE, SPACE, TEXT, WIDTH } from './metrics.js';
 import { formatNumber } from './scale.js';
 
 const LABEL_W = SIZE.chart.label;
@@ -101,25 +103,22 @@ function excludedNote(figure) {
 // cost: time O(s·n), heap O(out), stack O(1)
 // vars: s = 계열 수, n = 계열 이름 글자 수, out = 만든 SVG 글자 수
 // basis: estimate
-/** 제목, 부제, 계열 범례. bottom은 그림 영역이 시작하는 y다. */
+/**
+ * 제목, 부제, 계열 범례. bottom은 그림 영역이 시작하는 y다.
+ * 제목은 카드 제목(label), 부제와 덧붙임과 좁은 배치의 기준선 이름은 카드 부제(sub)와 같은 글 역할과 줄 높이로 위에서 아래로 쌓는다. 차트는 플롯 배치라 왼쪽에 맞추고, 긴 글은 어느 폭에서나 그림 폭 안에서 줄을 나눈다.
+ */
 export function drawHeader(figure) {
-  const parts = [];
-  let y = PAD;
-  for (const [text, size, gap, className, face] of [[figure.title, TEXT['15'], SPACE['4'], 'chart-title', 'semibold'], [figure.subtitle, TEXT['11'], SPACE['5'], 'chart-sub', 'regular'], [excludedNote(figure), TEXT['11'], SPACE['5'], 'chart-sub', 'regular']]) {
-    if (!text) continue;
-    const lines = figure.chart.layout ? wrap(text, figure.chart.layout.width - PAD * 2, { size, face }) : [text];
-    for (const line of lines) {
-      parts.push(`<text x="${PAD}" y="${r(y + size)}" class="${className}">${renderRich(line)}</text>`);
-      y += size + gap;
-    }
-  }
-  if (figure.chart.layout) for (const rule of figure.chart.rules) {
-    const lines = wrap(`${rule.label} ${formatNumber(rule.value)}`, figure.chart.layout.width - PAD * 2, { size: TEXT['11'] });
-    for (const line of lines) {
-      parts.push(`<text x="${PAD}" y="${r(y + TEXT['11'])}" class="chart-rule-label">${renderRich(line)}</text>`);
-      y += TEXT['11'] + SPACE['5'];
-    }
-  }
+  const { layout } = figure.chart;
+  const rules = layout ? figure.chart.rules.map((rule) => `${rule.label} ${formatNumber(rule.value)}`) : [];
+  const room = (layout?.width ?? WIDTH) - PAD * 2;
+  const linesOf = (text, role, style) => wrap(text, room, style).map((line) => ({ role, text: line, style }));
+  const lines = [
+    ...(figure.title ? linesOf(figure.title, 'label', STYLE.label) : []),
+    ...[figure.subtitle, excludedNote(figure), ...rules].filter(Boolean).flatMap((text) => linesOf(text, 'sub', STYLE.sub)),
+  ];
+  const texts = stackTexts(lines, { x: PAD, top: PAD, anchor: 'start' });
+  const parts = texts.map((t) => textMarkup(t, { x: 0, y: 0 }));
+  let y = lines.reduce((bottom, line) => bottom + line.style.line, PAD);
   if (figure.chart.series.length) {
     const legend = drawLegend(figure, y);
     parts.push(...legend.svg);

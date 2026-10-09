@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 // 사용: daphnis render|check|gallery|md … 명령과 결과 파일은 docs/design/playback.md 결과 파일 절이다.
 // stdout에는 만든 파일 경로(또는 --json 메시지)만, stderr에는 오류와 경고만 쓴다.
-import { mkdirSync, readdirSync, readFileSync, realpathSync } from 'node:fs';
+import { readdirSync, readFileSync, realpathSync } from 'node:fs';
 import { basename, dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { BUDGET_NAMES, parseBudgetList } from './budget.js';
-import { buildReported, report, writeOutput } from './build-reported.js';
+import { buildReported, commitReported, pickScene, report } from './build-reported.js';
 import { runMd } from './md-run.js';
+import { isLink, outputKey } from './md-write.js';
 import { makeDiagnostic } from './source/problems.js';
-import { selectScene, toSvg } from './svg.js';
+import { toSvg } from './svg.js';
 
 const USAGE = [
   'usage:',
@@ -24,6 +25,8 @@ const FLAGS = ['--html', '--static', '--strict', '--require-data', '--require-ci
 // md 명령이 받지 않는 옵션과 md 명령만 받는 옵션
 const MD_REFUSED = ['out', 'title', 'html'];
 const MD_ONLY = ['check', 'out-dir', 'fold', 'unfold', 'fold-title'];
+// 나머지 명령이 받지 않는 옵션. check는 파일을 쓰지 않으니 쓰는 옵션을 모두 거절하고, 목록 제목은 gallery만 받는다.
+const OTHER_REFUSED = { check: ['out', 'html', 'static', 'scene', 'title'], render: ['title'], gallery: ['scene'] };
 // 원본 확장자. `.dap` 파일만 원본으로 읽는다.
 const SOURCE_EXT = /\.dap$/;
 // gallery가 목록과 문서 미리보기로 쓰는 쪽 이름(확장자 없이)
@@ -81,15 +84,17 @@ function parseArgs(argv) {
   if (misplaced) return { error: `${misplaced}\n${USAGE}` };
   const folding = foldOptionError(args);
   if (folding) return { error: `${folding}\n${USAGE}` };
-  if (args.scene !== undefined && ['check', 'gallery'].includes(command)) return { error: `--scene is not for ${command}\n${USAGE}` };
+  const unaccepted = (OTHER_REFUSED[command] ?? []).find((name) => args[name] !== undefined || args.flags.has(name));
+  if (unaccepted) return { error: `--${unaccepted} is not for ${command}\n${USAGE}` };
   const refused = command === 'gallery' ? [...args.flags].find((flag) => !GALLERY_FLAGS.includes(flag)) : undefined;
   if (refused) return { error: `--${refused} is not for gallery\n${USAGE}` };
   return args;
 }
 
-// cost: time O(f·build), heap O(out), stack O(1), io 2f
+// cost: time O(f·build), heap O(f·out), stack O(1), io 4f
 // vars: f = 원본 수, build = 원본 하나를 만드는 비용, out = 결과 글자 수
 // basis: estimate
+// render는 쓸 파일 이름이 겹치는지 먼저 보고, 원본마다 만든 결과를 모아 한 번에 쓴다. 오류가 있는 원본은 파일을 쓰지 않고 다른 원본의 결과는 쓴다.
 async function main(argv) {
   const args = parseArgs(argv);
   if (args.error) {
@@ -98,20 +103,30 @@ async function main(argv) {
   }
   if (args.command === 'gallery') return writeGallery(args);
   if (args.command === 'md') return runMd(args);
+  if (args.command === 'render' && !claimOutputs(renderOutputs(args), { json: args.flags.has('json') })) return 1;
   let failed = false;
-  for (const input of args.inputs) failed = !(await processFile(input, args)) || failed;
-  return failed ? 1 : 0;
+  const writes = [];
+  for (const input of args.inputs) {
+    const result = await buildInput(input, args);
+    const files = result && args.command === 'render' ? await figureFiles(input, result, args) : undefined;
+    if (!result || (args.command === 'render' && !files)) failed = true;
+    writes.push(...(files ?? []));
+  }
+  const isWritten = commitReported(writes, { json: args.flags.has('json') });
+  return failed || !isWritten ? 1 : 0;
 }
 
-// cost: time O(build), heap O(out), stack O(1), io 3
-// vars: build = 원본 하나를 만드는 비용, out = 결과 글자 수
+// cost: time O(f), heap O(f), stack O(1)
+// vars: f = 원본 수
 // basis: estimate
-// 원본 하나를 검사하고, render면 결과 파일을 쓴다. 오류가 있으면 아무 파일도 쓰지 않는다.
-async function processFile(input, args) {
-  const result = await buildInput(input, args);
-  if (!result) return false;
-  if (args.command !== 'check') return writeFigure(input, result, args);
-  return true;
+// render가 쓸 파일 { path, shown, owner }. 확장자가 틀린 원본은 읽지 않으므로 빼고(그 오류는 만들 때 알린다), 장면 고르기는 보지 않는다.
+function renderOutputs({ inputs, out, flags }) {
+  return inputs.filter((input) => SOURCE_EXT.test(input)).flatMap((input) => {
+    const name = basename(input).replace(SOURCE_EXT, '');
+    const folder = out ?? dirname(input);
+    const files = [`${name}.svg`, ...(flags.has('html') ? [`${name}.html`] : [])];
+    return files.map((file) => ({ path: join(folder, file), shown: join(folder, file), owner: input }));
+  });
 }
 
 // cost: time O(1), heap O(1), stack O(1), io 1
@@ -140,35 +155,18 @@ async function buildInput(input, args) {
   return buildReported(source, input, { flags: args.flags, baseDir: dirname(input), budget: args.budget });
 }
 
-// cost: time O(s), heap O(1), stack O(1)
-// vars: s = 장면 수
-// basis: estimate
-/** `--scene`의 값(1부터 센 번호나 장면 이름)을 장면 번호(0부터)로. 없는 장면이면 오류 글과 함께 undefined다. */
-export function pickScene(result, option) {
-  try {
-    return selectScene(result.timeline.steps, option);
-  } catch (error) {
-    process.stderr.write(`--scene: ${error.message}\n`);
-    return undefined;
-  }
-}
-
-// cost: time O(out), heap O(out), stack O(1), io 3
+// cost: time O(out), heap O(out), stack O(1)
 // vars: out = 결과 글자 수
 // basis: estimate
-// 만든 그림의 SVG(--html이면 HTML도)를 쓴다. args.page가 있으면 HTML 파일 이름(확장자 없이)이다. 장면을 잘못 골랐으면 아무것도 쓰지 않고 false다.
-async function writeFigure(input, result, args) {
-  const json = args.flags.has('json');
-  const scene = result.timeline.steps.length ? pickScene(result, args.scene) : 0;
-  if (scene === undefined) return false;
+// 만든 그림이 쓸 파일 { path, text }[]: SVG(--html이면 HTML도). args.page가 있으면 HTML 파일 이름(확장자 없이)이다. 파일은 쓰지 않는다. 장면을 잘못 골랐으면 알리고 undefined다.
+async function figureFiles(input, result, args) {
+  const scene = pickScene(result, args.scene, { file: input, json: args.flags.has('json') });
+  if (scene === undefined) return undefined;
   const name = basename(input).replace(SOURCE_EXT, '');
   const folder = args.out ?? dirname(input);
-  const svg = await toSvg(result, { scene, isStatic: args.flags.has('static'), name });
-  const html = args.flags.has('html') ? await (await import('./html.js')).toHtml(result, name) : undefined;
-  mkdirSync(folder, { recursive: true });
-  writeOutput(join(folder, `${name}.svg`), svg, json);
-  if (html !== undefined) writeOutput(join(folder, `${args.page ?? name}.html`), html, json);
-  return true;
+  const files = [{ path: join(folder, `${name}.svg`), text: await toSvg(result, { scene, isStatic: args.flags.has('static'), name }) }];
+  if (args.flags.has('html')) files.push({ path: join(folder, `${args.page ?? name}.html`), text: await (await import('./html.js')).toHtml(result, name) });
+  return files;
 }
 
 // cost: time O(n log n), heap O(n), stack O(1)
@@ -185,21 +183,28 @@ function sourceFiles(names) {
 // 갤러리가 쓰는 재생 화면 이름. 원본 이름이 목록 쪽(index)이나 문서 미리보기(document)와 같으면(대소문자 무시, 대소문자를 가리지 않는 파일 시스템에서 같은 파일) `{이름}-player`다. 예약 파일 이름은 그대로 둔다.
 const playerPage = (name) => (RESERVED_PAGES.has(name.toLowerCase()) ? `${name}-player` : name);
 
-// cost: time O(f), heap O(f), stack O(1)
-// vars: f = 폴더 안 원본 수
+// cost: time O(f·d), heap O(f), stack O(1), io f·d
+// vars: f = 쓸 파일 수, d = 경로 깊이
 // basis: estimate
-// 쓸 파일 이름이 겹치는 곳을 찾아 알리고 겹침이 있으면 false다(대소문자 무시). 예약 파일 둘도 이미 이름을 가진 것으로 센다.
-function claimOutputs(names) {
-  const claimed = new Map([...RESERVED_PAGES].map((page) => [`${page}.html`, `the gallery ${page} page`]));
+/**
+ * 쓸 파일 경로가 겹치는 곳을 찾아 알리고 겹침이 있으면 false다. 아무것도 쓰기 전에 부른다.
+ * 대소문자나 유니코드 정규화만 다른 이름도 같은 파일로 센다(`outputKey`). 같은 원본을 두 번 줘도 겹친다.
+ * @param entries { path, shown, owner }[]. path는 쓸 파일, shown은 알릴 이름, owner는 그 파일을 쓰려는 원본이다
+ * @param reserved 이미 이름을 가진 파일 { path, owner }[]
+ */
+function claimOutputs(entries, { json, reserved = [] }) {
+  const claimed = new Map(reserved.map(({ path, owner }) => [outputKey(path), { path, owner }]));
   let ok = true;
-  for (const name of names) {
-    for (const file of [`${name}.svg`, `${playerPage(name)}.html`]) {
-      const key = file.toLowerCase();
-      if (claimed.has(key)) {
-        process.stderr.write(`${file} would be written twice: for ${name} and for ${claimed.get(key)}. Rename one of the sources\n`);
-        ok = false;
-      } else claimed.set(key, name);
-    }
+  for (const { path, shown, owner } of entries) {
+    const key = outputKey(path);
+    if (claimed.has(key)) {
+      const first = claimed.get(key);
+      const hint = isLink(path) || isLink(first.path) ? 'Rename one of the sources, or point the symbolic link at a different file' : 'Rename one of the sources';
+      const message = `${shown} would be written twice: for ${owner} and for ${first.owner}. ${hint}`;
+      if (json) report(shown, [makeDiagnostic({ severity: 'error', line: 0, message }, { code: 'output-collision' })], true);
+      else process.stderr.write(`${message}\n`);
+      ok = false;
+    } else claimed.set(key, { path, owner });
   }
   return ok;
 }
@@ -224,22 +229,26 @@ async function writeGallery(args) {
     process.stderr.write(`${folder}: no .dap files\n`);
     return 1;
   }
-  if (!claimOutputs(files.map((file) => file.replace(SOURCE_EXT, '')))) return 1;
+  const outputs = files.map((file) => file.replace(SOURCE_EXT, '')).flatMap((name) => [`${name}.svg`, `${playerPage(name)}.html`].map((file) => ({ path: join(out, file), shown: file, owner: name })));
+  const reserved = [...RESERVED_PAGES].map((page) => ({ path: join(out, `${page}.html`), owner: `the gallery ${page} page` }));
+  if (!claimOutputs(outputs, { json: false, reserved })) return 1;
   const galleryArgs = { ...args, command: 'render', out, flags: new Set([...args.flags, 'html']) };
   const built = [];
   for (const file of files) built.push({ file, input: join(folder, file), result: await buildInput(join(folder, file), galleryArgs) });
   if (built.some(({ result }) => !result)) return 1;
   const figures = [];
+  const writes = [];
   for (const { file, input, result } of built) {
     const name = file.replace(SOURCE_EXT, '');
-    await writeFigure(input, result, { ...galleryArgs, page: playerPage(name) });
+    const written = await figureFiles(input, result, { ...galleryArgs, page: playerPage(name) });
+    if (!written) return 1;
+    writes.push(...written);
     figures.push({ name, ext: file.slice(name.length), ...describe(result.figure, readFileSync(input, 'utf8')), href: relative(out, join(out, name)), page: playerPage(name) });
   }
   const { toDocument, toGallery } = await import('./html.js');
   const heading = args.title ?? basename(folder);
-  writeOutput(join(out, 'index.html'), toGallery(figures, heading), false);
-  writeOutput(join(out, 'document.html'), toDocument(figures, heading), false);
-  return 0;
+  writes.push({ path: join(out, 'index.html'), text: toGallery(figures, heading) }, { path: join(out, 'document.html'), text: toDocument(figures, heading) });
+  return commitReported(writes, { json: false }) ? 0 : 1;
 }
 
 // cost: time O(n), heap O(n), stack O(1)

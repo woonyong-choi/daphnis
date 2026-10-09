@@ -16,14 +16,9 @@ chart mrr "구독 매출 증감 요인" stacked "예시 데이터. 단위 만원
   row "10월" new=1900 expand=700 churn=-600 refund=-
 }
 
-view main plot {
-  mrr
-}
+scene "네 요인"
 
-scene "네 요인" mode=static
-  wait 1s
-
-scene "늘어난 쪽부터" mode=once
+scene "늘어난 쪽부터"
   reveal mrr.new
   wait 1s
   reveal mrr.expand
@@ -32,5 +27,5 @@ scene "늘어난 쪽부터" mode=once
   wait 1s
   reveal mrr.refund
 
-scene "9월 한 행" mode=once
+scene "9월 한 행"
   light mrr "9월"

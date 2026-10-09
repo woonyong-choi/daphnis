@@ -26,18 +26,17 @@ gw -> order
 order -> db
 order -> pay
 
-view calls graph down "호출 관계"
-view timing time "실제 시간" {
+view graph down "호출 관계"
+view time "실제 시간" {
   t
 }
-view inside time "DB 안쪽(마이크로초)" {
+view time "DB 안쪽(마이크로초)" {
   plan
 }
 
-scene "추적 전체" mode=static
-  wait 1s
+scene "추적 전체"
 
-scene "요청 따라가기" mode=once
+scene "요청 따라가기"
   light t.root t.auth
   gw -> order "POST /orders" time=700ms
   light t.create

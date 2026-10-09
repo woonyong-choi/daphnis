@@ -44,12 +44,11 @@ cart -> product relation=aggregation from="1" to="0..*" "담긴 상품"
 sql-repository -> repository relation=realization "계약 구현"
 sql-repository -> order relation=dependency "저장 대상"
 
-view main graph down
+view graph down
 
-scene "클래스 구조" mode=static
-  wait 1s
+scene "클래스 구조"
 
-scene "계약과 구현" mode=once
+scene "계약과 구현"
   sql-repository -> repository "구현" time=800ms
   sql-repository -> order "저장" time=800ms
 

@@ -86,8 +86,8 @@ ${EMBED_SCRIPT}
 ${STYLES.tokens}${STYLES.control}${STYLES.player}${STYLES.figure}${paintCss(result.scene)}${STYLES.chart}${charts ? STYLES.chartData : ''}${charts ? chartMotionCss(timeline.growMs, dotAts) : ''}${hasStatus(timeline) ? STYLES.status : ''}</style>
 </head>
 <body>
-${figureFrame({ canvas: panelsMarkup(content, title, figure, defs), style: figure.width === 'wide' ? ` style="--figure-canvas: ${canvasOf(figure)}px"` : '', narrow: responsive ? `<template class="fl-narrow">${panelsMarkup(responsive.content, title, figure)}</template>` : '' })}
-${chartCards(figure).map((card) => chartData({ chart: card.plot.chart, chartType: card.plot.chartType, title: card.label ?? card.id })).join('')}
+${figureFrame({ canvas: panelsMarkup(content, title, defs), style: figure.width === 'wide' ? ` style="--figure-canvas: ${canvasOf(figure)}px"` : '', narrow: responsive ? `<template class="fl-narrow">${panelsMarkup(responsive.content, title)}</template>` : '', source: typeof figure.source === 'string' ? figure.source : undefined })}
+${dataRegion(figure)}
 <script>
 ${PLAYER_SCRIPT}
 figurePlay(document.querySelector('.fl-figure'), ${JSON.stringify(content.data, roundedNumbers).replace(/</g, '\\u003c')});
@@ -95,6 +95,18 @@ figurePlay(document.querySelector('.fl-figure'), ${JSON.stringify(content.data, 
 </body>
 </html>
 `;
+}
+
+// cost: time O(c·r), heap O(out), stack O(1)
+// vars: c = 차트 수, r = 차트 행 수, out = 표 글자 수
+// basis: estimate
+/**
+ * 차트의 입력값 표 모음. 그림 틀 밖 그림 바로 뒤에 놓인 평범한 닫힌 `<details>`들이다. 여는 것은 사용자 조작뿐이고 초점이나 스크롤로 그림의 배치가 바뀌지 않는다(styles/chart-data.css).
+ * 차트가 없으면 빈 글이다.
+ */
+function dataRegion(figure) {
+  const tables = chartCards(figure).map((card) => chartData({ chart: card.plot.chart, chartType: card.plot.chartType, title: card.label ?? card.id }));
+  return tables.length ? `<section aria-label="차트 데이터">${tables.join('')}</section>` : '';
 }
 
 // cost: time O(c·p), heap O(p), stack O(1)
@@ -143,21 +155,21 @@ function withCanonical(template) {
 // vars: p = 판 수, out = 만든 글자 수
 // basis: estimate
 /**
- * 그림 판 묶음 마크업. 판마다 구역(section)과 SVG 한 장이고, 판 상자가 viewBox다. 구역은 가로로만 스크롤해 판마다 따로 가로 보기창이 된다.
- * 판의 표시 폭은 보기 폭에 대한 판 상자 폭 비율이고, 읽을 수 있는 폭(minWidth, 장면의 판 정보)보다 작아지지 않는다. 그 아래에서는 화면 전체를 줄이지 않고 그 판만 구역 안에서 밀린다.
+ * 그림 판 묶음 마크업. 판마다 구역(section)과 SVG 한 장이고, 판 상자가 viewBox다.
+ * 판의 표시 폭은 보기 폭에 대한 판 상자 폭 비율이고 모든 판이 같은 보기 폭으로 나눈다. 비율은 1을 넘지 않아 판은 자연 크기보다 커지지 않고, 좁은 화면에서는 묶음 전체가 같은 비율로 줄어 구역 안에 다 들어온다.
  * 판이 하나뿐인 그림은 둘레 여백을 걷은 보기 영역(data.tight)을 viewBox로 쓸 수 있도록 재생기가 맞춘다(player/play.js).
- * 보기 폭(--view-w)은 판 가운데 가장 넓은 것과 표준 캔버스 폭 중 큰 쪽이라, 좁은 내용은 캔버스 가운데에 같은 비율로 놓인다.
+ * 보기 폭(--view-w)은 판 가운데 가장 넓은 것(content.width)이다. 묶음 폭은 min(구역 폭, 표준 캔버스 폭, 보기 폭)이라 작은 자연 폭은 줄지 않고 가운데에 놓인다.
  * 마커와 차트 무늬 정의(defs, documentDefs)는 문서에 한 번만 둔다(보이지 않는 SVG). 판 SVG들이 같은 문서 id로 쓰므로 판마다 정의를 복사하지 않아 문서 안 id가 겹치지 않는다.
  */
-function panelsMarkup(content, title, figure, defs) {
-  const view = Math.max(content.width, canvasOf(figure));
+function panelsMarkup(content, title, defs) {
+  const view = content.width;
   const panels = content.panels.map((panel, i) => {
     const { box } = panel;
     const label = panel.label ?? (content.panels.length > 1 ? panel.view : undefined);
     const head = i === 0 ? `<title>${escapeXml(title)}</title>` : '';
     const name = i === 0 || !label ? '' : ` aria-label="${escapeXml(plainText(label))}"`;
     return (
-      `<section class="dp-panel" data-view="${escapeXml(panel.view)}" data-strategy="${panel.strategy}" style="--panel-w: ${r(box.w)}; --min-w: ${r(panel.minWidth)}px">` +
+      `<section class="dp-panel" data-view="${escapeXml(panel.view)}" data-strategy="${panel.strategy}" style="--panel-w: ${r(box.w)}">` +
       `<svg xmlns="http://www.w3.org/2000/svg" class="fl" style="aspect-ratio: ${r(box.w)} / ${r(box.h)}" viewBox="${r(box.x)} ${r(box.y)} ${r(box.w)} ${r(box.h)}" role="img"${name}>${head}${panel.svg}</svg>` +
       `</section>`
     );

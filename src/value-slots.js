@@ -1,7 +1,7 @@
 // 값 글자 자리(slot)의 크기. 자리는 그 값이 모든 장면에서 가질 글의 실제 글꼴 폭으로 정하고, 글이 더해져 자리가 넓어지면 배치를 다시 한다.
 // 시간표의 값 글은 이동 시간에 기대고 이동 시간은 배치에 기대므로, 배치와 시간표를 되풀이하되 자리는 줄어들지 않고 횟수에 상한을 둔다(build-scene.js).
 import { measure } from './measure/fonts.js';
-import { STYLE } from './measure/sizes.js';
+import { STYLE } from './measure/texts.js';
 
 /** 배치와 시간표를 되풀이하는 횟수의 상한. 넘으면 값 글이 수렴하지 않는다는 오류다. */
 export const SLOT_ITERATIONS = 4;

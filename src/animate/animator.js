@@ -1,13 +1,11 @@
 // 박자별 상태를 CSS keyframes class와 SMIL 점으로 바꾼다. 시계, 켜짐 keyframes, 점, 차트는 이 폴더의 파일이 나눠 맡는다.
 import { litIds } from '../timeline.js';
 import { PULSE, PULSE_MS } from '../pulse.js';
-import { tokens } from '../tokens.js';
 import { animateChart } from './chart.js';
 import { drawStatusPills } from '../draw/status.js';
 import { drawFlashes, drawValues } from '../draw/values.js';
 import { discreteWindows } from './discrete.js';
 import { hopLegs } from './legs.js';
-import { paintOf } from '../draw/paint.js';
 import { drawPacket } from './packet.js';
 import { pulseAnimate } from './pulse.js';
 import { createWindows } from './windows.js';
@@ -64,9 +62,8 @@ function borderPulse(shape, anim) {
   if (!anim) return '';
   return [...shape.matchAll(/<(\w+)\b[^>]*\sclass="(fl-stroke[^"]*)"[^>]*\/>/g)]
     .map(([tag, name, classes]) => {
-      // 색을 직접 고른 도형(`ps-이름`)의 후광은 그 계열의 effect 단계로 칠한다. 색을 고르지 않은 도형은 상태 파랑이다.
-      const chosen = classes.split(/\s+/).filter((cls) => cls.startsWith('ps-'));
-      return `${tag.replace(/\sclass="[^"]*"/, ` class="${['fl-pulse', ...chosen].join(' ')}" opacity="0" aria-hidden="true"`).replace(/\s*\/>$/, '>')}${anim}</${name}>`;
+      // 도착 후광은 도형이 고른 색과 상관없이 공통 UI 강조다.
+      return `${tag.replace(/\sclass="[^"]*"/, ` class="fl-pulse" opacity="0" aria-hidden="true"`).replace(/\s*\/>$/, '>')}${anim}</${name}>`;
     })
     .join('');
 }
@@ -74,30 +71,29 @@ function borderPulse(shape, anim) {
 // cost: time O(b), heap O(b), stack O(1)
 // vars: b = 박자 수
 // basis: estimate
-// 요소 종류별 켜짐과 꺼짐 스타일. 강조 그룹은 평소 그 색의 진한 단계(ink) 1.5px 테두리이고, 색을 고른 도형은 그 색의 outline 단계 1px이다. target은 { id, i, extra, scene }(i는 요소 번호, extra는 열 이름이나 카드 층)다.
+// 요소 종류별 켜짐과 꺼짐 스타일. 값은 이 파일이 정하지 않는다. figure.css의 효과 한 벌(`--fx-*`)이 켜짐과 평소를 정하고, 여기서는 그 사용자 정의 속성을 시각에 맞춰 고를 뿐이다(HTML 재생기의 `.on` 규칙이 읽는 것과 같다).
+// 켜짐은 모든 카드, 칸, 줄, 선 라벨이 같은 효과다: 공통 UI 강조 윤곽과 옅은 강조 면. 꺼짐은 요소의 평소 값(도형이 고른 모습 포함, draw/paint.js)이다. target은 { id, i, extra, scene }(i는 요소 번호, extra는 열 이름이나 카드 층, 차트 카드 묶음의 'ground')다.
 function decorateElement(kind, { id, i, extra, scene }, { segs, toggle, quiet, moving, litNode, cardState, stack }) {
-  const c = tokens.color;
   switch (kind) {
-    case 'node': {
-      // `light`가 켠 도형은 윤곽을 그대로 두고 옅은 면만 바꾼다(명시한 상태). 색을 직접 고른 도형은 상태로 바꾸지 않는다.
-      const box = scene.items[i];
-      return paintOf(box ?? {}) ? '' : toggle(litNode(id), `fill: color-mix(in srgb, ${tokens.simple2['hover-fill']} 70%, ${c.node})`, `fill: ${c.node}`);
-    }
+    case 'node':
+      // 차트 카드의 글자 바탕과 받침 선은 켜진 카드 면을 따른다. 면은 윤곽 요소가, 차트는 그 형제 묶음이 가지므로 같은 켜짐 구간을 묶음에 따로 건다. 건 것은 차트 묶음의 color(chart.css의 바탕 색 운반)이고, 사용자 정의 속성 keyframes는 테마가 바뀌어도 따라가지 않아 쓰지 않는다.
+      if (extra === 'ground') return toggle(litNode(id), 'color: var(--fx-face-on)', 'color: var(--fx-face)');
+      return toggle(litNode(id), 'fill: var(--fx-face-on); stroke: var(--fx-edge)', 'fill: var(--fx-face); stroke: var(--fx-edge-rest)');
     case 'group':
       // 그룹은 가장 뒤의 조직 정보라 장면에 따라 바뀌지 않는다.
       return '';
+    // 켜진 표 줄과 격자 칸은 면만 바뀐다(figure.css의 `.fl-part.on`과 같다).
     case 'cell':
-      return toggle(segs.map((s) => s.partsOn.includes(extra)), `fill: ${tokens.simple2['row-selection']}`, `fill: ${c.node}`);
     case 'part':
-      return toggle(segs.map((s) => s.partsOn.includes(extra)), `fill: ${c['card-on']}`, 'fill: transparent');
+      return toggle(segs.map((s) => s.partsOn.includes(extra)), 'fill: var(--fx-face-on)', 'fill: var(--fx-face)');
     // 조용한 선은 보임(불투명도)과 강조(색)가 한 요소에서 따로 움직이므로 한 class에 쌓는다. 따로 걸면 뒤의 `animation`이 앞의 것을 덮는다.
     case 'edge':
-      return stack([scene.edges[i]?.quiet ? quiet(i, { on: 'opacity: 1', off: 'opacity: 0' }) : undefined, moving(i, { on: `color: ${c.state.active}`, off: `color: ${scene.edges[i]?.isMark ? c.fg : c.line}` })]);
+      return stack([scene.edges[i]?.quiet ? quiet(i, { on: 'opacity: 1', off: 'opacity: 0' }) : undefined, moving(i, { on: 'color: var(--fx-edge)', off: 'color: var(--fx-line-rest)' })]);
     // 고정 라벨 알약은 늘 보인다. 점이 선 위에 있는 동안 테두리와 글자만 활성 색이고(알약과 글 전체의 불투명도는 그대로), 점이 떠나면 중립 색으로 PILL_FADE 동안 돌아온다.
     case 'pill':
-      return moving(i, { on: `stroke: ${c.state.active}`, off: `stroke: ${tokens.simple2.separator}`, fade: PILL_FADE }) ?? '';
+      return moving(i, { on: 'stroke: var(--fx-edge)', off: 'stroke: var(--fx-edge-rest)', fade: PILL_FADE }) ?? '';
     case 'pilltext':
-      return moving(i, { on: `fill: ${c.state.active}`, off: `fill: ${c.muted}`, fade: PILL_FADE }) ?? '';
+      return moving(i, { on: 'fill: var(--fx-ink)', off: 'fill: var(--fx-ink-rest)', fade: PILL_FADE }) ?? '';
     // 조용한 선의 라벨 알약 묶음(l-번호)은 선 요소(e-번호)와 다른 요소라 같은 보임 구간을 따로 건다. 알약과 글자의 활성 색은 안쪽 요소의 'pill', 'pilltext'가 맡아 이 묶음의 `animation`과 겹치지 않는다.
     case 'quiet':
       return quiet(i, { on: 'opacity: 1', off: 'opacity: 0' }) ?? '';

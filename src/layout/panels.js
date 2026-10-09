@@ -1,13 +1,10 @@
 // 보기마다 따로 배치한 판을 위에서 아래로 쌓아 장면 하나로 합친다. 판은 가장 넓은 판의 가운데에 맞추고, 보기 이름(label)이 있으면 판 위에 제목 줄을 둔다.
 // 합친 장면의 선은 보기 순서대로 이어 붙여 문서 전체 선·메시지 번호(source/project.js)와 같은 번호를 받고, 처음 점·끝 겹원의 선(isMark)은 맨 뒤에 둔다.
 import { FIGURE_PAD } from '../canvas.js';
-import { STYLE } from '../measure/sizes.js';
 import { shiftScene } from './shift.js';
 import { values } from '../tokens.js';
 
 const SIZE = values.size;
-// 읽을 수 있는 글 크기의 바닥: 가장 작은 글 역할(메타, simple2.micro-size)이다. 그림이 그리는 어떤 글도 이보다 작지 않아, 판은 자연 폭 아래로 줄어 글이 이 크기 아래로 내려가지 않고 좁은 화면에서는 판 안에서 가로로 밀린다.
-const READABLE = values.simple2['micro-size'];
 
 // cost: time O(p·(s + e·pts)), heap O(p·(s + e·pts)), stack O(1)
 // vars: p = 판 수, s = 도형·그룹 수, e = 선 수, pts = 경로 점 수
@@ -15,7 +12,7 @@ const READABLE = values.simple2['micro-size'];
 /**
  * 판들을 합친 장면을 만든다.
  * @param panels 보기 순서의 판 목록. 판은 { view, strategy, label?, scene?, chart?, time? }이다. 그래프와 순서 판은 scene({ items, groups, edges, ..., width, height }), 차트 판은 chart(chart/draw.js의 그림 + id), 시간 판은 time(layout/time.js의 배치)을 갖는다
- * @returns { items, groups, edges, lifelines, notes, activations, destructions, fragments, plots, times, panels, width, height }. panels는 { view, strategy, box: { x, y, w, h }, label?, minWidth, index }다. 합쳐진 도형·그룹·선에는 view와 panel(판 번호), 선에는 strategy가 붙는다
+ * @returns { items, groups, edges, lifelines, notes, activations, destructions, fragments, plots, times, panels, width, height }. panels는 { view, strategy, box: { x, y, w, h }, label?, index }다. 합쳐진 도형·그룹·선에는 view와 panel(판 번호), 선에는 strategy가 붙는다
  */
 export function composePanels(panels) {
   const sizes = panels.map(sizeOf);
@@ -30,7 +27,7 @@ export function composePanels(panels) {
     const place = { dx: x, dy: y + head };
     place_(scene, panel, place, index);
     const box = { x, y, w, h: h + head };
-    scene.panels.push({ index, view: panel.view, strategy: panel.strategy, box, label: panel.label, minWidth: Math.ceil((w * READABLE) / smallestText()), ...(panel.label ? { labelAt: { x: x + FIGURE_PAD, y: y + labelH / 2 } } : {}) });
+    scene.panels.push({ index, view: panel.view, strategy: panel.strategy, box, label: panel.label, ...(panel.label ? { labelAt: { x: x + FIGURE_PAD, y: y + labelH / 2 } } : {}) });
     y += h + head;
   });
   scene.height = y;
@@ -62,6 +59,3 @@ function place_(scene, panel, { dx, dy }, index) {
   if (panel.chart) scene.plots.push({ id: panel.chart.id, view: panel.view, panel: index, x: dx, y: dy, width: panel.chart.width, height: panel.chart.height, chart: panel.chart });
   else scene.times.push({ ...panel.time, view: panel.view, panel: index, x: dx, y: dy });
 }
-
-// 그림이 쓰는 글 역할 가운데 가장 작은 크기(px). 지금은 모두 메타 크기 이상이라 읽을 수 있는 바닥과 같고, 더 작은 역할이 생기면 판의 최소 폭이 그만큼 커진다.
-const smallestText = () => Math.min(...Object.values(STYLE).map((style) => style.size));

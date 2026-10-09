@@ -18,7 +18,7 @@ Turn one `.dap` text source into an animated SVG figure for documentation: struc
   </picture>
 </p>
 
-Dots in a figure start at their own times and move at their own pace, so one scene shows several flows running at once, values changing as dots arrive, a queue filling, and a message lost on the way. A source declares cards (boxes, tables, APIs, classes, grids, charts, traces), picks how to view them (`graph`, `sequence`, `plot`, `time`), and then lists scenes. The same card can appear in several views, and one event moves it in all of them. daphnis measures text with the fonts it embeds, lays out with elkjs, checks the result for overlaps, and writes an animated SVG or an HTML player.
+Dots in a figure start at their own times and move at their own pace, so one scene shows several flows running at once, values changing as dots arrive, a queue filling, and a message lost on the way. A source declares cards (boxes, tables, APIs, classes, grids, charts, traces) and then lists scenes. Cards that no `view` line lists get a view by default (a graph for most cards, a plot for a chart with no edges, a time view for a trace), and you write `view graph`, `view sequence`, `view plot`, or `view time` to choose yourself. The same card can appear in several views, and one event moves it in all of them. daphnis measures text with the fonts it embeds, lays out with elkjs, checks the result for overlaps, and writes an animated SVG or an HTML player.
 
 ## How it works
 
@@ -37,9 +37,7 @@ user -> tui "input"
 tui -> engine "JSON-RPC"
 engine -> codex "app-server request"
 
-view main graph right
-
-scene "Chat" mode=once
+scene "Chat"
   user -> tui "question"
   show tui "why does this test fail?" tag="you"
   tui -> engine
@@ -51,10 +49,10 @@ scene "Chat" mode=once
   <img src="docs/assets/how-it-works-light.svg" alt="Figure rendered from the source above: the developer's question moves from Screen to Engine, then to Codex CLI">
 </picture>
 
-1. The first line is the grammar version, `daphnis 2`. Then come cards and edges, a view, and scenes from `scene` on. A scene has one name and a `mode` of `static`, `once`, or `loop`; the explanation lives in the surrounding document, not in the figure.
+1. The first line is the grammar version, `daphnis 2`. Then come cards and edges, optional `view` lines, and scenes from `scene` on. No view is written here: the cards go into one left-to-right graph by default. A scene has one name; its `mode` (`static`, `once`, or `loop`) is `once` when the scene has lines and `static` when it is empty, unless you write it. The explanation lives in the surrounding document, not in the figure.
 2. daphnis lays out the cards inside `system` from top to bottom and the rest from left to right.
 3. In the first beat a dot moves from `user` to `tui`, and the card inside `tui` fills in when the dot arrives.
-4. A typo such as `engine -> cdex` stops the build with `how-it-works.dap:21: unknown card "cdex". Did you mean "codex"? Declared: codex, engine, main, system, tui, user`.
+4. A typo such as `engine -> cdex` stops the build with `how-it-works.dap:19: unknown card "cdex". Did you mean "codex"? Declared: codex, engine, system, tui, user`.
 
 ## Installation
 
@@ -100,7 +98,7 @@ how-it-works.svg
 how-it-works.html
 ```
 
-The SVG animates without scripts and plays the first scene by its `mode`; `--scene 2` or `--scene "Chat"` picks another scene. The HTML adds scene tabs, download, fullscreen, and zoom (in fullscreen), and a scene never advances to the next one by itself. There are no play, pause, speed, or repeat buttons; each scene's `mode` decides how it plays. `--static` writes a still SVG of the chosen scene's last state: no dots or pulses, values, cards, and charts at their final state, and any `light` the scene left on. A document without scenes is a still figure that shows the values it declares. An animated SVG used as an `<img>` cannot honor `prefers-reduced-motion` in Chrome; inline it, open it directly, or use `<picture>` with a `media` source that points to the `--static` SVG.
+The SVG animates without scripts and plays the first scene by its `mode`; `--scene 2` or `--scene "Chat"` picks another scene. A scene name made only of digits is an error, because `--scene` would read it as a scene number. The HTML adds scene tabs and a toolbar on the figure, and a scene never advances to the next one by itself. The toolbar is the same for every figure, standalone or embedded, and holds three actions, left to right: copy the `.dap` source, download the figure as standalone HTML, and fullscreen (which also zooms). The toolbar is not set per figure in the source. There are no play, pause, speed, or repeat buttons; each scene's `mode` decides how it plays. `--static` writes a still SVG of the chosen scene's last state: no dots or pulses, values, cards, and charts at their final state, and any `light` the scene left on. A document without scenes is a still figure that shows the values it declares. An animated SVG used as an `<img>` cannot honor `prefers-reduced-motion` in Chrome; inline it, open it directly, or use `<picture>` with a `media` source that points to the `--static` SVG.
 
 ### Check a figure
 
@@ -159,8 +157,8 @@ A source must start with `daphnis 2`, and only `.dap` files are read. A file tha
 - Architecture diagrams: `no=` numbers edges so the order reads in still images, `badge=` adds a short letter badge that survives in black and white, `count=` stacks N replicas of one role, and `icon=` uses the bundled icons or your own set registered with `icons name "folder"`.
 - Cell grids: bit fields, arrays, stacks, and matrices drawn cell by cell, with lines that start and end at a single cell.
 - Charts: bar, stacked, percent, dumbbell, difference, line, step, area, scatter, histogram, box, ECDF, heatmap, donut, pie, and waterfall. Series are not limited to two. Color is never the only cue: point shapes follow the series number, line, step, area, and ECDF series get end names, bar, scatter, and pie or donut series get numbered keys, and past seven colors patterns are added. A missing value is not a zero (histograms leave a missing sample out of the count, waterfalls do not know the running total after a missing step, and a box with a missing number draws no box), and a reference series draws an expected value apart from the measured one. Values come from the source or a JSON file.
-- Colors: eight names (`blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, `gray`) for `tone=`, `fill=`, and `stroke=`. Text reaches contrast 4.5 and shape outlines 3 on the surface they sit on, in light and dark. The yellow series border in light-mode charts stays below 3, so direct labels, numbered keys, patterns, and shapes tell series apart as well. Text uses the embedded Pretendard and JetBrains Mono files.
-- Layout: elkjs layout with per-group direction, using shape sizes measured with the embedded fonts. Text never shrinks below its size to fit. On a narrow page the graph and chart panels are redrawn for the container width, and a panel that still does not fit scrolls inside itself. The narrow layout is built when the HTML is written and gets the same checks, so a source that passes `check` can still fail `render --html` if its text does not fit at the narrow width.
+- Colors: eight names (`blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, `gray`) for `tone=`. Cards, groups, and `show` rows add `appearance=plain|filled|outline`: plain keeps a neutral surface with the colored icon and small marks, filled uses a light surface of the same family, and outline uses a same-family border on a neutral surface. Text reaches contrast 4.5 and shape outlines 3 on the surface they sit on, in light and dark. The yellow series border in light-mode charts stays below 3, so direct labels, numbered keys, patterns, and shapes tell series apart as well. Text uses the embedded Pretendard and JetBrains Mono files.
+- Layout: elkjs layout with per-group direction, using shape sizes measured with the embedded fonts. Text is never shrunk to make a shape fit. On a narrow page the graph and chart panels are redrawn for the container width, and a panel that still does not fit shrinks together with the other panels by one shared ratio (never above its natural size); read small text in full screen and zoom. The narrow layout is built when the HTML is written and gets the same checks, so a source that passes `check` can still fail `render --html` if its text does not fit at the narrow width.
 - Figure check: overlaps, edges through nodes, crowded edges, aspect ratio, and readability.
 - Playback: an HTML player and an animated SVG from the same timeline.
 - Markdown: `daphnis md` renders the `dap` code blocks of a document and keeps the image lines below them up to date, and a GitHub Action checks them in CI.
@@ -201,7 +199,7 @@ npm test
 npm run check
 ```
 
-The browser tests need Google Chrome and Playwright's WebKit. Set `CHROME_PATH` if Chrome is not at its default location, and run `npx playwright-core install webkit` once. A missing browser fails the tests; they are never skipped.
+`npm test` runs the contract tests through the public entry points (build results, SVG, HTML, CLI, Markdown) and needs no browser. Looking at the figures in a real browser, at phone and desktop sizes in light and dark, is a separate manual review that the tests do not replace.
 
 Shared design values (color roles, spacing, text sizes) come from the [design-tokens](https://github.com/woonyong-choi/design-tokens) package, which `npm install` fetches from GitHub by tag, so `git` must be available. Only figure-specific tokens live in `src/tokens.json`. A workflow opens a pull request when design-tokens publishes a new tag. In a clone, run `node src/cli.js` in place of `daphnis`, and `npm run catalog` to render every example, its source, and an index into `.local/examples/`.
 

@@ -104,9 +104,6 @@
   --color-muted: var(--primitive-simple2-muted);
   --color-group-title: var(--primitive-simple2-group-title);
   --color-bg: var(--primitive-simple2-bg);
-  --color-group-1: var(--primitive-simple2-group-1);
-  --color-group-2: var(--primitive-simple2-group-2);
-  --color-group-3: var(--primitive-simple2-group-3);
   --color-node: var(--primitive-simple2-node);
   --color-surface: var(--primitive-simple2-surface);
   --color-card: var(--primitive-simple2-card);
@@ -116,7 +113,7 @@
   --color-border: var(--primitive-simple2-border);
   --color-plate-border: var(--primitive-simple2-plate-border);
   --color-line: var(--primitive-simple2-line);
-  --color-state-active: var(--color-blue-light-stroke);
+  --color-state-active: var(--primitive-simple2-ui-accent);
   --color-state-active-fill: var(--color-category-blue-fill);
   --color-state-active-text: var(--color-blue-light-ink);
   --color-state-on-active: var(--color-category-blue-on);
@@ -131,9 +128,9 @@
   --color-flow-red: var(--color-category-red-fill);
   --color-flow-amber: var(--color-category-yellow-fill);
   --color-ui-link: var(--color-blue-light-ink);
-  --color-ui-focus: var(--color-blue-light-stroke);
+  --color-ui-focus: var(--primitive-simple2-ui-accent);
   --color-ui-progress: var(--color-blue-light-stroke);
-  --color-ui-control-on: var(--color-gray-0);
+  --color-ui-control-on: var(--primitive-simple2-ui-accent);
   --color-data-main: var(--color-category-blue-light-border);
   --color-data-compare: var(--color-category-yellow-fill);
   --color-data-heat-low: var(--color-blue-light-heat-low);
@@ -379,6 +376,7 @@
   --duration-effect-rise: 80ms;
   --duration-effect-hold: 80ms;
   --duration-effect-decay: 240ms;
+  --duration-notice: 2400ms;
   --easing-move: cubic-bezier(0.455, 0.03, 0.515, 0.955);
   --easing-reveal: cubic-bezier(0, 0, 0.58, 1);
   --simple2-heading: 36px;
@@ -406,15 +404,22 @@
   --simple2-canvas-corner: 18px;
   --simple2-canvas-fill: var(--primitive-simple2-canvas);
   --simple2-symbol-stroke: 1.5px;
-  --simple2-selection-fill: var(--primitive-simple2-selection-fill);
-  --simple2-selection-ink: var(--primitive-simple2-selection-ink);
-  --simple2-tab-fill: var(--primitive-simple2-tab-fill);
+  --simple2-segment-track: rgba(0, 25, 61, 0.1);
+  --simple2-segment-ink: rgba(0, 4, 9, 0.78);
+  --simple2-segment-hover: rgba(0, 25, 61, 0.08);
+  --simple2-segment-on: var(--primitive-simple2-ui-accent);
+  --simple2-segment-on-hover: var(--primitive-simple2-ui-accent-hover);
+  --simple2-segment-on-ink: var(--primitive-simple2-on-ui-accent);
+  --simple2-segment-radius: 12px;
+  --simple2-segment-item-radius: 9px;
+  --simple2-segment-pad: 4px;
   --simple2-label-size: 15px;
   --simple2-detail-size: 13px;
   --simple2-micro-size: 11px;
   --simple2-surface-edge: var(--primitive-simple2-plate-border);
   --simple2-hover-fill: var(--primitive-simple2-hover-fill);
   --simple2-row-selection: var(--primitive-simple2-row-selection);
+  --simple2-card-active-fill: var(--primitive-simple2-card-active-fill);
   --simple2-data-line: var(--primitive-simple2-data-line);
   --simple2-chart-hole: var(--primitive-simple2-chart-hole);
   --primitive-simple2-fg: #303336;
@@ -429,15 +434,13 @@
   --primitive-simple2-shadow: 0 2px 8px rgba(0,0,0,.10), 0 0 2px rgba(0,0,0,.10);
   --primitive-simple2-node-shadow: drop-shadow(0px 1px 1px rgba(0,0,0,.07));
   --primitive-simple2-group-title: #566170;
-  --primitive-simple2-canvas: #f2f5f7;
-  --primitive-simple2-selection-fill: #e3e4e8;
-  --primitive-simple2-selection-ink: #303336;
-  --primitive-simple2-tab-fill: #f5f5f7;
-  --primitive-simple2-group-1: #eef0f3;
-  --primitive-simple2-group-2: #e7eaee;
-  --primitive-simple2-group-3: #e0e4e9;
+  --primitive-simple2-canvas: #f5f5f6;
+  --primitive-simple2-ui-accent: #3c84f3;
+  --primitive-simple2-ui-accent-hover: #3779e0;
+  --primitive-simple2-on-ui-accent: #ffffff;
   --primitive-simple2-hover-fill: #eef4fc;
   --primitive-simple2-row-selection: #cee2fd;
+  --primitive-simple2-card-active-fill: #f3f7fd;
   --primitive-simple2-line: #9da5b0;
   --primitive-simple2-data-line: #737e8b;
   --primitive-simple2-dark-bg: #26272b;
@@ -448,10 +451,8 @@
   --primitive-simple2-dark-separator: #454850;
   --primitive-simple2-dark-hover: #343e50;
   --primitive-simple2-dark-selection: #274174;
+  --primitive-simple2-dark-card-active-fill: #333a48;
   --primitive-simple2-dark-muted: #a9adb6;
-  --primitive-simple2-dark-group-1: #2c2d32;
-  --primitive-simple2-dark-group-2: #32343a;
-  --primitive-simple2-dark-group-3: #393c43;
   --primitive-simple2-dark-line: #7f8793;
   --primitive-simple2-dark-data-line: #acb4c0;
   --primitive-simple2-light-outline: #818181;
@@ -685,9 +686,6 @@
     --color-muted: var(--primitive-simple2-dark-muted);
     --color-group-title: var(--primitive-simple2-dark-muted);
     --color-bg: var(--primitive-simple2-dark-bg);
-    --color-group-1: var(--primitive-simple2-dark-group-1);
-    --color-group-2: var(--primitive-simple2-dark-group-2);
-    --color-group-3: var(--primitive-simple2-dark-group-3);
     --color-node: var(--primitive-simple2-dark-node);
     --color-surface: var(--primitive-simple2-dark-card);
     --color-card: var(--primitive-simple2-dark-card);
@@ -697,7 +695,7 @@
     --color-border: var(--primitive-simple2-border);
     --color-plate-border: var(--primitive-simple2-dark-edge);
     --color-line: var(--primitive-simple2-dark-line);
-    --color-state-active: var(--color-blue-dark-stroke);
+    --color-state-active: var(--primitive-simple2-ui-accent);
     --color-state-active-fill: var(--color-category-blue-fill);
     --color-state-active-text: var(--color-blue-dark-ink);
     --color-state-on-active: var(--color-category-blue-on);
@@ -706,9 +704,9 @@
     --color-state-warning: var(--color-category-yellow-dark-border);
     --color-state-glow: var(--color-blue-dark-fill);
     --color-ui-link: var(--color-blue-dark-ink);
-    --color-ui-focus: var(--color-blue-dark-stroke);
+    --color-ui-focus: var(--primitive-simple2-ui-accent);
     --color-ui-progress: var(--color-blue-dark-stroke);
-    --color-ui-control-on: var(--color-gray-776);
+    --color-ui-control-on: var(--primitive-simple2-ui-accent);
     --color-data-main: var(--color-category-blue-dark-border);
     --color-data-heat-low: var(--color-blue-dark-heat-low);
     --color-data-heat-high: var(--color-blue-dark-heat-high);
@@ -760,12 +758,13 @@
     --simple2-node-shadow: var(--primitive-simple2-node-shadow);
     --simple2-separator: var(--primitive-simple2-dark-separator);
     --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
-    --simple2-selection-fill: var(--primitive-simple2-dark-edge);
-    --simple2-selection-ink: var(--color-gray-0);
-    --simple2-tab-fill: var(--primitive-simple2-dark-node);
+    --simple2-segment-track: rgba(255, 255, 255, 0.12);
+    --simple2-segment-ink: rgba(255, 255, 255, 0.78);
+    --simple2-segment-hover: rgba(255, 255, 255, 0.1);
     --simple2-surface-edge: var(--primitive-simple2-dark-edge);
     --simple2-hover-fill: var(--primitive-simple2-dark-hover);
     --simple2-row-selection: var(--primitive-simple2-dark-selection);
+    --simple2-card-active-fill: var(--primitive-simple2-dark-card-active-fill);
     --simple2-data-line: var(--primitive-simple2-dark-data-line);
     --color-figure-icon: var(--color-blue-dark-stroke);
     --color-figure-icon-tile: var(--color-blue-dark-fill);
@@ -850,9 +849,6 @@
   --color-muted: var(--primitive-simple2-dark-muted);
   --color-group-title: var(--primitive-simple2-dark-muted);
   --color-bg: var(--primitive-simple2-dark-bg);
-  --color-group-1: var(--primitive-simple2-dark-group-1);
-  --color-group-2: var(--primitive-simple2-dark-group-2);
-  --color-group-3: var(--primitive-simple2-dark-group-3);
   --color-node: var(--primitive-simple2-dark-node);
   --color-surface: var(--primitive-simple2-dark-card);
   --color-card: var(--primitive-simple2-dark-card);
@@ -862,7 +858,7 @@
   --color-border: var(--primitive-simple2-border);
   --color-plate-border: var(--primitive-simple2-dark-edge);
   --color-line: var(--primitive-simple2-dark-line);
-  --color-state-active: var(--color-blue-dark-stroke);
+  --color-state-active: var(--primitive-simple2-ui-accent);
   --color-state-active-fill: var(--color-category-blue-fill);
   --color-state-active-text: var(--color-blue-dark-ink);
   --color-state-on-active: var(--color-category-blue-on);
@@ -871,9 +867,9 @@
   --color-state-warning: var(--color-category-yellow-dark-border);
   --color-state-glow: var(--color-blue-dark-fill);
   --color-ui-link: var(--color-blue-dark-ink);
-  --color-ui-focus: var(--color-blue-dark-stroke);
+  --color-ui-focus: var(--primitive-simple2-ui-accent);
   --color-ui-progress: var(--color-blue-dark-stroke);
-  --color-ui-control-on: var(--color-gray-776);
+  --color-ui-control-on: var(--primitive-simple2-ui-accent);
   --color-data-main: var(--color-category-blue-dark-border);
   --color-data-heat-low: var(--color-blue-dark-heat-low);
   --color-data-heat-high: var(--color-blue-dark-heat-high);
@@ -925,12 +921,13 @@
   --simple2-node-shadow: var(--primitive-simple2-node-shadow);
   --simple2-separator: var(--primitive-simple2-dark-separator);
   --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
-  --simple2-selection-fill: var(--primitive-simple2-dark-edge);
-  --simple2-selection-ink: var(--color-gray-0);
-  --simple2-tab-fill: var(--primitive-simple2-dark-node);
+  --simple2-segment-track: rgba(255, 255, 255, 0.12);
+  --simple2-segment-ink: rgba(255, 255, 255, 0.78);
+  --simple2-segment-hover: rgba(255, 255, 255, 0.1);
   --simple2-surface-edge: var(--primitive-simple2-dark-edge);
   --simple2-hover-fill: var(--primitive-simple2-dark-hover);
   --simple2-row-selection: var(--primitive-simple2-dark-selection);
+  --simple2-card-active-fill: var(--primitive-simple2-dark-card-active-fill);
   --simple2-data-line: var(--primitive-simple2-dark-data-line);
   --color-figure-icon: var(--color-blue-dark-stroke);
   --color-figure-icon-tile: var(--color-blue-dark-fill);
@@ -1010,7 +1007,8 @@
   --color-flow-ink-gray: var(--color-gray-933);
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
-/* 글 위계는 셋이다: 제목(simple2.label-size, semibold), 핵심 필드(detail-size), 메타(micro-size). 크기는 measure/sizes.js의 STYLE이 같은 토큰으로 잰다. */
+/* 카드 안 글(label, sub, meta, cell, item, row)의 기준 점(text-anchor)은 글이 정한다(measure/texts.js의 anchor). 여기서는 글꼴과 색만 정한다. */
+/* 글 위계는 셋이다: 제목(simple2.label-size 15, semibold), 문장과 이름표(detail-size 13: 부제, 선 라벨, 메모, 이동 글, 카드 줄, 제약, 형식), 작은 표시(micro-size 11: 번호, 태그, 표식, 키, 눈금, 단위). 크기는 measure/texts.js의 STYLE이 같은 토큰으로 잰다. */
 .fl text {
   font-family: var(--font-figure-sans);
   letter-spacing: var(--tracking-text);
@@ -1019,27 +1017,25 @@
 .fl .label {
   font-size: var(--simple2-label-size);
   font-weight: var(--weight-semibold);
-  text-anchor: middle;
   fill: var(--color-fg);
 }
 
 .fl .sub {
-  font-size: var(--simple2-micro-size);
-  text-anchor: middle;
+  font-size: var(--simple2-detail-size);
   fill: var(--color-muted);
 }
 
 .fl .frame {
-  font-size: var(--simple2-micro-size);
+  font-size: var(--simple2-detail-size);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-frame);
   fill: var(--color-group-title);
 }
 
 .fl .edgelabel {
-  font-size: var(--simple2-micro-size);
+  font-size: var(--simple2-detail-size);
   text-anchor: middle;
-  fill: var(--color-muted);
+  fill: var(--fx-ink-rest);
 }
 
 .fl .row {
@@ -1053,9 +1049,9 @@
   font-size: var(--simple2-detail-size);
 }
 
-/* 메모와 구획 제목 같은 덧붙임 글은 메타 크기다. */
+/* 메모와 구획 제목 같은 덧붙임 글은 문장이라 같은 크기다. */
 .fl .meta {
-  font-size: var(--simple2-micro-size);
+  font-size: var(--simple2-detail-size);
   fill: var(--color-fg);
 }
 
@@ -1073,33 +1069,29 @@
   font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-tag);
-  text-anchor: middle;
   fill: var(--color-fg);
 }
 
 .fl .mark {
   font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
-  text-anchor: end;
   fill: var(--color-state-active-text);
 }
 
-/* 값 카드 줄의 값 글자. 줄의 이름(row)은 카드 층이 그리고 값은 오른쪽 끝에 얹힌다. 핵심 필드라 필드 크기다. */
+/* 값 카드 줄의 값 글자. 줄의 이름(row)은 카드 층이 그리고 값은 오른쪽 끝에 얹힌다. 이름과 같은 크기이고 굵기만 다르다. */
 .fl .value {
   font-size: var(--simple2-detail-size);
   font-weight: var(--weight-semibold);
-  text-anchor: end;
   fill: var(--color-fg);
 }
 
 .fl .mini {
-  font-size: var(--simple2-micro-size);
-  text-anchor: middle;
+  font-size: var(--simple2-detail-size);
   fill: var(--color-fg);
 }
 
 .fl .chip {
-  font-size: var(--simple2-micro-size);
+  font-size: var(--simple2-detail-size);
   text-anchor: middle;
 }
 
@@ -1110,7 +1102,6 @@
 
 .fl .item {
   font-size: var(--simple2-detail-size);
-  text-anchor: middle;
   fill: var(--color-fg);
 }
 
@@ -1118,21 +1109,15 @@
   fill: var(--color-muted);
 }
 
-.fl .cell.type,
-.fl .cell.rule {
+/* 열 형식(타입)은 코드 글이라 코드 글꼴의 오른쪽 열이다. 제약 줄(NOT NULL, ON DELETE 등)은 문장이라 일반 글꼴이다. 둘 다 이름보다 옅다. */
+.fl .cell.type {
   font-family: var(--font-figure-mono);
   letter-spacing: normal;
-  font-size: var(--simple2-micro-size);
   fill: var(--color-muted);
 }
 
-.fl .cell.type {
-  text-anchor: end;
-}
-
-.fl .fl-stroke {
-  stroke: var(--color-outline);
-  stroke-width: var(--border-thin);
+.fl .cell.rule {
+  fill: var(--color-muted);
 }
 
 /* 순서 보기의 메시지, 메모, 구획, 활성 막대는 자기 장면이 보일 때만 보인다. 자리는 늘 같아 판 크기가 변하지 않는다. */
@@ -1141,7 +1126,7 @@
 }
 
 .fl .fl-edge {
-  color: var(--color-line);
+  color: var(--fx-line-rest);
 }
 
 .fl .fl-path {
@@ -1150,32 +1135,18 @@
   stroke-width: var(--border-edge);
 }
 
-/* 머리 면은 중립 면이다. 파랑은 선택되거나 켜진 칸(part-bg)만 쓰고 정적 머리는 선택처럼 보이지 않는다. */
-.fl .schema-heading {
-  fill: var(--color-surface);
-}
-
+/* 열 키(PK, FK, UNQ)는 작은 표시이고 글자색이다. 파랑은 켜진 상태에만 쓴다. */
 .fl .cell .key {
   font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
-  fill: var(--color-state-active-text);
+  fill: var(--color-fg);
 }
 
+/* 그룹은 면이 없다(투명). 경계와 제목만 있고, 깊이에 따라 회색 면을 겹치지 않는다. 고른 색의 면과 경계는 draw/paint.js가 쓴 색에만 더한다. */
 .fl .frame-box {
-  fill: var(--color-group-1);
-  stroke: none;
-}
-
-.fl .frame-box.d2 {
-  fill: var(--color-group-2);
-}
-
-.fl .frame-box.d3 {
-  fill: var(--color-group-3);
-}
-
-.fl .frame-box.dashed {
+  fill: none;
   stroke: var(--color-line);
+  stroke-width: var(--border-thin);
 }
 
 .fl .lifeline {
@@ -1185,18 +1156,21 @@
 }
 
 .fl .note-box {
-  fill: var(--color-surface);
+  fill: var(--color-node);
   stroke: var(--color-line);
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
 
+/* 판 위 면은 모두 같은 중립 흰 면과 같은 경계다: 선 라벨 알약, 카드 안 틀. */
 .fl .pill {
-  fill: var(--color-card);
-  stroke: var(--simple2-separator);
+  fill: var(--color-node);
+  stroke: var(--fx-edge-rest);
 }
 
 .fl .part-bg {
-  fill: transparent;
+  --fx-face: transparent;
+  --fx-face-on: var(--fx-row);
+  fill: var(--fx-face);
 }
 
 .fl .col-line {
@@ -1205,7 +1179,9 @@
 }
 
 .fl .grid-cell {
-  fill: var(--color-node);
+  --fx-face: var(--color-node);
+  --fx-face-on: var(--fx-row);
+  fill: var(--fx-face);
   stroke: var(--simple2-separator);
   stroke-width: var(--border-thin);
 }
@@ -1217,18 +1193,24 @@
 }
 
 .fl .grid-cell.gap {
-  fill: var(--color-card);
+  --fx-face: var(--color-card);
   stroke: var(--simple2-separator);
 }
 
 .fl .grid-cell.empty {
-  fill: none;
+  --fx-face: none;
   stroke: var(--color-line);
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
 
 .fl .fl-edge.mark {
-  color: var(--color-fg);
+  --fx-line-rest: var(--color-fg);
+}
+
+/* 카드 안 틀: 내용이 있을 때 보이는 흰 면과 가는 경계. 고른 카드 모습(face)은 이 위에 옅은 면이나 경계를 더한다. */
+.fl .face {
+  fill: none;
+  stroke: none;
 }
 
 /* 도형 윗줄과 그룹 제목 줄의 장식: 글자 배지, 아이콘 */
@@ -1253,7 +1235,7 @@
   color: inherit;
 }
 
-/* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
+/* 선 번호 원. 흑백 번호이고 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
 .fl .number-pill {
   fill: var(--color-figure-number-fill);
 }
@@ -1267,7 +1249,7 @@
 
 /* 도형은 그림자 없는 평면이다. 그림자는 떠 있는 메뉴 같은 조작에만 둔다. */
 .fl :where(.fl-node) > .fl-stroke {
-  stroke: var(--simple2-surface-edge);
+  stroke: var(--fx-edge-rest);
   stroke-width: var(--simple2-node-stroke);
 }
 
@@ -1283,15 +1265,16 @@
   stroke-linejoin: round;
 }
 
-/* 화살촉과 몸통은 같은 관계선 묶음의 색을 상속한다. 마커 정의는 각 묶음 안에 있어 모든 브라우저에서 상태색이 같다. */
-.fl .fl-arrowhead {
+/* 화살촉과 몸통은 같은 소유자의 색을 상속한다(draw/arrow.js). 화살촉은 채운 삼각형이다. 연결선은 선 묶음이, 차트 방향선은 역할 class(.arrow-main 등, chart.css)가 소유자다.
+   HTML 문서의 차트 마커 정의는 판 SVG 밖의 정의 전용 SVG에 있어 `.fl` 아래가 아니므로 이 규칙은 `.fl` 범위를 걸지 않는다. */
+.fl-arrowhead {
   fill: currentColor;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-/* 조작 아이콘과 달리 의미 아이콘은 역할색으로 채운 실루엣과 그 안의 밝은 세부를 함께 가진다. */
+/* 의미 아이콘은 역할색으로 채운 실루엣과 그 안의 밝은 세부를 함께 가진다. 기술 브랜드도 자기 개념의 역할(icons/symbols.js)을 따른다. */
 .fl .fl-symbol-glyph {
   fill: none;
   stroke: currentColor;
@@ -1322,17 +1305,9 @@
   --symbol-detail: var(--color-figure-icon-service-surface);
 }
 
-.fl .fl-symbol-service .symbol-face {
-  fill: currentColor;
-}
-
 .fl .fl-symbol-data {
   color: var(--color-figure-icon-data-ink);
   --symbol-detail: var(--color-figure-icon-data-surface);
-}
-
-.fl .fl-symbol-data .symbol-face {
-  fill: currentColor;
 }
 
 .fl .fl-symbol-access {
@@ -1340,31 +1315,69 @@
   --symbol-detail: var(--color-figure-icon-access-surface);
 }
 
-.fl .fl-symbol-access .symbol-face {
-  fill: currentColor;
-}
-
 .fl .fl-symbol-person {
   color: var(--color-figure-icon-person-ink);
   --symbol-detail: var(--color-figure-icon-person-surface);
 }
 
-.fl .fl-symbol-person .symbol-face {
+.fl .symbol-face {
   fill: currentColor;
 }
 
-.fl .fl-symbol-brand {
-  color: var(--color-figure-icon-brand-ink);
-  --symbol-detail: var(--color-figure-icon-brand-surface);
+.fl .symbol-detail {
+  fill: var(--symbol-detail);
+  stroke: none;
 }
 
-.fl .fl-symbol-brand .symbol-face {
-  fill: currentColor;
+/* 효과 한 벌: 켜짐과 평소의 모습을 정하는 유일한 정의다. 움직이는 SVG(animate/animator.js)의 keyframes와 HTML 재생기의 `.on` 규칙이 같은 `--fx-*`를 읽으므로 두 출력과 정지 그림이 늘 같다.
+   - 켜짐(on): --fx-edge 윤곽·선·알약 테두리, --fx-ink 알약 글자, --fx-row 표 줄과 격자 칸의 면, --fx-face-on 요소의 켜진 면(도형은 아래), --fx-flash 값이 바뀐 순간의 면.
+   - 평소(rest): --fx-edge-rest 도형과 알약의 경계, --fx-ink-rest 알약 글자, --fx-line-rest 선, --fx-face 요소의 평소 면.
+   효과는 도형이 고른 색(tone)이나 표현(appearance)과 상관없다. 고른 색은 평소 값(--fx-face, --fx-edge-rest)만 바꾸고(draw/paint.js), 켜진 동안은 강조 윤곽에 자리를 내준다. */
+.fl {
+  --fx-edge: var(--color-state-active);
+  --fx-ink: var(--color-state-active-text);
+  --fx-row: var(--simple2-row-selection);
+  --fx-flash: var(--simple2-row-selection);
+  --fx-edge-rest: var(--simple2-surface-edge);
+  --fx-ink-rest: var(--color-muted);
+  --fx-line-rest: var(--color-line);
 }
 
-/* `light`가 명시한 도형만 윤곽을 그대로 두고 옅은 면을 바꾼다(명시한 상태의 고유 역할). 점이 닿은 도형은 면이 아니라 테두리 후광(.fl-pulse)만 쓴다. 색을 직접 고른 도형(ps-)의 면과 윤곽은 덮지 않는다. */
-.fl .fl-node.on > .fl-stroke:not([fill="none"], [class*="ps-"]) {
-  fill: color-mix(in srgb, var(--simple2-hover-fill) 70%, var(--color-node));
+/* 도형의 평소 면과 켜진 면. 옅은 면으로 고른 도형(filled)은 켜져도 면이 같다. 면이 없는 윤곽(fill='none')과 점은 자기 면이 없거나 자기 색이다. */
+.fl .fl-node {
+  --fx-face: var(--color-node);
+  --fx-face-on: var(--simple2-card-active-fill);
+}
+
+.fl .fl-node.ap-filled {
+  --fx-face-on: var(--fx-face);
+}
+
+.fl .fl-shape-start {
+  --fx-face: var(--color-fg);
+}
+
+.fl .fl-node > .fl-stroke[fill='none'] {
+  --fx-face: none;
+  --fx-face-on: none;
+}
+
+.fl .fl-node.ap-filled > .fl-stroke:not([fill='none']) {
+  fill: var(--fx-face);
+}
+
+/* `light`가 명시한 도형: 윤곽이 강조 색이 되고 면은 옅은 강조 면이다(옅은 면으로 고른 도형은 면을 그대로 둔다). 점이 닿은 도형은 도착 후광(.fl-pulse)만 쓴다. */
+.fl .fl-node.on > .fl-stroke {
+  stroke: var(--fx-edge);
+}
+
+.fl .fl-node.on > .fl-stroke:not([fill='none']) {
+  fill: var(--fx-face-on);
+}
+
+/* 켜진 표 줄(칸)과 격자 칸의 면. 모든 카드가 같은 규칙이다. */
+.fl .fl-part.on :is(.part-bg, .grid-cell) {
+  fill: var(--fx-face-on);
 }
 
 /* 도형에 마우스를 올려도 면이나 선이 켜지지 않는다(장식용 호버 활성 없음). 키보드 초점은 같은 외부 형상 위의 초점 표시이고 윤곽을 두 겹으로 만들지 않는다. */
@@ -1379,18 +1392,13 @@
   stroke-width: var(--simple2-focus-width);
 }
 
-.fl .symbol-detail {
-  fill: var(--symbol-detail);
-  stroke: none;
-}
-
 /* 값이 바뀔 때 켜지는 배경 면. 도형과 같은 윤곽을 쓰고 테두리를 더하지 않는다. */
 .fl .fl-flash-face {
   fill-opacity: var(--opacity-range);
 }
 
 .fl .fl-flash {
-  fill: var(--simple2-row-selection);
+  fill: var(--fx-flash);
   stroke: none;
   pointer-events: none;
 }
@@ -1404,7 +1412,7 @@
 /* 점이 도형에 닿을 때의 테두리 후광: 도형 윤곽과 같은 모양의 겹침 선이다. 면을 칠하지 않고 선 굵기가 윤곽과 같아 도형이 커지지 않는다. 불투명도(80/80/240ms)는 SMIL이나 재생기가 정한다. */
 .fl .fl-pulse {
   fill: none;
-  stroke: var(--color-state-active);
+  stroke: var(--fx-edge);
   stroke-width: var(--simple2-node-stroke);
   pointer-events: none;
 }
@@ -1424,30 +1432,30 @@
 }
 
 .fl .fl-fragment-heading {
-  fill: var(--color-card);
+  fill: var(--color-node);
 }
 
 .fl .fl-fragment-label {
   font-weight: var(--weight-semibold);
 }
 
-@keyframes a0 { 0%,100% { fill: var(--color-node) } }
+@keyframes a0 { 0%,100% { fill: var(--fx-face); stroke: var(--fx-edge-rest) } }
 .fl .a0 { animation: a0 6.4s infinite linear; }
 @keyframes a1 { 0%,100% { opacity: 1; visibility: visible } }
 .fl .a1 { animation: a1 6.4s infinite linear; }
 @keyframes a2 { 0%,100% { opacity: 1 } }
 .fl .a2 { animation: a2 6.4s infinite linear; }
-@keyframes a3 { 0%,19.224% { color: var(--color-state-active) } 19.225%,31.248% { color: var(--color-line) } 31.25%,50.474% { color: var(--color-state-active) } 50.475%,62.498% { color: var(--color-line) } 62.5%,81.724% { color: var(--color-state-active) } 81.725%,100% { color: var(--color-line) } }
+@keyframes a3 { 0%,19.224% { color: var(--fx-edge) } 19.225%,31.248% { color: var(--fx-line-rest) } 31.25%,50.474% { color: var(--fx-edge) } 50.475%,62.498% { color: var(--fx-line-rest) } 62.5%,81.724% { color: var(--fx-edge) } 81.725%,100% { color: var(--fx-line-rest) } }
 .fl .a3 { animation: a3 6.4s infinite linear; }
-@keyframes a4 { 0%,10.42% { color: var(--color-line) } 10.422%,24.126% { color: var(--color-state-active) } 24.127%,41.67% { color: var(--color-line) } 41.672%,55.376% { color: var(--color-state-active) } 55.377%,72.92% { color: var(--color-line) } 72.922%,86.626% { color: var(--color-state-active) } 86.627%,100% { color: var(--color-line) } }
+@keyframes a4 { 0%,10.42% { color: var(--fx-line-rest) } 10.422%,24.126% { color: var(--fx-edge) } 24.127%,41.67% { color: var(--fx-line-rest) } 41.672%,55.376% { color: var(--fx-edge) } 55.377%,72.92% { color: var(--fx-line-rest) } 72.922%,86.626% { color: var(--fx-edge) } 86.627%,100% { color: var(--fx-line-rest) } }
 .fl .a4 { animation: a4 6.4s infinite linear; }
-@keyframes a5 { 0%,20.827% { color: var(--color-line) } 20.828%,39.281% { color: var(--color-state-active) } 39.283%,52.077% { color: var(--color-line) } 52.078%,70.531% { color: var(--color-state-active) } 70.533%,83.327% { color: var(--color-line) } 83.328%,100% { color: var(--color-state-active) } }
+@keyframes a5 { 0%,20.827% { color: var(--fx-line-rest) } 20.828%,39.281% { color: var(--fx-edge) } 39.283%,52.077% { color: var(--fx-line-rest) } 52.078%,70.531% { color: var(--fx-edge) } 70.533%,83.327% { color: var(--fx-line-rest) } 83.328%,100% { color: var(--fx-edge) } }
 .fl .a5 { animation: a5 6.4s infinite linear; }
-@keyframes a6 { 0%,25.932% { color: var(--color-line) } 25.933%,100% { color: var(--color-state-active) } }
+@keyframes a6 { 0%,25.932% { color: var(--fx-line-rest) } 25.933%,100% { color: var(--fx-edge) } }
 .fl .a6 { animation: a6 6.4s infinite linear; }
-@keyframes a7 { 0%,7.811% { color: var(--color-line) } 7.813%,35.936% { color: var(--color-state-active) } 35.938%,54.686% { color: var(--color-line) } 54.688%,82.811% { color: var(--color-state-active) } 82.813%,100% { color: var(--color-line) } }
+@keyframes a7 { 0%,7.811% { color: var(--fx-line-rest) } 7.813%,35.936% { color: var(--fx-edge) } 35.938%,54.686% { color: var(--fx-line-rest) } 54.688%,82.811% { color: var(--fx-edge) } 82.813%,100% { color: var(--fx-line-rest) } }
 .fl .a7 { animation: a7 6.4s infinite linear; }
-.fl .sa0 { fill: var(--color-node); }
+.fl .sa0 { fill: var(--fx-face); stroke: var(--fx-edge-rest); }
 .fl .sa1 { opacity: 1; visibility: visible; }
 .fl .sa2 { opacity: 1; }
 .fl .fl-still { display: none; }
@@ -1460,49 +1468,49 @@
 <rect x="0.5" y="0.5" width="959" height="502" rx="18" fill="var(--simple2-canvas-fill)"/>
 <g class="fl-motion" transform="translate(231 0)">
 
-<g id="n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹" data-id="web"><rect x="28" y="70" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(57.7 83.5) scale(0.83333)"><rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path class="symbol-line" d="M8 21h8M12 17v4"/></g></g><text x="92" y="98.9" class="label">웹</text></g>
-<g id="n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="앱" data-id="app"><rect x="160" y="28" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(227.7 41.5) scale(0.83333)"><rect class="symbol-face" x="6" y="2" width="12" height="20" rx="3"/><path class="symbol-cut" d="M10 5h4M10 19h4"/></g></g><text x="262" y="56.9" class="label">앱</text><rect x="170" y="75" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card a2"/><g id="n-1-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M176 75H320a6 6 0 0 1 6 6V101a6 6 0 0 1 -6 6H176a6 6 0 0 1 -6 -6V81a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="1"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.375;0.3875;0.4;0.4375;0.47922;0.49172;0.50422;0.54172;0.58328;0.59578;0.60828;0.64578;0.6875;0.7;0.7125;0.75;0.79172;0.80422;0.81672;0.85422;0.89578;0.90828;0.92078;0.95828;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></path><text x="178" y="95.7" class="row">앱 화면 재고</text></g></g>
-<g id="n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="제휴사" data-id="partner"><rect x="368" y="70" width="102" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(386 83.5) scale(0.83333)"><path class="symbol-face" d="M4 21V5l8-3 8 3v16Z"/><path class="symbol-cut" d="M8 21V10h8v11"/></g></g><text x="433" y="98.9" class="label">제휴사</text></g>
-<g id="n-3" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="주문 API" data-id="api"><rect x="160" y="177" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="160" y="177" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.19225;0.20475;0.21725;0.24127;0.24464;0.25377;0.25475;0.26627;0.30377;0.39283;0.40533;0.41783;0.45533;0.50475;0.51725;0.52975;0.55377;0.55714;0.56627;0.56725;0.57877;0.61627;0.70533;0.71783;0.73033;0.76783;0.81725;0.82975;0.84225;0.86627;0.86964;0.87877;0.87975;0.89127;0.92877;1" values="0;0;1;1;0.35938;0.26954;1;1;1;0;0;1;1;0;0;1;1;0.35938;0.26954;1;1;1;0;0;1;1;0;0;1;1;0.35938;0.26954;1;1;1;0;0"/></rect><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(208.4 190.5) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="262" y="205.9" class="label">주문 API</text><rect x="170" y="224" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card a2"/><g id="n-3-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M176 224H320a6 6 0 0 1 6 6V250a6 6 0 0 1 -6 6H176a6 6 0 0 1 -6 -6V230a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="2"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.19225;0.20475;0.21725;0.24127;0.24464;0.25377;0.25475;0.26627;0.30377;0.375;0.3875;0.39283;0.4;0.404;0.40533;0.41783;0.4375;0.45533;0.47922;0.49172;0.50422;0.50475;0.51399;0.51725;0.52975;0.54172;0.55377;0.55714;0.56627;0.56725;0.57877;0.58328;0.59153;0.59578;0.60828;0.61627;0.64578;0.6875;0.7;0.70533;0.7125;0.7165;0.71783;0.73033;0.75;0.76783;0.79172;0.80422;0.81672;0.81725;0.82649;0.82975;0.84225;0.85422;0.86627;0.86964;0.87877;0.87975;0.89127;0.89578;0.90403;0.90828;0.92078;0.92877;0.95828;1" values="0;0;1;1;0.35938;0.26954;1;1;1;0;0;1;1;1;0.89344;1;1;0.47541;0;0;1;1;0.98581;0.73936;1;1;0.68085;0.35938;0.26954;1;1;1;0.87981;0.65985;1;1;0.78686;0;0;1;1;1;0.89344;1;1;0.47541;0;0;1;1;0.98581;0.73936;1;1;0.68085;0.35938;0.26954;1;1;1;0.87981;0.65985;1;1;0.78686;0;0"/></path><text x="178" y="244.7" class="row">처리 중</text></g></g>
-<g id="n-4" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="재고 DB" data-id="db"><path d="M130.7 338 a 88 12 0 0 1 176 0 v 125 a 88 12 0 0 1 -176 0 z" fill="var(--color-node)" class="fl-stroke a0"/><path d="M130.7 338 a 88 12 0 0 0 176 0" fill="none" class="fl-stroke a0"/><path d="M130.7 338 a 88 12 0 0 1 176 0 v 125 a 88 12 0 0 1 -176 0 z" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.375;0.3875;0.4;0.4375;0.47922;0.49172;0.50422;0.54172;0.58328;0.59578;0.60828;0.64578;0.6875;0.7;0.7125;0.75;0.79172;0.80422;0.81672;0.85422;0.89578;0.90828;0.92078;0.95828;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></path><path d="M130.7 338 a 88 12 0 0 0 176 0" fill="none" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.375;0.3875;0.4;0.4375;0.47922;0.49172;0.50422;0.54172;0.58328;0.59578;0.60828;0.64578;0.6875;0.7;0.7125;0.75;0.79172;0.80422;0.81672;0.85422;0.89578;0.90828;0.92078;0.95828;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></path><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(208.7 362) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="218.7" y="402.9" class="label">재고 DB</text><rect x="140.7" y="421" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card a2"/><g id="n-4-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M146.7 421H290.7a6 6 0 0 1 6 6V447a6 6 0 0 1 -6 6H146.7a6 6 0 0 1 -6 -6V427a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="0"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.375;0.3875;0.4;0.4375;0.47922;0.49172;0.50422;0.54172;0.58328;0.59578;0.60828;0.64578;0.6875;0.7;0.7125;0.75;0.79172;0.80422;0.81672;0.85422;0.89578;0.90828;0.92078;0.95828;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></path><text x="148.7" y="441.7" class="row">재고</text></g></g>
-<g id="n-5" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="결제 서비스" data-id="pay"><rect x="338.7" y="326" width="102.6" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="338.7" y="326" width="102.6" height="47" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.35938;0.37188;0.38438;0.42188;0.82813;0.84062;0.85313;0.89063;1" values="0;0;1;1;0;0;1;1;0;0"/></rect><text x="390" y="354.9" class="label">결제 서비스</text></g>
+<g id="n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹" data-id="web"><rect x="28" y="70" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(57.7 83.5) scale(0.83333)"><rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path class="symbol-line" d="M8 21h8M12 17v4"/></g></g><text x="92" y="98.9" class="label" text-anchor="middle">웹</text></g>
+<g id="n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="앱" data-id="app"><rect x="160" y="28" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(227.7 41.5) scale(0.83333)"><rect class="symbol-face" x="6" y="2" width="12" height="20" rx="3"/><path class="symbol-cut" d="M10 5h4M10 19h4"/></g></g><text x="262" y="56.9" class="label" text-anchor="middle">앱</text><rect x="170" y="75" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card a2"/><g id="n-1-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M176 75H320a6 6 0 0 1 6 6V101a6 6 0 0 1 -6 6H176a6 6 0 0 1 -6 -6V81a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="1"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.375;0.3875;0.4;0.4375;0.47922;0.49172;0.50422;0.54172;0.58328;0.59578;0.60828;0.64578;0.6875;0.7;0.7125;0.75;0.79172;0.80422;0.81672;0.85422;0.89578;0.90828;0.92078;0.95828;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></path><text x="178" y="95.7" class="row">앱 화면 재고</text></g></g>
+<g id="n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="제휴사" data-id="partner"><rect x="368" y="70" width="102" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(386 83.5) scale(0.83333)"><path class="symbol-face" d="M4 21V5l8-3 8 3v16Z"/><path class="symbol-cut" d="M8 21V10h8v11"/></g></g><text x="433" y="98.9" class="label" text-anchor="middle">제휴사</text></g>
+<g id="n-3" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="주문 API" data-id="api"><rect x="160" y="177" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="160" y="177" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.19225;0.20475;0.21725;0.24127;0.24464;0.25377;0.25475;0.26627;0.30377;0.39283;0.40533;0.41783;0.45533;0.50475;0.51725;0.52975;0.55377;0.55714;0.56627;0.56725;0.57877;0.61627;0.70533;0.71783;0.73033;0.76783;0.81725;0.82975;0.84225;0.86627;0.86964;0.87877;0.87975;0.89127;0.92877;1" values="0;0;1;1;0.35938;0.26954;1;1;1;0;0;1;1;0;0;1;1;0.35938;0.26954;1;1;1;0;0;1;1;0;0;1;1;0.35938;0.26954;1;1;1;0;0"/></rect><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(208.4 190.5) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="262" y="205.9" class="label" text-anchor="middle">주문 API</text><rect x="170" y="224" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card a2"/><g id="n-3-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M176 224H320a6 6 0 0 1 6 6V250a6 6 0 0 1 -6 6H176a6 6 0 0 1 -6 -6V230a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="2"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.19225;0.20475;0.21725;0.24127;0.24464;0.25377;0.25475;0.26627;0.30377;0.375;0.3875;0.39283;0.4;0.404;0.40533;0.41783;0.4375;0.45533;0.47922;0.49172;0.50422;0.50475;0.51399;0.51725;0.52975;0.54172;0.55377;0.55714;0.56627;0.56725;0.57877;0.58328;0.59153;0.59578;0.60828;0.61627;0.64578;0.6875;0.7;0.70533;0.7125;0.7165;0.71783;0.73033;0.75;0.76783;0.79172;0.80422;0.81672;0.81725;0.82649;0.82975;0.84225;0.85422;0.86627;0.86964;0.87877;0.87975;0.89127;0.89578;0.90403;0.90828;0.92078;0.92877;0.95828;1" values="0;0;1;1;0.35938;0.26954;1;1;1;0;0;1;1;1;0.89344;1;1;0.47541;0;0;1;1;0.98581;0.73936;1;1;0.68085;0.35938;0.26954;1;1;1;0.87981;0.65985;1;1;0.78686;0;0;1;1;1;0.89344;1;1;0.47541;0;0;1;1;0.98581;0.73936;1;1;0.68085;0.35938;0.26954;1;1;1;0.87981;0.65985;1;1;0.78686;0;0"/></path><text x="178" y="244.7" class="row">처리 중</text></g></g>
+<g id="n-4" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="재고 DB" data-id="db"><path d="M130.7 338 a 88 12 0 0 1 176 0 v 125 a 88 12 0 0 1 -176 0 z" fill="var(--color-node)" class="fl-stroke a0"/><path d="M130.7 338 a 88 12 0 0 0 176 0" fill="none" class="fl-stroke a0"/><path d="M130.7 338 a 88 12 0 0 1 176 0 v 125 a 88 12 0 0 1 -176 0 z" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.375;0.3875;0.4;0.4375;0.47922;0.49172;0.50422;0.54172;0.58328;0.59578;0.60828;0.64578;0.6875;0.7;0.7125;0.75;0.79172;0.80422;0.81672;0.85422;0.89578;0.90828;0.92078;0.95828;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></path><path d="M130.7 338 a 88 12 0 0 0 176 0" fill="none" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.375;0.3875;0.4;0.4375;0.47922;0.49172;0.50422;0.54172;0.58328;0.59578;0.60828;0.64578;0.6875;0.7;0.7125;0.75;0.79172;0.80422;0.81672;0.85422;0.89578;0.90828;0.92078;0.95828;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></path><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(208.7 362) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="218.7" y="402.9" class="label" text-anchor="middle">재고 DB</text><rect x="140.7" y="421" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card a2"/><g id="n-4-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M146.7 421H290.7a6 6 0 0 1 6 6V447a6 6 0 0 1 -6 6H146.7a6 6 0 0 1 -6 -6V427a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-vf="0"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.375;0.3875;0.4;0.4375;0.47922;0.49172;0.50422;0.54172;0.58328;0.59578;0.60828;0.64578;0.6875;0.7;0.7125;0.75;0.79172;0.80422;0.81672;0.85422;0.89578;0.90828;0.92078;0.95828;1" values="0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0;1;1;0;0"/></path><text x="148.7" y="441.7" class="row">재고</text></g></g>
+<g id="n-5" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="결제 서비스" data-id="pay"><rect x="338.7" y="326" width="102.6" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="338.7" y="326" width="102.6" height="47" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.35938;0.37188;0.38438;0.42188;0.82813;0.84062;0.85313;0.89063;1" values="0;0;1;1;0;0;1;1;0;0"/></rect><text x="390" y="354.9" class="label" text-anchor="middle">결제 서비스</text></g>
 <g id="e-0" class="fl-edge a3"><defs><marker id="fl-arrow-0" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-0" d="M 78 117 L 78 125 Q 78 133, 86 133 L 182 133 Q 204 133, 204 155 L 204 177" class="fl-path" marker-end="url(#fl-arrow-0)"/></g>
 <g id="e-1" class="fl-edge a4"><defs><marker id="fl-arrow-1" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-1" d="M 248 117 L 248 177" class="fl-path" marker-end="url(#fl-arrow-1)"/></g>
 <g id="e-2" class="fl-edge a5"><defs><marker id="fl-arrow-2" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-2" d="M 419 117 L 419 125 Q 419 133, 411 133 L 314 133 Q 292 133, 292 155 L 292 177" class="fl-path" marker-end="url(#fl-arrow-2)"/></g>
 <g id="e-3" class="fl-edge a6"><defs><marker id="fl-arrow-3" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-3" d="M 218.7 266 L 218.7 326" class="fl-path" marker-end="url(#fl-arrow-3)"/></g>
 <g id="e-4" class="fl-edge a7"><defs><marker id="fl-arrow-4" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-4" d="M 277.3 266 L 277.3 274 Q 277.3 282, 285.3 282 L 368 282 Q 390 282, 390 304 L 390 326" class="fl-path" marker-end="url(#fl-arrow-4)"/></g>
-<defs><path id="tp-0" class="fl-track-path" d="M 78 117 L 78 125 Q 78 133, 86 133 L 182 133 Q 204 133, 204 155 L 204 177 L 218.7 266 L 218.7 326" fill="none"/><path id="tp-1" class="fl-track-path" d="M 248 117 L 248 177 L 218.7 266 L 218.7 326" fill="none"/><path id="tp-2" class="fl-track-path" d="M 419 117 L 419 125 Q 419 133, 411 133 L 314 133 Q 292 133, 292 155 L 292 177 L 218.7 266 L 218.7 326" fill="none"/><path id="tp-3" class="fl-track-path" d="M 277.3 266 L 277.3 274 Q 277.3 282, 285.3 282 L 368 282 Q 390 282, 390 304 L 390 326" fill="none"/></defs><g class="fl-value"><text x="288.7" y="441.7" class="value" opacity="0" visibility="hidden" data-v="0" data-t="120">120<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375" values="visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375" values="1;0"/></text><text x="288.7" y="441.7" class="value" opacity="0" visibility="hidden" data-v="0" data-t="119">119<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375;0.47922" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375;0.47922" values="0;1;0"/></text><text x="288.7" y="441.7" class="value" opacity="0" visibility="hidden" data-v="0" data-t="118">118<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.47922;0.58328" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.47922;0.58328" values="0;1;0"/></text><text x="288.7" y="441.7" class="value" opacity="0" visibility="hidden" data-v="0" data-t="117">117<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.58328;0.6875" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.58328;0.6875" values="0;1;0"/></text><text x="288.7" y="441.7" class="value" opacity="0" visibility="hidden" data-v="0" data-t="116">116<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.6875;0.79172" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.6875;0.79172" values="0;1;0"/></text><text x="288.7" y="441.7" class="value" opacity="0" visibility="hidden" data-v="0" data-t="115">115<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.79172;0.89578" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.79172;0.89578" values="0;1;0"/></text><text x="288.7" y="441.7" class="value" opacity="0" visibility="hidden" data-v="0" data-t="114">114<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.89578" values="hidden;visible"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.89578" values="0;1"/></text></g>
-<g class="fl-value"><text x="318" y="95.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="120">120<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375" values="visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375" values="1;0"/></text><text x="318" y="95.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="119">119<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375;0.47922" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375;0.47922" values="0;1;0"/></text><text x="318" y="95.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="118">118<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.47922;0.58328" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.47922;0.58328" values="0;1;0"/></text><text x="318" y="95.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="117">117<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.58328;0.6875" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.58328;0.6875" values="0;1;0"/></text><text x="318" y="95.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="116">116<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.6875;0.79172" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.6875;0.79172" values="0;1;0"/></text><text x="318" y="95.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="115">115<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.79172;0.89578" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.79172;0.89578" values="0;1;0"/></text><text x="318" y="95.7" class="value" opacity="0" visibility="hidden" data-v="1" data-t="114">114<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.89578" values="hidden;visible"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.89578" values="0;1"/></text></g>
-<g class="fl-value"><text x="318" y="244.7" class="value" opacity="0" visibility="hidden" data-v="2" data-t="0">0<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19225" values="visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19225" values="1;0"/></text><text x="318" y="244.7" class="value" opacity="0" visibility="hidden" data-v="2" data-t="1">1<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19225;0.24127;0.375;0.39283;0.47922;0.50475;0.6875;0.70533;0.79172;0.81725" values="hidden;visible;hidden;visible;hidden;visible;hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19225;0.24127;0.375;0.39283;0.47922;0.50475;0.6875;0.70533;0.79172;0.81725" values="0;1;0;1;0;1;0;1;0;1;0"/></text><text x="318" y="244.7" class="value" opacity="0" visibility="hidden" data-v="2" data-t="2">2<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.24127;0.375;0.39283;0.47922;0.50475;0.55377;0.58328;0.6875;0.70533;0.79172;0.81725;0.86627;0.89578" values="hidden;visible;hidden;visible;hidden;visible;hidden;visible;hidden;visible;hidden;visible;hidden;visible"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.24127;0.375;0.39283;0.47922;0.50475;0.55377;0.58328;0.6875;0.70533;0.79172;0.81725;0.86627;0.89578" values="0;1;0;1;0;1;0;1;0;1;0;1;0;1"/></text><text x="318" y="244.7" class="value" opacity="0" visibility="hidden" data-v="2" data-t="3">3<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.55377;0.58328;0.86627;0.89578" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.55377;0.58328;0.86627;0.89578" values="0;1;0;1;0"/></text></g>
-<g class="p0-0" opacity="0" fill="var(--color-data-category-on-1)"><circle r="10" fill="var(--color-data-category-1)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><g><rect x="-18.2" y="-35" width="36.4" height="23" rx="8" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.14063;0.14583;0.16667;0.25;0.34375;0.375;1" values="0 47;0 47;0 47;0 47;0 47;0 0;0 0;0 0"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.14063;0.14583;0.16667;0.25;0.34375;0.375;1" values="1;1;0.9;0;0;1;1;1"/></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19225;0.25933;0.375" values="visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19225;0.25933;0.375" values="1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.375;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#tp-0" xlink:href="#tp-0"/></animateMotion></g>
-<g class="p0-1" opacity="0" fill="var(--color-data-category-on-1)"><circle r="10" fill="var(--color-data-category-1)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.3125;0.54948;0.57292;0.58073;0.60417;1" values="1;1;1;0;0;1;1"/><g><rect x="-18.2" y="-35" width="36.4" height="23" rx="8" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.3125;0.45313;0.45833;0.47917;0.5625;0.65625;0.6875;1" values="0 47;0 47;0 47;0 47;0 47;0 47;0 0;0 0;0 0"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.3125;0.45313;0.45833;0.47917;0.5625;0.65625;0.6875;1" values="1;1;1;0.9;0;0;1;1;1"/></g></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.3125;0.50475;0.57183;0.6875" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.3125;0.50475;0.57183;0.6875" values="0;1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3125;0.6875;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-0" xlink:href="#tp-0"/></animateMotion></g>
-<g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.84375;0.9375;1" values="1;1;0;0"/><g class="p0-2" opacity="0" fill="var(--color-data-category-on-1)"><circle r="10" fill="var(--color-data-category-1)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.625;0.86198;0.88542;0.89323;0.91667;0.9375;1" values="1;1;1;0;0;1;1;1"/><g><rect x="-18.2" y="-35" width="36.4" height="23" rx="8" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.625;0.76563;0.77083;0.79167;0.875;0.9375;1" values="0 47;0 47;0 47;0 47;0 47;0 47;0 15.7;0 15.7"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.625;0.76563;0.77083;0.79167;0.875;0.9375;1" values="1;1;1;0.9;0;0;0.7;0.7"/></g></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.625;0.81725;0.88433;0.9375" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.625;0.81725;0.88433;0.9375" values="0;1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.625;0.63802;0.65104;0.66406;0.67708;0.6901;0.70313;0.71615;0.72917;0.74219;0.75521;0.76823;0.78125;0.79427;0.80729;0.82031;0.83333;0.84635;0.85938;0.8724;0.88542;0.89844;0.91146;0.92448;0.9375;1" keyPoints="0;0;0.00413;0.01214;0.02435;0.04111;0.06276;0.08961;0.12195;0.15995;0.20364;0.25284;0.30703;0.36539;0.42673;0.48958;0.55233;0.61342;0.67148;0.72548;0.77471;0.81879;0.85759;0.89116;0.9197;0.94344;0.94344"><mpath href="#tp-0" xlink:href="#tp-0"/></animateMotion></g></g>
-<g class="p0-3" opacity="0" fill="var(--color-data-category-on-2)"><circle r="10" fill="var(--color-data-category-2)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-2)" stroke="var(--color-data-category-outline-2)" stroke-width="1.75"/><g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.10422;0.3151;0.33854;0.3724;0.39583;1" values="1;1;1;0;0;1;1"/><g><rect x="-18.2" y="-35" width="36.4" height="23" rx="8" fill="var(--color-data-category-2)" stroke="var(--color-data-category-outline-2)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.10422;0.16672;0.17193;0.19276;0.32297;0.32818;0.42193;0.47922;1" values="0 47;0 47;0 47;0 47;0 47;0 47;0 47;0 0;0 0;0 0"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.10422;0.16672;0.17193;0.19276;0.32297;0.32818;0.42193;0.47922;1" values="1;1;1;0.9;0;0;0.2;1;1;1"/></g></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.10422;0.24127;0.33703;0.47922" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.10422;0.24127;0.33703;0.47922" values="0;1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.10422;0.47922;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-1" xlink:href="#tp-1"/></animateMotion></g>
-<g class="p0-4" opacity="0" fill="var(--color-data-category-on-2)"><circle r="10" fill="var(--color-data-category-2)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-2)" stroke="var(--color-data-category-outline-2)" stroke-width="1.75"/><g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.41672;0.6276;0.65104;0.6875;0.71094;1" values="1;1;1;0;0;1;1"/><g><rect x="-18.2" y="-35" width="36.4" height="23" rx="8" fill="var(--color-data-category-2)" stroke="var(--color-data-category-outline-2)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.41672;0.47922;0.48443;0.50526;0.63547;0.64068;0.73443;0.79172;1" values="0 47;0 47;0 47;0 47;0 47;0 47;0 47;0 0;0 0;0 0"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.41672;0.47922;0.48443;0.50526;0.63547;0.64068;0.73443;0.79172;1" values="1;1;1;0.9;0;0;0.2;1;1;1"/></g></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.41672;0.55377;0.64953;0.79172" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.41672;0.55377;0.64953;0.79172" values="0;1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.41672;0.79172;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-1" xlink:href="#tp-1"/></animateMotion></g>
-<g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.84375;0.9375;1" values="1;1;0;0"/><g class="p0-5" opacity="0" fill="var(--color-data-category-on-2)"><circle r="10" fill="var(--color-data-category-2)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-2)" stroke="var(--color-data-category-outline-2)" stroke-width="1.75"/><g><rect x="-18.2" y="-35" width="36.4" height="23" rx="8" fill="var(--color-data-category-2)" stroke="var(--color-data-category-outline-2)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.72922;0.79172;0.79693;0.81776;0.9375;1" values="0 47;0 47;0 47;0 47;0 47;0 47;0 47"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.72922;0.79172;0.79693;0.81776;0.9375;1" values="1;1;1;0.9;0;0;0"/></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.72922;0.86627" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.72922;0.86627" values="0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.72922;0.7379;0.74658;0.75525;0.76393;0.77261;0.78129;0.78997;0.79865;0.80732;0.816;0.82468;0.83336;0.84204;0.85072;0.85939;0.86807;0.87675;0.88543;0.89411;0.90279;0.91146;0.92014;0.92882;0.9375;1" keyPoints="0;0;0.00233;0.00635;0.01213;0.01978;0.0294;0.04109;0.05495;0.07108;0.08957;0.11049;0.13392;0.15987;0.18836;0.21934;0.25271;0.28831;0.32591;0.36521;0.40585;0.44738;0.48936;0.5313;0.57272;0.61318;0.61318"><mpath href="#tp-1" xlink:href="#tp-1"/></animateMotion></g></g>
-<g class="p0-6" opacity="0" fill="var(--color-data-category-on-3)"><circle r="10" fill="var(--color-data-category-3)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.20828;0.45052;0.47396;0.47917;0.5026;1" values="1;1;1;0;0;1;1"/><g><rect x="-18.2" y="-35" width="36.4" height="23" rx="8" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.20828;0.3437;0.34891;0.36974;0.46349;0.55724;0.58328;1" values="0 47;0 47;0 47;0 47;0 47;0 47;0 0;0 0;0 0"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.20828;0.3437;0.34891;0.36974;0.46349;0.55724;0.58328;1" values="1;1;1;0.9;0;0;1;1;1"/></g></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.20828;0.39283;0.47198;0.58328" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.20828;0.39283;0.47198;0.58328" values="0;1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.20828;0.58328;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-2" xlink:href="#tp-2"/></animateMotion></g>
-<g class="p0-7" opacity="0" fill="var(--color-data-category-on-3)"><circle r="10" fill="var(--color-data-category-3)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.52078;0.76302;0.78646;0.79167;0.8151;1" values="1;1;1;0;0;1;1"/><g><rect x="-18.2" y="-35" width="36.4" height="23" rx="8" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.52078;0.6562;0.66141;0.68224;0.77599;0.86974;0.89578;1" values="0 47;0 47;0 47;0 47;0 47;0 47;0 0;0 0;0 0"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.52078;0.6562;0.66141;0.68224;0.77599;0.86974;0.89578;1" values="1;1;1;0.9;0;0;1;1;1"/></g></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.52078;0.70533;0.78448;0.89578" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.52078;0.70533;0.78448;0.89578" values="0;1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.52078;0.89578;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-2" xlink:href="#tp-2"/></animateMotion></g>
-<g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.84375;0.9375;1" values="1;1;0;0"/><g class="p0-8" opacity="0" fill="var(--color-data-category-on-3)"><circle r="10" fill="var(--color-data-category-3)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><g><rect x="-18.2" y="-35" width="36.4" height="23" rx="8" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.83328;0.9375;1" values="0 47;0 47;0 47;0 47"/></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.83328;0.9375" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.83328;0.9375" values="0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.83328;0.83762;0.84197;0.84631;0.85065;0.85499;0.85934;0.86368;0.86802;0.87236;0.87671;0.88105;0.88539;0.88973;0.89408;0.89842;0.90276;0.9071;0.91145;0.91579;0.92013;0.92447;0.92882;0.93316;0.9375;1" keyPoints="0;0;0.00096;0.00234;0.00413;0.00635;0.00902;0.01215;0.01574;0.01981;0.02437;0.02944;0.03503;0.04115;0.04781;0.05503;0.06282;0.07119;0.08014;0.0897;0.09987;0.11066;0.12207;0.13412;0.1468;0.16011;0.16011"><mpath href="#tp-2" xlink:href="#tp-2"/></animateMotion></g></g>
-<g class="p0-9" opacity="0" fill="var(--color-data-category-on-5)"><circle r="10" fill="var(--color-data-category-5)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-5)" stroke="var(--color-data-category-outline-5)" stroke-width="1.75"/><g><rect x="-18.2" y="-35" width="36.4" height="23" rx="8" fill="var(--color-data-category-5)" stroke="var(--color-data-category-outline-5)" stroke-width="1.75"/><text x="0" y="-20" class="chip">결제</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.07813;0.15625;0.34375;0.34896;0.35417;0.35938;1" values="0 47;0 47;0 47;0 9.5;0 8.9;0 8.4;0 8;0 8"/></g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.07813;0.35938" values="0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.07813;0.35938;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-3" xlink:href="#tp-3"/></animateMotion></g>
-<g class="p0-10" opacity="0" fill="var(--color-data-category-on-5)"><circle r="10" fill="var(--color-data-category-5)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-5)" stroke="var(--color-data-category-outline-5)" stroke-width="1.75"/><g><rect x="-18.2" y="-35" width="36.4" height="23" rx="8" fill="var(--color-data-category-5)" stroke="var(--color-data-category-outline-5)" stroke-width="1.75"/><text x="0" y="-20" class="chip">결제</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.54688;0.625;0.8125;0.81771;0.82292;0.82813;1" values="0 47;0 47;0 47;0 9.5;0 8.9;0 8.4;0 8;0 8"/></g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.54688;0.82813" values="0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.54688;0.82813;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-3" xlink:href="#tp-3"/></animateMotion></g>
+<defs><path id="tp-0" class="fl-track-path" d="M 78 117 L 78 125 Q 78 133, 86 133 L 182 133 Q 204 133, 204 155 L 204 177 L 218.7 266 L 218.7 326" fill="none"/><path id="tp-1" class="fl-track-path" d="M 248 117 L 248 177 L 218.7 266 L 218.7 326" fill="none"/><path id="tp-2" class="fl-track-path" d="M 419 117 L 419 125 Q 419 133, 411 133 L 314 133 Q 292 133, 292 155 L 292 177 L 218.7 266 L 218.7 326" fill="none"/><path id="tp-3" class="fl-track-path" d="M 277.3 266 L 277.3 274 Q 277.3 282, 285.3 282 L 368 282 Q 390 282, 390 304 L 390 326" fill="none"/></defs><g class="fl-value"><text x="288.7" y="441.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="0" data-t="120">120<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375" values="visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375" values="1;0"/></text><text x="288.7" y="441.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="0" data-t="119">119<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375;0.47922" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375;0.47922" values="0;1;0"/></text><text x="288.7" y="441.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="0" data-t="118">118<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.47922;0.58328" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.47922;0.58328" values="0;1;0"/></text><text x="288.7" y="441.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="0" data-t="117">117<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.58328;0.6875" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.58328;0.6875" values="0;1;0"/></text><text x="288.7" y="441.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="0" data-t="116">116<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.6875;0.79172" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.6875;0.79172" values="0;1;0"/></text><text x="288.7" y="441.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="0" data-t="115">115<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.79172;0.89578" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.79172;0.89578" values="0;1;0"/></text><text x="288.7" y="441.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="0" data-t="114">114<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.89578" values="hidden;visible"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.89578" values="0;1"/></text></g>
+<g class="fl-value"><text x="318" y="95.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="120">120<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375" values="visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375" values="1;0"/></text><text x="318" y="95.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="119">119<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375;0.47922" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.375;0.47922" values="0;1;0"/></text><text x="318" y="95.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="118">118<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.47922;0.58328" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.47922;0.58328" values="0;1;0"/></text><text x="318" y="95.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="117">117<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.58328;0.6875" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.58328;0.6875" values="0;1;0"/></text><text x="318" y="95.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="116">116<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.6875;0.79172" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.6875;0.79172" values="0;1;0"/></text><text x="318" y="95.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="115">115<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.79172;0.89578" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.79172;0.89578" values="0;1;0"/></text><text x="318" y="95.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="1" data-t="114">114<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.89578" values="hidden;visible"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.89578" values="0;1"/></text></g>
+<g class="fl-value"><text x="318" y="244.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="2" data-t="0">0<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19225" values="visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19225" values="1;0"/></text><text x="318" y="244.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="2" data-t="1">1<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19225;0.24127;0.375;0.39283;0.47922;0.50475;0.6875;0.70533;0.79172;0.81725" values="hidden;visible;hidden;visible;hidden;visible;hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19225;0.24127;0.375;0.39283;0.47922;0.50475;0.6875;0.70533;0.79172;0.81725" values="0;1;0;1;0;1;0;1;0;1;0"/></text><text x="318" y="244.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="2" data-t="2">2<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.24127;0.375;0.39283;0.47922;0.50475;0.55377;0.58328;0.6875;0.70533;0.79172;0.81725;0.86627;0.89578" values="hidden;visible;hidden;visible;hidden;visible;hidden;visible;hidden;visible;hidden;visible;hidden;visible"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.24127;0.375;0.39283;0.47922;0.50475;0.55377;0.58328;0.6875;0.70533;0.79172;0.81725;0.86627;0.89578" values="0;1;0;1;0;1;0;1;0;1;0;1;0;1"/></text><text x="318" y="244.7" class="value" text-anchor="end" opacity="0" visibility="hidden" data-v="2" data-t="3">3<animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.55377;0.58328;0.86627;0.89578" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.55377;0.58328;0.86627;0.89578" values="0;1;0;1;0"/></text></g>
+<g class="p0-0" opacity="0" fill="var(--color-data-category-on-1)"><circle r="10" fill="var(--color-data-category-1)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><g><rect x="-19.9" y="-38" width="39.9" height="26" rx="8" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.14063;0.14583;0.16667;0.25;0.34375;0.375;1" values="0 50;0 50;0 50;0 50;0 50;0 0;0 0;0 0"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.14063;0.14583;0.16667;0.25;0.34375;0.375;1" values="1;1;0.9;0;0;1;1;1"/></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19225;0.25933;0.375" values="visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.19225;0.25933;0.375" values="1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.375;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#tp-0" xlink:href="#tp-0"/></animateMotion></g>
+<g class="p0-1" opacity="0" fill="var(--color-data-category-on-1)"><circle r="10" fill="var(--color-data-category-1)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.3125;0.54948;0.57292;0.58073;0.60417;1" values="1;1;1;0;0;1;1"/><g><rect x="-19.9" y="-38" width="39.9" height="26" rx="8" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.3125;0.45313;0.45833;0.47917;0.5625;0.65625;0.6875;1" values="0 50;0 50;0 50;0 50;0 50;0 50;0 0;0 0;0 0"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.3125;0.45313;0.45833;0.47917;0.5625;0.65625;0.6875;1" values="1;1;1;0.9;0;0;1;1;1"/></g></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.3125;0.50475;0.57183;0.6875" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.3125;0.50475;0.57183;0.6875" values="0;1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3125;0.6875;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-0" xlink:href="#tp-0"/></animateMotion></g>
+<g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.84375;0.9375;1" values="1;1;0;0"/><g class="p0-2" opacity="0" fill="var(--color-data-category-on-1)"><circle r="10" fill="var(--color-data-category-1)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.625;0.86198;0.88542;0.89323;0.91667;0.9375;1" values="1;1;1;0;0;1;1;1"/><g><rect x="-19.9" y="-38" width="39.9" height="26" rx="8" fill="var(--color-data-category-1)" stroke="var(--color-data-category-outline-1)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.625;0.76563;0.77083;0.79167;0.875;0.9375;1" values="0 50;0 50;0 50;0 50;0 50;0 50;0 16.7;0 16.7"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.625;0.76563;0.77083;0.79167;0.875;0.9375;1" values="1;1;1;0.9;0;0;0.7;0.7"/></g></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.625;0.81725;0.88433;0.9375" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.625;0.81725;0.88433;0.9375" values="0;1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.625;0.63802;0.65104;0.66406;0.67708;0.6901;0.70313;0.71615;0.72917;0.74219;0.75521;0.76823;0.78125;0.79427;0.80729;0.82031;0.83333;0.84635;0.85938;0.8724;0.88542;0.89844;0.91146;0.92448;0.9375;1" keyPoints="0;0;0.00413;0.01214;0.02435;0.04111;0.06276;0.08961;0.12195;0.15995;0.20364;0.25284;0.30703;0.36539;0.42673;0.48958;0.55233;0.61342;0.67148;0.72548;0.77471;0.81879;0.85759;0.89116;0.9197;0.94344;0.94344"><mpath href="#tp-0" xlink:href="#tp-0"/></animateMotion></g></g>
+<g class="p0-3" opacity="0" fill="var(--color-data-category-on-2)"><circle r="10" fill="var(--color-data-category-2)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-2)" stroke="var(--color-data-category-outline-2)" stroke-width="1.75"/><g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.10422;0.3151;0.33854;0.3724;0.39583;1" values="1;1;1;0;0;1;1"/><g><rect x="-19.9" y="-38" width="39.9" height="26" rx="8" fill="var(--color-data-category-2)" stroke="var(--color-data-category-outline-2)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.10422;0.16151;0.16672;0.18755;0.32297;0.41672;0.47922;1" values="0 50;0 50;0 50;0 50;0 50;0 50;0 0;0 0;0 0"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.10422;0.16151;0.16672;0.18755;0.32297;0.41672;0.47922;1" values="1;1;1;0.9;0;0;1;1;1"/></g></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.10422;0.24127;0.33703;0.47922" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.10422;0.24127;0.33703;0.47922" values="0;1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.10422;0.47922;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-1" xlink:href="#tp-1"/></animateMotion></g>
+<g class="p0-4" opacity="0" fill="var(--color-data-category-on-2)"><circle r="10" fill="var(--color-data-category-2)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-2)" stroke="var(--color-data-category-outline-2)" stroke-width="1.75"/><g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.41672;0.6276;0.65104;0.6875;0.71094;1" values="1;1;1;0;0;1;1"/><g><rect x="-19.9" y="-38" width="39.9" height="26" rx="8" fill="var(--color-data-category-2)" stroke="var(--color-data-category-outline-2)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.41672;0.47401;0.47922;0.50005;0.63547;0.72922;0.79172;1" values="0 50;0 50;0 50;0 50;0 50;0 50;0 0;0 0;0 0"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.41672;0.47401;0.47922;0.50005;0.63547;0.72922;0.79172;1" values="1;1;1;0.9;0;0;1;1;1"/></g></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.41672;0.55377;0.64953;0.79172" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.41672;0.55377;0.64953;0.79172" values="0;1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.41672;0.79172;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-1" xlink:href="#tp-1"/></animateMotion></g>
+<g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.84375;0.9375;1" values="1;1;0;0"/><g class="p0-5" opacity="0" fill="var(--color-data-category-on-2)"><circle r="10" fill="var(--color-data-category-2)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-2)" stroke="var(--color-data-category-outline-2)" stroke-width="1.75"/><g><rect x="-19.9" y="-38" width="39.9" height="26" rx="8" fill="var(--color-data-category-2)" stroke="var(--color-data-category-outline-2)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.72922;0.78651;0.79172;0.81255;0.9375;1" values="0 50;0 50;0 50;0 50;0 50;0 50;0 50"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.72922;0.78651;0.79172;0.81255;0.9375;1" values="1;1;1;0.9;0;0;0"/></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.72922;0.86627" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.72922;0.86627" values="0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.72922;0.7379;0.74658;0.75525;0.76393;0.77261;0.78129;0.78997;0.79865;0.80732;0.816;0.82468;0.83336;0.84204;0.85072;0.85939;0.86807;0.87675;0.88543;0.89411;0.90279;0.91146;0.92014;0.92882;0.9375;1" keyPoints="0;0;0.00233;0.00635;0.01213;0.01978;0.0294;0.04109;0.05495;0.07108;0.08957;0.11049;0.13392;0.15987;0.18836;0.21934;0.25271;0.28831;0.32591;0.36521;0.40585;0.44738;0.48936;0.5313;0.57272;0.61318;0.61318"><mpath href="#tp-1" xlink:href="#tp-1"/></animateMotion></g></g>
+<g class="p0-6" opacity="0" fill="var(--color-data-category-on-3)"><circle r="10" fill="var(--color-data-category-3)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.20828;0.45052;0.47396;0.47917;0.5026;1" values="1;1;1;0;0;1;1"/><g><rect x="-19.9" y="-38" width="39.9" height="26" rx="8" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.20828;0.33849;0.3437;0.36453;0.46349;0.55724;0.58328;1" values="0 50;0 50;0 50;0 50;0 50;0 50;0 0;0 0;0 0"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.20828;0.33849;0.3437;0.36453;0.46349;0.55724;0.58328;1" values="1;1;1;0.9;0;0;1;1;1"/></g></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.20828;0.39283;0.47198;0.58328" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.20828;0.39283;0.47198;0.58328" values="0;1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.20828;0.58328;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-2" xlink:href="#tp-2"/></animateMotion></g>
+<g class="p0-7" opacity="0" fill="var(--color-data-category-on-3)"><circle r="10" fill="var(--color-data-category-3)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.52078;0.76302;0.78646;0.79167;0.8151;1" values="1;1;1;0;0;1;1"/><g><rect x="-19.9" y="-38" width="39.9" height="26" rx="8" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.52078;0.65099;0.6562;0.67703;0.77599;0.86974;0.89578;1" values="0 50;0 50;0 50;0 50;0 50;0 50;0 0;0 0;0 0"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.52078;0.65099;0.6562;0.67703;0.77599;0.86974;0.89578;1" values="1;1;1;0.9;0;0;1;1;1"/></g></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.52078;0.70533;0.78448;0.89578" values="hidden;visible;hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.52078;0.70533;0.78448;0.89578" values="0;1;0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.52078;0.89578;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-2" xlink:href="#tp-2"/></animateMotion></g>
+<g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.84375;0.9375;1" values="1;1;0;0"/><g class="p0-8" opacity="0" fill="var(--color-data-category-on-3)"><circle r="10" fill="var(--color-data-category-3)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><g><rect x="-19.9" y="-38" width="39.9" height="26" rx="8" fill="var(--color-data-category-3)" stroke="var(--color-data-category-outline-3)" stroke-width="1.75"/><text x="0" y="-20" class="chip">주문</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.83328;0.9375;1" values="0 50;0 50;0 50;0 50"/></g><animate attributeName="visibility" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.83328;0.9375" values="hidden;visible;hidden"/><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.83328;0.9375" values="0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.83328;0.83762;0.84197;0.84631;0.85065;0.85499;0.85934;0.86368;0.86802;0.87236;0.87671;0.88105;0.88539;0.88973;0.89408;0.89842;0.90276;0.9071;0.91145;0.91579;0.92013;0.92447;0.92882;0.93316;0.9375;1" keyPoints="0;0;0.00096;0.00234;0.00413;0.00635;0.00902;0.01215;0.01574;0.01981;0.02437;0.02944;0.03503;0.04115;0.04781;0.05503;0.06282;0.07119;0.08014;0.0897;0.09987;0.11066;0.12207;0.13412;0.1468;0.16011;0.16011"><mpath href="#tp-2" xlink:href="#tp-2"/></animateMotion></g></g>
+<g class="p0-9" opacity="0" fill="var(--color-data-category-on-5)"><circle r="10" fill="var(--color-data-category-5)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-5)" stroke="var(--color-data-category-outline-5)" stroke-width="1.75"/><g><rect x="-19.9" y="-38" width="39.9" height="26" rx="8" fill="var(--color-data-category-5)" stroke="var(--color-data-category-outline-5)" stroke-width="1.75"/><text x="0" y="-20" class="chip">결제</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.07813;0.26563;0.27604;0.28125;0.28646;0.29167;0.29688;0.30208;0.30729;0.3125;0.31771;0.32292;0.32813;0.33333;0.33854;0.34375;0.34896;0.35417;0.35938;1" values="-32.7 42;-32.7 42;0 42.5;0 35.5;0 32.2;0 29.1;0 26.2;0 23.6;0 21.2;0 19.1;0 17.1;0 15.4;0 13.8;0 12.5;0 11.3;0 10.3;0 9.5;0 8.9;0 8.4;0 8;0 8"/></g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.07813;0.35938" values="0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.07813;0.35938;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-3" xlink:href="#tp-3"/></animateMotion></g>
+<g class="p0-10" opacity="0" fill="var(--color-data-category-on-5)"><circle r="10" fill="var(--color-data-category-5)" opacity="0.2"/><circle r="4.5" fill="var(--color-data-category-5)" stroke="var(--color-data-category-outline-5)" stroke-width="1.75"/><g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.54688;0.54948;0.60677;0.63021;1" values="0.11111;0.11111;0;0;1;1"/><g><rect x="-19.9" y="-38" width="39.9" height="26" rx="8" fill="var(--color-data-category-5)" stroke="var(--color-data-category-outline-5)" stroke-width="1.75"/><text x="0" y="-20" class="chip">결제</text><animateTransform attributeName="transform" type="translate" dur="6.4s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.54688;0.73438;0.74479;0.75;0.75521;0.76042;0.76563;0.77083;0.77604;0.78125;0.78646;0.79167;0.79688;0.80208;0.80729;0.8125;0.81771;0.82292;0.82813;1" values="-32.7 42;-32.7 42;0 42.5;0 35.5;0 32.2;0 29.1;0 26.2;0 23.6;0 21.2;0 19.1;0 17.1;0 15.4;0 13.8;0 12.5;0 11.3;0 10.3;0 9.5;0 8.9;0 8.4;0 8;0 8"/></g></g><animate attributeName="opacity" dur="6.4s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.54688;0.82813" values="0;1;0"/><animateMotion dur="6.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.54688;0.82813;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#tp-3" xlink:href="#tp-3"/></animateMotion></g>
 
 </g>
 <g class="fl-still" transform="translate(231 0)">
 
-<g id="still-n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹" data-id="web"><rect x="28" y="70" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(57.7 83.5) scale(0.83333)"><rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path class="symbol-line" d="M8 21h8M12 17v4"/></g></g><text x="92" y="98.9" class="label">웹</text></g>
-<g id="still-n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="앱" data-id="app"><rect x="160" y="28" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(227.7 41.5) scale(0.83333)"><rect class="symbol-face" x="6" y="2" width="12" height="20" rx="3"/><path class="symbol-cut" d="M10 5h4M10 19h4"/></g></g><text x="262" y="56.9" class="label">앱</text><rect x="170" y="75" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card sa2"/><g id="still-n-1-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="178" y="95.7" class="row">앱 화면 재고</text></g></g>
-<g id="still-n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="제휴사" data-id="partner"><rect x="368" y="70" width="102" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(386 83.5) scale(0.83333)"><path class="symbol-face" d="M4 21V5l8-3 8 3v16Z"/><path class="symbol-cut" d="M8 21V10h8v11"/></g></g><text x="433" y="98.9" class="label">제휴사</text></g>
-<g id="still-n-3" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="주문 API" data-id="api"><rect x="160" y="177" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(208.4 190.5) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="262" y="205.9" class="label">주문 API</text><rect x="170" y="224" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card sa2"/><g id="still-n-3-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="178" y="244.7" class="row">처리 중</text></g></g>
-<g id="still-n-4" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="재고 DB" data-id="db"><path d="M130.7 338 a 88 12 0 0 1 176 0 v 125 a 88 12 0 0 1 -176 0 z" fill="var(--color-node)" class="fl-stroke sa0"/><path d="M130.7 338 a 88 12 0 0 0 176 0" fill="none" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(208.7 362) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="218.7" y="402.9" class="label">재고 DB</text><rect x="140.7" y="421" width="156" height="32" rx="6" fill="var(--color-card)" opacity="0" class="fl-card sa2"/><g id="still-n-4-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="148.7" y="441.7" class="row">재고</text></g></g>
-<g id="still-n-5" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="결제 서비스" data-id="pay"><rect x="338.7" y="326" width="102.6" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><text x="390" y="354.9" class="label">결제 서비스</text></g>
+<g id="still-n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹" data-id="web"><rect x="28" y="70" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(57.7 83.5) scale(0.83333)"><rect class="symbol-face" x="2" y="3" width="20" height="14" rx="2"/><path class="symbol-line" d="M8 21h8M12 17v4"/></g></g><text x="92" y="98.9" class="label" text-anchor="middle">웹</text></g>
+<g id="still-n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="앱" data-id="app"><rect x="160" y="28" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(227.7 41.5) scale(0.83333)"><rect class="symbol-face" x="6" y="2" width="12" height="20" rx="3"/><path class="symbol-cut" d="M10 5h4M10 19h4"/></g></g><text x="262" y="56.9" class="label" text-anchor="middle">앱</text><rect x="170" y="75" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card sa2"/><g id="still-n-1-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="178" y="95.7" class="row">앱 화면 재고</text></g></g>
+<g id="still-n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="제휴사" data-id="partner"><rect x="368" y="70" width="102" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(386 83.5) scale(0.83333)"><path class="symbol-face" d="M4 21V5l8-3 8 3v16Z"/><path class="symbol-cut" d="M8 21V10h8v11"/></g></g><text x="433" y="98.9" class="label" text-anchor="middle">제휴사</text></g>
+<g id="still-n-3" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="주문 API" data-id="api"><rect x="160" y="177" width="176" height="89" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(208.4 190.5) scale(0.83333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><text x="262" y="205.9" class="label" text-anchor="middle">주문 API</text><rect x="170" y="224" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card sa2"/><g id="still-n-3-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="178" y="244.7" class="row">처리 중</text></g></g>
+<g id="still-n-4" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="재고 DB" data-id="db"><path d="M130.7 338 a 88 12 0 0 1 176 0 v 125 a 88 12 0 0 1 -176 0 z" fill="var(--color-node)" class="fl-stroke sa0"/><path d="M130.7 338 a 88 12 0 0 0 176 0" fill="none" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(208.7 362) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="218.7" y="402.9" class="label" text-anchor="middle">재고 DB</text><rect x="140.7" y="421" width="156" height="32" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card sa2"/><g id="still-n-4-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><text x="148.7" y="441.7" class="row">재고</text></g></g>
+<g id="still-n-5" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="결제 서비스" data-id="pay"><rect x="338.7" y="326" width="102.6" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><text x="390" y="354.9" class="label" text-anchor="middle">결제 서비스</text></g>
 <g id="still-e-0" class="fl-edge "><defs><marker id="still-fl-arrow-0" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-0" d="M 78 117 L 78 125 Q 78 133, 86 133 L 182 133 Q 204 133, 204 155 L 204 177" class="fl-path" marker-end="url(#still-fl-arrow-0)"/></g>
 <g id="still-e-1" class="fl-edge "><defs><marker id="still-fl-arrow-1" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-1" d="M 248 117 L 248 177" class="fl-path" marker-end="url(#still-fl-arrow-1)"/></g>
 <g id="still-e-2" class="fl-edge "><defs><marker id="still-fl-arrow-2" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-2" d="M 419 117 L 419 125 Q 419 133, 411 133 L 314 133 Q 292 133, 292 155 L 292 177" class="fl-path" marker-end="url(#still-fl-arrow-2)"/></g>
 <g id="still-e-3" class="fl-edge "><defs><marker id="still-fl-arrow-3" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-3" d="M 218.7 266 L 218.7 326" class="fl-path" marker-end="url(#still-fl-arrow-3)"/></g>
 <g id="still-e-4" class="fl-edge "><defs><marker id="still-fl-arrow-4" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-4" d="M 277.3 266 L 277.3 274 Q 277.3 282, 285.3 282 L 368 282 Q 390 282, 390 304 L 390 326" class="fl-path" marker-end="url(#still-fl-arrow-4)"/></g>
-<g class="fl-value"><text x="288.7" y="441.7" class="value" opacity="1" data-v="0" data-t="114">114</text></g>
-<g class="fl-value"><text x="318" y="95.7" class="value" opacity="1" data-v="1" data-t="114">114</text></g>
-<g class="fl-value"><text x="318" y="244.7" class="value" opacity="1" data-v="2" data-t="2">2</text></g>
+<g class="fl-value"><text x="288.7" y="441.7" class="value" text-anchor="end" opacity="1" data-v="0" data-t="114">114</text></g>
+<g class="fl-value"><text x="318" y="95.7" class="value" text-anchor="end" opacity="1" data-v="1" data-t="114">114</text></g>
+<g class="fl-value"><text x="318" y="244.7" class="value" text-anchor="end" opacity="1" data-v="2" data-t="2">2</text></g>
 
 
 </g>

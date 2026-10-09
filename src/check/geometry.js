@@ -2,8 +2,7 @@
 import { ROOT, TOUCH } from '../layout/model.js';
 import { headBox } from '../layout/titles.js';
 import { FIT_SLACK } from '../measure/fonts.js';
-import { groupHead, sizePill } from '../measure/sizes.js';
-import { values } from '../tokens.js';
+import { sizePill } from '../measure/sizes.js';
 
 /** 도형과 그룹 안쪽으로 들어가야 선이 지나간 것으로 보는 안쪽 여백 */
 export const THROUGH_INSET = 1;

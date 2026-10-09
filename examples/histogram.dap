@@ -62,25 +62,12 @@ chart shape "자동 구간의 확률밀도" histogram "같은 JSON 표본. 막�
   bins auto measure=density
 }
 
-view count-view plot {
-  counts
-}
+scene "세 눈금"
 
-view ratio-view plot {
-  ratio
-}
-
-view density-view plot {
-  shape
-}
-
-scene "세 눈금" mode=static
-  wait 1s
-
-scene "느린 꼬리" mode=once
+scene "느린 꼬리"
   light counts x=900
   light ratio x=900
 
-scene "100ms 경계" mode=once
+scene "100ms 경계"
   light counts x=100
   light ratio x=100

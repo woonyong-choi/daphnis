@@ -2,7 +2,7 @@
 // 모습(frame.pulses, frame.charts)이 가리키는 값을 그대로 쓰고, 지난 프레임의 후광이 남았는지는 마지막으로 그린 키 집합으로만 본다.
 
 // 도형 윤곽 후광을 겹칠 윤곽 요소를 찾는 선택자. 모든 도형 종류의 바깥 윤곽은 도형 묶음 바로 아래의 .fl-stroke 요소이고, 종류에 따라 하나(상자, 표, 차트 카드 등)이거나 여럿(저장소: 몸통과 뚜껑)이다.
-// 윤곽 요소가 없는 도형은 후광이 없다. 모든 도형 종류가 윤곽을 갖는지는 시험(test/player-compiled.test.js)이 확인한다.
+// 윤곽 요소가 없는 도형은 후광이 없다.
 const OUTLINE_SELECTOR = ':scope > .fl-stroke';
 
 /**
@@ -30,8 +30,8 @@ function overlayOf(stage, i) {
   stage.overlays[i] = [...stage.nodes[i].querySelectorAll(OUTLINE_SELECTOR)].map((outline) => {
     const overlay = outline.cloneNode(false);
     overlay.removeAttribute('id');
-    // 색을 직접 고른 도형(`ps-이름`)의 후광은 그 색 계열의 effect 단계로 칠한다(paintCss). 색을 고르지 않은 도형은 상태 파랑이다.
-    overlay.setAttribute('class', ['fl-pulse', ...[...outline.classList].filter((name) => name.startsWith('ps-'))].join(' '));
+    // 도착 후광은 도형이 고른 색과 상관없이 공통 UI 강조 색이다(figure.css .fl-pulse).
+    overlay.setAttribute('class', 'fl-pulse');
     overlay.setAttribute('opacity', 0);
     overlay.setAttribute('aria-hidden', 'true');
     outline.after(overlay);

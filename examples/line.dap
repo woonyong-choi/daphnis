@@ -20,21 +20,16 @@ chart region "리전별 p95 지연" line "예시 데이터. 서울의 띠는 95%
   point x=16 seoul=131 seoul.low=119 seoul.high=144 tokyo=152 sg=183 goal=150
 }
 
-view main plot {
-  region
-}
+scene "세 리전"
 
-scene "세 리전" mode=static
-  wait 1s
-
-scene "리전 순서대로" mode=once
+scene "리전 순서대로"
   reveal region.seoul
   wait 1s
   reveal region.tokyo
   wait 1s
   reveal region.sg region.goal
 
-scene "점심 피크" mode=once
+scene "점심 피크"
   light region x=13
   wait 1s
   light region x=14

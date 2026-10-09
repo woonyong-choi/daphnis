@@ -6,11 +6,11 @@
 | 관련 결정 | [그림 문법과 배치를 직접 맡고 D2 호환을 버린다](../decisions/2026-10-01-own-syntax-and-layout.md), [조건과 대기를 빌드 때 계산해 같은 시간표에 담는다](../decisions/2026-10-04-flow-conditions-in-timetable.md) |
 ## 요약
 
-그림 문법은 `.dap` 파일 하나에 문서 하나를 적는 줄 단위 문법이다. 첫 문장은 `daphnis 2`다. 그 뒤에 카드(도형, 사람, 표, API, 클래스, 칸 격자, 차트, 추적)와 선, 값을 선언하고, 카드를 어떤 모양으로 보일지 보기(`view`)로 고른 다음, `scene` 줄부터 장면마다 움직임을 적는다.
+그림 문법은 `.dap` 파일 하나에 문서 하나를 적는 줄 단위 문법이다. 첫 문장은 `daphnis 2`다. 그 뒤에 카드(도형, 사람, 표, API, 클래스, 칸 격자, 차트, 추적)와 선, 값을 선언하고, 필요하면 카드를 어떤 모양으로 보일지 보기(`view`)로 고른 다음, `scene` 줄부터 장면마다 움직임을 적는다. 보기를 적지 않은 카드는 기본 보기를 받는다.
 
 - 문서 하나는 모형 하나다. 카드, 카드 안 칸, 연결점, 선과 라벨, 값, 보기, 장면이 모든 카드에 같은 규칙으로 놓이고, 그림 종류 문장은 없다.
-- 같은 카드가 여러 보기(그래프, 순서, 차트, 시간)에 함께 놓일 수 있다. 이름이 같아 한 카드의 상태는 하나이고, 장면 하나의 이동과 값 변화는 한 시간표에서 한 번만 계산된다. 보기마다 그려질 뿐이다.
-- 장면은 재생 방식(`mode`)과 속도(`speed`)를 가진다. 설명 글은 문서 본문이 맡고 그림 안에는 없다.
+- 같은 카드가 여러 보기(그래프, 순서, 차트, 시간)에 함께 놓일 수 있다. 이름이 같아 한 카드의 상태는 하나이고, 장면 하나의 이동과 값 변화는 한 시간표에서 한 번만 계산된다. 보기마다 그려질 뿐이다. 보기는 이름이 없다.
+- 장면은 재생 방식(`mode`, 생략하면 줄이 있는 장면은 한 번, 빈 장면은 정지)과 속도(`speed`)를 가진다. 설명 글은 문서 본문이 맡고 그림 안에는 없다.
 - 사람이 쓰는 글은 모두 따옴표 안에, 이름과 낱말은 모두 따옴표 밖에 둔다. 같은 일을 적는 방법은 하나뿐이다.
 
 ## 동기
@@ -37,7 +37,7 @@ table orders "orders" {
   id bigint pk
   status text
 }
-value depth "대기" on=pay from=0
+value depth "대기" on=pay
 value p95 "p95(ms)" from=120
 chart lag "처리 지연" bar {
   x "처리 시간(ms)"
@@ -61,14 +61,14 @@ create.body -> orders.id "저장"
 user -> gw
 gw -> pay
 
-view arch graph right "구조"
-view calls sequence "호출 순서" {
+view graph right "구조"
+view sequence "호출 순서" {
   user gw pay
 }
-view latency plot "지연" {
+view plot "지연" {
   trend
 }
-view timing time "실제 시간" {
+view time "실제 시간" {
   t
 }
 
@@ -83,7 +83,7 @@ scene "주문 한 건" mode=loop speed=1.5
 
 1. 사람(`user`)은 표준 카드에 사용자 아이콘(`icon=user`)이 붙은 카드다. 그래프의 `user -> create.body`는 API 카드(`create`)의 칸 `body`에, `create.body -> orders.id`는 테이블 `orders`의 열 `id`에 닿는다.
 2. `value p95`는 카드에 놓이지 않은 값(`on=` 없음)이다. 막대 차트 `lag`의 행 `ms=p95`와 선 차트 `trend`의 점 `p95=p95`가 이 값을 읽는다. 값이 바뀌면 차트가 프레임을 바꾼다.
-3. 보기 `arch`는 블록이 없어서, 차트 보기에 놓인 `trend`와 추적 `t`를 뺀 모든 카드를 담는다. `calls`는 `user gw pay`를 참여자로 한 순서 보기다.
+3. 첫 `view graph`는 블록이 없어서, 차트 보기에 놓인 `trend`와 추적 `t`를 뺀 모든 카드를 담는다. `lag`는 어느 선에도 닿지 않고 어느 보기에도 적히지 않은 차트라 기본 차트 보기를 따로 받아 그래프에 들어가지 않는다. `view sequence`는 `user gw pay`를 참여자로 한 순서 보기다.
 4. `user -> gw "POST /pay"`는 그래프의 선 하나와 순서 보기의 메시지 하나로 함께 보인다. 두 투영은 같은 시각에 같은 시간으로 움직이고, 시간은 먼저 놓인 투영(그래프의 선)이 한 번 정한다. `gw -> pay`의 `set="p95=150"`은 그 이동이 `pay`에 닿는 시각에 한 번만 값을 바꾼다.
 5. `pay -> gw "ok" dashed`는 선언한 선 `gw -> pay`를 거꾸로 지나고, 순서 보기에서는 점선 메시지다.
 6. `light t.s2`는 시간 보기에서 구간 `s2`를 밝힌다. 구간의 가로 위치와 길이는 시작 시각 `at`과 `dur`에 비례한다.
@@ -111,7 +111,7 @@ tui -> engine "JSON-RPC"
 engine -> db "기록" quiet
 engine -> codex "app-server 요청"
 
-scene "대화" mode=once
+scene "대화"
   user -> tui "질문"
   show tui "이 테스트 왜 깨져?" tag="you"
   tui -> engine
@@ -145,15 +145,15 @@ api -> db
 on api sent+1
 on db saved+1
 
-scene "첫 요청" mode=once
+scene "첫 요청"
   web -> api "요청" set="mirror:=sent"
   api -> db "저장" set="jobs+1"
 
-scene "이어서" mode=once keep="sent, jobs" set="saved=10"
+scene "이어서" keep="sent, jobs" set="saved=10"
   web -> api "요청" set="mirror:=saved"
   api -> db "저장" set="jobs+1"
 
-scene "맞바꿈" mode=once keep="saved, mirror" set="sent=20"
+scene "맞바꿈" keep="saved, mirror" set="sent=20"
   web -> api "요청"
   api -> db "바꿈" set="sent:=saved, saved:=sent"
 ```
@@ -175,9 +175,9 @@ value holder "쥔 쪽" on=lock from=none
 a -> lock
 b -> lock
 
-scene "A가 잠금을 쥔다" mode=once
+scene "A가 잠금을 쥔다"
   a -> lock "요청" set="holder=A"
-scene "풀리면 B가 들어간다" mode=once keep="holder"
+scene "풀리면 B가 들어간다" keep="holder"
   a -> lock "풀기" set="holder=none" & b -> lock "요청" wait="holder='none'" set="holder=B"
 ```
 
@@ -203,9 +203,9 @@ t1 -> l2
 t2 -> l2
 t2 -> l1
 
-scene "각자 하나씩 쥔다" mode=once
+scene "각자 하나씩 쥔다"
   t1 -> l1 "쥠" set="h1=t1" & t2 -> l2 "쥠" set="h2=t2"
-scene "서로 상대 것을 요청한다" mode=once keep="h1, h2" status="t1=wait, t2=wait"
+scene "서로 상대 것을 요청한다" keep="h1, h2" status="t1=wait, t2=wait"
   t1 -> l2 "요청" wait="h2='none'" stuck & t2 -> l1 "요청" wait="h1='none'" stuck
 ```
 
@@ -226,10 +226,10 @@ prod -> hub
 hub -> fast
 hub -> slow
 
-scene "평상시" mode=once for=6s
+scene "평상시" for=6s
   track prod -> hub -> fast "주문" every=1s time=2s
   track prod -> hub -> slow "주문" at=500ms every=1s time=2s
-scene "소비자 하나가 느려진다" mode=once for=6s status="slow=warn"
+scene "소비자 하나가 느려진다" for=6s status="slow=warn"
   track prod -> hub -> fast "주문" every=1s time=2s
   track prod -> hub -> slow "주문" at=500ms every=1s time=4s legs="500ms, -"
 ```
@@ -247,13 +247,13 @@ scene "소비자 하나가 느려진다" mode=once for=6s status="slow=warn"
 - 낱말은 공백 하나 이상으로 나눈다. `->`, `&`, `{`, `}`는 앞뒤에 공백이 있어야 하는 낱말이다. `a->b`는 오류다.
 - `{`는 블록(그룹, 테이블, API, 클래스, 격자, 차트, 추적, 보기)을 여는 줄의 마지막 낱말이고, `}`는 혼자 한 줄이다. 안에 아무것도 없는 그룹, 테이블, API, 격자, 추적은 오류다.
 - 글은 큰따옴표 안에 쓴다. 빈 글(`""`, 공백만 있는 글)은 오류다. 이름 없는 도형이나 빈 항목을 막기 위해서다. 따옴표 안의 `\"`는 따옴표, `\\`는 역슬래시다. 그 밖의 역슬래시와 줄바꿈은 오류다.
-- 글 안에서 백틱(`` ` ``)으로 감싼 부분은 코드다. 마크다운처럼 백틱은 그리지 않고 그 구간만 고정폭 글꼴로 그린다(예: ``"`session/start` 요청"``). 코드 안 한글은 Pretendard로 그린다. 도형 이름, 부제, 그룹 제목, 카드 글, 선 라벨, 노트, 장면 이름, 차트 글에 쓸 수 있다. 백틱 짝이 맞지 않으면 그 줄의 오류다. 백틱 글자 자체를 그릴 방법은 없다.
+- 글 안에서 백틱(`` ` ``)으로 감싼 부분은 코드다. 마크다운처럼 백틱은 그리지 않고 그 구간만 고정폭 글꼴로 그린다(예: ``"`session/start` 요청"``). 코드 안 한글은 Pretendard로 그린다. 도형 이름, 부제, 그룹 제목, 카드 글, 선 라벨, 노트, 장면 이름, 차트 글에 쓸 수 있다. 백틱 짝이 맞지 않으면 그 줄의 오류다. 글을 그대로 읽는 칸(클래스 멤버, 테이블과 API 칸의 타입, 카드의 `mono` 줄, 값 글인 `from`과 `set`의 값)은 이미 전부 코드이거나 사용자 자료라서 백틱도 글자다. 그 칸에 쓴 백틱은 짝이 맞든 홀수 개든 지워지지 않고 그대로 그려지고, 잰 폭도 그 글자를 센다. 원본 검사는 이 칸 밖의 글에서만 백틱 짝을 보므로 홀수 개의 백틱은 그 칸에서 오류가 아니다. 그 밖의 칸에서 백틱 글자 자체를 그릴 방법은 없다.
 - 선택 사항은 `키=값` 한 낱말이다. `=` 앞뒤 공백은 오류다. 선택 사항의 순서는 자유다. 같은 키를 두 번 쓰면 오류다.
 - 값이 없는 선택 사항(`quiet`, `dashed`, `mono`, `pk`, `unique`)은 정해진 낱말만 쓴다. 이름 자리의 `quiet` 같은 낱말은 이름이다.
 ### 이름
 
 - 이름(id)은 영어 소문자로 시작하고 영어 소문자, 숫자, `-`만 쓴다. `-`는 낱말 사이에 하나씩만 온다(`a-`, `a--b`는 오류). 테이블 이름은 `-` 대신 `_`를 같은 규칙으로 쓴다. 칸(열, 필드) 이름은 영문자로 시작하고 영문자(대소문자), 숫자, `_`를 쓴다.
-- 파일 안에서 카드, 그룹, 값, 보기 이름은 한 이름 공간이고 서로 겹치지 않는다. 겹치면 `the name "g" is already used (line N)` 오류(코드 `syntax`)를 겹친 선언의 줄에 내고, 이름을 가리키는 선과 이동, 보기 확인은 하지 않는다.
+- 파일 안에서 카드, 그룹, 값 이름은 한 이름 공간이고 서로 겹치지 않는다. 보기는 이름이 없어 이 공간에 들지 않는다. 겹치면 `the name "g" is already used (line N)` 오류(코드 `syntax`)를 겹친 선언의 줄에 내고, 이름을 가리키는 선과 이동, 보기 확인은 하지 않는다.
 - 카드 안의 이름은 그 카드 안에서만 겹치지 않는다. 테이블과 API의 칸, 클래스의 멤버, 격자의 칸, 추적의 구간, 차트의 계열이다. 서로 다른 차트가 같은 계열 이름을 써도 된다.
 - 카드 안 칸을 가리키는 연결점은 `카드.칸` 하나다. 점이 둘 이상인 이름(`a.b.c`)은 `write a part as card.part` 오류다. 연결점이 되는 카드는 테이블, API(열), 칸 격자(`item`)다. 클래스 멤버는 연결점이 아니라서 `class members are not ports. Connect "order"` 오류이고, 칸이 없는 카드에 칸을 쓰면 `a box has no parts` 오류다. `light`는 여기에 추적의 구간(`추적.구간`)도 가리킨다.
 - 이름 오류로 버린 선언의 이름을 가리키는 줄에는 `unknown card` 오류를 덧붙이지 않는다. 그 선언이 있던 그룹에도 `group is empty` 오류를 덧붙이지 않는다. 원인이 이름 오류 하나이기 때문이다.
@@ -304,10 +304,10 @@ scene "소비자 하나가 느려진다" mode=once for=6s status="slow=warn"
 
 | 줄 | 뜻 |
 |---|---|
-| `person id "이름" [fill=색] [stroke=색] [icon=이름]` | 사람. 표준 카드에 사용자 아이콘(`icon=user`)이 붙는다. 다른 아이콘을 골라도 된다 |
-| `box id "이름" ["부제"] [shape=rect\|circle\|tile] [badge="글"] [icon=이름] [count=N] [fill=색] [stroke=색]` | 구성 요소, 모듈. `shape=circle`은 합류 연산(⊕)처럼 짧은 이름을 담는 작은 원이고 부제가 없다 |
-| `external id "이름" ["부제"] [fill=색] [stroke=색]` | 외부 프로그램, 외부 서비스. 점선 테두리 |
-| `store id "이름" ["부제"] [fill=색] [stroke=색]` | 파일, 데이터베이스. 원통 |
+| `person id "이름" [tone=색] [appearance=모양] [icon=이름]` | 사람. 표준 카드에 사용자 아이콘(`icon=user`)이 붙는다. 다른 아이콘을 골라도 된다 |
+| `box id "이름" ["부제"] [shape=rect\|circle\|tile] [badge="글"] [icon=이름] [count=N] [tone=색] [appearance=모양]` | 구성 요소, 모듈. `shape=circle`은 합류 연산(⊕)처럼 짧은 이름을 담는 작은 원이고 부제가 없다 |
+| `external id "이름" ["부제"] [tone=색] [appearance=모양]` | 외부 프로그램, 외부 서비스. 점선 테두리 |
+| `store id "이름" ["부제"] [tone=색] [appearance=모양]` | 파일, 데이터베이스. 원통 |
 | `decision id "질문"` | 갈림길. 마름모 |
 | `queue id "이름" slots=N [from=K]` | 큐 |
 | `state id "이름"`, `start id`, `final id` | 상태, 처음 점, 끝 겹원 |
@@ -317,13 +317,13 @@ scene "소비자 하나가 느려진다" mode=once for=6s status="slow=warn"
 | `grid id "제목" [rows=N] [cols=N] {` `item`, `gap` 줄 `}` | 칸 격자([칸 격자](grid.md)) |
 | `chart id "제목" 종류 ["부제"] {` 차트 줄 `}` | 차트 카드([차트 카드](#차트-카드)) |
 | `trace id "제목" [unit=ms\|us\|s] {` `span` 줄 `}` | 추적 카드([추적 카드](#추적-카드)) |
-| `group id "이름" [direction=right\|down] [border=dashed] [badge="글"] [icon=이름] [fill=색] [stroke=색] {`, `}` | 그룹. 두 줄 사이에 카드와 그룹을 둔다. 제목 줄에 배지와 아이콘을 달 수 있다 |
+| `group id "이름" [direction=right\|down] [border=dashed] [badge="글"] [icon=이름] [tone=색] [appearance=모양] {`, `}` | 그룹. 두 줄 사이에 카드와 그룹을 둔다. 제목 줄에 배지와 아이콘을 달 수 있다 |
 | `icons 이름 "폴더"` | 사용자 아이콘 세트 등록. 폴더의 `<이름>.svg`를 `icon=세트:이름`으로 쓴다 |
 | `value id "이름" [on=카드] [from=값 \| ref=값id]` | 값 |
 | `on 카드 id+N, id-N, id=낱말` | 어떤 점이든 그 카드에 닿을 때 값을 바꾼다. 값 선언 뒤에 둔다 |
 | `a[.칸] -> b[.칸] ["라벨"] [quiet] [dashed] [head=end\|both\|none] [no=N] [relation=종류] [from="다중성"] [to="다중성"]` | 선 |
 
-- 카드 크기와 굵기는 적지 않는다. 크기는 글과 카드 내용으로, 모양은 토큰으로 정한다. 색은 기본이 칠하지 않음이고, 고르려면 아래 도형 색의 `fill`, `stroke`, `card`만 쓴다. 아이콘은 `icon=`으로 고르되 모양과 색은 정하지 않는다([배치](layout.md#아이콘)).
+- 카드 크기와 굵기는 적지 않는다. 크기는 글과 카드 내용으로, 모양은 토큰으로 정한다. 색은 기본이 칠하지 않음(중립 면)이고, 고르려면 아래 도형 색의 `tone`과 `appearance`만 쓴다. 아이콘은 `icon=`으로 고르되 모양과 색은 정하지 않는다([배치](layout.md#아이콘)).
 - 선의 양 끝은 선언된 카드나 그룹이고 `카드.칸`도 된다. 선은 카드 선언보다 앞에 와도 된다. 파일을 다 읽은 뒤 이름을 확인한다.
 - 선 하나의 끝 종류가 선택 사항을 정한다. 두 끝이 모두 클래스나 인터페이스면 관계 종류(`relation=`, 기본 `association`)와 다중성(`from=`, `to=`)을 쓸 수 있고, 관계 종류가 점선과 화살촉을 정한다. 그 밖의 선에 `relation=`, `from=`, `to=`를 쓰면 오류다. 두 상태를 잇는 선(전이)은 사건 라벨이 필요하다.
 - 테이블 열의 `fk=`는 선이 된다. 가리키는 열은 `pk`나 `unique`다. 같은 두 카드 사이에 직접 쓴 선과 외래 키 선이 함께 있어도 된다.
@@ -339,19 +339,25 @@ scene "소비자 하나가 느려진다" mode=once for=6s status="slow=warn"
 - `no=N`(1 이상 정수)은 선 번호다. 라벨 알약 왼쪽에 번호 원이 붙고(라벨이 없으면 번호 원만), 정지 SVG와 문서에서도 순서가 읽힌다. 재생 장면과 독립이고 같은 번호를 여러 선에 써도 된다.
 - `badge="글"`(8자 이하)은 카드 윗줄과 그룹 제목 줄에 글자 알약을 단다. 흑백에서도 구성 요소의 종류가 글자로 남는다. 배지는 면과 테두리 색을 바꾸지 않는다. 원(`shape=circle`)은 배지와 아이콘이 오류다.
 - `shape=tile`(`box`만, `icon=` 필수)은 아이콘 카드다. 같은 흰 카드에 아이콘을 크게(`size.icon.tile`) 위에 놓고 이름을 아래에 두며, 최소 너비와 이름 양옆 간격이 작아(`size.node.tile-width`, `size.node.tile-pad`) 가로로 퍼진 구성도가 캔버스 폭 안에 든다.
-- 그룹 `border=dashed`는 경계 그룹의 점선 테두리다. 그룹 아이콘은 틀 왼쪽 위 모서리에 딱 붙는 정사각 탭(`size.group.title`)이다. 그룹 면은 `fill`을 적지 않으면 중첩 깊이에 따른 무채색 회색이다. `fill=sky`나 `fill=purple`로 고르는 강조 그룹은 그 색의 옅은 틴트 면과 1.5px 테두리, 같은 색 제목을 쓴다.
+- 그룹 `border=dashed`는 경계 그룹의 점선 테두리다. 그룹 아이콘은 틀 왼쪽 위 모서리에 딱 붙는 정사각 탭(`size.group.title`)이다. 그룹 면은 `tone`을 적지 않으면 중첩 깊이에 따른 무채색 회색이다. `tone`을 고른 그룹은 아래 도형 색의 `appearance` 규칙을 따른다.
 - `icon=이름`은 기본 세트의 이름이다. 범용 개념(`server`, `db`, `user`)과 기술 브랜드(`git`, `postgresql`)가 한 표에 있다. 등록한 세트는 `icon=세트:이름`이다. 이름이 없거나 파일이 없으면 오류이고, 아이콘 없이 배지로 같은 뜻을 낸다.
 - `count=N`(2 이상, `box`만)은 같은 역할 복제 개수다. 상자 뒤에 윤곽 두 겹이 겹쳐 보이고 윗줄에 `(N)` 알약이 붙는다. 복제는 이름으로 가리킬 수 없고 선은 상자 하나에 닿는다.
 
 #### 도형 색
 
-- `fill=색`은 카드와 그룹의 면, `stroke=색`은 테두리, `show`의 `card=색`은 그 내용이 보일 때의 카드 바탕이다. 모두 생략할 수 있다(카드 기본 바탕은 `color.card`).
-- 색 이름은 문법 표의 `paint` 값 목록이 정한다: 범주 팔레트 계열 일곱(`blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`)과 무채색 `gray`. hex와 따옴표 글은 오류다. 대비 규칙(글자 4.5, 그래픽 3)을 원본이 깨지 못하게 하기 위해서다. 값 없이 `fill=#ff0000`처럼 쓰면 `#`부터 주석이라는 안내가 붙는다.
+- 색은 `tone=색`과 `appearance=plain|filled|outline` 두 선택 사항으로 고른다. `person`, `box`, `external`, `store`, `group`, `show`(카드 줄)가 같은 두 키를 쓴다. 둘 다 생략할 수 있고 생략하면 중립 면이다(카드 기본 바탕은 `color.card`, `appearance`의 기본은 `plain`).
+- `appearance`가 `tone`을 어디에 쓰는지 정한다.
+  - `plain`: 중립 면 그대로 색 아이콘과 작은 표식에만 색을 쓴다. `show`에서는 `tag` 알약의 색이다.
+  - `filled`: 같은 계열의 옅은 면.
+  - `outline`: 같은 계열의 경계와 중립 면.
+- `filled`와 `outline`은 칠할 색이 있어야 해서 `tone` 없이 쓰면 `appearance=filled needs tone` 오류다. `show`의 `tone`은 `plain`이면 알약을 칠하므로 `tag`가 있어야 하고(`tone colors a tag or, with appearance=filled|outline, the card`), `appearance=filled|outline`이면 `tag` 없이 그 내용의 카드 면이나 경계를 칠한다. 차트의 관측값과 기준값을 가르는 채움과 빈 표시(`series`의 `role`)는 이 규칙과 별개의 차트 역할이다.
+- 색 이름은 문법 표의 `tone` 값 목록이 정한다: 범주 팔레트 계열 일곱(`blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`)과 무채색 `gray`. 흐름의 이동 점 색(`a -> b`와 `track`의 `tone=`)도 같은 목록이다. hex와 따옴표 글은 오류다. 대비 규칙(글자 4.5, 그래픽 3)을 원본이 깨지 못하게 하기 위해서다. 값 없이 `tone=#ff0000`처럼 쓰면 `#`부터 주석이라는 안내가 붙는다.
+- `fill=`, `stroke=`, `card=`는 없다. 쓰면 그 줄이 받는 선택 사항 목록을 알리는 오류다.
 - 색 단계의 값과 대비는 [색 역할](docs-integration.md#색-역할)이 정한다.
 
 #### 값
 
-- `value id "이름" [on=카드] [from=값]`은 `on` 카드에 `이름  값` 줄을 만든다. `from`은 처음 값이고 생략하면 `0`이다. `on`은 카드를 쓰는 도형(`box`, `external`, `store`, `person`, `table`, `api`)이다. `on=`이 없는 값은 카드에 보이지 않고 조건(`when`, `wait`)과 차트의 묶음이 읽는다. 큐는 같은 이름의 값을 스스로 가진다([큐](#큐)). 값 이름은 파일 전체에서 카드, 그룹, 보기 이름과 겹치지 못한다.
+- `value id "이름" [on=카드] [from=값]`은 `on` 카드에 `이름  값` 줄을 만든다. `from`은 처음 값이고 생략하면 `0`이다. `on`은 카드를 쓰는 도형(`box`, `external`, `store`, `person`, `table`, `api`)이고, 그 카드를 그리는 그래프 보기에 놓여야 한다. 순서 보기는 참여자 머리만 그려 값 줄 자리가 없어서, 순서 보기에만 놓인 카드에 `on=`을 쓰면 줄 번호가 붙은 오류(`value "n" is on "s", which no graph view shows`)이고 같은 카드를 그래프 보기에도 놓으면 된다. `on=`이 없는 값은 카드에 보이지 않고 조건(`when`, `wait`)과 차트의 묶음이 읽는다. 큐는 같은 이름의 값을 스스로 가진다([큐](#큐)). 값 이름은 파일 전체에서 카드, 그룹 이름과 겹치지 못한다.
 - 값 글자의 길이는 제한하지 않는다. 카드의 값 자리 폭은 그 값이 모든 장면에서 가질 글(처음 글, 장면 `set=`과 이동의 `set=`이 정하는 글, 계산한 글) 가운데 가장 넓은 것의 실제 글꼴 폭이고, 카드가 담을 수 있는 몫(안쪽 폭의 0.6)을 넘는 글은 그 폭에서 글자 단위로 줄을 나눈다. 줄 높이는 글을 나눈 가장 많은 줄이다. 자리는 장면마다 달라지지 않고, 장면 3에만 나오는 가장 긴 글도 장면 1의 자리에 미리 잡힌다.
 - 시간표를 만들기 전에는 계산한 글(`n+1`의 결과)을 알 수 없다. 그래서 배치와 시간표를 되풀이하되 값 자리는 줄어들지 않고 글 집합은 합집합으로만 늘며, 네 번을 넘어도 자리가 바뀌면 값 선언 줄의 `layout-unstable` 오류다(`value "q" text set does not settle; its width changes hop times`).
 - 선언한 값은 모든 장면의 카드에 장면 시작부터 늘 보인다. 값을 바꾸는 식이 있든 없든 같다. 바뀌는 순간에 그 줄이 짧은 펄스로 밝아진다([재생](playback.md#값-변화)).
@@ -363,7 +369,7 @@ scene "소비자 하나가 느려진다" mode=once for=6s status="slow=warn"
 
 - `queue id "이름" slots=N [from=K]`는 이름 아래에 칸 N개를 놓은 둥근 사각형이다. 도형 선호 폭을 넘으면 여러 줄로 나눈다. 찬 칸은 각 행의 왼쪽부터, 위 행에서 아래 행으로 채운다.
 - `slots`는 1 이상 32 이하 정수이고 꼭 적는다. 0, 33 이상, 소수, 음수는 오류다. 개별 칸을 세어 읽는 표현의 현재 문법 상한은 32이며, 줄 나눔은 이 상한이나 큐의 값을 바꾸지 않는다.
-- `from`은 처음 찬 칸 수다. 0 이상 `slots` 이하 정수이고 생략하면 0(빈 큐)이다. `slots`보다 크면 오류다. 부제, 배지, 아이콘, `fill`, `stroke`, 카드는 없다.
+- `from`은 처음 찬 칸 수다. 0 이상 `slots` 이하 정수이고 생략하면 0(빈 큐)이다. `slots`보다 크면 오류다. 부제, 배지, 아이콘, `tone`, `appearance`, 카드는 없다.
 - 큐는 자기 이름으로 부르는 값 하나(찬 칸 수)를 스스로 가진다. 따로 `value` 줄을 쓰지 않고, 위 값과 같은 식으로 바꾼다. 식의 값 이름 자리에 큐 이름을 쓴다: `on q q+1`(점이 `q`에 닿을 때 한 칸 채움), `set="q-1@q"`(나갈 때 한 칸 비움), `set="q=0"`. 적용 순서, 장면이 시작할 때 `from`으로 돌아가는 것, 출발 도형은 닿는 것이 아니라 빼는 것도 값과 같다. 이 값의 식은 정수만 받는다(`q+1.5`, `q=낱말`은 오류).
 - 큐의 값에는 카드 줄이 없다(`value`의 `on=큐`는 오류). 찬 칸 수를 숫자로도 보이려면 다른 도형에 참조를 단다: `value len "큐 길이" on=prod ref=q`.
 - 값 범위: 값 자체는 자르지 않고 식대로 계산하지만 그림은 음수를 0칸(빈 큐), `slots`를 넘는 값을 가득 찬 칸으로 그린다. 그래서 `0`에서 `q-1`을 하면 값은 -1이고 그림은 빈 큐이며, 이어서 `q+1`을 하면 값이 0이라 여전히 빈 큐다. 이렇게 값이 범위를 벗어나면 [그림 검사](figure-check.md) 14번이 큐마다 아래쪽과 위쪽 한 번씩 경고한다. 정확히 0과 `slots`는 범위 안이라 경고가 없다.
@@ -373,17 +379,17 @@ scene "소비자 하나가 느려진다" mode=once for=6s status="slow=warn"
 
 ### 보기
 
-보기(`view`)는 같은 문서의 카드를 한 가지 방식으로 보이는 판이다. 판은 위에서 아래로 쌓여 한 그림이 되고, 보기 이름(`"라벨"`)이 있으면 판 위에 제목 줄이 생긴다.
+보기(`view`)는 같은 문서의 카드를 한 가지 방식으로 보이는 판이다. 판은 위에서 아래로 쌓여 한 그림이 되고, 라벨(`"라벨"`)이 있으면 판 위에 제목 줄이 생긴다. 보기는 이름이 없다. 어떤 문장도 보기를 가리키지 않기 때문이다. 내부에서는 정해진 순서대로 `v1`, `v2`, ...를 붙여 시간표와 장면이 보기를 가리키는 열쇠로 쓴다.
 
 ```text
-view <id> graph [right|down] ["라벨"] [{ 카드 이름들 }]
-view <id> sequence ["라벨"] {
+view graph [right|down] ["라벨"] [{ 카드 이름들 }]
+view sequence ["라벨"] {
   참여자 이름들
 }
-view <id> plot ["라벨"] {
+view plot ["라벨"] {
   차트 카드 하나
 }
-view <id> time ["라벨"] {
+view time ["라벨"] {
   추적 카드 하나
 }
 ```
@@ -397,10 +403,17 @@ view <id> time ["라벨"] {
 
 - 구성원이 아닌 이름, 방식에 맞지 않는 카드(`a table card cannot be a sequence participant`)는 구성원 이름의 자리에서 오류다.
 - 카드는 보기 여럿에 함께 놓일 수 있다. 같은 이름의 카드가 보기마다 한 번씩 그려지고 상태는 하나다.
-- 그래프 보기의 구성원은 그룹을 적으면 그 안 카드와 그룹 전체를 담는다. 그룹 안 카드를 그룹 없이 적으면 `list group "g" instead of "x"` 오류다. 블록을 생략한 그래프 보기는 추적 카드와 `plot` 보기에 놓인 차트를 뺀 모든 카드를 담고(순서 보기에 놓인 카드는 들어간다), 그 차트를 그래프에도 그리려면 블록에 적는다.
-- 보기 줄이 하나도 없으면: 카드가 차트 하나뿐이고 선이 없으면 그 차트의 `plot` 보기 하나, 아니면 모든 카드를 담는 `graph right` 하나와 추적 카드마다 `time` 보기 하나다. 기본 보기의 이름은 이름 공간에 들지 않고 가리킬 수 없다.
-- 어떤 보기에도 놓이지 않은 카드는 `card "t" is not shown in any view` 오류다.
+- 그래프 보기의 구성원은 그룹을 적으면 그 안 카드와 그룹 전체를 담는다. 그룹 안 카드를 그룹 없이 적으면 `list group "g" instead of "x"` 오류다. 블록을 생략한 그래프 보기는 추적 카드와 `plot` 보기(적은 것과 기본 것)에 놓인 차트를 뺀 모든 카드를 담고(순서 보기에 놓인 카드는 들어간다), 그 차트를 그래프에도 그리려면 블록에 적는다.
+- `view main graph`처럼 보기 방식 앞에 이름을 쓰면 `a view is one of graph, sequence, plot, time. Found "main"` 오류다.
+- 기본 보기. 적은 보기가 먼저 구성원을 정하고(적은 순서가 판 순서), 어느 보기에도 적히지 않은 카드는 다음 규칙으로 기본 보기를 받는다. 기본 보기는 적은 보기 뒤에 카드 선언 순서로 쌓인다. 같은 카드가 기본 보기와 적은 보기에 겹쳐 그려지는 일은 없다.
+  1. 추적 카드는 카드마다 `time` 보기 하나.
+  2. 그룹 밖에 있고 어느 선에도 닿지 않는 차트 카드는 카드마다 `plot` 보기 하나. 그래프 안에 작게 두려면 그래프 블록에 적는다.
+  3. 나머지 그래프로 그릴 수 있는 카드(그룹 나무는 온전히)는 `graph right` 하나. 블록 없는 `view graph`를 적었으면 그 보기가 맡으므로 만들지 않는다.
+  - 순서, 차트, 시간 보기에 적은 카드는 "적힌" 카드라 기본 그래프에 들어가지 않는다. 그 카드를 그래프에도 보이려면 그래프 블록에 적는다.
+  - 보기 줄이 하나도 없으면 위 규칙만으로 보기가 정해진다. 카드가 차트 하나뿐이면 그 `plot` 하나다.
+- 어떤 보기에도 놓이지 않은 카드는 `card "t" is not shown in any view` 오류다. 위 규칙이 모든 카드를 맡으므로 이 오류는 구성원 오류로 거절된 카드 말고는 나오지 않는다.
 - 가로 방향(`right`)이 기본이고, 그룹마다 `direction=`으로 바꾼다.
+- 순서 보기 블록의 참여자 순서가 처음 메시지를 보내는 순서와 다르면 순서가 처음 어긋난 참여자를 적은 줄에서 경고한다(`--strict`이면 오류). 보내지 않는 참여자는 뒤에 와도 된다.
 
 #### 이동의 투영
 
@@ -435,7 +448,7 @@ chart lag "처리 지연" bar ["부제"] {
 
 행의 숫자 자리에 값 이름을 쓰면(`ms=depth`) 그 값이 바뀔 때 차트가 바뀐다.
 
-- 시작 값은 값의 `from`(참조면 가리키는 값의 `from`)이고 숫자여야 한다. 아니면 `chart "lag" reads "depth", which holds "none" at the start. A chart value is a number`(`value-type`)다. 장면 중에 숫자가 아닌 글이 되면 같은 오류를 묶은 행의 줄에서 알린다.
+- 시작 값은 값의 `from`(참조면 가리키는 값의 `from`)이고 숫자여야 한다. 아니면 `chart "lag" reads "depth", which holds "none" at the start. A chart value is a number`(`value-type`)다. 장면 중에 숫자가 아닌 글이 되면 같은 오류를 묶은 행의 줄에서 알린다. 장면 중에 값이 차트의 값 범위를 어겨도(막대의 음수, 로그 눈금의 0 이하, 쌓는 합계나 크기 상한 초과, 신뢰구간 `low ≤ 값 ≤ high` 순서) 원본 행과 같은 값 규칙으로 `value-type` 오류를 묶은 행의 줄에서 알린다(`chart "c" reads v=-5: values cannot be negative`). 이 검사는 값 범위를 재는 프레임과 실제 프레임 모두에서 한다. 단 쌓는 합계와 신뢰구간 순서처럼 값 여럿이 함께 정하는 규칙은 실제 프레임에서만 본다.
 - 상자 차트와 워터폴은 묶을 수 없고, 가로 위치(`x=`)도 묶을 수 없다(`binding-unsupported`).
 - 모든 프레임은 같은 축을 쓴다. 값 범위는 고정 값과 묶은 값이 가질 모든 값을 합친 범위이고, 그림 영역 길이는 모든 프레임 가운데 가장 짧은 값으로 고정한다. 카드 크기는 모든 프레임 가운데 가장 큰 그림의 크기다. 눈금과 축 이름은 프레임이 바뀌어도 움직이지 않는다.
 - 프레임이 바뀌는 표식(막대, 점, 값 글자)에는 바뀌지 않는 id를 붙인다. 막대 등은 `data-mark="계열:행"`, 글은 `data-mark-text="계열:행"`이고 같은 계열과 행에서 둘째부터는 `~번호`가 붙는다. 선 차트의 선(`path`)은 `d`만 바뀌고 강조하지 않고, 점과 값 글자만 강조한다.
@@ -466,7 +479,7 @@ trace t "결제 추적" unit=ms {
 | `a[.칸] -> b[.칸] ["실어 보낼 글"] [time=3s] [tone=purple] [set="식, 식"] [lost=60%] [when="조건"] [wait="조건"] [timeout=2s] [else=카드] [stuck] [reserve="식, 식"]` | 이동 박자. 점 하나가 선 하나를 지난다. 순서 보기에 보이는 이동은 `dashed`, `create`, `destroy`를 더할 수 있다 |
 | `track a, b -> c -> d ["글"] [at=0s] [every=2s] [time=6s] [legs="1s, -"] [tone=blue] [set="식"] [lost=60%] [when="조건"] [wait="조건"] [timeout=2s] [else=카드] [stuck] [reserve="식"]` | 흐름. 출발지마다 점이 선언된 선들을 멈춤 없이 잇는다. `legs`는 구간마다 이동 시간을 정한다 |
 | `a -> b "글" & c -> d time=2s` | 한 박자 안의 여러 이동 |
-| `show id "글" [tag="태그"] [tone=purple] [card=색] [meta="덧붙임"] [mark="표시"] [mono]` | 카드 줄 하나를 바로 앞 박자에 더한다 |
+| `show id "글" [tag="태그"] [tone=purple] [appearance=모양] [meta="덧붙임"] [mark="표시"] [mono]` | 카드 줄 하나를 바로 앞 박자에 더한다. 카드를 그리는 그래프 보기에 놓인 카드만 쓸 수 있다 |
 | `show id graph "가 -> 나; 가 -> 다" [lit="가, 나"]` | 카드에 작은 관계 그래프 줄 하나를 더한다 |
 | `clear id` | 바로 앞 박자에서 카드를 비운다 |
 | `light 이름 ...` | 점 없이 카드, 그룹, 칸을 밝히는 박자. 칸은 `카드.칸`(테이블·API의 칸, 격자의 `item`, 추적의 구간)이다 |
@@ -477,7 +490,7 @@ trace t "결제 추적" unit=ms {
 
 #### 재생 방식
 
-- `mode`는 `static`(기본), `once`, `loop`다. `static`은 장면의 마지막 상태 하나를 보인다. 장면에 이동이 있어도 경고가 없다. 시간표는 모두 계산하고 마지막 상태만 보인다. `once`는 처음부터 한 번 재생하고 마지막 상태에 머문다. `loop`는 같은 장면을 되풀이한다.
+- `mode`는 `static`, `once`, `loop`다. 적지 않으면 줄(이동, `track`, `show`, `light`, `reveal`, `wait` 등)이 없는 장면은 `static`, 줄이 있는 장면은 `once`다. 적은 `mode`가 우선한다. 줄 없는 장면에 `mode=once|loop`를 적으면 재생할 것이 없어 오류다. 줄이 있는 장면을 `static`으로 두려면 `mode=static`을 적는다. 장면 이름은 숫자로만 쓸 수 없다(`--scene n`이 숫자를 장면 번호로 읽기 때문이다). `static`은 장면의 마지막 상태 하나를 보인다. 장면에 이동이 있어도 경고가 없다. 시간표는 모두 계산하고 마지막 상태만 보인다. `once`는 처음부터 한 번 재생하고 마지막 상태에 머문다. `loop`는 같은 장면을 되풀이한다.
 - `speed`는 재생 배속이고 0보다 큰 유한한 숫자(기본 1)다. 시간표의 ms는 배속으로 바뀌지 않는다. 장면의 논리 길이를 배속으로 나눈 값이 1ms보다 짧아지면 재생 길이가 0이 되므로 `speed=N makes scene "x" shorter than 1ms (max speed for this scene: ms)` 오류(`invalid-speed`)다. 숫자가 아니거나 0 이하거나 무한대이면 같은 `code`의 오류다.
 - 장면은 탭으로만 고른다. 장면이 끝나도 다음 장면으로 넘어가지 않는다.
 - 갱신 펄스(값 글자, 값이 바뀐 차트 표식)는 바뀐 시각에서 400ms 동안 80ms 올라가고 80ms 머물고 240ms 내려온다. 길이는 배속과 상관없는 화면 시간이다. 한 대상의 펄스가 겹치면 합하지 않고 가장 센 값을 쓴다. 한 시각에 이어 쓴 값이 처음 글로 돌아오면 펄스가 없다. 장면의 한 바퀴 화면 길이는 마지막 펄스가 끝날 때까지 늘어나서, 반복 경계가 펄스를 자르지 않는다. 논리 시각은 바꾸지 않는다.
@@ -500,11 +513,11 @@ trace t "결제 추적" unit=ms {
 - 태그는 대문자로 그린다. `tone`이 있는 줄은 그 색이다. `tone`이 없는 줄은, `tone` 없이 처음 나온 태그 순서대로 범주 팔레트 순서(`blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, 다시 처음부터)로 붙인 색을 그림 전체에서 같은 태그에 쓴다. 상태 색이라고 건너뛰는 자리는 없다. `gray`는 `tone`으로 고를 때만 쓴다.
 - `mark`는 8자 이하다. 카드 오른쪽 끝에 들어갈 자리가 정해져 있기 때문이다.
 - 관계 그래프 글은 `;`로 관계를 나누고, 관계는 `이름 -> 이름` 또는 이름 하나다. 이름은 앞뒤 공백을 빼고 `;`, `,`, `->`를 쓰지 않는다. 관계가 돌아 제자리로 오거나, `lit`의 이름이 그래프에 없으면 오류다.
-- 카드를 쓰는 도형은 `box`, `external`, `store`, `person`, `table`, `api`다. `decision`, 격자, 그룹에 `show`를 쓰면 오류다.
+- 카드를 쓰는 도형은 `box`, `external`, `store`, `person`, `table`, `api`다. `decision`, 격자, 그룹에 `show`를 쓰면 오류다. `show`와 `clear`의 대상은 카드를 그리는 그래프 보기에 놓여야 한다. 순서 보기에만 놓인 카드에 쓰면 `show "s" needs a card, and no graph view shows "s"` 오류이고, 같은 카드를 그래프 보기에도 놓으면 된다. 상태 알약(`status`)은 순서 보기 머리에도 그려서 이 제한이 없다.
 
 장면:
 
-- 박자 줄도 흐름 줄도 하나도 없는 장면은 오류다. 예외는 `mode=static`이다. 줄이 없어도 처음 구성 그대로의 정지 모습이고 표시 길이가 0이다(가짜 `light`나 `wait`를 넣지 않는다). 줄 없는 `once`, `loop` 장면의 오류 메시지가 `mode=static`을 알린다.
+- 박자 줄도 흐름 줄도 하나도 없는 장면은 `mode`를 적지 않으면 `static`이다. 줄이 없어도 처음 구성 그대로의 정지 모습이고 표시 길이가 0이다(자리를 채우는 `wait`나 가짜 `light`를 넣지 않는다). 줄 없는 장면에 `mode=once` 또는 `mode=loop`를 적으면 오류이고, 메시지가 `mode=static`을 알린다.
 - 한 장면 안에서 밝힌 도형과 카드 내용은 남는다. 선은 점이 지나는 동안만 켜지고, 남는 선은 `quiet` 선의 처음 지난 뒤뿐이다. 다음 장면이 시작하면 모두 꺼진다. 차트 카드의 장면 규칙은 [차트 카드](#차트-카드)에 있다.
 
 흐름 장면:
@@ -581,7 +594,7 @@ value holder "쥔 쪽" on=lock from=none
 a -> lock
 b -> lock
 
-scene "같은 시각에 요청한다" mode=once for=8s
+scene "같은 시각에 요청한다" for=8s
   track a -> lock "요청" at=0s time=1s wait="holder='none'" reserve="holder=A"
   track b -> lock "요청" at=0s time=1s wait="holder='none'" reserve="holder=B"
   track a -> lock "풀기" at=3s time=1s when="holder='A'" set="holder=none"
@@ -645,12 +658,15 @@ scene "같은 시각에 요청한다" mode=once for=8s
 | `.dap`가 아닌 파일(`render`, `check`의 입력) | `unsupported-extension` | 파일, 1줄 1자리 | `only .dap files are read` |
 | 문법 표에 없는 낱말(`flow`, `step`, `say`, 머리 `speed` 등) | `syntax` | 첫 글자 | `unknown statement "step"` |
 | 글이 둘인 `scene "이름" "설명"` | `syntax` | 둘째 글 | `write a scene as: scene "name" [mode=...] ...` |
+| 이름을 쓴 보기 `view main graph` | `syntax` | 그 줄 | `a view is one of graph, sequence, plot, time. Found "main". A view has no name: write view graph ...` |
+| 도형과 그룹의 `fill=`, `stroke=`, `show`의 `card=` | `syntax` | 그 줄 | `a box takes count=, shape=, badge=, icon=, tone=, appearance=. Found "fill"` |
+| 숫자로만 된 장면 이름 `scene "2"` | `syntax` | 그 줄 | `scene "2" is only digits, which --scene reads as a scene number. Add a word to the name, such as "step 2"` |
 | 머리 자리의 `x`, `y`, `scale`, `zero`, `decimals` | `syntax` | 첫 글자 | `"x" belongs inside a chart block` |
 
 - 값 목록에 없는 색 이름(`brand`, `amber`, `teal`, `navy`, `pink`, `sky` 포함)은 일반 값 목록 오류다.
 - 옮기는 명령과 폐기 안내 옵션은 없다. 모르는 명령과 옵션은 일반 사용법 오류(종료 2)다.
 - 마크다운 이미지 줄과 SVG에 이 도구가 남기는 소유 표시는 `<!-- dap -->`와 `<!-- daphnis md v2 ... -->`뿐이다. 다른 표시가 붙은 파일과 줄, ` ```muto ` 같은 다른 울타리는 사용자의 것이라 읽거나 가져가거나 덮어쓰지 않는다.
-- 명령 `render`와 `md`의 `--scene n|이름`은 SVG로 만들 장면을 고른다(생략하면 첫 장면, 번호는 1부터).
+- 명령 `render`와 `md`의 `--scene n|이름`은 SVG로 만들 장면을 고른다(생략하면 첫 장면, 번호는 1부터). 숫자만으로 된 장면 이름은 문법이 받지 않아 숫자는 늘 번호다. 장면 수를 넘는 번호, 없는 이름, 장면이 없는 원본에 준 `--scene`은 오류다.
 
 ### 문법 표
 
@@ -661,7 +677,7 @@ scene "같은 시각에 요청한다" mode=once for=8s
 |---|---|---|
 | 판 표기 | 문서 줄 | `daphnis` |
 | 머리 | 문서 줄 | `title`, `subtitle`, `pace`, `aspect`, `width` |
-| 선언 | 문서 줄 | `person`, `box`, `external`, `store`, `decision`, `queue`, `state`, `group`, `grid`, `icons`, `value`, `on node id+N`, `start`, `final`, `table`, `api id "METHOD /url" {`, `class`, `interface`, `chart id "title" type ["subtitle"] {`, `trace id "title" [unit=ms] {`, `view id graph|sequence|plot|time ["label"]`, `a -> b` |
+| 선언 | 문서 줄 | `person`, `box`, `external`, `store`, `decision`, `queue`, `state`, `group`, `grid`, `icons`, `value`, `on node id+N`, `start`, `final`, `table`, `api id "METHOD /url" {`, `class`, `interface`, `chart id "title" type ["subtitle"] {`, `trace id "title" [unit=ms] {`, `view graph|sequence|plot|time ["label"] [{]`, `a -> b` |
 | 선언 | 격자 블록 안 | `item`, `gap` |
 | 선언 | 클래스 블록 안 | `field`, `method` |
 | 선언 | 추적 블록 안 | `span` |
@@ -677,12 +693,12 @@ scene "같은 시각에 요청한다" mode=once for=8s
 | `group.border` | `solid`, `dashed` |
 | `group.badge` | 글, 최대 8자 |
 | `group.icon` | 이름 또는 세트:이름 |
-| `group.fill` | `blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, `gray` |
-| `group.stroke` | `blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, `gray` |
+| `group.tone` | `blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, `gray` |
+| `group.appearance` | `plain`, `filled`, `outline` |
 | `node.badge` | 글, 최대 8자 |
 | `node.icon` | 이름 또는 세트:이름 |
-| `node.fill` | `blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, `gray` |
-| `node.stroke` | `blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, `gray` |
+| `node.tone` | `blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, `gray` |
+| `node.appearance` | `plain`, `filled`, `outline` |
 | `box.count` | 2 이상 정수 |
 | `queue.slots` | 1 이상 32 이하 정수 |
 | `queue.from` | 0 이상 slots 이하 정수 |
@@ -728,7 +744,7 @@ scene "같은 시각에 요청한다" mode=once for=8s
 | `box.shape` | `rect`, `circle`, `tile` |
 | `show.tag` | 글 |
 | `show.tone` | `blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, `gray` |
-| `show.card` | `blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, `gray` |
+| `show.appearance` | `plain`, `filled`, `outline` |
 | `show.meta` | 글 |
 | `show.mark` | 글, 최대 8자 |
 | `show.mono` | 값 없음(낱말만) |
@@ -770,14 +786,14 @@ scene "같은 시각에 요청한다" mode=once for=8s
 | `fragmentRun` | `fragment.run` | `on`, `off` | 없음 |
 | `direction` | `group.direction` | `right`, `down` | `right` |
 | `viewStrategy` |  | `graph`, `sequence`, `plot`, `time` | 없음 |
-| `sceneMode` | `scene.mode` | `static`, `once`, `loop` | `static` |
+| `sceneMode` | `scene.mode` | `static`, `once`, `loop` | 줄이 있는 장면은 `once`, 줄이 없는 장면은 `static` |
 | `traceUnit` | `trace.unit` | `ms`, `us`, `s` | `ms` |
 | `scale` | `scale 값` | `linear`, `log` | `linear` |
 | `zero` | `zero 값` | `on`, `off` | `on` |
 | `chartType` |  | `bar`, `stacked`, `percent`, `dumbbell`, `box`, `scatter`, `line`, `step`, `area`, `ecdf`, `difference`, `heatmap`, `pie`, `donut`, `histogram`, `waterfall` | 없음 |
-| `tone` | `hop.tone`, `track.tone`, `show.tone` | `blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, `gray` | 없음 |
+| `tone` | `group.tone`, `node.tone`, `hop.tone`, `track.tone`, `show.tone` | `blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, `gray` | 없음 |
+| `appearance` | `group.appearance`, `node.appearance`, `show.appearance` | `plain`, `filled`, `outline` | `plain` |
 | `role` | `series.role` | `main`, `compare`, `reference` | 계열이 하나나 둘이면 선언 순서대로 main, compare(`dumbbell`은 compare, main), 셋 이상이면 없음 |
-| `paint` | `group.fill`, `group.stroke`, `node.fill`, `node.stroke`, `show.card` | `blue`, `yellow`, `red`, `green`, `orange`, `purple`, `cyan`, `gray` | 없음 |
 | `head` | `edge.head` | `end`, `both`, `none` | `end` |
 | `shape` | `box.shape` | `rect`, `circle`, `tile` | `rect` |
 | `width` | `width 값` | `standard`, `wide` | `standard` |
@@ -792,23 +808,23 @@ scene "같은 시각에 요청한다" mode=once for=8s
 
 | 요구사항 | 검증 계획 |
 |---|---|
-| 첫 문장이 `daphnis 2`가 아니거나 `.dap`가 아닌 파일이면 읽지 않고, 둘째 판에 없는 낱말(`step`, `say`, 머리 `speed`)과 글이 둘인 장면 줄은 일반 문법 오류다. 모든 오류는 `code`, 줄, 자리를 알리며 결과 파일을 쓰지 않는다. 읽는 어댑터와 옛 이름 전용 경로는 없다. | `test/v2-version.test.js`. 표의 줄마다 `code`와 자리를 확인하고, 명령줄(`render`, `gallery`, `md`)의 동작을 폴더 목록으로 확인. `--json` 한 줄의 필드는 `test/contracts-final.test.js` |
-| 한 문서가 사람, API 칸, 스키마 칸, 값, 값에 묶인 차트 카드를 한 모형으로 읽고, 카드 종류마다 다른 연결점(API 칸, 테이블 열, 격자 칸, 추적 구간)을 쓴다. 클래스 멤버는 연결점이 아니다. | `test/v2-document.test.js`의 `the mixed document parses ...`, `heterogeneous ports ...`, `names are one namespace ...` |
-| 보기 규칙(구성원, 덮임, 그릴 수 있는 선, 투영 없는 이동, 순서 보기 전용 문장)을 줄 번호와 함께 알린다. | `test/v2-document.test.js`의 `view rules ...`, `sequence-only statements ...` |
-| 이동은 보기마다 한 번씩 보이고 같은 시각과 시간을 쓰며, 값은 첫 투영의 도착에 한 번만 바뀐다. 장면은 정확히 `{ label, mode, speed }`다. 정지 장면에 이동이 있어도 경고가 없다. `speed`는 양의 유한한 숫자이고 재생 길이가 0이 되면 `invalid-speed`다. | `test/v2-document.test.js`의 `a move is shown once per view ...`, `values change once ...`, `timeline.steps are exactly ...`, `a static scene ...`, `speed takes any positive ...` |
-| 같은 원본에서 같은 시각을 낸다(예약, 값 유지, 대기와 조건, 사라짐, 흐름). 논리 시각에는 설명 글 길이, 박자 뒤 머묾, 효과 시간이 없다. | `test/v2-golden.test.js`가 `test/fixtures/v2-golden/algorithms.json`의 원본을 사건 순서, 값, 대기, 예약, 막힘과 논리 시각까지 견준다. 기준선의 시각은 논리 시각이다 |
-| 값 글자 자리는 모든 장면의 글의 실제 폭이고 긴 글은 줄을 나눈다. 8자 제한이 없다. | `test/v2-document.test.js`의 `value slots follow the real text width ...` |
-| 값에 묶인 차트는 고정된 축, 바뀌지 않는 표식 id, 시간표의 프레임 구간을 갖고, 숫자가 아닌 값과 묶을 수 없는 차트는 줄 번호와 함께 알린다. | `test/v2-document.test.js`의 `a chart bound to a value ...`, `binding errors ...`, `a bound value that turns into a word ...` |
-| 추적 보기는 구간을 실제 시간에 비례해 놓는다. | `test/v2-document.test.js`의 `the trace panel ...` |
-| 펄스는 80/80/240ms이고, 바뀌지 않은 값에는 없고, 반복 경계에서 잘리지 않는다. 겹친 표시 구간은 하나로 합친다. | `test/v2-document.test.js`의 `pulses ...`, `marks merge ...`, `test/v2-render.test.js`의 `the display length keeps a full pulse ...` |
-| 장면의 `mode`와 `speed`가 SVG 재생을 정하고(loop는 되풀이, once는 한 번 뒤 마지막 상태에 머묾, static은 움직임 없음), `--scene`으로 장면을 고른다. 모든 보기 판이 공유 재생기가 찾을 수 있는 id로 그려진다. | `test/v2-render.test.js` |
-| 마크다운 문서의 ` ```dap ` 예시, 시험 원본, 예제 원본이 둘째 판으로 읽힌다. | 예제는 `test/demo-v2.test.js`, 설계 문서의 예시 원본은 `test/grammar.test.js`가 strict로 읽는다. 시험이 쓰는 원본이 문법 표의 낱말과 선택 사항을 쓰는 범위는 `test/grammar-coverage.test.js`가 센다 |
-| 표의 차트 종류와 계열 수 범위는 문법 표가 정하고 이 문법은 별도 제한을 두지 않는다. | `test/grammar.test.js`, 그리기는 [차트](charts.md#요구사항)의 시험 |
+| 첫 문장이 `daphnis 2`가 아니거나 `.dap`가 아닌 파일이면 읽지 않고, 둘째 판에 없는 낱말(`step`, `say`, 머리 `speed`)과 글이 둘인 장면 줄은 일반 문법 오류다. 모든 오류는 `code`, 줄, 자리를 알리며 결과 파일을 쓰지 않는다. 읽는 어댑터와 옛 이름 전용 경로는 없다. | `test/grammar.test.js`가 `buildFigure`의 진단(`code`, 줄, 자리)을 표의 줄마다 확인한다. 명령줄의 동작은 `test/exports.test.js` |
+| 한 문서가 사람, API 칸, 스키마 칸, 값, 값에 묶인 차트 카드를 한 모형으로 읽고, 카드 종류마다 다른 연결점(API 칸, 테이블 열, 격자 칸, 추적 구간)을 쓴다. 클래스 멤버는 연결점이 아니다. | `test/cards.test.js` |
+| 보기는 이름이 없고, 보기를 적지 않은 카드는 기본 보기를 받는다(추적은 시간 보기, 선이 없는 차트는 차트 보기, 나머지는 그래프). 적은 보기와 겹쳐 그려지지 않고, 이름을 쓴 옛 꼴은 줄 번호가 붙은 오류다. 구성원, 그릴 수 있는 선, 투영 없는 이동, 순서 보기 전용 문장도 줄 번호와 함께 알린다. | `test/authoring.test.js`(기본 보기), `test/cards.test.js`(보기 규칙) |
+| 장면의 `mode`를 적지 않으면 줄이 있는 장면은 `once`, 없는 장면은 `static`이고 적은 값이 우선한다. 도형, 그룹, `show` 줄의 색은 `tone`과 `appearance`이고 옛 `fill`, `stroke`, `card`는 오류다. | `test/authoring.test.js` |
+| 이동은 보기마다 한 번씩 보이고 같은 시각과 시간을 쓰며, 값은 첫 투영의 도착에 한 번만 바뀐다. 정지 장면에 이동이 있어도 경고가 없다. `speed`는 양의 유한한 숫자이고 재생 길이가 0이 되면 `invalid-speed`다. 순서 보기에만 놓인 카드의 값 `on=`, `show`, `clear`는 줄 번호가 붙은 오류다. | `test/cards.test.js`, `test/values.test.js`, `test/exports.test.js` |
+| 같은 원본에서 같은 시각을 낸다(예약, 값 유지, 대기와 조건, 사라짐, 흐름). 같은 시각에 해제와 시간 초과가 겹치면 해제가 이긴다. 논리 시각에는 설명 글 길이, 박자 뒤 머묾, 효과 시간이 없다. | `test/values.test.js`(공개 출력의 값 줄)와 `test/exports.test.js`(결정성) |
+| 값 글자 자리는 모든 장면의 글의 실제 폭이고 긴 글은 줄을 나눈다. 8자 제한이 없다. | `test/values.test.js` |
+| 값에 묶인 차트는 고정된 축, 바뀌지 않는 표식 id, 시간표의 프레임 구간을 갖고, 숫자가 아닌 값, 값 범위를 어긴 값, 묶을 수 없는 차트는 줄 번호와 함께 알린다. | `test/charts.test.js` |
+| 장면의 `mode`와 `speed`가 SVG 재생을 정하고(loop는 되풀이, once는 한 번 뒤 마지막 상태에 머묾, static은 움직임 없음), `--scene`으로 장면을 고른다. 모든 보기 판이 공유 재생기가 찾을 수 있는 id로 그려진다. | `test/exports.test.js` |
+| 예제 원본과 문서의 ` ```dap ` 블록이 현재 문법으로 읽힌다. | 예제는 `test/examples.test.js`, ` ```dap ` 블록은 `daphnis md --check`가 읽는다. 설계 문서의 ` ```text ` 예시 원본은 자동 시험이 읽지 않는다(검증 요구사항, 미완료) |
+| 표의 차트 종류와 계열 수 범위는 문법 표가 정하고 이 문법은 별도 제한을 두지 않는다. | `test/charts.test.js` |
+| 사용자가 눈으로 보는 화면(탭, 시계, 전체 화면, 복사와 내려받기 조작)은 이 시험이 대신하지 않는다. | 검증 요구사항, 미완료. 실제 Chrome에서 사람이 직접 보는 검수로 따로 확인한다 |
 
 ## 단점
 
 - D2 원본을 그대로 쓸 수 없다. 첫 판 원본도 읽지 않아서 둘째 판으로 다시 써야 한다. 옮기는 명령은 두지 않았다(어댑터는 옛 문법을 영원히 남긴다).
-- 도형 크기와 색을 원본에서 정할 수 없다. 특별한 강조가 필요한 그림은 표현할 수 없다.
+- 도형 크기와 모양, 임의의 색을 원본에서 정할 수 없다. 색은 이름(`tone`)과 표현 방식(`appearance`)만 고른다. 특별한 강조가 필요한 그림은 표현할 수 없다.
 
 ## 대안
 

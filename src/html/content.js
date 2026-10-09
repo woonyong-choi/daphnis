@@ -14,7 +14,7 @@ import { FLOW_METRICS, PLAYER_METRICS } from './metrics.js';
 
 /**
  * 그림 내용. 판마다 SVG 한 장을 만들고(판 상자가 viewBox), 재생 데이터를 모은다.
- * @returns { panels, width, height, data, dotAts, hasCharts, charts }. charts는 그려진 차트 그림 목록(무늬 정의 defs를 문서에 한 번 모을 때 쓴다). panels[i]는 { index, view, label, box, minWidth, svg }이다. svg는 판 안쪽 내용(SVG 요소의 자식)이다.
+ * @returns { panels, width, height, data, dotAts, hasCharts, charts }. charts는 그려진 차트 그림 목록(무늬 정의 defs를 문서에 한 번 모을 때 쓴다). panels[i]는 { index, view, label, box, svg }이다. svg는 판 안쪽 내용(SVG 요소의 자식)이다.
  */
 export function figureContent(result, glyphs) {
   const { scene, timeline, figure } = result;
@@ -38,11 +38,11 @@ export function figureContent(result, glyphs) {
     steps: timeline.steps,
     segs: playerSegs(timeline),
     itemIds: scene.items.map((it) => it.id),
-    cardCounts: scene.items.map((it) => it.card?.layouts.length ?? 0),
+    cardCounts: scene.items.map((it) => it.content?.layouts.length ?? 0),
     groupIds: scene.groups.map((g) => g.id),
     edgePanels: scene.edges.map((e) => e.panel ?? 0),
     trackPanels,
-    panels: panels.map(({ index, view, strategy, box, minWidth }) => ({ index, view, strategy, box, minWidth })),
+    panels: panels.map(({ index, view, strategy, box }) => ({ index, view, strategy, box })),
     width: scene.width,
     height: scene.height,
     marks: timeline.marks ?? {},

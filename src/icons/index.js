@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { sanitizeIcon } from './sanitize.js';
-import { ICON_GRID, SYMBOLS } from './symbols.js';
+import { BRAND_ROLES, ICON_GRID, SYMBOLS } from './symbols.js';
 
 /** 이름 앞에 세트를 적지 않았을 때 찾는 세트. 저장소에 파일이 들어 있다. */
 export const DEFAULT_SET = 'builtin';
@@ -11,8 +11,10 @@ const BRANDS = JSON.parse(readFileSync(new URL('./brands.json', import.meta.url)
 const BRAND_DIR = new URL('./simple-icons/', import.meta.url);
 const clash = Object.keys(SYMBOLS).filter((name) => Object.hasOwn(BRANDS, name));
 if (clash.length) throw new Error(`icon names are both a concept and a brand: ${clash.join(', ')}`);
-/** 기본 세트의 이름 → 역할(`service`, `data`, `access`, `person`, `brand`) 표. 개념 이름(`server`)과 브랜드 이름(`git`)이 한 표에 있어 서로 겹치지 못한다. */
-export const ICON_NAMES = Object.freeze(Object.fromEntries([...Object.keys(SYMBOLS), ...Object.keys(BRANDS)].sort().map((name) => [name, SYMBOLS[name]?.role ?? 'brand'])));
+const unroled = Object.keys(BRANDS).filter((name) => !Object.hasOwn(BRAND_ROLES, name));
+if (unroled.length) throw new Error(`brand icons without a concept role (icons/symbols.js BRAND_ROLES): ${unroled.join(', ')}`);
+/** 기본 세트의 이름 → 역할(`service`, `data`, `access`, `person`) 표. 개념 이름(`server`)과 브랜드 이름(`git`)이 한 표에 있어 서로 겹치지 못한다. 브랜드는 자기 개념의 역할이다(BRAND_ROLES). */
+export const ICON_NAMES = Object.freeze(Object.fromEntries([...Object.keys(SYMBOLS), ...Object.keys(BRANDS)].sort().map((name) => [name, SYMBOLS[name]?.role ?? BRAND_ROLES[name]])));
 /** 사용자 세트 안의 아이콘 이름 형식. 폴더 밖으로 나가는 경로를 막는다. */
 export const USER_ICON_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
 
@@ -50,7 +52,7 @@ export function loadIcon(ref, sets, baseDir) {
   if (ref.set !== DEFAULT_SET) return { ...readSvg(resolve(baseDir, sets.find((s) => s.name === ref.set).path, `${ref.name}.svg`)), role: 'custom', name: undefined, symbol: false };
   const symbol = SYMBOLS[ref.name];
   if (symbol) return { viewBox: [0, 0, ICON_GRID, ICON_GRID], body: symbol.body, role: symbol.role, name: ref.name, symbol: true };
-  return { ...readSvg(fileURLToPath(new URL(`${BRANDS[ref.name]}.svg`, BRAND_DIR))), role: 'brand', name: ref.name, symbol: false };
+  return { ...readSvg(fileURLToPath(new URL(`${BRANDS[ref.name]}.svg`, BRAND_DIR))), role: BRAND_ROLES[ref.name], name: ref.name, symbol: false };
 }
 
 // cost: time O(n·f), heap O(n), stack O(1), io n

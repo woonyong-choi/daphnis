@@ -2,14 +2,14 @@
 // 모든 문서를 먼저 만든 다음에 쓴다. 오류가 하나라도 있으면 아무 파일도 쓰지 않고, --check는 쓰지 않고 갱신이 필요한지만 알린다.
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { basename, dirname, extname, join, relative, sep } from 'node:path';
-import { buildReported, report } from './build-reported.js';
+import { buildReported, pickScene, report } from './build-reported.js';
 import { fileHref } from './href.js';
 import { findForMode, inspectFold, joinLines, layoutDocument } from './md-fold.js';
 import { acquireLocks } from './md-lock.js';
-import { ownerOf, ownership, realPath, svgMark } from './md-owner.js';
-import { commitWrites, FILE_IO } from './md-write.js';
+import { ownerOf, ownership, svgMark } from './md-owner.js';
+import { commitWrites, FILE_IO, outputKey } from './md-write.js';
 import { makeDiagnostic } from './source/problems.js';
-import { selectScene, toSvg } from './svg.js';
+import { toSvg } from './svg.js';
 import { plainText } from './text.js';
 
 const problem = (message, code = 'md') => makeDiagnostic({ severity: 'error', line: 0, message }, { code });
@@ -32,24 +32,23 @@ function targetsOf(file, blocks, outDir) {
 // cost: time O(b), heap O(b), stack O(1)
 // vars: b = 블록 수
 // basis: estimate
-// 출력 이름을 겹침 비교용 키로 바꾼다. 폴더는 실제 경로로 풀고, 파일 이름은 NFC 정규화 뒤 소문자로 낮춘다. 대소문자나 정규화만 다른 이름을 같은 파일로 치는 파일 시스템에서도 같은 결과가 나오게 항상 그렇게 비교한다.
-const claimKey = (svg) => join(realPath(dirname(svg)), basename(svg)).normalize('NFC').toLowerCase();
-
-// cost: time O(b), heap O(b), stack O(1)
-// vars: b = 블록 수
-// basis: estimate
-// 두 블록이 같은 SVG 파일을 쓰려는 곳(같은 이름, 같은 문서 이름, 대소문자만 다른 이름)을 오류로 알린다. 오류가 있으면 false다.
-function claimTargets(file, targets, { claimed, json }) {
+// 이번 실행이 쓸 파일(SVG와 문서)이 서로 같은 파일을 쓰려는 곳(같은 이름, 같은 문서 이름, 대소문자만 다른 이름, 같은 파일을 가리키는 링크)을 오류로 알린다. 오류가 있으면 false다.
+// entries는 { path, line, hint }이고 line은 오류를 알릴 줄(문서 자체는 0)이다. 모든 출력이 같은 outputKey로 하나의 claimed에 등록된다.
+function claimOutputs(file, entries, { claimed, json }) {
   let ok = true;
-  for (const { block, svg } of targets) {
-    const key = claimKey(svg);
+  for (const { path, line, hint } of entries) {
+    const key = outputKey(path);
     if (claimed.has(key)) {
-      report(file, [{ ...problem(`${svg} is also written for ${claimed.get(key)}. Give the block a different name= (names that differ only in case or Unicode form count as the same)`), line: block.open + 1 }], json);
+      report(file, [{ ...problem(`${path} is also written for ${claimed.get(key)}. ${hint}`), line }], json);
       ok = false;
-    } else claimed.set(key, `${file}:${block.open + 1}`);
+    } else claimed.set(key, line ? `${file}:${line}` : file);
   }
   return ok;
 }
+
+// 같은 파일을 쓰려는 겹침을 풀 방법. 이름은 대소문자나 유니코드 정규화만 달라도 같은 파일로 센다.
+const SVG_HINT = 'Give the block a different name= (names that differ only in case or Unicode form count as the same)';
+const DOCUMENT_HINT = 'Give each document once; a symbolic link and the file it points to are the same document';
 
 // cost: time O(b), heap O(b), stack O(1), io b
 // vars: b = 블록 수
@@ -76,24 +75,10 @@ async function buildTargets(file, targets, args) {
   const built = [];
   for (const { block, label, svg } of targets) {
     const result = await buildReported(block.source, file, { flags: args.flags, baseDir: dirname(file), lineOffset: block.open + 1, budget: args.budget });
-    const scene = result ? sceneOf(result, args.scene, { file, block, json: args.flags.has('json') }) : undefined;
+    const scene = result ? pickScene(result, args.scene, { file, json: args.flags.has('json'), line: block.open + 1 }) : undefined;
     built.push(scene === undefined ? undefined : { label, svg, block, result, scene });
   }
   return built.includes(undefined) ? undefined : built;
-}
-
-// cost: time O(s), heap O(1), stack O(1)
-// vars: s = 장면 수
-// basis: estimate
-// `--scene` 값을 이 블록의 장면 번호로 바꾼다. 없는 장면이면 블록 줄에 오류를 알리고 undefined다. 장면이 없는 블록은 0이다.
-function sceneOf(result, option, { file, block, json }) {
-  if (!result.timeline.steps.length) return 0;
-  try {
-    return selectScene(result.timeline.steps, option);
-  } catch (error) {
-    report(file, [{ ...problem(`--scene: ${error.message}`), line: block.open + 1 }], json);
-    return undefined;
-  }
 }
 
 // cost: time O(out), heap O(out), stack O(1)
@@ -110,11 +95,12 @@ async function svgText({ result, svg, scene }, { args, owner }) {
 // vars: n = 폴더 안 파일 수
 // basis: estimate
 // 이 문서가 예전에 만들었지만 지금은 안 쓰는 SVG. `{문서}-*.svg` 중 ownership이 이 문서 것으로 판정한 파일만이다. 표시는 SVG 폴더 기준 문서 경로라 다른 폴더의 같은 이름 문서가 만든 파일은 소유로 보지 않는다.
+// keep은 이번에 쓰는 SVG의 outputKey 집합이다. 쓰기 겹침 판정과 같은 키로 비교하므로, 대소문자나 정규화만 달라진 이름이 가리키는 같은 파일을 낡은 파일로 보지 않는다.
 function staleSvgs({ file, outDir, owner }, keep) {
   const prefix = `${basename(file, extname(file))}-`;
   if (!existsSync(outDir)) return [];
   return readdirSync(outDir)
-    .filter((name) => name.startsWith(prefix) && name.endsWith('.svg') && !keep.has(join(outDir, name)))
+    .filter((name) => name.startsWith(prefix) && name.endsWith('.svg') && !keep.has(outputKey(join(outDir, name))))
     .map((name) => join(outDir, name))
     .filter((path) => ownership(path, owner).kind === 'mine');
 }
@@ -163,7 +149,8 @@ async function planDocument(file, args, claimed) {
   report(file, inspected.errors.map(({ line, message }) => ({ ...problem(message, 'md-fold'), line })), json);
   const outDir = args['out-dir'] ?? dirname(file);
   const targets = targetsOf(file, found.blocks, outDir);
-  const unique = claimTargets(file, targets, { claimed, json });
+  const entries = [{ path: file, line: 0, hint: DOCUMENT_HINT }, ...targets.map(({ block, svg }) => ({ path: svg, line: block.open + 1, hint: SVG_HINT }))];
+  const unique = claimOutputs(file, entries, { claimed, json });
   const owner = ownerOf(file, outDir);
   const owned = checkOwners(file, targets, { owner, json });
   const broken = found.errors.length || inspected.errors.length || !unique || !owned;
@@ -175,7 +162,7 @@ async function planDocument(file, args, claimed) {
   // 문서는 SVG 뒤에 쓴다. 문서가 가리키는 SVG가 먼저 놓여 있어야 중간에 멈춰도 깨진 링크가 없다.
   const text = joinLines(layoutDocument(doc, { ...inspected, fenced: found.fenced, quotes: found.quotes }, { mode, title: args['fold-title'], images }), doc.eol);
   files.push({ path: file, text, isDocument: true });
-  return { files, stale: staleSvgs({ file, outDir, owner }, new Set(built.map((item) => item.svg))) };
+  return { files, stale: staleSvgs({ file, outDir, owner }, new Set(built.map((item) => outputKey(item.svg)))) };
 }
 
 // cost: time O(f), heap O(f), stack O(1), io f
@@ -190,8 +177,8 @@ const changedFiles = (files) => files.filter(({ path, text }) => !existsSync(pat
 // 이번 실행의 쓰기와 삭제 계획. 문서마다 따로 정한 낡은 SVG 목록을 합친 뒤, 어느 문서든 이번에 쓰는 파일은 뺀다. 쓰는 파일과 지우는 파일이 겹치지 않는다.
 function outputPlan(plans) {
   const files = plans.flatMap((plan) => plan.files);
-  const written = new Set(files.map(({ path }) => path));
-  const removes = [...new Set(plans.flatMap((plan) => plan.stale))].filter((path) => !written.has(path));
+  const written = new Set(files.map(({ path }) => outputKey(path)));
+  const removes = [...new Set(plans.flatMap((plan) => plan.stale))].filter((path) => !written.has(outputKey(path)));
   const writes = changedFiles(files);
   return { writes: [...writes.filter((file) => !file.isDocument), ...writes.filter((file) => file.isDocument)], removes };
 }

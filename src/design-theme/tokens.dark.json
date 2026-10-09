@@ -531,8 +531,8 @@
     "state": {
       "active": {
         "$type": "color",
-        "$value": "{color.blue.dark-stroke}",
-        "$description": "What is happening now: lit lines, dots and borders. The brand blue. Meets 3:1 on every surface."
+        "$value": "{primitive.simple2.ui-accent}",
+        "$description": "What is happening now: lit lines, borders, the arrival pulse and lit field outlines. The common UI accent, independent of the category order and of the category blue. 3:1 or more on the page, canvas and node faces in both modes."
       },
       "active-fill": {
         "$type": "color",
@@ -609,8 +609,8 @@
       },
       "focus": {
         "$type": "color",
-        "$value": "{color.blue.dark-stroke}",
-        "$description": "Focus ring. Meets 3:1."
+        "$value": "{primitive.simple2.ui-accent}",
+        "$description": "Focus ring. The common UI accent. 3:1 or more on the page, canvas and node faces in both modes."
       },
       "progress": {
         "$type": "color",
@@ -619,8 +619,8 @@
       },
       "control-on": {
         "$type": "color",
-        "$value": "{color.gray.776}",
-        "$description": "Face of a selected segmented control."
+        "$value": "{primitive.simple2.ui-accent}",
+        "$description": "Face of the selected segmented control (scene tab). The common UI accent."
       }
     },
     "data": {
@@ -3041,19 +3041,32 @@
       },
       "canvas": {
         "$type": "color",
-        "$value": "#f2f5f7"
+        "$value": "#f5f5f6",
+        "$description": "The single gray plate under a figure's cards. The official Things description card is rgba(2, 17, 37, 0.04); over the white page that composites to this value (245, 245, 246). Groups and cards draw no gray layer of their own."
       },
-      "selection-fill": {
+      "ui-accent": {
         "$type": "color",
-        "$value": "#e3e4e8"
+        "$value": "#3c84f3",
+        "$description": "Common UI accent: the selected tab face and lit or arriving state. Read from the official Things website segmented control (tabs-title is-selected computed background rgb(60, 132, 243), collected 2026-10-09). A UI role, separate from the category blue #1e6bd6 which is an icon fill sample (color.category.blue.anchor). The two are never mixed or substituted.",
+        "$extensions": {
+          "provenance": {
+            "source": "https://culturedcode.com/things/features/",
+            "kind": "official-web-ui-computed-style",
+            "collected": "2026-10-09",
+            "original": "#3c84f3",
+            "adjusted": null
+          }
+        }
       },
-      "selection-ink": {
+      "ui-accent-hover": {
         "$type": "color",
-        "$value": "#303336"
+        "$value": "#3779e0",
+        "$description": "Selected tab under the pointer: the accent about 8% darker. Daphnis value; Things has no recorded hover for this control."
       },
-      "tab-fill": {
+      "on-ui-accent": {
         "$type": "color",
-        "$value": "#f5f5f7"
+        "$value": "#ffffff",
+        "$description": "Ink on the UI accent, as on the official Things website."
       },
       "group-1": {
         "$type": "color",
@@ -3074,6 +3087,10 @@
       "row-selection": {
         "$type": "color",
         "$value": "#cee2fd"
+      },
+      "card-active-fill": {
+        "$type": "color",
+        "$value": "#f3f7fd"
       },
       "line": {
         "$type": "color",
@@ -3114,6 +3131,10 @@
       "dark-selection": {
         "$type": "color",
         "$value": "#274174"
+      },
+      "dark-card-active-fill": {
+        "$type": "color",
+        "$value": "#333a48"
       },
       "dark-muted": {
         "$type": "color",
@@ -3649,7 +3670,7 @@
     "figure-canvas-wide": {
       "$type": "dimension",
       "$value": 1440,
-      "$description": "넓은 캔버스 폭(그림 머리 `width wide`). 데스크톱 문서 본문 폭(1440 화면)이다. 재생기와 목록은 이 폭 아래로 줄이지 않고 가로로 스크롤하며, 문서(README 이미지)는 본문 폭에 맞춰 줄인다. 최소 글자 검사도 이 폭 기준이다"
+      "$description": "넓은 캔버스 폭(그림 머리 `width wide`). 데스크톱 문서 본문 폭 1440이다. 레이아웃과 최소 글자 검사가 이 폭을 기준으로 쓰며, 소비자는 자신의 표시 폭에 맞게 적응한다"
     },
     "chip": {
       "max-width": {
@@ -4302,6 +4323,11 @@
       "$type": "duration",
       "$value": 240,
       "$description": "도착 효과의 감쇠 시간"
+    },
+    "notice": {
+      "$type": "duration",
+      "$value": 2400,
+      "$description": "도구 막대의 결과 알림(복사, 다운로드)이 보이는 표시 시간. 시간표의 사건 시각을 바꾸지 않는다"
     }
   },
   "illustration": {
@@ -5491,17 +5517,49 @@
       "$type": "dimension",
       "$value": 1.5
     },
-    "selection-fill": {
-      "$type": "color",
-      "$value": "{primitive.simple2.dark-edge}"
+    "segment-track": {
+      "$type": "string",
+      "$value": "rgba(255, 255, 255, 0.12)",
+      "$description": "Shared track behind every scene tab. Value read from the official Things website segmented control (computed parentBackground of the tabs-title items, collected 2026-10-09). It is translucent so it sits on the page surface; dark mode uses the white equivalent."
     },
-    "selection-ink": {
-      "$type": "color",
-      "$value": "{color.gray.0}"
+    "segment-ink": {
+      "$type": "string",
+      "$value": "rgba(255, 255, 255, 0.78)",
+      "$description": "Ink of an unselected tab. Official Things website value (tabs-title color). Dark mode uses a white equivalent at the same alpha."
     },
-    "tab-fill": {
+    "segment-hover": {
+      "$type": "string",
+      "$value": "rgba(255, 255, 255, 0.1)",
+      "$description": "Face of an unselected tab under the pointer. Daphnis value (Things has no recorded hover): one step above the track so hover is visible and differs from the selected face and from the focus ring."
+    },
+    "segment-on": {
       "$type": "color",
-      "$value": "{primitive.simple2.dark-node}"
+      "$value": "{primitive.simple2.ui-accent}",
+      "$description": "Face of the selected tab. The common UI accent, a role separate from the category blue."
+    },
+    "segment-on-hover": {
+      "$type": "color",
+      "$value": "{primitive.simple2.ui-accent-hover}",
+      "$description": "Selected tab face under the pointer."
+    },
+    "segment-on-ink": {
+      "$type": "color",
+      "$value": "{primitive.simple2.on-ui-accent}",
+      "$description": "White ink on the selected tab, as on the official Things website. About 3.6:1 on the accent face; this is not claimed as an accessibility pass."
+    },
+    "segment-radius": {
+      "$type": "dimension",
+      "$value": 12,
+      "$description": "Track corner. Concentric with the item corner plus the track padding. Daphnis value; Things measures 11.088 around 8.712 at a smaller height."
+    },
+    "segment-item-radius": {
+      "$type": "dimension",
+      "$value": 9
+    },
+    "segment-pad": {
+      "$type": "dimension",
+      "$value": 4,
+      "$description": "Track padding. The 44px touch height of an item plus this padding twice is the track height."
     },
     "label-size": {
       "$type": "dimension",
@@ -5526,6 +5584,11 @@
     "row-selection": {
       "$type": "color",
       "$value": "{primitive.simple2.dark-selection}"
+    },
+    "card-active-fill": {
+      "$type": "color",
+      "$value": "{primitive.simple2.dark-card-active-fill}",
+      "$description": "Face of a lit card: the hover tint mixed 70% over the card face (srgb, rounded to 8 bits), so it stays paler than the selection row on a large card. Daphnis value, moved here from its stylesheet unchanged; the test recomputes the mix from hover-fill and node so the two cannot drift."
     },
     "data-line": {
       "$type": "color",

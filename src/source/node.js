@@ -1,7 +1,7 @@
-// 도형 선언(`box id "이름" ["부제"] [shape=circle|tile] [badge="LB"] [icon=server] [count=3] [fill=red] [stroke=red]`)을 읽는다.
-import { STATEMENTS, optionsOf } from './grammar.js';
+// 도형 선언(`box id "이름" ["부제"] [shape=circle|tile] [badge="LB"] [icon=server] [count=3] [tone=red] [appearance=plain|filled|outline]`)을 읽는다.
+import { STATEMENTS } from './grammar.js';
 import { checkId, parentFor, rejectName } from './names.js';
-import { readOptions } from './options.js';
+import { readLook, readOptions } from './options.js';
 import { ID_PATTERN } from './words.js';
 
 // 사람 카드가 따로 고르지 않을 때 쓰는 의미 아이콘. 모든 카드가 같은 틀과 머리를 쓰고, 사람은 이 아이콘으로 가른다.
@@ -21,8 +21,7 @@ export function readNode({ tokens, line }, ctx) {
     return;
   }
   const scopes = STATEMENTS[shape].scopes ?? [];
-  const known = new Set(scopes.flatMap((s) => Object.keys(optionsOf(s))));
-  const options = tail.filter((t) => t.type === 'option' && known.has(t.key));
+  const options = tail.filter((t) => t.type === 'option');
   const [sub, ...rest] = tail.filter((t) => !options.includes(t));
   if (sub && (sub.type !== 'text' || !takesSub)) ctx.problems.error(line, takesSub ? 'the subtitle must be quoted text' : `${shape} takes no subtitle`);
   if (rest.length) ctx.problems.error(line, `${shape} takes no more words or options`);
@@ -30,10 +29,11 @@ export function readNode({ tokens, line }, ctx) {
   const isTile = found.shape === 'tile';
   const form = found.shape === 'rect' || isTile ? undefined : found.shape;
   checkNodeOptions({ found, form, sub, line }, ctx);
-  const { badge, count, fill, stroke } = found;
+  const { badge, count } = found;
+  const look = readLook(found, { line, ctx });
   const icon = found.icon ?? (shape === 'person' ? PERSON_ICON : undefined);
   const queue = shape === 'queue' ? readQueue({ found, id: id.value, label: label.value, line }, ctx) : undefined;
-  ctx.figure.nodes.push({ id: id.value, shape: form ?? shape, label: label.value, sub: sub?.type === 'text' ? sub.value : undefined, badge, icon, count, fill, stroke, tile: isTile || undefined, ...queue, parent: parentFor(id, ctx), line });
+  ctx.figure.nodes.push({ id: id.value, shape: form ?? shape, label: label.value, sub: sub?.type === 'text' ? sub.value : undefined, badge, icon, count, ...look, tile: isTile || undefined, ...queue, parent: parentFor(id, ctx), line });
 }
 
 // cost: time O(1), heap O(1), stack O(1)

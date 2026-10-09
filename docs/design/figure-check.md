@@ -73,17 +73,20 @@
 
 ### 요구사항
 
+시험 칸이 "검증 요구사항, 미완료"인 항목은 직접 확인하는 자동 시험이 아직 확인되지 않았다는 뜻이다.
+
 | 요구사항 | 검증 계획 |
 |---|---|
-| 검사 항목마다 실패하는 원본에서 그 항목 메시지를 낸다. | `test/check.test.js`의 `checkFigure_each_item_reports_its_code_for_a_scene_that_breaks_it`(1, 2, 3, 4, 5, 6, 12번), `buildFigure_moving_text_taller_than_a_short_figure_is_a_check_7_error`(7번), `buildFigure_check_9_aspect_warning_suggests_what_the_source_can_change`(9번), `buildFigure_content_still_wider_than_the_canvas_after_shrinking_warns_check_10`(10번). 11번을 포함한 나머지 항목은 일부러 실패하게 만든 원본으로 확인 |
-| 박자 이동의 글 상자가 글자, 아이콘, 알약, 카드 안쪽을 가리지 않고, 윤곽만 둘째 계획에서 덮이며, 예제 30개가 strict로 7번 경고 없이 만들어진다. 서로 다른 장면에서만 보이는 선 쌍은 5번과 2번이 견주지 않는다. | `test/edgecase-final.test.js`, `test/runtime-regressions-final.test.js`, `test/runtime-regressions-final-chip.test.js`, `test/chip.test.js` |
-| 큐 값이 0 미만이거나 `slots`를 넘으면 14번 경고를 내고, 0과 `slots`는 경고하지 않는다. | `test/queue.test.js`의 `buildFigure_warns_check_14_when_a_queue_goes_below_zero_or_over_its_slots_and_stays_quiet_at_the_bounds` |
-| `lost`, `when`, `wait`가 있는 흐름은 점이 하나도 그려지지 않아도 14번 오류가 없고, 없는 흐름은 오류다. | `test/lost-status-legs.test.js`의 `buildFigure_check_14_does_not_report_a_lost_flow_without_dots_and_still_reports_one_without_lost`(`lost`), `test/when-wait.test.js`의 `buildFigure_check_14_does_not_report_a_flow_with_when_or_wait_that_draws_no_dot_and_still_reports_one_without`(`when`, `wait`) |
-| 단계별 도형 상태 알약이 이름, 다른 도형, 선 라벨, 그룹 제목을 가리면 상태를 적은 단계 줄에 2번 오류를 낸다. | `test/lost-status-legs.test.js`의 `checkLabels_status_pill_over_an_edge_label_a_name_or_another_node_is_a_check_2_error_on_the_step_line` |
-| 14번이 단계 `set=`이 정한 시작 값의 글자 수와 큐 칸 수도 센다. | `test/value-keep.test.js`의 `buildFigure_check_14_counts_the_start_value_a_step_set_makes` |
-| 모든 예제가 오류 없이 검사를 통과한다. | 예제 전체에 `check` 실행 |
-| 오류가 있으면 그림 파일을 쓰지 않는다. | `test/cli.test.js`의 `main_render_with_an_error_writes_no_file_and_reports_the_line`. 실패 원본에 `render` 뒤 결과 파일 없음 확인 |
-| `--json` 출력이 한 줄에 메시지 하나다. | `test/cli.test.js`의 `main_json_prints_one_message_per_line_with_the_documented_fields`. 출력 줄마다 JSON으로 읽히는지 확인. 필드 여섯 개와 옛 필드가 없다는 것은 `test/contracts-final.test.js` |
+| 검사 항목마다 실패하는 원본에서 그 항목 메시지를 낸다. | 검증 요구사항, 미완료. 일부러 실패하게 만든 원본으로 항목을 사람이 확인한다 |
+| 박자 이동의 글 상자가 글자, 아이콘, 알약, 카드 안쪽을 가리지 않고, 윤곽만 둘째 계획에서 덮이며, 예제가 strict로 7번 경고 없이 만들어진다. 서로 다른 장면에서만 보이는 선 쌍은 5번과 2번이 견주지 않는다. | 예제의 strict 빌드는 `test/examples.test.js`. 나머지는 검증 요구사항, 미완료 |
+| 큐 값이 0 미만이거나 `slots`를 넘으면 14번 경고를 내고, 0과 `slots`는 경고하지 않는다. | `test/kinds.test.js`(K-queue) |
+| `lost`, `when`, `wait`가 있는 흐름은 점이 하나도 그려지지 않아도 14번 오류가 없고, 없는 흐름은 오류다. | 검증 요구사항, 미완료 |
+| 단계별 도형 상태 알약이 이름, 다른 도형, 선 라벨, 그룹 제목을 가리면 상태를 적은 단계 줄에 2번 오류를 낸다. | 검증 요구사항, 미완료 |
+| 14번이 단계 `set=`이 정한 시작 값의 글자 수와 큐 칸 수도 센다. | 검증 요구사항, 미완료 |
+| 모든 예제가 오류 없이 검사를 통과한다. | `test/examples.test.js`, 예제 전체에 `check` 실행 |
+| 오류가 있으면 그림 파일을 쓰지 않는다. | `test/cli.test.js`(L2) |
+| `--json` 출력이 한 줄에 메시지 하나이고 필드가 여섯 개다. | `test/cli.test.js`(L2) |
+| `check`는 파일을 쓰는 `render` 전용 선택 사항(`--html`, `--static`, `--out`, `--scene`)과 `--title`을 받지 않고 사용법 오류(종료 2)로 거절한다. | `test/cli.test.js`(L3) |
 
 ## 단점
 

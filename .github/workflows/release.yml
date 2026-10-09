@@ -12,8 +12,6 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    env:
-      CHROME_PATH: /usr/bin/google-chrome
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -37,11 +35,6 @@ jobs:
             exit 1
           fi
       - run: npm ci
-      # 재생기 시험은 실제 Chrome과 WebKit을 연다(test/chrome.js). 배포 전에 없으면 여기서 실패한다.
-      - name: Install Chrome and WebKit for the browser tests
-        run: |
-          npx --no-install playwright-core install --with-deps chrome webkit
-          "$CHROME_PATH" --version
       - run: npm test
       - run: npm run check
       - run: node src/cli.js check examples/*.dap docs/assets/*.dap --strict

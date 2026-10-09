@@ -12,9 +12,7 @@ user -> tui "input"
 tui -> engine "JSON-RPC"
 engine -> codex "app-server request"
 
-view main graph right
-
-scene "Chat" mode=once
+scene "Chat"
   user -> tui "question"
   show tui "why does this test fail?" tag="you"
   tui -> engine

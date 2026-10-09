@@ -17,19 +17,14 @@ chart load "초당 요청 수" area "예시 데이터. 0에서 시작하는 면�
   point x=24 read=300 write=90 batch=280
 }
 
-view main plot {
-  load
-}
+scene "하루 전체"
 
-scene "하루 전체" mode=static
-  wait 1s
-
-scene "계열 하나씩 겹쳐 보기" mode=once
+scene "계열 하나씩 겹쳐 보기"
   reveal load.read
   wait 1s
   reveal load.write
   wait 1s
   reveal load.batch
 
-scene "피크 시각" mode=once
+scene "피크 시각"
   light load x=20

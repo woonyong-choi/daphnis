@@ -2,7 +2,7 @@
 import { ratio } from '../format.js';
 import { BADGE_STYLE } from '../measure/decor.js';
 import { centerBaseline, escapeXml, roundCoord as r } from '../text.js';
-import { TITLE_INSET } from '../layout/titles.js';
+import { headBox } from '../layout/titles.js';
 import { values } from '../tokens.js';
 
 // cost: time O(k), heap O(out), stack O(1)
@@ -17,7 +17,7 @@ import { values } from '../tokens.js';
 export function drawDecor(decor, place, glyphs) {
   return decor.items
     .filter((item) => item.kind !== 'title')
-    .map((item) => (item.kind === 'icon' ? drawIcon(item, place) : drawPill(item, place, glyphs)))
+    .map((item) => (item.kind === 'icon' ? drawIcon(item, place) : drawBadge(item, place, glyphs)))
     .join('');
 }
 
@@ -49,13 +49,12 @@ function iconAt(iconData, { x, y, size, className }) {
  */
 export function drawGroupTab(g) {
   const size = values.size.group.title - values.space['4'];
-  // 선이 탭을 지나면 탭과 제목이 한 덩어리로 선 오른쪽으로 비킨다(layout/titles.js).
-  const shift = g.titleDx - TITLE_INSET - values.size.group.title;
-  return drawSymbol(g.iconData, { x: g.x + values.space['4'] + shift, y: g.y + values.space['2'], size });
+  // 탭은 제목 덩어리 사각형(layout/titles.js headBox: 선이 탭을 지나면 탭과 제목이 한 덩어리로 비킨다) 왼쪽 위에서 안쪽으로 들인다.
+  return drawSymbol(g.iconData, { x: headBox(g, g.titleDx).x + values.space['4'], y: g.y + values.space['2'], size });
 }
 
-// 글자 알약. 배지와 복제 개수가 같은 모양이다.
-function drawPill(item, { x, y }, glyphs) {
+// 글자 배지. 배지와 복제 개수가 같은 모양이다(선 라벨 알약과는 다른 역할이다: draw/connector.js).
+function drawBadge(item, { x, y }, glyphs) {
   glyphs.add(item.text, BADGE_STYLE.face);
   const [left, top] = [x + item.x, y + item.y];
   return `<g class="fl-badge"><rect x="${r(left)}" y="${r(top)}" width="${r(item.w)}" height="${r(item.h)}" rx="${r(item.h / 2)}" class="badge-pill"/><text x="${r(left + item.w / 2)}" y="${r(centerBaseline(top + item.h / 2, BADGE_STYLE.size))}" class="badge">${escapeXml(item.text)}</text></g>`;

@@ -124,12 +124,13 @@ function paintSegment(stage, seg, frame) {
   stage.painted.cards = {};
 }
 
-// 도형(논리 id)마다 보일 카드. 바뀐 도형만 다시 쓰고, 같은 도형이 여러 판에 있으면 모두 쓴다. 이름 묶음(.fl-head)은 카드가 비어 있어도 움직이지 않는다.
+// 도형(논리 id)마다 보일 카드. 바뀐 도형만 다시 쓰고, 같은 도형이 여러 판에 있으면 모두 쓴다. 카드 층이 있는 판만 쓰고, 카드 층이 있는 판이 하나도 없으면(머리만 그리는 순서 보기뿐) 건너뛴다.
+// 판 순서에 따라 첫 판이 카드 층이 없는 순서 보기일 수 있어 첫 번호만 보지 않는다.
 function paintCards(stage, cards) {
   for (const [id, indices] of stage.nodesById) {
-    if (!stage.cardCounts[indices[0]] || stage.painted.cards[id] === `${cards[id]}`) continue;
+    if (!indices.some((i) => stage.cardCounts[i]) || stage.painted.cards[id] === `${cards[id]}`) continue;
     stage.painted.cards[id] = `${cards[id]}`;
-    for (const i of indices) showCard(stage, i, cards[id]);
+    for (const i of indices) if (stage.cardCounts[i]) showCard(stage, i, cards[id]);
   }
 }
 

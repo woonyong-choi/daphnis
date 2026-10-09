@@ -7,7 +7,7 @@ box app "앱"
 box auth "인가 서버"
 external api "리소스 API"
 
-view flow sequence {
+view sequence {
   user app auth api
 }
 

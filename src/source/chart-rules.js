@@ -154,8 +154,6 @@ export function checkChartRows(figure, problems) {
   const labels = new Map();
   for (const row of chart.rows) {
     checkRowKeys(row, figure, problems);
-    // 쌓는 합계는 양수끼리, 음수끼리 따로 쌓이므로 한 쪽 합의 크기를 본다(빠진 값은 더하지 않는다).
-    if (['stacked', 'percent'].includes(chartType) && stackTotals(row, chart.series).some((total) => total >= MAX_VALUE)) problems.error(row.line, `stack total: ${RANGE_MESSAGE}`);
     // 표본(히스토그램, ECDF)은 같은 값이 여러 번 나올 수 있다(동률). 이름이 없는 행도 마찬가지다.
     if (['histogram', 'ecdf'].includes(chartType)) continue;
     const key = CHART_TYPES[chartType].numericRows ? `x=${row.values.x}` : row.label;
@@ -163,6 +161,27 @@ export function checkChartRows(figure, problems) {
     labels.set(key, row.line);
   }
   PREPARE_ROWS[chartType]?.(figure, problems);
+  checkRowValues(figure, problems);
+  // 값이 모두 0이거나 하나도 없어도 오류가 아니다. 0은 값이라 길이 0의 표식과 값 글자 0으로 그리고, 빠진 값은 표식 없이 축과 틀만 그린다(0으로 그리지 않는다).
+  // 로그 축은 위에서 0 이하를 막았고, 비율(퍼센트, 원, 도넛)은 합이 0이면 비율을 정하지 않고 그 뜻을 글로 알린다.
+  for (const link of chart.links) {
+    for (const name of [link.from, link.to]) if (!labels.has(name)) problems.error(link.line, unknownName('point', name, [...labels.keys()]));
+  }
+}
+
+// cost: time O(r·k), heap O(r·k), stack O(1)
+// vars: r = 행 수, k = 행의 값 수
+// basis: estimate
+/**
+ * 행 값의 규칙: 쌓는 합계와 절댓값 상한, 아주 작은 값, 음수, 로그 축의 0 이하 값, 막대 행 기준의 음수, 신뢰구간 순서(low ≤ 값 ≤ high).
+ * 원본 행과 `data` 행(checkChartRows)과 값에 묶인 차트가 받는 모든 프레임이 이 한 함수를 쓴다. 오류는 값이 있는 행의 줄에 쌓는다.
+ * @param options { combinations }. 쌓는 합계와 구간 순서는 여러 값이 함께 정하는 규칙이라 실제로 함께 나오는 값(원본 행, 실제 프레임)에서만 본다. 값 하나씩 바꿔 끼워 보는 어림 후보(combinations 거짓)에서는 뺀다
+ */
+export function checkRowValues(figure, problems, { combinations = true } = {}) {
+  const { chart, chartType } = figure;
+  // 쌓는 합계는 양수끼리, 음수끼리 따로 쌓이므로 한 쪽 합의 크기를 본다(빠진 값은 더하지 않는다).
+  if (combinations && ['stacked', 'percent'].includes(chartType)) for (const row of chart.rows) if (stackTotals(row, chart.series).some((total) => total >= MAX_VALUE)) problems.error(row.line, `stack total: ${RANGE_MESSAGE}`);
+  if (combinations && INTERVAL_TYPES.includes(chartType)) for (const row of chart.rows) for (const { id } of chart.series) checkIntervalOrder(row, id, problems);
   // 선 차트의 x는 값 축이 아니라 늘 linear다. 로그와 "모두 0" 검사에서 뺀다.
   const hasRule = hasRowRule(chart, chartType);
   const isRowRule = (k) => hasRule && k === 'rule';
@@ -178,11 +197,6 @@ export function checkChartRows(figure, problems) {
   const negativeRule = chart.rows.find((r) => hasRule && r.values.rule < 0);
   if (negativeRule) problems.error(negativeRule.line, 'a bar chart starts at 0, so a row rule cannot be negative');
   if (chart.scale === 'log' && numbers.some((v) => v <= 0)) problems.error(chart.rows.find((r) => Object.entries(r.values).some(([k, v]) => isValue(k) && v !== null && v <= 0)).line, 'log scale needs values above 0');
-  // 값이 모두 0이거나 하나도 없어도 오류가 아니다. 0은 값이라 길이 0의 표식과 값 글자 0으로 그리고, 빠진 값은 표식 없이 축과 틀만 그린다(0으로 그리지 않는다).
-  // 로그 축은 위에서 0 이하를 막았고, 비율(퍼센트, 원, 도넛)은 합이 0이면 비율을 정하지 않고 그 뜻을 글로 알린다.
-  for (const link of chart.links) {
-    for (const name of [link.from, link.to]) if (!labels.has(name)) problems.error(link.line, unknownName('point', name, [...labels.keys()]));
-  }
 }
 
 // cost: time O(k), heap O(1), stack O(1)
@@ -220,7 +234,7 @@ function checkRowKeys(row, figure, problems) {
     if (value === null && !isMissingSlot) problems.error(row.line, `"-" (missing) is only for the values of ${MISSING_TYPES.join(', ')} charts. Found ${key}=-`);
   }
   if (row.values.series !== undefined && !ids.includes(row.values.series)) problems.error(row.line, unknownName('series', row.values.series, ids));
-  if (INTERVAL_TYPES.includes(chartType)) for (const id of ids) checkInterval(row, id, problems);
+  if (INTERVAL_TYPES.includes(chartType)) for (const id of ids) checkIntervalKeys(row, id, problems);
   if (chartType === 'box') checkQuartiles(row, problems);
 }
 
@@ -247,13 +261,19 @@ function withInterval(id) {
   return [id, `${id}.low`, `${id}.high`];
 }
 
-// 신뢰구간: low와 high는 함께 적고, low ≤ 값 ≤ high다. 같은 값은 반올림한 실험 값에서 생기므로 허용한다.
-function checkInterval(row, id, problems) {
+// 신뢰구간의 꼴: low와 high는 함께 적고, 빠진 값에는 구간이 없다. 값이 묶여 바뀌어도 꼴은 변하지 않으므로 원본 행에서만 본다.
+function checkIntervalKeys(row, id, problems) {
   const [value, low, high] = [row.values[id], row.values[`${id}.low`], row.values[`${id}.high`]];
   if (low === undefined && high === undefined) return;
   if (low === undefined || high === undefined) problems.error(row.line, `write both ${id}.low and ${id}.high, or neither`);
   else if (value === null) problems.error(row.line, `a missing ${id} value cannot have an interval`);
-  else if (!(low <= value && value <= high)) problems.error(row.line, `${id} needs ${id}.low ≤ ${id} ≤ ${id}.high. Found ${low}, ${value}, ${high}`);
+}
+
+// 신뢰구간의 순서: low ≤ 값 ≤ high다. 같은 값은 반올림한 실험 값에서 생기므로 허용한다. 꼴이 틀린 구간은 checkIntervalKeys가 알리므로 숫자 셋이 모두 있을 때만 본다.
+function checkIntervalOrder(row, id, problems) {
+  const [value, low, high] = [row.values[id], row.values[`${id}.low`], row.values[`${id}.high`]];
+  if ([value, low, high].some((v) => typeof v !== 'number')) return;
+  if (!(low <= value && value <= high)) problems.error(row.line, `${id} needs ${id}.low ≤ ${id} ≤ ${id}.high. Found ${low}, ${value}, ${high}`);
 }
 
 // cost: time O(1), heap O(1), stack O(1)

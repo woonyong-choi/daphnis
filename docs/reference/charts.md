@@ -36,11 +36,7 @@ chart sales "분기별 매출" bar "예시 데이터. 점선은 목표 100" {
   row "3분기" now=121 prev=99
 }
 
-view main plot {
-  sales
-}
-
-scene "작년에서 올해로" mode=once
+scene "작년에서 올해로"
   reveal sales.prev
   wait 1s
   reveal sales.now
@@ -49,7 +45,7 @@ scene "작년에서 올해로" mode=once
 
 ![분기별 매출](charts-minimal.svg)<!-- dap -->
 
-계열은 `series 이름 "표시 이름" [role=main|compare|reference]`로 선언하고, 값 축 제목에는 괄호 단위를 붙입니다. 카드 제목과 부제는 카드 줄(`chart` 줄)에 적고, `plot` 보기는 카드 하나를 문서 폭으로 보입니다. 보기를 적지 않고 카드 하나만 있으면 그 카드의 `plot` 보기가 기본으로 생깁니다.
+계열은 `series 이름 "표시 이름" [role=main|compare|reference]`로 선언하고, 값 축 제목에는 괄호 단위를 붙입니다. 카드 제목과 부제는 카드 줄(`chart` 줄)에 적고, `plot` 보기는 카드 하나를 문서 폭으로 보입니다. 어느 선에도 닿지 않는 차트는 보기를 적지 않아도 자기 `plot` 보기가 기본으로 생깁니다. 라벨을 붙이거나 순서를 정하려면 `view plot "라벨" {`로 적습니다.
 
 ## 문법
 
@@ -79,9 +75,6 @@ chart latency "응답 지연 분포" histogram {
   sample 150
   sample 300
 }
-view main plot {
-  latency
-}
 scene "가장 많은 구간" mode=static
   light latency x=0
 ```
@@ -100,9 +93,6 @@ chart cost "응답 시간 개선" waterfall {
   row "캐시 적용" value=-50
   total "최종 응답"
 }
-view main plot {
-  cost
-}
 scene "캐시 효과" mode=static
   light cost "캐시 적용"
 ```
@@ -119,6 +109,8 @@ scene "캐시 효과" mode=static
 | 행이 없음 | `a chart needs at least one row` | `syntax` | 종류의 행 줄을 적습니다 |
 | 없는 행을 밝힘 | `light target "q" is not in the chart` | `syntax` | 차트에 있는 행 이름을 적습니다 |
 | 숫자가 아닌 값에 묶음 | `chart "c" reads "v", which holds "none" at the start. A chart value is a number` | `value-type` | 값의 시작 값을 숫자로 둡니다 |
+| 묶은 값이 장면 중에 차트의 값 범위를 어김 | `chart "c" reads v=-5: values cannot be negative` | `value-type` | 같은 숫자를 행에 적어도 거절되는 값이면 묶어도 거절됩니다. 값이 범위 안에 머물게 합니다. 오류는 묶은 행의 줄에 붙습니다 |
+| `data` 파일을 읽지 못함 | `cannot read data "a.json" at "/rows": ENOENT` 또는 `not valid JSON at position 12` | `syntax` | 경로와 JSON을 고칩니다. 메시지에 파일의 내용은 싣지 않습니다 |
 | 값 축 제목에 단위 없음 | `the value axis title needs a unit in parentheses, such as x "latency(ms)"` | `syntax` | 제목에 `(단위)`를 붙입니다(경고, `--strict`에서 실패) |
 
 `code`는 `daphnis check figure.dap --json`으로 봅니다.

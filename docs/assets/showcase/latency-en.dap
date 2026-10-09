@@ -13,10 +13,6 @@ chart latency "p95 latency per endpoint" dumbbell "Example data. The horizontal 
   row "POST /orders" base=420 cached=410
 }
 
-view main plot {
-  latency
-}
-
 scene "Before and after" mode=static
   reveal latency.base
   reveal latency.cached

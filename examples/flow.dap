@@ -11,7 +11,7 @@ decision stocked "재고 있음?"
 box lock "재고 잠금"
 store db "재고 DB" icon=db
 box pay "결제" icon=server
-box notice "대기 안내" fill=yellow stroke=yellow
+box notice "대기 안내" tone=yellow appearance=filled
 
 value stock "재고" on=db from=120
 value shown "앱에 보이는 재고" on=app ref=stock
@@ -32,14 +32,13 @@ api -> pay
 web -> notice quiet
 app -> notice quiet
 
-view main graph down
+view graph down
 
-scene "구조" mode=static
-  wait 1s
+scene "구조"
 
-scene "두 채널의 주문" mode=once
+scene "두 채널의 주문"
   web -> api "웹 주문" time=800ms & app -> api "앱 주문" time=800ms
-  show api "검증 완료" tag="접수" tone=blue meta="2건" mark="OK" mono card=blue
+  show api "검증 완료" tag="접수" tone=blue appearance=filled meta="2건" mark="OK" mono
   api -> stocked time=500ms
   stocked -> lock time=500ms
   lock -> db "차감" time=700ms
@@ -51,18 +50,18 @@ scene "동시 주문" mode=loop speed=1.5 for=8s
   track web, app, partner -> api -> stocked -> lock -> db "주문" every=2s time=2400ms
   track partner -> api -> pay at=1s every=3s time=2s tone=red lost=60%
 
-scene "재고 확인 뒤 차감" mode=once keep="stock" set="holder=none"
+scene "재고 확인 뒤 차감" keep="stock" set="holder=none"
   web -> api "주문" time=700ms
   api -> stocked time=500ms
   stocked -> lock time=500ms when="stock>0" set="holder=web"
   lock -> db "차감" time=700ms set="stock-1, holder=none"
 
-scene "품절" mode=once set="stock=0"
+scene "품절" set="stock=0"
   web -> api "주문" time=700ms
   api -> stocked time=500ms
   stocked -> notice "품절 안내" time=600ms
 
-scene "같은 순간의 잠금" mode=once for=8s status="lock=wait, notice=warn"
+scene "같은 순간의 잠금" for=8s status="lock=wait, notice=warn"
   track web -> api -> stocked -> lock at=0s time=2400ms wait="holder='none'" reserve="holder=web" timeout=3s else=notice
   track app -> api -> stocked -> lock at=0s time=2400ms wait="holder='none'" reserve="holder=app" timeout=3s else=notice
   track web -> api -> stocked -> lock at=5s time=2400ms when="holder='web'" set="holder=none"

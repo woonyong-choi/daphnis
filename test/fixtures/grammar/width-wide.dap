@@ -1,7 +1,0 @@
-daphnis 2
-width wide
-title "넓은 캔버스"
-
-box a "A"
-box b "B"
-a -> b

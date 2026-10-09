@@ -1,6 +1,6 @@
 // 브라우저에서 돈다. html.js가 HTML 안에 그대로 넣는다(src/player/ 파일을 이어 붙인다).
 // 시간표를 그대로 그린다. 상태를 다시 계산하지 않는다(docs/architecture.md 불변 조건).
-// 이 파일은 재생기 본체다: 시작, 시계, 장면 들어가기. 역할별로 파일이 나뉜다: 시각마다의 모습(sample.js), 탭(controls.js), 그림 그리기(stage.js, values.js), 이동 곡선(curve.js), 도구 막대와 전체 화면과 확대(view.js), HTML 내려받기(export.js).
+// 이 파일은 재생기 본체다: 시작, 시계, 장면 들어가기. 역할별로 파일이 나뉜다: 시각마다의 모습(sample.js), 탭(controls.js), 그림 그리기(stage.js, values.js), 이동 곡선(curve.js), 도구 막대와 전체 화면과 확대(view.js), 문법 복사와 HTML 다운로드(export.js).
 // 시계는 장면에 들어선 뒤 흐른 표시 시각 하나(clock.elapsed)다. 프레임 사이에 시간을 자르거나 버리지 않고 시작 기준 시각에서 바로 재므로 어긋남이 쌓이지 않는다.
 
 const REDUCED_MOTION = matchMedia('(prefers-reduced-motion: reduce)');
@@ -16,7 +16,7 @@ function figurePlay(root, data) {
   figureView(root, data, bindResponsiveScene(root, player));
   document.addEventListener('visibilitychange', () => syncClock(player));
   REDUCED_MOTION.addEventListener('change', () => REDUCED_MOTION.matches && settleScene(player));
-  // 시간 흐름이 없는 그림은 다 자란 모양 그대로 움직이지 않고 탭도 없다(확대와 전체 화면은 쓸 수 있다). 장면이 하나뿐이어도 탭이 없다.
+  // 시간 흐름이 없는 그림은 다 자란 모양 그대로 움직이지 않고 탭도 없다(도구 막대는 쓸 수 있다). 장면이 하나뿐이어도 탭이 없다.
   root.querySelector('.fl-foot').hidden = !data.segs.length || player.scenes.length < 2;
   if (data.segs.length) enterScene(player, 0);
 }

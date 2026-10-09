@@ -21,7 +21,7 @@ table order_items "order_items" {
   product_id bigint fk=products.id required
 }
 
-view main graph down
+view graph down
 
 scene "외래 키" mode=static
   light orders.user_id order_items.order_id order_items.product_id

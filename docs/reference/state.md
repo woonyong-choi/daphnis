@@ -21,13 +21,13 @@ running -> done "성공"
 running -> failed "오류"
 failed -> queued "재시도" dashed
 
-view main graph down
+view graph down
 
-scene "정상" mode=once
+scene "정상"
   queued -> running time=700ms
   running -> done time=700ms
 
-scene "재시도" mode=once
+scene "재시도"
   queued -> running time=700ms
   running -> failed time=700ms
   failed -> queued time=700ms

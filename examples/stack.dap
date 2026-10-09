@@ -21,19 +21,19 @@ code -> foo.arg "인자 n" no=1
 foo.ret -> code "return" no=2
 foo.saved -> caller.msaved "rbp 복원" no=3
 
-view main graph down
+view graph down
 
 scene "프레임 구조" mode=static
   light foo caller
 
-scene "호출" mode=once
+scene "호출"
   code -> foo.arg time=700ms set="depth+1"
   light foo.arg
   light foo.ret
   light foo.saved
   light foo.local
 
-scene "반환" mode=once keep="depth"
+scene "반환" keep="depth"
   light foo.local
   foo.saved -> caller.msaved time=700ms
   foo.ret -> code time=700ms set="depth-1"

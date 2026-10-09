@@ -2,13 +2,15 @@
 import { FIGURE_PAD } from '../canvas.js';
 import { groupTitleWidth, hasPill, isOnLinePill, sizePill } from '../measure/sizes.js';
 import { values } from '../tokens.js';
+import { isInnerEdge } from './cell-ports.js';
 import { ROOT } from './model.js';
 import { isBodyShape, outerBox, spreadBodyPorts } from './ports.js';
 
 const SPACE = values.space;
 const SIZE = values.size;
 const ELK_DIRECTION = { right: 'RIGHT', down: 'DOWN' };
-const SINGLE_LAYER_OPTIONS = Object.freeze({ 'elk.layered.layering.strategy': 'COFFMAN_GRAHAM', 'elk.layered.layering.coffmanGraham.layerBound': '1', 'elk.layered.nodePlacement.strategy': 'SIMPLE' });
+// 한 층에 하나씩 놓는 층 나누기는 같은 조건의 형제 순서를 정하지 못하므로, 자식 순서(order.js)를 분할 번호로 줘 위에서 아래로 그 순서를 지키게 한다.
+const SINGLE_LAYER_OPTIONS = Object.freeze({ 'elk.layered.layering.strategy': 'COFFMAN_GRAHAM', 'elk.layered.layering.coffmanGraham.layerBound': '1', 'elk.layered.nodePlacement.strategy': 'SIMPLE', 'elk.partitioning.activate': 'true' });
 // 라벨을 선 위 가운데에 얹는다. 라벨마다 주는 elkjs 선택 사항이다.
 const LABEL_OPTIONS = { 'elk.edgeLabels.inline': 'true', 'elk.edgeLabels.placement': 'CENTER' };
 
@@ -21,7 +23,8 @@ const ROOM_OPTIONS = { 'elk.edgeLabels.inline': 'false', 'elk.edgeLabels.placeme
 /** 모형을 elkjs 그래프로 바꾼다. 그룹이 안쪽 그래프이고 선 조각은 그룹마다 모인다. */
 export function toElk(model, figure) {
   const byContainer = edgesByContainer(model, figure);
-  const ctx = { model, figure, byContainer, alignRight: figure.aspect !== undefined && figure.groups.length > 0, isSafe: figure.safeLayout === true };
+  const selfLoops = new Set(model.edges.filter((e) => e.from === e.to && !isInnerEdge(e)).map((e) => e.from));
+  const ctx = { model, figure, byContainer, selfLoops, alignRight: figure.aspect !== undefined && figure.groups.length > 0, isSafe: figure.safeLayout === true };
   return containerToElk(model.containers.get(ROOT), ctx);
 }
 
@@ -76,21 +79,28 @@ function alignOf(parent, ctx) {
 // cost: time O(c + p), heap O(c + p), stack O(d)
 // vars: c = 자식 수, p = 연결점 수, d = 그룹 깊이
 // basis: estimate
-function containerToElk(c, ctx) {
-  const children = c.children.map((id) => (ctx.model.containers.has(id) ? containerToElk(ctx.model.containers.get(id), ctx) : nodeToElk(ctx.model.nodes.get(id), ctx)));
+function containerToElk(c, ctx, partition = {}) {
+  const parts = isSingleLayer(c, ctx) ? (i) => ({ 'elk.partitioning.partition': String(i) }) : () => ({});
+  const children = c.children.map((id, i) => (ctx.model.containers.has(id) ? containerToElk(ctx.model.containers.get(id), ctx, parts(i)) : nodeToElk(ctx.model.nodes.get(id), ctx, parts(i))));
   return {
     id: c.id,
     children,
     edges: ctx.byContainer.get(c.id),
     ports: c.ports.map((p) => ({ id: p.id, width: 0, height: 0, layoutOptions: { 'elk.port.side': p.side } })),
-    layoutOptions: containerOptions(c, ctx),
+    layoutOptions: { ...containerOptions(c, ctx), ...partition },
   };
+}
+
+// 한 층에 하나씩 놓는 후보에서 이 그룹(또는 가장 바깥 층)의 자식을 쌓는지. 안전 배치는 처음 배치가 실패한 뒤의 대비라 그룹을 풀지 않는다.
+function isSingleLayer(c, ctx) {
+  if (c.id === ROOT) return ctx.figure.oneNodePerLayer === true;
+  return !ctx.isSafe && ctx.figure.compactGroups === true && c.direction === 'down';
 }
 
 // cost: time O(p), heap O(p), stack O(1)
 // vars: p = 도형의 연결점 수
 // basis: estimate
-function nodeToElk(n, ctx) {
+function nodeToElk(n, ctx, partition = {}) {
   const outer = outerBox(n.size);
   const ports = n.ports.map((p) => ({ id: p.id, width: 0, height: 0, ...(p.position ?? {}), layoutOptions: { 'elk.port.side': p.side } }));
   // 사람과 원통: 첫 배치는 순서를 맡기고(FIXED_SIDE), 둘째 배치는 그 순서로 몸통 범위에 고정한다(FIXED_POS).
@@ -101,8 +111,15 @@ function nodeToElk(n, ctx) {
     width: outer.w,
     height: outer.h,
     ports,
-    layoutOptions: { 'elk.portConstraints': portConstraint(ports, isFirstPass), ...alignOf(n.parent, ctx) },
+    layoutOptions: { 'elk.portConstraints': portConstraint(ports, isFirstPass), ...alignOf(n.parent, ctx), ...partition },
+    ...selfLoopSpacing(n, ctx),
   };
+}
+
+// 연결점이 없는 도형의 자기 선은 elkjs가 기본 간격(10)으로 돌려 그려 화살촉만 하다. 도형에서 떨어진 거리를 `space.12`(화살촉 길이의 세 배 이상)로 넓혀 고리로 읽히게 한다.
+// elkjs는 이 간격을 도형의 layoutOptions가 아니라 도형별 간격(individualSpacings)에서만 읽는다.
+function selfLoopSpacing(n, ctx) {
+  return ctx.selfLoops.has(n.id) && !n.ports.length ? { individualSpacings: { 'elk.spacing.nodeSelfLoop': String(SPACE['12']) } } : {};
 }
 
 // cost: time O(p), heap O(1), stack O(1)

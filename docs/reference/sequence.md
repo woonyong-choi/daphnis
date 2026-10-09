@@ -1,6 +1,6 @@
 # 순서 그림
 
-순서 그림은 같은 카드를 순서 보기(`view ... sequence`)로 보이는 그림입니다. 참여자 사이에 메시지가 오가는 순서를 그립니다. 인증 절차, API 호출 순서처럼 위에서 아래로 읽는 그림에 씁니다.
+순서 그림은 같은 카드를 순서 보기(`view sequence`)로 보이는 그림입니다. 참여자 사이에 메시지가 오가는 순서를 그립니다. 인증 절차, API 호출 순서처럼 위에서 아래로 읽는 그림에 씁니다.
 
 ## 최소 예제
 
@@ -12,11 +12,11 @@ person user "사용자"
 box app "앱"
 box server "서버"
 
-view calls sequence {
+view sequence {
   user app server
 }
 
-scene "요청과 응답" mode=once
+scene "요청과 응답"
   user -> app "로그인 누름"
   app -> server "POST /login"
   note server "비밀번호 해시를 비교합니다"
@@ -48,8 +48,9 @@ scene "요청과 응답" mode=once
 |---|---|---|---|
 | 메시지 글 없음 | `a sequence message needs text: a -> b "message"` | `syntax` | 따옴표 글을 붙입니다 |
 | 메시지와 관계없는 참여자의 메모 | `a note points at "a" or "b", the participants of the message above` | `syntax` | 바로 앞 메시지의 참여자를 가리킵니다 |
-| 참여자 순서가 처음 보내는 순서와 다름 | `declare participants in the order they first send: a, b` | `syntax` | 보기 블록의 순서를 바꿉니다 |
+| 참여자 순서가 처음 보내는 순서와 다름 | `declare participants in the order they first send: a, b` | `syntax` | 보기 블록의 순서를 바꿉니다(경고, `--strict`에서 실패. 경고는 순서가 처음 어긋난 참여자를 적은 보기 블록의 줄에 붙습니다) |
 | 선언하지 않은 참여자 | `unknown card "c". Did you mean "a"? Declared: a, b` | `syntax` | 이름을 고치거나 선언합니다 |
+| 순서 보기에만 있는 카드에 값 `on=`, `show`, `clear` | `show "s" needs a card, and no graph view shows "s". A sequence view draws only the head. Put "s" in a graph view` | `syntax` | 같은 카드를 `view graph` 블록에도 넣습니다 |
 | 순서 보기에 없는 카드에 `activate` | `"activate api" needs "api" in a sequence view` | `syntax` | 카드를 순서 보기 블록에 넣습니다 |
 | 메모가 화살표나 라벨을 가림 | 번호 12 검사의 메시지 | `check-12` | 메모 글을 줄이거나 자리를 옮깁니다 |
 

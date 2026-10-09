@@ -1,7 +1,7 @@
 // 산점도: 같은 크기 점, 이름 글자, link 화살표. 계열이 있으면 계열 색이다. 신뢰구간은 받지 않는다.
 // 계열이 둘 이상이면 점 이름 앞에 그 점 계열의 번호 키(`3 검색 전`)를 붙인다. 번호는 계열 목록 순서이고 범례의 번호와 같다.
 import { centerBaseline, renderRich, roundCoord as r } from '../text.js';
-import { headReach } from '../draw/arrow.js';
+import { CHART_ARROW, headReach, roleArrow } from '../draw/arrow.js';
 import { values } from '../tokens.js';
 import { drawRules } from './axis.js';
 import { inkGroup } from './labels.js';
@@ -14,6 +14,7 @@ import { NAME_STEP, placeNames } from './scatter-names.js';
 
 // 화살 끝을 당길 때 한 번에 움직이는 거리(px)
 const TIP_STEP = 1;
+const ARROW = roleArrow(CHART_ARROW.scatter);
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -50,7 +51,7 @@ function linkArrow(ctx, link) {
   const { cap } = headReach(values.border.strong);
   const [x1, y1, x2, y2] = [a.x + dir.ux * gap, a.y + dir.uy * gap, endAt(tip).x - dir.ux * cap, endAt(tip).y - dir.uy * cap];
   const series = seriesOf(chart, b.p);
-  return `<g class="cr-${chart.rows.indexOf(a.p)}"><g class="cs-${series}"><line x1="${r(x1)}" y1="${r(y1)}" x2="${r(x2)}" y2="${r(y2)}" class="chart-link pop" marker-end="url(#fl-arrow)"/></g></g>`;
+  return `<g class="cr-${chart.rows.indexOf(a.p)}"><g class="cs-${series}"><line x1="${r(x1)}" y1="${r(y1)}" x2="${r(x2)}" y2="${r(y2)}" class="chart-link ${ARROW.cls} pop"${ARROW.end}/></g></g>`;
 }
 
 // cost: time O(n), heap O(n), stack O(1)

@@ -14,14 +14,9 @@ chart gap "기존 대비 전환율 차이" difference "예시 데이터. 점은 
   row "알림 추천" diff=0 diff.low=0 diff.high=0
 }
 
-view main plot {
-  gap
-}
+scene "전체 차이"
 
-scene "전체 차이" mode=static
-  wait 1s
-
-scene "하나씩 확인" mode=once
+scene "하나씩 확인"
   light gap "홈 추천"
   wait 1s
   light gap "신규 가입자"

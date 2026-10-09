@@ -18,8 +18,8 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 ### 기능이 예제에 있는지 찾기
 
 1. 아래 표에서 기능의 줄을 찾는다.
-2. 예제 열의 원본(`examples/*.dap`)을 연다. 갤러리(`npm run catalog`가 `.local/examples/index.html`로 만든다)는 모든 예제의 미리보기, 재생 화면, SVG, 원본을 한 쪽에 모은다.
-3. 예제가 그 기능을 줄 번호와 함께 쓰는지는 `scripts/lib/catalog-coverage.mjs`가 원본 낱말을 읽어 알려 주고, `test/demo-v2.test.js`가 표의 기능마다 쓰이는지 확인한다.
+2. 예제 열의 원본(`examples/*.dap`)을 연다. 카탈로그(`npm run catalog`가 `.local/examples/index.html`로 만든다)는 모든 예제의 첫 장면 정지 이미지 미리보기와 재생 화면, SVG, 원본 링크를 한 쪽에 모으고 iframe을 쓰지 않는다. `daphnis gallery`가 쓰는 목록 쪽은 재생기를 iframe으로 모으므로 둘은 다른 출력이다.
+3. 예제가 그 기능을 줄 번호와 함께 쓰는지는 `scripts/lib/catalog-coverage.mjs`가 원본 낱말을 읽어 알려 준다.
 
 ### 지원 범위를 넘는 요청
 
@@ -30,31 +30,32 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 
 ### 지원하는 표현
 
-모든 예제는 첫 줄이 `daphnis 2`이고, 장면마다 `mode`를 적는다. 첫 장면은 정지(`static`)이고 움직임은 둘째 장면 이후의 `once`와 `loop` 탭에 둔다. 예제 30개는 차트 종류마다 하나(16개), 개발 그림 열세 가지와 통합 하나(14개)다. 같은 표현의 모양만 바꾼 변형 예제는 두지 않는다.
+모든 예제는 첫 줄이 `daphnis 2`이다. `mode`는 줄이 없는 장면은 정지(`static`), 줄이 있는 장면은 한 번(`once`)이 기본이라, 필요할 때만(`loop`, 줄이 있는 정지 장면) 적는다. 첫 장면은 정지이고 움직임은 둘째 장면 이후에 둔다. 보기는 기본 보기로 충분하면 적지 않고, 방향(`down`)이나 라벨이 필요하거나 카드를 나눠야 할 때만 적는다. 예제 30개는 차트 종류마다 하나(16개), 개발 그림 열세 가지와 통합 하나(14개)다. 같은 표현의 모양만 바꾼 변형 예제는 두지 않는다.
 
 | 표현 | 문법 | 예제 | 확인 |
 |---|---|---|---|
-| 구성도: 사용자, 외부 시스템, 저장소, 중첩 그룹, 아이콘, 배지, 복제 개수, 타일, 번호 선, 등록한 아이콘 세트, 조용한 선 | `person`, `external`, `store`, `group`, `icons`, `icon=`, `badge=`, `count=`, `shape=tile`, `no=`, `quiet` | `architecture` | 문법과 사용은 `test/demo-v2.test.js`, 배치는 `test/layout.test.js`와 `test/icons.test.js` |
-| 흐름: 동시 이동, 흐름 줄, 구간별 시간, 손실, 갈림길, 카드 바꾸기 | `&`, `track`, `legs`, `lost`, `decision`, `show`, `clear`, `light` | `flow`, `architecture` | `test/demo-v2.test.js`, 시간표는 `test/v2-golden.test.js`의 알고리즘 기준선 |
-| 값: 증감, 대입, 참조, 읽기, 장면 사이 유지와 재설정 | `value`, `on`, `set=`, `ref=`, `:=`, `keep=` | `flow`, `metric`, `donut`, `stack`, `pointer` | `test/demo-v2.test.js`, `test/v2-golden.test.js` |
-| 조건과 대기: 조건, 기다림, 시간 초과, 대체 경로, 의도한 막힘, 원자적 예약 | `when=`, `wait=`, `timeout=`, `else=`, `stuck`, `reserve=` | `flow`, `queue` | `test/demo-v2.test.js`, `test/v2-golden.test.js` |
-| 큐: 용량, 채움, 역압, 보관함 | `queue slots= from=` | `queue`, `architecture`, `sequence` | `test/demo-v2.test.js` |
-| 장면별 상태 알약 | `status=` | `architecture`, `flow`, `queue` | `test/demo-v2.test.js` |
-| 순서 보기: 메시지, 응답, 자기 호출, 메모, 활성 구간, 생성과 소멸, 네 구획(`alt`, `loop`, `par`, `opt`) | `view ... sequence`, `fragment`, `branch`, `note`, `activate`, `create`, `destroy` | `sequence` | `test/demo-v2.test.js`, 구획 계약은 `test/sequence-fragments.test.js`, `test/sequence-life.test.js` |
-| 상태: 시작, 끝, 자기 전이, 그룹, 점선 전이 | `state`, `start`, `final`, `group` | `state` | `test/demo-v2.test.js` |
-| 스키마: 키, 유일, NULL 허용, 외래 키(같은 테이블의 두 열을 잇는 자기 참조 포함), 삭제 정책, 예시 행 | `table`, `pk`, `unique`, `nullable`, `required`, `fk=`, `ondelete=`, `show` | `schema` | `test/demo-v2.test.js`, 제약 모순은 `test/data-constraints.test.js` |
-| API 카드: 메서드와 경로, `https://` 주소, 칸 사이 연결 | `api` | `api`, `integration` | `test/demo-v2.test.js` |
-| 클래스: 세 구획, 가시성, 정적, 추상, 여섯 관계, 다중성, 그룹 | `class`, `interface`, `field`, `method`, `relation=`, `from=`, `to=` | `class` | `test/demo-v2.test.js`, 기호는 `test/class.test.js` |
-| 칸 격자: 비트 필드, 합친 칸, 생략한 칸, 칸에서 칸으로 가는 선 | `grid`, `item`, `gap` | `memory`, `stack`, `pointer` | `test/demo-v2.test.js`, 크기는 `test/grid-scale.test.js` |
-| 추적: 구간, 레인, 실제 시간 축, 밀리초와 마이크로초 | `trace`, `span`, `view ... time`, `unit=` | `trace`, `integration` | `test/demo-v2.test.js`, `test/v2-document.test.js` |
-| 여러 보기가 같은 사건을 공유 | 한 문서의 `view` 여럿 | `integration`, `trace`, `metric`, `donut` | `test/v2-document.test.js`, `test/demo-v2.test.js` |
-| 차트 열여섯 종류 | `chart id "제목" 종류 {` | 종류마다 `bar`, `stacked`, `percent`, `dumbbell`, `difference`, `line`, `step`, `area`, `scatter`, `histogram`, `box`, `ecdf`, `heatmap`, `donut`, `pie`, `waterfall` | 해석은 `test/demo-v2.test.js`, 그리기는 `test/chart-v2-*.test.js` |
-| 계열 N개, 색 수(지금 일곱)를 넘는 구분 | `series` | `percent`(9), `pie`(9), `line`(4), `ecdf`(3) | `test/chart-v2-geometry.test.js`, `test/chart-palette.test.js` |
-| 기대값 계열, 신뢰구간, 행 기준선, 공통 기준선 | `role=reference`, `.low`, `.high`, `rule` | `bar`, `line`, `step`, `dumbbell`, `difference` | `test/chart-v2-geometry.test.js` |
-| 빠진 값(`-`)과 0의 구분, 모두 0이거나 모두 빠진 차트 | `-`, `missing` | `bar`, `stacked`, `percent`, `line`, `step`, `ecdf` | `test/chart-v2-data.test.js`. 히스토그램, 워터폴, 상자의 빠진 값은 예제가 쓰지 않고 `test/edgecase-final.test.js`가 확인한다([차트](charts.md#종류와-행-줄)). 모두 0과 모두 빠짐이 오류가 아니라는 규칙에 대응하는 시험은 아직 확인되지 않았다 |
-| 값에 묶은 차트와 바뀐 표식 강조 | 행의 `계열=값이름` | `donut`, `metric`, `integration` | `test/chart-v2-frames.test.js`, `test/v2-document.test.js` |
-| 차트 값을 JSON에서 읽기 | `data "경로" at "/포인터"` | `histogram` | `test/demo-v2.test.js` |
-| 장면 재생 방식과 배속 | `mode=static\|once\|loop`, `speed=` | 모든 예제, `flow`(`speed=1.5`) | `test/v2-render.test.js` |
+| 구성도: 사용자, 외부 시스템, 저장소, 중첩 그룹, 아이콘, 배지, 복제 개수, 타일, 번호 선, 등록한 아이콘 세트, 조용한 선 | `person`, `external`, `store`, `group`, `icons`, `icon=`, `badge=`, `count=`, `shape=tile`, `no=`, `quiet` | `architecture` | `test/kinds.test.js`(K-arch), `test/escaping.test.js`(사용자 아이콘), `test/examples.test.js` |
+| 색: 한 낱말 색과 표현 방식 | `tone=`, `appearance=plain\|filled\|outline`(도형, 그룹, `show`) | `architecture`, `flow` | `test/authoring.test.js`, `test/examples.test.js` |
+| 흐름: 동시 이동, 흐름 줄, 구간별 시간, 손실, 갈림길, 카드 바꾸기 | `&`, `track`, `legs`, `lost`, `decision`, `show`, `clear`, `light` | `flow`, `architecture` | `test/values.test.js`, `test/examples.test.js` |
+| 값: 증감, 대입, 참조, 읽기, 장면 사이 유지와 재설정 | `value`, `on`, `set=`, `ref=`, `:=`, `keep=` | `flow`, `metric`, `donut`, `stack`, `pointer` | `test/values.test.js`, `test/examples.test.js` |
+| 조건과 대기: 조건, 기다림, 시간 초과, 대체 경로, 의도한 막힘, 원자적 예약 | `when=`, `wait=`, `timeout=`, `else=`, `stuck`, `reserve=` | `flow`, `queue` | `test/values.test.js`, `test/examples.test.js` |
+| 큐: 용량, 채움, 역압, 보관함 | `queue slots= from=` | `queue`, `architecture`, `sequence` | `test/kinds.test.js`(K-queue) |
+| 장면별 상태 알약 | `status=` | `architecture`, `flow`, `queue` | `test/examples.test.js`. 알약 자체를 직접 확인하는 시험은 확인되지 않았다(검증 요구사항, 미완료) |
+| 순서 보기: 메시지, 응답, 자기 호출, 메모, 활성 구간, 생성과 소멸, 네 구획(`alt`, `loop`, `par`, `opt`) | `view sequence`, `fragment`, `branch`, `note`, `activate`, `create`, `destroy` | `sequence` | `test/kinds.test.js`(K-sequence), `test/cards.test.js` |
+| 상태: 시작, 끝, 자기 전이, 그룹, 점선 전이 | `state`, `start`, `final`, `group` | `state` | `test/kinds.test.js`(K-state) |
+| 스키마: 키, 유일, NULL 허용, 외래 키(같은 테이블의 두 열을 잇는 자기 참조 포함), 삭제 정책, 예시 행 | `table`, `pk`, `unique`, `nullable`, `required`, `fk=`, `ondelete=`, `show` | `schema` | `test/cards.test.js`(S4), `test/examples.test.js`. 제약 모순은 직접 확인하는 시험이 확인되지 않았다(검증 요구사항, 미완료) |
+| API 카드: 메서드와 경로, `https://` 주소, 칸 사이 연결 | `api` | `api`, `integration` | `test/cards.test.js`(S1), `test/examples.test.js` |
+| 클래스: 세 구획, 가시성, 정적, 추상, 여섯 관계, 다중성, 그룹 | `class`, `interface`, `field`, `method`, `relation=`, `from=`, `to=` | `class` | `test/kinds.test.js`(K-class) |
+| 칸 격자: 비트 필드, 합친 칸, 생략한 칸, 칸에서 칸으로 가는 선 | `grid`, `item`, `gap` | `memory`, `stack`, `pointer` | `test/kinds.test.js`(K-grid), `test/cards.test.js`(S2, S3) |
+| 추적: 구간, 레인, 실제 시간 축, 밀리초와 마이크로초 | `trace`, `span`, `view time`, `unit=` | `trace`, `integration` | `test/kinds.test.js`(K-trace) |
+| 여러 보기가 같은 사건을 공유, 보기를 적지 않은 카드의 기본 보기 | 한 문서의 `view` 여럿, 보기 줄 없음 | `integration`, `trace`, `metric`, `donut` | `test/cards.test.js`(S5, S9, S10), `test/authoring.test.js` |
+| 차트 열여섯 종류 | `chart id "제목" 종류 {` | 종류마다 `bar`, `stacked`, `percent`, `dumbbell`, `difference`, `line`, `step`, `area`, `scatter`, `histogram`, `box`, `ecdf`, `heatmap`, `donut`, `pie`, `waterfall` | `test/charts.test.js`(K1), `test/examples.test.js` |
+| 계열 N개, 색 수(지금 일곱)를 넘는 구분 | `series` | `percent`(9), `pie`(9), `line`(4), `ecdf`(3) | 색과 무늬의 모양은 검증 요구사항, 미완료. 계열 수 범위의 거절은 `test/charts.test.js`(K5) |
+| 기대값 계열, 신뢰구간, 행 기준선, 공통 기준선 | `role=reference`, `.low`, `.high`, `rule` | `bar`, `line`, `step`, `dumbbell`, `difference` | 예제 빌드는 `test/examples.test.js`. 그림의 의미는 직접 확인하는 시험이 확인되지 않았다(검증 요구사항, 미완료) |
+| 빠진 값(`-`)과 0의 구분, 모두 0이거나 모두 빠진 차트 | `-`, `missing` | `bar`, `stacked`, `percent`, `line`, `step`, `ecdf` | `test/charts.test.js`(K4). 히스토그램, 워터폴, 상자의 빠진 값은 예제가 쓰지 않고 직접 확인하는 시험이 확인되지 않았다([차트](charts.md#종류와-행-줄), 검증 요구사항, 미완료) |
+| 값에 묶은 차트와 바뀐 표식 강조 | 행의 `계열=값이름` | `donut`, `metric`, `integration` | `test/charts.test.js`(C1~C4) |
+| 차트 값을 JSON에서 읽기 | `data "경로" at "/포인터"` | `histogram` | `test/charts.test.js`(C5) |
+| 장면 재생 방식과 배속 | `mode=static\|once\|loop`(생략하면 줄이 있으면 `once`, 없으면 `static`), `speed=` | 모든 예제, `flow`(`speed=1.5`) | `test/authoring.test.js`, `test/exports.test.js` |
 
 ### 예제가 쓰지 않는 문법
 
@@ -65,7 +66,7 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 | 머리 `aspect`, `width wide` | 그림 비율을 억지로 맞추면 접힌 배치가 오히려 길어지고, 넓은 캔버스는 표시 폭으로 줄어 글자가 12px 아래로 내려간다. 예제가 쓰면 읽기 기준에 어긋난다 |
 | 차트 `series ... key=` | JSON 키와 계열 이름을 따로 둘 때만 필요하다. 예제의 JSON은 `histogram`의 `value` 하나뿐이다 |
 | `shape=circle`, `shape=rect`, 값 목록 `head=end`, `border=solid` | 기본값이거나 짧은 이름을 담는 작은 원 하나라 예제의 이야기에 필요하지 않았다 |
-| `visibility=package`, 색 `red`의 `fill`·`stroke`(`tone=red`는 쓴다) | 다른 값이 같은 규칙을 보인다 |
+| `visibility=package`, 색 `red`의 `appearance`(`tone=red`는 쓴다) | 다른 값이 같은 규칙을 보인다 |
 | 추적 `unit=s` | `ms`와 `us`가 단위 규칙을 보인다 |
 
 ### 전용 표현이 없는 범위
@@ -106,7 +107,7 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 
 화면 값은 design-tokens의 `themes/simple2`가 소유한다. Daphnis에서 가져온 JSON이나 생성 CSS·JS를 손으로 고치지 않는다. 그림 글꼴은 측정과 SVG 배포를 위해 포함한 글꼴을 쓰므로, 운영체제 글꼴을 쓰는 Things와 글꼴 파일이 같지는 않다. 다크 테마는 Daphnis의 확장이며 공식 밝은 페이지와 같은 화면이라고 판정하지 않는다. 다크의 보조 참고는 라이트·다크가 함께 있는 2018년 Things 3.7 화면 쌍이고, 현재 네이티브 버전의 다크라는 근거는 아니다. 2017년 사이트 영상 스틸도 같은 이유로 역할 비교용 보조 참고일 뿐 현재 네이티브 버전과 같다는 근거가 아니며, 두 이미지의 색을 현재 네이티브 색으로 읽지 않는다.
 
-화면으로 확인한 범위는 [예제와 검증 범위](#예제와-검증-범위)의 표가 정하고, 그 밖의 폭과 장면, 실제 기기, Firefox는 확인하지 않았다(검증 요구사항, 미완료). 가로 넘침 없는 결과와 실제 글자가 읽히는 결과를 구분한다. 복잡한 그래프와 순서 그림은 보통 보기에서 읽을 수 있는 글자 크기를 지키려고 판 안에서 가로로 이동하므로 그림 전체가 한 화면에 들어간다고 적지 않고, 전체 화면은 묶음 전체를 영역에 맞춘 뒤 수동 확대로 읽는다([재생](playback.md#도구-막대와-전체-화면)). 화면 비교는 도형 경계, 텍스트 겹침, 카드 여백, 의미색, 조작의 위치를 확인하며 자동 검사 통과만으로 디자인 승인을 대신하지 않는다.
+화면으로 확인한 범위는 [예제와 검증 범위](#예제와-검증-범위)의 표가 정하고, 그 밖의 폭과 장면, 실제 기기와 Safari, Firefox는 확인하지 않았다(검증 요구사항, 미완료). 가로 넘침 없는 결과와 실제 글자가 읽히는 결과를 구분한다. 복잡한 그래프와 순서 그림은 보통 보기에서 모든 판이 같은 비율로 줄어 가로로 잘리지 않고 들어오지만 그만큼 글자가 작아지므로 글자가 읽힌다고 적지 않고, 전체 화면은 묶음 전체를 영역에 맞춘 뒤 수동 확대로 읽는다([재생](playback.md#도구-막대와-전체-화면)). 화면 비교는 도형 경계, 텍스트 겹침, 카드 여백, 의미색, 조작의 위치를 확인하며 자동 검사 통과만으로 디자인 승인을 대신하지 않는다.
 
 ### 요소별 대응과 소유권
 
@@ -121,7 +122,7 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 | 큰 제목 | `.fancysection-heading`, 36px·700 | `simple2.heading`, `simple2.heading-weight` | 크기·굵기 대응 |
 | 조작 글자 | `.navigation-button`, 15px·600 | `simple2.control`, `weight.semibold` | 역할 대응. 비선택 상태는 보통 굵기 |
 | 본문 글자 | `body`, 18px·400 | `simple2.body`, `font.sans`, `styles/document.css` | 문서 본문 크기 대응 |
-| 그림 이름·상세·메타 | 대응 요소 없음 | `simple2.label-size`, `size.text.13`, `size.text.11` | 그림 밀도를 위한 확장 |
+| 그림 이름·상세·메타 | 대응 요소 없음 | `simple2.label-size`, `simple2.detail-size`, `simple2.micro-size` | 그림 밀도를 위한 확장 |
 | 캔버스 면 | `body`의 밝은 회색 면 | `simple2.canvas-fill` | 밝은 모드의 색 대응 |
 | 캔버스 카드 | `.productcard`의 18px 모서리 | `simple2.canvas-corner` | 바깥 카드 역할. 모든 내부 도형에 적용하지 않는다 |
 | 조작 모서리 | `.navigation-button`의 6px 모서리 | `simple2.control-radius` | 직접 대응 |
@@ -159,35 +160,82 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 
 | 요구사항 | 검증 계획 |
 |---|---|
-| 예제 폴더가 지원하는 표현마다 하나이고 옛 산출물이 없다. 차트 예제는 문법 표의 차트 종류와 하나씩 맞는다. | `test/demo-v2.test.js`의 `examples_folder_holds_exactly_one_demo_per_supported_expression`, `scripts/build-catalog.mjs`의 같은 대조 |
-| 모든 예제와 첫 화면 그림이 `daphnis 2`, 정식 색 이름, 장면마다 명시한 `mode`를 쓰고 옛 형태가 한 줄도 없다. | `test/demo-v2.test.js`의 `every_example_and_showcase_source_uses_the_canonical_second_grammar`, `the_examples_use_every_canonical_color_name_and_no_legacy_alias` |
-| 표의 기능마다 그 기능을 쓰는 예제가 있고, 빠진 값과 0, 계열 N개, 기대값, 값 묶음, 반대 방향·손실·동시·막힘 이동, 순서 구획 네 가지가 원본과 시간표에서 확인된다. | `test/demo-v2.test.js`의 `chart_demos_cover_...`, `bound_chart_demos_change_frames_...`, `traffic_demos_cover_...`, `structure_demos_cover_...` |
-| 모든 예제가 strict로 오류와 경고 없이 만들어지고, 첫 장면은 정지이며, 움직이는 예제는 한 번과 반복 탭을 갖는다. | `test/demo-v2.test.js`의 `every_example_builds_strictly_...`, `the_first_scene_of_every_example_is_static_...` |
-| 갤러리 목록이 모든 예제의 재생 화면, SVG, 원본 내려받기, 원본 글을 담고 외부 틀을 쓰지 않는다. | `test/demo-v2.test.js`의 `the_gallery_index_exposes_every_example_and_its_source` |
-| 모든 재생 페이지와 갤러리 목록이 폭 390과 960에서 가로로 넘치지 않는다. Chrome이 없으면 실패한다. | `test/demo-v2.test.js`의 `every_player_page_and_the_gallery_index_stay_inside_the_page_width_at_390_and_960` |
-| 첫 화면 그림이 영어와 한국어 한 쌍으로 같은 구조이고 첫 그림은 반복 장면이다. | `test/demo-v2.test.js`의 `showcase_pairs_share_one_structure_and_the_hero_loops` |
-| 지원하지 않는 전용 표현을 지원한다고 안내하지 않는다. | `test/grammar.test.js`의 `parseFigure_unsupported_dedicated_expressions_report_errors` |
+| 예제 폴더가 지원하는 표현마다 하나이고 옛 산출물이 없다. 차트 예제는 문법 표의 차트 종류와 하나씩 맞는다. | `test/examples.test.js`, `scripts/build-catalog.mjs`의 같은 대조 |
+| 모든 예제가 `daphnis 2`, 현재 문법(이름 없는 보기, `tone`과 `appearance`)으로 strict 빌드에서 오류와 경고 없이 만들어지고, 모든 장면이 SVG와 HTML이 된다. | `test/examples.test.js` |
+| 표의 기능마다 그 기능을 쓰는 예제가 있다. | `scripts/lib/catalog-coverage.mjs`가 원본 낱말을 읽어 알려 준다. 기능마다 쓰이는지를 시험이 따로 확인하지 않는다(검증 요구사항, 미완료) |
+| 개발 그림 가족과 차트 열여섯 종류가 독립한 최소 원본으로도 읽히고 잘못된 입력을 줄 번호와 함께 거절한다. | `test/kinds.test.js`, `test/charts.test.js` |
+| 지원하지 않는 전용 표현을 지원한다고 안내하지 않는다. | `test/grammar.test.js` |
+| 갤러리 목록이 모든 예제의 재생 화면, SVG, 원본 글을 담고 외부 틀을 쓰지 않는다. | 검증 요구사항, 미완료 |
+| 첫 화면 그림이 영어와 한국어 한 쌍으로 같은 구조이고 첫 그림은 반복 장면이다. | 검증 요구사항, 미완료 |
+| 모든 재생 페이지와 갤러리 목록이 폭 320·390·430·데스크톱에서 가로로 넘치지 않는다. | 자동 시험은 없다. 예제 재생 화면의 문서 가로 넘침은 실제 Chrome에서 폭 320·390·430·1440의 라이트·다크로 쟀고 넘침이 없었다. 목록 쪽은 폭 320의 대표만 봤다([예제와 검증 범위](#예제와-검증-범위)). 그 밖의 폭과 목록 쪽, 그 밖의 재생 페이지는 확인하지 않았다(검증 요구사항, 미완료) |
 
-시험은 각 파일이 맡은 계약의 범위만 보인다. `test/demo-v2.test.js`는 원본 낱말과 컴파일 결과, 실제 Chrome의 가로 넘침을 확인한다. 이 표는 시험이 있는 계약을 대응시킬 뿐 전체 품질을 확인했다는 근거가 아니다. 그림 안의 글자 겹침, 의미색, 라이트와 다크의 모양, 재생 중 표시는 자동으로 확인하지 않고 화면으로 본다.
+시험은 각 파일이 맡은 계약의 범위만 보인다. 이 표는 시험이 있는 계약을 대응시킬 뿐 전체 품질을 확인했다는 근거가 아니다. `npm test`는 브라우저를 열지 않는다. 그림 안의 글자 겹침, 의미색, 라이트와 다크의 모양, 재생 중 표시는 자동으로 확인하지 않고 화면으로 본다. 이 문서와 다른 문서의 표는 시험이 맡은 계약을 적을 뿐이고, 시험이나 CI를 실제로 돌린 결과는 GitHub Actions 기록과 이슈가 맡는다.
+
+### 시험 번호
+
+시험 이름은 번호로 시작한다(`V1`, `S7`, `K-arch`). 번호는 계약 묶음을 가리키고, 묶음의 규칙은 오른쪽 문서가 정한다. 결함을 막는 시험은 이슈 번호(`#171`)를 이름에 단다. 문서의 요구사항 표는 이 번호로 시험을 가리킨다.
+
+| 번호 | 시험 파일 | 보는 계약 | 규칙을 정하는 문서 |
+|---|---|---|---|
+| V | `test/grammar.test.js` | 판 표기, 줄과 낱말, 이름 공간, 연결점, 오류의 위치와 필드 | [그림 문법](figure-syntax.md) |
+| G | `test/authoring.test.js` | 이름 없는 보기와 기본 보기, 장면 `mode` 기본값, `tone`과 `appearance` | [그림 문법](figure-syntax.md) |
+| S | `test/cards.test.js` | 카드 연결점(표 열, API 칸, 격자 칸, 추적 구간), 여러 보기에 놓인 카드, 보기 규칙(#172, #175) | [그림 문법](figure-syntax.md), [그림 종류](figure-kinds.md), [칸 격자](grid.md) |
+| K, K-종류 | `test/charts.test.js`(K1~K9), `test/kinds.test.js`(K-arch, K-class, K-sequence, K-state, K-trace, K-queue, K-grid), `test/examples.test.js`(K30) | 종류만의 수학, 의미, 거절. 차트 열여섯 종류와 개발 그림 가족 | [차트](charts.md), [그림 종류](figure-kinds.md), [칸 격자](grid.md) |
+| C | `test/charts.test.js` | 값에 묶인 차트, `data` JSON(#171) | [차트](charts.md), [그림 문법](figure-syntax.md) |
+| E | `test/values.test.js` | 값, 이동, 조건, 대기, 예약(#173) | [그림 문법](figure-syntax.md), [재생](playback.md) |
+| X | `test/exports.test.js` | 장면 방식, 움직이는·멈춘 SVG, HTML의 마크업, 결정성, 정본 내려받기 | [재생](playback.md) |
+| I | `test/escaping.test.js` | 글 이스케이프와 사용자 아이콘의 안전 | [재생](playback.md), [배치](layout.md) |
+| L | `test/cli.test.js` | `render`, `check`, `gallery`의 파일, 종료 코드, 이름 겹침(#176), 쓰기 실패(#177) | [재생](playback.md#결과-파일) |
+| M | `test/markdown.test.js` | `md`의 블록, 소유 표시, 정리, 접기, 잠금, 쓰기 실패(#176) | [마크다운](markdown.md) |
+| P | `test/package.test.js` | 패키지에 오르는 파일과 진입점 | [마크다운](markdown.md) |
+| T | `test/text.test.js` | 글을 읽는 방식(백틱이 글자인지 코드인지), 측정이 놓은 글 자리를 그리는 쪽과 그림 검사가 읽는 것, 긴 제목의 줄바꿈(카드 머리, 차트·시간 머리) | [배치](layout.md), [그림 문법](figure-syntax.md) |
+| Q | `test/sampler.test.js`(Q1~Q8) | 순수 표본 추출기(`player/sample.js`)가 장면과 시각만으로 모습을 정하는 규칙 | [재생](playback.md) |
+| U | `test/components.test.js`, `test/component-state.test.js`(켜짐과 평소의 정의 `--fx-*`, 켜진 차트 카드의 바탕 색 `color`, 차트 방향선 화살촉의 역할별 표식. 번호 없이 파일로 가리킨다) | 공통 부품: 잰 카드와 그려진 카드가 같다(U1), 머리 규칙(U2), 머리와 필드의 구분(U3), 글 이스케이프(U4), 글꼴이 정하는 백틱 읽기(U5, U6), 보통 화살표와 의미 관계의 화살촉(U7), 개념 아이콘이 하나의 도형(U8), 그림 틀의 도구 막대와 탭 줄(U9), 차트 바탕 색이 차트 묶음의 `color`로 실려 `currentColor`로 읽힌다(U10) | [배치](layout.md), [재생](playback.md), [아키텍처](../architecture.md#부품-호출-지도) |
+
+공통 부품(카드, 필드, 선, 화살촉, 라벨, 아이콘, 탭, 도구 막대)의 모양과 상태는 부품이 하나씩 소유하므로 그 시험도 부품마다 한 곳에 한 번만 둔다. 부품 시험은 둘로 나뉜다. `test/components.test.js`는 부품의 기하와 구조(잰 크기와 그린 모양이 같다, 글이 이스케이프된다, 같은 도형이 같은 모양이다)를 보고, 코드가 실제로 쓰는 진입점(`measure/card.js`, `measure/texts.js`, `draw/texts.js`, `draw/arrow.js`, `icons/`, `html/player-script.js`의 `figureFrame`)과 공개 진입점(`buildFigure`, `toSvg`, `toHtml`)을 부른다. `test/component-state.test.js`는 출력 어댑터 사이의 일치를 본다. 켜짐과 평소의 모습을 움직이는 SVG와 HTML이 같은 정의(`--fx-*`)로 읽는지, 차트 방향선의 화살촉이 역할마다 정의 하나인지를 공개 진입점의 출력에서만 읽는다. 시험만을 위한 내보내기나 훅은 없다. 종류별 시험이 같은 색, 두께, 모양을 다시 확인하지 않고, 조합 시험은 데이터 전달과 연결만 본다. 이 시험들은 부품이 약속한 기하와 구조, 출력이 읽는 정의를 읽을 뿐이고, 토큰 값이 자기 자신과 같은지나 소스 글을 읽지 않으며, 계산된 색이 화면에서 어떻게 보이는지는 보지 않는다. 부품 시험으로 아직 덮지 못한 것: 카드 내용(`show`) 줄의 면과 색(줄의 글 자리는 `test/text.test.js`가 측정과 그린 자리의 일치로 본다), 격자 칸과 큐 칸의 모양, 글꼴 조각에 백틱 글자가 실리는지(보이는 글자가 글꼴에 있는지는 화면에서 본다).
+
+### 브라우저에서만 보이는 계약
+
+공개 진입점으로 읽을 수 없는 계약이다. 시험이 없다고 통과로 쓰지 않고, 실제 Chrome에서 보는 검수의 몫이다. 표의 "시험이 대신 보는 것"과 "보지 않는 것"은 시험의 범위일 뿐이고, 어떤 항목을 Chrome에서 어디까지 확인했는지는 [예제와 검증 범위](#예제와-검증-범위)가 정한다. 거기 적히지 않은 항목은 검증 요구사항, 미완료다.
+
+| 계약 | 시험이 대신 보는 것 | 보지 않는 것 |
+|---|---|---|
+| 재생기가 순서 보기를 먼저 적은 혼합 그림에서도 그래프 판의 카드 내용을 그린다(#172) | `test/cards.test.js`(S8)가 멈춘 SVG와 HTML 판 마크업을 읽는다 | 재생기가 `once` 장면이 끝난 뒤 카드를 칠한 모습 |
+| 멈춘 장면과 한 번 장면의 마지막 모습이 장면 끝의 박자를 읽는다(#174) | `test/exports.test.js`(X2)가 SVG의 재생 길이를, `test/sampler.test.js`(Q)가 순수 표본 추출기(`player/sample.js`)가 돌려주는 마지막 모습을 읽는다 | 브라우저의 시계가 표본을 부르는 일과 HTML 재생기가 그 모습을 DOM에 쓰는 일 |
+| 장면 탭: 장면이 둘 이상일 때만 아래 가운데에 놓이고, 눌러도 화면이 튀지 않고, 같은 탭을 다시 눌러도 되감지 않는다 | `test/components.test.js`(U9)가 페이지의 탭 줄이 비어 있고 그림 밖에 있다는 것과 재생기가 읽는 장면 수(`steps`)를 읽는다 | 재생기가 탭을 만들고, 장면이 하나이거나 시간 흐름이 없을 때 탭 줄을 숨기는 일(`player/play.js`), 눌림, 위치 |
+| 장면 방식의 시계, 문서가 가려질 때 얼림, 움직임 줄이기 | 없음 | 모두 |
+| 도구 막대의 실제 동작: 문법 복사(클립보드에 쓴 글, 실패 표시), HTML 다운로드(받은 파일), 전체화면(확대, 끌기, 장면과 시계 유지) | `test/exports.test.js`(X8, X10, X11)가 정본 복원, 단추 순서, 페이지에 실린 원본을 읽는다 | 클릭, 클립보드, 파일 저장, 44px 눌림 영역, 호버, 초점, 터치 노출 |
+| 320·390·430px에서 도구 막대와 탭이 잘리지 않고 문서가 가로로 넘치지 않으며 좁은 배치로 바뀐다 | 없음 | 모두. 문서 가로 넘침과 판 경계는 Chrome에서 쟀다([예제와 검증 범위](#예제와-검증-범위)) |
+| 색과 면: `tone`·`appearance`가 구분되는 모습, 라이트·다크 대비 | `test/authoring.test.js`(G5)가 모형과 SVG의 차이를 읽는다 | 실제 화면에서 구분되는지, 대비 |
+| 켜진 도형·표 줄·격자 칸·알약과 차트 방향선 화살촉의 색이 움직이는 SVG와 HTML에서 같다 | `test/component-state.test.js`가 두 출력이 같은 `--fx-*` 정의와 역할별 표식(`fl-arrow-<역할>`)을 읽는지 읽는다 | 브라우저가 계산한 색, 라이트·다크, 표식이 문서 밖 정의에서 색을 받는지 |
+| 켜진 차트 카드의 글자 바탕과 받침 선이 정지 SVG, 움직이는 SVG, HTML에서 같은 켜진 면을 읽는다 | `test/component-state.test.js`(S3)가 차트 묶음의 `color`가 켜짐 구간에 `--fx-face-on`과 `--fx-face`로 바뀌고 keyframes가 사용자 정의 속성을 선언하지 않는지, `test/components.test.js`(U10)가 받는 쪽이 `currentColor`를 읽는지 읽는다. 둘은 선언을 읽는 시험이다 | 브라우저가 계산한 색과 재생 중 라이트·다크 전환의 보임. 실제 Chrome에서 본 범위는 [예제와 검증 범위](#예제와-검증-범위)의 "차트 바탕" 행이고 그 밖의 소비자와 상태는 검증 요구사항, 미완료 |
+| 효과의 시간(펄스, 선 켜짐·꺼짐, 점과 글 상자) | 없음 | 모두 |
+| 복사 글이 줄바꿈까지 원본과 같다 | `test/exports.test.js`(X11)가 페이지에 원본이 있음을 읽는다 | 실제로 클립보드에 들어간 글 |
 
 ### 예제와 검증 범위
 
-예제 30개와 첫 화면 그림 일곱 쌍은 전부 지금 컴파일러로 strict 빌드한다. 사람이 화면으로 본 범위는 아래와 같고, 그 밖은 검증 요구사항, 미완료다.
+예제 30개는 `test/examples.test.js`가 현재 문법으로 strict 빌드하고, 첫 화면 그림 `docs/assets/how-it-works.dap`은 CI의 `check --strict`가 읽는다. 첫 화면 그림 쇼케이스(`docs/assets/showcase/`의 일곱 쌍)는 시험과 CI가 읽지 않지만, `npm run figures`가 예제와 첫 화면 그림과 함께 strict로 빌드한다(로컬 실행이고 CI 관문이 아니다). 실제 Chrome에서 확인한 범위는 아래와 같고, 그 밖은 검증 요구사항, 미완료다. 이전 모양의 화면 검수는 이번 개편(공통 장면 기본값, 한 낱말 색, 공통 도구 막대, Things 색 역할)의 근거가 아니다. 시험과 빌드를 돌린 결과와 날짜, 개수는 이슈가 맡고 이 표에 적지 않는다.
 
 | 검증 대상 | 실제 범위와 근거 | 증명하지 않는 것 |
 |---|---|---|
-| 원본의 둘째 판 문법과 기능 사용 | `test/demo-v2.test.js`: 예제 30개, 첫 화면 그림 열네 원본, 정식 색 이름 여덟 개 | 모든 입력 조합 |
-| 컴파일과 시간표 | 같은 시험이 strict 빌드, 경고 없음, 장면 모드, 값에 묶은 차트의 프레임과 바뀐 표식을 확인 | 재생기가 그 시간표를 화면에서 맞게 그리는지 |
-| 페이지 가로 넘침 | Chrome, 폭 390과 960, 재생 페이지 30개와 갤러리 목록. 문서 전체 `scrollWidth`만 본다 | 판 안쪽 글자가 읽히는지, 판 안쪽 가로 이동의 편의 |
-| HTML 재생기의 자동 렌더 검사 | Chrome에서 예제 30개의 장면 99개를 폭 320·390·430·1440, 라이트·다크로 열고 장면마다 정지·진입·중간·종료 직전 시각을 표본으로 잡았다. 페이지 오류, 페이지 가로 넘침, SVG 글자의 경계 밖, 글 겹침, 도구 글 겹침, 10px 미만 글자를 검사했고 걸린 표본은 없었다 | 표본 사이의 시각, 글이 읽히는지, WebKit, 실제 기기 |
-| 전체 화면 | Chrome에서 예제 30개를 폭 네 가지로 열었다. 맞춤이 SVG viewBox의 실제 묶음 크기이고 넘침이 없으며, 들어가기와 나가기에서 선택한 장면, 경과 시각, 프레임이 그대로다. WebKit은 `test/mobile-final-regression.test.js`의 자동 시험으로만 본다 | 전체 화면 1배에서 글자가 읽히는지(수동 확대가 읽기를 맡는다) |
-| SVG의 구조와 글 | 예제 30개의 장면 99개마다 멈춘 SVG와 움직이는 SVG가 XML, id, 참조 구조를 지킨다. 멈춘 SVG의 보이는 글을 움직임 줄이기 상태의 HTML과 장면마다 대조해 모두 같았다. 조용한 선의 라벨과 번호, 장면이 없는 차트의 계열 보임은 `test/quiet-label-scene-less.test.js`가 Chrome과 WebKit에서 HTML과 SVG를 견준다([재생](playback.md#움직이는-svg)) | 움직이는 SVG의 재생 중 모든 순간이 HTML과 같다는 것. 위 시험이 보는 시각은 장면마다 여덟 곳이다 |
-| 눈으로 본 화면(Chrome) | 폭 390 라이트·다크의 예제 30개 첫 장면 모음 화면, 그 가운데 면적·산점도·원·상자·통합 예제의 실제 크기, 일반 Chrome 390에서 산점도의 정지와 탭 바꾸기를 직접 조작, 폭 1440 라이트의 예제 30개 첫 장면 모음 화면과 흐름 예제의 실제 크기 화면, 순서 예제 다크의 마지막 장면 실제 크기, 데스크톱에서 그래프·차트·API·스키마·순서·추적이 섞인 화면을 직접 조작. 이 화면들에서 도구 막대, 번호 배지, 다크의 의미 아이콘과 일반 아이콘 카드를 함께 보았다 | 폭 320과 430의 눈 검수, 모든 예제의 모든 장면, 재생 중 모든 순간, 모든 아이콘 도형의 모든 크기, 갱신 효과 펄스의 라이트·다크 인지성, WebKit |
-| 색각 이상 에뮬레이션 | 차트 여섯 종류를 라이트·다크에서 정상, 적록 색각 이상, 무색각으로 보며 끝 이름, 번호 키, 점 모양을 대조했다. 일곱 계열 산점도는 라이트·다크의 무색각 화면에서 점 열네 개와 번호 키 일곱 개가 모두 그려지는 것을 직접 확인했다. 에뮬레이션이다 | 일곱 계열 산점도의 정상·적록 화면, 색각 이상이 있는 실제 사용자 |
-| Things와 역할 비교 | 공식 기능 페이지의 2024 solid 기능 아이콘에서 원색 네 개의 출처를 고정했다. 2017 공식 사이트 영상 스틸과 2018 Things 3.7 라이트·다크 공식 화면은 큰 제목, 작은 구획 제목, 본문, 보조 글자, 흰색·회색·다크 면, 파란 선택, 작은 의미 아이콘, 얇은 구분선을 역할끼리 견주는 보조 참고다 | 현재 네이티브 앱의 픽셀 단위 대조. 그래프, 흐름, 트래픽 표현은 Daphnis의 확장이다 |
-| 차트 그리기 | `test/chart-v2-*.test.js`는 정규 입력을 직접 만들어 그리기만 확인한다. 예제의 원본에서 그림까지는 위 눈 확인이다 | 라이트와 다크의 모든 대비 |
+| 원본의 현재 문법과 기능 사용 | `test/examples.test.js`: 예제 30개를 strict로 읽고 모든 장면을 SVG와 HTML로 만든다 | 모든 입력 조합 |
+| 개발 그림 가족과 차트 종류의 경계 | `test/kinds.test.js`, `test/charts.test.js`: 독립한 최소 원본으로 의미와 거절을 본다 | 모든 입력 조합, 그림의 모양 |
+| 결과물 | `test/exports.test.js`: 같은 원본이 같은 SVG와 HTML을 내고, 정본 내려받기가 바이트까지 같다 | 브라우저에서의 동작, 재생 중 모든 순간 |
+| 순수 표본 추출기 | `test/sampler.test.js`(Q1~Q8): 실제 `player/sample.js`와 `curve.js`를 `node:vm`에서 돌리고 재생 데이터는 공개 진입점 `toHtml`이 실은 JSON을 읽는다. 이력과 무관한 같은 모습, 정지 장면의 마지막 모습, 같은 선을 쓰는 정방향·역방향 점의 선 켜짐, 잃은 점이 도착으로 보이지 않음, 같은 시각의 넘겨받기, 선 라벨 알약의 줄어듦, 마지막 값 유지, 소수 배속에서 반올림한 표시 길이 뒤에 효과가 끝난 모습을 본다 | 브라우저의 시계와 DOM에 쓰는 일 |
+| 기하 확인(Chrome) | 현재 소스에서 예제 30개의 모든 장면을 실제 Chrome에서 폭 320·390·430·1440(CSS 픽셀)의 라이트·다크로 쟀다. 시스템 테마를 명시해 고르고 실제 계산된 라이트·다크 배경색을 확인했다. 움직임 줄이기에서 장면의 마지막 모습을 쟀다. 문서의 가로 넘침, SVG 글자가 자기 viewBox 밖에 나가는지, SVG 경계와 `scrollWidth`가 부모 판 밖에 나가는지, 일반 캔버스 안쪽의 세로 잘림, 장면 탭이 그림 전체 아래에 놓이는지, 탭 누르는 높이 44px를 확인했고 실패가 없었다. 공통 부품을 고치면 이 절차를 현재 소스로 다시 돌린다 | 좌표와 크기만 쟀다. 저장한 모든 화면 그림의 읽힘, 재생 중 모든 프레임, 임의의 입력, 실제 기기는 아니다. 자연 높이 그림에서 장면 탭은 그림 전체 아래에 있어 보기 창 밖일 수 있고 페이지 스크롤로 닿는다. 탭이 보기 창 안에 있다는 것은 확인한 계약이 아니고, 가로 경계만 쟀다. 보기 창 아래로 이어지는 세로 부분은 잘림이 아니다 |
+| 첫 장면 화면 검수(Chrome) | 모든 예제의 첫 장면을 폭과 테마 여덟 조합으로 화면에 저장했고, 그 가운데 눈으로 본 범위는 폭 390 라이트의 모든 예제 종류, 폭 390 다크의 통합 예제, 폭 1440 다크의 면적, 워터폴, 스택, 상태, 지표 예제다. 이 범위에서 모든 종류의 첫 장면을 한 번씩 봤고 글자 잘림, 글자끼리 겹침, 범례 깨짐, 조작 넘침은 보이지 않았다. 통합 예제는 순서 보기의 세 참여자와 추적의 끝이 모두 보인다. 복잡한 개요 그림은 글자가 작아서 자세한 내용은 전체화면 확대로 읽는다. 이 검수가 찾은 모양 결함(좁은 폭의 눈금 솎기, 형제 도형의 선언 순서, 워터폴 바닥 띠, 자기 전이 고리 간격, 점 라벨 소유)은 공통 규칙으로 고쳤고 아래 행에서 다시 봤다 | 위 범위 밖의 폭, 테마, 장면의 읽힘은 아니다. 이 행의 범위는 그대로이고 수정 뒤 재검수가 넓히지 않는다 |
+| 수정 뒤 화면 재검수(Chrome) | 위 결함을 고친 현재 소스에서 영향받은 화면을 눈으로 다시 봤다: 폭 390 라이트의 면적, 지표, 상태, 워터폴, 산점도, 흐름, 메모리, 스택, 막대 예제와 폭 390 다크의 통합 예제 전체 페이지. 눈금이 고르게 솎이고, API 1·2·3 열이 선언한 순서이며, 워터폴 바닥 띠가 차트 바탕과 같고, 자기 전이 고리가 도형에서 떨어져 있고, 산점도 점 라벨이 자기 점에 가까운 쪽에 놓이는 것을 이 화면에서 봤다 | 받아들인 남은 한계: 스택의 고정 연결점에서 생기는 선 교차, 점이 몰린 산점도에서 점 라벨의 소유가 늘 분명하다는 보장 없음, 복잡한 개요 그림의 작은 글자는 전체화면 확대에 의존. 위 화면 밖의 폭, 테마, 장면, 재생 중 모든 프레임, 실제 휴대폰의 Safari는 확인하지 않았다(검증 요구사항, 미완료) |
+| 좁은 배치 전환(Chrome) | 검사 7번 경고가 늘면 좁은 배치를 싣지 않는 기준이 실제 HTML에서 맞게 동작했다: 흐름 예제는 좁은 배치 template이 없고, 지표, 도넛, 통합 예제는 좁은 배치를 유지했다. 위 기하 확인의 매트릭스가 이 상태로 통과했다 | 좁은 배치로 바뀌는 순간의 동작(초점, 시계 유지)과, 이 네 예제 밖에서 좁은 배치가 읽히는지는 확인하지 않았다(검증 요구사항, 미완료) |
+| 차트 바탕(Chrome) | 차트 묶음의 `color`가 싣는 바탕 면(`--chart-ground`)을 실제 Chrome의 계산된 색으로 확인했다. 켜진 차트 카드는 움직이는 SVG에서 켜짐 꺼짐 양쪽, 재생을 이어 둔 채(다시 불러오지 않고) 다크에서 라이트로, 라이트에서 다크로 바꾸는 전환 양방향을 여러 주기에 걸쳐 확인했고, 정지 SVG는 두 테마, HTML 재생기는 켜짐 꺼짐과 두 전환 방향을 확인했다. 어느 출력에서나 카드 면과 글자 바탕 면 모두 계산된 RGB가 같았다. 막대 차트의 다크 바탕 면과 기준선 받침 선은 캔버스 색과 같았고, 선 차트 기대값 계열의 속 빈 점은 라이트의 채움이 캔버스와 같았다 | 위에서 본 예제, 출력, 상태, 테마 전환뿐이다. 모든 소비자와 모든 상태를 확인했거나 픽셀이 같다는 뜻이 아니고, 다른 종류의 받침 선과 속 빈 점은 보지 않았다(검증 요구사항, 미완료) |
+| 차트 노랑의 계산된 색(Chrome) | 차트 노랑 면의 계산된 `fill`은 `#f2d024`이고 테두리는 `#d6b600`으로 같은 노랑 계열의 더 어두운 테두리다 | 그 색의 정본은 팔레트가 소유하고 Daphnis 소스에 둘째 상수로 복사하지 않는다. 노랑 그래픽의 면 위 대비를 접근성 기준 충족으로 쓰지 않는다 |
+| 목록 쪽(Chrome) | `daphnis gallery`가 쓴 목록 쪽을 폭 320의 라이트·다크로 봤다. 대표로 API 예제 iframe 하나를 봤다: 부모 페이지에 가로 넘침이 없고, iframe 폭은 좁은 배치 기준(272)이며, 캔버스의 client와 scroll 크기가 같아 가려진 부분이 없고 장면 탭이 그림 전체 아래에 놓였다. iframe 안에서 장면 탭을 바꿨고 목록의 테마 단추로 고른 라이트가 iframe에 전달됐다. `npm run catalog`가 쓴 카탈로그는 폭 320 다크에서 정지 이미지 미리보기와 링크로만 이루어져 iframe이 없고 가로 넘침이 없었다 | 대표 하나이고 모든 예제의 iframe, 전체화면 대체 동작, 시스템·다크 전환, 다른 폭은 아니다. 카탈로그와 `daphnis gallery`는 다른 출력이라 서로의 근거로 쓰지 않는다 |
+| 긴 머리와 글 읽기(Chrome, 폭 320) | 긴 한국어 머리글과 긴 API 경로·클래스 이름이 든 시험 원본이 줄바꿈되어 그려졌고 장면이 없는 그 원본에는 탭 줄이 없었다. 백틱, 꺾쇠, 따옴표가 든 글을 담은 시험 원본의 전체화면 스크린샷에서 홀수 개의 백틱과 꺾쇠, 따옴표 모양이 글 그대로 보였고 전체화면 닫기가 동작했다. 복잡한 개요 그림은 작아서 전체화면 확대로 읽는다 | 이 두 원본 밖의 입력, 폭, 글꼴 조각 전체는 아니다 |
+| 재생기 조작(Chrome) | 시계를 확인하는 대표 예제를 폭 390 다크에서 확인했다. 정지 장면은 마지막 모습, 한 번 장면은 재생 뒤 마지막 모습, 반복 장면은 점이 계속 움직인다. 지금 탭을 다시 눌러도 다시 시작하지 않고, 다른 탭에 갔다 오면 다시 시작한다. 움직임 줄이기에서는 마지막 모습이 보이고, 움직임 줄이기를 끄면 장면에 다시 들어갈 때까지 다시 시작하지 않는다. 전체화면에 들어가고 나와도 고른 장면이 같고 점이 계속 움직이며, 확대와 맞춤이 동작한다. 전체화면 캔버스는 `tabindex=0`이고 밖에서는 없다 | 흐른 시간이 정확히 같은지와 문서가 가려질 때 얼림과 이어서 재생은 재지 않았다(검증 요구사항, 미완료). 위에 적지 않은 예제와 폭, 호버, 키보드 조작도 마찬가지다 |
+| 복사와 다운로드(Chrome) | 원본 복사는 원래 글의 바이트와 줄바꿈을 그대로 보존했다. HTML 다운로드는 독립한 HTML을 받았고, 탭을 바꾼 뒤 두 번째로 받은 파일이 처음 받은 파일과 바이트까지 같으며 크기가 늘지 않았다. HTTP로 이미 열어 둔 독립 재생 페이지는 네트워크를 끈 채로(움직임 줄이기는 꺼진 상태) 장면 전환과 다운로드가 계속 동작했고, 반복 장면의 점의 변환 값이 관측 사이에 바뀌어 정적인 탭뿐 아니라 움직임도 오프라인에서 도는 것을 확인했다. 확인 뒤 네트워크를 되돌렸다 | 내려받은 파일을 오프라인에서 처음 여는 일은 확인하지 못했다. 브라우저가 `file://` 주소 이동을 막았고 우회하지 않았다(검증 요구사항, 미완료) |
+| 색각 이상 에뮬레이션, 스크린 리더, 실제 사용자 | 이번 개편 뒤에는 하지 않았다. 실제 기기의 Safari와 Firefox도 보지 않았다 | 검증 요구사항, 미완료 |
+| Things와 역할 비교 | 공식 기능 페이지를 열어 중립 캔버스, 카드 면, 제목 위계, 파란 선택 조작, 작은 아이콘과 선의 역할을 눈으로 견줬다. 공식 기능 페이지의 2024 solid 기능 아이콘에서 원색 네 개의 출처를 고정했고 UI 선택색은 따로 둔다. 2017 공식 사이트 영상 스틸과 2018 Things 3.7 라이트·다크 공식 화면은 큰 제목, 작은 구획 제목, 본문, 보조 글자, 흰색·회색·다크 면, 파란 선택, 작은 의미 아이콘, 얇은 구분선을 역할끼리 견주는 보조 참고다 | 현재 네이티브 앱의 픽셀 단위 대조나 네이티브와 같다는 판정은 아니다. 다크는 재구성한 확장이고 글꼴은 다르며 그래프, 흐름, 트래픽 표현은 Daphnis의 확장이다 |
 
-Chrome과 WebKit 자동 시험은 브라우저 엔진 안의 에뮬레이션이라 실제 휴대폰이나 기기의 Safari를 시험한 것이 아니다. 접근성 기준 전체를 충족한다고도 적지 않는다.
+자동 시험은 브라우저 엔진도, 실제 휴대폰이나 기기의 Safari도 시험하지 않는다. 접근성 기준 전체를 충족한다고도 적지 않는다.
 
 알려진 결함과 제한은 이 문서의 [승인한 제외와 보류](#승인한-제외와-보류)와 [차트](charts.md)에 있다. 예제의 트래픽은 설명용 시뮬레이션이고, 수치는 모두 기능을 설명하려고 만든 예시 데이터다. 실제 부하나 실행 추적을 수집하는 기능은 없다.
 

@@ -104,9 +104,6 @@
   --color-muted: var(--primitive-simple2-muted);
   --color-group-title: var(--primitive-simple2-group-title);
   --color-bg: var(--primitive-simple2-bg);
-  --color-group-1: var(--primitive-simple2-group-1);
-  --color-group-2: var(--primitive-simple2-group-2);
-  --color-group-3: var(--primitive-simple2-group-3);
   --color-node: var(--primitive-simple2-node);
   --color-surface: var(--primitive-simple2-surface);
   --color-card: var(--primitive-simple2-card);
@@ -116,7 +113,7 @@
   --color-border: var(--primitive-simple2-border);
   --color-plate-border: var(--primitive-simple2-plate-border);
   --color-line: var(--primitive-simple2-line);
-  --color-state-active: var(--color-blue-light-stroke);
+  --color-state-active: var(--primitive-simple2-ui-accent);
   --color-state-active-fill: var(--color-category-blue-fill);
   --color-state-active-text: var(--color-blue-light-ink);
   --color-state-on-active: var(--color-category-blue-on);
@@ -131,9 +128,9 @@
   --color-flow-red: var(--color-category-red-fill);
   --color-flow-amber: var(--color-category-yellow-fill);
   --color-ui-link: var(--color-blue-light-ink);
-  --color-ui-focus: var(--color-blue-light-stroke);
+  --color-ui-focus: var(--primitive-simple2-ui-accent);
   --color-ui-progress: var(--color-blue-light-stroke);
-  --color-ui-control-on: var(--color-gray-0);
+  --color-ui-control-on: var(--primitive-simple2-ui-accent);
   --color-data-main: var(--color-category-blue-light-border);
   --color-data-compare: var(--color-category-yellow-fill);
   --color-data-heat-low: var(--color-blue-light-heat-low);
@@ -379,6 +376,7 @@
   --duration-effect-rise: 80ms;
   --duration-effect-hold: 80ms;
   --duration-effect-decay: 240ms;
+  --duration-notice: 2400ms;
   --easing-move: cubic-bezier(0.455, 0.03, 0.515, 0.955);
   --easing-reveal: cubic-bezier(0, 0, 0.58, 1);
   --simple2-heading: 36px;
@@ -406,15 +404,22 @@
   --simple2-canvas-corner: 18px;
   --simple2-canvas-fill: var(--primitive-simple2-canvas);
   --simple2-symbol-stroke: 1.5px;
-  --simple2-selection-fill: var(--primitive-simple2-selection-fill);
-  --simple2-selection-ink: var(--primitive-simple2-selection-ink);
-  --simple2-tab-fill: var(--primitive-simple2-tab-fill);
+  --simple2-segment-track: rgba(0, 25, 61, 0.1);
+  --simple2-segment-ink: rgba(0, 4, 9, 0.78);
+  --simple2-segment-hover: rgba(0, 25, 61, 0.08);
+  --simple2-segment-on: var(--primitive-simple2-ui-accent);
+  --simple2-segment-on-hover: var(--primitive-simple2-ui-accent-hover);
+  --simple2-segment-on-ink: var(--primitive-simple2-on-ui-accent);
+  --simple2-segment-radius: 12px;
+  --simple2-segment-item-radius: 9px;
+  --simple2-segment-pad: 4px;
   --simple2-label-size: 15px;
   --simple2-detail-size: 13px;
   --simple2-micro-size: 11px;
   --simple2-surface-edge: var(--primitive-simple2-plate-border);
   --simple2-hover-fill: var(--primitive-simple2-hover-fill);
   --simple2-row-selection: var(--primitive-simple2-row-selection);
+  --simple2-card-active-fill: var(--primitive-simple2-card-active-fill);
   --simple2-data-line: var(--primitive-simple2-data-line);
   --simple2-chart-hole: var(--primitive-simple2-chart-hole);
   --primitive-simple2-fg: #303336;
@@ -429,15 +434,13 @@
   --primitive-simple2-shadow: 0 2px 8px rgba(0,0,0,.10), 0 0 2px rgba(0,0,0,.10);
   --primitive-simple2-node-shadow: drop-shadow(0px 1px 1px rgba(0,0,0,.07));
   --primitive-simple2-group-title: #566170;
-  --primitive-simple2-canvas: #f2f5f7;
-  --primitive-simple2-selection-fill: #e3e4e8;
-  --primitive-simple2-selection-ink: #303336;
-  --primitive-simple2-tab-fill: #f5f5f7;
-  --primitive-simple2-group-1: #eef0f3;
-  --primitive-simple2-group-2: #e7eaee;
-  --primitive-simple2-group-3: #e0e4e9;
+  --primitive-simple2-canvas: #f5f5f6;
+  --primitive-simple2-ui-accent: #3c84f3;
+  --primitive-simple2-ui-accent-hover: #3779e0;
+  --primitive-simple2-on-ui-accent: #ffffff;
   --primitive-simple2-hover-fill: #eef4fc;
   --primitive-simple2-row-selection: #cee2fd;
+  --primitive-simple2-card-active-fill: #f3f7fd;
   --primitive-simple2-line: #9da5b0;
   --primitive-simple2-data-line: #737e8b;
   --primitive-simple2-dark-bg: #26272b;
@@ -448,10 +451,8 @@
   --primitive-simple2-dark-separator: #454850;
   --primitive-simple2-dark-hover: #343e50;
   --primitive-simple2-dark-selection: #274174;
+  --primitive-simple2-dark-card-active-fill: #333a48;
   --primitive-simple2-dark-muted: #a9adb6;
-  --primitive-simple2-dark-group-1: #2c2d32;
-  --primitive-simple2-dark-group-2: #32343a;
-  --primitive-simple2-dark-group-3: #393c43;
   --primitive-simple2-dark-line: #7f8793;
   --primitive-simple2-dark-data-line: #acb4c0;
   --primitive-simple2-light-outline: #818181;
@@ -685,9 +686,6 @@
     --color-muted: var(--primitive-simple2-dark-muted);
     --color-group-title: var(--primitive-simple2-dark-muted);
     --color-bg: var(--primitive-simple2-dark-bg);
-    --color-group-1: var(--primitive-simple2-dark-group-1);
-    --color-group-2: var(--primitive-simple2-dark-group-2);
-    --color-group-3: var(--primitive-simple2-dark-group-3);
     --color-node: var(--primitive-simple2-dark-node);
     --color-surface: var(--primitive-simple2-dark-card);
     --color-card: var(--primitive-simple2-dark-card);
@@ -697,7 +695,7 @@
     --color-border: var(--primitive-simple2-border);
     --color-plate-border: var(--primitive-simple2-dark-edge);
     --color-line: var(--primitive-simple2-dark-line);
-    --color-state-active: var(--color-blue-dark-stroke);
+    --color-state-active: var(--primitive-simple2-ui-accent);
     --color-state-active-fill: var(--color-category-blue-fill);
     --color-state-active-text: var(--color-blue-dark-ink);
     --color-state-on-active: var(--color-category-blue-on);
@@ -706,9 +704,9 @@
     --color-state-warning: var(--color-category-yellow-dark-border);
     --color-state-glow: var(--color-blue-dark-fill);
     --color-ui-link: var(--color-blue-dark-ink);
-    --color-ui-focus: var(--color-blue-dark-stroke);
+    --color-ui-focus: var(--primitive-simple2-ui-accent);
     --color-ui-progress: var(--color-blue-dark-stroke);
-    --color-ui-control-on: var(--color-gray-776);
+    --color-ui-control-on: var(--primitive-simple2-ui-accent);
     --color-data-main: var(--color-category-blue-dark-border);
     --color-data-heat-low: var(--color-blue-dark-heat-low);
     --color-data-heat-high: var(--color-blue-dark-heat-high);
@@ -760,12 +758,13 @@
     --simple2-node-shadow: var(--primitive-simple2-node-shadow);
     --simple2-separator: var(--primitive-simple2-dark-separator);
     --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
-    --simple2-selection-fill: var(--primitive-simple2-dark-edge);
-    --simple2-selection-ink: var(--color-gray-0);
-    --simple2-tab-fill: var(--primitive-simple2-dark-node);
+    --simple2-segment-track: rgba(255, 255, 255, 0.12);
+    --simple2-segment-ink: rgba(255, 255, 255, 0.78);
+    --simple2-segment-hover: rgba(255, 255, 255, 0.1);
     --simple2-surface-edge: var(--primitive-simple2-dark-edge);
     --simple2-hover-fill: var(--primitive-simple2-dark-hover);
     --simple2-row-selection: var(--primitive-simple2-dark-selection);
+    --simple2-card-active-fill: var(--primitive-simple2-dark-card-active-fill);
     --simple2-data-line: var(--primitive-simple2-dark-data-line);
     --color-figure-icon: var(--color-blue-dark-stroke);
     --color-figure-icon-tile: var(--color-blue-dark-fill);
@@ -850,9 +849,6 @@
   --color-muted: var(--primitive-simple2-dark-muted);
   --color-group-title: var(--primitive-simple2-dark-muted);
   --color-bg: var(--primitive-simple2-dark-bg);
-  --color-group-1: var(--primitive-simple2-dark-group-1);
-  --color-group-2: var(--primitive-simple2-dark-group-2);
-  --color-group-3: var(--primitive-simple2-dark-group-3);
   --color-node: var(--primitive-simple2-dark-node);
   --color-surface: var(--primitive-simple2-dark-card);
   --color-card: var(--primitive-simple2-dark-card);
@@ -862,7 +858,7 @@
   --color-border: var(--primitive-simple2-border);
   --color-plate-border: var(--primitive-simple2-dark-edge);
   --color-line: var(--primitive-simple2-dark-line);
-  --color-state-active: var(--color-blue-dark-stroke);
+  --color-state-active: var(--primitive-simple2-ui-accent);
   --color-state-active-fill: var(--color-category-blue-fill);
   --color-state-active-text: var(--color-blue-dark-ink);
   --color-state-on-active: var(--color-category-blue-on);
@@ -871,9 +867,9 @@
   --color-state-warning: var(--color-category-yellow-dark-border);
   --color-state-glow: var(--color-blue-dark-fill);
   --color-ui-link: var(--color-blue-dark-ink);
-  --color-ui-focus: var(--color-blue-dark-stroke);
+  --color-ui-focus: var(--primitive-simple2-ui-accent);
   --color-ui-progress: var(--color-blue-dark-stroke);
-  --color-ui-control-on: var(--color-gray-776);
+  --color-ui-control-on: var(--primitive-simple2-ui-accent);
   --color-data-main: var(--color-category-blue-dark-border);
   --color-data-heat-low: var(--color-blue-dark-heat-low);
   --color-data-heat-high: var(--color-blue-dark-heat-high);
@@ -925,12 +921,13 @@
   --simple2-node-shadow: var(--primitive-simple2-node-shadow);
   --simple2-separator: var(--primitive-simple2-dark-separator);
   --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
-  --simple2-selection-fill: var(--primitive-simple2-dark-edge);
-  --simple2-selection-ink: var(--color-gray-0);
-  --simple2-tab-fill: var(--primitive-simple2-dark-node);
+  --simple2-segment-track: rgba(255, 255, 255, 0.12);
+  --simple2-segment-ink: rgba(255, 255, 255, 0.78);
+  --simple2-segment-hover: rgba(255, 255, 255, 0.1);
   --simple2-surface-edge: var(--primitive-simple2-dark-edge);
   --simple2-hover-fill: var(--primitive-simple2-dark-hover);
   --simple2-row-selection: var(--primitive-simple2-dark-selection);
+  --simple2-card-active-fill: var(--primitive-simple2-dark-card-active-fill);
   --simple2-data-line: var(--primitive-simple2-dark-data-line);
   --color-figure-icon: var(--color-blue-dark-stroke);
   --color-figure-icon-tile: var(--color-blue-dark-fill);
@@ -1010,7 +1007,8 @@
   --color-flow-ink-gray: var(--color-gray-933);
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
-/* 글 위계는 셋이다: 제목(simple2.label-size, semibold), 핵심 필드(detail-size), 메타(micro-size). 크기는 measure/sizes.js의 STYLE이 같은 토큰으로 잰다. */
+/* 카드 안 글(label, sub, meta, cell, item, row)의 기준 점(text-anchor)은 글이 정한다(measure/texts.js의 anchor). 여기서는 글꼴과 색만 정한다. */
+/* 글 위계는 셋이다: 제목(simple2.label-size 15, semibold), 문장과 이름표(detail-size 13: 부제, 선 라벨, 메모, 이동 글, 카드 줄, 제약, 형식), 작은 표시(micro-size 11: 번호, 태그, 표식, 키, 눈금, 단위). 크기는 measure/texts.js의 STYLE이 같은 토큰으로 잰다. */
 .fl text {
   font-family: var(--font-figure-sans);
   letter-spacing: var(--tracking-text);
@@ -1019,27 +1017,25 @@
 .fl .label {
   font-size: var(--simple2-label-size);
   font-weight: var(--weight-semibold);
-  text-anchor: middle;
   fill: var(--color-fg);
 }
 
 .fl .sub {
-  font-size: var(--simple2-micro-size);
-  text-anchor: middle;
+  font-size: var(--simple2-detail-size);
   fill: var(--color-muted);
 }
 
 .fl .frame {
-  font-size: var(--simple2-micro-size);
+  font-size: var(--simple2-detail-size);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-frame);
   fill: var(--color-group-title);
 }
 
 .fl .edgelabel {
-  font-size: var(--simple2-micro-size);
+  font-size: var(--simple2-detail-size);
   text-anchor: middle;
-  fill: var(--color-muted);
+  fill: var(--fx-ink-rest);
 }
 
 .fl .row {
@@ -1053,9 +1049,9 @@
   font-size: var(--simple2-detail-size);
 }
 
-/* 메모와 구획 제목 같은 덧붙임 글은 메타 크기다. */
+/* 메모와 구획 제목 같은 덧붙임 글은 문장이라 같은 크기다. */
 .fl .meta {
-  font-size: var(--simple2-micro-size);
+  font-size: var(--simple2-detail-size);
   fill: var(--color-fg);
 }
 
@@ -1073,33 +1069,29 @@
   font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-tag);
-  text-anchor: middle;
   fill: var(--color-fg);
 }
 
 .fl .mark {
   font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
-  text-anchor: end;
   fill: var(--color-state-active-text);
 }
 
-/* 값 카드 줄의 값 글자. 줄의 이름(row)은 카드 층이 그리고 값은 오른쪽 끝에 얹힌다. 핵심 필드라 필드 크기다. */
+/* 값 카드 줄의 값 글자. 줄의 이름(row)은 카드 층이 그리고 값은 오른쪽 끝에 얹힌다. 이름과 같은 크기이고 굵기만 다르다. */
 .fl .value {
   font-size: var(--simple2-detail-size);
   font-weight: var(--weight-semibold);
-  text-anchor: end;
   fill: var(--color-fg);
 }
 
 .fl .mini {
-  font-size: var(--simple2-micro-size);
-  text-anchor: middle;
+  font-size: var(--simple2-detail-size);
   fill: var(--color-fg);
 }
 
 .fl .chip {
-  font-size: var(--simple2-micro-size);
+  font-size: var(--simple2-detail-size);
   text-anchor: middle;
 }
 
@@ -1110,7 +1102,6 @@
 
 .fl .item {
   font-size: var(--simple2-detail-size);
-  text-anchor: middle;
   fill: var(--color-fg);
 }
 
@@ -1118,21 +1109,15 @@
   fill: var(--color-muted);
 }
 
-.fl .cell.type,
-.fl .cell.rule {
+/* 열 형식(타입)은 코드 글이라 코드 글꼴의 오른쪽 열이다. 제약 줄(NOT NULL, ON DELETE 등)은 문장이라 일반 글꼴이다. 둘 다 이름보다 옅다. */
+.fl .cell.type {
   font-family: var(--font-figure-mono);
   letter-spacing: normal;
-  font-size: var(--simple2-micro-size);
   fill: var(--color-muted);
 }
 
-.fl .cell.type {
-  text-anchor: end;
-}
-
-.fl .fl-stroke {
-  stroke: var(--color-outline);
-  stroke-width: var(--border-thin);
+.fl .cell.rule {
+  fill: var(--color-muted);
 }
 
 /* 순서 보기의 메시지, 메모, 구획, 활성 막대는 자기 장면이 보일 때만 보인다. 자리는 늘 같아 판 크기가 변하지 않는다. */
@@ -1141,7 +1126,7 @@
 }
 
 .fl .fl-edge {
-  color: var(--color-line);
+  color: var(--fx-line-rest);
 }
 
 .fl .fl-path {
@@ -1150,32 +1135,18 @@
   stroke-width: var(--border-edge);
 }
 
-/* 머리 면은 중립 면이다. 파랑은 선택되거나 켜진 칸(part-bg)만 쓰고 정적 머리는 선택처럼 보이지 않는다. */
-.fl .schema-heading {
-  fill: var(--color-surface);
-}
-
+/* 열 키(PK, FK, UNQ)는 작은 표시이고 글자색이다. 파랑은 켜진 상태에만 쓴다. */
 .fl .cell .key {
   font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
-  fill: var(--color-state-active-text);
+  fill: var(--color-fg);
 }
 
+/* 그룹은 면이 없다(투명). 경계와 제목만 있고, 깊이에 따라 회색 면을 겹치지 않는다. 고른 색의 면과 경계는 draw/paint.js가 쓴 색에만 더한다. */
 .fl .frame-box {
-  fill: var(--color-group-1);
-  stroke: none;
-}
-
-.fl .frame-box.d2 {
-  fill: var(--color-group-2);
-}
-
-.fl .frame-box.d3 {
-  fill: var(--color-group-3);
-}
-
-.fl .frame-box.dashed {
+  fill: none;
   stroke: var(--color-line);
+  stroke-width: var(--border-thin);
 }
 
 .fl .lifeline {
@@ -1185,18 +1156,21 @@
 }
 
 .fl .note-box {
-  fill: var(--color-surface);
+  fill: var(--color-node);
   stroke: var(--color-line);
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
 
+/* 판 위 면은 모두 같은 중립 흰 면과 같은 경계다: 선 라벨 알약, 카드 안 틀. */
 .fl .pill {
-  fill: var(--color-card);
-  stroke: var(--simple2-separator);
+  fill: var(--color-node);
+  stroke: var(--fx-edge-rest);
 }
 
 .fl .part-bg {
-  fill: transparent;
+  --fx-face: transparent;
+  --fx-face-on: var(--fx-row);
+  fill: var(--fx-face);
 }
 
 .fl .col-line {
@@ -1205,7 +1179,9 @@
 }
 
 .fl .grid-cell {
-  fill: var(--color-node);
+  --fx-face: var(--color-node);
+  --fx-face-on: var(--fx-row);
+  fill: var(--fx-face);
   stroke: var(--simple2-separator);
   stroke-width: var(--border-thin);
 }
@@ -1217,18 +1193,24 @@
 }
 
 .fl .grid-cell.gap {
-  fill: var(--color-card);
+  --fx-face: var(--color-card);
   stroke: var(--simple2-separator);
 }
 
 .fl .grid-cell.empty {
-  fill: none;
+  --fx-face: none;
   stroke: var(--color-line);
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
 
 .fl .fl-edge.mark {
-  color: var(--color-fg);
+  --fx-line-rest: var(--color-fg);
+}
+
+/* 카드 안 틀: 내용이 있을 때 보이는 흰 면과 가는 경계. 고른 카드 모습(face)은 이 위에 옅은 면이나 경계를 더한다. */
+.fl .face {
+  fill: none;
+  stroke: none;
 }
 
 /* 도형 윗줄과 그룹 제목 줄의 장식: 글자 배지, 아이콘 */
@@ -1253,7 +1235,7 @@
   color: inherit;
 }
 
-/* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
+/* 선 번호 원. 흑백 번호이고 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
 .fl .number-pill {
   fill: var(--color-figure-number-fill);
 }
@@ -1267,7 +1249,7 @@
 
 /* 도형은 그림자 없는 평면이다. 그림자는 떠 있는 메뉴 같은 조작에만 둔다. */
 .fl :where(.fl-node) > .fl-stroke {
-  stroke: var(--simple2-surface-edge);
+  stroke: var(--fx-edge-rest);
   stroke-width: var(--simple2-node-stroke);
 }
 
@@ -1283,15 +1265,16 @@
   stroke-linejoin: round;
 }
 
-/* 화살촉과 몸통은 같은 관계선 묶음의 색을 상속한다. 마커 정의는 각 묶음 안에 있어 모든 브라우저에서 상태색이 같다. */
-.fl .fl-arrowhead {
+/* 화살촉과 몸통은 같은 소유자의 색을 상속한다(draw/arrow.js). 화살촉은 채운 삼각형이다. 연결선은 선 묶음이, 차트 방향선은 역할 class(.arrow-main 등, chart.css)가 소유자다.
+   HTML 문서의 차트 마커 정의는 판 SVG 밖의 정의 전용 SVG에 있어 `.fl` 아래가 아니므로 이 규칙은 `.fl` 범위를 걸지 않는다. */
+.fl-arrowhead {
   fill: currentColor;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-/* 조작 아이콘과 달리 의미 아이콘은 역할색으로 채운 실루엣과 그 안의 밝은 세부를 함께 가진다. */
+/* 의미 아이콘은 역할색으로 채운 실루엣과 그 안의 밝은 세부를 함께 가진다. 기술 브랜드도 자기 개념의 역할(icons/symbols.js)을 따른다. */
 .fl .fl-symbol-glyph {
   fill: none;
   stroke: currentColor;
@@ -1322,17 +1305,9 @@
   --symbol-detail: var(--color-figure-icon-service-surface);
 }
 
-.fl .fl-symbol-service .symbol-face {
-  fill: currentColor;
-}
-
 .fl .fl-symbol-data {
   color: var(--color-figure-icon-data-ink);
   --symbol-detail: var(--color-figure-icon-data-surface);
-}
-
-.fl .fl-symbol-data .symbol-face {
-  fill: currentColor;
 }
 
 .fl .fl-symbol-access {
@@ -1340,31 +1315,69 @@
   --symbol-detail: var(--color-figure-icon-access-surface);
 }
 
-.fl .fl-symbol-access .symbol-face {
-  fill: currentColor;
-}
-
 .fl .fl-symbol-person {
   color: var(--color-figure-icon-person-ink);
   --symbol-detail: var(--color-figure-icon-person-surface);
 }
 
-.fl .fl-symbol-person .symbol-face {
+.fl .symbol-face {
   fill: currentColor;
 }
 
-.fl .fl-symbol-brand {
-  color: var(--color-figure-icon-brand-ink);
-  --symbol-detail: var(--color-figure-icon-brand-surface);
+.fl .symbol-detail {
+  fill: var(--symbol-detail);
+  stroke: none;
 }
 
-.fl .fl-symbol-brand .symbol-face {
-  fill: currentColor;
+/* 효과 한 벌: 켜짐과 평소의 모습을 정하는 유일한 정의다. 움직이는 SVG(animate/animator.js)의 keyframes와 HTML 재생기의 `.on` 규칙이 같은 `--fx-*`를 읽으므로 두 출력과 정지 그림이 늘 같다.
+   - 켜짐(on): --fx-edge 윤곽·선·알약 테두리, --fx-ink 알약 글자, --fx-row 표 줄과 격자 칸의 면, --fx-face-on 요소의 켜진 면(도형은 아래), --fx-flash 값이 바뀐 순간의 면.
+   - 평소(rest): --fx-edge-rest 도형과 알약의 경계, --fx-ink-rest 알약 글자, --fx-line-rest 선, --fx-face 요소의 평소 면.
+   효과는 도형이 고른 색(tone)이나 표현(appearance)과 상관없다. 고른 색은 평소 값(--fx-face, --fx-edge-rest)만 바꾸고(draw/paint.js), 켜진 동안은 강조 윤곽에 자리를 내준다. */
+.fl {
+  --fx-edge: var(--color-state-active);
+  --fx-ink: var(--color-state-active-text);
+  --fx-row: var(--simple2-row-selection);
+  --fx-flash: var(--simple2-row-selection);
+  --fx-edge-rest: var(--simple2-surface-edge);
+  --fx-ink-rest: var(--color-muted);
+  --fx-line-rest: var(--color-line);
 }
 
-/* `light`가 명시한 도형만 윤곽을 그대로 두고 옅은 면을 바꾼다(명시한 상태의 고유 역할). 점이 닿은 도형은 면이 아니라 테두리 후광(.fl-pulse)만 쓴다. 색을 직접 고른 도형(ps-)의 면과 윤곽은 덮지 않는다. */
-.fl .fl-node.on > .fl-stroke:not([fill="none"], [class*="ps-"]) {
-  fill: color-mix(in srgb, var(--simple2-hover-fill) 70%, var(--color-node));
+/* 도형의 평소 면과 켜진 면. 옅은 면으로 고른 도형(filled)은 켜져도 면이 같다. 면이 없는 윤곽(fill='none')과 점은 자기 면이 없거나 자기 색이다. */
+.fl .fl-node {
+  --fx-face: var(--color-node);
+  --fx-face-on: var(--simple2-card-active-fill);
+}
+
+.fl .fl-node.ap-filled {
+  --fx-face-on: var(--fx-face);
+}
+
+.fl .fl-shape-start {
+  --fx-face: var(--color-fg);
+}
+
+.fl .fl-node > .fl-stroke[fill='none'] {
+  --fx-face: none;
+  --fx-face-on: none;
+}
+
+.fl .fl-node.ap-filled > .fl-stroke:not([fill='none']) {
+  fill: var(--fx-face);
+}
+
+/* `light`가 명시한 도형: 윤곽이 강조 색이 되고 면은 옅은 강조 면이다(옅은 면으로 고른 도형은 면을 그대로 둔다). 점이 닿은 도형은 도착 후광(.fl-pulse)만 쓴다. */
+.fl .fl-node.on > .fl-stroke {
+  stroke: var(--fx-edge);
+}
+
+.fl .fl-node.on > .fl-stroke:not([fill='none']) {
+  fill: var(--fx-face-on);
+}
+
+/* 켜진 표 줄(칸)과 격자 칸의 면. 모든 카드가 같은 규칙이다. */
+.fl .fl-part.on :is(.part-bg, .grid-cell) {
+  fill: var(--fx-face-on);
 }
 
 /* 도형에 마우스를 올려도 면이나 선이 켜지지 않는다(장식용 호버 활성 없음). 키보드 초점은 같은 외부 형상 위의 초점 표시이고 윤곽을 두 겹으로 만들지 않는다. */
@@ -1379,18 +1392,13 @@
   stroke-width: var(--simple2-focus-width);
 }
 
-.fl .symbol-detail {
-  fill: var(--symbol-detail);
-  stroke: none;
-}
-
 /* 값이 바뀔 때 켜지는 배경 면. 도형과 같은 윤곽을 쓰고 테두리를 더하지 않는다. */
 .fl .fl-flash-face {
   fill-opacity: var(--opacity-range);
 }
 
 .fl .fl-flash {
-  fill: var(--simple2-row-selection);
+  fill: var(--fx-flash);
   stroke: none;
   pointer-events: none;
 }
@@ -1404,7 +1412,7 @@
 /* 점이 도형에 닿을 때의 테두리 후광: 도형 윤곽과 같은 모양의 겹침 선이다. 면을 칠하지 않고 선 굵기가 윤곽과 같아 도형이 커지지 않는다. 불투명도(80/80/240ms)는 SMIL이나 재생기가 정한다. */
 .fl .fl-pulse {
   fill: none;
-  stroke: var(--color-state-active);
+  stroke: var(--fx-edge);
   stroke-width: var(--simple2-node-stroke);
   pointer-events: none;
 }
@@ -1424,38 +1432,38 @@
 }
 
 .fl .fl-fragment-heading {
-  fill: var(--color-card);
+  fill: var(--color-node);
 }
 
 .fl .fl-fragment-label {
   font-weight: var(--weight-semibold);
 }
 
-@keyframes a0 { 0%,42.285% { fill: var(--color-node) } 42.286%,61.711% { fill: var(--color-node) } 61.712%,100% { fill: var(--color-node) } }
-.fl .a0 { animation: a0 8.88s 1 forwards linear; }
-@keyframes a1 { 0%,42.285% { opacity: 0; visibility: hidden } 42.286%,42.286% { opacity: 1; visibility: visible } 42.286%,61.711% { opacity: 1; visibility: visible } 61.712%,100% { opacity: 1; visibility: visible } }
-.fl .a1 { animation: a1 8.88s 1 forwards linear; }
-@keyframes a2 { 0%,42.285% { opacity: 0 } 42.286%,42.286% { opacity: 1 } 42.286%,61.711% { opacity: 1 } 61.712%,100% { opacity: 1 } }
-.fl .a2 { animation: a2 8.88s 1 forwards linear; }
-@keyframes a3 { 0%,42.285% { color: var(--color-state-active) } 42.286%,100% { color: var(--color-line) } }
-.fl .a3 { animation: a3 8.88s 1 forwards linear; }
-@keyframes a4 { 0%,42.285% { color: var(--color-line) } 42.286%,61.711% { color: var(--color-state-active) } 61.712%,100% { color: var(--color-line) } }
-.fl .a4 { animation: a4 8.88s 1 forwards linear; }
-@keyframes a5 { 0%,61.711% { color: var(--color-line) } 61.712%,100% { color: var(--color-state-active) } }
-.fl .a5 { animation: a5 8.88s 1 forwards linear; }
-@keyframes a6 { 0%,42.285% { stroke: var(--color-state-active) } 42.286% { stroke: var(--color-state-active) } 46.791%,100% { stroke: var(--simple2-separator) } }
-.fl .a6 { animation: a6 8.88s 1 forwards linear; }
-@keyframes a7 { 0%,42.285% { fill: var(--color-state-active) } 42.286% { fill: var(--color-state-active) } 46.791%,100% { fill: var(--color-muted) } }
-.fl .a7 { animation: a7 8.88s 1 forwards linear; }
-@keyframes a8 { 0%,42.285% { stroke: var(--simple2-separator) } 42.286% { stroke: var(--simple2-separator) } 43.187%,61.711% { stroke: var(--color-state-active) } 61.712% { stroke: var(--color-state-active) } 66.216%,100% { stroke: var(--simple2-separator) } }
-.fl .a8 { animation: a8 8.88s 1 forwards linear; }
-@keyframes a9 { 0%,42.285% { fill: var(--color-muted) } 42.286% { fill: var(--color-muted) } 43.187%,61.711% { fill: var(--color-state-active) } 61.712% { fill: var(--color-state-active) } 66.216%,100% { fill: var(--color-muted) } }
-.fl .a9 { animation: a9 8.88s 1 forwards linear; }
-@keyframes a10 { 0%,61.711% { stroke: var(--simple2-separator) } 61.712% { stroke: var(--simple2-separator) } 62.613%,100% { stroke: var(--color-state-active) } }
-.fl .a10 { animation: a10 8.88s 1 forwards linear; }
-@keyframes a11 { 0%,61.711% { fill: var(--color-muted) } 61.712% { fill: var(--color-muted) } 62.613%,100% { fill: var(--color-state-active) } }
-.fl .a11 { animation: a11 8.88s 1 forwards linear; }
-.fl .sa0 { fill: var(--color-node); }
+@keyframes a0 { 0%,42.647% { fill: var(--fx-face); stroke: var(--fx-edge-rest) } 42.648%,61.951% { fill: var(--fx-face); stroke: var(--fx-edge-rest) } 61.952%,100% { fill: var(--fx-face); stroke: var(--fx-edge-rest) } }
+.fl .a0 { animation: a0 8.936s 1 forwards linear; }
+@keyframes a1 { 0%,42.647% { opacity: 0; visibility: hidden } 42.648%,42.648% { opacity: 1; visibility: visible } 42.648%,61.951% { opacity: 1; visibility: visible } 61.952%,100% { opacity: 1; visibility: visible } }
+.fl .a1 { animation: a1 8.936s 1 forwards linear; }
+@keyframes a2 { 0%,42.647% { opacity: 0 } 42.648%,42.648% { opacity: 1 } 42.648%,61.951% { opacity: 1 } 61.952%,100% { opacity: 1 } }
+.fl .a2 { animation: a2 8.936s 1 forwards linear; }
+@keyframes a3 { 0%,42.647% { color: var(--fx-edge) } 42.648%,100% { color: var(--fx-line-rest) } }
+.fl .a3 { animation: a3 8.936s 1 forwards linear; }
+@keyframes a4 { 0%,42.647% { color: var(--fx-line-rest) } 42.648%,61.951% { color: var(--fx-edge) } 61.952%,100% { color: var(--fx-line-rest) } }
+.fl .a4 { animation: a4 8.936s 1 forwards linear; }
+@keyframes a5 { 0%,61.951% { color: var(--fx-line-rest) } 61.952%,100% { color: var(--fx-edge) } }
+.fl .a5 { animation: a5 8.936s 1 forwards linear; }
+@keyframes a6 { 0%,42.647% { stroke: var(--fx-edge) } 42.648% { stroke: var(--fx-edge) } 47.124%,100% { stroke: var(--fx-edge-rest) } }
+.fl .a6 { animation: a6 8.936s 1 forwards linear; }
+@keyframes a7 { 0%,42.647% { fill: var(--fx-ink) } 42.648% { fill: var(--fx-ink) } 47.124%,100% { fill: var(--fx-ink-rest) } }
+.fl .a7 { animation: a7 8.936s 1 forwards linear; }
+@keyframes a8 { 0%,42.647% { stroke: var(--fx-edge-rest) } 42.648% { stroke: var(--fx-edge-rest) } 43.543%,61.951% { stroke: var(--fx-edge) } 61.952% { stroke: var(--fx-edge) } 66.428%,100% { stroke: var(--fx-edge-rest) } }
+.fl .a8 { animation: a8 8.936s 1 forwards linear; }
+@keyframes a9 { 0%,42.647% { fill: var(--fx-ink-rest) } 42.648% { fill: var(--fx-ink-rest) } 43.543%,61.951% { fill: var(--fx-ink) } 61.952% { fill: var(--fx-ink) } 66.428%,100% { fill: var(--fx-ink-rest) } }
+.fl .a9 { animation: a9 8.936s 1 forwards linear; }
+@keyframes a10 { 0%,61.951% { stroke: var(--fx-edge-rest) } 61.952% { stroke: var(--fx-edge-rest) } 62.847%,100% { stroke: var(--fx-edge) } }
+.fl .a10 { animation: a10 8.936s 1 forwards linear; }
+@keyframes a11 { 0%,61.951% { fill: var(--fx-ink-rest) } 61.952% { fill: var(--fx-ink-rest) } 62.847%,100% { fill: var(--fx-ink) } }
+.fl .a11 { animation: a11 8.936s 1 forwards linear; }
+.fl .sa0 { fill: var(--fx-face); stroke: var(--fx-edge-rest); }
 .fl .sa1 { opacity: 1; visibility: visible; }
 .fl .sa2 { opacity: 1; }
 .fl .fl-still { display: none; }
@@ -1466,34 +1474,34 @@
 </style>
 <defs></defs>
 <rect x="0.5" y="0.5" width="959" height="533" rx="18" fill="var(--simple2-canvas-fill)"/>
-<g class="fl-motion" transform="translate(23.5 0)">
-<g id="g-0" class="fl-group" data-id="system"><rect x="317.3" y="28" width="240" height="478" rx="18" class="frame-box fl-stroke "/><text x="335.3" y="46" class="frame">Saturn</text></g>
+<g class="fl-motion" transform="translate(12.6 0)">
+<g id="g-0" class="fl-group" data-id="system"><rect x="321.8" y="28" width="240" height="478" rx="18" class="frame-box fl-stroke "/><text x="339.8" y="46.7" class="frame">Saturn</text></g>
 
-<g id="n-0" class="fl-node fl-shape-person" tabindex="0" role="img" aria-label="Developer" data-id="user"><rect x="28" y="44.5" width="132.1" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-person"><g class="fl-symbol-glyph" transform="translate(46 58) scale(0.83333)"><circle class="symbol-face" cx="12" cy="7.8" r="3.6"/><path class="symbol-face" d="M4 19.4V16.2A8 4 0 0 1 20 16.2V19.4Q20 21 18.4 21H5.6Q4 21 4 19.4Z"/></g></g><text x="108" y="73.4" class="label">Developer</text></g>
-<g id="n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Screen" data-id="tui"><rect x="357.3" y="128" width="176" height="109" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="357.3" y="128" width="176" height="109" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="8.88s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.42286;0.43187;0.44088;0.46791;1" values="0;0;1;1;0;0"/></rect><text x="445.3" y="156.9" class="label">Screen</text><rect x="367.3" y="175" width="156" height="52" rx="6" fill="var(--color-card)" opacity="0" class="fl-card a2"/><g id="n-1-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M373.3 175H517.3a6 6 0 0 1 6 6V221a6 6 0 0 1 -6 6H373.3a6 6 0 0 1 -6 -6V181a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-rf="tui:0"><animate attributeName="opacity" dur="8.88s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.42286;0.43187;0.44088;0.46791;1" values="0;0;1;1;0;0"/></path><rect x="375.3" y="184" width="30" height="14" rx="4" fill="var(--color-data-category-1)" fill-opacity="0.15"/><text x="390.3" y="195" class="tag">YOU</text><text x="410.3" y="195.7" class="row">why does this test</text><text x="375.3" y="215.7" class="row">fail?</text></g></g>
-<g id="n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Engine" data-id="engine"><rect x="395.3" y="375" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="395.3" y="375" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="8.88s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.61712;0.62613;0.63514;0.66216;1" values="0;0;1;1;0;0"/></rect><text x="445.3" y="403.9" class="label">Engine</text></g>
-<g id="n-3" class="fl-node fl-shape-external" tabindex="0" role="img" aria-label="Codex CLI" data-id="codex"><rect x="780.6" y="458.5" width="104.5" height="47" rx="8" fill="var(--color-node)" class="fl-stroke ext a0" stroke-dasharray="5 4"/><rect x="780.6" y="458.5" width="104.5" height="47" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true" stroke-dasharray="5 4"><animate attributeName="opacity" dur="8.88s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.95495;0.96396;0.97297;1" values="0;0;1;1;0"/></rect><text x="832.8" y="487.4" class="label">Codex CLI</text></g>
-<g id="e-0" class="fl-edge a3"><defs><marker id="fl-arrow-0" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-0" d="M 160.1 68 L 319.3 68 Q 341.3 68, 341.3 90 L 341.3 174.5 Q 341.3 182.5, 349.3 182.5 L 357.3 182.5" class="fl-path" marker-end="url(#fl-arrow-0)"/></g>
-<g id="e-1" class="fl-edge a4"><defs><marker id="fl-arrow-1" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-1" d="M 445.3 237 L 445.3 375" class="fl-path" marker-end="url(#fl-arrow-1)"/></g>
-<g id="e-2" class="fl-edge a5"><defs><marker id="fl-arrow-2" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-2" d="M 495.3 398.5 L 503.3 398.5 Q 511.3 398.5, 511.3 406.5 L 511.3 460 Q 511.3 482, 533.3 482 L 780.6 482" class="fl-path" marker-end="url(#fl-arrow-2)"/></g>
+<g id="n-0" class="fl-node fl-shape-person" tabindex="0" role="img" aria-label="Developer" data-id="user"><rect x="28" y="44.5" width="132.1" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-person"><g class="fl-symbol-glyph" transform="translate(46 58) scale(0.83333)"><circle class="symbol-face" cx="12" cy="7.8" r="3.6"/><path class="symbol-face" d="M4 19.4V16.2A8 4 0 0 1 20 16.2V19.4Q20 21 18.4 21H5.6Q4 21 4 19.4Z"/></g></g><text x="108" y="73.4" class="label" text-anchor="middle">Developer</text></g>
+<g id="n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Screen" data-id="tui"><rect x="361.8" y="128" width="176" height="109" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="361.8" y="128" width="176" height="109" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="8.936s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.42648;0.43543;0.44438;0.47124;1" values="0;0;1;1;0;0"/></rect><text x="449.8" y="156.9" class="label" text-anchor="middle">Screen</text><rect x="371.8" y="175" width="156" height="52" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card a2"/><g id="n-1-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M377.8 175H521.8a6 6 0 0 1 6 6V221a6 6 0 0 1 -6 6H377.8a6 6 0 0 1 -6 -6V181a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-rf="tui:0"><animate attributeName="opacity" dur="8.936s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.42648;0.43543;0.44438;0.47124;1" values="0;0;1;1;0;0"/></path><rect x="379.8" y="184" width="30" height="14" rx="4" fill="var(--color-data-category-1)" fill-opacity="0.15"/><text x="394.8" y="195" class="tag" text-anchor="middle">YOU</text><text x="414.8" y="195.7" class="row">why does this test</text><text x="379.8" y="215.7" class="row">fail?</text></g></g>
+<g id="n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Engine" data-id="engine"><rect x="399.8" y="375" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="399.8" y="375" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="8.936s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.61952;0.62847;0.63742;0.66428;1" values="0;0;1;1;0;0"/></rect><text x="449.8" y="403.9" class="label" text-anchor="middle">Engine</text></g>
+<g id="n-3" class="fl-node fl-shape-external" tabindex="0" role="img" aria-label="Codex CLI" data-id="codex"><rect x="802.3" y="458.5" width="104.5" height="47" rx="8" fill="var(--color-node)" class="fl-stroke ext a0" stroke-dasharray="5 4"/><rect x="802.3" y="458.5" width="104.5" height="47" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true" stroke-dasharray="5 4"><animate attributeName="opacity" dur="8.936s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.95524;0.96419;0.97314;1" values="0;0;1;1;0"/></rect><text x="854.5" y="487.4" class="label" text-anchor="middle">Codex CLI</text></g>
+<g id="e-0" class="fl-edge a3"><defs><marker id="fl-arrow-0" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-0" d="M 160.1 68 L 323.8 68 Q 345.8 68, 345.8 90 L 345.8 174.5 Q 345.8 182.5, 353.8 182.5 L 361.8 182.5" class="fl-path" marker-end="url(#fl-arrow-0)"/></g>
+<g id="e-1" class="fl-edge a4"><defs><marker id="fl-arrow-1" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-1" d="M 449.8 237 L 449.8 375" class="fl-path" marker-end="url(#fl-arrow-1)"/></g>
+<g id="e-2" class="fl-edge a5"><defs><marker id="fl-arrow-2" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-2" d="M 499.8 398.5 L 507.8 398.5 Q 515.8 398.5, 515.8 406.5 L 515.8 460 Q 515.8 482, 537.8 482 L 802.3 482" class="fl-path" marker-end="url(#fl-arrow-2)"/></g>
 
-<g class="p0-0" opacity="0" fill="var(--color-state-on-active)"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><g><rect x="-29" y="-35" width="58.1" height="23" rx="8" fill="var(--color-state-active-fill)"/><text x="0" y="-20" class="chip">question</text><animateTransform attributeName="transform" type="translate" dur="8.88s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.00751;0.01502;0.02252;0.03003;0.03754;0.04505;0.05255;0.06006;0.06757;0.07132;0.07508;0.07883;0.08258;0.08634;0.22147;0.35661;0.36036;0.37162;0.37913;0.38664;0.39414;0.40165;0.40916;0.41667;0.42286;1" values="33 0;32.5 0;31.8 0;30.7 0;29.3 0;27.5 0;25.4 0;23 0;20.2 0;17 0;15.2 0;13.4 0;11.4 0;9.3 0;7.2 0;-37.1 0;-18.6 0;-19.7 0;-23.4 0;-25.6 0;-27.6 0;-29.3 0;-30.6 0;-31.7 0;-32.5 0;-33 0;-33 0"/></g><animate attributeName="opacity" dur="8.88s" repeatCount="1" fill="freeze" calcMode="discrete" keyTimes="0;0.42286" values="1;0"/><animateMotion dur="8.88s" repeatCount="1" fill="freeze" calcMode="spline" keyTimes="0;0.42286;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
-<g class="p1-0" opacity="0" fill="var(--color-state-on-active)"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="8.88s" repeatCount="1" fill="freeze" calcMode="discrete" keyTimes="0;0.42286;0.61712" values="0;1;0"/><animateMotion dur="8.88s" repeatCount="1" fill="freeze" calcMode="spline" keyTimes="0;0.42286;0.61712;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
-<g class="p2-0" opacity="0" fill="var(--color-state-on-active)"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><g><rect x="-18.3" y="-35" width="36.6" height="23" rx="8" fill="var(--color-state-active-fill)"/><text x="0" y="-20" class="chip">turn</text><animateTransform attributeName="transform" type="translate" dur="8.88s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.61712;0.62087;0.62462;0.62838;0.63213;0.63589;0.63964;0.64339;0.64715;0.6509;0.65465;0.78979;0.88739;0.95495;1" values="22.3 47;22.3 47;22 47;21.5 47;20.9 47;20.2 47;19.3 47;18.2 47;17 47;15.7 47;14.2 47;12.5 47;0 0;0 0;-22.3 0;-22.3 0"/></g><animate attributeName="opacity" dur="8.88s" repeatCount="1" fill="freeze" calcMode="discrete" keyTimes="0;0.61712;0.95495" values="0;1;0"/><animateMotion dur="8.88s" repeatCount="1" fill="freeze" calcMode="spline" keyTimes="0;0.61712;0.95495;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
-<g class="fl-pills"><g id="l-0" class="fl-edge"><g class="fl-pill"><rect x="220.1" y="58.5" width="37.2" height="18" rx="9" class="pill a6"/><text x="238.7" y="71.5" class="edgelabel a7">input</text></g></g><g id="l-1" class="fl-edge"><g class="fl-pill"><rect x="412.3" y="297" width="65.6" height="18" rx="9" class="pill a8"/><text x="445.1" y="310" class="edgelabel a9">JSON-RPC</text></g></g><g id="l-2" class="fl-edge"><g class="fl-pill"><rect x="617.3" y="472.5" width="103.3" height="18" rx="9" class="pill a10"/><text x="668.9" y="485.5" class="edgelabel a11">app-server request</text></g></g></g>
+<g class="p0-0" opacity="0" fill="var(--color-state-on-active)"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><g><rect x="-32.9" y="-38" width="65.8" height="26" rx="8" fill="var(--color-state-active-fill)"/><text x="0" y="-20" class="chip">question</text><animateTransform attributeName="transform" type="translate" dur="8.936s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.00746;0.01492;0.02238;0.02984;0.0373;0.04476;0.05222;0.05968;0.06714;0.0746;0.07833;0.08207;0.0858;0.22008;0.35437;0.3581;0.36183;0.36556;0.37675;0.38421;0.39167;0.39913;0.4066;0.41406;0.42152;0.42648;1" values="36.9 50;36.4 50;35.6 50;34.6 50;33.2 50;31.4 50;29.4 50;27 50;24.2 50;21 50;17.5 50;15.6 50;13.5 50;11.4 50;-43 50;-21.3 0;-22 0;-22.9 0;-24 0;-27.7 0;-29.9 0;-31.8 0;-33.4 0;-34.7 0;-35.7 0;-36.5 0;-36.9 0;-36.9 0"/></g><animate attributeName="opacity" dur="8.936s" repeatCount="1" fill="freeze" calcMode="discrete" keyTimes="0;0.42648" values="1;0"/><animateMotion dur="8.936s" repeatCount="1" fill="freeze" calcMode="spline" keyTimes="0;0.42648;1" keySplines="0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;1;1"><mpath href="#p-0" xlink:href="#p-0"/></animateMotion></g>
+<g class="p1-0" opacity="0" fill="var(--color-state-on-active)"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><animate attributeName="opacity" dur="8.936s" repeatCount="1" fill="freeze" calcMode="discrete" keyTimes="0;0.42648;0.61952" values="0;1;0"/><animateMotion dur="8.936s" repeatCount="1" fill="freeze" calcMode="spline" keyTimes="0;0.42648;0.61952;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-1" xlink:href="#p-1"/></animateMotion></g>
+<g class="p2-0" opacity="0" fill="var(--color-state-on-active)"><circle r="10" fill="var(--color-state-active)" opacity="0.2"/><circle r="4.5" fill="var(--color-state-active)"/><g><rect x="-20.1" y="-38" width="40.2" height="26" rx="8" fill="var(--color-state-active-fill)"/><text x="0" y="-20" class="chip">turn</text><animateTransform attributeName="transform" type="translate" dur="8.936s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.61952;0.62325;0.62698;0.63071;0.63444;0.63817;0.6419;0.64563;0.64936;0.78365;0.88809;0.95524;1" values="24.1 50;24.1 50;23.7 50;23.3 50;22.6 50;21.9 50;20.9 50;19.8 50;18.6 50;17.2 50;0 0;0 0;-24.1 0;-24.1 0"/></g><animate attributeName="opacity" dur="8.936s" repeatCount="1" fill="freeze" calcMode="discrete" keyTimes="0;0.61952;0.95524" values="0;1;0"/><animateMotion dur="8.936s" repeatCount="1" fill="freeze" calcMode="spline" keyTimes="0;0.61952;0.95524;1" keySplines="0 0 1 1;0.455 0.03 0.515 0.955;0 0 1 1" keyPoints="0;0;1;1"><mpath href="#p-2" xlink:href="#p-2"/></animateMotion></g>
+<g class="fl-pills"><g id="l-0" class="fl-edge"><g class="fl-pill"><rect x="220.1" y="58.5" width="41.7" height="18" rx="9" class="pill a6"/><text x="240.9" y="72.2" class="edgelabel a7">input</text></g></g><g id="l-1" class="fl-edge"><g class="fl-pill"><rect x="411.8" y="297" width="75.4" height="18" rx="9" class="pill a8"/><text x="449.4" y="310.7" class="edgelabel a9">JSON-RPC</text></g></g><g id="l-2" class="fl-edge"><g class="fl-pill"><rect x="621.8" y="472.5" width="120.5" height="18" rx="9" class="pill a10"/><text x="682" y="486.2" class="edgelabel a11">app-server request</text></g></g></g>
 </g>
-<g class="fl-still" transform="translate(23.5 0)">
-<g id="still-g-0" class="fl-group" data-id="system"><rect x="317.3" y="28" width="240" height="478" rx="18" class="frame-box fl-stroke "/><text x="335.3" y="46" class="frame">Saturn</text></g>
+<g class="fl-still" transform="translate(12.6 0)">
+<g id="still-g-0" class="fl-group" data-id="system"><rect x="321.8" y="28" width="240" height="478" rx="18" class="frame-box fl-stroke "/><text x="339.8" y="46.7" class="frame">Saturn</text></g>
 
-<g id="still-n-0" class="fl-node fl-shape-person" tabindex="0" role="img" aria-label="Developer" data-id="user"><rect x="28" y="44.5" width="132.1" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-person"><g class="fl-symbol-glyph" transform="translate(46 58) scale(0.83333)"><circle class="symbol-face" cx="12" cy="7.8" r="3.6"/><path class="symbol-face" d="M4 19.4V16.2A8 4 0 0 1 20 16.2V19.4Q20 21 18.4 21H5.6Q4 21 4 19.4Z"/></g></g><text x="108" y="73.4" class="label">Developer</text></g>
-<g id="still-n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Screen" data-id="tui"><rect x="357.3" y="128" width="176" height="109" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><text x="445.3" y="156.9" class="label">Screen</text><rect x="367.3" y="175" width="156" height="52" rx="6" fill="var(--color-card)" opacity="0" class="fl-card sa2"/><g id="still-n-1-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><rect x="375.3" y="184" width="30" height="14" rx="4" fill="var(--color-data-category-1)" fill-opacity="0.15"/><text x="390.3" y="195" class="tag">YOU</text><text x="410.3" y="195.7" class="row">why does this test</text><text x="375.3" y="215.7" class="row">fail?</text></g></g>
-<g id="still-n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Engine" data-id="engine"><rect x="395.3" y="375" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><text x="445.3" y="403.9" class="label">Engine</text></g>
-<g id="still-n-3" class="fl-node fl-shape-external" tabindex="0" role="img" aria-label="Codex CLI" data-id="codex"><rect x="780.6" y="458.5" width="104.5" height="47" rx="8" fill="var(--color-node)" class="fl-stroke ext sa0" stroke-dasharray="5 4"/><text x="832.8" y="487.4" class="label">Codex CLI</text></g>
-<g id="still-e-0" class="fl-edge "><defs><marker id="still-fl-arrow-0" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-0" d="M 160.1 68 L 319.3 68 Q 341.3 68, 341.3 90 L 341.3 174.5 Q 341.3 182.5, 349.3 182.5 L 357.3 182.5" class="fl-path" marker-end="url(#still-fl-arrow-0)"/></g>
-<g id="still-e-1" class="fl-edge "><defs><marker id="still-fl-arrow-1" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-1" d="M 445.3 237 L 445.3 375" class="fl-path" marker-end="url(#still-fl-arrow-1)"/></g>
-<g id="still-e-2" class="fl-edge "><defs><marker id="still-fl-arrow-2" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-2" d="M 495.3 398.5 L 503.3 398.5 Q 511.3 398.5, 511.3 406.5 L 511.3 460 Q 511.3 482, 533.3 482 L 780.6 482" class="fl-path" marker-end="url(#still-fl-arrow-2)"/></g>
+<g id="still-n-0" class="fl-node fl-shape-person" tabindex="0" role="img" aria-label="Developer" data-id="user"><rect x="28" y="44.5" width="132.1" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-person"><g class="fl-symbol-glyph" transform="translate(46 58) scale(0.83333)"><circle class="symbol-face" cx="12" cy="7.8" r="3.6"/><path class="symbol-face" d="M4 19.4V16.2A8 4 0 0 1 20 16.2V19.4Q20 21 18.4 21H5.6Q4 21 4 19.4Z"/></g></g><text x="108" y="73.4" class="label" text-anchor="middle">Developer</text></g>
+<g id="still-n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Screen" data-id="tui"><rect x="361.8" y="128" width="176" height="109" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><text x="449.8" y="156.9" class="label" text-anchor="middle">Screen</text><rect x="371.8" y="175" width="156" height="52" rx="6" fill="var(--color-node)" stroke="var(--simple2-separator)" stroke-width="1" opacity="0" class="fl-card sa2"/><g id="still-n-1-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><rect x="379.8" y="184" width="30" height="14" rx="4" fill="var(--color-data-category-1)" fill-opacity="0.15"/><text x="394.8" y="195" class="tag" text-anchor="middle">YOU</text><text x="414.8" y="195.7" class="row">why does this test</text><text x="379.8" y="215.7" class="row">fail?</text></g></g>
+<g id="still-n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Engine" data-id="engine"><rect x="399.8" y="375" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><text x="449.8" y="403.9" class="label" text-anchor="middle">Engine</text></g>
+<g id="still-n-3" class="fl-node fl-shape-external" tabindex="0" role="img" aria-label="Codex CLI" data-id="codex"><rect x="802.3" y="458.5" width="104.5" height="47" rx="8" fill="var(--color-node)" class="fl-stroke ext sa0" stroke-dasharray="5 4"/><text x="854.5" y="487.4" class="label" text-anchor="middle">Codex CLI</text></g>
+<g id="still-e-0" class="fl-edge "><defs><marker id="still-fl-arrow-0" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-0" d="M 160.1 68 L 323.8 68 Q 345.8 68, 345.8 90 L 345.8 174.5 Q 345.8 182.5, 353.8 182.5 L 361.8 182.5" class="fl-path" marker-end="url(#still-fl-arrow-0)"/></g>
+<g id="still-e-1" class="fl-edge "><defs><marker id="still-fl-arrow-1" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-1" d="M 449.8 237 L 449.8 375" class="fl-path" marker-end="url(#still-fl-arrow-1)"/></g>
+<g id="still-e-2" class="fl-edge "><defs><marker id="still-fl-arrow-2" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-2" d="M 499.8 398.5 L 507.8 398.5 Q 515.8 398.5, 515.8 406.5 L 515.8 460 Q 515.8 482, 537.8 482 L 802.3 482" class="fl-path" marker-end="url(#still-fl-arrow-2)"/></g>
 
 
-<g class="fl-pills"><g id="still-l-0" class="fl-edge"><g class="fl-pill"><rect x="220.1" y="58.5" width="37.2" height="18" rx="9" class="pill "/><text x="238.7" y="71.5" class="edgelabel ">input</text></g></g><g id="still-l-1" class="fl-edge"><g class="fl-pill"><rect x="412.3" y="297" width="65.6" height="18" rx="9" class="pill "/><text x="445.1" y="310" class="edgelabel ">JSON-RPC</text></g></g><g id="still-l-2" class="fl-edge"><g class="fl-pill"><rect x="617.3" y="472.5" width="103.3" height="18" rx="9" class="pill "/><text x="668.9" y="485.5" class="edgelabel ">app-server request</text></g></g></g>
+<g class="fl-pills"><g id="still-l-0" class="fl-edge"><g class="fl-pill"><rect x="220.1" y="58.5" width="41.7" height="18" rx="9" class="pill "/><text x="240.9" y="72.2" class="edgelabel ">input</text></g></g><g id="still-l-1" class="fl-edge"><g class="fl-pill"><rect x="411.8" y="297" width="75.4" height="18" rx="9" class="pill "/><text x="449.4" y="310.7" class="edgelabel ">JSON-RPC</text></g></g><g id="still-l-2" class="fl-edge"><g class="fl-pill"><rect x="621.8" y="472.5" width="120.5" height="18" rx="9" class="pill "/><text x="682" y="486.2" class="edgelabel ">app-server request</text></g></g></g>
 </g>
 </svg>

@@ -17,7 +17,7 @@ shipped -> delivered "receipt confirmed"
 created -> cancelled "payment failed"
 paid -> cancelled "customer cancels" dashed
 
-view main graph down
+view graph down
 
 scene "Normal order" mode=static
   created -> paid time=700ms

@@ -56,6 +56,12 @@ function readSeries({ tokens, line }, { figure, problems }) {
     problems.error(line, `a ${figure.chartType} chart row uses "x=" for the horizontal value, so a series cannot be named "x"`);
     return;
   }
+  // 계열 이름은 차트 카드 안에서 겹치지 않는다. 같은 이름의 값 자리는 어느 계열인지 정할 수 없기 때문이다.
+  const same = figure.chart.series.find((s) => s.id === id.value);
+  if (same) {
+    problems.error(line, `the series "${id.value}" is already declared in this chart (line ${same.line})`);
+    return;
+  }
   figure.chart.series.push({ id: id.value, label: label.value, key: given.key ?? id.value, role: given.role, line });
 }
 

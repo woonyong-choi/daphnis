@@ -4,7 +4,7 @@ import { CHIP_GAP, sizeChip } from '../chip.js';
 import { keySpline, MOVE, timeAtPosition } from '../easing.js';
 import { discreteWindows } from './discrete.js';
 import { chipFadeAnimate, cutFadeAnimate, cutMotionKeys, visibleSpans } from './flow-packet.js';
-import { STYLE } from '../measure/sizes.js';
+import { STYLE } from '../measure/texts.js';
 import { ratio } from '../format.js';
 import { renderRich, roundCoord as r } from '../text.js';
 import { toneColors } from '../tone.js';

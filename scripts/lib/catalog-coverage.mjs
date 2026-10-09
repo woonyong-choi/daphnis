@@ -37,7 +37,7 @@ export function catalogCoverage(source) {
     if (first.value === 'scene' && !isArrow) inScenes = true;
     add(found, word, at);
     if (word === 'chart') add(found, `chart:${tokens[3]?.value}`, at);
-    if (word === 'view') add(found, `view:${tokens[2]?.value}`, at);
+    if (word === 'view') add(found, `view:${tokens[1]?.value}`, at);
     if (word === 'fragment') add(found, `fragment:${tokens[1]?.value}`, at);
     for (const token of tokens) {
       if (token.type === 'amp') add(found, '&', at);

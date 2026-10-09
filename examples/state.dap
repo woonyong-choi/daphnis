@@ -23,17 +23,16 @@ paid -> cancelled "고객 취소" dashed
 shipped -> delivered "수령 확인"
 delivered -> returned "7일 안 반품" dashed
 
-view main graph down
+view graph down
 
-scene "상태 전체" mode=static
-  wait 1s
+scene "상태 전체"
 
-scene "정상 주문" mode=once
+scene "정상 주문"
   created -> paid "승인" time=700ms
   paid -> shipped time=700ms
   shipped -> delivered "수령" time=700ms
 
-scene "결제 재시도와 취소" mode=once
+scene "결제 재시도와 취소"
   created -> created "재시도" time=700ms
   created -> cancelled "실패" time=700ms
 
@@ -41,7 +40,7 @@ scene "출고 전 취소" mode=loop
   created -> paid time=600ms
   paid -> cancelled time=700ms
 
-scene "배송 뒤 반품" mode=once
+scene "배송 뒤 반품"
   shipped -> delivered time=700ms
   delivered -> returned time=800ms
   light fulfil

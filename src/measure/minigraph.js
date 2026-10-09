@@ -2,9 +2,9 @@
 import { depthsOf } from '../source/minigraph.js';
 import { values } from '../tokens.js';
 import { measure } from './fonts.js';
+import { STYLE } from './texts.js';
 
 const SPACE = values.space;
-const NODE_TEXT = values.size.text['11'];
 const NODE_H = values.size.pill.height;
 const ROW_GAP = SPACE['3'];
 
@@ -27,7 +27,7 @@ export function layoutMiniGraph(graph, width) {
   const nodes = graph.nodes.map((name, i) => {
     const d = depth[i];
     // 열 사이에는 이어 주는 선이 읽히도록 `space.4`를 비운다.
-    const w = Math.min(columnW - SPACE['4'], measure(name, NODE_TEXT) + SPACE['11']);
+    const w = Math.min(columnW - SPACE['4'], measure(name, STYLE.mini.size, STYLE.mini.face) + SPACE['11']);
     const columnH = counts[i] * NODE_H + (counts[i] - 1) * ROW_GAP;
     const order = depth.slice(0, i).filter((x) => x === d).length;
     return { name, x: columnW * d + (columnW - w) / 2, y: arc + (bodyH - columnH) / 2 + order * (NODE_H + ROW_GAP), w, h: NODE_H, isLit: graph.lit.includes(name) };
@@ -35,5 +35,3 @@ export function layoutMiniGraph(graph, width) {
   const edges = graph.edges.map(([a, b]) => ({ from: nodes[a], to: nodes[b], isLit: nodes[a].isLit && nodes[b].isLit, isSkip: Math.abs(depth[b] - depth[a]) > 1 }));
   return { height: arc + bodyH, nodes, edges };
 }
-
-export { NODE_TEXT as MINI_TEXT };

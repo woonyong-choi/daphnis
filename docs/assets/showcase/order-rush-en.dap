@@ -21,7 +21,7 @@ partner -> api
 api -> db
 api -> pay
 
-view main graph down
+view graph down
 
 scene "Concurrent orders" mode=loop for=6s
   track web, app, partner -> api -> db "order" every=2s time=2400ms

@@ -1,6 +1,6 @@
 # 구조 그림
 
-구조 그림은 카드를 선으로 잇고 그래프 보기(`view ... graph`)로 보이는 그림입니다. 구성 요소와 요청이 가는 길을 그립니다. 카드를 선언하고, 선을 잇고, 보기를 고른 다음, 장면(`scene`)마다 점이 어느 선을 지나는지 적습니다.
+구조 그림은 카드를 선으로 잇고 그래프 보기(`view graph`)로 보이는 그림입니다. 구성 요소와 요청이 가는 길을 그립니다. 카드를 선언하고, 선을 잇고, 보기를 고른 다음, 장면(`scene`)마다 점이 어느 선을 지나는지 적습니다.
 
 ## 최소 예제
 
@@ -15,16 +15,14 @@ store db "데이터베이스"
 client -> server "GET /orders"
 server -> db "SELECT"
 
-view main graph right
-
-scene "요청" mode=once
+scene "요청"
   client -> server time=700ms
   server -> db time=700ms
 ```
 
 ![요청 경로](flow-minimal.svg)<!-- dap -->
 
-첫 줄은 언제나 `daphnis 2`입니다. 그다음 카드 줄, 선 줄, 보기 줄(`view 이름 graph right`), 장면 줄 순서로 적습니다. 보기 줄을 생략하면 모든 카드를 담은 그래프 보기 하나가 기본으로 생깁니다. 장면의 `mode`는 `static`(마지막 상태 하나), `once`(한 번 재생), `loop`(되풀이)이고, 생략하면 `static`입니다. 장면 안의 이동에 글을 붙이지 않은 것은 선 라벨이 이미 그 글을 보이기 때문입니다.
+첫 줄은 언제나 `daphnis 2`입니다. 그다음 카드 줄, 선 줄, 필요하면 보기 줄(`view graph down`), 장면 줄 순서로 적습니다. 보기 줄을 생략하면 모든 카드를 담은 왼쪽에서 오른쪽 그래프 보기 하나가 기본으로 생기고, 방향이나 라벨이 필요할 때만 `view graph down "라벨"`처럼 적습니다. 장면의 `mode`는 `static`(마지막 상태 하나), `once`(한 번 재생), `loop`(되풀이)이고, 생략하면 줄이 있는 장면은 `once`, 줄이 없는 장면은 `static`입니다. 장면 안의 이동에 글을 붙이지 않은 것은 선 라벨이 이미 그 글을 보이기 때문입니다.
 
 ## 문법
 
@@ -54,7 +52,7 @@ web -> api
 app -> api
 api -> db
 
-view main graph down
+view graph down
 
 scene "동시 주문" mode=loop for=6s
   track web, app -> api -> db "주문" every=1500ms time=2s
@@ -76,7 +74,9 @@ scene "동시 주문" mode=loop for=6s
 | 같은 방향 선 두 개 | `there is already an edge a -> b (line 4). Merge the labels into one` | `syntax` | 선을 하나로 합치고 라벨을 한 글에 적습니다 |
 | 선언하지 않은 선으로 이동 | `there is no edge between "a" and "b". Declare "a -> b" first` | `syntax` | 선을 먼저 선언합니다 |
 | 내용 없는 `once`, `loop` 장면 | `scene "s" has no lines. Add a move, show, light, reveal, or wait, or write mode=static for a still composition` | `syntax` | 박자나 `track`을 적거나, 정지 모습이면 `mode=static`을 씁니다 |
-| 둘째 판에 없는 낱말(`step`, `say`) | `unknown statement "step"` | `syntax` | `scene "이름" mode=once`처럼 문법 표에 있는 낱말을 씁니다 |
+| 둘째 판에 없는 낱말(`step`, `say`) | `unknown statement "step"` | `syntax` | `scene "이름"`처럼 문법 표에 있는 낱말을 씁니다 |
+| 이름을 쓴 보기 | `a view is one of graph, sequence, plot, time. Found "main". A view has no name: write view graph ...` | `syntax` | 보기 방식부터 적습니다(`view graph down`) |
+| 숫자로만 된 장면 이름 | `scene "2" is only digits, which --scene reads as a scene number. Add a word to the name, such as "step 2"` | `syntax` | 이름에 글자를 더합니다 |
 | 장면 이름 뒤 글 | `write a scene as: scene "name" [mode=...] ...` | `syntax` | 장면에는 이름 하나만 적고 설명은 문서 본문에 적습니다 |
 | 쓸 수 없는 색 이름 | `tone is one of blue, yellow, red, green, orange, purple, cyan, gray` | `syntax` | 목록의 이름을 고릅니다 |
 | 이동 글과 선 라벨이 같음 | `the moving text "label" repeats the edge label. Remove one of them` | `check-8` | 한쪽을 지웁니다(경고, `--strict`에서 실패) |

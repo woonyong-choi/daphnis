@@ -35,7 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.DESIGN_TOKENS_UPDATE_TOKEN || secrets.GITHUB_TOKEN }}
-      CHROME_PATH: /usr/bin/google-chrome
     steps:
       - uses: actions/checkout@v4
         with:
@@ -91,13 +90,7 @@ jobs:
         if: steps.update.outcome == 'success'
         run: |
           result() { if "$@" >> "$RUNNER_TEMP/verify.log" 2>&1; then echo pass; else echo fail; fi; }
-          # 재생기 시험은 실제 Chrome과 WebKit을 연다(test/chrome.js). 못 받으면 시험을 돌릴 수 없으니 시험 실패로 적고 로그에 이유를 남긴다.
-          install_browsers() { npx --no-install playwright-core install --with-deps chrome webkit && "$CHROME_PATH" --version; }
-          if [ "$(result install_browsers)" = pass ]; then
-            echo "test=$(result npm test)" >> "$GITHUB_OUTPUT"
-          else
-            echo "test=fail" >> "$GITHUB_OUTPUT"
-          fi
+          echo "test=$(result npm test)" >> "$GITHUB_OUTPUT"
           echo "check=$(result npm run check)" >> "$GITHUB_OUTPUT"
 
       - name: Commit and push the update branch

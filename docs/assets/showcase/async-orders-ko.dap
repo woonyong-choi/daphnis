@@ -31,7 +31,7 @@ q -> stock
 q -> pay
 q -> notify
 
-view main graph down
+view graph down
 
 scene "이벤트가 오가는 중" mode=loop
   track web -> api -> q at=0s every=2s time=3s

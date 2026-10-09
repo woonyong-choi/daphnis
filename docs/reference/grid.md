@@ -16,12 +16,12 @@ box table "페이지 표"
 
 addr.page -> table "조회"
 
-view main graph down
+view graph down
 
 scene "나누기" mode=static
   light addr.page addr.offset
 
-scene "조회" mode=once
+scene "조회"
   addr.page -> table time=700ms
 ```
 

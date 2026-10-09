@@ -34,19 +34,14 @@ chart cdf "응답 시간 ECDF" ecdf "예시 데이터. 계열마다 요청 표�
   sample 410 series=rolling
 }
 
-view main plot {
-  cdf
-}
+scene "세 방식"
 
-scene "세 방식" mode=static
-  wait 1s
-
-scene "방식 순서대로" mode=once
+scene "방식 순서대로"
   reveal cdf.blue
   wait 1s
   reveal cdf.canary
   wait 1s
   reveal cdf.rolling
 
-scene "100ms 지점" mode=once
+scene "100ms 지점"
   light cdf x=102

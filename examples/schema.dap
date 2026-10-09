@@ -31,18 +31,17 @@ table order_items "order_items" {
   qty int required
 }
 
-view main graph down
+view graph down
 
-scene "스키마 전체" mode=static
-  wait 1s
+scene "스키마 전체"
 
-scene "외래 키 따라가기" mode=once
+scene "외래 키 따라가기"
   order_items -> orders time=900ms
   show orders "id 7 · 결제 완료" tag="행" tone=blue
   orders -> users time=900ms
   show users "id 3 · kim@example.com" tag="행" tone=blue
 
-scene "삭제 정책" mode=once
+scene "삭제 정책"
   light orders.user_id orders.coupon_id order_items.order_id
   wait 1s
   light order_items.product_id products.id

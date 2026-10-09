@@ -17,21 +17,16 @@ chart errors "엔드포인트별 5xx 오류율" bar "예시 데이터. 요청 10
   row "DELETE /carts" before=0.95 before.low=0.7 before.high=1.24 after=1.26 after.low=1.01 after.high=1.55 goal=1
 }
 
-view main plot {
-  errors
-}
+scene "전체 비교"
 
-scene "전체 비교" mode=static
-  wait 1s
-
-scene "배포 전에서 후로" mode=once
+scene "배포 전에서 후로"
   reveal errors.before
   wait 1s
   reveal errors.after
   wait 1s
   reveal errors.goal
 
-scene "목표를 넘은 행" mode=once
+scene "목표를 넘은 행"
   light errors "POST /orders"
   wait 1s
   light errors "DELETE /carts"

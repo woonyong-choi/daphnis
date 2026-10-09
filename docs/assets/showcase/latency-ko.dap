@@ -13,10 +13,6 @@ chart latency "엔드포인트별 p95 지연" dumbbell "예시 데이터. 가로
   row "POST /orders" base=420 cached=410
 }
 
-view main plot {
-  latency
-}
-
 scene "전과 후" mode=static
   reveal latency.base
   reveal latency.cached

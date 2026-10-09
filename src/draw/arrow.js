@@ -1,5 +1,6 @@
-// 관계선 화살촉. 채운 삼각형이며 면과 윤곽 모두 관계선 묶음의 currentColor를 따른다.
-// 마커 크기는 `markerUnits=strokeWidth`라 몸통 굵기에 비례해 커진다. 그러면 마커 안 선도 같은 비율로 굵어져 이중으로 굵어지므로, 마커 안 선 굵기를 `VIEW / size`로 정규화해 어떤 몸통 굵기에서도 실제 굵기가 몸통과 같게 한다.
+// 화살촉 부품. 모양은 `arrowMarker` 하나이고, 색은 마커 정의를 품은 요소(소유자)의 `color`를 상속한다. 마커는 자기를 쓰는 선이 아니라 정의된 자리에서 색을 받는다(context-stroke에 기대지 않는다).
+// 소유자는 둘이다. 연결선은 선 묶음 자신이 소유자라 묶음 안에 정의를 두고(`edgeMarker`, 상태색이 묶음의 color를 따른다), 차트 방향선은 역할(`CHART_ARROW`)이 소유자라 역할마다 정의 하나를 문서에 한 번 둔다(`roleArrowDefs`).
+// 어느 쪽이든 먼저 나온 차트가 색을 정하지 않는다. 마커 크기는 `markerUnits=strokeWidth`라 몸통 굵기에 비례해 커진다. 그러면 마커 안 선도 같은 비율로 굵어져 이중으로 굵어지므로, 마커 안 선 굵기를 `VIEW / size`로 정규화해 어떤 몸통 굵기에서도 실제 굵기가 몸통과 같게 한다.
 import { tokens, values } from '../tokens.js';
 
 // 마커 좌표계 한 변
@@ -23,6 +24,24 @@ export function arrowMarker(id, size = values.size.arrow.head) {
   const c = VIEW / 2;
   const d = `M ${ARM_X} ${c - ARM_HALF} L ${TIP_X} ${c} L ${ARM_X} ${c + ARM_HALF} Z`;
   return `<marker id="${id}" viewBox="0 0 ${VIEW} ${VIEW}" refX="${TIP_X}" refY="${c}" markerWidth="${size}" markerHeight="${size}" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="${d}" stroke-width="${markStroke(size)}"/></marker>`;
+}
+
+/** 방향선을 가진 차트 종류가 쓰는 색 역할. 종류가 역할을 고르고, 역할의 색은 chart.css의 `.arrow-<역할>`이 한 번 정한다(몸통과 화살촉이 함께 읽는다). */
+export const CHART_ARROW = Object.freeze({ dumbbell: 'main', scatter: 'muted' });
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+/** 역할이 소유한 차트 방향선의 속성: 몸통 class(역할의 색을 읽는다)와 끝 표식. 표식 정의는 `roleArrowDefs`가 문서에 한 번 둔다. */
+export function roleArrow(role) {
+  return { cls: `arrow-${role}`, end: ` marker-end="url(#fl-arrow-${role})"` };
+}
+
+// cost: time O(r log r), heap O(r), stack O(1)
+// vars: r = 역할 수
+// basis: estimate
+/** 쓰인 역할마다 하나인 마커 정의. 역할 class의 묶음 안에 있어 화살촉이 그 역할의 색을 상속한다. 역할 이름순이라 선언 순서와 상관없이 같은 글이다. */
+export function roleArrowDefs(roles) {
+  return [...new Set(roles)].sort().map((role) => `<g class="arrow-${role}">${arrowMarker(`fl-arrow-${role}`)}</g>`).join('');
 }
 
 // cost: time O(1), heap O(1), stack O(1)

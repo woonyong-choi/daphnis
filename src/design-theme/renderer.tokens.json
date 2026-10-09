@@ -412,18 +412,6 @@
       "$value": "{primitive.simple2.bg}",
       "$type": "color"
     },
-    "group-1": {
-      "$value": "{primitive.simple2.group-1}",
-      "$type": "color"
-    },
-    "group-2": {
-      "$value": "{primitive.simple2.group-2}",
-      "$type": "color"
-    },
-    "group-3": {
-      "$value": "{primitive.simple2.group-3}",
-      "$type": "color"
-    },
     "node": {
       "$value": "{primitive.simple2.node}",
       "$type": "color"
@@ -462,7 +450,7 @@
     },
     "state": {
       "active": {
-        "$value": "{color.blue.light-stroke}",
+        "$value": "{primitive.simple2.ui-accent}",
         "$type": "color"
       },
       "active-fill": {
@@ -526,7 +514,7 @@
         "$type": "color"
       },
       "focus": {
-        "$value": "{color.blue.light-stroke}",
+        "$value": "{primitive.simple2.ui-accent}",
         "$type": "color"
       },
       "progress": {
@@ -534,7 +522,7 @@
         "$type": "color"
       },
       "control-on": {
-        "$value": "{color.gray.0}",
+        "$value": "{primitive.simple2.ui-accent}",
         "$type": "color"
       }
     },
@@ -1705,6 +1693,10 @@
     "effect-decay": {
       "$value": 240,
       "$type": "duration"
+    },
+    "notice": {
+      "$value": 2400,
+      "$type": "duration"
     }
   },
   "easing": {
@@ -1828,17 +1820,41 @@
       "$value": 1.5,
       "$type": "dimension"
     },
-    "selection-fill": {
-      "$value": "{primitive.simple2.selection-fill}",
+    "segment-track": {
+      "$value": "rgba(0, 25, 61, 0.1)",
+      "$type": "string"
+    },
+    "segment-ink": {
+      "$value": "rgba(0, 4, 9, 0.78)",
+      "$type": "string"
+    },
+    "segment-hover": {
+      "$value": "rgba(0, 25, 61, 0.08)",
+      "$type": "string"
+    },
+    "segment-on": {
+      "$value": "{primitive.simple2.ui-accent}",
       "$type": "color"
     },
-    "selection-ink": {
-      "$value": "{primitive.simple2.selection-ink}",
+    "segment-on-hover": {
+      "$value": "{primitive.simple2.ui-accent-hover}",
       "$type": "color"
     },
-    "tab-fill": {
-      "$value": "{primitive.simple2.tab-fill}",
+    "segment-on-ink": {
+      "$value": "{primitive.simple2.on-ui-accent}",
       "$type": "color"
+    },
+    "segment-radius": {
+      "$value": 12,
+      "$type": "dimension"
+    },
+    "segment-item-radius": {
+      "$value": 9,
+      "$type": "dimension"
+    },
+    "segment-pad": {
+      "$value": 4,
+      "$type": "dimension"
     },
     "label-size": {
       "$value": 15,
@@ -1862,6 +1878,10 @@
     },
     "row-selection": {
       "$value": "{primitive.simple2.row-selection}",
+      "$type": "color"
+    },
+    "card-active-fill": {
+      "$value": "{primitive.simple2.card-active-fill}",
       "$type": "color"
     },
     "data-line": {
@@ -1924,31 +1944,19 @@
         "$type": "color"
       },
       "canvas": {
-        "$value": "#f2f5f7",
+        "$value": "#f5f5f6",
         "$type": "color"
       },
-      "selection-fill": {
-        "$value": "#e3e4e8",
+      "ui-accent": {
+        "$value": "#3c84f3",
         "$type": "color"
       },
-      "selection-ink": {
-        "$value": "#303336",
+      "ui-accent-hover": {
+        "$value": "#3779e0",
         "$type": "color"
       },
-      "tab-fill": {
-        "$value": "#f5f5f7",
-        "$type": "color"
-      },
-      "group-1": {
-        "$value": "#eef0f3",
-        "$type": "color"
-      },
-      "group-2": {
-        "$value": "#e7eaee",
-        "$type": "color"
-      },
-      "group-3": {
-        "$value": "#e0e4e9",
+      "on-ui-accent": {
+        "$value": "#ffffff",
         "$type": "color"
       },
       "hover-fill": {
@@ -1957,6 +1965,10 @@
       },
       "row-selection": {
         "$value": "#cee2fd",
+        "$type": "color"
+      },
+      "card-active-fill": {
+        "$value": "#f3f7fd",
         "$type": "color"
       },
       "line": {
@@ -1999,20 +2011,12 @@
         "$value": "#274174",
         "$type": "color"
       },
+      "dark-card-active-fill": {
+        "$value": "#333a48",
+        "$type": "color"
+      },
       "dark-muted": {
         "$value": "#a9adb6",
-        "$type": "color"
-      },
-      "dark-group-1": {
-        "$value": "#2c2d32",
-        "$type": "color"
-      },
-      "dark-group-2": {
-        "$value": "#32343a",
-        "$type": "color"
-      },
-      "dark-group-3": {
-        "$value": "#393c43",
         "$type": "color"
       },
       "dark-line": {

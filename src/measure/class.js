@@ -1,42 +1,41 @@
-// 클래스의 세 구획은 같은 줄 좌표를 측정, 렌더링, 충돌 검사에 전달한다.
+// 클래스의 머리, 속성, 메서드 구획을 카드가 쓰는 text(measure/texts.js)와 구분선으로 한 번 배치해 측정, 렌더링, 충돌 검사에 넘긴다.
+// 머리는 표, API, 순서 보기 참여자와 같은 머리(measure/card.js)이고, 이 파일은 UML 구획(속성, 메서드)과 멤버 표기만 맡는다.
+import { plainText } from '../text.js';
 import { values } from '../tokens.js';
+import { INNER_MAX, MARKS, PAD, headerOf, placeHeader } from './card.js';
 import { measure, wrap } from './fonts.js';
-
-/** 인터페이스 카드의 표시. 클래스 카드와 순서 보기의 머리만 있는 참여자가 같은 글을 쓴다. */
-export const INTERFACE_MARK = '«interface»';
+import { STYLE, stackTexts } from './texts.js';
 
 const VISIBILITY = Object.freeze({ public: '+', private: '-', protected: '#', package: '~' });
-const PAD_X = values.space['9'];
-const PAD_Y = values.space['6'];
 
 // cost: time O(m·n²), heap O(m·n), stack O(1)
 // vars: m = 멤버 수, n = 가장 긴 표시 글자 수
 // basis: estimate
-export function sizeClassifier(node, styles) {
-  const maxInner = values.size.node['card-width'] - PAD_X * 2;
-  // 머리는 제목(label)과 그 위아래 메타(stereotype), 멤버는 핵심 필드(mono)다
-  const header = [];
-  if (node.classifierKind === 'interface') header.push({ text: INTERFACE_MARK, style: styles.meta, role: 'meta' });
-  header.push({ text: node.label, style: styles.label, role: 'label' });
-  if (node.abstract) header.push({ text: '{abstract}', style: styles.meta, role: 'meta' });
-  const groups = [header, ...['field', 'method'].map((kind) => node.members.filter((m) => m.kind === kind).map((m) => ({ text: memberText(m), style: styles.mono, role: 'row mono', underline: Boolean(m.static), member: m.id })))];
-  const rows = [];
-  const dividers = [];
-  let y = 0;
-  for (const [index, group] of groups.entries()) {
-    y += PAD_Y;
-    for (const entry of group) {
-      for (const text of wrap(entry.text, maxInner, entry.style)) {
-        rows.push({ ...entry, text, center: y + entry.style.line / 2, centered: index === 0 });
-        y += entry.style.line;
-      }
-    }
-    if (!group.length) y += styles.mono.line;
-    y += PAD_Y;
-    if (index < groups.length - 1) dividers.push(y);
+/**
+ * 클래스 크기와 글. 머리 아래에 속성, 메서드 구획이 있고 구획 사이에 구분선이 있다. 멤버는 왼쪽에 맞추고 구획 위아래에 안쪽 여백이 있다.
+ * 멤버는 고정폭 글이라 글자 그대로 읽고(text.js isLiteralFace) 줄이 나뉘어도 멤버 하나다. 머리 제목은 멤버 폭과 카드 기본 안쪽 폭 가운데 넓은 쪽에서 줄을 나눈다.
+ * @returns { w, h, texts, decor?, dividers, description }. dividers는 카드 위에서 구분선까지의 거리, description은 화면 읽기용 글(머리와 멤버 하나씩)이다
+ */
+export function sizeClassifier(node) {
+  const maxInner = values.size.node['card-width'] - PAD.x * 2;
+  const members = (kind) => node.members.filter((m) => m.kind === kind).map((m) => ({ text: memberText(m), style: STYLE.mono, role: 'row mono', ...(m.static ? { underline: true } : {}) }));
+  const groups = [members('field'), members('method')];
+  const sections = groups.map((group) => group.flatMap(({ text, ...entry }) => wrap(text, maxInner, entry.style).map((line) => ({ ...entry, text: line }))));
+  const body = Math.max(0, ...sections.flat().map((line) => measure(line.text, line.style.size, line.style.face)));
+  const header = headerOf(node, { room: Math.max(body, INNER_MAX) });
+  const w = Math.max(values.size.node['min-width'], Math.max(header.w, body) + PAD.x * 2);
+  const { decor, texts } = placeHeader(header, w);
+  const dividers = [header.h];
+  let y = header.h;
+  for (const [index, lines] of sections.entries()) {
+    y += PAD.y;
+    texts.push(...stackTexts(lines, { x: PAD.x, top: y, anchor: 'start' }));
+    y += lines.length ? lines.reduce((sum, line) => sum + line.style.line, 0) : STYLE.mono.line;
+    y += PAD.y;
+    if (index < sections.length - 1) dividers.push(y);
   }
-  const w = Math.max(values.size.node['min-width'], ...rows.map((row) => measure(row.text, row.style.size, row.style.face) + PAD_X * 2));
-  return { w, h: y, marginTop: 0, marginBottom: 0, labelLines: [], subLines: [], classifierRows: rows.map((row) => ({ ...row, x: row.centered ? w / 2 : PAD_X })), classifierDividers: dividers };
+  const description = [plainText(node.label), header.above, header.below, ...groups.flat().map((member) => member.text)].filter(Boolean).join('; ');
+  return { w, h: y, marginTop: 0, marginBottom: 0, decor, texts, dividers, description };
 }
 
 // cost: time O(n), heap O(n), stack O(1)
@@ -44,5 +43,5 @@ export function sizeClassifier(node, styles) {
 // basis: estimate
 function memberText(member) {
   const signature = member.kind === 'field' ? `${member.id}: ${member.signature}` : `${member.id}${member.signature}`;
-  return [VISIBILITY[member.visibility], signature, member.abstract ? '{abstract}' : undefined].filter(Boolean).join(' ');
+  return [VISIBILITY[member.visibility], signature, member.abstract ? MARKS.abstract : undefined].filter(Boolean).join(' ');
 }

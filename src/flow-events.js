@@ -171,22 +171,32 @@ class StepEngine {
   // cost: time O(w·n), heap O(w), stack O(1)
   // vars: w = 대기 수, n = 조건 AST 노드 수
   // basis: estimate
-  // 순위 3: 값이 바뀌었으면 그 값을 읽는 대기를 선언 순서로 다시 평가해 참이면 풀어 출발시키고, 거짓이어도 제한 시간이 지났으면 시간 초과로 끝낸다. 같은 시각에 풀림과 시간 초과가 겹치면 풀림이 이긴다.
+  // 순위 3: 값이 바뀌었으면 그 값을 읽는 대기를 선언 순서로 다시 평가해 참이면 풀어 출발시킨다. 시간 초과는 여기서 정하지 않는다(expireWaits).
   settleWaits(changed, t) {
     for (const entry of [...this.pending].sort((a, b) => a.launch.order - b.launch.order || a.seq - b.seq)) {
       const { launch } = entry;
-      const isRead = entry.roots.some((root) => changed.has(root));
-      if (isRead) this.count(1, { line: launch.line, t });
-      if (isRead && this.test(launch.wait, 'wait', launch)) {
-        this.endWait(entry, { t, end: 'released' });
+      if (!entry.roots.some((root) => changed.has(root))) continue;
+      this.count(1, { line: launch.line, t });
+      if (!this.test(launch.wait, 'wait', launch)) continue;
+      this.endWait(entry, { t, end: 'released' });
+      this.count(1, { line: launch.line, t });
+      this.runLaunch(launch, { t, via: 'release' });
+    }
+  }
+
+  // cost: time O(w), heap O(1), stack O(1)
+  // vars: w = 대기 수
+  // basis: estimate
+  // 이 시각의 처리가 더 일어나지 않을 때 제한 시간이 지난 대기를 시간 초과로 끝내고 `else` 점을 출발시킨다. 같은 시각의 출발이 뒤 회차에 거는 갱신과 `reserve=`가 먼저 대기를 풀 수 있어야
+  // 같은 시각에 풀림과 시간 초과가 겹칠 때 풀림이 이긴다. 시간 초과로 새 이벤트가 생기면 부른 쪽이 이 시각을 한 번 더 돈다.
+  expireWaits(t) {
+    for (const entry of [...this.pending].sort((a, b) => a.launch.order - b.launch.order || a.seq - b.seq)) {
+      if (entry.deadline > t) continue;
+      const { launch } = entry;
+      this.endWait(entry, { t, end: 'timeout' });
+      if (launch.elsePlan) {
         this.count(1, { line: launch.line, t });
-        this.runLaunch(launch, { t, via: 'release' });
-      } else if (entry.deadline <= t) {
-        this.endWait(entry, { t, end: 'timeout' });
-        if (launch.elsePlan) {
-          this.count(1, { line: launch.line, t });
-          this.launchDot(launch, { t, via: 'else' });
-        }
+        this.launchDot(launch, { t, via: 'else' });
       }
     }
   }
@@ -220,20 +230,25 @@ class StepEngine {
   // basis: estimate
   // 한 시각의 이벤트를 위 표의 순위(갱신, 풀린 대기, 출발)로 처리한다. 출발 도형에 닿는 것으로 정한 `@도형` 갱신은 출발과 같은 시각이라,
   // 처리가 새 이벤트를 같은 시각에 더하면 같은 시각을 한 번 더 돈다. 이 연쇄는 chain 예산이 끊는다.
+  // 시간 초과는 이 시각의 회차가 모두 끝난 뒤에 정한다(expireWaits). 시간 초과로 새 이벤트가 생기면 그 회차를 다시 돈다.
   processSlot(t) {
     if (t > TICK_LIMIT) throw timeLimitError(this.heap.peek(), this.step);
     this.chain = 0;
     this.lastT = t;
+    const isBusy = () => (this.dropStale() && this.heap.peek().key[0] === t) || this.reserved.size > 0;
     do {
-      const items = [];
-      while (this.heap.size && this.heap.peek().key[0] === t) items.push(this.heap.pop());
-      const updates = items.filter((item) => item.kind === 'update');
-      // 예약이 바꾼 값을 읽는 대기도 같은 시각에 다시 평가한다(원자 예약). 예약이 남기면 이 시각을 한 번 더 돈다.
-      const changed = new Set([...(updates.length ? this.applyUpdates(updates, t) : []), ...this.reserved]);
-      this.reserved.clear();
-      this.settleWaits(changed, t);
-      this.runDepartures(items.filter((item) => item.kind === 'depart'), t);
-    } while ((this.dropStale() && this.heap.peek().key[0] === t) || this.reserved.size > 0);
+      do {
+        const items = [];
+        while (this.heap.size && this.heap.peek().key[0] === t) items.push(this.heap.pop());
+        const updates = items.filter((item) => item.kind === 'update');
+        // 예약이 바꾼 값을 읽는 대기도 같은 시각에 다시 평가한다(원자 예약). 예약이 남기면 이 시각을 한 번 더 돈다.
+        const changed = new Set([...(updates.length ? this.applyUpdates(updates, t) : []), ...this.reserved]);
+        this.reserved.clear();
+        this.settleWaits(changed, t);
+        this.runDepartures(items.filter((item) => item.kind === 'depart'), t);
+      } while (isBusy());
+      this.expireWaits(t);
+    } while (isBusy());
   }
 
   // cost: time O(n·log n), heap O(1), stack O(1)

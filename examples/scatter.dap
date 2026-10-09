@@ -19,21 +19,16 @@ chart risk "변경 규모와 장애" scatter "예시 데이터. 점 하나가 �
   link "검색 전" -> "검색 후"
 }
 
-view main plot {
-  risk
-}
+scene "모든 서비스"
 
-scene "모든 서비스" mode=static
-  wait 1s
-
-scene "팀별로 보기" mode=once
+scene "팀별로 보기"
   reveal risk.pay
   wait 1s
   reveal risk.search
   wait 1s
   reveal risk.growth
 
-scene "개선 전후" mode=once
+scene "개선 전후"
   light risk "결제 전"
   wait 1s
   light risk "검색 후"

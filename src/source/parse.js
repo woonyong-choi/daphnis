@@ -1,5 +1,5 @@
 // 원본 전체를 읽어 문서 모형(figure) 하나로 만든다. 줄을 머리, 선언, 시간 흐름 세 부분으로 나누고 문장마다 맡을 함수를 고른다.
-import { BLOCK_WORDS, STATEMENTS, VERSION } from './grammar.js';
+import { BLOCK_WORDS, STATEMENTS, VALUES, VERSION } from './grammar.js';
 import { BLOCK_READERS, openBlock } from './blocks.js';
 import { readEdge } from './declare.js';
 import { readDeclaration } from './declare.js';
@@ -41,7 +41,7 @@ export function parseFigure(source) {
  */
 export function readFigure(source, problems) {
   const statements = splitStatements(source, problems);
-  const figure = emptyFigure();
+  const figure = emptyFigure(source);
   const ctx = { figure, problems, section: 'header', groups: [], block: undefined, step: undefined, headers: new Map(), previous: undefined };
   if (!statements.length) {
     problems.error(1, 'the file is empty. The first line is "daphnis 2"', { code: 'missing-version' });
@@ -49,24 +49,28 @@ export function readFigure(source, problems) {
   }
   const body = readVersion(statements, ctx);
   for (const statement of body) readStatement(statement, ctx);
-  if (ctx.block) problems.error(ctx.block.card.line, `close ${ctx.block.kind} "${ctx.block.card.id}" with "}"`);
+  if (ctx.block) problems.error(ctx.block.card.line, ctx.block.kind === 'view' ? 'close the view block with "}"' : `close ${ctx.block.kind} "${ctx.block.card.id}" with "}"`);
   for (const group of ctx.groups) if (!group.isRejected) problems.error(group.line, `close group "${group.id}" with "}"`);
   for (const block of ctx.sequenceBlocks ?? []) problems.error(block.line, 'close the sequence block with }');
   prepareSequenceFragments(figure, problems);
+  // 색을 고르지 않은 카드(표, API, 클래스, 차트 등)도 중립 면(plain)이라는 값을 모형에 담는다.
+  for (const card of figure.nodes) card.appearance ??= VALUES.appearance.default;
   validateFigure(figure, problems);
   return figure;
 }
 
 /**
  * 비어 있는 문서 모형.
- * nodes: { id, shape, label, sub, parent, line, columns?, members?, cells?, plot?, spans? },
- * groups: { id, label, direction, parent, line },
+ * source: 받은 원본 글 그대로(줄바꿈 CRLF, 첫 글자 포함). 읽기 전에 고치지 않고 정리하지 않는다. 문법 복사가 이 글을 쓴다.
+ * nodes: { id, shape, label, sub, parent, tone, appearance, line, columns?, members?, cells?, plot?, spans? },
+ * groups: { id, label, direction, parent, tone, appearance, line },
  * edges: { from, to, label, quiet, dashed, head, no, line, relation?, fromColumn?, toColumn?, fromCell?, toCell?, fromSpan?, toSpan? },
- * views: { id, strategy, direction, label, members, line, isImplicit },
+ * views: { id, strategy, direction, label, members, line, isImplicit }. id는 v1, v2, ...로 resolveViews가 붙인다,
  * steps: { label, mode, speed, line, beats, tracks, forMs, keep, sets, status }
  */
-function emptyFigure() {
+function emptyFigure(source) {
   return {
+    source,
     version: VERSION,
     title: undefined,
     subtitle: undefined,

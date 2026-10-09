@@ -24,19 +24,19 @@ grid pa "물리 주소 (8비트)" cols=8 {
   item off "오프셋 (3비트)" col=5 cols=3
 }
 
-value loads "처리한 접근" on=cpu from=0
+value loads "처리한 접근" on=cpu
 
 cpu -> va "load 0x4A" no=1
 va.vpn -> pt.v9 "VPN 9" no=2
 pt.f9 -> pa.pfn "프레임 4" no=3
 va.off -> pa.off "그대로" no=4
 
-view main graph down
+view graph down
 
 scene "주소 구조" mode=static
   light va.vpn va.off pa.pfn pa.off
 
-scene "주소 변환" mode=once
+scene "주소 변환"
   cpu -> va time=600ms set="loads+1"
   light va.vpn
   va.vpn -> pt.v9 time=700ms

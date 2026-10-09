@@ -1,12 +1,12 @@
 // 브라우저에서 돈다(play.js와 한 스크립트로 이어 붙는다).
-// 도구 막대(내려받기, 전체 화면)와, 전체 화면에서만 켜지는 확대·축소·끌어 옮기기를 맡는다. 문서 안에서는 그림을 그대로 보인다. 전체 화면은 보는 방식만 바꾸고 장면과 시계에 손대지 않는다.
-// 판은 SVG 한 장씩이고, 문서 안에서는 판마다 자기 구역에서 가로로 밀린다(CSS .dp-panel). 전체 화면의 확대는 판 묶음 폭의 배수이고 옮기기는 그림 영역의 스크롤이다.
+// 도구 막대(문법 복사, HTML 다운로드, 전체 화면 순서. 앞 둘은 player/export.js)와, 전체 화면에서만 켜지는 확대·축소·끌어 옮기기를 맡는다. 문서 안에서는 그림을 그대로 보인다. 전체 화면은 보는 방식만 바꾸고 장면과 시계에 손대지 않는다.
+// 판은 SVG 한 장씩이고, 문서 안에서는 모든 판이 같은 비율로 줄어 구역에 다 들어온다(CSS .dp-panel > svg). 전체 화면의 확대는 판 묶음 폭의 배수이고 옮기기는 그림 영역의 스크롤이다.
 
 const ZOOM_ICONS = { in: 'zoom-in', out: 'zoom-out', fit: 'scan' };
 
 /**
- * 그림 틀에 내려받기와 전체 화면 단추, 확대·축소를 붙인다.
- * @param root `.fl-figure` 요소. 안에 `.fl-download`, `.fl-full`, `.fl-zoom` 단추와 `.dp-panels`가 있다
+ * 그림 틀에 문법 복사, HTML 다운로드, 전체화면 단추와 확대·축소를 붙인다.
+ * @param root `.fl-figure` 요소. 안에 `.fl-copy`, `.fl-download`, `.fl-full`, `.fl-zoom` 단추와 `.dp-panels`가 있다
  * @param data { metrics: { icon, iconStroke, zoomMax, zoomStep }, width, height, responsive? }. width, height는 장면 크기다
  * @param swapLayout 좁은 배치로 바꾸는 함수(isNarrow) → 그 배치의 데이터. 좁은 배치가 없는 그림은 undefined
  */
@@ -14,40 +14,24 @@ function figureView(root, data, swapLayout) {
   // 보는 상태 한 덩어리. zoom은 전체 화면의 확대 배수(1이면 그림 전체가 보임), drag는 끄는 중인 손짓이다.
   const viewer = { root, canvas: root.querySelector('.fl-canvas'), panels: root.querySelector('.dp-panels'), metrics: data.metrics, data, zoom: 1, drag: undefined, fullButton: root.querySelector('.fl-full') };
   bindResponsiveView(viewer, swapLayout);
-  bindDownload(root, data.metrics);
+  bindExport(root, data.metrics);
   bindFull(viewer);
   bindZoom(viewer);
   bindPan(viewer);
   showFull(viewer, false);
 }
 
-// 좁은 화면에서 판마다 읽을 수 있는 폭을 지키는지 알리고, 좁은 배치가 있는 그림은 화면 폭에 맞춰 배치를 고른다.
-// 읽을 수 있는 폭은 장면의 판 정보(minWidth)가 정한다. 화면 전체를 줄이지 않고 그 폭보다 좁은 판만 구역 안에서 가로로 밀린다. 확대 중(전체 화면)에는 하지 않는다.
+// 좁은 배치가 있는 그림은 화면 폭에 맞춰 배치를 고른다.
+// 좁은 배치로 바꾸는 기준은 가장 넓은 판의 상자 폭(box.w)이다. 확대 중(전체 화면)에는 하지 않는다.
 function bindResponsiveView(viewer, swapLayout) {
   const { root } = viewer;
   // 판정은 처음(넓은) 배치의 판으로 한 번만 정한다. 좁은 배치로 바꾼 뒤의 판 폭으로 다시 정하면 같은 폭에서 두 배치를 오간다.
   const { responsive } = viewer.data;
-  const widest = Math.max(...viewer.data.panels.map((panel) => panel.minWidth));
+  const widest = Math.max(...viewer.data.panels.map((panel) => panel.box.w));
   viewer.fit = () => {
     if (root.classList.contains('full')) return;
     const isNarrow = Boolean(swapLayout && responsive && root.clientWidth < responsive.breakpoint && root.clientWidth < widest);
     if (swapLayout) viewer.data = { ...viewer.data, ...swapLayout(isNarrow) };
-    // 가로로 밀리는 판은 키보드로 밀 수 있도록 초점을 받고 이름이 있는 영역이 된다.
-    let isAnyScrollable = false;
-    for (const panel of viewer.panels.children) {
-      const isScrollable = panel.scrollWidth > panel.clientWidth + 1;
-      isAnyScrollable ||= isScrollable;
-      if (isScrollable) {
-        panel.tabIndex = 0;
-        panel.setAttribute('role', 'region');
-        panel.setAttribute('aria-label', `${panel.dataset.view} 판. 좌우로 스크롤하여 전체 내용을 볼 수 있습니다.`);
-      } else {
-        panel.removeAttribute('tabindex');
-        panel.removeAttribute('role');
-        panel.removeAttribute('aria-label');
-      }
-    }
-    root.querySelector('.fl-scroll-hint').hidden = !isAnyScrollable;
   };
   addEventListener('resize', viewer.fit);
 }
@@ -92,10 +76,12 @@ function setFull(viewer, isFull) {
 function showFull(viewer, isFull) {
   const { root, fullButton, metrics } = viewer;
   root.classList.toggle('full', isFull);
+  // 스크롤하는 전체 화면 캔버스만 키보드 초점을 받아 방향키로 옮겨 볼 수 있다. 문서 안 캔버스는 넘치지 않는다.
+  if (isFull) viewer.canvas.tabIndex = 0;
+  else viewer.canvas.removeAttribute('tabindex');
   if (window.self !== window.top) parent.postMessage({ figureFullscreen: isFull && document.fullscreenElement !== root }, '*');
-  root.querySelector('.fl-scroll-hint').hidden = true;
   fullButton.innerHTML = drawUiIcon(metrics, isFull ? 'minimize-2' : 'maximize-2');
-  const label = isFull ? '전체 화면 끝내기' : '전체 화면';
+  const label = isFull ? '전체화면 종료' : '전체화면';
   fullButton.setAttribute('aria-label', label);
   fullButton.title = label;
   viewer.zoom = 1;
@@ -113,7 +99,7 @@ function bundleBox(panels) {
 }
 
 // 전체 화면에서 판 묶음의 폭. 그림 전체가 그림 영역에 들어가는 폭(맞춤)에 확대 배수를 곱한다. 그림이 영역보다 넓어지면 영역이 스크롤된다.
-// 맞춤은 문서 안의 보기 폭(--view-w, 표준 캔버스 폭 이상)이 아니라 판 묶음의 실제 좌표 크기로 잰다. 같은 폭을 판 비율의 분모(--bundle-w)로 써서 판의 상대 크기는 문서 안과 같고 줄어드는 비율은 한 번뿐이다.
+// 맞춤은 문서 안의 보기 폭(--view-w, 가장 넓은 판의 폭)과 같은 값이며 판 묶음의 실제 좌표 크기로 잰다. 같은 폭을 판 비율의 분모(--bundle-w)로 써서 판의 상대 크기는 문서 안과 같고 줄어드는 비율은 한 번뿐이다.
 function layoutFull(viewer) {
   const { canvas, panels, zoom } = viewer;
   const bundle = bundleBox(panels);
@@ -173,7 +159,7 @@ function zoomAt(viewer, factor, center) {
   canvas.scrollTop += after.top + fraction.y * after.height - at.y;
 }
 
-// 조작부의 24 격자 글리프. 크기와 획은 공통 토큰을 쓰는 선 글리프이고 면으로 채우지 않는다. 확대·축소, 전체 화면, 내려받기 단추가 쓴다.
+// 조작부의 24 격자 글리프. 크기와 획은 공통 토큰을 쓰는 선 글리프이고 면으로 채우지 않는다. 도구 막대의 단추와 확대·축소가 쓴다.
 function drawUiIcon(metrics, name) {
   return `<svg width="${metrics.icon}" height="${metrics.icon}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${metrics.iconStroke}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${UI_ICONS[name]}</svg>`;
 }

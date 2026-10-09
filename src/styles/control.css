@@ -1,4 +1,5 @@
-/* 조작 단추의 공통 모양과 상태. 재생기(원 단추, 탭), 목록 쪽과 문서 미리보기(테마 묶음)가 모두 이 파일 하나를 쓴다. */
+/* 조작 단추의 공통 모양과 상태. 장면 탭(.fl-tabs)과 목록 쪽 테마 묶음(.theme)은 같은 분절 조작이고, 도구 막대의 원 단추(.fl-round)는 아래에서 같은 상태 규칙을 쓴다.
+   분절 조작은 공통 바탕 줄(track) 위에 항목이 놓이고, 켜진 항목만 공통 UI 강조 면과 흰 글자다. 호버는 켜지지 않은 항목의 면이 한 단계 짙어지는 것이고, 키보드 초점은 항목 둘레의 고리다. 세 상태는 서로 다르게 보인다. */
 .fl-round:focus-visible,
 .fl-tabs button:focus-visible,
 .theme button:focus-visible {
@@ -6,84 +7,67 @@
   outline-offset: var(--space-1);
 }
 
-/* 탭은 낮은 면으로 표시하고, 카드에만 입체 그림자를 둔다. */
+/* 분절 조작은 부모 폭을 넘지 않는다. 항목이 줄 폭보다 많으면 줄을 바꾸고, 한 항목이 줄 폭보다 길면 그 항목의 글이 줄을 바꾼다(긴 한글과 식별자는 낱말 안에서도 끊는다). 말줄임이나 가로 스크롤로 글을 감추지 않는다.
+   항목의 높이는 한 줄일 때 최소 터치 크기이고 글이 여러 줄이면 그에 맞게 자란다. */
 .fl-tabs,
 .theme {
-  display: flex;
+  position: relative;
+  display: inline-flex;
+  flex-wrap: wrap;
   box-sizing: border-box;
-  min-height: var(--size-control-outer);
-  padding: var(--space-2);
-  background: transparent;
+  max-width: 100%;
+  padding: var(--simple2-segment-pad);
+  background: var(--simple2-segment-track);
   border: 0;
-  border-radius: var(--simple2-control-radius);
+  border-radius: var(--simple2-segment-radius);
 }
 
 .fl-tabs button,
 .theme button {
-  min-height: var(--size-control-inner);
+  flex: 0 1 auto;
+  box-sizing: border-box;
+  max-width: 100%;
   min-width: var(--size-control-inner);
-  font: var(--simple2-control) var(--font-sans);
-  color: var(--color-muted);
+  min-height: var(--size-control-inner);
+  padding: var(--space-3) var(--space-7);
+  font: var(--weight-semibold) var(--simple2-control) var(--font-sans);
+  color: var(--simple2-segment-ink);
+  text-align: center;
+  overflow-wrap: anywhere;
   cursor: pointer;
   background: transparent;
   border: 0;
-  border-radius: var(--simple2-control-radius);
+  border-radius: var(--simple2-segment-item-radius);
 }
 
-.theme button {
-  padding: 0 var(--space-6);
+.fl-tabs button:not(.on):hover,
+.fl-tabs button:not(.on):active,
+.theme button:not([aria-pressed='true']):hover,
+.theme button:not([aria-pressed='true']):active {
+  background: var(--simple2-segment-hover);
 }
 
-/* 켜진 탭은 옅은 파란 면과 굵은 글자로 구분한다. */
+.fl-tabs button.on,
 .theme button[aria-pressed='true'] {
-  font-weight: var(--weight-semibold);
-  color: var(--simple2-selection-ink);
-  background: var(--simple2-selection-fill);
+  color: var(--simple2-segment-on-ink);
+  background: var(--simple2-segment-on);
 }
 
-/* 같은 조작의 hover와 pressed를 재생기와 목록에서 공유한다. */
+.fl-tabs button.on:hover,
+.theme button[aria-pressed='true']:hover {
+  background: var(--simple2-segment-on-hover);
+}
+
 .fl-round:hover,
-.fl-tabs button:hover,
-.theme button:hover {
-  color: var(--simple2-selection-ink);
-  background: var(--simple2-selection-fill);
-}
-
-.fl-round:active,
-.fl-tabs button:active,
-.theme button:active {
-  color: var(--simple2-selection-ink);
-  background: var(--simple2-selection-fill);
+.fl-round:active {
+  color: var(--color-fg);
+  background: var(--simple2-segment-hover);
 }
 
 .fl-round:disabled,
 .fl-tabs button:disabled,
 .theme button:disabled {
   color: var(--color-muted);
-  background: var(--color-surface);
   cursor: default;
-}
-
-.fl-tabs button {
-  background: var(--simple2-tab-fill);
-}
-
-.fl-tabs button.on {
-  font-weight: var(--weight-semibold);
-  color: var(--simple2-selection-ink);
-  background: var(--simple2-selection-fill);
-}
-
-.fl-tabs button:not(.on):hover {
-  color: var(--simple2-selection-ink);
-  background: var(--simple2-selection-fill);
-}
-
-.fl-tabs button.on:hover {
-  background: var(--simple2-selection-fill);
-}
-
-.fl-tabs button:active {
-  color: var(--simple2-selection-ink);
-  background: var(--simple2-selection-fill);
+  background: transparent;
 }

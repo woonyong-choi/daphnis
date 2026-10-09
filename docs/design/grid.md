@@ -30,12 +30,12 @@ grid pa "물리 주소 (16비트)" cols=16 {
 }
 va -> pa "페이지 표 조회"
 
-view main graph down
+view graph down
 
 scene "나누기" mode=static
   light va.vpn va.offset
 
-scene "바꾸기" mode=once
+scene "바꾸기"
   va -> pa time=800ms
   light pa.pfn pa.offset
 ```
@@ -60,8 +60,6 @@ grid pte "페이지 표 항목 (PTE)" rows=4 cols=6 {
   item note "참조 비트는 CPU가 접근할 때 켜고, 운영체제가 주기적으로 지워 최근에 쓰지 않은 페이지를 교체 후보로 고른다" row=2 col=0 rows=2 cols=5
 }
 mmu -> pte "조회"
-
-view main graph right
 
 scene "상태 비트" mode=static
   light pte.valid pte.dirty pte.ref
@@ -103,9 +101,7 @@ virt.p2 -> table.p2
 table.f1 -> phys.fr7
 table.f2 -> phys.fr3
 
-view main graph right
-
-scene "조회" mode=once
+scene "조회"
   virt.p1 -> table.p1 time=700ms
   light table.f1
   table.f1 -> phys.fr7 time=700ms
@@ -159,7 +155,7 @@ scene "조회" mode=once
 ### 그리기와 색
 
 - 틀과 칸은 `color.node` 면과 `color.outline` 윤곽이고 글은 `color.fg`다. 생략 칸(`gap`)은 `color.surface` 면에 점선 윤곽과 `color.muted` 글이다. 빈 자리는 면 없이 점선 윤곽만 그린다([빈 칸 표현](#빈-칸-표현)).
-- 밝힌 칸은 `simple2.row-selection` 면(선택 행과 같다)이고 윤곽은 이웃 칸과 같은 중립 구분선 그대로다. 선택 테두리를 따로 그리지 않아 칸 구분선과 선택이 겹쳐 두 겹이 되지 않는다. 칸이 밝아지고 꺼지는 것은 논리 경계에서 바로 바뀌고 CSS 전환을 걸지 않는다([재생](playback.md#움직이는-svg)). 파랑은 "지금 일어나는 것"만 뜻하므로 값의 크고 작음을 이 색으로 나타내지 않는다.
+- 밝힌 칸은 `simple2.row-selection` 면(선택 행과 같다. 효과 한 벌의 `--fx-row`를 HTML 재생기와 움직이는 SVG가 같이 읽는다, [배치](layout.md))이고 윤곽은 이웃 칸과 같은 중립 구분선 그대로다. 선택 테두리를 따로 그리지 않아 칸 구분선과 선택이 겹쳐 두 겹이 되지 않는다. 칸이 밝아지고 꺼지는 것은 논리 경계에서 바로 바뀌고 CSS 전환을 걸지 않는다([재생](playback.md#움직이는-svg)). 파랑은 "지금 일어나는 것"만 뜻하므로 값의 크고 작음을 이 색으로 나타내지 않는다.
 - 이 짝들은 모두 [대비 기준](docs-integration.md#대비-기준)의 기존 짝(글자와 면, 경계와 면, 강조 그래픽과 면)이라 새 색 역할이 없다. 크기와 간격은 토큰 `size.grid.cell`과 기존 `space.*`뿐이다.
 
 ### 빈 칸 표현
@@ -213,29 +209,24 @@ scene "조회" mode=once
 
 ### 요구사항
 
+시험은 공개 진입점으로 계약을 확인하고, 격자만의 계산(구간 계산, 공간 색인)은 공개 출력의 칸 위치와 오류로 본다. 칸의 모양처럼 공통 부품이 소유한 것은 격자 시험이 다시 보지 않는다. 아래 표에서 시험 칸이 "검증 요구사항, 미완료"인 항목은 이 계약을 직접 확인하는 자동 시험이 아직 없다는 뜻이다.
+
 | 요구사항 | 검증 계획 |
 |---|---|
-| 칸의 너비와 높이는 차지한 칸 수에 비례한다(10 대 6 비트 필드, 합친 칸). | `test/layout.test.js`의 `buildFigure_grid_cells_are_as_wide_and_tall_as_the_units_they_occupy`. 10칸과 6칸, 8칸과 1칸, 2행과 1행 칸의 폭과 높이 비 확인 |
-| 글이 긴 칸은 칸 안에서 줄을 바꾸고 모든 행의 높이가 같다. | `test/layout.test.js`의 `buildFigure_grid_long_korean_text_wraps_inside_its_cell_and_rows_keep_one_height`. 긴 한글 칸이 여러 줄이고 strict로 통과하는지 확인 |
-| 칸이 없는 자리는 빈 칸이고, 칸끼리 겹치지 않으며 모두 격자 안에 있다. | `test/layout.test.js`의 `buildFigure_grid_positions_without_a_cell_stay_empty_and_every_cell_stays_inside_the_frame`. 칸과 빈 자리 사각형이 서로 겹치지 않는지 확인 |
-| 격자는 구조 그림에서 크기가 고정된 도형 하나로 배치되고, 선은 격자 테두리에 닿는다. | `test/layout.test.js`의 `layoutGraph_box_sizes_equal_measured_sizes`(잰 크기와 같음), `buildFigure_grid_between_flow_boxes_is_one_shape_whose_edges_end_on_its_border` |
-| 칸 자리와 선택 사항을 어긴 원본, 격자 밖 칸, 틀린 칸 연결, 밝힐 수 없는 칸을 줄 번호와 함께 알린다. | `test/grammar.test.js`의 `parseFigure_malformed_source_reports_the_line_and_the_rule`(격자 행) |
-| `grid`, `item`, `gap`을 쓴 둘째 판 원본이 오류 없이 읽힌다. | `test/grammar.test.js`의 격자 낱말 행, 예제 `memory`·`stack`·`pointer`는 `test/demo-v2.test.js` |
-| 문법 표에 모든 낱말과 선택 사항이 있고 문서의 표가 문법 표에서 만든 표와 같다. | `test/grammar.test.js`의 `grammarDoc_figure_syntax_tables_equal_the_tables_made_from_the_grammar` |
-| 칸 `light`는 도형 `light`와 같은 박자 규칙이다. | `test/motion.test.js`의 `buildTimeline_grid_cell_light_stays_for_the_rest_of_the_step_like_a_node_light` |
-| 칸에서 칸으로 가는 선이 칸 테두리에서 나가고 들어오며, 안쪽 칸으로 가는 선도 이웃 칸을 지나지 않는다. | `test/layout.test.js`의 `buildFigure_grid_cell_edges_start_and_end_on_their_cell_and_never_cross_another_cell_flow_right`, `..._flow_down`, `buildFigure_grid_edge_between_two_cells_of_one_grid_stays_inside_the_grid_frame`. 그림 검사 3번(칸), 4번(칸 테두리)이 strict 빌드에서 같은 규칙을 지킨다 |
+| 칸의 너비와 높이는 차지한 칸 수에 비례한다(10 대 6 비트 필드, 합친 칸). 칸이 없는 자리는 빈 칸이고, 칸끼리 겹치지 않으며 모두 격자 안에 있다. | `test/cards.test.js`(S3) |
+| 글이 긴 칸은 칸 안에서 줄을 바꾸고 모든 행의 높이가 같다. | 검증 요구사항, 미완료 |
+| 격자는 구조 그림에서 크기가 고정된 도형 하나로 배치되고, 선은 격자 테두리에 닿는다. | 검증 요구사항, 미완료 |
+| 칸 자리와 선택 사항을 어긴 원본, 격자 밖 칸, 틀린 칸 연결, 밝힐 수 없는 칸을 줄 번호와 함께 알린다. | `test/kinds.test.js`(K-grid), `test/cards.test.js`(S2) |
+| `grid`, `item`, `gap`을 쓴 둘째 판 원본이 오류 없이 읽힌다. | `test/examples.test.js`(`memory`, `stack`, `pointer` 예제) |
+| 문법 표에 모든 낱말과 선택 사항이 있고 문서의 표가 문법 표에서 만든 표와 같다. | `npm run grammar`가 문서의 표를 다시 쓴다. 어긋남을 자동으로 알리는 시험은 확인되지 않았다(검증 요구사항, 미완료) |
+| 칸 `light`는 도형 `light`와 같은 박자 규칙이다. | 검증 요구사항, 미완료 |
+| 칸에서 칸으로 가는 선이 칸 테두리에서 나가고 들어오며, 안쪽 칸으로 가는 선도 이웃 칸을 지나지 않는다. | `test/kinds.test.js`(K-grid)는 칸 연결 규칙만 본다. 선의 기하는 [그림 검사](figure-check.md) 3번(칸), 4번(칸 테두리)이 strict 빌드에서 같은 규칙을 지킨다 |
 | 합친 칸, 비트 띠, 같은 면에서 나가는 여러 선, 한 격자의 두 칸을 잇는 선이 섞여도 오류가 없다. | `npm run fuzz`(구조 그림에 칸 선 끝이 섞인다). [배치](layout.md)의 요구사항 표와 같은 명령 |
-| 칸 면, 글, 윤곽은 모든 면에서 대비 기준을 넘는다. | `test/contrast.test.js`의 `contrast_text_pairs_reach_4_5_in_both_themes`, `contrast_graphic_pairs_reach_3_in_both_themes`. 칸이 쓰는 `fg`, `muted`, `border`, `state.active`와 `node`, `surface`, `card-on` 짝이 이 입력에 이미 들어 있다 |
-| 선언 수가 같으면 논리 격자가 커져도 출력과 빈 구간 수가 같다(행×열에 비례하지 않는다). | `test/grid-scale.test.js`의 `buildFigure_grid_output_stays_the_same_size_when_only_the_logical_grid_grows`(100, 400, 100000), `toSvg_grid_draws_all_empty_cells_as_one_pattern_filled_path`, `emptyRegions_count_follows_the_declared_cells_not_the_grid_size` |
-| 구간은 선언하지 않은 단위 칸을 정확히 한 번씩 덮고, 칸 겹침을 쓸기로 찾는다. | `test/grid-scale.test.js`의 `emptyRegions_cover_every_undeclared_unit_exactly_once`(무작위 300판을 단위 집합과 대조), `findOverlaps_pairs_each_later_cell_with_an_earlier_cell_it_overlaps` |
-| 예산은 모든 격자의 합계를 크기를 정하기 전에 검사하고, 한도와 같은 양은 통과하며, 초과는 필요한 양과 조정 방법을 알린다. | `test/grid-scale.test.js`의 `buildFigure_grid_over_budget_reports_the_needed_amount_and_how_to_raise_it`, `..._budget_accepts_exactly_the_needed_amount_and_rejects_one_less`, `..._budget_counts_all_grids_of_the_figure_and_names_the_grid_that_passes_it`, `..._budget_counts_the_path_commands_of_the_merged_empty_area_path`, `..._budget_is_checked_before_the_grid_is_sized`, `..._budget_counts_the_wrapped_text_lines_so_it_never_undercounts_the_drawn_elements`(여러 줄 글 격자에서 그린 요소 수와 계산값이 같고, 한도를 하나 낮추면 오류) |
-| 좌표 범위와 인덱스 합을 넘는 입력은 격자 줄의 오류이고 중단하지 않는다. | `test/grid-scale.test.js`의 `buildFigure_grid_beyond_the_exact_coordinate_range_is_a_line_error_not_a_crash`, `..._cell_index_sums_beyond_the_safe_integer_range_are_line_errors` |
-| 이동 글을 붙인 희소 격자의 공간 색인 삽입 수가 논리 격자 면적과 무관하다. 큰 사각형은 칸으로 펼치지 않는다. | `test/chip-index.test.js`의 `buildFigure_moving_text_in_a_sparse_grid_inserts_the_same_few_index_cells_whatever_the_grid_size`(20, 40, 80, 10000, 삽입 상한 보호), `gridOf_keeps_a_huge_rectangle_to_a_few_entries_and_still_finds_it`, `gridOf_offers_a_rectangle_of_unknown_size_for_every_box_without_spreading_it_over_cells` |
-| 색인은 닿는 사각형을 빠뜨리지 않고 오름차순으로 내며, 항목 수는 사각형 수의 네 배 이하다. | `test/chip-index.test.js`의 `gridOf_near_never_misses_a_touching_rectangle_and_lists_each_once_in_ascending_order`(무작위 사각형을 훑은 답과 대조), `indexEntries_equals_the_entries_gridOf_makes_and_stays_within_four_per_rectangle` |
-| 색인 항목은 만들기 전에 세고, `chip-index` 예산을 넘으면 색인을 만들지 않고 `budget-exceeded`로 끝낸다. 한도와 같은 양은 통과한다. | `test/chip-index.test.js`의 `buildFigure_moving_text_over_the_chip_index_budget_ends_with_budget_exceeded_before_any_index_is_built`(삽입 0회, 한도와 한도보다 하나 모자란 값), `main_render_with_a_small_chip_index_budget_exits_with_budget_exceeded_and_writes_no_file`, `parseBudgetPair_accepts_the_chip_index_budget`, `buildFigure_default_chip_index_budget_accepts_a_huge_sparse_grid_with_moving_text` |
-| 이동 글, 큰 합친 칸, 빈 영역, 여러 격자를 함께 써도 글 상자 후보와 계획이 색인 없이 잰 결과와 같다. | `test/chip-index.test.js`의 `chipCandidates_with_the_index_equal_the_linear_scan_beside_moving_text_big_merged_cells_empty_areas_and_several_grids`, `buildFigure_moving_text_plans_beside_big_merged_cells_and_empty_areas_equal_the_plans_made_before_the_range_index` |
-| `--budget`과 Action 입력 `budget`이 같은 해석이고, 모든 그림 명령이 받으며, 잘못된 값은 만들기 전에 끝나고, 초과는 파일을 쓰지 않는다. | `test/grid-scale.test.js`의 `main_budget_option_raises_the_limit_and_an_over_budget_figure_writes_no_file`, `main_every_figure_command_takes_budget_with_the_same_meaning`, `main_budget_option_with_a_bad_name_or_value_is_a_usage_error`, `parseBudgetPair_accepts_only_known_names_with_positive_safe_integers`, `test/action.test.js`의 `action_budget_input_raises_the_limit_with_spaces_or_commas_and_rejects_bad_items` |
-| 문서의 예시와 예제 그림이 오류와 경고 없이 만들어지고 움직임이 시간표와 같다. | `test/grammar.test.js`의 `docExamples_every_design_doc_example_builds_without_errors_or_warnings`, `test/motion.test.js`의 `toSvg_moving_packets_match_the_timeline_at_every_example`와 `test/demo-v2.test.js`(`examples/memory.dap`, `stack.dap`, `pointer.dap`이 격자를 쓴다) |
+| 칸 면, 글, 윤곽은 모든 면에서 대비 기준을 넘는다. | 검증 요구사항, 미완료. 화면 값은 `npm run check`가 토큰 수준에서만 지킨다 |
+| 선언 수가 같으면 논리 격자가 커져도 출력과 빈 구간 수가 같다(행×열에 비례하지 않는다). | 검증 요구사항, 미완료 |
+| 예산은 모든 격자의 합계를 크기를 정하기 전에 검사하고, 한도와 같은 양은 통과하며, 초과는 필요한 양과 조정 방법을 알린다. `--budget`과 Action 입력 `budget`이 같은 해석이고, 잘못된 값은 만들기 전에 끝나고, 초과는 파일을 쓰지 않는다. | 검증 요구사항, 미완료 |
+| 좌표 범위와 인덱스 합을 넘는 입력은 격자 줄의 오류이고 중단하지 않는다. | 검증 요구사항, 미완료 |
+| 이동 글을 붙인 희소 격자의 공간 색인 삽입 수가 논리 격자 면적과 무관하고, 색인 예산(`chip-index`)을 넘으면 색인을 만들지 않고 `budget-exceeded`로 끝난다. 색인으로 구한 글 상자 후보가 색인 없이 구한 결과와 같다. | 검증 요구사항, 미완료. 빌드 시간은 `npm run perf`(로컬 전용)가 기준 파일과 견주지만 기준 파일이 아직 없어 지금은 비교하지 않는다(깨끗한 커밋에서 `--write`로 만든다) |
 | 올바른 무작위 구조 그림(칸 격자가 섞인)이 배치 오류나 그림 검사 오류가 되지 않는다. | `npm run fuzz`(구조 그림의 4분의 1이 칸 격자를 담는다). [배치](layout.md)의 요구사항 표와 같은 명령 |
 
 ## 단점

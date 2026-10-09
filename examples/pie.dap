@@ -14,19 +14,14 @@ chart usage "스토리지 사용량" pie "예시 데이터. 단위 TB. 색이 �
   row "임시 파일" value=2
 }
 
-view main plot {
-  usage
-}
+scene "전체 몫"
 
-scene "전체 몫" mode=static
-  wait 1s
-
-scene "큰 조각" mode=once
+scene "큰 조각"
   light usage "이미지"
   wait 1s
   light usage "로그"
 
-scene "무늬 조각" mode=once
+scene "무늬 조각"
   light usage "ML 모델"
   wait 1s
   light usage "임시 파일"

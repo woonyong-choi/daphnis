@@ -12,7 +12,7 @@ value board "대시보드 p95" on=lb ref=p95
 value cpu1 "CPU(%)" on=a1 from=34
 value cpu2 "CPU(%)" on=a2 from=41
 value cpu3 "CPU(%)" on=a3 from=38
-value peak "최고 CPU(%)" on=lb from=0
+value peak "최고 CPU(%)" on=lb
 
 lb -> a1
 lb -> a2
@@ -39,11 +39,11 @@ chart lat "p95 지연 추이" line "예시 데이터. 마지막 점이 카드의
   point x=4 ms=p95
 }
 
-view cards graph down "서버"
-view load plot "CPU 사용률" {
+view graph down "서버"
+view plot "CPU 사용률" {
   cpu
 }
-view latency plot "지연" {
+view plot "지연" {
   lat
 }
 
@@ -52,7 +52,7 @@ scene "평상시" mode=static
   lb -> a2 time=600ms
   lb -> a3 time=600ms
 
-scene "트래픽 급증" mode=once
+scene "트래픽 급증"
   lb -> a1 "요청 폭주" time=700ms set="cpu1+49, p95=236"
   lb -> a2 "요청" time=700ms set="cpu2+32"
   lb -> a3 "요청" time=700ms set="cpu3+12, peak:=cpu1"

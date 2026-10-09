@@ -20,8 +20,12 @@ html.embedded body {
   background: transparent;
 }
 
+/* 그림 틀은 모든 곳(단독, 삽입, 전체 화면)에서 같은 열 하나다: 그림 면(.fl-surface) 다음에 장면 탭 줄(.fl-foot)이 문서 흐름대로 이어진다. 탭은 그림 위로 올라가지 않는다.
+   단독 문서와 삽입 재생기 모두 자연 높이를 쓰고 문서가 세로로 스크롤한다. */
 .fl-figure {
   position: relative;
+  display: flex;
+  flex-direction: column;
   max-width: var(--figure-canvas, var(--size-figure-canvas));
   margin: 0 auto;
   overflow: clip;
@@ -41,29 +45,22 @@ html.embedded .fl-figure.full {
   background: var(--color-page);
 }
 
-/* 장면 탭은 그림 바로 아래 가운데에 놓는다. 본문에 삽입된 재생기도 같다. */
-html.embedded .fl-foot {
-  position: static;
-  padding: var(--space-4) 0 0;
-  background: transparent;
-}
-
 /* 그림의 바탕은 SVG와 같다. 도구 막대는 이 면 위 오른쪽 위에 뜬다. */
 .fl-surface {
   position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
 }
 
+/* 판을 담는 회색 판은 그림에서 유일한 회색 층이다. 카드는 이 위의 흰 면이고 그룹은 면이 없다. 문서 안에서는 자연 높이라 넘치지 않고, 전체 화면에서 그림이 영역보다 커지면 이 안에서 스크롤한다. */
 .fl-canvas {
+  min-height: 0;
   padding: var(--space-6) 0;
   background: var(--simple2-canvas-fill);
   border-radius: var(--simple2-canvas-corner);
   overflow: auto;
-}
-
-.fl-scroll-hint {
-  margin: var(--space-3) 0;
-  font-size: var(--size-text-13);
-  color: var(--color-muted);
 }
 
 .fl-canvas:focus-visible {
@@ -71,27 +68,17 @@ html.embedded .fl-foot {
   outline-offset: calc(-1 * var(--border-tag));
 }
 
-/* 판 묶음: 판마다 구역 하나(SVG 한 장)이고 위에서 아래로 쌓인다. 묶음 폭은 보기 영역 폭(표준 캔버스 폭 이하)이다.
-   판의 표시 폭은 보기 폭(--view-w)에 대한 판 상자 폭(--panel-w)의 비율이다. 장면의 읽을 수 있는 폭(--min-w)보다는 작아지지 않는다.
-   그보다 좁은 화면에서는 그림 전체를 줄이지 않고 그 판만 구역 안에서 가로로 밀린다. 판마다 따로 밀리므로 좁은 판은 그대로 들어온다. */
+/* 판 묶음: 판마다 구역 하나(SVG 한 장)이고 위에서 아래로 쌓인다. 묶음 폭은 min(구역 폭, 표준 캔버스 폭, 보기 폭)이다.
+   판의 표시 폭은 보기 폭(--view-w)에 대한 판 상자 폭(--panel-w)의 비율이고 모든 판이 같은 보기 폭으로 나눈다.
+   보기 폭은 가장 넓은 판의 폭이라 비율은 1을 넘지 않는다. 공통 비율은 min(1, 구역 폭/보기 폭, 캔버스 폭/보기 폭)이고, 판은 자연 크기보다 커지지 않으며 묶음이 좁아지면 모든 판이 같은 비율로 줄어 구역 안에 다 들어온다. */
 .dp-panels {
-  width: min(100%, var(--figure-canvas, var(--size-figure-canvas)));
+  width: min(100%, var(--figure-canvas, var(--size-figure-canvas)), calc(var(--view-w) * 1px)); /* tokens-allow: 화면 상수가 아니라 데이터에서 나온 SVG 좌표 폭(단위 없는 수)을 CSS 길이로 바꾸는 좌표 단위 변환의 1px */
   margin: 0 auto;
-}
-
-.dp-panel {
-  overflow-x: auto;
-  overflow-y: hidden;
-}
-
-.dp-panel:focus-visible {
-  outline: var(--border-tag) solid var(--color-ui-focus);
-  outline-offset: calc(-1 * var(--border-tag));
 }
 
 .dp-panel > svg {
   display: block;
-  width: max(calc(100% * var(--panel-w) / var(--view-w)), var(--min-w));
+  width: calc(100% * var(--panel-w) / var(--view-w));
   height: auto;
   margin: 0 auto;
 }
@@ -104,14 +91,16 @@ html.embedded .fl-foot {
   overflow: hidden;
 }
 
-/* 장면이 둘 이상일 때만 보이는 탭 줄이다(없으면 hidden). 좁은 화면에서는 탭이 줄바꿈되어 잘리지 않는다. */
+/* 장면이 둘 이상일 때만 보이는 탭 줄이다(없으면 hidden). 그림 면 바로 아래 문서 흐름에 놓인 가운데 줄이고 그림을 덮지 않는다.
+   문서 안에서는 틀 높이가 정해지지 않아 백분율 상한이 걸리지 않는다. 전체 화면에서 탭이 그림 공간을 모두 차지하지 않도록 틀 높이의 절반까지만 자라고 넘치면 안에서 스크롤한다. */
 .fl-foot {
-  position: relative;
-  z-index: var(--z-raised);
-  display: grid;
-  justify-items: center;
-  padding: var(--simple2-page-gutter);
-  background: var(--color-page);
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: center;
+  box-sizing: border-box;
+  max-height: 50%;
+  padding: var(--space-4) 0 0;
+  overflow: auto;
 }
 
 .fl-round {
@@ -130,21 +119,10 @@ html.embedded .fl-foot {
   cursor: pointer;
 }
 
+/* 탭 줄은 틀 폭 안에서 줄을 바꾸고(폭 규칙은 control.css의 분절 조작) 가운데로 모은다. 부모 flex 안에서 내용 폭 밑으로 줄어들 수 있어야 긴 탭이 틀 밖으로 나가지 않는다. */
 .fl-tabs {
-  flex-wrap: wrap;
-  gap: var(--space-1);
   justify-content: center;
   min-width: 0;
-  max-width: 100%;
-}
-
-.fl-tabs button {
-  position: relative;
-  display: grid;
-  place-items: center;
-  max-width: 100%;
-  padding: 0 var(--space-7);
-  overflow-wrap: anywhere;
 }
 
 /* 백틱으로 감싼 글. 코드 글꼴로 그린다. */
@@ -153,14 +131,17 @@ html.embedded .fl-foot {
   letter-spacing: normal;
 }
 
-/* 도구 막대: 내려받기, 전체 화면(맨 오른쪽). 마우스는 그림에 올리거나 키보드 초점이 들어올 때 서서히 나타나고, 터치(손가락)에서는 늘 보인다. */
+/* 도구 막대: 문법 복사, HTML 다운로드, 전체화면(맨 오른쪽)이 모든 그림에서 같다. 마우스는 그림에 올리거나 키보드 초점이 들어올 때 서서히 나타나고, 터치(손가락)에서는 늘 보인다.
+   결과 알림(.fl-tool-status)은 막대 맨 앞에 붙어 나타나는 동안은 마우스와 상관없이 보인다. */
 .fl-view-tools {
   position: absolute;
   top: var(--space-3);
   right: var(--space-3);
   z-index: var(--z-raised);
   display: flex;
+  align-items: center;
   gap: var(--space-1);
+  max-width: calc(100% - var(--space-6));
   padding: var(--space-1);
   background: var(--color-card);
   border: var(--border-thin) solid var(--simple2-separator);
@@ -171,13 +152,50 @@ html.embedded .fl-foot {
 }
 
 .fl-figure:hover .fl-view-tools,
-.fl-figure:has(:focus-visible) .fl-view-tools {
+.fl-figure:has(:focus-visible) .fl-view-tools,
+.fl-view-tools:has(.fl-tool-status:not(:empty)) {
   opacity: 1;
 }
 
 .fl-view-tools .fl-round {
+  flex: 0 0 auto;
   min-width: var(--size-control-inner);
   height: var(--size-control-inner);
+  border-radius: var(--simple2-segment-item-radius);
+}
+
+.fl-view-tools .fl-round[data-state='done'] {
+  color: var(--color-state-success);
+}
+
+.fl-view-tools .fl-round[data-state='failed'] {
+  color: var(--color-state-error);
+}
+
+/* 결과 알림. 비어 있으면 폭이 0이라 보이지 않지만 화면 읽기 도구는 바뀐 글을 읽는다. */
+.fl-tool-status {
+  min-width: 0;
+  max-width: calc(var(--size-control-outer) * 4);
+  padding: 0 var(--space-4);
+  overflow: hidden;
+  font-size: var(--size-text-13);
+  color: var(--color-fg);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fl-tool-status:empty {
+  max-width: 0;
+  padding: 0;
+}
+
+/* 복사 명령이 쓰는 눈에 안 보이는 선택 영역. */
+.fl-copy-holder {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
 }
 
 /* 터치에서는 도구 막대가 늘 보이므로 그림 위에 겹치지 않도록 그 높이만큼 자리를 비운다. */
@@ -197,21 +215,13 @@ html.embedded .fl-foot {
   }
 }
 
+/* 전체 화면은 같은 틀을 창 전체로 키우는 것뿐이다. 문서 안에서는 자연 높이이고 전체 화면에서만 창 높이를 채운다. */
 .fl-figure.full {
   position: fixed;
   inset: 0;
   z-index: var(--z-overlay);
-  display: flex;
-  flex-direction: column;
   max-width: none;
   border-radius: 0;
-}
-
-.fl-figure.full .fl-surface {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
 }
 
 .fl-figure.full .fl-canvas {
@@ -226,26 +236,14 @@ html.embedded .fl-foot {
 }
 
 /* 전체 화면: 판 묶음은 그림 전체가 영역에 들어가는 폭(--fit-w, 재생기가 잰다)에 확대 배수(--zoom)를 곱한 폭이고, 영역이 넘치면 스크롤된다.
-   읽을 수 있는 폭을 지키지 않는다. 글자를 키우는 일은 확대가 맡는다. 판 폭의 분모는 문서 안의 보기 폭이 아니라 묶음의 실제 폭(--bundle-w)이다. 판은 구역 안에서 따로 밀리지 않고 묶음 폭을 그대로 채운다. */
+   글자를 키우는 일은 확대가 맡는다. 판 폭의 분모는 문서 안의 보기 폭이 아니라 묶음의 실제 폭(--bundle-w)이다. */
 .fl-figure.full .dp-panels {
   width: calc(var(--fit-w, 100%) * var(--zoom, 1));
   max-width: none;
 }
 
-.fl-figure.full .dp-panel {
-  overflow: visible;
-}
-
 .fl-figure.full .dp-panel > svg {
   width: calc(100% * var(--panel-w) / var(--bundle-w, var(--view-w)));
-}
-
-/* 가로 화면에서도 탭이 그림 공간을 모두 차지하지 않게 하고, 많은 탭은 안에서 이동한다. */
-.fl-figure.full .fl-foot {
-  flex-shrink: 0;
-  box-sizing: border-box;
-  max-height: 50%;
-  overflow: auto;
 }
 
 .fl-figure.full.zoomed .fl-canvas {
@@ -281,17 +279,17 @@ html.embedded .fl-foot {
 }
 
 .fl .fl-edge.is-current {
-  color: var(--color-state-active);
+  color: var(--fx-edge);
 }
 
 /* 고정 라벨 알약은 늘 보인다. 점이 올라 있는 동안 알약의 테두리와 글자가 활성 색이고, 점이 떠난 뒤 재생기가 쓰는 세기(--pill-tint, 1에서 0)만큼 중립 색으로 돌아온다.
-   불투명도는 건드리지 않는다. 세기는 시각마다 재생기가 정한 값이다. */
+   불투명도는 건드리지 않는다. 세기는 시각마다 재생기가 정한 값이다. 켜짐과 평소 색은 figure.css의 효과 한 벌이다. */
 .fl .fl-edge .pill {
-  stroke: color-mix(in srgb, var(--color-state-active) calc(var(--pill-tint, 0) * 100%), var(--simple2-separator));
+  stroke: color-mix(in srgb, var(--fx-edge) calc(var(--pill-tint, 0) * 100%), var(--fx-edge-rest));
 }
 
 .fl .fl-edge .edgelabel {
-  fill: color-mix(in srgb, var(--color-state-active) calc(var(--pill-tint, 0) * 100%), var(--color-muted));
+  fill: color-mix(in srgb, var(--fx-ink) calc(var(--pill-tint, 0) * 100%), var(--fx-ink-rest));
 }
 
 .fl .fl-packet > circle:first-child {
@@ -312,14 +310,6 @@ html.embedded .fl-foot {
 
 .fl-packet {
   pointer-events: none;
-}
-
-.fl .fl-part.on .part-bg {
-  fill: var(--color-card-on);
-}
-
-.fl .fl-part.on .grid-cell {
-  fill: var(--simple2-row-selection);
 }
 
 /* hidden 속성이 display: grid 같은 규칙에 지지 않게 한다. 장면이 하나뿐이거나 시간 흐름이 없는 그림의 빈 탭 줄을 숨기기 위해서다. */

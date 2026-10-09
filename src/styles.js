@@ -1,6 +1,6 @@
 // 결과 파일에 넣을 스타일과 SVG defs. 값은 모두 토큰(tokens.css, tokens.js)에서 온다.
 import { readFileSync } from 'node:fs';
-import { arrowMarker } from './draw/arrow.js';
+import { CHART_ARROW, roleArrowDefs } from './draw/arrow.js';
 
 // cost: time O(n), heap O(n), stack O(1), io 1
 // vars: n = CSS 파일 글자 수
@@ -42,9 +42,7 @@ export function patternDefs(drawings) {
   return [...defs.keys()].sort().map((id) => defs.get(id)).join('');
 }
 
-/** 차트 화살표 표식은 그 종류의 차트가 있을 때만 넣는다. 색과 굵기는 연결된 선을 따른다. */
+/** 차트 방향선의 화살촉 표식. 쓰인 역할(draw/arrow.js CHART_ARROW)마다 하나씩, 그 역할의 색을 상속하게 넣는다. 차트 종류가 섞여도 선언 순서에 기대지 않는다. */
 export function figureDefs(figure) {
-  const types = [...new Set(figure.nodes.filter((n) => n.shape === 'chart' && !n.isRejected).map((n) => n.plot.chartType))];
-  // 표식 id는 하나뿐이라 종류가 여럿이면 처음 종류의 색을 쓴다.
-  return types.slice(0, 1).map((type) => `<g class="chart-marker-${type}">${arrowMarker('fl-arrow')}</g>`).join('');
+  return roleArrowDefs(figure.nodes.filter((n) => n.shape === 'chart' && !n.isRejected).map((n) => CHART_ARROW[n.plot.chartType]).filter(Boolean));
 }

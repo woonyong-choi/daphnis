@@ -7,7 +7,7 @@ import { extentOfFrames } from './chart/extent.js';
 import { changedBetween, frameSet } from './chart/frames.js';
 import { drawChecked } from './chart/guard.js';
 import { patternDefs } from './styles.js';
-import { prepareChartRows } from './source/chart-rules.js';
+import { checkRowValues, prepareChartRows } from './source/chart-rules.js';
 import { FigureError, createProblems, makeDiagnostic } from './source/problems.js';
 import { NUMBER_PATTERN } from './source/words.js';
 import { values } from './tokens.js';
@@ -35,6 +35,30 @@ export const boundIds = (card) => [...new Set(card.plot.chart.rows.flatMap((row)
 /** 차트 보기에 놓인 차트는 문서 폭 전체로, 그래프 카드로만 놓인 차트는 좁은 폭으로 그린다. 한 차트는 한 모양으로만 그린다. */
 export const isFullChart = (figure, card) => figure.views.some((v) => v.strategy === 'plot' && v.cardIds.includes(card.id));
 
+// 값 이름이 가질 글 가운데 숫자인 것. 숫자가 아닌 글은 시간표를 만든 뒤 checkNumbers가 알린다.
+const numericTexts = (texts, byId, id) => [...(texts.get(rootOf(byId, id)) ?? [])].filter((t) => NUMBER_PATTERN.test(t));
+
+// cost: time O(b·t), heap O(b·t), stack O(1)
+// vars: b = 묶은 값 수, t = 값이 가질 글 수
+// basis: estimate
+// 값 범위와 그림 영역 길이를 재려고 보는 값 목록: 처음 값(맨 앞), 값 하나가 가질 글을 하나씩 넣은 것. assign은 값 이름 → 숫자 글이다.
+function candidateAssigns(card, figure, texts) {
+  const byId = valueTable(figure);
+  const base = Object.fromEntries(boundIds(card).map((id) => [id, startText(id, figure)]));
+  return [base, ...boundIds(card).flatMap((id) => numericTexts(texts, byId, id).map((text) => ({ ...base, [id]: text })))];
+}
+
+// cost: time O(b·t·r·k), heap O(r·k), stack O(1)
+// vars: b = 묶은 값 수, t = 값이 가질 글 수, r = 행 수, k = 행의 값 수
+// basis: estimate
+// 값 범위와 눈금을 만들기 전에, 묶은 값이 가질 수 있는 숫자마다 원본 행과 같은 값 규칙(checkFrameValues)을 지킨다. 실제 프레임을 그릴 때와 같은 함수라 어긋나지 않는다.
+// 묶은 값이 함께 움직일 때만 생기는 쌓는 합계와 구간 순서는 보지 않는다. 그 조합은 값 범위를 재려고 섞은 가정이고 실제 프레임은 아니므로, 실제 프레임을 그릴 때 모두 확인한다.
+function checkedCandidates(card, figure, texts) {
+  const assigns = candidateAssigns(card, figure, texts);
+  for (const assign of assigns) checkFrameValues(plotWith(card, { rows: rowsWith(card, assign) }), { card, assign, combinations: false });
+  return assigns;
+}
+
 // cost: time O(b·t), heap O(b·t), stack O(1)
 // vars: b = 묶은 값 수, t = 값이 가질 글 수
 // basis: estimate
@@ -42,15 +66,23 @@ export const isFullChart = (figure, card) => figure.views.some((v) => v.strategy
  * 값 범위를 정하려고 그려 볼 모든 행 목록: 처음 값, 값 하나가 가질 글을 하나씩 넣은 것, 묶은 값이 모두 가장 큰(또는 가장 작은) 글을 가진 것.
  * 쌓은 막대의 합과 음수 합은 묶은 값이 함께 움직일 때 가장 크므로 마지막 두 목록이 양쪽 끝을 덮는다.
  * @param texts 값 이름 → 가질 글 집합
+ * @param assigns candidateAssigns의 목록(처음 값이 맨 앞)
  */
-function extentRows(card, figure, texts) {
+function extentRows(card, figure, texts, [base, ...singles]) {
   const ids = boundIds(card);
   const byId = valueTable(figure);
-  const base = Object.fromEntries(ids.map((id) => [id, startText(id, figure)]));
-  const candidates = (id) => [...(texts.get(rootOf(byId, id)) ?? [])].filter((t) => NUMBER_PATTERN.test(t));
-  const pick = (choose) => Object.fromEntries(ids.map((id) => [id, candidates(id).sort((a, b) => choose(Number(a), Number(b)))[0] ?? base[id]]));
-  const singles = ids.flatMap((id) => candidates(id).map((text) => ({ ...base, [id]: text })));
+  const pick = (choose) => Object.fromEntries(ids.map((id) => [id, numericTexts(texts, byId, id).sort((a, b) => choose(Number(a), Number(b)))[0] ?? base[id]]));
   return [base, ...singles, pick((a, b) => b - a), pick((a, b) => a - b)].map((assign) => rowsWith(card, assign));
+}
+
+// cost: time O(b·t·r·s), heap O(b·t·r), stack O(1)
+// vars: b = 묶은 값 수, t = 값이 가질 글 수, r = 행 수, s = 계열 수
+// basis: estimate
+// 값 규칙을 이미 지킨 목록(assigns)으로 값 범위를 정한다. 값 축이 없는 차트와 묶은 값이 없는 차트는 undefined다.
+function extentWithin(card, figure, texts, assigns) {
+  const { chart, chartType } = card.plot;
+  if (!boundIds(card).length || NO_AXIS.has(chartType)) return undefined;
+  return extentOfFrames(chartType, chart.series.map((s) => s.id), extentRows(card, figure, texts, assigns), chart.scale);
 }
 
 // cost: time O(b·t·r·s), heap O(b·t·r), stack O(1)
@@ -59,12 +91,13 @@ function extentRows(card, figure, texts) {
 /**
  * 묶은 값이 가질 모든 값과 고정 값으로 정한 값 범위. 값 축이 없는 차트와 묶은 값이 없는 차트는 undefined다.
  * 범위 규칙은 chart/extent.js 하나다: 쌓은 막대는 양수 합과 음수 합, 퍼센트는 0~100, 누적분포는 0~1, 나머지는 모든 값의 최솟값과 최댓값이다.
+ * 범위를 정하기 전에 묶은 값이 가질 숫자마다 값 규칙을 확인하므로, 로그 축의 0 같은 값은 줄 번호가 있는 오류가 된다.
  * @param texts 값 이름 → 가질 글 집합
+ * @throws FigureError 묶은 값이 원본 행과 같은 값 규칙(음수, 로그 0 이하, 크기 상한)을 어길 때(value-type)
  */
 export function extentOf(card, figure, texts) {
-  const { chart, chartType } = card.plot;
-  if (!boundIds(card).length || NO_AXIS.has(chartType)) return undefined;
-  return extentOfFrames(chartType, chart.series.map((s) => s.id), extentRows(card, figure, texts), chart.scale);
+  if (!boundIds(card).length) return undefined;
+  return extentWithin(card, figure, texts, checkedCandidates(card, figure, texts));
 }
 
 // cost: time O(r), heap O(r), stack O(1)
@@ -92,12 +125,29 @@ function layoutOf({ isFull, chartWidth }) {
 // cost: time O(draw), heap O(out), stack O(1)
 // vars: draw = 차트를 그리는 비용, out = 만든 SVG 글자 수
 // basis: estimate
-// 프레임 하나를 그린다. 원·도넛처럼 행 값에서 비율이 정해지는 차트는 비율을 다시 계산한다.
+// 프레임 하나를 그린다. 원·도넛처럼 행 값에서 비율이 정해지는 차트는 비율을 다시 계산하고, 묶인 값은 원본 행과 같은 값 규칙을 거친다.
+// 어림 프레임(probe)의 값은 checkedCandidates가 이미 확인했으므로 다시 확인하지 않는다. assign은 값 이름 → 숫자 글이다.
 function drawFrame(card, options, problems) {
-  const plot = plotWith(card, options);
-  if (card.plot.chart.rows.some((row) => row.bind)) prepareChartRows(plot, problems);
+  const plot = plotWith(card, { ...options, rows: rowsWith(card, options.assign) });
+  if (card.plot.chart.rows.some((row) => row.bind)) {
+    prepareChartRows(plot, problems);
+    if (!options.probe) checkFrameValues(plot, { card, assign: options.assign, combinations: true });
+  }
   const drawn = drawChecked(plot, problems);
   return { ...drawn, text: chartText(plot) };
+}
+
+// cost: time O(r·k), heap O(r·k), stack O(1)
+// vars: r = 행 수, k = 행의 값 수
+// basis: estimate
+// 묶은 값이 채운 행도 원본 행과 같은 값 규칙(음수, 로그 0 이하, 크기 상한, 쌓는 합계, 구간 순서)을 지킨다(checkRowValues). 어기면 묶은 행의 줄에서 알려, 그리기가 줄 번호 없는 내부 오류로 끝나거나 틀린 막대를 그리지 않는다.
+// combinations가 거짓이면 여러 값이 함께 정하는 규칙(쌓는 합계, 구간 순서)은 보지 않는다: 값 범위와 그림 영역 길이를 재려고 값 하나씩 섞어 본 어림이라 실제 프레임의 값이 아니다.
+function checkFrameValues(plot, { card, assign, combinations }) {
+  const found = createProblems();
+  checkRowValues(plot, found, { combinations });
+  if (!found.errors.length) return;
+  const reads = Object.entries(assign).map(([id, text]) => `${id}=${text}`).join(', ');
+  throw new FigureError(found.errors.map((d) => ({ ...d, code: 'value-type', message: `chart "${card.id}" reads ${reads}: ${d.message}` })).sort((a, b) => a.line - b.line));
 }
 
 // cost: time O(f·draw), heap O(f·out), stack O(1)
@@ -111,23 +161,20 @@ function drawFrame(card, options, problems) {
  */
 export function drawChartBase(card, { figure, texts, chartWidth, problems }) {
   const isFull = isFullChart(figure, card);
-  const extent = extentOf(card, figure, texts);
   const ids = boundIds(card);
   const base = Object.fromEntries(ids.map((id) => [id, startText(id, figure)]));
+  let extent;
   let plotWidth;
   if (ids.length) {
-    const byId = valueTable(figure);
+    // 값 범위와 어림 프레임이 같은 값 목록을 한 번 확인하고 쓴다.
+    const assigns = checkedCandidates(card, figure, texts);
+    extent = extentWithin(card, figure, texts, assigns);
     const probe = [];
-    drawFrame(card, { rows: rowsWith(card, base), extent, probe, isFull, chartWidth }, createProblems());
-    for (const id of ids) {
-      for (const text of texts.get(rootOf(byId, id)) ?? []) {
-        if (NUMBER_PATTERN.test(text)) drawFrame(card, { rows: rowsWith(card, { ...base, [id]: text }), extent, probe, isFull, chartWidth }, createProblems());
-      }
-    }
+    for (const assign of assigns) drawFrame(card, { assign, extent, probe, isFull, chartWidth }, createProblems());
     plotWidth = probe.length ? Math.min(...probe) : undefined;
   }
   const pin = { extent, plotWidth, isFull, chartWidth };
-  return { drawn: drawFrame(card, { rows: rowsWith(card, base), ...pin }, problems), pin };
+  return { drawn: drawFrame(card, { assign: base, ...pin }, problems), pin };
 }
 
 // 값이 시간표를 만들기 전에 가진 처음 글(참조면 가리키는 값의 처음 글)
@@ -148,7 +195,7 @@ const textAt = (row, t) => (row.periods.find(([from, to]) => from <= t && t < to
  * 같은 시각에 이어 쓴 값은 마지막 글만 보이고(길이 0 구간은 건너뛴다), 한 시각 안에서 제자리로 돌아오면 바뀐 표식이 없다.
  * 길이 0인 장면도 자신의 값으로 길이 0 구간 하나를 갖는다. 장면의 첫 구간에서 바뀐 표식은 장면이 시작할 때 보이는 값(`set`, `keep`)과 견준다.
  * @returns { frames, marks, rows, body, defs } 또는 묶은 값이 없으면 undefined. rows는 장면마다 { si, t0, t1, periods: [[from, to, 프레임 번호, 바뀐 표식 id[]]] }, body는 표식 id를 붙인 처음 그림이다. 바뀐 표식은 원자료가 달라진 것뿐이다(위치만 밀린 표식은 조용히 옮겨진다).
- * @throws FigureError 묶은 값이 숫자가 아닌 글을 가질 때(value-type)나 프레임끼리 표식 이름이 다를 때(chart-frames, 그리기의 버그)
+ * @throws FigureError 묶은 값이 숫자가 아닌 글을 가질 때나 원본 행과 같은 값 규칙(음수, 로그 0 이하, 크기 상한)을 어길 때(value-type)나 프레임끼리 표식 이름이 다를 때(chart-frames, 그리기의 버그)
  */
 export function buildChartFrames(card, { figure, timeline, base, pin }, problems) {
   const ids = boundIds(card);
@@ -177,7 +224,7 @@ export function buildChartFrames(card, { figure, timeline, base, pin }, problems
     });
     return { si, t0, t1, start, periods };
   });
-  const drawn = assigns.map((assign) => drawFrame(card, { rows: rowsWith(card, assign), ...pin }, problems));
+  const drawn = assigns.map((assign) => drawFrame(card, { assign, ...pin }, problems));
   const { marks, frames, raws, body } = pairFrames(drawn.map((d) => d.body), card);
   const changed = (a, b) => changedBetween(raws, a, b);
   for (const row of rows) {

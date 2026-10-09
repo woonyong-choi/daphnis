@@ -1,5 +1,5 @@
 // 덤벨 차트: 첫 계열 값(compare 노란 점)에서 둘째 계열 값(main 채운 점)으로 이은 한 줄과 오른쪽 바뀐 비율.
-import { headReach } from '../draw/arrow.js';
+import { CHART_ARROW, headReach, roleArrow } from '../draw/arrow.js';
 import { measure, wrap } from '../measure/fonts.js';
 import { centerBaseline, roundCoord as r } from '../text.js';
 import { drawRules, finishRowChart, rowValueScale } from './axis.js';
@@ -12,6 +12,7 @@ import { formatChange, seriesFormats } from './scale.js';
 import { values } from '../tokens.js';
 
 const ARROW_MIN = SIZE.chart['arrow-min'];
+const ARROW = roleArrow(CHART_ARROW.dumbbell);
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -71,7 +72,7 @@ function endMark(ctx, [x1, x2], { k, raw }) {
   const edge = DOT + SPACE['1'];
   const dot = markShape({ shape: seriesPaint(chart, 1).shape, cx: x2, cy, radius: DOT, attrs: dotAttrs(chart, 1, ` class="chart-after pop"${markAttrs(chart, markId(chart, 1, k), { raw, paint: seriesPaint(chart, 1) })}`) });
   const hidden = Math.abs(x2 - x1) - 2 * edge < ARROW_MIN ? ' visibility="hidden"' : '';
-  return `<line x1="${r(x1 + dir * edge)}" y1="${r(cy)}" x2="${r(x2 - dir * (edge + headReach(values.border.strong).cap))}" y2="${r(cy)}" class="chart-arrow pop" marker-end="url(#fl-arrow)"${hidden}${markAttrs(chart, markId(chart, 1, k, '.a'), { raw, paint: seriesPaint(chart, 1) })}/>${dot}`;
+  return `<line x1="${r(x1 + dir * edge)}" y1="${r(cy)}" x2="${r(x2 - dir * (edge + headReach(values.border.strong).cap))}" y2="${r(cy)}" class="chart-arrow ${ARROW.cls} pop"${ARROW.end}${hidden}${markAttrs(chart, markId(chart, 1, k, '.a'), { raw, paint: seriesPaint(chart, 1) })}/>${dot}`;
 }
 
 // cost: time O(1), heap O(1), stack O(1)

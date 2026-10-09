@@ -1,7 +1,7 @@
 // 점 위에 뜨는 글 상자의 크기와 자리. 움직이는 SVG, 재생기, 그림 검사가 시간표에 담은 같은 계획을 쓴다(docs/design/playback.md 이동 글).
 import { FIGURE_PAD } from './canvas.js';
 import { FIT_SLACK, measure, wrap } from './measure/fonts.js';
-import { STYLE } from './measure/sizes.js';
+import { STYLE } from './measure/texts.js';
 import { values } from './tokens.js';
 
 const SPACE = values.space;

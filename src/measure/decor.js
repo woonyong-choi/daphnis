@@ -10,11 +10,6 @@ const TEXT = values.size.text;
 export const BADGE_STYLE = Object.freeze({ size: TEXT['11'], face: 'semibold' });
 /** 장식 사이 간격과 알약 높이, 도형 윗줄과 이름 사이 간격 */
 export const DECOR = Object.freeze({ gap: SPACE['2'], pillH: SIZE.pill.height, rowGap: SPACE['2'], pillPad: SPACE['7'] });
-/**
- * 카드 머리의 공통 여백. 머리는 아이콘 틀(24 격자 한 칸)과 제목이 한 줄로 나란하고, 상자, 표, API, 클래스가 같은 값을 쓴다.
- * iconGap은 아이콘과 제목 사이, padX와 padY는 머리 둘레, rowH는 구획으로 나뉜 카드(표, API, 클래스)의 머리 줄 높이다.
- */
-export const HEADER = Object.freeze({ iconGap: SPACE['4'], padX: SPACE['9'], padY: SPACE['6'], rowH: Math.max(SIZE.node['table-row'], SIZE.icon.node + SPACE['4']) });
 /** 복제 개수(count)를 가진 상자의 뒤 윤곽 한 겹 간격 */
 export const STACK_STEP = SPACE['2'];
 
@@ -60,9 +55,6 @@ export function layoutDecor(item, { iconSize, titleW, titleH = DECOR.pillH, icon
 
 /** 도형 윗줄의 장식. 너비가 도형 안쪽에 들어가야 하므로 도형 크기를 정하는 쪽이 이 너비를 쓴다. */
 export const nodeDecor = (node) => layoutDecor(node, { iconSize: node.tile ? SIZE.icon.tile : SIZE.icon.node });
-
-/** 카드 머리 한 줄의 장식: 아이콘, 제목(너비 titleW, 높이 titleH), 배지, 개수가 한 줄로 나란하다. 아이콘은 제목 첫 줄과 가운데가 같다. */
-export const headerDecor = (node, { titleW, titleH }) => layoutDecor(node, { iconSize: SIZE.icon.node, titleW, titleH, iconGap: HEADER.iconGap });
 
 /** 그룹 제목 줄의 장식(제목 글과 배지, 개수 알약). 아이콘은 제목 줄 왼쪽 모서리 탭이 맡아(draw/decor.js drawGroupTab) 여기에 없다. 장식이 없으면 undefined이고 제목 글만 그린다. */
 export const groupDecor = (group, titleW) => layoutDecor({ ...group, iconData: undefined }, { iconSize: 0, titleW });

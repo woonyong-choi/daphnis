@@ -31,7 +31,7 @@ vpn -> bastion no=8
 bastion -> app no=9
 app -> cache
 
-view main graph down
+view graph down
 
 scene "요청 경로" mode=static
   user -> dns

@@ -12,7 +12,7 @@ table orders "orders" {
 queue jobs "알림 큐" slots=4
 box worker "알림 작업자"
 
-view flow sequence {
+view sequence {
   user gw pg jobs worker orders
 }
 
@@ -31,7 +31,7 @@ scene "결제 요청" mode=static
     }
   }
 
-scene "재시도와 후처리" mode=once
+scene "재시도와 후처리"
   fragment loop "PG 응답 지연 시 재시도" times=2 {
     gw -> pg "상태 조회"
     pg -> gw "처리 중" dashed

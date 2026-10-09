@@ -61,6 +61,7 @@ function valueRows() {
 // basis: estimate
 // 기본값이 없는 목록의 기본 규칙 글
 function defaultText(list) {
+  if (list === 'sceneMode') return `줄이 있는 장면은 ${code('once')}, 줄이 없는 장면은 ${code('static')}`;
   if (list !== 'role') return '없음';
   const automatic = ['main', 'compare'];
   const first = Object.entries(VALUES.chartType.items).filter(([, item]) => item.firstRole).map(([type, item]) => `${code(type)}은 ${[item.firstRole, ...automatic.filter((r) => r !== item.firstRole)].join(', ')}`);

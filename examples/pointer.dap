@@ -21,7 +21,7 @@ grid fresh "새 노드 · 0x58" cols=2 {
 }
 
 value cur "cur" on=head from=0x10
-value visited "방문 수" on=head from=0
+value visited "방문 수" on=head
 
 head -> a.av
 a.an -> b.bv
@@ -29,12 +29,12 @@ b.bn -> c.cv
 a.an -> fresh.fv quiet
 fresh.fn -> b.bv quiet
 
-view main graph down
+view graph down
 
 scene "리스트 구조" mode=static
   light a b c
 
-scene "순회" mode=once
+scene "순회"
   head -> a.av time=600ms set="cur=0x10, visited=1"
   light a.av
   a.an -> b.bv time=700ms set="cur=0x28, visited=2"
@@ -42,7 +42,7 @@ scene "순회" mode=once
   b.bn -> c.cv time=700ms set="cur=0x40, visited=3"
   light c.cv c.cn
 
-scene "A 뒤에 삽입" mode=once keep="visited"
+scene "A 뒤에 삽입" keep="visited"
   light fresh
   fresh.fn -> b.bv time=700ms set="cur=0x28"
   a.an -> fresh.fv time=700ms set="cur=0x58"

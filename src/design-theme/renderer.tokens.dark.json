@@ -16,18 +16,6 @@
       "$value": "{primitive.simple2.dark-bg}",
       "$type": "color"
     },
-    "group-1": {
-      "$value": "{primitive.simple2.dark-group-1}",
-      "$type": "color"
-    },
-    "group-2": {
-      "$value": "{primitive.simple2.dark-group-2}",
-      "$type": "color"
-    },
-    "group-3": {
-      "$value": "{primitive.simple2.dark-group-3}",
-      "$type": "color"
-    },
     "node": {
       "$value": "{primitive.simple2.dark-node}",
       "$type": "color"
@@ -66,7 +54,7 @@
     },
     "state": {
       "active": {
-        "$value": "{color.blue.dark-stroke}",
+        "$value": "{primitive.simple2.ui-accent}",
         "$type": "color"
       },
       "active-fill": {
@@ -104,7 +92,7 @@
         "$type": "color"
       },
       "focus": {
-        "$value": "{color.blue.dark-stroke}",
+        "$value": "{primitive.simple2.ui-accent}",
         "$type": "color"
       },
       "progress": {
@@ -112,7 +100,7 @@
         "$type": "color"
       },
       "control-on": {
-        "$value": "{color.gray.776}",
+        "$value": "{primitive.simple2.ui-accent}",
         "$type": "color"
       }
     },
@@ -336,17 +324,17 @@
       "$value": "{primitive.simple2.dark-bg}",
       "$type": "color"
     },
-    "selection-fill": {
-      "$value": "{primitive.simple2.dark-edge}",
-      "$type": "color"
+    "segment-track": {
+      "$value": "rgba(255, 255, 255, 0.12)",
+      "$type": "string"
     },
-    "selection-ink": {
-      "$value": "{color.gray.0}",
-      "$type": "color"
+    "segment-ink": {
+      "$value": "rgba(255, 255, 255, 0.78)",
+      "$type": "string"
     },
-    "tab-fill": {
-      "$value": "{primitive.simple2.dark-node}",
-      "$type": "color"
+    "segment-hover": {
+      "$value": "rgba(255, 255, 255, 0.1)",
+      "$type": "string"
     },
     "surface-edge": {
       "$value": "{primitive.simple2.dark-edge}",
@@ -358,6 +346,10 @@
     },
     "row-selection": {
       "$value": "{primitive.simple2.dark-selection}",
+      "$type": "color"
+    },
+    "card-active-fill": {
+      "$value": "{primitive.simple2.dark-card-active-fill}",
       "$type": "color"
     },
     "data-line": {

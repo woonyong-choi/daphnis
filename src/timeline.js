@@ -1,5 +1,5 @@
 // 시간 흐름을 시간표로 편다. 박자마다 상태를 완전히 적어서, 탭으로 건너뛰어도 앞 박자를 다시 계산하지 않는다(docs/design/playback.md).
-import { sequenceStep } from './sequence-plan.js';
+import { planBeats, sequenceStep } from './sequence-plan.js';
 import { resolveBudget } from './budget.js';
 import { arrivalOffsetMs } from './easing.js';
 import { createStepEngine } from './flow-events.js';
@@ -55,7 +55,7 @@ export function collectCards(figure, valueTexts) {
     const stateOf = () => Object.fromEntries([...new Set([...valueRowsOf.keys(), ...rows.keys()])].map((id) => [id, indexOf(id, [...(valueRowsOf.get(id) ?? []), ...(rows.get(id) ?? [])])]));
     let state = stateOf();
     starts.set(step, state);
-    for (const beat of step.beats) {
+    for (const beat of planBeats(step)) {
       const before = state;
       for (const op of beat.ops) applyCardOp(rows, op);
       state = stateOf();
@@ -183,7 +183,7 @@ function beatSeg({ step, si, beat, bi, timed, endMs = 0 }, { memory, run }, { ca
   // 박자의 논리 길이: 이동이 끝나는 시각, 차트가 자라는 시간, 이벤트 처리가 소비한 시각 가운데 가장 늦은 것에 적은 `wait`를 더한다. 그 밖의 시간은 없다.
   // 효과(후광, 알약 줄어듦)의 400ms는 논리 시각이 아니라 표시 시간이라 여기에 더하지 않는다(timeline-marks.js presentationOf). 박자는 서로 붙어 이어진다.
   const grow = Object.values(charts).some((c) => c.growing.length) ? run.growMs : 0;
-  const card = cards.beats.get(beat) ?? { before: {}, after: {} };
+  const card = cards.beats.get(beat.planned ?? beat);
   return createSeg(run, {
     line: beat.line,
     si,
