@@ -58,7 +58,7 @@ test('parseCondition_runs_no_code_and_rejects_everything_outside_the_grammar', (
   globalThis.__conditionRan = false;
   const hostile = [
     'process.exit(1)', 'globalThis.__conditionRan = true', 'n=1; globalThis.__conditionRan = true', 'constructor', '__proto__=1', 'n=1 ? 1 : 2', '(n=1)()', 'n+1=2', 'n=1+1', 'n==1', 'n===1', 'n=`1`', 'n="1"', 'a.b=1', 'n=[1]', 'n={}',
-    'import("x")', 'n=1 and m=1', 'n=1 or m=1', 'not n=1', 'n=1 &', 'n=1 |', 'n=1 ||', '', '   ', '(', ')', 'n=', '=1', 'n 1', 'n=1 m=1', '1=1', "'a'='a'", 'n=1 n', "n=''", "n='a b'", "n='abcdefghi'", "n='5'", "n<'x'", "'x'>n",
+    'import("x")', 'n=1 and m=1', 'n=1 or m=1', 'not n=1', 'n=1 &', 'n=1 |', 'n=1 ||', '', '   ', '(', ')', 'n=', '=1', 'n 1', 'n=1 m=1', '1=1', "'a'='a'", 'n=1 n', "n=''", "n='a b'", "n='5'", "n<'x'", "'x'>n",
   ];
 
   for (const text of hostile) {
@@ -68,6 +68,16 @@ test('parseCondition_runs_no_code_and_rejects_everything_outside_the_grammar', (
   }
   assert.equal(globalThis.__conditionRan, false);
   delete globalThis.__conditionRan;
+});
+
+// 근거: 구조 검토 C9 "값 글자 상한(VALUE_MAX 8자)을 없앤다. 값 자리는 실제 글꼴 폭으로 정해진다". 조건의 낱말도 길이를 제한하지 않고, 공백과 빈 낱말은 여전히 오류다
+test('parseCondition_accepts_a_long_word_and_still_rejects_an_empty_or_spaced_one', () => {
+  const long = 'a'.repeat(40);
+
+  assert.deepEqual(run(`holder='${long}'`, { holder: long }), { value: true });
+  assert.deepEqual(run(`holder='${long}'`, { holder: 'A' }), { value: false });
+  assert.match(run("holder=''").error, /no spaces and is not empty/);
+  assert.match(run("holder='a b'").error, /no spaces and is not empty/);
 });
 
 // 근거: 설계 figure-syntax.md "조건 처리는 자체 파서. eval이나 Function 등 임의 JavaScript 실행 금지"

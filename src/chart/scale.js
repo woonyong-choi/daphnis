@@ -40,6 +40,9 @@ export function tickLabels(ticks) {
   return ticks.map((t) => String(Number(t.toPrecision(15))));
 }
 
+/** 원본 값이 아니라 계산으로 얻은 비율(%)을 쓰는 기본 소수 자릿수. 머리 줄 `decimals`가 있으면 그것을 쓴다. 계산한 비율은 입력 값의 자릿수가 아니라 이 수만큼만 읽힌다. */
+export const SHARE_PLACES = 1;
+
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 값 수
 // basis: estimate

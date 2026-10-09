@@ -5,10 +5,26 @@ import { values } from './tokens.js';
 export const CANVAS = values.size['figure-canvas'];
 /** 그림 머리 `width wide`를 쓴 그림의 표시 폭 */
 export const CANVAS_WIDE = values.size['figure-canvas-wide'];
-/** 그림 둘레 안쪽 여백. 배치와 차트가 내용 둘레에, 설명 글이 아래에 같은 값을 둔다. */
+/** 그림 둘레 안쪽 여백. 배치와 차트가 내용 둘레에 같은 값을 둔다. */
 export const FIGURE_PAD = values.space['14'];
+/**
+ * 좁은 화면(`size.figure-compact-width`)에서 그림 컨테이너가 가지는 폭. 컨테이너는 화면 폭에서 좌우 바깥 여백(`simple2.page-gutter`)을 뺀 값이고 그림 안쪽에는 여백이 없다.
+ * 좁은 배치의 그래프와 차트는 이 폭에 들어가 표시 배율 1배로 보인다.
+ */
+export const COMPACT_WIDTH = values.size['figure-compact-width'] - values.simple2['page-gutter'] * 2;
 /** 보이는 가로세로 비율의 한도. 비율이 이 값이나 그 역수를 넘으면 그림이 읽히지 않는다. */
 export const ASPECT_MAX = values.scale['aspect-max'];
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+/**
+ * 본문에 삽입된 재생기(iframe)가 보는 틈 없는 보기 영역. 그림 둘레 안쪽 여백(FIGURE_PAD)을 작은 여백(`space.2`)만 남기고 걷어, 도형이 본문 글과 가까이 놓이고 같은 폭에서 글자가 덜 줄어든다.
+ * @returns { x, y, w, h } viewBox 값
+ */
+export function tightView(width, height) {
+  const inset = FIGURE_PAD - values.space['2'];
+  return { x: inset, y: inset, w: width - inset * 2, h: height - inset * 2 };
+}
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -31,7 +47,7 @@ export function displayRatio(width, height, canvas = CANVAS) {
  * 내용 크기에서 viewBox 폭과 표시 크기를 정한다.
  * 내용이 canvas보다 좁으면 viewBox만 canvas로 넓혀 가운데에 두고, 넓으면 viewBox는 내용 폭 그대로 두고 표시 폭만 canvas로 줄인다(글자도 같은 비율로 작아진다).
  * @param width 내용 너비
- * @param height 내용 높이(캡션 포함)
+ * @param height 내용 높이
  * @param canvas 캔버스 폭(canvasOf)
  * @returns { viewWidth, shownWidth, shownHeight, scale }. scale은 내용이 줄어드는 비율이고 1이면 줄지 않는다
  */

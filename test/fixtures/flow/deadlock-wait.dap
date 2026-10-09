@@ -1,0 +1,18 @@
+daphnis 2
+title "서로 기다리는 교착"
+box t1 "작업 1"
+box t2 "작업 2"
+box l1 "잠금 1"
+box l2 "잠금 2"
+value h1 "잠금 1 쥔 쪽" on=l1 from=none
+value h2 "잠금 2 쥔 쪽" on=l2 from=none
+t1 -> l1
+t2 -> l2
+t1 -> l2
+t2 -> l1
+
+scene "각자 하나씩 쥔다" mode=once
+  t1 -> l1 "쥠" time=1s set="h1=t1" & t2 -> l2 "쥠" time=1s set="h2=t2"
+
+scene "서로 상대 것을 요청한다" mode=once keep="h1, h2" status="t1=wait, t2=wait"
+  t1 -> l2 "요청" time=1s wait="h2='none'" stuck & t2 -> l1 "요청" time=1s wait="h1='none'" stuck

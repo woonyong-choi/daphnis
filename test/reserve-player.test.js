@@ -1,18 +1,42 @@
 // 원자 예약(`reserve=`)의 결과가 움직이는 SVG와 HTML 재생기에서 같다(docs/design/playback.md 원자 예약).
-// SMIL 값을 25ms 간격으로 풀어 시간표의 값 줄과 맞추고, 재생기를 가짜 시계로 돌려 일시정지, 배속, 재시작, 단계 직접 선택이 값 결과를 바꾸지 않는지 본다.
-// 재생기 시험은 Chrome이 없으면 건너뛴다. 경로는 CHROME_PATH로 바꿀 수 있다.
+// SMIL 값을 25ms 간격으로 풀어 시간표의 값 줄과 맞추고, 재생기를 가짜 시계로 돌려 문서 가림, 배속(장면 `speed=`), 반복(`mode=loop`), 장면 직접 선택이 값 결과를 바꾸지 않는지 본다.
+// 원본은 이 파일 안에 둔다(예제 파일에 기대지 않는다). 재생기 시험은 Chrome이 없으면 실패한다.
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
 import { after, before, describe, test } from 'node:test';
-import { chromium } from 'playwright-core';
 import { buildFigure } from '../src/build.js';
-import { toHtml } from '../src/html.js';
 import { toSvg } from '../src/svg.js';
+import { launchChrome, withPage } from './chrome.js';
+import { playerHtml } from './player-compiled.js';
+import { smilStateAt, valueElementsOf } from './smil.js';
+import { sameState, sceneModel, timelineStateAt } from './value-display.js';
+import { PROBE_MS, runFrames, sceneRows, setHidden, statesOf, tab, valuesNow } from './value-player.js';
 
-const CHROME = [process.env.CHROME_PATH, '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser'].find((path) => path && existsSync(path));
-const example = (name) => readFileSync(new URL(`../examples/${name}.dap`, import.meta.url), 'utf8');
-// 둘째 단계가 `keep`한 쥔 쪽에서 시작해, 단계를 바로 골라도 앞 단계의 예약 결과가 이어지는지 보는 원본
-const TWO_STEPS = `flow right
+// 두 점이 같은 시각에 잠금을 요청해 하나만 통과하고, 다른 쪽은 풀릴 때까지 기다린다
+const ATOMIC_LOCK = `daphnis 2
+box a "A"
+box b "B"
+box lock "잠금"
+value holder "쥔 쪽" on=lock from=none
+a -> lock
+b -> lock
+scene "A와 B가 같은 시각에 요청한다" mode=once for=7s
+  track a -> lock "요청" at=0s time=1s wait="holder='none'" reserve="holder=A"
+  track b -> lock "요청" at=0s time=1s wait="holder='none'" reserve="holder=B"
+  track a -> lock "풀기" at=3s time=1s when="holder='A'" set="holder=none"
+`;
+// 큐의 마지막 한 칸을 두 소비자가 같은 시각에 가져가려 한다. 하나만 가져가고 다른 쪽은 시간 초과로 포기한다
+const ATOMIC_QUEUE = `daphnis 2
+box c1 "소비자 1"
+box c2 "소비자 2"
+queue q "대기열" slots=3 from=1
+q -> c1
+q -> c2
+scene "마지막 한 개를 두 소비자가 가져가려 한다" mode=once for=6s
+  track q -> c1 "가져오기" at=0s time=1s wait="q>0" reserve="q-1"
+  track q -> c2 "가져오기" at=0s time=1s wait="q>0" reserve="q-1" timeout=2s
+`;
+// 둘째 장면이 `keep`한 쥔 쪽에서 시작해, 장면을 바로 골라도 앞 장면의 예약 결과가 이어지는지 보는 원본
+const TWO_SCENES = `daphnis 2
 box a "A"
 box b "B"
 box c "C"
@@ -23,224 +47,165 @@ a -> lock
 b -> lock
 c -> lock
 c -> q
-step "A와 B가 같은 시각에 요청한다" for=7s
+scene "A와 B가 같은 시각에 요청한다" mode=once for=7s
   track a -> lock "요청" at=0s time=1s wait="holder='none'" reserve="holder=A"
   track b -> lock "요청" at=0s time=1s wait="holder='none'" reserve="holder=B"
   track a -> lock "풀기" at=3s time=1s when="holder='A'" set="holder=none"
-step "C는 B가 쥔 잠금을 기다리다 포기한다" for=5s keep="holder"
+scene "C는 B가 쥔 잠금을 기다리다 포기한다" mode=once for=5s keep="holder"
   track c -> lock "요청" at=0s time=1s wait="holder='none'" reserve="holder=C" timeout=2s else=q
 `;
-const SOURCES = [['atomic-lock', example('atomic-lock')], ['atomic-queue', example('atomic-queue')], ['two-steps', TWO_STEPS]];
-// SMIL을 풀고 재생기를 재는 간격(ms)
-const PROBE_MS = 25;
-// keyTimes는 한 바퀴 비율의 소수 5자리라 시각으로는 이만큼(ms) 어긋난다. 경계에서 이만큼 안쪽 시각은 재지 않는다.
-const EDGE_MS = 2;
-// 가짜 시계를 멈추는 시각(ms). 설치한 뒤 실제 시간이 이만큼 흐르기 전에 멈춰야 하므로 느린 환경도 견딜 만큼 멀리 둔다.
-const PAUSE_AT_MS = 600_000;
+const SOURCES = [['atomic-lock', ATOMIC_LOCK], ['atomic-queue', ATOMIC_QUEUE], ['two-scenes', TWO_SCENES]];
 
-// cost: time O(n), heap O(n), stack O(1)
-// vars: n = SVG 글자 수
-// basis: estimate
-// 움직이는 SVG의 값 글자 요소마다 { vi, text, dur, times, values }. 값 줄 번호 vi와 글(data-t)은 요소의 속성이다.
-function valueTextsOf(svg) {
-  const pattern = /<(?:text|g)\b[^>]*?\bdata-v="(\d+)"[^>]*?>((?:(?!<\/(?:g|text)>)[\s\S])*?)<animate ([^>]*?)\/>/g;
-  return [...svg.matchAll(pattern)].map(([whole, vi, , animate]) => {
-    const attr = (name) => animate.match(new RegExp(`\\b${name}="([^"]*)"`))[1];
-    return { vi: Number(vi), text: whole.match(/\bdata-t="([^"]*)"/)?.[1], dur: Number.parseFloat(attr('dur')) * 1000, times: attr('keyTimes').split(';').map(Number), values: attr('values').split(';').map(Number) };
-  });
-}
-
-// SMIL calcMode=discrete 값을 한 바퀴 비율 x에서 푼다.
-const discreteAt = ({ times, values }, x) => values[times.findLastIndex((time) => time <= x)];
-
-// 근거: 이슈 #138 완료 조건 "SVG와 HTML은 같은 시간표를 읽는다", 설계 playback.md 값 변화 "움직이는 SVG는 SMIL 이산 불투명도로 보인다"
+// 근거: 이슈 #138 완료 조건 "SVG와 HTML은 같은 시간표를 읽는다", 설계 playback.md 값 변화 "움직이는 SVG는 SMIL 이산 불투명도로 보인다". 장면마다 그 장면만 그린 SVG를 푼다
 test('toSvg_reserved_values_match_the_timeline_every_25ms', async () => {
   for (const [name, source] of SOURCES) {
-    const result = await buildFigure(source, { baseDir: 'examples' });
-    const { timeline } = result;
-    const texts = valueTextsOf(await toSvg(result, { name }));
-    const edges = timeline.values.flatMap((row) => row.periods);
-    let probed = 0;
+    const result = await buildFigure(source, { baseDir: 'test' });
+    for (const si of result.timeline.steps.keys()) {
+      const model = sceneModel(result, si);
+      const { sliced, display, speed } = model;
+      const elements = valueElementsOf(await toSvg(result, { name, scene: si }));
+      let probed = 0;
 
-    for (let t = 0; t < timeline.total; t += PROBE_MS) {
-      if (edges.some(([from, to]) => Math.abs(t - from) <= EDGE_MS || Math.abs(t - to) <= EDGE_MS)) continue;
-      const smil = timeline.values.map((_, vi) => texts.filter((el) => el.vi === vi && discreteAt(el, t / el.dur) === 1).map((el) => el.text));
-      const expected = timeline.values.map((row) => [row.periods.find(([from, to]) => t >= from && t < to)?.[2]].filter((text) => text !== undefined));
+      for (let td = 0; td < display; td += PROBE_MS) {
+        // keyTimes가 소수 5자리라 값 구간 경계에서 2ms 안의 시각은 재지 않는다
+        if (sliced.values.some((row) => row.periods.some(([from, to]) => Math.abs(td - from / speed) <= 2 || Math.abs(td - to / speed) <= 2))) continue;
+        const smil = smilStateAt(elements, sliced.values, td);
 
-      assert.deepEqual(smil, expected, `${name}: t=${t}ms`);
-      probed++;
+        assert.ok(smil.every(({ texts }) => texts.length <= 1), `${name} 장면 ${si}: t=${td}ms 같은 줄에 글자 요소가 둘 이상 보인다 ${JSON.stringify(smil)}`);
+        assert.ok(sameState(smil, timelineStateAt(model, td)), `${name} 장면 ${si}: t=${td}ms ${JSON.stringify([smil, timelineStateAt(model, td)])}`);
+        probed++;
+      }
+      assert.ok(probed > display / PROBE_MS / 2, `${name} 장면 ${si}: 잰 시각 ${probed}`);
     }
-    assert.ok(probed > timeline.total / PROBE_MS / 2, name);
   }
 });
 
-describe('player', { skip: CHROME ? false : 'Chrome이 없다' }, () => {
+describe('player', () => {
   let browser;
   before(async () => {
-    browser = await chromium.launch({ executablePath: CHROME });
+    browser = await launchChrome();
   });
   after(async () => {
     await browser.close();
   });
 
-  // cost: time O(1), heap O(1), stack O(1), io 1
-  // basis: estimate
-  // 지금 재생기 화면의 { step, values }. step은 켜진 탭 번호이고 values는 값 줄마다 보이는 글자(data-t)다.
-  const sample = (page) =>
-    page.evaluate(() => {
-      const step = [...document.querySelectorAll('.fl-tabs button')].findIndex((button) => button.classList.contains('on'));
-      const rows = [...new Set([...document.querySelectorAll('[data-v]')].map((el) => el.dataset.v))];
-      const values = rows.flatMap((vi) => {
-        const text = [...document.querySelectorAll(`[data-v="${vi}"]`)].filter((el) => el.getAttribute('opacity') === '1').map((el) => el.dataset.t);
-        return text.length ? [[Number(vi), text.join('|')]] : [];
-      });
-      return { step, values };
-    });
-
-  // cost: time O(F), heap O(F), stack O(1), io F
-  // vars: F = 프레임 수
-  // basis: estimate
-  // 재생기를 가짜 시계로 프레임마다 흘리며 { t, step, values } 목록을 모은다. until(frames)가 true가 되거나 limitMs가 다하면 멈춘다.
-  async function runFrames(page, { limitMs, until = () => false }) {
-    const frames = [];
-    for (let t = PROBE_MS; t <= limitMs && !until(frames); t += PROBE_MS) {
-      await page.clock.runFor(PROBE_MS);
-      frames.push({ t, ...(await sample(page)) });
-    }
-    return frames;
-  }
-
-  // cost: time O(F), heap O(F), stack O(1)
-  // vars: F = 프레임 수
-  // basis: estimate
-  // 같은 상태가 이어지는 프레임을 하나로 묶은 목록 { step, values }
-  const runsOf = (frames) =>
-    frames.reduce((runs, { step, values }) => (runs.length && JSON.stringify(runs.at(-1)) === JSON.stringify({ step, values }) ? runs : [...runs, { step, values }]), []);
-
   // cost: time O(1), heap O(1), stack O(1), io 3
   // basis: estimate
-  // 원본의 재생기 HTML을 가짜 시계로 연 페이지로 body(page, result)를 돌린다.
+  // 원본의 재생기 HTML을 가짜 시계로 연 페이지로 body(page, result)를 돌리고 body가 돌려준 값을 돌려준다. 전환은 가짜 시계를 따라가지 못하므로 꺼서 켜진 뒤의 값을 잰다.
   async function withPlayer(source, body) {
-    const result = await buildFigure(source, { baseDir: 'examples' });
-    const page = await browser.newPage({ viewport: { width: 1400, height: 900 } });
-    // 가짜 시계는 설치만 하면 실제 시간으로 흘러 결과가 실행마다 달라진다. 페이지를 열기 전에 멈춰 두고 runFor로만 흘린다.
-    await page.clock.install({ time: 0 });
-    await page.clock.pauseAt(PAUSE_AT_MS);
-    await page.setContent(await toHtml(result, 'reserve'));
-    // 반복 시 값과 대기 순서가 보존되는지 검사하므로 반복을 명시적으로 켠다.
-    await page.click('.fl-repeat');
-    await page.click('.fl-pause');
-    await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' });
-    try {
-      return await body(page, result);
-    } finally {
-      await page.close();
-    }
+    const { html, result } = await playerHtml(source, { baseDir: 'test' });
+    let out;
+    await withPage(browser, html, {}, async (page) => {
+      await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' });
+      out = await body(page, result);
+    });
+    return out;
   }
 
   const references = new Map();
   // cost: time O(F), heap O(F), stack O(1), io F
   // vars: F = 프레임 수
   // basis: estimate
-  // 처음부터 한 바퀴 재생한 기준 상태 목록. 원본마다 한 번만 만든다.
+  // 장면마다 처음부터 한 번 재생한 기준 { full, texts } 상태 목록. 원본마다 한 번만 만든다.
   const referenceOf = (name, source) => {
-    if (!references.has(name)) references.set(name, withPlayer(source, async (page, { timeline }) => ({ runs: runsOf(await runFrames(page, { limitMs: timeline.total * 1.1 })), timeline })));
+    if (!references.has(name)) {
+      references.set(name, withPlayer(source, async (page, result) => {
+        const lists = [];
+        for (const si of result.timeline.steps.keys()) {
+          await tab(page, si);
+          const frames = await runFrames(page, { limitMs: sceneModel(result, si).display });
+          lists.push({ frames, full: statesOf(frames), texts: statesOf(frames, false) });
+        }
+        return lists;
+      }));
+    }
     return references.get(name);
   };
 
   // 같은 시각에 바뀌어 길이가 없는 구간(`none`에서 `A`로 바로 바뀌는 처음 값)은 재생기가 보이지 않으므로 길이가 있는 구간만 비교한다
   const orderOf = (texts) => texts.filter((text, i) => text !== undefined && text !== texts[i - 1]);
 
+  // 근거: 이슈 #138 완료 조건 "재생기는 시간표의 예약 결과를 읽는다". 장면이 끝나는 시각에 바뀐 값은 효과 꼬리 동안 보이는 마지막 글이다
   test('player_shows_the_reserved_values_in_the_order_of_the_timeline_periods', async () => {
     for (const [name, source] of SOURCES) {
-      const { runs, timeline } = await referenceOf(name, source);
+      const references_ = await referenceOf(name, source);
+      const { timeline } = (await buildFigure(source, { baseDir: 'test' }));
 
-      for (const [vi, row] of timeline.values.entries()) {
-        const shown = orderOf(runs.filter((run) => run.step === row.si).map((run) => run.values.find(([index]) => index === vi)?.[1]));
-        const expected = orderOf(row.periods.filter(([from, to]) => to > from).map(([, , text]) => text));
+      for (const [si, { frames }] of references_.entries()) {
+        for (const [row, vi] of sceneRows(timeline, si)) {
+          const shown = orderOf(frames.map(({ values }) => values.find(([index]) => index === vi)?.[1]));
+          const expected = orderOf([...row.periods.filter(([from, to]) => to > from).map(([, , text]) => text), row.periods.at(-1)?.[2]]);
 
-        // 재생기는 한 바퀴를 넘겨 재므로 두 바퀴째가 앞에 이어 붙은 값은 뗀다
-        assert.deepEqual(shown.slice(0, expected.length), expected, `${name} ${row.id}(${row.si}번 단계)`);
+          assert.deepEqual(shown, expected, `${name} ${row.id}(${si}번 장면)`);
+        }
       }
     }
   });
 
-  // 근거: 이슈 #138 완료 조건 "pause·rate·restart·단계 직접 선택이 예약 결과를 바꾸지 않는다"
-  test('player_pause_and_rate_changes_do_not_change_the_reserved_values_of_a_lap', async () => {
+  // 근거: 이슈 #138 완료 조건 "pause·rate·restart·단계 직접 선택이 예약 결과를 바꾸지 않는다". 일시정지는 문서 가림이고 배속은 장면의 speed=다
+  test('player_hidden_document_and_scene_speed_do_not_change_the_reserved_values_of_a_scene', async () => {
     for (const [name, source] of SOURCES) {
-      const { runs, timeline } = await referenceOf(name, source);
-      const total = timeline.total;
-      const lapEnd = runs.findLastIndex((run) => run.step === timeline.steps.length - 1) + 1;
+      const reference = await referenceOf(name, source);
 
-      await withPlayer(source, async (page) => {
-        const before = await runFrames(page, { limitMs: total / 2 });
-        await page.click('.fl-pause');
-        const paused = await sample(page);
+      await withPlayer(source, async (page, result) => {
+        const { display } = sceneModel(result, 0);
+        const before = await runFrames(page, { limitMs: display / 2 });
+        await setHidden(page, true);
+        const frozen = await valuesNow(page);
         const during = await runFrames(page, { limitMs: 3000 });
-        await page.click('.fl-pause');
-        const after = await runFrames(page, { limitMs: total * 1.1 - total / 2 });
+        await setHidden(page, false);
+        const after = await runFrames(page, { limitMs: display });
 
-        assert.ok(during.every(({ step, values }) => JSON.stringify({ step, values }) === JSON.stringify(paused)), `${name}: 멈춘 동안 값이 그대로다`);
-        assert.deepEqual(runsOf([...before, ...during, ...after]).slice(0, lapEnd), runs.slice(0, lapEnd), `${name}: 일시정지 뒤 이어도 같다`);
+        assert.ok(during.every(({ values }) => JSON.stringify(values) === JSON.stringify(frozen)), `${name}: 가린 동안 값이 그대로다`);
+        assert.deepEqual(statesOf([...before, ...during, ...after]).slice(0, reference[0].full.length), reference[0].full, `${name}: 가렸다 다시 보여도 같은 차례다`);
       });
-      for (const clicks of [1, 2]) {
-        await withPlayer(source, async (page) => {
-          for (let i = 0; i < clicks; i++) await page.click('.fl-rate');
-          const rate = clicks === 1 ? 2 : 0.5;
-          const frames = await runFrames(page, { limitMs: (total * 1.1) / rate });
+      for (const speed of [2, 0.5]) {
+        await withPlayer(source.replaceAll('mode=once', `mode=once speed=${speed}`), async (page, result) => {
+          for (const si of result.timeline.steps.keys()) {
+            await tab(page, si);
+            const frames = await runFrames(page, { limitMs: sceneModel(result, si).display, stepMs: PROBE_MS * Math.min(1, speed) / 2 });
 
-          assert.deepEqual(runsOf(frames).slice(0, lapEnd), runs.slice(0, lapEnd), `${name}: ${rate}배속에서 값이 바뀌는 차례가 같다`);
+            assert.deepEqual(statesOf(frames, false), reference[si].texts, `${name} 장면 ${si}: ${speed}배속에서 값 글자가 바뀌는 차례가 같다`);
+          }
         });
       }
     }
   });
 
-  // 근거: 이슈 #138 완료 조건 "단계 직접 선택이 예약 결과를 바꾸지 않는다", 설계 playback.md 단계 사이 값 유지
-  test('player_selecting_a_step_directly_shows_the_same_reserved_values_as_playing_up_to_it', async () => {
+  // 근거: 이슈 #138 완료 조건 "단계 직접 선택이 예약 결과를 바꾸지 않는다", 설계 playback.md 장면 사이 값 유지. 둘째 장면은 앞 장면이 예약한 쥔 쪽(B)에서 시작한다
+  test('player_selecting_a_scene_directly_shows_the_same_reserved_values_as_playing_up_to_it', async () => {
     const [name, source] = SOURCES[2];
-    const { runs, timeline } = await referenceOf(name, source);
-    // cost: time O(r), heap O(r), stack O(1)
-    // vars: r = 상태 수
-    // basis: estimate
-    // 단계 step이 처음 켜져 있는 동안의 값 상태 목록
-    const statesOfStep = (list, step) => {
-      const from = list.findIndex((run) => run.step === step);
-      const to = list.findIndex((run, i) => i > from && run.step !== step);
-      return list.slice(from, to < 0 ? list.length : to).map(({ values }) => values);
-    };
+    const reference = await referenceOf(name, source);
 
-    for (let step = 0; step < timeline.steps.length; step++) {
-      await withPlayer(source, async (page) => {
-        await page.click(`.fl-tabs button:nth-child(${step + 1})`);
-        await page.click('.fl-pause');
-        const first = await sample(page);
-        const frames = await runFrames(page, { limitMs: timeline.total, until: (list) => list.length && list.at(-1).step !== step });
-        const own = statesOfStep(runsOf([{ t: 0, ...first }, ...frames]), step);
+    for (let si = 0; si < reference.length; si++) {
+      await withPlayer(source, async (page, result) => {
+        await tab(page, si);
+        const first = await valuesNow(page);
+        const frames = await runFrames(page, { limitMs: sceneModel(result, si).display });
+        const own = statesOf([{ values: first }, ...frames]);
 
-        const t0 = timeline.segs.find((seg) => seg.si === step).t0;
-        const startOf = (row) => row.changes.findLast(([at]) => at <= t0)?.[1] ?? row.initial;
-
-        assert.deepEqual(first.values.map(([, text]) => text), timeline.values.filter((row) => row.si === step).map(startOf), `${step}번 단계를 고른 첫 화면은 시작 시각까지 예약한 값이다`);
-        assert.deepEqual(own, statesOfStep(runs, step), `${step}번 단계를 바로 고른 값 변화가 처음부터 재생한 값 변화와 같다`);
+        // 시각 0에 바뀐 값(`none`에서 `A`로 바로 바뀌는 처음 값)은 길이가 0인 구간이라 첫 화면에 이미 바뀐 글이 보인다
+        assert.deepEqual(first.map(([, text]) => text), timelineStateAt(sceneModel(result, si), 0).map(({ text }) => text), `${si}번 장면을 고른 첫 화면은 시각 0까지 예약한 값이다`);
+        assert.deepEqual(own, reference[si].full, `${si}번 장면을 바로 고른 값 변화가 처음부터 재생한 값 변화와 같다`);
       });
     }
-    assert.equal(timeline.values.find((row) => row.si === 1).initial, 'B', '둘째 단계는 앞 단계가 예약한 쥔 쪽에서 시작한다');
+    assert.equal((await buildFigure(source, { baseDir: 'test' })).timeline.values.find((row) => row.si === 1).initial, 'B', '둘째 장면은 앞 장면이 예약한 쥔 쪽에서 시작한다');
   });
 
-  // 근거: 이슈 #138 완료 조건 "restart가 예약 결과를 바꾸지 않는다"
-  test('player_restart_after_a_lap_shows_the_same_reserved_values_at_the_same_lap_times', async () => {
+  // 근거: 이슈 #138 완료 조건 "restart가 예약 결과를 바꾸지 않는다". 반복(`mode=loop`)하는 장면은 두 번째 바퀴에서도 첫 바퀴와 같은 시각에 같은 값이다
+  test('player_loop_restart_shows_the_same_reserved_values_at_the_same_lap_times', async () => {
     for (const [name, source] of SOURCES) {
-      const { timeline } = await referenceOf(name, source);
-      const { total } = timeline;
-      const edges = timeline.values.flatMap((row) => row.periods.flat().filter((x) => typeof x === 'number'));
-      const probes = [200, total * 0.4, total * 0.9].filter((t) => edges.every((edge) => Math.abs(t - edge) > 100));
-
-      await withPlayer(source, async (page) => {
-        const frames = await runFrames(page, { limitMs: total * 2.1 });
+      await withPlayer(source.replaceAll('mode=once', 'mode=loop'), async (page, result) => {
+        const { display, sliced } = sceneModel(result, 0);
+        const edges = sliced.values.flatMap((row) => row.periods.flatMap(([from, to]) => [from, to]));
+        const probes = [200, display * 0.4, display * 0.9].filter((t) => edges.every((edge) => Math.abs(t - edge) > 100));
+        const frames = await runFrames(page, { limitMs: display * 2.1 });
         const at = (t) => frames[Math.round(t / PROBE_MS) - 1];
 
         assert.ok(probes.length >= 2, name);
-        for (const t of probes) assert.deepEqual(at(total + t).values, at(t).values, `${name}: 두 바퀴째 ${Math.round(t)}ms의 값이 첫 바퀴와 같다`);
+        // 펄스 세기는 프레임 위상(16.7ms)에 따라 바퀴마다 조금 달라지므로 값 글자만 견준다
+        const texts = (frame) => frame.values.map(([vi, text]) => [vi, text]);
+        for (const t of probes) assert.deepEqual(texts(at(display + t)), texts(at(t)), `${name}: 두 바퀴째 ${Math.round(t)}ms의 값이 첫 바퀴와 같다`);
       });
     }
   });

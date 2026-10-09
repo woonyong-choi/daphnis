@@ -1,4 +1,4 @@
-flow right
+daphnis 2
 title "맥락"
 
 person user "개발자"
@@ -20,7 +20,7 @@ saturn -> macos-keychain "router 키 조회"
 saturn -> saturn-key "router 키 조회"
 saturn -> config-files "설정 조회"
 
-step "Codex" "입력은 router 판단을 거쳐 Codex로 간다"
+scene "Codex" mode=once
   user -> saturn "입력"
   saturn -> router-api
   saturn -> codex-cli

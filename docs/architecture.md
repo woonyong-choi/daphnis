@@ -6,7 +6,7 @@
 
 | 외부 요소 | 종류 | 주고받는 것 |
 |---|---|---|
-| `.dap` 원본 | 파일 | 그림 종류, 도형, 선, 시간 흐름, 차트 값 |
+| `.dap` 원본 | 파일 | 첫 문장 `daphnis 2`, 카드, 칸, 선, 값, 보기, 장면, 차트 값 |
 | 실험 결과 JSON | 파일 | 차트 `data` 줄이 읽는 값 |
 | elkjs | 외부 프로그램 | 도형 크기와 연결점 제약, 도형 좌표와 직교 경로 |
 | 글꼴 파일 | 파일 | Pretendard, JetBrains Mono의 글자 너비 표와 글자 모양 |
@@ -26,16 +26,34 @@
 
 ### 그림 만들기
 
-1. `cli`가 원본을 읽어 머리, 선언, 시간 흐름으로 나누고, 이름과 규칙을 확인한다([그림 문법](design/figure-syntax.md)).
-2. `cli`가 글꼴 파일로 모든 글의 폭을 재고 도형 크기와 연결점을 정한다.
-3. `cli`가 그룹마다, 그다음 바깥을 elkjs로 배치하고 경로 조각을 잇는다([배치](design/layout.md)).
-4. `cli`가 시간표를 만들고(점 이동 시간이 선 길이에 비례해 배치 뒤에 만든다), 모든 선과 가장 큰 카드가 보이는 상태에서 화면 오류를 검사한다([그림 검사](design/figure-check.md)).
-5. 오류가 없으면 `cli`가 같은 장면과 시간표로 HTML, 움직이는 SVG, 멈춘 SVG 가운데 요청한 것을 쓴다.
+1. `cli`가 원본을 읽어 문서 모형 하나(`figure`)로 만든다. 첫 문장이 `daphnis 2`인지 보고(`source/version.js`), 줄을 머리, 선언, 시간 흐름으로 나눠 읽는다. 카드, 칸, 선, 값, 보기, 장면이 모든 카드에 같은 규칙으로 놓이고 그림 종류는 없다. 파일을 다 읽은 뒤 이름 공간, 연결점(`카드.칸`), 보기 구성원, 선의 그릴 수 있음, 차트 묶음, 이동의 보기별 투영을 확인한다(`source/validate.js`, `views-check.js`, `project.js`. [그림 문법](design/figure-syntax.md)).
+2. 값 글자 자리는 값이 모든 장면에서 가질 글의 실제 폭이라 시간표에 기대고 시간표는 배치에 기대므로, `build-scene.js`가 배치와 시간표를 되풀이하되 자리가 줄어들지 않고 네 번을 넘지 않는다(`value-slots.js`, 못 맞추면 `layout-unstable`).
+3. 한 번의 되풀이 안에서: 글꼴 파일로 모든 글의 폭을 재 카드 크기와 연결점을 정하고(차트 카드는 모든 프레임 가운데 가장 큰 차트 크기), 보기마다 배치한다. 그래프는 그룹마다 그다음 바깥을 elkjs로 배치하고 경로 조각을 잇는다([배치](design/layout.md)). 순서는 격자 배치, 차트는 그림 크기, 시간 보기는 `layout/time.js`다. `layout/panels.js`가 판을 위에서 아래로 쌓아 장면 하나로 합친다.
+4. `views.js`가 보기마다 모형을 줄이고(`viewFigure`), 합친 장면에서 시간표를 만든다. 점 이동 시간은 선 길이에 비례해 배치 뒤에 만들고, 이동 하나는 보기마다 hop 하나로 펼치되 시간은 첫 투영이 한 번만 정한다. 값에 묶인 차트는 프레임과 시간표 구간을 만든다(`chart-frames.js`). 모든 선과 가장 큰 카드가 보이는 상태에서 화면 오류를 검사한다([그림 검사](design/figure-check.md)).
+5. 오류가 없으면 `cli`가 같은 장면과 시간표로 HTML이나 장면 하나의 움직이는 SVG를 쓴다. SVG는 장면의 `mode`(`static`은 마지막 상태, `once`는 한 번 재생하고 머묾, `loop`는 되풀이)와 `speed`로 재생한다.
+
+### 시간표 모양
+
+`buildFigure`의 결과는 `{ figure, scene, timeline, warnings, valueTexts }`다. 차트만 따로 있는 `chart` 결과와 `figure.kind`는 없다. 재생기와 SVG가 읽는 계약이다.
+
+- `timeline.steps`: 장면마다 정확히 `{ label: string, mode: 'static' | 'once' | 'loop', speed: number }`다. 문자열 형태는 없다.
+- `timeline.segs[]`: `{ si, bi, t0, t1, hops, nodesOn, partsOn, cards, cardsBefore, cardsAt, charts?, status?, ... }`. `t0`, `t1`은 논리 시각이다(효과 시간과 박자 뒤 머묾이 없다). 설명 글(`caption`)과 지나간 선을 남기는 목록은 없다. `hops`는 이동마다 보기별 투영 하나씩이고 `edge`는 합친 장면의 선·메시지 번호이며 같은 이동의 투영은 `at`, `ms`, `cut`이 같다. `charts`는 차트 카드 id → `{ series, growing, lights }`로 차트마다 따로 움직인다.
+- `timeline.values[]`: 장면마다 값 줄 `{ si, id, node, t0, t1, initial, changes, periods, flashes }`. `node`가 없는 값은 카드에 보이지 않는다. 시각 `t`의 글은 `periods.find(([from, to]) => from <= t && t < to) ?? periods.at(-1)`이다. 장면이 없는 문서는 선언한 값마다 `si`가 없고 길이가 0이며 변화와 펄스가 없는 줄을 하나 갖는다(처음 값을 보이기 위한 줄이고 탭이나 시간을 만들지 않는다).
+- `timeline.total`: 장면의 논리 길이의 합이다. 장면이 없거나 모두 길이 0이면 0이고 1ms로 올려 쓰지 않는다. 재생기는 이 값을 쓰지 않는다.
+- `timeline.charts[카드 id]`: 값에 묶인 차트만. `{ id, rows: [{ si, t0, t1, periods: [[from, to, 프레임 번호, 바뀐 표식 id[]]] }] }`. 같은 규칙으로 보이는 프레임을 정하고, 장면의 첫 구간의 바뀐 표식은 장면이 시작할 때 보이는 값(`set=`과 `keep`을 반영한 시작 값)의 프레임과 견준다.
+- `scene.chartFrames[카드 id]`: `{ marks: [{ id, tag }], frames: [{ [표식 id]: { attrs, text? } }] }`. 모든 프레임이 같은 표식을 갖고 `attrs`는 그 표식의 속성 전체다. 그려진 차트의 표식 요소에는 `data-mark`(글은 `data-mark-text`)가 붙고 차트 그림은 `<g data-chart="카드 id">` 안에 있다.
+- `timeline.marks`: `{ [키]: [[from, to, si], ...] }`. 조용한 선이 보이는 구간이다(`quiet:번호`). 같은 장면 안에서만 합치고 길이 0 구간도 남기며, 세 번째 값이 구간을 소유한 장면이다. 점이 지나는 동안의 선은 이동 목록(`hops`)에서 구하고, 켜 둔 도형과 부분, 차트 행은 구간(`nodesOn`, `partsOn`, `charts[id].lights`)이 가진다.
+- `timeline.pulses`: `[{ key, at, si }]` 시각 순. 키는 `value:값 줄 번호`나 `chart:차트:표식 id`이고 `si`는 출처 장면이다. 펄스 모양은 `src/pulse.js`다(`PULSE`, `PULSE_MS`, `pulseAt`, `envelopeKeys`).
+- `timeline.presentation[si]`: 장면마다 표시 길이(화면 ms). 논리 길이를 `speed`로 나눈 값과 마지막 펄스·선 이탈에 `PULSE_MS`를 더한 값 가운데 큰 것이고, 컴파일러가 한 번 정해(`timeline-marks.js`의 `presentationOf`) 재생기와 SVG가 읽는다([재생](design/playback.md#장면과-재생-방식)).
+- `scene`: `{ items, groups, edges, lifelines, notes, activations, destructions, fragments, plots, times, panels, chartFrames, width, height, tagOrder }`. 도형, 그룹, 선에는 `view`가 있고 선에는 `strategy`가 있다. 같은 카드가 여러 보기에 그려지면 `items`에 같은 `id`가 여러 번 있다. `panels[]`는 `{ index, view, strategy, box: { x, y, w, h }, label?, labelAt?, minWidth }`이고 `minWidth`는 글이 12px 아래로 줄지 않는 판의 최소 폭이다. `plots[]`와 `times[]`는 차트 보기와 시간 보기 판이다.
+- 재생기가 해야 할 일: 같은 `id`의 요소는 `querySelectorAll`로 모두 찾고, 시각의 상태는 `periods`와 `charts`의 같은 규칙으로 정하고, 펄스는 `timeline.pulses`로 건다. 애니메이션 끝 이벤트는 논리 상태를 정하지 않는다.
+
+장면 생성은 `build-scene.js`가 맡고 최초 빌드와 재배치가 같은 카드 크기·배치·충돌 검사를 사용한다.
 
 ### 토큰 만들기
 
 1. 공통 토큰은 설치된 `@woonyong-choi/design-tokens`의 정본(`source`, `source-dark`)에서 읽는다. 버전은 `package.json` `devDependencies`의 태그(`github:woonyong-choi/design-tokens#v0.1.1`)가 정한다.
-2. `scripts/build-tokens.mjs`가 그 정본과 `src/tokens.json`, `src/tokens.dark.json`을 합쳐 `src/tokens.css`, `src/tokens.js`를 만든다. `src/` 정본에는 그림 전용 구성 요소 토큰(`color.figure`, `color.paint`, `color.tag`, `color.palette`의 `amber`, `teal`, `navy`, `pink`, `sky`, `slate`, 그림과 재생기와 차트의 `size`, `duration`, `opacity`, `distance` 같은 값, 내장 글꼴 사슬 `font.figure-sans`, `font.figure-mono`)만 있다.
+2. `scripts/build-tokens.mjs`가 그 정본과 `src/tokens.json`, `src/tokens.dark.json`을 합쳐 `src/tokens.css`, `src/tokens.js`를 만든다. `src/` 정본에는 그림 전용 구성 요소 토큰(`color.figure`, `color.paint`(범주 계열의 이름과 이전 이름의 임시 별칭), `color.tag`, `color.flow-ink`, `color.flow-outline`, `color.palette`의 `sky`, `slate`, 그림과 재생기와 차트의 `size`, `duration`, `opacity`, `distance` 같은 값, 내장 글꼴 사슬 `font.figure-sans`, `font.figure-mono`)만 있다.
 3. `src/` 정본이 공통 토큰과 같은 이름을 다시 정의하면 `npm run check`(`build-tokens.mjs --check`)가 실패한다. 생성물이 낡았을 때도 같다.
 4. `npm run palette`가 이 저장소가 값을 갖는 팔레트 단계(`sky`와 `slate`의 면과 외곽선)를 공통 토큰의 면 위 대비 규칙으로 다시 계산해 `src/tokens.json`에 쓴다. 나머지 팔레트 단계는 공통 토큰을 가리키는 별칭이다.
 5. design-tokens에 새 태그가 나오면 `design-tokens-update` 워크플로가 의존성을 올리고 1~4와 `npm run figures`로 생성물을 다시 만든 PR과 이슈를 연다. 알림(`repository_dispatch`)과 매일 한 번의 정기 확인, 수동 실행을 받는다. 같은 버전의 PR이 열려 있으면 새로 만들지 않는다.
@@ -46,9 +64,9 @@
 
 ### 재생하기
 
-1. 브라우저가 HTML을 열면 `player`가 첫 단계의 첫 박자 상태를 그린다.
+1. 브라우저가 HTML을 열면 `player`가 장면을 탭으로만 고른다. `static` 장면은 마지막 상태를 그리고, `once`는 한 번 재생한 뒤 마지막 상태에 머물고, `loop`는 같은 장면을 되풀이한다. 다음 장면으로 저절로 넘어가지 않는다.
 2. `player`가 박자마다 시간표의 상태를 그대로 그리고 점을 경로 위로 옮긴다([재생](design/playback.md)).
-3. 브라우저가 SVG를 열면 `svg` 안의 keyframes가 같은 시간표를 반복한다.
+3. 브라우저가 SVG를 열면 `svg` 안의 keyframes와 SMIL이 장면 하나의 시간표를 `mode`와 `speed`대로 재생한다.
 
 ## 불변 조건
 
@@ -57,7 +75,9 @@
 - 글 폭은 그림에 넣는 글꼴과 같은 글꼴 파일로 잰다. 잰 폭과 그려진 폭이 어긋나는 일을 막기 위해서다.
 - 오류가 하나라도 있으면 결과 파일을 쓰지 않는다. 깨진 그림이 문서에 올라가는 일을 막기 위해서다.
 - 같은 원본과 같은 버전은 바이트까지 같은 결과를 낸다. 다시 변환해도 git 차이가 없게 하기 위해서다.
-- `player`와 `svg`는 시간표를 읽기만 하고 상태를 다시 계산하지 않는다. HTML과 SVG가 다르게 움직이는 일을 막기 위해서다.
+- `player`와 `svg`는 시간표를 읽기만 하고 상태를 다시 계산하지 않는다. HTML과 SVG가 다르게 움직이는 일을 막기 위해서다. 보기가 여럿이어도 이동과 값 변화는 시간표에서 한 번만 계산된다.
+- 논리 시각(`t0`, `t1`, `at`, `ms`, 값 구간, 프레임 구간)은 재생 속도, 펄스, 화면 길이가 바꾸지 않는다. 펄스의 꼬리는 화면 길이만 늘린다.
+- 값 글자와 차트 카드 크기는 실제 글꼴로 잰 글 폭이다. 렌더러가 같은 글꼴로 같은 줄 나눔을 쓴다.
 - 점 이동 곡선, 글 상자 밀어 넣기, 차트 자라기는 HTML과 SVG가 같은 토큰과 같은 규칙을 쓴다. 규칙은 `src/easing.js`, `src/chip.js`, `src/chart/motion.js`에 있고, 브라우저 코드(`player/`)는 불러올 수 없어 같은 계산을 따로 둔다. 글 상자 자리는 예외로, 빌드 때 시간표에 담은 계획을 재생기가 보간만 한다.
 - 크기, 간격, 색, 시간 값은 토큰만 쓴다. 공통 토큰은 design-tokens가, 그림 전용 토큰은 `src/tokens.json`이 정본이고 같은 이름을 두 곳에 두지 않는다. `src/tokens.css`, `src/tokens.js`는 둘을 합친 생성물이라 손으로 고치지 않는다.
 - 변환 중 네트워크에 접근하지 않는다. 글꼴과 배치 엔진을 모두 함께 배포한다.
@@ -74,8 +94,14 @@
 
 ## 선택 테마 가져오기
 
-테마 선택은 루트 theme.config.json의 simple2다. design-tokens의 dist/simple2 완성본을 src/design-theme에 커밋한다. scripts/theme-snapshot.mjs가 모든 파일의 해시를 검사한다. scripts/lib/design-tokens.mjs는 이 사본의 renderer.tokens.json과 renderer.tokens.dark.json을 읽는다. src/tokens.json과 src/tokens.dark.json은 그림 전용 토큰의 호환 사본이다. 계산 알고리즘은 유지하고 생성 CSS·JS는 선택한 테마의 값을 사용한다.
+테마 선택은 루트 theme.config.json의 simple2다. design-tokens의 dist/simple2 완성본을 src/design-theme에 커밋한다. scripts/theme-snapshot.mjs가 설정의 테마 이름과 사본의 이름이 같은지, 모든 파일의 해시가 같은지 검사한다. scripts/lib/design-tokens.mjs는 이 사본의 renderer.tokens.json과 renderer.tokens.dark.json을 읽는다. src/tokens.json과 src/tokens.dark.json은 그림 전용 토큰의 호환 사본이다. 계산 알고리즘은 유지하고 생성 CSS·JS는 선택한 테마의 값을 사용한다.
 
 공통 정본에서 수정한 다음 `npm run theme:sync -- --from <design-tokens-root>`, `npm run tokens`, `npm run check`, `npm test` 순서로 확인한다. theme:sync는 기존 사본의 수동 수정을 발견하면 중단한다. 자동 업데이트 워크플로도 새 패키지 설치 후 같은 명령으로 설정한 테마를 가져온다. Git 태그 개발 의존성은 업데이트 감지용이며 실행 시에는 커밋된 사본과 생성물을 사용한다.
 
 현재 연결은 simple2의 두 모드를 사용하고 그림의 측정 글꼴을 보존한다. 다른 테마는 renderer 계약과 그림 전용 값, 실제 측정 글꼴을 갖추고 검사한 뒤 연결한다. npm 사용자에게 테마 원본을 다시 다운로드하도록 요구하지 않는다.
+
+`buildFigure`는 원본의 의미와 배치에서 시간표를 만들며, `reflowFigure`는 기존 시간표의 사건을 보존하고 그래프 보기의 새 배치에 경로만 대응하며, `chartWidth`가 있으면 차트를 그 폭 이하로 다시 그린다. `track-geometry.js`는 경로 기하만 계산하고 `reflow-timeline.js`는 중간 도착 시각을 유지하는 거리 비율을 만든다. 브라우저가 새 사건이나 값을 계산하지 않는 규칙은 같다. 자세한 계약은 [좁은 화면 배치](design/layout.md#좁은-화면을-위한-배치-목표-폭)에 있다.
+
+HTML은 `html/responsive.js`가 좁은 배치를 미리 만들고 `player/responsive.js`가 같은 시계에서 그림만 전환한다. 비활성 template을 사용해 표시 SVG와 ID를 중복하지 않는다. 사건을 다시 실행하거나 탭·조작부를 다시 만들지 않는다. 세부 계약과 남은 가로 넘침은 [배치 설계](design/layout.md)에 적는다.
+
+토큰 생성기는 문자열 dimension의 px와 duration의 ms를 배치용 숫자로 읽는다. rem·s처럼 환산 기준이 필요한 문자열과 타입에 맞지 않는 단위는 거절한다. 기존 객체형 값은 선언된 단위의 수치를 보존한다. 예를 들어 tracking의 em 수치는 글꼴 측정기가 글자 크기와 곱한다. CSS 출력은 원래 단위를 유지한다.

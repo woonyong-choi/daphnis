@@ -17,7 +17,7 @@
 ### 비트 필드의 10 대 6 폭
 
 ```text
-flow down
+daphnis 2
 title "가상 주소를 VPN과 오프셋으로 나눈다"
 
 grid va "가상 주소 (16비트)" cols=16 {
@@ -30,13 +30,14 @@ grid pa "물리 주소 (16비트)" cols=16 {
 }
 va -> pa "페이지 표 조회"
 
-step "나누기" "윗 10비트는 페이지 번호이고 아랫 6비트는 페이지 안의 위치다"
-  light va.vpn
-  light va.offset
-step "바꾸기" "페이지 번호만 프레임 번호로 바뀌고 오프셋은 그대로 간다"
-  va -> pa "VPN을 PFN으로"
-  light pa.pfn
-  light pa.offset
+view main graph down
+
+scene "나누기" mode=static
+  light va.vpn va.offset
+
+scene "바꾸기" mode=once
+  va -> pa time=800ms
+  light pa.pfn pa.offset
 ```
 
 1. `va`와 `pa`는 16칸 폭 격자이고, `vpn`은 10칸, `offset`은 6칸을 차지한다. 칸 폭은 10 대 6이다.
@@ -46,7 +47,7 @@ step "바꾸기" "페이지 번호만 프레임 번호로 바뀌고 오프셋은
 ### 칸을 합치고, 비우고, 글을 길게 쓰기
 
 ```text
-flow right
+daphnis 2
 title "페이지 표 항목의 필드"
 
 box mmu "MMU" "주소 변환"
@@ -60,7 +61,9 @@ grid pte "페이지 표 항목 (PTE)" rows=4 cols=6 {
 }
 mmu -> pte "조회"
 
-step "상태" "유효, 수정, 참조 비트는 운영체제가 읽고 지운다"
+view main graph right
+
+scene "상태 비트" mode=static
   light pte.valid pte.dirty pte.ref
 ```
 
@@ -71,7 +74,7 @@ step "상태" "유효, 수정, 참조 비트는 운영체제가 읽고 지운다
 ### 칸에서 칸으로 잇기
 
 ```text
-flow right
+daphnis 2
 title "가상 칸에서 페이지 표 행을 거쳐 물리 칸으로"
 
 grid virt "가상 주소 공간" rows=3 {
@@ -100,10 +103,12 @@ virt.p2 -> table.p2
 table.f1 -> phys.fr7
 table.f2 -> phys.fr3
 
-step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
-  virt.p1 -> table.p1 "페이지 1"
+view main graph right
+
+scene "조회" mode=once
+  virt.p1 -> table.p1 time=700ms
   light table.f1
-  table.f1 -> phys.fr7 "프레임 7"
+  table.f1 -> phys.fr7 time=700ms
   light phys.fr7
 ```
 
@@ -123,7 +128,7 @@ step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
 | `light 격자 격자.칸` | 격자 전체나 칸 하나를 밝힌다. 칸은 `item`만 밝힌다 |
 | `격자.칸 -> 도형` , `도형 -> 격자.칸`, `격자.칸 -> 격자.칸` | 칸을 선 끝으로 쓴다. 같은 격자의 서로 다른 두 칸도 이을 수 있다(라벨 없음). 이동도 같은 이름으로 적는다 |
 
-- 선택 사항의 값 형식과 판은 [그림 문법](figure-syntax.md#호환-규칙)의 문법 표가 정본이다. `rows`, `cols`의 기본값은 1이고, `row`, `col`의 기본값은 0이다.
+- 선택 사항의 값 형식과 판은 [그림 문법](figure-syntax.md#문법-표)의 문법 표가 정본이다. `rows`, `cols`의 기본값은 1이고, `row`, `col`의 기본값은 0이다.
 - `row`와 `col`은 화면 좌표가 아니라 격자 안의 논리 인덱스다. 0부터 센다.
 - 칸 이름은 격자 안에서만 겹치지 않으면 된다. 다른 격자의 칸과 같은 이름을 써도 되고, 격자 밖에서는 `격자.칸`으로 부른다. 격자 이름은 다른 도형, 그룹 이름과 겹치지 않는다.
 - 오류: 크기가 0 이하이거나 정수가 아닌 값, 안전한 정수(2^53 - 1)를 넘는 값, 음수 인덱스, 인덱스와 크기의 합이 안전한 정수를 넘는 칸(끝 인덱스를 정확히 셀 수 없다), 격자 밖으로 나가는 칸, 겹치는 칸, 같은 칸 이름, `count` 없는 `gap`, 칸 없는 격자, 닫지 않은 격자, 격자 밖의 `item`과 `gap`, 격자 안의 다른 문장은 줄 번호가 붙은 원본 오류다.
@@ -137,7 +142,8 @@ step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
 크기는 [배치](layout.md)의 도형 크기 단계(2단계)에서 정하고, elkjs에는 그 사각형을 그대로 넘긴다.
 
 - 칸 단위(가로, 세로)는 모든 행과 열에서 같다. 칸은 차지한 단위 수만큼 커져서, 합친 칸의 폭과 높이는 단위의 정수배다.
-- 가로 단위는 칸마다 `(글 폭 + 안쪽 간격) / 차지한 열 수`를 구해 가장 큰 값으로 정한다. 글 폭은 `size.node.max-width`에서 도형 안쪽 간격을 뺀 값을 넘지 않는다. 글이 짧아도 토큰 `size.grid.cell`보다 좁아지지 않고, 제목이 격자보다 넓으면 제목이 들어갈 만큼 넓어진다.
+- 일반 격자의 가로 단위는 칸마다 `(글 폭 + 안쪽 간격) / 차지한 열 수`를 구해 필요한 폭을 계산한 뒤, 격자 전체가 `size.node.max-width`에 들어가는 선호 단위 폭과 비교해 작은 쪽을 쓴다. 글이 길면 칸 안에서 줄을 나눈다. 단위 폭은 올림하며 `size.grid.cell`과 제목을 담는 폭보다 좁아지지 않는다. 열이 많으면 최소 칸 크기를 지키기 위해 전체 폭이 선호 폭을 넘을 수 있다.
+- 한 행 전체를 빈 칸 없이 병합 필드만 채우고, 각 필드가 논리 열 둘 이상을 차지하면 비율형 필드 띠로 배치한다. 보이지 않는 논리 열마다 최소 폭을 예약하지 않고, 보이는 필드 각각의 최소 폭(`size.grid.cell`)과 제목을 지키면서 `size.node.max-width`를 선호 폭으로 쓴다. 필드 폭은 선언한 `cols`에 비례하고 글자는 고정 크기로 줄을 나눈다. 단위 폭은 소수도 허용해 논리 비트 수가 커져도 빈 폭이 늘지 않는다. 개별 칸이나 빈 자리가 하나라도 있는 격자에는 이 규칙을 적용하지 않는다.
 - 칸 글은 칸 폭 안에서 줄을 나눈다. 세로 단위는 칸마다 `(줄 수 × 줄 높이 + 안쪽 간격) / 차지한 행 수`를 구해 가장 큰 값으로 정한다. 글이 긴 칸이 하나 있으면 모든 행이 그 높이로 같이 높아진다. 일부 칸만 늘려 비율을 깨뜨리지 않기 위해서다.
 - 격자는 칸 묶음의 위에 제목 줄을 두고, 틀과 칸 사이 간격은 `space.6`이다.
 - 칸이 없는 자리는 단위 하나짜리 빈 칸으로 그린다. 행과 열의 수에는 제품 상한이 없고, 빈 칸을 하나씩 만들지 않으므로 비용은 격자 크기가 아니라 선언한 칸 수에 비례한다([빈 칸 표현](#빈-칸-표현)). `gap`은 설명에서 일부를 생략하겠다는 뜻일 때만 쓰고, 렌더러가 큰 격자를 `gap`으로 접지 않는다.
@@ -153,7 +159,7 @@ step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
 ### 그리기와 색
 
 - 틀과 칸은 `color.node` 면과 `color.outline` 윤곽이고 글은 `color.fg`다. 생략 칸(`gap`)은 `color.surface` 면에 점선 윤곽과 `color.muted` 글이다. 빈 자리는 면 없이 점선 윤곽만 그린다([빈 칸 표현](#빈-칸-표현)).
-- 밝힌 칸은 `color.card-on` 면에 `color.state.active` 윤곽(굵기 `border.edge`)이다. 이웃 칸과 맞닿은 변을 이웃 칸의 평소 윤곽이 덮어도 파랑이 보이게 한 굵기이고, 도형 `light`의 파랑 윤곽과 같은 색이다. 칸을 밝히는 전환(`duration.fast`) 도중에는 면만 먼저 옅게 보이므로, 밝힌 칸은 전환이 끝난 뒤의 모습으로 판단한다. 파랑은 "지금 일어나는 것"만 뜻하므로 값의 크고 작음을 이 색으로 나타내지 않는다.
+- 밝힌 칸은 `simple2.row-selection` 면(선택 행과 같다)이고 윤곽은 이웃 칸과 같은 중립 구분선 그대로다. 선택 테두리를 따로 그리지 않아 칸 구분선과 선택이 겹쳐 두 겹이 되지 않는다. 칸이 밝아지고 꺼지는 것은 논리 경계에서 바로 바뀌고 CSS 전환을 걸지 않는다([재생](playback.md#움직이는-svg)). 파랑은 "지금 일어나는 것"만 뜻하므로 값의 크고 작음을 이 색으로 나타내지 않는다.
 - 이 짝들은 모두 [대비 기준](docs-integration.md#대비-기준)의 기존 짝(글자와 면, 경계와 면, 강조 그래픽과 면)이라 새 색 역할이 없다. 크기와 간격은 토큰 `size.grid.cell`과 기존 `space.*`뿐이다.
 
 ### 빈 칸 표현
@@ -162,7 +168,6 @@ step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
 
 - 빈 자리 구간: 칸을 행 순서로 훑으며(sweep) 선언하지 않은 단위 칸을 직사각형 구간으로 묶는다. 칸이 시작하거나 끝나 빈 열 구간이 바뀔 때만 위 구간을 닫으므로 구간 수는 선언한 칸 수에 비례한다(칸 하나가 구간을 최대 셋으로 가른다). 행×열 크기의 배열을 만들지 않고, 칸 겹침 확인도 같은 쓸기라 `O(c log c)`다. 칸 이름은 격자마다 `Map`으로 찾는다.
 - 그리기: 단위 칸 하나의 점선 윤곽을 담은 반복 무늬(`<pattern id="ge-번호">`)를 한 번 정의하고, 모든 빈 구간을 이은 경로(`<path class="grid-empty">`) 하나를 그 무늬로 칠한다. 무늬 칸은 단위 칸에 통로 높이를 더한 크기라 행 사이 통로는 비어 있다. 윤곽은 칸 경계선을 굵기 절반만큼 비켜 무늬 칸 안에 온전히 넣고, 경로를 굵기 절반만큼 사방으로 넓혀 구간 바깥 경계선도 같은 굵기로 보인다. 그래서 선 굵기와 칸 자리는 칸마다 사각형을 그리던 때와 같고, 점선이 시작하는 자리만 칸 윗변과 왼쪽 변 시작으로 바뀐다.
-- 빈 칸이 없는 격자와 다른 그림 종류의 SVG는 이전과 바이트가 같다. 빈 칸이 있는 격자는 SVG 구조가 바뀌므로 라이트와 다크 화면으로 이전과 같은지 확인했다([측정](#측정)).
 - 빈 자리 경로의 명령은 구간마다 다섯(`M h v h z`)이고 예산이 센다. 하나의 경로로 합쳤다는 이유로 비용에서 빠지지 않는다.
 
 ### 예산
@@ -171,17 +176,17 @@ step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
 
 | 이름 | 단위 | 기본 한도 |
 |---|---|---|
-| `grid-elements` | 격자가 그리는 SVG 요소 수. 틀 사각형 1, 제목 글 줄마다 1, 칸마다 `item` 4(묶음, 사각형, 고리 묶음, 고리 사각형)와 `gap` 2에 칸 글 줄마다 1, 빈 자리가 있으면 3(무늬, 무늬 안 선, 경로). 글 줄은 그릴 때와 같은 줄 나눔(칸 폭에 따른 자동 줄 나눔)의 실제 결과다 | 500000 |
+| `grid-elements` | 격자가 그리는 SVG 요소 수. 틀 사각형 1, 제목 글 줄마다 1, 칸마다 `item` 2(묶음, 사각형)와 `gap` 2에 칸 글 줄마다 1, 빈 자리가 있으면 3(무늬, 무늬 안 선, 경로). 글 줄은 그릴 때와 같은 줄 나눔(칸 폭에 따른 자동 줄 나눔)의 실제 결과다 | 500000 |
 | `grid-path-commands` | 빈 자리 경로의 명령 수(구간마다 5) | 1000000 |
 | `chip-index` | 이동 글 상자 계획 하나가 만드는 공간 색인의 칸 항목 수(도형과 글자 색인, 선과 틀까지 넣은 색인의 합). 색인을 만들기 전에 센다 | 2000000 |
 
-- 검사는 크기와 배치를 정하기 전에 한다. 글 줄 수는 칸 글을 칸 폭에 맞춰 나눈 결과라 이 검사가 줄 나눔(칸 글 길이에 비례한 비용)을 먼저 하고 크기 계산이 그 결과를 다시 쓴다. 따라서 세는 요소 수는 실제로 그리는 수와 같고, 검사가 칸 수나 글 길이를 넘는 큰 할당을 하지 않으며, 초과하면 크기, 배치, 그리기에 들어가지 않고 파일도 쓰지 않는다. 시간표 항목은 격자 크기로 늘지 않는다(`light`는 칸 하나를 가리키고 단계마다 줄 수만큼만 늘어난다)라 이 PR은 예산을 두지 않는다.
+- 검사는 크기와 배치를 정하기 전에 한다. 글 줄 수는 칸 글을 칸 폭에 맞춰 나눈 결과라 이 검사가 줄 나눔(칸 글 길이에 비례한 비용)을 먼저 하고 크기 계산이 그 결과를 다시 쓴다. 따라서 세는 요소 수는 실제로 그리는 수와 같고, 검사가 칸 수나 글 길이를 넘는 큰 할당을 하지 않으며, 초과하면 크기, 배치, 그리기에 들어가지 않고 파일도 쓰지 않는다. 시간표 항목은 격자 크기로 늘지 않는다(`light`는 칸 하나를 가리키고 단계마다 줄 수만큼만 늘어난다)라 예산을 두지 않는다.
 - 초과 진단은 합계가 처음 한도를 넘은 격자의 줄에 붙고 필요한 양, 지금 한도, 올리는 방법을 적는다. 예: `this figure needs 502 SVG elements drawn by grids, over the budget grid-elements=100, and grid "g0" is where the total passes it. Raise it with --budget grid-elements=502 (the Action input budget: grid-elements=502), or shrink the grids`. 넘는 예산마다 진단 하나이고 `code`는 `budget`이다.
 - 올리는 방법: `render`, `check`, `gallery`, `md`가 `--budget 이름=값`을 받고(여러 번 쓸 수 있다), GitHub Action은 입력 `budget`(공백이나 쉼표로 나눈 `이름=값`)을 같은 해석으로 넘긴다. 값은 양의 안전한 정수이고, 모르는 이름이나 틀린 값은 그림을 만들기 전에 사용법 오류(종료 2)다.
-- 기본 한도는 현재 구현의 측정에서 정했다([측정](#측정)). 요소 500000은 빽빽한 316×316 격자(499282개)가 한 그림으로 5초, 최대 메모리 약 620MB, SVG 28MB에 끝나는 크기라, 브라우저가 한 번에 그릴 수 있는 크기와 기본 Node 힙 안에 든다. 경로 명령 1000000은 `gap` 칸 10만 개를 대각선 계단으로 놓은 입력(구간 20만 개, 명령 999990개, 요소 30만 개)이 같은 범위(최대 메모리 약 650MB)에 끝나는 크기다. 일반 문서의 격자(수십~수백 칸)는 한도의 0.1% 아래다.
-- `chip-index`는 이동 글 상자 계획([재생](playback.md))이 만드는 공간 색인의 크기를 막는다. 색인 크기는 칸 선언과 이동 수로 정해지고 논리 격자의 행×열과 무관하다([글 상자 계획의 공간 색인](#글-상자-계획의-공간-색인)). 그래도 선언 수가 크면 색인이 커지므로, 이 예산은 색인을 만들기 전에 항목 수를 세어 한도를 넘으면 `budget-exceeded`로 끝낸다. 진단 줄은 계획을 세운 이동의 줄이고, 필요한 항목 수와 `--budget chip-index=<N>`을 알린다. 기본 한도 200만은 색인 항목 100만 개당 약 58MB를 쓰는 측정에서, 가장 큰 빽빽한 격자(`grid-elements` 기본 한도 안의 316×316, 이동 글 하나, 25만 항목)의 여덟 배로 정했다.
+- 기본 한도는 브라우저가 한 번에 그릴 수 있는 크기와 기본 Node 힙 안에 드는 값으로 정했다. 요소 500000은 빽빽한 316×316 격자(499282개)까지 한 그림으로 허용하고, 경로 명령 1000000은 `gap` 칸 10만 개를 대각선 계단으로 놓은 입력(구간 20만 개, 명령 999990개)까지 허용한다. 일반 문서의 격자(수십~수백 칸)는 한도의 0.1% 아래다. 측정한 시간과 메모리는 이 문서에 적지 않고 GitHub 이슈 요약에 둔다.
+- `chip-index`는 이동 글 상자 계획([재생](playback.md))이 만드는 공간 색인의 크기를 막는다. 색인 크기는 칸 선언과 이동 수로 정해지고 논리 격자의 행×열과 무관하다([글 상자 계획의 공간 색인](#글-상자-계획의-공간-색인)). 그래도 선언 수가 크면 색인이 커지므로, 이 예산은 색인을 만들기 전에 항목 수를 세어 한도를 넘으면 `budget-exceeded`로 끝낸다. 진단 줄은 계획을 세운 이동의 줄이고, 필요한 항목 수와 `--budget chip-index=<N>`을 알린다. 기본 한도 200만은 가장 큰 빽빽한 격자(`grid-elements` 기본 한도 안의 316×316, 이동 글 하나, 25만 항목)의 여덟 배다.
 - `check-14`의 흐름 점 한도(800)는 이 인터페이스로 옮기지 않았고 동작과 진단이 그대로다.
-- 이벤트 예산 `events`와 `chain`(흐름 조건과 대기)도 같은 모듈과 `--budget`을 쓰고, 이름은 `parseBudgetPair`가 이 표와 함께 검사한다. 이 두 예산의 단위, 기본값, 측정은 [재생](playback.md#이벤트-예산)이 정한다.
+- 이벤트 예산 `events`와 `chain`(흐름 조건과 대기)도 같은 모듈과 `--budget`을 쓰고, 이름은 `parseBudgetPair`가 이 표와 함께 검사한다. 이 두 예산의 단위와 기본값은 [재생](playback.md#이벤트-예산)이 정한다.
 
 ### 글 상자 계획의 공간 색인
 
@@ -193,52 +198,18 @@ step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
 - 고정 행·열 제한은 없다. 칸 선언과 이동 수가 같으면 격자가 10^10×10^10이어도 색인 항목 수가 같다.
 - 색인 항목은 만들기 전에 센다(`indexEntries`). 두 색인(도형과 글자만, 선과 틀까지)의 합이 `chip-index`를 넘으면 색인을 만들지 않고 끝낸다.
 
-### 측정
+### 비용의 성질
 
-구현 전(`origin/main`)과 후를 같은 입력으로 한 입력당 3회 재어 시간은 중앙값, 최대 메모리는 최댓값(최대 상주 메모리)이다. 입력은 칸 셋(칸 하나, 합친 칸, 생략 칸)만 선언하고 `rows`와 `cols`만 키운 희소 격자, 칸을 모두 채운 빽빽한 격자, 격자 여러 개다. 구현 전의 큰 입력은 힙 상한 1GB와 제한 시간을 걸고 돌렸다. 시간은 기계 부하에 ±1초쯤 흔들린다.
-
-| 입력 | 전: 시간 / 메모리 / SVG | 후: 시간 / 메모리 / SVG |
-|---|---|---|
-| 희소 100×100 | 0.47초 / 212MB / 0.76MB | 0.16초 / 207MB / 45.7KB |
-| 희소 200×200 | 0.46초 / 239MB / 2.9MB | 0.5초 / 248MB / 45.7KB |
-| 희소 400×400 | 0.80초 / 344MB / 11.7MB | 0.9초 / 227MB / 45.8KB |
-| 희소 1000×1000 | 2.8초 / 860MB / 73MB | 1.1초 / 220MB / 45.8KB |
-| 희소 4000×4000 | 힙 부족으로 실패 | 1.2초 / 227MB / 45.8KB |
-| 희소 10^5×10^5 | `Invalid array length` | 0.8초 / 220MB / 45.9KB |
-| 희소 10^9×10^9, 10^10×10^10 | 해당 없음 | 0.8~1.4초 / 222MB / 46.1KB |
-| 희소 10^11×10^11 | 해당 없음 | 격자 줄의 좌표 범위 오류(2^40 px 초과) |
-| 희소 200×200 격자 3개 | 0.8초 / 303MB / 8.7MB | 0.3초 / 219MB / 50.3KB |
-| 빽빽 32×32 격자 10개 | 1.1초 / 313MB / 2.9MB | 1.4초 / 317MB / 2.9MB |
-| 빽빽 100×100 | 2.2초 / 265MB / 2.8MB | 0.8초 / 269MB / 2.8MB |
-| 빽빽 200×200 | 8.9초 / 408MB / 11.2MB | 2.2초 / 350MB / 11.2MB |
-| 빽빽 300×300 | 49초(1회) / 568MB / 25MB | 4.4초 / 599MB / 25MB |
-| 빽빽 316×316(기본 한도 안) | 해당 없음 | 5.2초 / 623MB / 28MB |
-| 빽빽 400×400, 예산 기본 | 해당 없음 | 0.7초 / 458MB에서 `budget-exceeded`(요소 800002 필요), 파일 없음 |
-| 빽빽 400×400, `grid-elements=1000000` | 해당 없음 | 8.0초 / 742MB / 45MB |
-| `gap` 계단 10만 칸 | 해당 없음 | 6.2초 / 663MB / 22MB |
-
-- 희소 격자의 출력은 격자 크기와 무관하다. 빽빽한 격자의 출력은 구현 전과 바이트가 같고, 빽빽한 격자의 시간은 이전에 칸 수의 제곱으로 늘던 이름 중복 확인과 겹침 확인을 없애 줄었다(남은 시간은 줄마다 읽는 비용이다).
-- 초과 검사는 선언을 읽은 뒤에 하므로 메모리 하한은 선언한 칸 수에 비례한 입력 읽기 비용이다.
-
-이동 글을 붙인 희소 격자(`grid g rows=n cols=n`에 칸 하나, 상자 하나, 선 하나, 이동 하나)의 글 상자 계획 비용이다. 한 입력당 3회 재어 시간은 중앙값, 메모리는 최대 상주 메모리의 최댓값이고, 삽입 수는 `chip-grid.js` 안에서 일어난 `Map`의 새 키 삽입이다(칸 항목과 같은 칸 범위를 다시 묻지 않게 하는 답 저장 항목을 포함한다). 구현 전의 10000×10000은 삽입 10000회 상한과 힙 상한 1GB, 제한 시간 120초로 중단했고 실제 메모리 부족까지 돌리지 않았다.
-
-| 입력 | 전: 삽입 / 시간 / 메모리 | 후: 삽입 / 시간 / 메모리 |
-|---|---|---|
-| 희소 20×20 | 452 / 0.17초 / 170MB | 56 / 0.17초 / 170MB |
-| 희소 40×40 | 1440 / 0.23초 / 188MB | 60 / 0.23초 / 170MB |
-| 희소 80×80 | 5220 / 0.34초 / 190MB | 63 / 0.24초 / 170MB |
-| 희소 400×400 | 121860 / 1.4초 / 224MB | 63 / 0.23초 / 178MB |
-| 희소 10000×10000 | 10001에서 중단 | 18 / 0.23초 / 169MB |
-| 희소 10^9×10^9, 10^10×10^10 | 해당 없음 | 18 / 0.22초 / 168MB |
-| 빽빽 316×316, 이동 하나 | 해당 없음 | 항목 249648 / 2.9초 / 415MB |
-
-- 색인 항목 100만 개를 만드는 데 약 58MB와 0.07초가 든다(작은 사각형 100만 개, 두 색인 합계 468만 개까지 확인).
+- 희소 격자(`rows`와 `cols`만 크고 선언한 칸이 적은 격자)의 출력 크기와 처리 비용은 격자의 행×열이 아니라 선언한 칸 수에 따른다. 행×열 크기의 배열을 만들지 않기 때문이다.
+- 초과 검사는 선언을 읽은 뒤에 하므로 메모리의 하한은 선언한 칸 수에 비례한 입력 읽기 비용이다.
+- 이동 글 상자 계획의 비용도 칸 선언과 이동 수에 따르고 논리 격자 면적에 따르지 않는다([글 상자 계획의 공간 색인](#글-상자-계획의-공간-색인)).
+- 측정한 시간과 메모리는 이 문서가 아니라 GitHub 이슈 요약에 둔다.
 
 ### 시간 흐름
 
 - `light 격자.칸`은 도형의 `light`와 같은 박자 규칙이다. 한 단계 안에서 밝힌 칸은 남고 다음 단계가 시작하면 꺼진다. 시간표의 `partsOn`에 `격자.칸` 이름으로 들어가고, HTML 재생기와 움직이는 SVG가 같은 값을 읽는다.
 - `light 격자`는 격자 틀을 밝히고 칸은 밝히지 않는다. 칸의 `light`도 틀을 밝히지 않는다.
-- 멈춘 SVG는 칸을 밝히지 않는다.
+- 멈춘 SVG는 고른 장면의 마지막 모습이라 그 장면이 밝힌 칸(`partsOn`)이 남고 점과 펄스는 없다. 다음 장면이 밝힌 칸은 보이지 않는다.
 
 ### 요구사항
 
@@ -249,8 +220,8 @@ step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
 | 칸이 없는 자리는 빈 칸이고, 칸끼리 겹치지 않으며 모두 격자 안에 있다. | `test/layout.test.js`의 `buildFigure_grid_positions_without_a_cell_stay_empty_and_every_cell_stays_inside_the_frame`. 칸과 빈 자리 사각형이 서로 겹치지 않는지 확인 |
 | 격자는 구조 그림에서 크기가 고정된 도형 하나로 배치되고, 선은 격자 테두리에 닿는다. | `test/layout.test.js`의 `layoutGraph_box_sizes_equal_measured_sizes`(잰 크기와 같음), `buildFigure_grid_between_flow_boxes_is_one_shape_whose_edges_end_on_its_border` |
 | 칸 자리와 선택 사항을 어긴 원본, 격자 밖 칸, 틀린 칸 연결, 밝힐 수 없는 칸을 줄 번호와 함께 알린다. | `test/grammar.test.js`의 `parseFigure_malformed_source_reports_the_line_and_the_rule`(격자 행) |
-| `grid`, `item`, `gap`을 이름으로 쓴 옛 원본이 그대로 읽힌다. | `test/grammar.test.js`의 `parseFigure_valid_forms_read_without_errors`(격자 낱말 행), `test/compat.test.js`의 `compat_v1_every_fixture_builds_without_errors_and_matches_the_structure_snapshot`(`all-grid.dap`) |
-| 문법 표에 모든 낱말과 선택 사항이 판 1로 있고 고정 묶음이 쓴다. | `test/compat.test.js`의 `compat_v1_covers_every_word_option_and_value_in_the_grammar_table`, `test/grammar.test.js`의 `grammarDoc_figure_syntax_tables_equal_the_tables_made_from_the_grammar` |
+| `grid`, `item`, `gap`을 쓴 둘째 판 원본이 오류 없이 읽힌다. | `test/grammar.test.js`의 격자 낱말 행, 예제 `memory`·`stack`·`pointer`는 `test/demo-v2.test.js` |
+| 문법 표에 모든 낱말과 선택 사항이 있고 문서의 표가 문법 표에서 만든 표와 같다. | `test/grammar.test.js`의 `grammarDoc_figure_syntax_tables_equal_the_tables_made_from_the_grammar` |
 | 칸 `light`는 도형 `light`와 같은 박자 규칙이다. | `test/motion.test.js`의 `buildTimeline_grid_cell_light_stays_for_the_rest_of_the_step_like_a_node_light` |
 | 칸에서 칸으로 가는 선이 칸 테두리에서 나가고 들어오며, 안쪽 칸으로 가는 선도 이웃 칸을 지나지 않는다. | `test/layout.test.js`의 `buildFigure_grid_cell_edges_start_and_end_on_their_cell_and_never_cross_another_cell_flow_right`, `..._flow_down`, `buildFigure_grid_edge_between_two_cells_of_one_grid_stays_inside_the_grid_frame`. 그림 검사 3번(칸), 4번(칸 테두리)이 strict 빌드에서 같은 규칙을 지킨다 |
 | 합친 칸, 비트 띠, 같은 면에서 나가는 여러 선, 한 격자의 두 칸을 잇는 선이 섞여도 오류가 없다. | `npm run fuzz`(구조 그림에 칸 선 끝이 섞인다). [배치](layout.md)의 요구사항 표와 같은 명령 |
@@ -264,7 +235,7 @@ step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
 | 색인 항목은 만들기 전에 세고, `chip-index` 예산을 넘으면 색인을 만들지 않고 `budget-exceeded`로 끝낸다. 한도와 같은 양은 통과한다. | `test/chip-index.test.js`의 `buildFigure_moving_text_over_the_chip_index_budget_ends_with_budget_exceeded_before_any_index_is_built`(삽입 0회, 한도와 한도보다 하나 모자란 값), `main_render_with_a_small_chip_index_budget_exits_with_budget_exceeded_and_writes_no_file`, `parseBudgetPair_accepts_the_chip_index_budget`, `buildFigure_default_chip_index_budget_accepts_a_huge_sparse_grid_with_moving_text` |
 | 이동 글, 큰 합친 칸, 빈 영역, 여러 격자를 함께 써도 글 상자 후보와 계획이 색인 없이 잰 결과와 같다. | `test/chip-index.test.js`의 `chipCandidates_with_the_index_equal_the_linear_scan_beside_moving_text_big_merged_cells_empty_areas_and_several_grids`, `buildFigure_moving_text_plans_beside_big_merged_cells_and_empty_areas_equal_the_plans_made_before_the_range_index` |
 | `--budget`과 Action 입력 `budget`이 같은 해석이고, 모든 그림 명령이 받으며, 잘못된 값은 만들기 전에 끝나고, 초과는 파일을 쓰지 않는다. | `test/grid-scale.test.js`의 `main_budget_option_raises_the_limit_and_an_over_budget_figure_writes_no_file`, `main_every_figure_command_takes_budget_with_the_same_meaning`, `main_budget_option_with_a_bad_name_or_value_is_a_usage_error`, `parseBudgetPair_accepts_only_known_names_with_positive_safe_integers`, `test/action.test.js`의 `action_budget_input_raises_the_limit_with_spaces_or_commas_and_rejects_bad_items` |
-| 문서의 예시와 예제 그림이 오류와 경고 없이 만들어지고 움직임이 시간표와 같다. | `test/grammar.test.js`의 `docExamples_every_design_doc_example_builds_without_errors_or_warnings`, `test/motion.test.js`의 `toSvg_moving_packets_match_the_timeline_at_every_example`(`examples/address-bits.dap` 외 세 파일 포함) |
+| 문서의 예시와 예제 그림이 오류와 경고 없이 만들어지고 움직임이 시간표와 같다. | `test/grammar.test.js`의 `docExamples_every_design_doc_example_builds_without_errors_or_warnings`, `test/motion.test.js`의 `toSvg_moving_packets_match_the_timeline_at_every_example`와 `test/demo-v2.test.js`(`examples/memory.dap`, `stack.dap`, `pointer.dap`이 격자를 쓴다) |
 | 올바른 무작위 구조 그림(칸 격자가 섞인)이 배치 오류나 그림 검사 오류가 되지 않는다. | `npm run fuzz`(구조 그림의 4분의 1이 칸 격자를 담는다). [배치](layout.md)의 요구사항 표와 같은 명령 |
 
 ## 단점
@@ -278,4 +249,4 @@ step "조회" "페이지 1은 표의 둘째 행을 거쳐 프레임 7로 간다"
 
 ## 미해결 질문
 
-- 칸 선언이 많은 격자는 `item`마다 묶음과 고리 요소를 그린다. 칸 선언 자체를 구간이나 반복으로 줄여 적는 문법은 아직 없다.
+- 칸 선언이 많은 격자는 `item`마다 묶음과 사각형 요소를 그린다. 칸 선언 자체를 구간이나 반복으로 줄여 적는 문법은 아직 없다.

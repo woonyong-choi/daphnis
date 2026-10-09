@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import { findBlocks } from '../src/md.js';
 import { detailsBefore } from '../src/md-tags.js';
 
-const SOURCE = ['flow right', 'box a "A"'];
+const SOURCE = ['daphnis 2', 'box a "A"'];
 const block = (name, prefix = '') => [`\`\`\`dap name=${name}`, ...SOURCE, '```'].map((line) => `${prefix}${line}`).join('\n') + '\n';
 // cost: time O(n·c), heap O(n), stack O(1)
 // vars: n = 문서 줄 수, c = 열린 칸 수

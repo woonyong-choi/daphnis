@@ -3,8 +3,8 @@ import { createMeter } from '../budget.js';
 import { emptyRegions } from '../source/grid-space.js';
 import { gridLines } from './sizes.js';
 
-/** 칸 하나가 글 줄 말고 그리는 요소 수: item은 묶음 g, 사각형, 고리 g, 고리 사각형이고 gap은 g, 사각형이다. 글은 줄마다 `<text>` 하나다 */
-const CELL_ELEMENTS = { item: 4, gap: 2 };
+/** 칸 하나가 글 줄 말고 그리는 요소 수: item과 gap 모두 묶음 g와 사각형이다. 글은 줄마다 `<text>` 하나다. 행 통로가 있을 때 깔리는 판(`grid-tray`)은 격자마다 하나라 칸 수에 비례하지 않아 세지 않는다 */
+const CELL_ELEMENTS = { item: 2, gap: 2 };
 /** 틀 사각형 하나 */
 const FRAME_ELEMENTS = 1;
 /** 빈 자리가 있으면 무늬(pattern), 무늬 안 사각형, 경로 하나 */

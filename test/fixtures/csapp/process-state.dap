@@ -1,4 +1,4 @@
-state down
+daphnis 2
 title "프로세스 상태"
 subtitle "생성부터 회수까지. 중단과 좀비는 시그널과 wait로 바뀐다"
 
@@ -19,17 +19,19 @@ stopped -> ready "SIGCONT"
 running -> zombie "exit 또는 종료 시그널"
 zombie -> gone "부모가 wait로 회수"
 
-step "fork 직후" "새 프로세스는 준비 상태로 시작해 스케줄되면 실행된다"
+view main graph down
+
+scene "fork 직후" mode=once
   ready -> running
   running -> ready
   ready -> running
-step "I/O와 중단" "디스크를 기다리면 대기, Ctrl+Z를 받으면 중단되고 SIGCONT로 되살아난다"
+scene "I/O와 중단" mode=once
   running -> waiting
   waiting -> ready
   ready -> running
   running -> stopped
   stopped -> ready
-step "종료와 회수" "종료해도 부모가 wait하기 전에는 좀비로 남는다"
+scene "종료와 회수" mode=once
   ready -> running
   running -> zombie
   zombie -> gone

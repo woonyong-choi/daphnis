@@ -1,4 +1,4 @@
-data right
+daphnis 2
 title "스택 프레임 배치"
 subtitle "call caller와 call swap_add 직후의 스택. 높은 주소의 프레임이 낮은 주소의 프레임을 부른다"
 
@@ -21,12 +21,12 @@ table frame_swap "swap_add 프레임 (rbp = 0x7FFFDFE0)" {
   yp "0x7FFFDFC0: 0x7FFFDFF8" fk=frame_caller.arg2
 }
 
-step "caller 프레임" "caller는 이전 rbp를 저장하고 지역 변수 arg1, arg2를 16바이트에 둔다"
+scene "caller 프레임" mode=once
   light frame_caller.ret_addr frame_caller.saved_rbp frame_caller.arg1 frame_caller.arg2
   show frame_caller "rsp = 0x7FFFDFF0" tag="rsp"
   show frame_caller "rbp = 0x7FFFE000" tag="rbp"
   frame_caller -> frame_main
-step "swap_add 프레임" "swap_add는 포인터 xp, yp로 caller의 지역 변수를 고친다"
+scene "swap_add 프레임" mode=once
   light frame_swap.ret_addr frame_swap.saved_rbp
   show frame_swap "rbp = 0x7FFFDFE0" tag="rbp"
   frame_swap.xp -> frame_caller.arg1 "xp = &arg1"

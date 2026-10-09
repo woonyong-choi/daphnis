@@ -3,39 +3,50 @@ import { BADGE_STYLE, bodyOf } from '../measure/decor.js';
 import { CARD, STYLE, groupHead, hasPill, sizePill } from '../measure/sizes.js';
 import { routePolyline } from '../route.js';
 import { walkUp } from '../source/ancestry.js';
+import { tableDescription } from '../table.js';
 import { centerBaseline, escapeXml, renderRich, roundCoord as r } from '../text.js';
 import { tokens, values } from '../tokens.js';
 import { cardGlyphs, createTones, drawCard } from './card.js';
+import { edgeMarker } from './arrow.js';
 import { drawDecor, drawGroupTab } from './decor.js';
 import { paintOf, tintOf } from './paint.js';
+import { sceneTag } from './scene-tag.js';
+import { drawSequenceFragments } from './sequence-fragments.js';
+import { drawSequenceLife } from './sequence-life.js';
 import { LINE_DASH, drawShape } from './shape.js';
+import { drawPlot, drawTime } from './time.js';
 
 const SPACE = values.space;
 const SIZE = values.size;
 const RADIUS = values.radius;
 const INNER_Y = SPACE['6'];
-// 그룹 면 단계는 깊이 0, 1, 2 이상 셋(color.group-1, group-2, group-3)이다. 깊이를 이 값으로 막는다.
-const MAX_GROUP_STEP = 2;
+// 그룹 면은 깊이에 따라 color.group-1과 group-2를 번갈아 쓴다.
+const NESTED_STEPS = 2;
 // 이름을 도형 안에서 따로 그리는 도형(테이블 머리, 격자 제목)
-const HAS_OWN_LABELS = new Set(['table', 'grid']);
+const HAS_OWN_LABELS = new Set(['table', 'api', 'grid', 'classifier', 'chart']);
 
 // cost: time O(s·k·r·n + e·p), heap O(out), stack O(1)
 // vars: s = 도형 수, k = 카드 내용 수, r = 카드 줄 수, n = 글자 수, e = 선 수, p = 경로 점 수, out = 만든 SVG 글자 수
 // basis: estimate
 /**
- * 장면을 그린다. body의 순서는 그룹, 생명선, 도형, 선, 메모다. 선 라벨 알약(pills)은 따로 돌려준다. 점과 글 상자가 알약 위로 지나면 알약 글자의 대비가 깨지므로, 호출하는 쪽이 점 층 뒤에 둔다(docs/design/playback.md 점 층).
+ * 장면을 그린다. `scene.flashes`가 있으면(draw/values.js의 drawFlashes) 값이 바뀔 때 켜지는 배경 면을 도형 면과 카드 층 안, 글자 아래에 놓는다. `scene.borders`가 있으면((도형 번호, 도형 글) => 겹침 윤곽 글, 움직이는 SVG의 animate/animator.js) 점이 닿을 때 깜빡이는 테두리 후광을 도형 윤곽 바로 위에 놓는다. body의 순서는 그룹, 생명선, 도형, 선, 메모다. 선 라벨 알약(pills)은 따로 돌려준다. 점과 글 상자가 알약 위로 지나면 알약 글자의 대비가 깨지므로, 호출하는 쪽이 점 층 뒤에 둔다(docs/design/playback.md 점 층).
  * @param decorate (kind, index, extra) => class. 움직이는 SVG가 박자별 class를 넣는다. kind: node, edge, pill, pilltext, quiet, card, layer, part
  * @param glyphs 쓴 글자를 모으는 그릇(createGlyphSet)
  * @returns { body, pills }. pills는 알약이 있는 선마다 `l-번호` 묶음을 담은 `<g class="fl-pills">`이고 알약이 없으면 빈 글이다
  */
 export function drawScene(scene, decorate, glyphs) {
-  const paint = { toneOf: createTones(scene.tagOrder), decorate, glyphs, scene };
+  const paint = { toneOf: createTones(scene.tagOrder), decorate, glyphs, scene, flashes: scene.flashes ?? { shape: new Map(), card: new Map() }, borders: scene.borders };
   const parts = [];
   scene.groups.forEach((g, j) => parts.push(drawGroup(g, j, paint)));
-  for (const line of scene.lifelines ?? []) parts.push(`<line x1="${r(line.x)}" x2="${r(line.x)}" y1="${r(line.y1)}" y2="${r(line.y2)}" class="lifeline"/>`);
+  for (const line of scene.lifelines ?? []) parts.push(`<line x1="${r(line.x)}" x2="${r(line.x)}" y1="${r(line.y1)}" y2="${r(line.y2)}" class="lifeline${sceneTag(line, scene.shownSi).off}"${sceneTag(line, scene.shownSi).attr}/>`);
+  parts.push(drawSequenceFragments(scene, glyphs));
+  if (scene.activations?.length || scene.destructions?.length) parts.push(drawSequenceLife(scene));
   scene.items.forEach((it, i) => parts.push(drawItem(it, i, paint)));
   scene.edges.forEach((e, j) => parts.push(drawEdge(e, j, paint)));
-  for (const note of scene.notes ?? []) parts.push(drawNote(note, glyphs));
+  for (const note of scene.notes ?? []) parts.push(drawNote(note, glyphs, scene.shownSi));
+  for (const plot of scene.plots ?? []) parts.push(drawPlot(plot, glyphs));
+  for (const time of scene.times ?? []) parts.push(drawTime(time, paint));
+  for (const panel of scene.panels ?? []) if (panel.label) parts.push(drawPanelLabel(panel, glyphs));
   const pills = scene.edges.flatMap((e, j) => drawPill(e, j, paint) ?? []);
   return { body: parts.join('\n'), pills: pills.length ? `<g class="fl-pills">${pills.join('')}</g>` : '' };
 }
@@ -49,7 +60,8 @@ function drawGroup(g, j, { decorate, glyphs, scene }) {
   const paint = paintOf(g);
   const tint = tintOf(g, scene);
   const colors = `${paint ? ` ps-${paint}` : ''}${tint ? ` tint-${tint.name}-${tint.level}` : ''}`;
-  const depth = Math.min(depthOf(g, scene), MAX_GROUP_STEP);
+  // 중첩 면은 두 단계를 번갈아 쓴다. 깊어질수록 짙어져 카드와 아이콘보다 넓은 면이 앞서지 않게 한다.
+  const depth = depthOf(g, scene) % NESTED_STEPS;
   const deep = depth ? ` d${depth + 1}` : '';
   const dashed = g.border === 'dashed';
   return (
@@ -65,14 +77,28 @@ function drawGroup(g, j, { decorate, glyphs, scene }) {
 function drawItem(it, i, paint) {
   const { decorate, glyphs, scene } = paint;
   const stroke = `class="fl-stroke${paintOf(it) ? ` ps-${paintOf(it)}` : ''}${it.shape === 'external' ? ' ext' : ''} ${decorate('node', i)}"`;
-  const open = `<g id="n-${i}" class="fl-node fl-shape-${escapeXml(it.shape)}" tabindex="0" role="img" aria-label="${escapeXml(it.label)}" data-id="${escapeXml(it.id)}">`;
-  for (const l of it.labelLines ?? []) glyphs.add(l, 'medium');
-  for (const l of it.subLines ?? []) glyphs.add(l, 'regular');
+  const description = describeNode(it);
+  const open = `<g id="n-${i}" class="fl-node fl-shape-${escapeXml(it.shape)}" tabindex="0" role="img" aria-label="${escapeXml(description)}" data-id="${escapeXml(it.id)}">`;
+  for (const l of it.labelLines ?? []) glyphs.add(l, STYLE.label.face);
+  for (const l of it.subLines ?? []) glyphs.add(l, STYLE.sub.face);
   if (it.card) cardGlyphs(it.card.layouts, glyphs);
   const shape = drawShape(it.stroke && !it.fill ? { ...it, fill: it.stroke } : it, stroke, { ...paint, index: i });
   const decor = it.decor ? drawDecor(it.decor, { x: it.x + it.decor.x, y: it.y + it.decor.y, iconData: it.iconData }, glyphs) : '';
-  const card = it.card ? drawCard(it.card, { box: cardBox(it), i }, paint) : '';
-  return `${open}${shape}${decor}${HAS_OWN_LABELS.has(it.shape) ? '' : drawLabels(it)}${card}</g>`;
+  const card = it.card ? drawCard(it.card, { box: cardBox(it), i, shown: scene.shownCards?.[it.id] }, paint) : '';
+  // 이름 묶음(아이콘, 이름, 부제)은 카드가 비어 있어도 같은 자리에 있다. 카드 자리는 가장 큰 내용에 맞춰 늘 예약된다.
+  const head = `${decor}${HAS_OWN_LABELS.has(it.shape) ? '' : drawLabels(it)}`;
+  return `${open}${shape}${paint.flashes.shape.get(i) ?? ''}${paint.borders?.(i, shape) ?? ''}${head}${card}</g>`;
+}
+
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = 노드의 표시 글자 수
+// basis: estimate
+function describeNode(it) {
+  if (it.headerOnly) return it.label;
+  if (it.shape === 'table' || it.shape === 'api') return tableDescription(it);
+  if (it.shape === 'chart') return it.label;
+  if (it.shape === 'classifier') return it.classifierRows.map((row) => row.text).join('; ');
+  return it.label;
 }
 
 // cost: time O(g²), heap O(g), stack O(1)
@@ -103,13 +129,12 @@ function drawLabels(it) {
  */
 export function labelRows(it) {
   const body = bodyOf(it);
-  const cx = body.x + body.w / 2;
+  const cx = it.decor?.inline ? it.x + it.decor.textCx : body.x + body.w / 2;
   const lines = [...(it.labelLines ?? []).map((l) => ['label', l, STYLE.label]), ...(it.subLines ?? []).map((l) => ['sub', l, STYLE.sub])];
   if (!lines.length) return [];
   const textH = lines.reduce((sum, [, , s]) => sum + s.line, 0);
   let top;
-  if (it.shape === 'person') top = it.y + it.h + SPACE['3'];
-  else if (it.shape === 'queue') top = it.y + INNER_Y;
+  if (it.shape === 'queue') top = it.y + INNER_Y;
   else if (it.decor) top = it.y + INNER_Y + it.decor.room;
   else if (it.card) top = it.y + INNER_Y;
   else top = it.y + (body.h - textH) / 2;
@@ -123,27 +148,29 @@ export function labelRows(it) {
 /** 카드 자리. 사람은 이름표 아래, 테이블은 열 아래, 나머지는 도형 아래쪽 안이다. */
 export function cardBox(it) {
   const { w, h } = it.card;
-  if (it.shape === 'person') return { x: it.x + (it.w - w) / 2, y: it.y + it.h + SPACE['3'] + it.labelLines.length * STYLE.label.line + CARD.margin, w, h };
-  if (it.shape === 'table') return { x: it.x + CARD.margin, y: it.y + it.rowH * (it.columns.length + 1) + CARD.margin, w, h };
+  if (it.shape === 'table' || it.shape === 'api') return { x: it.x + CARD.margin, y: it.y + it.tableHeight + CARD.margin, w, h };
   const body = bodyOf(it);
   return { x: it.x + CARD.margin, y: body.y + body.h - CARD.margin - h, w, h };
-}
-
-// 선 양끝 화살촉 속성. 기본은 끝(`end`)에만, `both`는 시작에도, `none`은 없다.
-function arrowheads({ head }) {
-  const start = head === 'both' ? ' marker-start="url(#fl-arrow)"' : '';
-  return `${start}${head === 'none' ? '' : ' marker-end="url(#fl-arrow)"'}`;
 }
 
 // cost: time O(p), heap O(out), stack O(1)
 // vars: p = 경로 점 수, out = 만든 SVG 글자 수
 // basis: estimate
 // 선 하나. 알약 라벨은 drawPill이 따로 그린다.
-function drawEdge(e, j, { decorate }) {
+function drawEdge(e, j, { decorate, glyphs, scene }) {
+  const tag = sceneTag(e, scene.shownSi);
   const { d } = routePolyline(e.points, RADIUS.route);
   const dash = e.dashed ? ` stroke-dasharray="${LINE_DASH}"` : '';
-  const path = `<path id="p-${j}" d="${d}" class="fl-path ${decorate('edge', j)}"${dash}${arrowheads(e)}/>`;
-  return `<g id="e-${j}" class="${edgeClass(e, j, decorate)}">${path}</g>`;
+  const marker = edgeMarker(e, j);
+  const path = `<path id="p-${j}" d="${d}" class="fl-path"${dash}${marker.attributes}/>`;
+  const from = e.fromMultiplicity === undefined ? e.from : `${e.from} [${e.fromMultiplicity}]`;
+  const to = e.toMultiplicity === undefined ? e.to : `${e.to} [${e.toMultiplicity}]`;
+  const description = e.relation ? ` role="img" aria-label="${escapeXml(`${from} ${e.relation} ${to}${e.label ? `: ${e.label}` : ''}`)}"` : '';
+  const ends = (e.endpointLabels ?? []).map((label) => {
+    glyphs.add(label.text, STYLE.pill.face);
+    return `<text class="edgelabel fl-multiplicity ${decorate('pilltext', j)}" data-end="${label.end}" x="${r(label.x)}" y="${r(centerBaseline(label.y, STYLE.pill.size))}">${escapeXml(label.text)}</text>`;
+  });
+  return `<g id="e-${j}" class="${edgeClass(e, j, decorate)} ${decorate('edge', j)}${tag.off}"${tag.attr}${description}>${marker.defs}${path}${ends.join('')}</g>`;
 }
 
 // 선과 알약 묶음이 함께 쓰는 class. 알약 묶음도 선과 같이 켜지고 조용해진다.
@@ -155,14 +182,15 @@ function edgeClass(e, j, decorate) {
 // vars: n = 라벨 글자 수, out = 만든 SVG 글자 수
 // basis: estimate
 // 선의 알약 라벨 묶음. 라벨 자리는 배치가 정했다. 없으면 undefined다.
-function drawPill(e, j, { decorate, glyphs }) {
+function drawPill(e, j, { decorate, glyphs, scene }) {
   if (!hasPill(e) || !e.labelAt) return undefined;
+  const tag = sceneTag(e, scene.shownSi);
   const { w, h, numW, textW } = sizePill(e.label, e.no);
   const { x, y } = e.labelAt;
   const frame = e.label === undefined ? '' : `<rect x="${r(x - w / 2)}" y="${r(y - h / 2)}" width="${r(w)}" height="${r(h)}" rx="${r(h / 2)}" class="pill ${decorate('pill', j)}"/>`;
   const number = e.no === undefined ? '' : drawNumber(e.no, { x: x - w / 2 + SPACE['1'], y, numW }, glyphs);
   const text = e.label === undefined ? '' : drawPillText(e.label, { x: e.no === undefined ? x : x - w / 2 + SPACE['1'] + numW + SPACE['2'] + textW / 2, y, cls: decorate('pilltext', j) }, glyphs);
-  return `<g id="l-${j}" class="${edgeClass(e, j, decorate)}"><g class="fl-pill">${frame}${number}${text}</g></g>`;
+  return `<g id="l-${j}" class="${edgeClass(e, j, decorate)}${tag.off}"${tag.attr}><g class="fl-pill">${frame}${number}${text}</g></g>`;
 }
 
 // cost: time O(n), heap O(out), stack O(1)
@@ -187,11 +215,18 @@ function drawNumber(no, { x: left, y, numW }, glyphs) {
   );
 }
 
+// 보기 이름. 판 위 제목 줄에 그룹 제목과 같은 글로 쓴다.
+function drawPanelLabel(panel, glyphs) {
+  glyphs.add(panel.label, 'semibold');
+  return `<text x="${r(panel.labelAt.x)}" y="${r(centerBaseline(panel.labelAt.y, STYLE.group.size))}" class="frame" data-view="${escapeXml(panel.view)}">${renderRich(panel.label)}</text>`;
+}
+
 // cost: time O(l), heap O(out), stack O(1)
 // vars: l = 메모 줄 수, out = 만든 SVG 글자 수
 // basis: estimate
-function drawNote(note, glyphs) {
+function drawNote(note, glyphs, shownSi) {
   glyphs.add(note.text, 'regular');
-  const lines = note.lines.map((l, k) => `<text x="${r(note.x + SPACE['5'])}" y="${r(note.y + SPACE['5'] + STYLE.row.size + k * STYLE.row.line)}" class="row">${renderRich(l)}</text>`);
-  return `<g class="fl-note"><rect x="${r(note.x)}" y="${r(note.y)}" width="${r(note.w)}" height="${r(note.h)}" rx="${RADIUS.md}" class="note-box"/>${lines.join('')}</g>`;
+  const tag = sceneTag(note, shownSi);
+  const lines = note.lines.map((l, k) => `<text x="${r(note.x + SPACE['5'])}" y="${r(centerBaseline(note.y + SPACE['5'] + (k + 0.5) * STYLE.meta.line, STYLE.meta.size))}" class="meta">${renderRich(l)}</text>`);
+  return `<g class="fl-note${tag.off}"${tag.attr}><rect x="${r(note.x)}" y="${r(note.y)}" width="${r(note.w)}" height="${r(note.h)}" rx="${RADIUS.md}" class="note-box"/>${lines.join('')}</g>`;
 }

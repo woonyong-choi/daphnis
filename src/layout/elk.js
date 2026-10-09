@@ -8,6 +8,7 @@ import { isBodyShape, outerBox, spreadBodyPorts } from './ports.js';
 const SPACE = values.space;
 const SIZE = values.size;
 const ELK_DIRECTION = { right: 'RIGHT', down: 'DOWN' };
+const SINGLE_LAYER_OPTIONS = Object.freeze({ 'elk.layered.layering.strategy': 'COFFMAN_GRAHAM', 'elk.layered.layering.coffmanGraham.layerBound': '1', 'elk.layered.nodePlacement.strategy': 'SIMPLE' });
 // 라벨을 선 위 가운데에 얹는다. 라벨마다 주는 elkjs 선택 사항이다.
 const LABEL_OPTIONS = { 'elk.edgeLabels.inline': 'true', 'elk.edgeLabels.placement': 'CENTER' };
 
@@ -34,12 +35,23 @@ function edgesByContainer({ containers, pieces, edges, isSafe }, figure) {
     list.forEach((p, k) => {
       // 번호만 있는 알약은 선을 다 그린 뒤 얹으므로(read.js) 자리를 요구하지 않는다. 안전 배치는 얹을 자리가 없을 때의 대비라 알약도 자리를 받는다.
       const labels = p.hasLabel && (edge.label !== undefined || (hasPill(edge) && (isSafe || !isOnLinePill(edge)))) && !isBeside(edge, containers.get(p.container)) ? [{ id: `label::${index}`, text: edge.label ?? String(edge.no), ...sizeOf(sizePill(edge.label, edge.no)), layoutOptions: LABEL_OPTIONS }] : [];
+      labels.push(...multiplicityLabels(edge, k, list.length));
       const room = figure.chipRoom?.get(index);
       if (room !== undefined) labels.push(roomLabel(`room::${index}::${k}`, room, containers.get(p.container).direction));
       byContainer.get(p.container).push({ id: `${index}::${k}`, sources: [p.from], targets: [p.to], labels });
     });
   }
   return byContainer;
+}
+
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = 다중성 표시 글자 수
+// basis: estimate
+function multiplicityLabels(edge, index, count) {
+  return [['from', index === 0, 'TAIL'], ['to', index === count - 1, 'HEAD']].flatMap(([end, isEnd, placement]) => {
+    const text = edge[`${end}Multiplicity`];
+    return isEnd && text !== undefined ? [{ id: `multiplicity::${edge.index}::${end}`, text, ...sizeOf(sizePill(text)), layoutOptions: { 'elk.edgeLabels.inline': 'false', 'elk.edgeLabels.placement': placement } }] : [];
+  });
 }
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -140,7 +152,12 @@ function cycleStrategy(c, ctx) {
 
 function rootOptions(figure) {
   const pad = FIGURE_PAD;
-  return { 'elk.padding': `[top=${pad},left=${pad},bottom=${pad},right=${pad}]`, ...(figure.aspect !== undefined ? wrapOptions(figure.aspect) : {}) };
+  return {
+    'elk.padding': `[top=${pad},left=${pad},bottom=${pad},right=${pad}]`,
+    ...(figure.aspect !== undefined ? wrapOptions(figure.aspect) : {}),
+    // 한 층에 하나씩 놓는 후보는 이어지지 않은 도형도 같은 줄에 쌓는다. 덩어리를 따로 나란히 놓으면 좁은 목표 폭에 드는 후보가 될 수 없다.
+    ...(figure.oneNodePerLayer ? { ...SINGLE_LAYER_OPTIONS, 'elk.separateConnectedComponents': 'false' } : {}),
+  };
 }
 
 // cost: time O(n), heap O(1), stack O(1)
@@ -150,8 +167,8 @@ function groupOptions(c, ctx) {
   return {
     // 제목이 선을 비킬 자리가 없던 그룹은 오른쪽 안쪽 여백을 제목 덩어리만큼 넓혀, 선 오른쪽 끝 너머에 제목이 설 자리를 만든다.
     'elk.padding': `[top=${SIZE.group.title + SPACE['6']},left=${SPACE['12']},bottom=${SPACE['12']},right=${SPACE['12'] + (ctx.figure.wideGroups?.has(c.id) ? groupTitleWidth(c) : 0)}]`,
-    // 그룹 안은 연결점에서 도형까지 선이 곧게 가도록 네트워크 심플렉스 배치로 놓는다(그룹 모서리로 도는 선을 줄인다). 선이 붙는 그림 검사에 걸리면 안전 배치가 기본 배치로 다시 놓는다.
-    ...(ctx.isSafe ? {} : { 'elk.layered.nodePlacement.strategy': 'NETWORK_SIMPLEX' }),
+    // 그룹 안은 연결선을 모으는 네트워크 심플렉스를 쓴다. 좁은 후보에서는 세로 그룹만 한 층씩 놓고, 명시한 가로 방향은 유지한다. 안전 배치는 기본 전략을 쓴다.
+    ...(ctx.isSafe ? {} : ctx.figure.compactGroups && c.direction === 'down' ? SINGLE_LAYER_OPTIONS : { 'elk.layered.nodePlacement.strategy': 'NETWORK_SIMPLEX' }),
     'elk.nodeSize.constraints': 'MINIMUM_SIZE',
     'elk.nodeSize.minimum': `(${minGroupWidth(c)}, ${SIZE.group.title})`,
     ...alignOf(c.parent, ctx),

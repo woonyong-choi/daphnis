@@ -1,4 +1,4 @@
-/* 재생기 틀과 조작 막대. iframe 안(html.embedded)에서는 테두리와 바깥 여백을 뺀다. */
+/* 재생기 틀, 도구 막대, 장면 탭. iframe 안(html.embedded)에서는 테두리와 바깥 여백을 뺀다. */
 /* 그림 표시 폭 규칙: 문서 미리보기, 목록 카드, 재생기가 같다. 컨테이너 폭은 화면 폭에서 좌우 바깥 여백(simple2.page-gutter)을 뺀 값이고,
    그림 폭은 min(표준 캔버스 폭, 컨테이너 폭)이다. 컨테이너 안쪽에는 좌우 여백과 레이아웃을 차지하는 테두리를 두지 않아 세 곳의 그림 폭이 같다. */
 :root {
@@ -14,10 +14,10 @@ body {
   background: var(--color-page);
 }
 
-/* 목록 쪽 카드 안은 틀이 카드 너비를 다 채워 양옆이 비치지 않게 하고, 바탕은 재생기 쪽과 같은 색으로 둔다. */
+/* 본문이나 목록 카드에 삽입된 재생기(iframe)는 둘러싼 면 위에 그대로 놓인다. 바탕을 칠하지 않고 바깥 여백이 없어 그림이 본문 흐름에 붙는다. */
 html.embedded body {
   padding: 0;
-  background: var(--color-page);
+  background: transparent;
 }
 
 .fl-figure {
@@ -32,11 +32,27 @@ html.embedded body {
 
 html.embedded .fl-figure {
   max-width: none;
+  background: transparent;
   border-radius: 0;
   box-shadow: none;
 }
 
-/* 그림의 바탕은 SVG와 같고, 조작 줄은 카드의 흰 면으로 구분한다. */
+html.embedded .fl-figure.full {
+  background: var(--color-page);
+}
+
+/* 장면 탭은 그림 바로 아래 가운데에 놓는다. 본문에 삽입된 재생기도 같다. */
+html.embedded .fl-foot {
+  position: static;
+  padding: var(--space-4) 0 0;
+  background: transparent;
+}
+
+/* 그림의 바탕은 SVG와 같다. 도구 막대는 이 면 위 오른쪽 위에 뜬다. */
+.fl-surface {
+  position: relative;
+}
+
 .fl-canvas {
   padding: var(--space-6) 0;
   background: var(--simple2-canvas-fill);
@@ -44,85 +60,58 @@ html.embedded .fl-figure {
   overflow: auto;
 }
 
-/* 그림은 표준 캔버스 폭 아래로 줄이지 않는다. 화면 높이에 맞춰 줄이지도 않는다. 세로로 긴 그림은 페이지가 길어지고(조작 막대는 화면 아래에 붙어 따라온다),
-   화면 폭이 캔버스 폭보다 좁으면 그림 영역이 가로로 스크롤된다. 줄이면 글자가 가장 작은 글 토큰(size.text.9)보다 작아져 읽히지 않기 때문이다. */
-.fl-canvas svg {
-  display: block;
-  width: auto;
-  height: auto;
-  min-width: var(--figure-canvas, var(--size-figure-canvas));
+.fl-scroll-hint {
+  margin: var(--space-3) 0;
+  font-size: var(--size-text-13);
+  color: var(--color-muted);
+}
+
+.fl-canvas:focus-visible {
+  outline: var(--border-tag) solid var(--color-ui-focus);
+  outline-offset: calc(-1 * var(--border-tag));
+}
+
+/* 판 묶음: 판마다 구역 하나(SVG 한 장)이고 위에서 아래로 쌓인다. 묶음 폭은 보기 영역 폭(표준 캔버스 폭 이하)이다.
+   판의 표시 폭은 보기 폭(--view-w)에 대한 판 상자 폭(--panel-w)의 비율이다. 장면의 읽을 수 있는 폭(--min-w)보다는 작아지지 않는다.
+   그보다 좁은 화면에서는 그림 전체를 줄이지 않고 그 판만 구역 안에서 가로로 밀린다. 판마다 따로 밀리므로 좁은 판은 그대로 들어온다. */
+.dp-panels {
+  width: min(100%, var(--figure-canvas, var(--size-figure-canvas)));
   margin: 0 auto;
 }
 
-/* 조작 막대와 설명 줄은 한 가운데 축을 쓴다. 위아래 안쪽 여백이 같고, 막대와 설명 사이는 한 칸(space-6)이다. */
+.dp-panel {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.dp-panel:focus-visible {
+  outline: var(--border-tag) solid var(--color-ui-focus);
+  outline-offset: calc(-1 * var(--border-tag));
+}
+
+.dp-panel > svg {
+  display: block;
+  width: max(calc(100% * var(--panel-w) / var(--view-w)), var(--min-w));
+  height: auto;
+  margin: 0 auto;
+}
+
+/* 마커 정의만 담은 보이지 않는 SVG. 판 SVG들이 이 정의를 문서 id로 쓴다. */
+.dp-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* 장면이 둘 이상일 때만 보이는 탭 줄이다(없으면 hidden). 좁은 화면에서는 탭이 줄바꿈되어 잘리지 않는다. */
 .fl-foot {
-  position: sticky;
-  bottom: 0;
+  position: relative;
   z-index: var(--z-raised);
   display: grid;
-  gap: var(--space-6);
   justify-items: center;
   padding: var(--simple2-page-gutter);
   background: var(--color-page);
-}
-
-/* 장면 선택과 재생 조작을 두 줄로 나눠 좁은 화면에서도 탭 너비를 확보한다. */
-.fl-bar {
-  display: grid;
-  width: 100%;
-  gap: var(--simple2-control-gap);
-  justify-items: center;
-}
-
-.fl-transport {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--simple2-control-gap);
-  align-items: center;
-  justify-content: center;
-}
-
-.fl-transport .fl-pause {
-  display: flex;
-  gap: var(--space-2);
-  padding: 0;
-  color: var(--color-state-active-text);
-}
-
-.fl-play-symbol {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: var(--size-control-outer);
-  height: var(--size-control-outer);
-}
-
-.fl-repeat[aria-pressed='true'] {
-  color: var(--color-state-active-text);
-  background: var(--color-card-on);
-}
-
-/* 현재 장면의 시간은 조작부와 분리한 수평 진행선에 표시한다. */
-.fl-pause {
-  position: relative;
-}
-
-.fl-ring {
-  display: block;
-  width: var(--simple2-progress-width);
-  height: var(--simple2-progress-stroke);
-  background: var(--simple2-separator);
-  pointer-events: none;
-}
-
-.fl-ring-fill {
-  fill: none;
-  stroke: var(--color-ui-progress);
-}
-
-.fl-pause-icon {
-  display: grid;
-  place-items: center;
 }
 
 .fl-round {
@@ -133,7 +122,6 @@ html.embedded .fl-figure {
   height: var(--size-control-outer);
   padding: 0 var(--space-2);
   font: var(--simple2-control) var(--font-sans);
-  font-variant-numeric: tabular-nums;
   white-space: nowrap;
   color: var(--color-muted);
   background: transparent;
@@ -146,13 +134,17 @@ html.embedded .fl-figure {
   flex-wrap: wrap;
   gap: var(--space-1);
   justify-content: center;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .fl-tabs button {
   position: relative;
   display: grid;
   place-items: center;
+  max-width: 100%;
   padding: 0 var(--space-7);
+  overflow-wrap: anywhere;
 }
 
 /* 백틱으로 감싼 글. 코드 글꼴로 그린다. */
@@ -161,21 +153,48 @@ html.embedded .fl-figure {
   letter-spacing: normal;
 }
 
-.fl-caption {
-  max-width: var(--size-player-caption-max);
-  min-height: calc(var(--size-text-13) * var(--leading-normal));
-  margin: 0;
-  font-size: var(--size-text-13);
-  line-height: var(--leading-normal);
-  text-align: center;
-  color: var(--color-muted);
+/* 도구 막대: 내려받기, 전체 화면(맨 오른쪽). 마우스는 그림에 올리거나 키보드 초점이 들어올 때 서서히 나타나고, 터치(손가락)에서는 늘 보인다. */
+.fl-view-tools {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: var(--z-raised);
+  display: flex;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background: var(--color-card);
+  border: var(--border-thin) solid var(--simple2-separator);
+  border-radius: var(--simple2-control-radius);
+  box-shadow: var(--simple2-shadow);
+  opacity: 0;
+  transition: opacity var(--duration-fast);
 }
 
-.fl-full {
-  position: absolute;
-  top: var(--space-5);
-  right: var(--space-5);
-  z-index: var(--z-raised);
+.fl-figure:hover .fl-view-tools,
+.fl-figure:has(:focus-visible) .fl-view-tools {
+  opacity: 1;
+}
+
+.fl-view-tools .fl-round {
+  min-width: var(--size-control-inner);
+  height: var(--size-control-inner);
+}
+
+/* 터치에서는 도구 막대가 늘 보이므로 그림 위에 겹치지 않도록 그 높이만큼 자리를 비운다. */
+@media (hover: none), (pointer: coarse) {
+  .fl-view-tools {
+    opacity: 1;
+  }
+
+  .fl-surface {
+    padding-top: calc(var(--size-control-inner) + var(--space-3) * 3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fl-view-tools {
+    transition: none;
+  }
 }
 
 .fl-figure.full {
@@ -188,97 +207,102 @@ html.embedded .fl-figure {
   border-radius: 0;
 }
 
-.fl-figure.full .fl-canvas {
-  display: grid;
+.fl-figure.full .fl-surface {
+  display: flex;
   flex: 1;
-  place-items: center;
+  flex-direction: column;
+  min-height: 0;
 }
 
-.fl-figure.full .fl-canvas svg {
-  width: 100%;
-  min-width: 0;
-  height: calc(100vh - var(--size-player-embedded-chrome));
-  max-height: none;
+.fl-figure.full .fl-canvas {
+  position: relative;
+  display: block;
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+  overflow: auto;
   touch-action: none;
   user-select: none;
 }
 
-.fl-figure.full.zoomed .fl-canvas svg {
+/* 전체 화면: 판 묶음은 그림 전체가 영역에 들어가는 폭(--fit-w, 재생기가 잰다)에 확대 배수(--zoom)를 곱한 폭이고, 영역이 넘치면 스크롤된다.
+   읽을 수 있는 폭을 지키지 않는다. 글자를 키우는 일은 확대가 맡는다. 판 폭의 분모는 문서 안의 보기 폭이 아니라 묶음의 실제 폭(--bundle-w)이다. 판은 구역 안에서 따로 밀리지 않고 묶음 폭을 그대로 채운다. */
+.fl-figure.full .dp-panels {
+  width: calc(var(--fit-w, 100%) * var(--zoom, 1));
+  max-width: none;
+}
+
+.fl-figure.full .dp-panel {
+  overflow: visible;
+}
+
+.fl-figure.full .dp-panel > svg {
+  width: calc(100% * var(--panel-w) / var(--bundle-w, var(--view-w)));
+}
+
+/* 가로 화면에서도 탭이 그림 공간을 모두 차지하지 않게 하고, 많은 탭은 안에서 이동한다. */
+.fl-figure.full .fl-foot {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  max-height: 50%;
+  overflow: auto;
+}
+
+.fl-figure.full.zoomed .fl-canvas {
   cursor: grab;
 }
 
-.fl-figure.full.zoomed .fl-canvas svg:active {
+.fl-figure.full.zoomed .fl-canvas:active {
   cursor: grabbing;
 }
 
-/* 확대·축소는 전체 화면에서만 보인다. 문서 안에서는 그림을 그대로 보이는 편이 읽기 쉽다. */
+/* 확대·축소는 전체 화면에서만 보인다. 문서 안에서는 그림을 그대로 보이는 편이 읽기 쉽다. 도구 막대 바로 아래에 같은 면으로 붙는다. */
 .fl-zoom {
   position: absolute;
-  top: calc(var(--space-5) + var(--size-control-outer) + var(--space-3));
-  right: var(--space-5);
-  z-index: var(--z-raised);
+  top: calc(100% + var(--space-3));
+  right: 0;
   display: none;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background: var(--color-card);
+  border: var(--border-thin) solid var(--simple2-separator);
+  border-radius: var(--simple2-control-radius);
+  box-shadow: var(--simple2-shadow);
 }
 
 .fl-figure.full .fl-zoom {
   display: flex;
 }
 
-/* 내용이 없는 카드는 틀도 보이지 않는다(그리는 쪽이 opacity 0). 흐름 그림은 내용이 있어도 켜진 색은 아니라 filled가 따로 있다. */
+/* 내용이 없는 카드는 틀도 보이지 않는다(그리는 쪽이 opacity 0). 내용이 찬 카드는 중립 면과 경계 그대로이고, 지금 단계는 바깥 도형 윤곽이, 값이 바뀐 줄은 짧은 배경 면이 알린다. */
 .fl .fl-card.filled {
   opacity: 1;
 }
 
-.fl .fl-card.on {
-  fill: var(--color-card-on);
-  stroke: var(--color-state-active);
+.fl .fl-edge.is-current {
+  color: var(--color-state-active);
 }
 
-.fl .fl-edge.is-current .fl-path,
-.fl .fl-edge.hover .fl-path {
-  stroke: var(--color-state-active);
-  stroke-width: var(--border-edge);
+/* 고정 라벨 알약은 늘 보인다. 점이 올라 있는 동안 알약의 테두리와 글자가 활성 색이고, 점이 떠난 뒤 재생기가 쓰는 세기(--pill-tint, 1에서 0)만큼 중립 색으로 돌아온다.
+   불투명도는 건드리지 않는다. 세기는 시각마다 재생기가 정한 값이다. */
+.fl .fl-edge .pill {
+  stroke: color-mix(in srgb, var(--color-state-active) calc(var(--pill-tint, 0) * 100%), var(--simple2-separator));
 }
 
-.fl .fl-edge.is-current .fl-path[marker-end],
-.fl .fl-edge.hover .fl-path[marker-end] {
-  marker-end: url("#fl-arrow-on");
-}
-
-.fl .fl-edge.is-current .fl-path[marker-start],
-.fl .fl-edge.hover .fl-path[marker-start] {
-  marker-start: url("#fl-arrow-on");
-}
-
-.fl .fl-edge.on .fl-pill rect {
-  fill: var(--color-card);
-  stroke: var(--simple2-separator);
-}
-
-.fl .fl-edge.on .fl-pill text {
-  fill: var(--color-muted);
+.fl .fl-edge .edgelabel {
+  fill: color-mix(in srgb, var(--color-state-active) calc(var(--pill-tint, 0) * 100%), var(--color-muted));
 }
 
 .fl .fl-packet > circle:first-child {
   opacity: 0;
 }
 
-.fl .fl-path,
-.fl .fl-stroke,
-.fl .grid-cell,
-.fl .fl-pill rect {
-  transition: stroke var(--duration-fast), stroke-width var(--duration-fast), fill var(--duration-fast);
-}
+/* 선, 도형 윤곽, 카드 내용 층, 바뀐 값의 배경 면의 켜짐과 줄어듦은 재생기가 시각마다 정한 상태라 전환을 걸지 않는다. 같은 장면, 같은 시각의 모습이 실제 시간이나 앞 기록에 따르지 않고,
+   카드 내용 층은 바뀐 순간에 새 층만 보여 접근성 트리와 화면이 같다. 도착 후광(.fl-pulse)은 figure.css, 차트 표식 겹침(.fl-mark-pulse)은 칠을 요소가 직접 싣는다. */
 
-.fl .fl-layer,
-.fl .fl-edge.quiet {
-  transition: opacity var(--duration-fast);
-}
-
-/* 조용한 선은 지금 단계에서 쓰거나 마우스를 올린 도형에 닿을 때만 보인다. */
-.fl .fl-edge.quiet:not(.on, .hover) {
+/* 조용한 선은 지금 단계에서 쓸 때만 보인다. 도형에 마우스를 올려도 켜지지 않는다. */
+.fl .fl-edge.quiet:not(.on) {
   opacity: 0;
 }
 
@@ -290,22 +314,6 @@ html.embedded .fl-figure {
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .fl .fl-path,
-  .fl .fl-stroke,
-  .fl .grid-cell,
-  .fl .fl-pill rect,
-  .fl .fl-layer,
-  .fl .fl-edge.quiet {
-    transition: none;
-  }
-}
-
-.fl .fl-group.on .fl-stroke {
-  stroke: var(--color-state-active);
-  stroke-width: var(--simple2-node-stroke);
-}
-
 .fl .fl-part.on .part-bg {
   fill: var(--color-card-on);
 }
@@ -314,57 +322,7 @@ html.embedded .fl-figure {
   fill: var(--simple2-row-selection);
 }
 
-.fl .fl-part.on .grid-ring {
-  stroke: var(--color-state-active);
-  stroke-width: var(--simple2-node-stroke);
-}
-
-/* hidden 속성이 display: grid 같은 규칙에 지지 않게 한다. 시간 흐름 없는 그림의 빈 조작 막대를 숨기기 위해서다. */
+/* hidden 속성이 display: grid 같은 규칙에 지지 않게 한다. 장면이 하나뿐이거나 시간 흐름이 없는 그림의 빈 탭 줄을 숨기기 위해서다. */
 [hidden] {
   display: none !important;
-}
-
-/* 큰 원형 재생 면은 유지하고 시간 진행 선은 단추 밖의 별도 줄에 둔다. */
-.fl-play-symbol::before {
-  position: absolute;
-  width: var(--simple2-play-face);
-  height: var(--simple2-play-face);
-  background: var(--simple2-play-fill);
-  border-radius: var(--radius-full);
-  content: '';
-}
-
-.fl-pause .fl-pause-icon {
-  position: relative;
-  color: var(--simple2-play-ink);
-}
-
-.fl-pause:hover .fl-play-symbol::before {
-  background: var(--color-state-active);
-}
-
-.fl-pause:active .fl-play-symbol::before {
-  background: var(--color-state-active-fill);
-}
-
-.fl-pause-icon svg {
-  fill: currentColor;
-  stroke: none;
-}
-
-.fl-pause:hover,
-.fl-pause:active {
-  background: transparent;
-}
-
-.fl-context {
-  display: grid;
-  gap: var(--space-3);
-  justify-items: center;
-}
-
-.fl-position {
-  font-size: var(--simple2-caption);
-  font-variant-numeric: tabular-nums;
-  color: var(--color-muted);
 }

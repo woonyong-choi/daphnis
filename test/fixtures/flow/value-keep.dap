@@ -1,0 +1,25 @@
+daphnis 2
+title "값 유지와 읽기"
+box web "웹"
+box api "API"
+store db "DB"
+queue jobs "대기열" slots=6
+value count "요청 수" on=api
+value last "마지막 값" on=api from=none
+value copy "복사본" on=db from=0
+value shown "화면 값" on=db ref=count
+on api count+1
+on db copy:=count, last:=copy
+web -> api
+api -> db
+api -> jobs
+
+scene "처음" mode=once
+  web -> api "요청" set="last=web, jobs:=count"
+  api -> db "저장" set="copy:=last"
+
+scene "이어서" mode=once keep="count, last" set="copy=100, jobs=1"
+  web -> api "요청" set="last:=copy"
+
+scene "재설정" mode=once set="count:=jobs"
+  api -> db "저장"

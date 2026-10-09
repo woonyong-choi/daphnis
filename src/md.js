@@ -2,10 +2,8 @@
 
 /** 이미지 줄 끝의 표시. 이 표시가 붙은 줄만 이 도구가 만든 줄로 보고 갱신하거나 지운다. */
 export const IMAGE_MARK = '<!-- dap -->';
-// 옛 표시(`<!-- muto -->`)가 붙은 줄도 이 도구가 만든 줄로 보고 새 표시로 고쳐 쓴다.
-const MARKED_IMAGE = /^\s*!\[.*\]\(.*\)<!-- (?:dap|muto) -->\s*$/;
-/** 옛 울타리 언어 이름. 계속 읽고 폐기 안내를 낸다. */
-export const LEGACY_FENCE = 'muto';
+// 다른 표시가 붙은 이미지 줄은 사용자 줄이다. 이 도구가 갱신하거나 지우지 않는다.
+const MARKED_IMAGE = /^\s*!\[.*\]\(.*\)<!-- dap -->\s*$/;
 // 인용 표시(`>`)가 앞에 있어도 울타리를 읽는다. 1번 묶음은 인용 표시와 그 뒤 공백 하나, 2번은 목록 들여쓰기다.
 const FENCE_OPEN = /^((?:[ \t]*>[ \t]?)*)(\s*)(`{3,}|~{3,})(.*)$/;
 const BLOCK_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -54,10 +52,10 @@ function closesFence(line, open) {
 // cost: time O(t), heap O(t), stack O(1)
 // vars: t = 설명 글자의 낱말 수
 // basis: estimate
-// `dap name=flow` 설명 글자를 읽는다. dap(옛 muto) 울타리가 아니면 undefined, 형식이 틀리면 { error }다. fence는 쓴 언어 이름이다.
+// `dap name=flow` 설명 글자를 읽는다. dap 울타리가 아니면 undefined, 형식이 틀리면 { error }다. fence는 쓴 언어 이름이다.
 function parseInfo(info) {
   const [first, ...options] = info.split(/\s+/);
-  if (first !== 'dap' && first !== LEGACY_FENCE) return undefined;
+  if (first !== 'dap') return undefined;
   let name;
   for (const option of options) {
     const value = /^name=(.+)$/.exec(option)?.[1];
@@ -85,7 +83,7 @@ function addBlock(found, open, { lines, close }) {
   if (info?.error) found.errors.push({ line: open.at + 1, message: info.error });
   else if (info) {
     const { at, leader, quote, indent } = open;
-    found.blocks.push({ name: info.name, legacy: info.fence === LEGACY_FENCE, source: dedent(lines.slice(at + 1, close), open.ctx), open: at, close, indent, leader, quote });
+    found.blocks.push({ name: info.name, source: dedent(lines.slice(at + 1, close), open.ctx), open: at, close, indent, leader, quote });
   }
 }
 

@@ -13,12 +13,12 @@ import { toSvg } from '../src/svg.js';
 import { runCli as run, withFolder } from './helpers.js';
 
 // 선언 수는 같고 논리 크기만 n×n인 격자. 칸은 셋(하나, 합친 칸 하나, 생략 칸 하나)이다.
-const sparse = (n) => `flow right\ngrid g "큰 격자" rows=${n} cols=${n} {\n  item a "A"\n  item b "B" row=1 col=1 rows=2 cols=3\n  gap skip "…" count=5 row=${Math.floor(n / 2)} cols=2\n}\n`;
+const sparse = (n) => `daphnis 2\ngrid g "큰 격자" rows=${n} cols=${n} {\n  item a "A"\n  item b "B" row=1 col=1 rows=2 cols=3\n  gap skip "…" count=5 row=${Math.floor(n / 2)} cols=2\n}\n`;
 // 칸이 n×n 모두 있는 빽빽한 격자
 const dense = (n, name = 'g') => `grid ${name} "빽빽" rows=${n} cols=${n} {\n${Array.from({ length: n * n }, (_, k) => `  item c${k} "${k % 10}" row=${Math.floor(k / n)} col=${k % n}`).join('\n')}\n}\n`;
-const denseFigure = (n, grids = 1) => `flow right\n${Array.from({ length: grids }, (_, k) => dense(n, `g${k}`)).join('')}`;
-// 빽빽한 10×10 격자 하나: 틀 2 + 칸 100×5
-const TEN_BY_TEN = 502;
+const denseFigure = (n, grids = 1) => `daphnis 2\n${Array.from({ length: grids }, (_, k) => dense(n, `g${k}`)).join('')}`;
+// 빽빽한 10×10 격자 하나: 틀 2 + 칸 100×3 (묶음, 사각형, 글 줄)
+const TEN_BY_TEN = 302;
 
 // cost: time O(build), heap O(out), stack O(1)
 // vars: build = 그림 하나를 만드는 비용, out = 결과 글자 수
@@ -91,7 +91,7 @@ test('buildFigure_grid_budget_counts_the_path_commands_of_the_merged_empty_area_
 
 // 근거: 이슈 #28 완료 조건 "작은 예산을 준 시험에서 대량 할당 전에 실패한다": 크기를 정하는 단계가 실패하는 입력도 예산 오류가 먼저다
 test('buildFigure_grid_budget_is_checked_before_the_grid_is_sized', async () => {
-  const huge = 'flow right\ngrid g "크다" rows=9007199254740991 cols=9007199254740991 {\n  item a "A"\n}\n';
+  const huge = 'daphnis 2\ngrid g "크다" rows=9007199254740991 cols=9007199254740991 {\n  item a "A"\n}\n';
 
   assert.deepEqual((await failureOf(huge, { budget: { 'grid-elements': 1 } })).map((p) => p.code), ['budget-exceeded']);
   assert.deepEqual((await failureOf(huge)).map((p) => p.code), ['syntax']);
@@ -99,17 +99,17 @@ test('buildFigure_grid_budget_is_checked_before_the_grid_is_sized', async () => 
 
 // 근거: 이슈 #28 구현 기준 "좌표와 크기 계산의 유한성을 검사하고 처리할 수 없는 정밀도는 해당 줄의 진단으로 알린다"
 test('buildFigure_grid_beyond_the_exact_coordinate_range_is_a_line_error_not_a_crash', async () => {
-  const source = 'flow right\n\ngrid g "크다" rows=1000000000000 cols=3 {\n  item a "A"\n}\n';
+  const source = 'daphnis 2\n\ngrid g "크다" rows=1000000000000 cols=3 {\n  item a "A"\n}\n';
   const problems = await failureOf(source);
 
   assert.deepEqual(problems.map((p) => p.line), [3]);
   assert.match(problems[0].message, /grid "g" \(rows=1000000000000, cols=3\) would be about .* px, beyond the 1099511627776 px/);
-  assert.equal((await buildFigure('flow right\ngrid g "큼" rows=100000000 cols=100000000 {\n  item a "A"\n}\n')).scene.items.length, 1);
+  assert.equal((await buildFigure('daphnis 2\ngrid g "큼" rows=100000000 cols=100000000 {\n  item a "A"\n}\n')).scene.items.length, 1);
 });
 
 // 근거: 이슈 #28 구현 기준 "인덱스 합산이 안전한 정수를 넘으면 해당 줄의 진단"
 test('buildFigure_grid_cell_index_sums_beyond_the_safe_integer_range_are_line_errors', async () => {
-  const source = 'flow right\ngrid g "격자" rows=9007199254740991 cols=2 {\n  item a "A" row=9007199254740990 rows=3\n  item b "B" row=0\n}\n';
+  const source = 'daphnis 2\ngrid g "격자" rows=9007199254740991 cols=2 {\n  item a "A" row=9007199254740990 rows=3\n  item b "B" row=0\n}\n';
   const problems = await failureOf(source);
 
   assert.deepEqual(problems.map((p) => p.line), [3]);
@@ -179,8 +179,8 @@ test('findOverlaps_pairs_each_later_cell_with_an_earlier_cell_it_overlaps', () =
 test('gridCost_counts_elements_and_path_commands_from_the_declaration', () => {
   const cells = [{ kind: 'item', row: 0, col: 0, rows: 1, cols: 1 }, { kind: 'gap', row: 1, col: 0, rows: 1, cols: 1 }];
 
-  assert.deepEqual(gridCost({ rows: 2, cols: 1, cells }), { elements: 2 + 5 + 3, pathCommands: 0 });
-  assert.deepEqual(gridCost({ rows: 2, cols: 2, cells: [{ kind: 'item', row: 0, col: 0, rows: 2, cols: 1 }] }), { elements: 2 + 5 + 3, pathCommands: 5 });
+  assert.deepEqual(gridCost({ rows: 2, cols: 1, cells }), { elements: 2 + 3 + 3, pathCommands: 0 });
+  assert.deepEqual(gridCost({ rows: 2, cols: 2, cells: [{ kind: 'item', row: 0, col: 0, rows: 2, cols: 1 }] }), { elements: 2 + 3 + 3, pathCommands: 5 });
 });
 
 // 근거: 설계 grid.md 빈 칸 표현: 무늬 칸은 통로 높이를 포함하고, 구간 경로는 선 굵기 절반만큼 넓어진다
@@ -236,7 +236,7 @@ test('main_budget_option_raises_the_limit_and_an_over_budget_figure_writes_no_fi
     const raised = run(['render', 'g.dap', '--budget', `grid-elements=${TEN_BY_TEN}`, '--budget', 'grid-path-commands=5'], folder);
 
     assert.equal(over.status, 1);
-    assert.match(over.stderr, /^g\.dap:2: this figure needs 502 SVG elements drawn by grids, over the budget grid-elements=100.*--budget grid-elements=502/m);
+    assert.match(over.stderr, /^g\.dap:2: this figure needs 302 SVG elements drawn by grids, over the budget grid-elements=100.*--budget grid-elements=302/m);
     assert.deepEqual(readdirSync(folder).filter((f) => f !== 'g.dap' && f !== 'g.svg'), []);
     assert.equal(raised.status, 0, raised.stderr);
     assert.ok(existsSync(join(folder, 'g.svg')));
@@ -256,7 +256,7 @@ test('main_every_figure_command_takes_budget_with_the_same_meaning', () => {
       assert.equal(run([...command, '--budget', big], folder).status, command[0] === 'md' ? 1 : 0, command.join(' '));
     }
     const md = run(['md', 'doc.md', '--budget', small], folder);
-    assert.match(md.stderr, /^doc\.md:5: this figure needs 502/m);
+    assert.match(md.stderr, /^doc\.md:5: this figure needs 302/m);
     assert.equal(run(['md', 'doc.md', '--budget', big], folder).status, 0);
     assert.equal(run(['md', 'doc.md', '--check', '--budget', big], folder).status, 0);
   });
@@ -265,7 +265,7 @@ test('main_every_figure_command_takes_budget_with_the_same_meaning', () => {
 // 근거: 이슈 #28 구현 기준 "조정값 검증": 잘못된 값, 모르는 이름, 값 없음은 인자 오류(종료 2)이고 아무것도 만들지 않는다
 test('main_budget_option_with_a_bad_name_or_value_is_a_usage_error', () => {
   withFolder((folder) => {
-    writeFileSync(join(folder, 'g.dap'), 'flow right\nbox a "A"\n');
+    writeFileSync(join(folder, 'g.dap'), 'daphnis 2\nbox a "A"\n');
     const cases = [['--budget', 'grid-elements=0'], ['--budget', 'grid-elements=1.5'], ['--budget', 'grid-elements=99999999999999999999'], ['--budget', 'nope=1'], ['--budget', 'grid-elements'], ['--budget'], ['--budget', '--strict']];
 
     for (const args of cases) {
@@ -279,7 +279,7 @@ test('main_budget_option_with_a_bad_name_or_value_is_a_usage_error', () => {
 });
 
 const LONG = '참조 비트는 CPU가 접근할 때 켜고 운영체제가 주기적으로 지워 최근에 쓰지 않은 페이지를 교체 후보로 고른다';
-const WRAPPED = `flow right\ngrid g "여러 줄 제목이 들어가는 긴 격자 제목은 폭을 넘으면 줄을 나눈다 ${LONG}" rows=3 cols=3 {\n  item a "${LONG}" cols=2\n  gap s "${LONG}" count=3 row=1\n  item b "짧음" row=2 col=2\n}\n`;
+const WRAPPED = `daphnis 2\ngrid g "여러 줄 제목이 들어가는 긴 격자 제목은 폭을 넘으면 줄을 나눈다 ${LONG}" rows=3 cols=3 {\n  item a "${LONG}" cols=2\n  gap s "${LONG}" count=3 row=1\n  item b "짧음" row=2 col=2\n}\n`;
 
 // 근거: 이슈 #28 결정 "비용을 실제로 늘리는 단위가 예산에서 빠지면 안 된다": 줄 나눔으로 늘어난 글 요소도 센다
 test('buildFigure_grid_budget_counts_the_wrapped_text_lines_so_it_never_undercounts_the_drawn_elements', async () => {

@@ -1,0 +1,20 @@
+daphnis 2
+title "큐 역압"
+subtitle "큐가 가득 차면 생산이 기다리고, 오래 기다리면 시간 초과로 버려진다"
+box prod "생산자"
+queue q "큐" slots=4
+box cons "소비자"
+store dlq "버린 요청"
+value dropped "버린 수" on=dlq
+on dlq dropped+1
+prod -> q
+q -> cons
+prod -> dlq
+
+scene "소비가 느리다" mode=once for=12s
+  track prod -> q "작업" at=0s every=1s time=300ms wait="q<4" reserve="q+1" timeout=900ms else=dlq
+  track q -> cons "소비" at=2500ms every=3s time=300ms when="q>0" set="q-1"
+
+scene "소비가 빨라진다" mode=once for=8s keep="q"
+  track prod -> q "작업" at=0s every=1s time=300ms wait="q<4" reserve="q+1" timeout=900ms else=dlq
+  track q -> cons "소비" at=0s every=500ms time=300ms when="q>0" set="q-1"

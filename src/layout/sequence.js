@@ -1,4 +1,6 @@
 // 순서 그림 배치. 참여자 열과 메시지 행이 정해진 격자라 elkjs를 쓰지 않는다(docs/design/layout.md 순서 그림 배치).
+import { fragmentRows, finishFragments } from './sequence-fragments.js';
+import { placeSequenceLife } from './sequence-life.js';
 import { measure, wrap } from '../measure/fonts.js';
 import { FIGURE_PAD } from '../canvas.js';
 import { STYLE, sizePill } from '../measure/sizes.js';
@@ -22,45 +24,60 @@ const NOTE_CLEAR = SPACE['2'];
 export function layoutSequence(figure, sizes) {
   const participants = figure.nodes;
   const index = new Map(participants.map((p, i) => [p.id, i]));
-  const messages = figure.steps.flatMap((s) => s.beats).filter((b) => b.hops.length);
+  // 메시지는 장면(step)마다 따로 첫 행부터 쌓인다. owners[m]은 메시지 m이 속한 장면 번호다. 한 장면만 보이므로 장면끼리 같은 행을 쓰고, 판 크기는 가장 긴 장면이 정한다.
+  const owned = figure.steps.flatMap((step, si) => step.beats.filter((b) => b.hops.length).map((beat) => ({ beat, si })));
+  const messages = owned.map(({ beat }) => beat);
+  const owners = owned.map(({ si }) => si);
   const noteBoxes = messages.flatMap((beat, m) => beat.notes.map((n) => ({ ...n, m, ...sizeNote(n.text) })));
-  const centers = placeColumns({ participants, sizes, index }, messages, noteBoxes);
+  const fragments = fragmentRows(figure.fragments);
+  for (const frame of fragments.frames) frame.si = owners[frame.first];
+  const centers = placeColumns({ participants, sizes, index }, messages, noteBoxes).map((x) => x + fragments.inset);
   const headH = Math.max(...participants.map((p) => sizes.get(p.id).h + sizes.get(p.id).marginTop + sizes.get(p.id).marginBottom));
   const items = participants.map((p, i) => {
     const size = sizes.get(p.id);
     const bottom = FIGURE_PAD + headH - size.marginBottom;
     return { ...p, ...size, x: centers[i] - size.w / 2, y: bottom - size.h, w: size.w, h: size.h, ports: [] };
   });
-  const rows = layoutRows(messages, noteBoxes, { index, centers, top: FIGURE_PAD + headH + SPACE['12'] });
+  const rows = layoutRows(messages, noteBoxes, { index, centers, sizes, fragments, owners, top: FIGURE_PAD + headH + SPACE['12'] });
   const { edges, notes } = rows;
   const bottom = rows.bottom + SPACE['8'];
   const lifelines = items.map((it) => ({ id: it.id, x: centers[index.get(it.id)], y1: it.y + it.h + it.marginBottom, y2: bottom }));
-  const right = Math.max(...items.map((it) => it.x + it.w), ...notes.map((n) => n.x + n.w), ...edges.flatMap((e) => e.points.map((p) => p.x)));
-  return { items, groups: [], edges, lifelines, notes, width: right + FIGURE_PAD, height: bottom + FIGURE_PAD };
+  const right = Math.max(...items.map((it) => it.x + it.w), ...notes.map((n) => n.x + n.w), ...edges.flatMap((e) => e.points.map((p) => p.x)), ...edges.map((e) => e.labelAt.x + sizePill(e.label).w / 2));
+  const scene = { items, groups: [], edges, lifelines, notes, width: right + FIGURE_PAD, height: bottom + FIGURE_PAD };
+  if (messages.some((beat) => beat.activations || beat.hops[0].create || beat.hops[0].destroy)) placeSequenceLife(scene, messages, owners, figure.steps.length);
+  finishFragments(fragments, scene);
+  return scene;
 }
 
 // cost: time O(m·n), heap O(m + n), stack O(1)
 // vars: m = 메시지 수, n = 메모 수
 // basis: estimate
 // 메시지마다 한 행을 위에서 아래로 쌓는다. 행 높이는 화살표, 라벨, 그 행의 메모가 서로 겹치지 않는 가장 작은 값이다.
+// 장면이 바뀌면 행 커서가 처음 행으로 돌아간다. 아래 끝(bottom)은 가장 긴 장면의 끝이라 모든 장면에서 판 크기와 생명선 길이가 같다. 메시지와 메모에는 장면 번호(si)가 붙는다.
 function layoutRows(messages, noteBoxes, ctx) {
   let y = ctx.top;
+  let bottom = ctx.top;
   const edges = [];
   const notes = [];
   messages.forEach((beat, m) => {
+    if (m && ctx.owners[m] !== ctx.owners[m - 1]) {
+      bottom = Math.max(bottom, y);
+      y = ctx.top;
+    }
+    y = ctx.fragments.before(m, y);
     const row = layoutRow(beat, noteBoxes.filter((n) => n.m === m), { ...ctx, m, y });
-    edges.push(row.edge);
-    notes.push(...row.notes);
-    y += row.height;
+    edges.push({ ...row.edge, si: ctx.owners[m] });
+    notes.push(...row.notes.map((note) => ({ ...note, si: ctx.owners[m] })));
+    y = ctx.fragments.after(m, y + row.height);
   });
-  return { edges, notes, bottom: y };
+  return { edges, notes, bottom: Math.max(bottom, y) };
 }
 
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 행의 메모 수
 // basis: estimate
 // 한 행. 메모가 화살표나 그 라벨과 가로로 겹치면 메모를 위에, 화살표와 라벨을 그 아래에 쌓는다. 겹치지 않으면 한 높이에 나란히 둔다.
-function layoutRow(beat, rowNotes, { index, centers, m, y }) {
+function layoutRow(beat, rowNotes, { index, centers, sizes, m, y }) {
   const hop = beat.hops[0];
   const [a, b] = [index.get(hop.from), index.get(hop.to)];
   const isSelf = a === b;
@@ -73,8 +90,9 @@ function layoutRow(beat, rowNotes, { index, centers, m, y }) {
   const selfExtra = isSelf ? SIZE.sequence.row / 2 : 0;
   // 메모 위 여백 + 메모 + 최소 간격 + 라벨 위 간격 + 라벨 + 화살표 아래 여백
   const stack = isStacked ? SPACE['2'] + Math.max(...placed.map((n) => n.h)) + NOTE_CLEAR + pill.h + SPACE['2'] + SPACE['8'] + selfExtra : 0;
-  const height = Math.max(SIZE.sequence.row * (isSelf ? 2 : 1), ...placed.map((n) => n.h + SPACE['8']), stack);
-  const lineY = y + height - SPACE['8'] - selfExtra;
+  const creation = hop.create ? sizes.get(hop.to).h : 0;
+  const height = Math.max(SIZE.sequence.row * (isSelf ? 2 : 1), ...placed.map((n) => n.h + SPACE['8']), stack) + creation;
+  const lineY = y + height - SPACE['8'] - selfExtra - creation / 2;
   const points = isSelf
     ? [{ x: centers[a], y: lineY }, { x: centers[a] + loop, y: lineY }, { x: centers[a] + loop, y: lineY + SPACE['14'] }, { x: centers[a], y: lineY + SPACE['14'] }]
     : [{ x: centers[a], y: lineY }, { x: centers[b], y: lineY }];
@@ -115,7 +133,7 @@ function placeColumns({ participants, sizes, index }, messages, noteBoxes) {
     for (const beat of messages) {
       const hop = beat.hops[0];
       const [a, b] = [index.get(hop.from), index.get(hop.to)].sort((x, y) => x - y);
-      if (b === i && a < i) c = Math.max(c, centers[a] + sizePill(hop.data).w + SPACE['12']);
+      if (b === i && a < i) c = Math.max(c, centers[a] + sizePill(hop.data).w + SPACE['12'] + (hop.create ? half(index.get(hop.to)) : 0));
     }
     centers.push(c);
   }
@@ -127,7 +145,7 @@ function placeColumns({ participants, sizes, index }, messages, noteBoxes) {
 // basis: estimate
 // 메모 상자 크기. 너비 NOTE_MAX에서 줄을 나눈다.
 function sizeNote(text) {
-  const lines = wrap(text, NOTE_MAX - NOTE_PAD * 2, STYLE.row);
-  const w = Math.max(...lines.map((l) => measure(l, STYLE.row.size))) + NOTE_PAD * 2;
-  return { lines, w, h: lines.length * STYLE.row.line + NOTE_PAD * 2 };
+  const lines = wrap(text, NOTE_MAX - NOTE_PAD * 2, STYLE.meta);
+  const w = Math.max(...lines.map((l) => measure(l, STYLE.meta.size))) + NOTE_PAD * 2;
+  return { lines, w, h: lines.length * STYLE.meta.line + NOTE_PAD * 2 };
 }

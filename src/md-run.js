@@ -9,7 +9,7 @@ import { acquireLocks } from './md-lock.js';
 import { ownerOf, ownership, realPath, svgMark } from './md-owner.js';
 import { commitWrites, FILE_IO } from './md-write.js';
 import { makeDiagnostic } from './source/problems.js';
-import { toSvg } from './svg.js';
+import { selectScene, toSvg } from './svg.js';
 import { plainText } from './text.js';
 
 const problem = (message, code = 'md') => makeDiagnostic({ severity: 'error', line: 0, message }, { code });
@@ -54,14 +54,14 @@ function claimTargets(file, targets, { claimed, json }) {
 // cost: time O(b), heap O(b), stack O(1), io b
 // vars: b = 블록 수
 // basis: estimate
-// 쓸 SVG가 이미 있으면 이 문서 것인지 확인한다. 다른 문서 것이거나 표시 없는 파일, 소유를 정할 수 없는 옛 표시 파일이면 그 블록 줄에 오류를 알린다. 오류가 있으면 false다.
+// 쓸 SVG가 이미 있으면 이 문서 것인지 확인한다. 다른 문서 것이거나 `daphnis md v2` 표시가 없는 파일이면 그 블록 줄에 오류를 알린다. 오류가 있으면 false다.
 function checkOwners(file, targets, { owner, json }) {
   let ok = true;
   for (const { block, svg } of targets) {
     if (!existsSync(svg)) continue;
     const found = ownership(svg, owner);
     if (found.kind === 'mine') continue;
-    const who = found.kind === 'other' ? `was made for another document, or its mark does not name this document (${found.text})` : 'has no daphnis md mark, so it is not a figure made by this tool';
+    const who = found.kind === 'other' ? `was made for another document, or its mark does not name this document (${found.text})` : 'has no daphnis md v2 mark, so it is not a figure made by this tool';
     report(file, [{ ...problem(`${svg} already exists and ${who}. Give the block a different name=, or write this document to a different --out-dir`), line: block.open + 1 }], json);
     ok = false;
   }
@@ -76,17 +76,32 @@ async function buildTargets(file, targets, args) {
   const built = [];
   for (const { block, label, svg } of targets) {
     const result = await buildReported(block.source, file, { flags: args.flags, baseDir: dirname(file), lineOffset: block.open + 1, budget: args.budget });
-    built.push(result && { label, svg, block, result });
+    const scene = result ? sceneOf(result, args.scene, { file, block, json: args.flags.has('json') }) : undefined;
+    built.push(scene === undefined ? undefined : { label, svg, block, result, scene });
   }
   return built.includes(undefined) ? undefined : built;
+}
+
+// cost: time O(s), heap O(1), stack O(1)
+// vars: s = 장면 수
+// basis: estimate
+// `--scene` 값을 이 블록의 장면 번호로 바꾼다. 없는 장면이면 블록 줄에 오류를 알리고 undefined다. 장면이 없는 블록은 0이다.
+function sceneOf(result, option, { file, block, json }) {
+  if (!result.timeline.steps.length) return 0;
+  try {
+    return selectScene(result.timeline.steps, option);
+  } catch (error) {
+    report(file, [{ ...problem(`--scene: ${error.message}`), line: block.open + 1 }], json);
+    return undefined;
+  }
 }
 
 // cost: time O(out), heap O(out), stack O(1)
 // vars: out = SVG 글자 수
 // basis: estimate
 // SVG 글에 문서 표시를 넣는다(여는 태그 줄 다음 줄).
-async function svgText({ result, svg }, { args, owner }) {
-  const text = await toSvg(result, { isStatic: args.flags.has('static'), name: basename(svg, '.svg') });
+async function svgText({ result, svg, scene }, { args, owner }) {
+  const text = await toSvg(result, { scene, isStatic: args.flags.has('static'), name: basename(svg, '.svg') });
   const cut = text.indexOf('\n') + 1;
   return `${text.slice(0, cut)}${svgMark(owner)}\n${text.slice(cut)}`;
 }
@@ -123,10 +138,9 @@ function readDocument(file, json) {
 // cost: time O(b), heap O(b), stack O(1)
 // vars: b = 블록 수
 // basis: estimate
-// 블록 형식 오류와 옛 울타리 폐기 안내를 알린다.
+// 블록 형식 오류를 알린다.
 function reportBlocks(file, found, json) {
-  report(file, found.errors.map(({ line, message }) => ({ ...problem(message), line })), json);
-  report(file, found.blocks.filter((block) => block.legacy).map((block) => ({ ...makeDiagnostic({ severity: 'deprecated', line: block.open + 1, message: 'the code block language "muto" is now "dap". Write the fence as ```dap' }, { code: 'deprecated-fence' }) })), json);
+  report(file, found.errors.map(({ line, message, code }) => ({ ...problem(message, code), line })), json);
 }
 
 // cost: time O(1), heap O(1), stack O(1)

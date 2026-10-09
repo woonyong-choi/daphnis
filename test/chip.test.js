@@ -19,8 +19,8 @@ const EXAMPLES = new URL('../examples/', import.meta.url);
 const FIGURE_DIRS = [EXAMPLES, new URL('./fixtures/csapp/', import.meta.url), new URL('./fixtures/layout/', import.meta.url), new URL('./fixtures/chip-reach/', import.meta.url)];
 // 그림 옆 경계에 가까운 선에서 출발하는 이동 글: 글 상자가 판 밖으로 나가려는 원본
 const EDGE_SOURCES = [
-  'flow right\nbox a "A"\nbox b "B"\nbox c "C"\nbox d "D"\na -> b\nb -> c\nc -> d\nstep "보내기"\n  a -> b "왼쪽 끝에서 출발"',
-  'flow down\nbox a "A"\nbox b "B"\nbox c "C"\nbox d "D"\nbox e "E"\na -> b\na -> c\na -> d\na -> e\nstep "보내기"\n  a -> b "왼쪽 아래 도형으로 가는 두 줄짜리 이동 글은 옆으로 밀린다"',
+  'daphnis 2\nbox a "A"\nbox b "B"\nbox c "C"\nbox d "D"\na -> b\nb -> c\nc -> d\nscene "보내기"\n  a -> b "왼쪽 끝에서 출발"\n',
+  'daphnis 2\nbox a "A"\nbox b "B"\nbox c "C"\nbox d "D"\nbox e "E"\na -> b\na -> c\na -> d\na -> e\nview main graph down\nscene "보내기"\n  a -> b "왼쪽 아래 도형으로 가는 두 줄짜리 이동 글은 옆으로 밀린다"\n',
 ];
 const SCENE = { width: 600, height: 300 };
 const CHIP = { w: 100, h: 23 };
@@ -123,7 +123,7 @@ async function chipFigures() {
   const figures = [];
   for (const { file, source } of [...sources, ...EDGE_SOURCES.map((source, i) => ({ file: `edge-${i}`, source }))]) {
     const result = await buildFigure(source, { baseDir: 'examples' });
-    const hops = result.chart ? [] : result.timeline.segs.flatMap((seg) => seg.hops).filter((h) => h.data);
+    const hops = result.timeline.segs.flatMap((seg) => seg.hops).filter((h) => h.data);
     if (hops.length) figures.push({ file, scene: result.scene, hops, tracks: result.timeline.tracks ?? [] });
   }
   return figures;
@@ -157,11 +157,11 @@ test('buildFigure_every_example_and_demo_chip_stays_inside_clear_and_never_jumps
           assert.ok(gap <= values.size.packet['chip-reach'] + 0.5, `${file}: ${Math.round(t)}ms에 흐름 글 상자가 점에서 ${gap.toFixed(1)}px 떨어진다`);
         }
         if (hop.track === undefined) {
-          // 박자 이동은 깨끗한 자리만으로 6할을 못 채울 때만 도형 이름을 가린다. 선 라벨 알약은 어떤 경우에도 가리지 않는다.
-          const pill = names.find((name) => name.isPill && overlaps(box, name));
-          assert.ok(!isVisible || !pill, `${file}: ${Math.round(t)}ms에 이동 글 상자가 알약 ${pill?.name}을 가린다`);
-          const count = counts.get(hop) ?? { seen: 0, clean: 0, hit: 0 };
-          counts.set(hop, { seen: count.seen + 1, clean: count.clean + Number(isVisible && !hit), hit: count.hit + Number(isVisible && Boolean(hit)) });
+          // 박자 이동은 도형 윤곽(isFrame)만, 깨끗한 자리만으로 6할을 못 채울 때에 한해 덮을 수 있다. 글자, 아이콘, 알약, 카드와 큐 안은 어떤 경우에도 가리지 않는다.
+          const hard = names.find((name) => !name.isFrame && overlaps(box, name));
+          assert.ok(!isVisible || !hard, `${file}: ${Math.round(t)}ms에 이동 글 상자가 ${hard?.isPill ? '알약' : hard?.isInner ? '카드 안' : '글자'} ${hard?.name}을 가린다`);
+          const count = counts.get(hop) ?? { seen: 0, clean: 0, hit: 0, file, text: hop.data.join(' ') };
+          counts.set(hop, { ...count, seen: count.seen + 1, clean: count.clean + Number(isVisible && !hit), hit: count.hit + Number(isVisible && Boolean(hit)) });
         } else assert.ok(!isVisible || !hit, `${file}: ${Math.round(t)}ms에 이동 글 상자가 ${hit?.name}을 가린다`);
         assert.ok(!isVisible || (box.x >= -0.5 && box.y >= -0.5 && box.x + box.w <= scene.width + 0.5 && box.y + box.h <= scene.height + 0.5), `${file}: ${Math.round(t)}ms에 판 밖`);
         const center = { x: box.x + box.w / 2, y: box.y + box.h / 2 };
@@ -175,7 +175,7 @@ test('buildFigure_every_example_and_demo_chip_stays_inside_clear_and_never_jumps
     }
   }
   assert.ok(frames > 1000, `잰 프레임 ${frames}개`);
-  for (const { seen, clean, hit } of counts.values()) assert.ok(hit === 0 || clean / seen < 0.6, '가리는 자리는 깨끗한 자리만으로 6할을 못 채울 때만 쓴다');
+  for (const { seen, clean, hit, file, text } of counts.values()) assert.ok(hit === 0 || clean / seen < 0.6, `${file} "${text}": 윤곽을 덮는 자리는 깨끗한 자리만으로 6할을 못 채울 때만 쓴다 (깨끗 ${clean}/${seen}, 가림 ${hit})`);
 });
 
 // 근거: 사용자 결정 "박자 이동의 글 상자는 점이 보이는 시간의 6할 이상 보인다"(글이 정보라서 이동 내내 숨기지 않는다). 흐름은 점 색이 흐름을 구분해 제외
@@ -241,15 +241,16 @@ test('planChip_fades_instead_of_switching_when_every_slide_would_cover_something
   assert.ok(walk.step <= CHIP_STEP_MAX, `속도 ${walk.step}`);
 });
 
-// 근거: 사용자 결정 "글 상자는 이동 구간의 대부분에서 보인다. 붙임 거리 안에서 못 찾으면 점 옆에 둔다"(선 라벨 알약은 가리지 않는다). 반대 사례: 알약이 막으면 숨는다(위 시험)
-test('planChip_shows_the_chip_over_a_shape_name_when_no_clean_place_is_within_reach_but_never_over_a_pill', () => {
-  const wall = [{ x: 30, y: 0, w: 570, h: 300, name: '벽' }];
+// 근거: 사용자 결정 "글 상자는 이동 구간의 대부분에서 보인다. 붙임 거리 안에서 못 찾으면 점 옆에 둔다". 구현(chip-plan.js planWithin)은 이때 도형 윤곽(isFrame)만 덮고 글자와 아이콘(표시 없는 사각형), 카드와 큐 안(isInner, 윤곽 안에 있어 처음 계획은 윤곽으로 이미 피하고 윤곽을 덮는 둘째 계획만 따로 피한다), 알약은 어떤 경우에도 덮지 않는다. 반대 사례: 알약이 막으면 숨는다(위 시험)
+test('planChip_shows_the_chip_over_a_shape_outline_when_no_clean_place_is_within_reach_but_never_over_text_inner_area_or_a_pill', () => {
+  const wall = { x: 30, y: 0, w: 570, h: 300, name: '벽' };
   const move = { route: flattenRoute(LINE_SCENE.edges[0].points), hop: LINE_HOP, chip: sizeChip(LINE_HOP.data) };
+  const shareWith = (...obstacles) => visibleShare(move, planChip(LINE_SCENE, LINE_HOP, obstacles).path);
 
-  const plan = planChip(LINE_SCENE, LINE_HOP, wall);
-
-  assert.ok(visibleShare(move, plan.path) >= 0.6, `보이는 비율 ${visibleShare(move, plan.path)}`);
-  assert.ok(visibleShare(move, planChip(LINE_SCENE, LINE_HOP, [{ ...wall[0], isPill: true }]).path) < 0.6);
+  assert.ok(shareWith({ ...wall, isFrame: true }) >= 0.6, `윤곽만 가로막으면 보이는 비율 ${shareWith({ ...wall, isFrame: true })}`);
+  assert.ok(shareWith(wall) < 0.6, '글자처럼 덮을 수 없는 것이 막으면 숨는다');
+  assert.ok(shareWith({ ...wall, isFrame: true }, { ...wall, isInner: true }) < 0.6, '윤곽 안의 카드와 큐 안은 윤곽을 덮을 때도 덮지 않는다');
+  assert.ok(shareWith({ ...wall, isPill: true }) < 0.6, '알약은 덮지 않는다');
 });
 
 // 근거: 설계 playback.md 요구사항 "이동 글 상자가 ... 바꾸지 않고": 막는 것이 없으면 한 자리에 머문다
@@ -264,10 +265,10 @@ test('planChip_keeps_one_position_for_the_whole_hop_when_nothing_is_in_the_way',
 
 // 근거: 설계 playback.md 요구사항 "SVG와 재생기가 같은 계획을 쓴다"
 test('toHtml_and_toSvg_share_the_chip_plan_from_the_timeline', async () => {
-  const result = await buildFigure(readFileSync(new URL('saturn.dap', EXAMPLES), 'utf8'), { baseDir: 'examples' });
+  const result = await buildFigure(readFileSync(new URL('./fixtures/chip-reach/context.dap', import.meta.url), 'utf8'));
   const hops = result.timeline.segs.flatMap((seg) => seg.hops).filter((hop) => hop.data);
-  const html = await toHtml(result, 'saturn');
-  const svg = await toSvg(result, { name: 'saturn' });
+  const html = await toHtml(result, 'context');
+  const svg = await toSvg(result, { name: 'context' });
 
   assert.ok(hops.length > 0 && hops.every((hop) => hop.chipPath.length >= 2 && hop.chipPath.every((p) => p.length === 4)));
   for (const hop of hops) assert.ok(html.includes(`"chipPath":${JSON.stringify(hop.chipPath, roundedNumbers)}`));
@@ -285,7 +286,7 @@ test('buildFigure_chip_beside_shape_fixture_has_no_check_7_warning', async () =>
 
 // 근거: 버그 #145: 그리드 칸에서 시작하는 이동 글 상자가 칸 글자를 가리지 않는 자리를 찾고 check-7 경고 없이 그려진다
 test('buildFigure_grid_cell_movement_chip_avoids_source_cell_text', async () => {
-  const source = `flow right
+  const source = `daphnis 2
 width wide
 box src "Source"
 grid g "Sparse 40x40" rows=40 cols=40 {
@@ -298,7 +299,7 @@ box dst "Dest"
 src -> g.a
 g.a -> g.big
 g.z -> dst
-step "Move"
+scene "Move" mode=once
  src -> g.a "read" time=1s
  g.a -> g.big "copy" time=1s
  g.z -> dst "write" time=1s`;

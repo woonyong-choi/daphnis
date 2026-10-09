@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import { contrast } from '../src/contrast.js';
 import { valueNames } from '../src/source/grammar.js';
 import { themeColor } from './helpers.js';
+import { isLabelRequired } from './label-required.js';
 
 const THEMES = ['light', 'dark'];
 const GROUP_FACES = ['group-1', 'group-2', 'group-3'];
@@ -25,6 +26,8 @@ test('outline_gray_reaches_contrast_3_on_the_plate_all_group_steps_and_the_node_
 test('outline_paint_steps_reach_contrast_3_on_their_own_fill_the_plate_and_the_node_in_both_themes', () => {
   for (const theme of THEMES) {
     for (const name of valueNames('paint')) {
+      // 노랑 윤곽은 라이트에서 3에 못 미치고 직접 라벨이 뜻을 전한다(범주 팔레트).
+      if (isLabelRequired(theme, name)) continue;
       for (const face of [`paint.${name}.fill`, 'bg', 'node']) {
         const ratio = contrast(themeColor(theme, `paint.${name}.outline`), themeColor(theme, face));
         assert.ok(ratio >= OUTLINE_MIN, `${theme} paint.${name}.outline on ${face}: ${ratio.toFixed(2)}`);

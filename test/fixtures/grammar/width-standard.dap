@@ -1,0 +1,7 @@
+daphnis 2
+width standard
+title "표준 캔버스"
+
+box a "A"
+box b "B"
+a -> b

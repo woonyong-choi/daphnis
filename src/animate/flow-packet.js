@@ -28,7 +28,7 @@ export function visibleSpans(start, hop) {
 export function chipFadeAnimate(clock, start, keys) {
   const timed = keys.map(([at, shown]) => [clock.keyTime(start + at), shown]).filter(([time], i, all) => i === 0 || (time > all[i - 1][0] && time <= 1));
   const full = [...(timed[0][0] > 0 ? [[0, timed[0][1]]] : []), ...timed, ...(timed.at(-1)[0] < 1 ? [[1, timed.at(-1)[1]]] : [])];
-  return `<animate attributeName="opacity" dur="${clock.duration}" repeatCount="indefinite" calcMode="linear" keyTimes="${full.map(([at]) => at).join(';')}" values="${full.map(([, shown]) => ratio(shown)).join(';')}"/>`;
+  return `<animate attributeName="opacity" dur="${clock.duration}" ${clock.smil} calcMode="linear" keyTimes="${full.map(([at]) => at).join(';')}" values="${full.map(([, shown]) => ratio(shown)).join(';')}"/>`;
 }
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -37,7 +37,7 @@ export function chipFadeAnimate(clock, start, keys) {
 export function cutFadeAnimate(clock, start, hop) {
   const end = start + hop.cut;
   const keys = [[0, 1], [clock.keyTime(end - CUT_FADE_MS), 1], [clock.keyTime(end), 0], [1, 0]].filter(([time], i, all) => i === 0 || time > all[i - 1][0]);
-  return `<animate attributeName="opacity" dur="${clock.duration}" repeatCount="indefinite" calcMode="linear" keyTimes="${keys.map(([at]) => at).join(';')}" values="${keys.map(([, shown]) => shown).join(';')}"/>`;
+  return `<animate attributeName="opacity" dur="${clock.duration}" ${clock.smil} calcMode="linear" keyTimes="${keys.map(([at]) => at).join(';')}" values="${keys.map(([, shown]) => shown).join(';')}"/>`;
 }
 
 // cost: time O(l·PACE_SAMPLES), heap O(l·PACE_SAMPLES), stack O(1)

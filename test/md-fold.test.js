@@ -7,8 +7,8 @@ import { findBlocks } from '../src/md.js';
 import { escapeHtml, inspectFold, joinLines, layoutDocument } from '../src/md-fold.js';
 import { runCli as run, withFolder } from './helpers.js';
 
-const FLOW = 'flow right\ntitle "Request path"\nbox a "Client"\nbox b "Server"\na -> b "GET"\nstep "s"\n  a -> b\n';
-const BAR = 'chart bar\ntitle "Latency"\nseries s "S"\nrow "r" s=1\n';
+const FLOW = 'daphnis 2\ntitle "Request path"\nbox a "Client"\nbox b "Server"\na -> b "GET"\nscene "s" mode=once\n  a -> b\n';
+const BAR = 'daphnis 2\ntitle "Latency"\nchart c "Latency" bar {\n  series s "S"\n  row "r" s=1\n}\n';
 const read = (folder, name = 'doc.md') => readFileSync(join(folder, name), 'utf8');
 const put = (folder, text, name = 'doc.md') => writeFileSync(join(folder, name), text);
 const snapshot = (folder) => Object.fromEntries(readdirSync(folder).filter((name) => !name.startsWith('.')).sort().map((name) => [name, read(folder, name)]));
@@ -101,7 +101,7 @@ test('md_fold_options_are_argument_errors_when_combined_or_misplaced', () => {
 // 근거: 이슈 #39 완료 조건 "여러 블록, 긴 울타리, CRLF". 줄바꿈이 섞인 문서도 블록 본문 바이트가 그대로이고 새 줄은 CRLF다
 test('md_fold_keeps_crlf_and_the_block_bytes_in_a_document_with_mixed_line_endings', () => {
   withFolder((folder) => {
-    const wide = '````dap name=wide\nflow right\nbox a "A"\n````';
+    const wide = '````dap name=wide\ndaphnis 2\nbox a "A"\n````';
     const body = `# Doc\r\n\r\n${wide.replaceAll('\n', '\r\n')}\r\n\r\n\`\`\`dap name=flow\n${FLOW}\`\`\`\r\nend\r\n`;
     put(folder, body);
 
@@ -276,7 +276,7 @@ test('md_with_an_fold_option_draws_a_dap_block_inside_a_block_quote_and_keeps_th
 test('md_without_an_option_ignores_unmarked_blocks_in_a_quote_exactly_as_before', () => {
   withFolder((folder) => {
     const head = `# Doc\n\n\`\`\`dap name=flow\n${FLOW}\`\`\`\n\nmiddle\n`;
-    const quote = `\n> \`\`\`dap name=q\n> ${BAR.replaceAll('\n', '\n> ').trimEnd()}\n> \`\`\`\n>\n> note\n>\n> ![x](x.svg)<!-- dap -->\n\n> \`\`\`dap name=broken\n> chart bar\nnot quoted\n\nend\n`;
+    const quote = `\n> \`\`\`dap name=q\n> ${BAR.replaceAll('\n', '\n> ').trimEnd()}\n> \`\`\`\n>\n> note\n>\n> ![x](x.svg)<!-- dap -->\n\n> \`\`\`dap name=broken\n> daphnis 2\nnot quoted\n\nend\n`;
     put(folder, head + quote);
     put(folder, head, 'plain.md');
     run(['md', 'plain.md'], folder);
@@ -312,7 +312,7 @@ test('md_without_an_option_updates_a_quoted_block_that_already_carries_a_daphnis
 // 근거: 이슈 #39 구현 기준 "구조를 확정할 수 없는 입력은 추측해 고치지 않고 위치와 이유를 알린다". 옵션을 준 실행에서 인용 안 울타리가 인용 표시 없는 줄을 만나면 닫힌 것으로 읽지 않는다
 test('md_with_an_fold_option_reports_a_quoted_fence_that_loses_its_quote_mark_before_it_closes', () => {
   withFolder((folder) => {
-    const text = `> \`\`\`dap name=q\n> chart bar\nnot quoted\n\`\`\`\n`;
+    const text = `> \`\`\`dap name=q\n> daphnis 2\nnot quoted\n\`\`\`\n`;
     put(folder, text);
 
     const result = run(['md', 'doc.md', '--unfold'], folder);

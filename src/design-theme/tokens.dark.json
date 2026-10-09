@@ -1,9 +1,7 @@
 {
   "$extensions": {
     "theme": {
-      "fontFaces": [
-        "@font-face { font-family: FigSans; src: url(\"assets/fonts/pretendard-variable.woff2\") format(\"woff2\"); font-style: normal; font-weight: 100 900; font-display: swap; }"
-      ]
+      "fontFaces": []
     }
   },
   "color": {
@@ -175,284 +173,284 @@
     "blue": {
       "anchor": {
         "$type": "color",
-        "$value": "#1e66d8",
+        "$value": "{color.category.blue.anchor}",
         "$description": "Hand-picked light anchor."
       },
       "light-fill": {
         "$type": "color",
-        "$value": "#edf4ff"
+        "$value": "{color.category.blue.light-tint-1}"
       },
       "light-stroke": {
         "$type": "color",
-        "$value": "#1e66d8"
+        "$value": "{color.category.blue.light-border}"
       },
       "light-ink": {
         "$type": "color",
-        "$value": "#1760d2"
+        "$value": "{color.category.blue.light-ink}"
       },
       "light-heat-low": {
         "$type": "color",
-        "$value": "#b4ccf2"
+        "$value": "{color.sequential.light-low}"
       },
       "light-heat-high": {
         "$type": "color",
-        "$value": "#0352c3"
+        "$value": "{color.sequential.high}"
       },
       "light-outline": {
         "$type": "color",
-        "$value": "#678dcb"
+        "$value": "{color.category.blue.light-border}"
       },
       "light-tint-1": {
         "$type": "color",
-        "$value": "#e8f1ff"
+        "$value": "{color.category.blue.light-tint-1}"
       },
       "light-tint-2": {
         "$type": "color",
-        "$value": "#dfebfd"
+        "$value": "{color.category.blue.light-tint-2}"
       },
       "light-tint-3": {
         "$type": "color",
-        "$value": "#d7e5fb"
+        "$value": "{color.category.blue.light-tint-3}"
       },
       "dark-fill": {
         "$type": "color",
-        "$value": "#08152d"
+        "$value": "{color.category.blue.dark-tint-1}"
       },
       "dark-stroke": {
         "$type": "color",
-        "$value": "#6ca4ff"
+        "$value": "{color.category.blue.dark-border}"
       },
       "dark-ink": {
         "$type": "color",
-        "$value": "#6fa6ff"
+        "$value": "{color.category.blue.dark-ink}"
       },
       "dark-heat-low": {
         "$type": "color",
-        "$value": "#33445e"
+        "$value": "{color.sequential.dark-low}"
       },
       "dark-heat-high": {
         "$type": "color",
-        "$value": "#4075cc"
+        "$value": "{color.sequential.high}"
       },
       "dark-outline": {
         "$type": "color",
-        "$value": "#577bb4"
+        "$value": "{color.category.blue.dark-border}"
       },
       "dark-tint-1": {
         "$type": "color",
-        "$value": "#272e39"
+        "$value": "{color.category.blue.dark-tint-1}"
       },
       "dark-tint-2": {
         "$type": "color",
-        "$value": "#2c3543"
+        "$value": "{color.category.blue.dark-tint-2}"
       },
       "dark-tint-3": {
         "$type": "color",
-        "$value": "#323d4e"
+        "$value": "{color.category.blue.dark-tint-3}"
       }
     },
     "purple": {
       "anchor": {
         "$type": "color",
-        "$value": "#b28fd1",
+        "$value": "{color.category.purple.anchor}",
         "$description": "Hand-picked light anchor."
       },
       "light-fill": {
         "$type": "color",
-        "$value": "#f7f0ff"
+        "$value": "{color.category.purple.light-tint-1}"
       },
       "light-stroke": {
         "$type": "color",
-        "$value": "#9573b3"
+        "$value": "{color.category.purple.light-border}"
       },
       "light-ink": {
         "$type": "color",
-        "$value": "#795895"
+        "$value": "{color.category.purple.light-ink}"
       },
       "light-dot": {
         "$type": "color",
-        "$value": "#795895"
+        "$value": "{color.category.purple.light-border}"
       },
       "light-outline": {
         "$type": "color",
-        "$value": "#9885ac"
+        "$value": "{color.category.purple.light-border}"
       },
       "light-tint-1": {
         "$type": "color",
-        "$value": "#f4ecfc"
+        "$value": "{color.category.purple.light-tint-1}"
       },
       "light-tint-2": {
         "$type": "color",
-        "$value": "#efe5f9"
+        "$value": "{color.category.purple.light-tint-2}"
       },
       "light-tint-3": {
         "$type": "color",
-        "$value": "#eadef6"
+        "$value": "{color.category.purple.light-tint-3}"
       },
       "dark-fill": {
         "$type": "color",
-        "$value": "#1c0f27"
+        "$value": "{color.category.purple.dark-tint-1}"
       },
       "dark-stroke": {
         "$type": "color",
-        "$value": "#b693d6"
+        "$value": "{color.category.purple.dark-border}"
       },
       "dark-ink": {
         "$type": "color",
-        "$value": "#bb98db"
+        "$value": "{color.category.purple.dark-ink}"
       },
       "dark-dot": {
         "$type": "color",
-        "$value": "#9a77b8"
+        "$value": "{color.category.purple.dark-border}"
       },
       "dark-outline": {
         "$type": "color",
-        "$value": "#89709f"
+        "$value": "{color.category.purple.dark-border}"
       },
       "dark-tint-1": {
         "$type": "color",
-        "$value": "#302b36"
+        "$value": "{color.category.purple.dark-tint-1}"
       },
       "dark-tint-2": {
         "$type": "color",
-        "$value": "#38303f"
+        "$value": "{color.category.purple.dark-tint-2}"
       },
       "dark-tint-3": {
         "$type": "color",
-        "$value": "#41374a"
+        "$value": "{color.category.purple.dark-tint-3}"
       }
     },
     "red": {
       "anchor": {
         "$type": "color",
-        "$value": "#ef0f0f",
+        "$value": "{color.category.red.anchor}",
         "$description": "Hand-picked light anchor."
       },
       "light-fill": {
         "$type": "color",
-        "$value": "#ffefed"
+        "$value": "{color.category.red.light-tint-1}"
       },
       "light-stroke": {
         "$type": "color",
-        "$value": "#c70005"
+        "$value": "{color.category.red.light-border}"
       },
       "light-ink": {
         "$type": "color",
-        "$value": "#c70005"
+        "$value": "{color.category.red.light-ink}"
       },
       "light-dot": {
         "$type": "color",
-        "$value": "#740001"
+        "$value": "{color.category.red.light-border}"
       },
       "light-outline": {
         "$type": "color",
-        "$value": "#cd7367"
+        "$value": "{color.category.red.light-border}"
       },
       "dark-fill": {
         "$type": "color",
-        "$value": "#290b08"
+        "$value": "{color.category.red.dark-tint-1}"
       },
       "dark-stroke": {
         "$type": "color",
-        "$value": "#fc7182"
+        "$value": "{color.category.red.dark-border}"
       },
       "dark-ink": {
         "$type": "color",
-        "$value": "#ff7e8c"
+        "$value": "{color.category.red.dark-ink}"
       },
       "dark-dot": {
         "$type": "color",
-        "$value": "#df576f"
+        "$value": "{color.category.red.dark-border}"
       },
       "dark-outline": {
         "$type": "color",
-        "$value": "#b56165"
+        "$value": "{color.category.red.dark-border}"
       }
     },
     "green": {
       "anchor": {
         "$type": "color",
-        "$value": "#09c72c",
+        "$value": "{color.category.green.anchor}",
         "$description": "Hand-picked light anchor."
       },
       "light-fill": {
         "$type": "color",
-        "$value": "#eaf8e9"
+        "$value": "{color.category.green.light-tint-1}"
       },
       "light-stroke": {
         "$type": "color",
-        "$value": "#00971d"
+        "$value": "{color.category.green.light-border}"
       },
       "light-ink": {
         "$type": "color",
-        "$value": "#007715"
+        "$value": "{color.category.green.light-ink}"
       },
       "light-dot": {
         "$type": "color",
-        "$value": "#007715"
+        "$value": "{color.category.green.light-border}"
       },
       "light-outline": {
         "$type": "color",
-        "$value": "#609b5f"
+        "$value": "{color.category.green.light-border}"
       },
       "dark-fill": {
         "$type": "color",
-        "$value": "#061b07"
+        "$value": "{color.category.green.dark-tint-1}"
       },
       "dark-stroke": {
         "$type": "color",
-        "$value": "#58bf5a"
+        "$value": "{color.category.green.dark-border}"
       },
       "dark-ink": {
         "$type": "color",
-        "$value": "#58bf5a"
+        "$value": "{color.category.green.dark-ink}"
       },
       "dark-dot": {
         "$type": "color",
-        "$value": "#5fc660"
+        "$value": "{color.category.green.dark-border}"
       },
       "dark-outline": {
         "$type": "color",
-        "$value": "#4b874b"
+        "$value": "{color.category.green.dark-border}"
       }
     },
     "orange": {
       "anchor": {
         "$type": "color",
-        "$value": "#e65200",
+        "$value": "{color.category.orange.anchor}",
         "$description": "Hand-picked light anchor."
       },
       "light-fill": {
         "$type": "color",
-        "$value": "#fff0ea"
+        "$value": "{color.category.orange.light-tint-1}"
       },
       "light-stroke": {
         "$type": "color",
-        "$value": "#e45100"
+        "$value": "{color.category.orange.light-border}"
       },
       "light-ink": {
         "$type": "color",
-        "$value": "#b43e00"
+        "$value": "{color.category.orange.light-ink}"
       },
       "light-outline": {
         "$type": "color",
-        "$value": "#c6785b"
+        "$value": "{color.category.orange.light-border}"
       },
       "dark-fill": {
         "$type": "color",
-        "$value": "#280d04"
+        "$value": "{color.category.orange.dark-tint-1}"
       },
       "dark-stroke": {
         "$type": "color",
-        "$value": "#fa7a49"
+        "$value": "{color.category.orange.dark-border}"
       },
       "dark-ink": {
         "$type": "color",
-        "$value": "#ff8253"
+        "$value": "{color.category.orange.dark-ink}"
       },
       "dark-outline": {
         "$type": "color",
-        "$value": "#b36548"
+        "$value": "{color.category.orange.dark-border}"
       }
     },
     "fg": {
@@ -538,7 +536,7 @@
       },
       "active-fill": {
         "$type": "color",
-        "$value": "{color.blue.dark-stroke}",
+        "$value": "{color.category.blue.fill}",
         "$description": "Face of what is happening now. Meets 4.5:1 with on-active text."
       },
       "active-text": {
@@ -548,7 +546,7 @@
       },
       "on-active": {
         "$type": "color",
-        "$value": "{color.gray.933}",
+        "$value": "{color.category.blue.on}",
         "$description": "Text on active-fill and on flow tone faces. Meets 4.5:1."
       },
       "error": {
@@ -563,8 +561,8 @@
       },
       "warning": {
         "$type": "color",
-        "$value": "{color.orange.dark-stroke}",
-        "$description": "Warning or caution. The orange. Graphic use only, 3:1 on every surface."
+        "$value": "{color.category.yellow.dark-border}",
+        "$description": "Warning. The yellow border; it stays yellow, so a direct label or an icon carries the meaning where 3:1 is out of reach in light. Graphic use only."
       },
       "glow": {
         "$type": "color",
@@ -575,17 +573,17 @@
     "flow": {
       "brand": {
         "$type": "color",
-        "$value": "{color.blue.dark-ink}",
+        "$value": "{color.category.blue.fill}",
         "$description": "First flow tone, the brand blue."
       },
       "purple": {
         "$type": "color",
-        "$value": "{color.purple.dark-dot}",
+        "$value": "{color.category.purple.fill}",
         "$description": "Flow tone for a rare accent."
       },
       "green": {
         "$type": "color",
-        "$value": "{color.green.dark-dot}",
+        "$value": "{color.category.green.fill}",
         "$description": "Flow tone for normal paths."
       },
       "gray": {
@@ -595,8 +593,12 @@
       },
       "red": {
         "$type": "color",
-        "$value": "{color.red.dark-dot}",
+        "$value": "{color.category.red.fill}",
         "$description": "Flow tone for error paths."
+      },
+      "amber": {
+        "$type": "color",
+        "$value": "{color.category.yellow.fill}"
       }
     },
     "ui": {
@@ -624,12 +626,12 @@
     "data": {
       "main": {
         "$type": "color",
-        "$value": "{color.blue.dark-stroke}",
+        "$value": "{color.category.blue.dark-border}",
         "$description": "Series the chart argues for (new, improved). The brand blue."
       },
       "compare": {
         "$type": "color",
-        "$value": "{color.orange.dark-stroke}",
+        "$value": "{color.category.yellow.fill}",
         "$description": "Baseline series (old). Orange is for comparison and caution only."
       },
       "heat-low": {
@@ -656,6 +658,314 @@
         "$type": "color",
         "$value": "{primitive.simple2.dark-edge}",
         "$description": "Grid and axis lines. Decorative, 1.5:1 or more."
+      },
+      "compare-fill": {
+        "$type": "color",
+        "$value": "{color.category.yellow.fill}"
+      },
+      "compare-outline": {
+        "$type": "color",
+        "$value": "{color.category.yellow.dark-border}"
+      },
+      "category": {
+        "1": {
+          "$type": "color",
+          "$value": "{color.category.blue.fill}"
+        },
+        "2": {
+          "$type": "color",
+          "$value": "{color.category.yellow.fill}"
+        },
+        "3": {
+          "$type": "color",
+          "$value": "{color.category.red.fill}"
+        },
+        "4": {
+          "$type": "color",
+          "$value": "{color.category.green.fill}"
+        },
+        "5": {
+          "$type": "color",
+          "$value": "{color.category.orange.fill}"
+        },
+        "6": {
+          "$type": "color",
+          "$value": "{color.category.purple.fill}"
+        },
+        "7": {
+          "$type": "color",
+          "$value": "{color.category.cyan.fill}"
+        }
+      },
+      "category-outline": {
+        "1": {
+          "$type": "color",
+          "$value": "{color.category.blue.dark-border}"
+        },
+        "2": {
+          "$type": "color",
+          "$value": "{color.category.yellow.dark-border}"
+        },
+        "3": {
+          "$type": "color",
+          "$value": "{color.category.red.dark-border}"
+        },
+        "4": {
+          "$type": "color",
+          "$value": "{color.category.green.dark-border}"
+        },
+        "5": {
+          "$type": "color",
+          "$value": "{color.category.orange.dark-border}"
+        },
+        "6": {
+          "$type": "color",
+          "$value": "{color.category.purple.dark-border}"
+        },
+        "7": {
+          "$type": "color",
+          "$value": "{color.category.cyan.dark-border}"
+        }
+      },
+      "category-family": {
+        "1": {
+          "$type": "string",
+          "$value": "blue"
+        },
+        "2": {
+          "$type": "string",
+          "$value": "yellow"
+        },
+        "3": {
+          "$type": "string",
+          "$value": "red"
+        },
+        "4": {
+          "$type": "string",
+          "$value": "green"
+        },
+        "5": {
+          "$type": "string",
+          "$value": "orange"
+        },
+        "6": {
+          "$type": "string",
+          "$value": "purple"
+        },
+        "7": {
+          "$type": "string",
+          "$value": "cyan"
+        }
+      },
+      "main-fill": {
+        "$type": "color",
+        "$value": "{color.category.blue.fill}"
+      },
+      "category-on": {
+        "1": {
+          "$type": "color",
+          "$value": "{color.category.blue.on}"
+        },
+        "2": {
+          "$type": "color",
+          "$value": "{color.category.yellow.on}"
+        },
+        "3": {
+          "$type": "color",
+          "$value": "{color.category.red.on}"
+        },
+        "4": {
+          "$type": "color",
+          "$value": "{color.category.green.on}"
+        },
+        "5": {
+          "$type": "color",
+          "$value": "{color.category.orange.on}"
+        },
+        "6": {
+          "$type": "color",
+          "$value": "{color.category.purple.on}"
+        },
+        "7": {
+          "$type": "color",
+          "$value": "{color.category.cyan.on}"
+        }
+      },
+      "category-ink": {
+        "1": {
+          "$type": "color",
+          "$value": "{color.category.blue.dark-ink}"
+        },
+        "2": {
+          "$type": "color",
+          "$value": "{color.category.yellow.dark-ink}"
+        },
+        "3": {
+          "$type": "color",
+          "$value": "{color.category.red.dark-ink}"
+        },
+        "4": {
+          "$type": "color",
+          "$value": "{color.category.green.dark-ink}"
+        },
+        "5": {
+          "$type": "color",
+          "$value": "{color.category.orange.dark-ink}"
+        },
+        "6": {
+          "$type": "color",
+          "$value": "{color.category.purple.dark-ink}"
+        },
+        "7": {
+          "$type": "color",
+          "$value": "{color.category.cyan.dark-ink}"
+        }
+      },
+      "category-tint": {
+        "1": {
+          "$type": "color",
+          "$value": "{color.category.blue.dark-tint-1}"
+        },
+        "2": {
+          "$type": "color",
+          "$value": "{color.category.yellow.dark-tint-1}"
+        },
+        "3": {
+          "$type": "color",
+          "$value": "{color.category.red.dark-tint-1}"
+        },
+        "4": {
+          "$type": "color",
+          "$value": "{color.category.green.dark-tint-1}"
+        },
+        "5": {
+          "$type": "color",
+          "$value": "{color.category.orange.dark-tint-1}"
+        },
+        "6": {
+          "$type": "color",
+          "$value": "{color.category.purple.dark-tint-1}"
+        },
+        "7": {
+          "$type": "color",
+          "$value": "{color.category.cyan.dark-tint-1}"
+        }
+      },
+      "category-pattern": {
+        "1": {
+          "$type": "string",
+          "$value": "hatch"
+        },
+        "2": {
+          "$type": "string",
+          "$value": "dots"
+        },
+        "3": {
+          "$type": "string",
+          "$value": "cross"
+        },
+        "$description": "범주 순서를 한 바퀴 돌 때마다 층이 오른다. 층 1부터 이 목록을 순서대로(고정 순서) 쓰고 목록이 끝나면 처음으로 돌아가되 무늬 간격을 판의 step만큼 넓힌다. 층 0은 무늬 없는 단색 면이다. 목록은 뒤에만 덧붙이며 판(category-revision)이 앞에서부터 몇 개를 쓰는지 정한다"
+      },
+      "category-shape": {
+        "1": {
+          "$type": "string",
+          "$value": "circle"
+        },
+        "2": {
+          "$type": "string",
+          "$value": "square"
+        },
+        "3": {
+          "$type": "string",
+          "$value": "diamond"
+        },
+        "4": {
+          "$type": "string",
+          "$value": "triangle"
+        },
+        "$description": "점과 선 꼭짓점의 모양. 층 번호를 이 목록의 길이로 나눈 나머지 칸을 쓴다. 층 0은 첫 모양(circle)이다. 목록은 뒤에만 덧붙이며 판(category-revision)이 앞에서부터 몇 개를 쓰는지 정한다"
+      },
+      "category-revision": {
+        "1": {
+          "family": {
+            "$type": "number",
+            "$value": 7
+          },
+          "pattern": {
+            "$type": "number",
+            "$value": 3
+          },
+          "shape": {
+            "$type": "number",
+            "$value": 4
+          },
+          "step": {
+            "$type": "number",
+            "$value": 0.5,
+            "$description": "무늬 목록을 한 바퀴 돌 때마다 무늬 간격에 더하는 배율. 이 판 안에서 (무늬, 간격, 모양) 쌍이 겹치지 않게 한다"
+          }
+        },
+        "$description": "범주 칠의 판. 판 N은 세 목록(category-family, category-pattern, category-shape) 각각의 앞에서부터 family·pattern·shape개와 무늬 간격을 넓히는 배율 step을 고정한다. 목록은 뒤에만 덧붙이고, 판은 1부터 빈칸 없이 이어지며 숫자는 이전 판보다 줄지 않는다. 가장 큰 번호의 판은 목록 전체를 덮는다. 문서가 판을 고르지 않으면 언제나 1판으로 칠한다. 1판은 처음 기록한 일곱 계열(blue, yellow, red, green, orange, purple, cyan), 무늬 3, 모양 4, step 0.5이며 바꾸지 않는다"
+      },
+      "category-label": {
+        "1": {
+          "$type": "string",
+          "$value": "optional"
+        },
+        "2": {
+          "$type": "string",
+          "$value": "required"
+        },
+        "3": {
+          "$type": "string",
+          "$value": "optional"
+        },
+        "4": {
+          "$type": "string",
+          "$value": "optional"
+        },
+        "5": {
+          "$type": "string",
+          "$value": "optional"
+        },
+        "6": {
+          "$type": "string",
+          "$value": "optional"
+        },
+        "7": {
+          "$type": "string",
+          "$value": "optional"
+        }
+      },
+      "category-effect": {
+        "1": {
+          "$type": "color",
+          "$value": "{color.category.blue.dark-effect}"
+        },
+        "2": {
+          "$type": "color",
+          "$value": "{color.category.yellow.dark-effect}"
+        },
+        "3": {
+          "$type": "color",
+          "$value": "{color.category.red.dark-effect}"
+        },
+        "4": {
+          "$type": "color",
+          "$value": "{color.category.green.dark-effect}"
+        },
+        "5": {
+          "$type": "color",
+          "$value": "{color.category.orange.dark-effect}"
+        },
+        "6": {
+          "$type": "color",
+          "$value": "{color.category.purple.dark-effect}"
+        },
+        "7": {
+          "$type": "color",
+          "$value": "{color.category.cyan.dark-effect}"
+        }
       }
     },
     "palette": {
@@ -830,11 +1140,11 @@
         },
         "light-outline": {
           "$type": "color",
-          "$value": "#648bca"
+          "$value": "#648cc7"
         },
         "dark-fill": {
           "$type": "color",
-          "$value": "#08152c"
+          "$value": "#07162c"
         },
         "dark-stroke": {
           "$type": "color",
@@ -858,7 +1168,7 @@
         },
         "dark-outline": {
           "$type": "color",
-          "$value": "#587bb5"
+          "$value": "#4e7bbd"
         }
       },
       "slate": {
@@ -927,35 +1237,37 @@
       },
       "icon-service-ink": {
         "$type": "color",
-        "$value": "{primitive.simple2.dark-icon-service}"
+        "$value": "{color.category.blue.dark-border}",
+        "$description": "Dark role of the semantic icon glyph. The data anchor (color.category.blue.fill) is dark blue and does not read on a dark card, so the glyph takes the same family's existing dark border, a vivid family color that keeps 3:1 on the card face and on the page. It is a supplementary role; the anchor is not changed and this is not a claim of any native app pixel."
       },
       "icon-service-surface": {
         "$type": "color",
-        "$value": "{primitive.simple2.dark-icon-service-face}"
+        "$value": "{color.node}",
+        "$description": "The cut-out detail of a dark glyph is the card face, so it reads against the light glyph."
       },
       "icon-data-ink": {
         "$type": "color",
-        "$value": "{primitive.simple2.dark-icon-data}"
+        "$value": "{color.category.green.dark-border}"
       },
       "icon-data-surface": {
         "$type": "color",
-        "$value": "{primitive.simple2.dark-icon-data-face}"
+        "$value": "{color.node}"
       },
       "icon-access-ink": {
         "$type": "color",
-        "$value": "{primitive.simple2.dark-icon-access}"
+        "$value": "{color.category.yellow.dark-border}"
       },
       "icon-access-surface": {
         "$type": "color",
-        "$value": "{primitive.simple2.dark-icon-access-face}"
+        "$value": "{color.node}"
       },
       "icon-person-ink": {
         "$type": "color",
-        "$value": "{primitive.simple2.dark-icon-person}"
+        "$value": "{color.category.blue.dark-border}"
       },
       "icon-person-surface": {
         "$type": "color",
-        "$value": "{primitive.simple2.dark-icon-person-face}"
+        "$value": "{color.node}"
       },
       "icon-brand-ink": {
         "$type": "color",
@@ -964,6 +1276,14 @@
       "icon-brand-surface": {
         "$type": "color",
         "$value": "{color.gray.835}"
+      },
+      "number-fill": {
+        "$type": "color",
+        "$value": "{color.gray.59}"
+      },
+      "number-ink": {
+        "$type": "color",
+        "$value": "{color.gray.933}"
       }
     },
     "paint": {
@@ -1184,16 +1504,168 @@
           "$type": "color",
           "$value": "{color.palette.slate.dark-dot}"
         }
+      },
+      "blue": {
+        "fill": {
+          "$type": "color",
+          "$value": "{color.category.blue.dark-tint-1}"
+        },
+        "stroke": {
+          "$type": "color",
+          "$value": "{color.category.blue.dark-border}"
+        },
+        "outline": {
+          "$type": "color",
+          "$value": "{color.category.blue.dark-border}"
+        },
+        "ink": {
+          "$type": "color",
+          "$value": "{color.category.blue.dark-ink}"
+        },
+        "dot": {
+          "$type": "color",
+          "$value": "{color.category.blue.dark-border}"
+        },
+        "group-1": {
+          "$type": "color",
+          "$value": "{color.category.blue.dark-tint-1}"
+        },
+        "group-2": {
+          "$type": "color",
+          "$value": "{color.category.blue.dark-tint-2}"
+        },
+        "group-3": {
+          "$type": "color",
+          "$value": "{color.category.blue.dark-tint-3}"
+        },
+        "effect": {
+          "$type": "color",
+          "$value": "{color.category.blue.dark-effect}"
+        }
+      },
+      "yellow": {
+        "fill": {
+          "$type": "color",
+          "$value": "{color.category.yellow.dark-tint-1}"
+        },
+        "stroke": {
+          "$type": "color",
+          "$value": "{color.category.yellow.dark-border}"
+        },
+        "outline": {
+          "$type": "color",
+          "$value": "{color.category.yellow.dark-border}"
+        },
+        "ink": {
+          "$type": "color",
+          "$value": "{color.category.yellow.dark-ink}"
+        },
+        "dot": {
+          "$type": "color",
+          "$value": "{color.category.yellow.dark-border}"
+        },
+        "group-1": {
+          "$type": "color",
+          "$value": "{color.category.yellow.dark-tint-1}"
+        },
+        "group-2": {
+          "$type": "color",
+          "$value": "{color.category.yellow.dark-tint-2}"
+        },
+        "group-3": {
+          "$type": "color",
+          "$value": "{color.category.yellow.dark-tint-3}"
+        },
+        "effect": {
+          "$type": "color",
+          "$value": "{color.category.yellow.dark-effect}"
+        }
+      },
+      "orange": {
+        "fill": {
+          "$type": "color",
+          "$value": "{color.category.orange.dark-tint-1}"
+        },
+        "stroke": {
+          "$type": "color",
+          "$value": "{color.category.orange.dark-border}"
+        },
+        "outline": {
+          "$type": "color",
+          "$value": "{color.category.orange.dark-border}"
+        },
+        "ink": {
+          "$type": "color",
+          "$value": "{color.category.orange.dark-ink}"
+        },
+        "dot": {
+          "$type": "color",
+          "$value": "{color.category.orange.dark-border}"
+        },
+        "group-1": {
+          "$type": "color",
+          "$value": "{color.category.orange.dark-tint-1}"
+        },
+        "group-2": {
+          "$type": "color",
+          "$value": "{color.category.orange.dark-tint-2}"
+        },
+        "group-3": {
+          "$type": "color",
+          "$value": "{color.category.orange.dark-tint-3}"
+        },
+        "effect": {
+          "$type": "color",
+          "$value": "{color.category.orange.dark-effect}"
+        }
+      },
+      "cyan": {
+        "fill": {
+          "$type": "color",
+          "$value": "{color.category.cyan.dark-tint-1}"
+        },
+        "stroke": {
+          "$type": "color",
+          "$value": "{color.category.cyan.dark-border}"
+        },
+        "outline": {
+          "$type": "color",
+          "$value": "{color.category.cyan.dark-border}"
+        },
+        "ink": {
+          "$type": "color",
+          "$value": "{color.category.cyan.dark-ink}"
+        },
+        "dot": {
+          "$type": "color",
+          "$value": "{color.category.cyan.dark-border}"
+        },
+        "group-1": {
+          "$type": "color",
+          "$value": "{color.category.cyan.dark-tint-1}"
+        },
+        "group-2": {
+          "$type": "color",
+          "$value": "{color.category.cyan.dark-tint-2}"
+        },
+        "group-3": {
+          "$type": "color",
+          "$value": "{color.category.cyan.dark-tint-3}"
+        },
+        "effect": {
+          "$type": "color",
+          "$value": "{color.category.cyan.dark-effect}"
+        }
       }
     },
     "tag": {
       "purple": {
         "$type": "color",
-        "$value": "{color.paint.purple.stroke}"
+        "$value": "{color.category.purple.fill}"
       },
       "green": {
         "$type": "color",
-        "$value": "{color.paint.green.stroke}"
+        "$value": "{color.category.green.fill}"
       },
       "gray": {
         "$type": "color",
@@ -1201,30 +1673,737 @@
       },
       "red": {
         "$type": "color",
-        "$value": "{color.paint.red.stroke}"
+        "$value": "{color.category.red.fill}"
       },
       "brand": {
         "$type": "color",
         "$value": "{color.state.active}"
+      },
+      "amber": {
+        "$type": "color",
+        "$value": "{color.category.yellow.fill}"
       }
     },
     "on-action": {
       "$type": "color",
       "$value": "{color.gray.0}"
+    },
+    "flow-ink": {
+      "amber": {
+        "$type": "color",
+        "$value": "{color.category.yellow.on}"
+      },
+      "brand": {
+        "$type": "color",
+        "$value": "{color.category.blue.on}"
+      },
+      "purple": {
+        "$type": "color",
+        "$value": "{color.category.purple.on}"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "{color.category.green.on}"
+      },
+      "red": {
+        "$type": "color",
+        "$value": "{color.category.red.on}"
+      },
+      "gray": {
+        "$type": "color",
+        "$value": "{color.gray.933}",
+        "$description": "Text on the neutral flow face, since the gray has no category family. White on the light gray, the dark text on the light gray of the dark mode."
+      }
+    },
+    "flow-outline": {
+      "amber": {
+        "$type": "color",
+        "$value": "{color.category.yellow.dark-border}"
+      },
+      "brand": {
+        "$type": "color",
+        "$value": "{color.category.blue.dark-border}"
+      },
+      "purple": {
+        "$type": "color",
+        "$value": "{color.category.purple.dark-border}"
+      },
+      "green": {
+        "$type": "color",
+        "$value": "{color.category.green.dark-border}"
+      },
+      "red": {
+        "$type": "color",
+        "$value": "{color.category.red.dark-border}"
+      }
+    },
+    "category": {
+      "$extensions": {
+        "review": {
+          "status": "accepted-with-role-limits",
+          "revision": 1,
+          "reviewed": "2026-10-09",
+          "basis": "Revision 1 (seven families) accepted after an actual-size light and dark comparison of the candidates in a browser and a review of the product renderer in Chrome. Product review covered layout, contrast and identity: automated render checks at 320, 390, 430 and 1440 px in light and dark, and hands-on viewing of screens at 390 and 1440 px. Color vision was emulated in Chrome: an initial audit of 100 screens under none, protanopia, deuteranopia, tritanopia and achromatopsia, and a final pass of six chart kinds in light and dark under none, deuteranopia and achromatopsia (36 screens), including the seven-series scatter.",
+          "evidence": [
+            "https://github.com/woonyong-choi/daphnis/issues/164",
+            "https://github.com/woonyong-choi/daphnis/issues/170"
+          ],
+          "limitations": [
+            "Not tested on physical devices; Chrome and WebKit engine emulation only. Firefox and real iOS Safari were not checked.",
+            "Not tested with people who have a color-vision deficiency; the screens are emulations.",
+            "Color alone does not separate every pair under every color vision. Consumers keep direct labels, number keys or marker shapes; the light yellow border needs a direct label (labelRequired).",
+            "No claim of full WCAG conformance; the contrast floors in docs/themes.md apply per role, and the light yellow border and the yellow effect step stay below 3:1 by record.",
+            "The official Things comparison is a role comparison against site images and 2018 screens, not a pixel match with the current native app."
+          ],
+          "note": "The order is recorded once in color.data.category-family. A new color is appended; the generator never reorders or shifts an anchor."
+        }
+      },
+      "blue": {
+        "anchor": {
+          "$type": "color",
+          "$value": "#1e6bd6",
+          "$description": "Solid fill of an official Things feature icon, sampled from the opaque interior pixels. Used as a Daphnis anchor; it is not the link color or the color of every native app role.",
+          "$extensions": {
+            "provenance": {
+              "source": "https://culturedcode.com/things/2024-01-20/images/fancysection-icon-checklists-io70.png",
+              "kind": "official-icon-interior-sample",
+              "collected": "2026-10-09",
+              "opaqueInteriorCount": 6136,
+              "original": "#1e6bd6",
+              "originalOKLCH": [
+                0.544,
+                0.18,
+                258.221
+              ],
+              "adjusted": null,
+              "actualOKLCH": [
+                0.544,
+                0.18,
+                258.221
+              ]
+            }
+          }
+        },
+        "fill": {
+          "$type": "color",
+          "$value": "{color.category.blue.anchor}"
+        },
+        "on": {
+          "$type": "color",
+          "$value": "{color.gray.0}"
+        },
+        "light-border": {
+          "$type": "color",
+          "$value": "#1e6bd6"
+        },
+        "light-ink": {
+          "$type": "color",
+          "$value": "#1161cb"
+        },
+        "light-tint-1": {
+          "$type": "color",
+          "$value": "#f7fafe"
+        },
+        "light-tint-2": {
+          "$type": "color",
+          "$value": "#e5eefc"
+        },
+        "light-tint-3": {
+          "$type": "color",
+          "$value": "#d5e4fa"
+        },
+        "dark-border": {
+          "$type": "color",
+          "$value": "#3a85f2"
+        },
+        "dark-ink": {
+          "$type": "color",
+          "$value": "#6da8ff"
+        },
+        "dark-tint-1": {
+          "$type": "color",
+          "$value": "#303948"
+        },
+        "dark-tint-2": {
+          "$type": "color",
+          "$value": "#303b4e"
+        },
+        "dark-tint-3": {
+          "$type": "color",
+          "$value": "#303d54"
+        },
+        "light-effect": {
+          "$type": "color",
+          "$value": "#3984f2",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "dark-effect": {
+          "$type": "color",
+          "$value": "#60a0ff",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        }
+      },
+      "yellow": {
+        "anchor": {
+          "$type": "color",
+          "$value": "#f2d024",
+          "$description": "Solid fill of an official Things feature icon, sampled from the opaque interior pixels. Used as a Daphnis anchor; it is not the link color or the color of every native app role.",
+          "$extensions": {
+            "provenance": {
+              "source": "https://culturedcode.com/things/2024-01-20/images/fancysection-icon-today-io70.png",
+              "kind": "official-icon-interior-sample",
+              "collected": "2026-10-09",
+              "opaqueInteriorCount": 5738,
+              "original": "#f2d024",
+              "originalOKLCH": [
+                0.861,
+                0.171,
+                96.512
+              ],
+              "adjusted": null,
+              "actualOKLCH": [
+                0.861,
+                0.171,
+                96.512
+              ]
+            },
+            "floor": {
+              "lightness": 0.78,
+              "reason": "A yellow border darker than this reads as brown. It stays yellow and a direct label carries the meaning where 3:1 is out of reach."
+            }
+          }
+        },
+        "fill": {
+          "$type": "color",
+          "$value": "{color.category.yellow.anchor}"
+        },
+        "on": {
+          "$type": "color",
+          "$value": "{color.gray.1000}"
+        },
+        "light-border": {
+          "$type": "color",
+          "$value": "#d6b600",
+          "$extensions": {
+            "labelRequired": true
+          }
+        },
+        "light-ink": {
+          "$type": "color",
+          "$value": "{color.fg}",
+          "$extensions": {
+            "neutral": true
+          }
+        },
+        "light-tint-1": {
+          "$type": "color",
+          "$value": "#fefcf3"
+        },
+        "light-tint-2": {
+          "$type": "color",
+          "$value": "#fdf9e9"
+        },
+        "light-tint-3": {
+          "$type": "color",
+          "$value": "#fcf7df"
+        },
+        "dark-border": {
+          "$type": "color",
+          "$value": "#f2d024"
+        },
+        "dark-ink": {
+          "$type": "color",
+          "$value": "#f2d024"
+        },
+        "dark-tint-1": {
+          "$type": "color",
+          "$value": "#393938"
+        },
+        "dark-tint-2": {
+          "$type": "color",
+          "$value": "#3b3a39"
+        },
+        "dark-tint-3": {
+          "$type": "color",
+          "$value": "#3c3c39"
+        },
+        "light-effect": {
+          "$type": "color",
+          "$value": "#f0d03b",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "dark-effect": {
+          "$type": "color",
+          "$value": "#ffec9a",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        }
+      },
+      "red": {
+        "anchor": {
+          "$type": "color",
+          "$value": "#fa1955",
+          "$description": "Solid fill of an official Things feature icon, sampled from the opaque interior pixels. Used as a Daphnis anchor; it is not the link color or the color of every native app role.",
+          "$extensions": {
+            "provenance": {
+              "source": "https://culturedcode.com/things/2024-01-20/images/fancysection-icon-upcoming-io70.png",
+              "kind": "official-icon-interior-sample",
+              "collected": "2026-10-09",
+              "opaqueInteriorCount": 5976,
+              "original": "#fa1955",
+              "originalOKLCH": [
+                0.632,
+                0.244,
+                15.856
+              ],
+              "adjusted": null,
+              "actualOKLCH": [
+                0.632,
+                0.244,
+                15.856
+              ]
+            }
+          }
+        },
+        "fill": {
+          "$type": "color",
+          "$value": "{color.category.red.anchor}"
+        },
+        "on": {
+          "$type": "color",
+          "$value": "{color.gray.1000}"
+        },
+        "light-border": {
+          "$type": "color",
+          "$value": "#fa1955"
+        },
+        "light-ink": {
+          "$type": "color",
+          "$value": "#cc0041"
+        },
+        "light-tint-1": {
+          "$type": "color",
+          "$value": "#fff8f8"
+        },
+        "light-tint-2": {
+          "$type": "color",
+          "$value": "#ffecec"
+        },
+        "light-tint-3": {
+          "$type": "color",
+          "$value": "#ffdfe0"
+        },
+        "dark-border": {
+          "$type": "color",
+          "$value": "#ff315d"
+        },
+        "dark-ink": {
+          "$type": "color",
+          "$value": "#ff7f8b"
+        },
+        "dark-tint-1": {
+          "$type": "color",
+          "$value": "#413439"
+        },
+        "dark-tint-2": {
+          "$type": "color",
+          "$value": "#48353a"
+        },
+        "dark-tint-3": {
+          "$type": "color",
+          "$value": "#4e363b"
+        },
+        "light-effect": {
+          "$type": "color",
+          "$value": "#ff697b",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "dark-effect": {
+          "$type": "color",
+          "$value": "#ff7785",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        }
+      },
+      "green": {
+        "anchor": {
+          "$type": "color",
+          "$value": "#269c6e",
+          "$description": "Solid fill of an official Things feature icon, sampled from the opaque interior pixels. Used as a Daphnis anchor; it is not the link color or the color of every native app role.",
+          "$extensions": {
+            "provenance": {
+              "source": "https://culturedcode.com/things/2024-01-20/images/fancysection-icon-listediting-io70.png",
+              "kind": "official-icon-interior-sample",
+              "collected": "2026-10-09",
+              "opaqueInteriorCount": 6075,
+              "original": "#269c6e",
+              "originalOKLCH": [
+                0.618,
+                0.124,
+                161.927
+              ],
+              "adjusted": null,
+              "actualOKLCH": [
+                0.618,
+                0.124,
+                161.927
+              ]
+            }
+          }
+        },
+        "fill": {
+          "$type": "color",
+          "$value": "{color.category.green.anchor}"
+        },
+        "on": {
+          "$type": "color",
+          "$value": "{color.gray.1000}"
+        },
+        "light-border": {
+          "$type": "color",
+          "$value": "#149265"
+        },
+        "light-ink": {
+          "$type": "color",
+          "$value": "#00744e"
+        },
+        "light-tint-1": {
+          "$type": "color",
+          "$value": "#f7fbf9"
+        },
+        "light-tint-2": {
+          "$type": "color",
+          "$value": "#e9f4ed"
+        },
+        "light-tint-3": {
+          "$type": "color",
+          "$value": "#daece2"
+        },
+        "dark-border": {
+          "$type": "color",
+          "$value": "#269c6e"
+        },
+        "dark-ink": {
+          "$type": "color",
+          "$value": "#4cba8a"
+        },
+        "dark-tint-1": {
+          "$type": "color",
+          "$value": "#323b3c"
+        },
+        "dark-tint-2": {
+          "$type": "color",
+          "$value": "#333d3d"
+        },
+        "dark-tint-3": {
+          "$type": "color",
+          "$value": "#333f3e"
+        },
+        "light-effect": {
+          "$type": "color",
+          "$value": "#3aab7c",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "dark-effect": {
+          "$type": "color",
+          "$value": "#46b586",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        }
+      },
+      "orange": {
+        "anchor": {
+          "$type": "color",
+          "$value": "#ff8906",
+          "$description": "Orange of HappyHues palette 13, used unchanged.",
+          "$extensions": {
+            "provenance": {
+              "source": "https://www.happyhues.co/palettes/13",
+              "kind": "palette-source",
+              "collected": "2026-10-09",
+              "original": "#ff8906",
+              "originalOKLCH": [
+                0.746,
+                0.18,
+                56.643
+              ],
+              "adjusted": null,
+              "actualOKLCH": [
+                0.746,
+                0.18,
+                56.643
+              ]
+            }
+          }
+        },
+        "fill": {
+          "$type": "color",
+          "$value": "{color.category.orange.anchor}"
+        },
+        "on": {
+          "$type": "color",
+          "$value": "{color.gray.1000}"
+        },
+        "light-border": {
+          "$type": "color",
+          "$value": "#c46800"
+        },
+        "light-ink": {
+          "$type": "color",
+          "$value": "#9d5100"
+        },
+        "light-tint-1": {
+          "$type": "color",
+          "$value": "#fff9f5"
+        },
+        "light-tint-2": {
+          "$type": "color",
+          "$value": "#fff2e9"
+        },
+        "light-tint-3": {
+          "$type": "color",
+          "$value": "#ffebdd"
+        },
+        "dark-border": {
+          "$type": "color",
+          "$value": "#ff8906"
+        },
+        "dark-ink": {
+          "$type": "color",
+          "$value": "#ff8906"
+        },
+        "dark-tint-1": {
+          "$type": "color",
+          "$value": "#3d3738"
+        },
+        "dark-tint-2": {
+          "$type": "color",
+          "$value": "#403938"
+        },
+        "dark-tint-3": {
+          "$type": "color",
+          "$value": "#433a38"
+        },
+        "light-effect": {
+          "$type": "color",
+          "$value": "#df812e",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "dark-effect": {
+          "$type": "color",
+          "$value": "#ffb27a",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        }
+      },
+      "purple": {
+        "anchor": {
+          "$type": "color",
+          "$value": "#7d40c8",
+          "$description": "Deep purple of a ColorHunt palette, lightened for small dark tiles.",
+          "$extensions": {
+            "provenance": {
+              "source": "https://colorhunt.co/palette/443199792ca2c13383e05454",
+              "kind": "palette-source",
+              "collected": "2026-10-09",
+              "original": "#792ca2",
+              "originalOKLCH": [
+                0.463,
+                0.184,
+                311.027
+              ],
+              "adjusted": {
+                "hex": "#7d40c8",
+                "reason": "The source value is too dark and heavy on small dark tiles. The other candidate (#7f5af0, HappyHues palette 4) sits too close to blue. This keeps the source hue family and lifts lightness and chroma.",
+                "deltaOKLCH": [
+                  0.057,
+                  0.016,
+                  -11.067
+                ]
+              },
+              "actualOKLCH": [
+                0.519,
+                0.201,
+                299.96
+              ]
+            }
+          }
+        },
+        "fill": {
+          "$type": "color",
+          "$value": "{color.category.purple.anchor}"
+        },
+        "on": {
+          "$type": "color",
+          "$value": "{color.gray.0}"
+        },
+        "light-border": {
+          "$type": "color",
+          "$value": "#7d40c8"
+        },
+        "light-ink": {
+          "$type": "color",
+          "$value": "#7d40c8"
+        },
+        "light-tint-1": {
+          "$type": "color",
+          "$value": "#fbf9fe"
+        },
+        "light-tint-2": {
+          "$type": "color",
+          "$value": "#f1ecfb"
+        },
+        "light-tint-3": {
+          "$type": "color",
+          "$value": "#e7dff8"
+        },
+        "dark-border": {
+          "$type": "color",
+          "$value": "#a269f3"
+        },
+        "dark-ink": {
+          "$type": "color",
+          "$value": "#bb91ff"
+        },
+        "dark-tint-1": {
+          "$type": "color",
+          "$value": "#383547"
+        },
+        "dark-tint-2": {
+          "$type": "color",
+          "$value": "#3c364e"
+        },
+        "dark-tint-3": {
+          "$type": "color",
+          "$value": "#403756"
+        },
+        "light-effect": {
+          "$type": "color",
+          "$value": "#945ae3",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "dark-effect": {
+          "$type": "color",
+          "$value": "#b78aff",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        }
+      },
+      "cyan": {
+        "anchor": {
+          "$type": "color",
+          "$value": "#25c0cf",
+          "$description": "Pale cyan of HappyHues palette 14, given the chroma and depth it needs to read as a mark.",
+          "$extensions": {
+            "provenance": {
+              "source": "https://www.happyhues.co/palettes/14",
+              "kind": "palette-source",
+              "collected": "2026-10-09",
+              "original": "#bae8e8",
+              "originalOKLCH": [
+                0.899,
+                0.047,
+                196.339
+              ],
+              "adjusted": {
+                "hex": "#25c0cf",
+                "reason": "The source value is a pastel that is too pale on the light surfaces. This keeps the hue family and lowers lightness while raising chroma, so it parts from green in small tiles and bars.",
+                "deltaOKLCH": [
+                  -0.159,
+                  0.073,
+                  8.956
+                ]
+              },
+              "actualOKLCH": [
+                0.74,
+                0.12,
+                205.295
+              ]
+            }
+          }
+        },
+        "fill": {
+          "$type": "color",
+          "$value": "{color.category.cyan.anchor}"
+        },
+        "on": {
+          "$type": "color",
+          "$value": "{color.gray.1000}"
+        },
+        "light-border": {
+          "$type": "color",
+          "$value": "#008e9a"
+        },
+        "light-ink": {
+          "$type": "color",
+          "$value": "#00717b"
+        },
+        "light-tint-1": {
+          "$type": "color",
+          "$value": "#f5fbfc"
+        },
+        "light-tint-2": {
+          "$type": "color",
+          "$value": "#e9f7f9"
+        },
+        "light-tint-3": {
+          "$type": "color",
+          "$value": "#def3f6"
+        },
+        "dark-border": {
+          "$type": "color",
+          "$value": "#25c0cf"
+        },
+        "dark-ink": {
+          "$type": "color",
+          "$value": "#25c0cf"
+        },
+        "dark-tint-1": {
+          "$type": "color",
+          "$value": "#333a3f"
+        },
+        "dark-tint-2": {
+          "$type": "color",
+          "$value": "#333c42"
+        },
+        "dark-tint-3": {
+          "$type": "color",
+          "$value": "#343e44"
+        },
+        "light-effect": {
+          "$type": "color",
+          "$value": "#33a7b3",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        },
+        "dark-effect": {
+          "$type": "color",
+          "$value": "#4ddae9",
+          "$description": "Transient effect cue: the border brightened in its own hue. Not a contrast-gated role; see docs/themes.md."
+        }
+      }
+    },
+    "sequential": {
+      "$extensions": {
+        "family": "blue",
+        "interpolation": "oklab"
+      },
+      "light-low": {
+        "$type": "color",
+        "$value": "#b2cbf1"
+      },
+      "dark-low": {
+        "$type": "color",
+        "$value": "#32445e"
+      },
+      "high": {
+        "$type": "color",
+        "$value": "{color.category.blue.anchor}"
+      }
     }
   },
   "font": {
     "sans": {
       "$type": "fontFamily",
       "$value": [
-        "FigSans",
-        "Pretendard",
         "ui-sans-serif",
         "-apple-system",
         "BlinkMacSystemFont",
-        "Segoe UI",
         "Roboto",
-        "Apple SD Gothic Neo",
         "sans-serif"
       ],
       "$description": "Body and numbers."
@@ -1246,14 +2425,10 @@
         "FigSans",
         "FigSansSym",
         "FigSansMath",
-        "FigSans",
-        "Pretendard",
         "ui-sans-serif",
         "-apple-system",
         "BlinkMacSystemFont",
-        "Segoe UI",
         "Roboto",
-        "Apple SD Gothic Neo",
         "sans-serif"
       ],
       "$description": "본문 글꼴 사슬. 그림에 잘라 넣는 내장 글꼴 이름(FigSans, FigSansSym, FigSansMath, 순서는 src/measure/fonts.js의 대체 사슬과 같다) 뒤에 design-tokens의 font.sans 목록이 그대로 이어진다"
@@ -1830,7 +3005,7 @@
       },
       "bg": {
         "$type": "color",
-        "$value": "#f5f6f8"
+        "$value": "#f2f5f7"
       },
       "page": {
         "$type": "color",
@@ -1860,21 +3035,13 @@
         "$value": "0 2px 8px rgba(0,0,0,.10), 0 0 2px rgba(0,0,0,.10)",
         "$type": "string"
       },
-      "play-fill": {
-        "$type": "color",
-        "$value": "#4f91fb"
-      },
-      "play-ink": {
-        "$type": "color",
-        "$value": "#ffffff"
-      },
       "node-shadow": {
         "$type": "string",
         "$value": "drop-shadow(0px 1px 1px rgba(0,0,0,.07))"
       },
       "canvas": {
         "$type": "color",
-        "$value": "#f5f6f8"
+        "$value": "#f2f5f7"
       },
       "selection-fill": {
         "$type": "color",
@@ -1887,38 +3054,6 @@
       "tab-fill": {
         "$type": "color",
         "$value": "#f5f5f7"
-      },
-      "icon-service": {
-        "$type": "color",
-        "$value": "#3688cb"
-      },
-      "icon-data": {
-        "$type": "color",
-        "$value": "#299b8f"
-      },
-      "icon-access": {
-        "$type": "color",
-        "$value": "#9b8950"
-      },
-      "icon-person": {
-        "$type": "color",
-        "$value": "#d74474"
-      },
-      "icon-service-face": {
-        "$type": "color",
-        "$value": "#e7f3fc"
-      },
-      "icon-data-face": {
-        "$type": "color",
-        "$value": "#e8f5f2"
-      },
-      "icon-access-face": {
-        "$type": "color",
-        "$value": "#f7f2df"
-      },
-      "icon-person-face": {
-        "$type": "color",
-        "$value": "#fcecf2"
       },
       "group-1": {
         "$type": "color",
@@ -2004,38 +3139,6 @@
         "$type": "color",
         "$value": "#acb4c0"
       },
-      "dark-icon-service": {
-        "$type": "color",
-        "$value": "#6cb9ef"
-      },
-      "dark-icon-service-face": {
-        "$type": "color",
-        "$value": "#263e50"
-      },
-      "dark-icon-data": {
-        "$type": "color",
-        "$value": "#64beb0"
-      },
-      "dark-icon-data-face": {
-        "$type": "color",
-        "$value": "#263f3a"
-      },
-      "dark-icon-access": {
-        "$type": "color",
-        "$value": "#ccbd80"
-      },
-      "dark-icon-access-face": {
-        "$type": "color",
-        "$value": "#423d2d"
-      },
-      "dark-icon-person": {
-        "$type": "color",
-        "$value": "#ed82a3"
-      },
-      "dark-icon-person-face": {
-        "$type": "color",
-        "$value": "#492f3b"
-      },
       "light-outline": {
         "$type": "color",
         "$value": "#818181"
@@ -2043,10 +3146,6 @@
       "dark-outline": {
         "$type": "color",
         "$value": "#868686"
-      },
-      "flow-purple": {
-        "$type": "color",
-        "$value": "#70508c"
       },
       "dark-paint-gray": {
         "$type": "color",
@@ -2059,6 +3158,18 @@
       "paint-sky-chroma": {
         "$type": "number",
         "$value": 0.05
+      },
+      "number-fill": {
+        "$type": "color",
+        "$value": "#303336"
+      },
+      "number-ink": {
+        "$type": "color",
+        "$value": "#ffffff"
+      },
+      "chart-hole": {
+        "$type": "number",
+        "$value": 0.55
       }
     }
   },
@@ -2426,6 +3537,11 @@
         "$type": "dimension",
         "$value": 6,
         "$description": "타일 아이콘과 그 아래 이름 사이 간격"
+      },
+      "grid": {
+        "$type": "dimension",
+        "$value": 24,
+        "$description": "의미 아이콘 도형이 놓이는 공통 격자 한 변. 모든 카드 머리글이 같은 아이콘 틀을 쓴다"
       }
     },
     "tag": {
@@ -2461,7 +3577,7 @@
       "head": {
         "$type": "dimension",
         "$value": 5,
-        "$description": "화살촉"
+        "$description": "화살촉 마커 한 변이 몸통 선 굵기의 몇 배인지. 채운 삼각형이며 면과 윤곽이 선의 색을 따른다. 기본과 밝힌 선이 같은 크기다"
       },
       "head-lit": {
         "$type": "dimension",
@@ -2574,8 +3690,8 @@
     "chart": {
       "width": {
         "$type": "dimension",
-        "$value": "{size.figure-canvas}",
-        "$description": "차트 너비. 표준 캔버스 폭과 같아 모든 차트가 가로를 꽉 채운다"
+        "$value": 720,
+        "$description": "차트 논리 폭. 본문 폭(약 680~760)에 삽입돼도 글자가 거의 줄지 않게 표준 캔버스(960)보다 좁다. 이름 칸, 눈금, 값 글자, 막대 길이가 이 폭에서 새로 계산된다"
       },
       "label": {
         "$type": "dimension",
@@ -2631,6 +3747,16 @@
         "$type": "dimension",
         "$value": 16,
         "$description": "덤벨 연결 화살표를 그리는 최소 길이(두 점 가장자리 사이). 이보다 가까우면 화살표만 빼고 두 점은 그대로 둔다"
+      },
+      "compact-width": {
+        "$type": "dimension",
+        "$value": 296,
+        "$description": "좁은 화면용 차트 논리 폭. 내용 보기 폭 248px에 320px 화면의 바깥 여백 48px와 카드 안쪽 여유 24px를 확보한다."
+      },
+      "pattern-spacing": {
+        "$type": "dimension",
+        "$value": 8,
+        "$description": "범주 무늬(빗금, 점, 격자)의 기준 간격. 무늬 선 하나의 간격에 category-revision의 step 배율이 곱해진다. 무늬 선 굵기는 border.tag를 쓴다. 이 값은 차트 기하의 선택이며 어떤 앱의 측정값이라고 주장하지 않는다"
       }
     },
     "queue": {
@@ -2685,6 +3811,11 @@
         "$value": 28,
         "$description": "그룹 제목 줄 높이"
       }
+    },
+    "figure-compact-width": {
+      "$type": "dimension",
+      "$value": 320,
+      "$description": "좁은 화면용 구조 그림의 배치 목표 폭. 글자와 도형을 축소하는 값이 아니며, 들어가지 못한 배치는 넘침을 따로 보고한다."
     }
   },
   "border": {
@@ -3156,6 +4287,21 @@
       "$type": "duration",
       "$value": 600,
       "$description": "단계 끝까지 도착하지 못하는 흐름의 점이 단계 끝에서 서서히 사라지는 시간"
+    },
+    "effect-rise": {
+      "$type": "duration",
+      "$value": 80,
+      "$description": "도착 효과의 상승 시간. 표시 시각이며 시간표의 사건 시각을 바꾸지 않는다"
+    },
+    "effect-hold": {
+      "$type": "duration",
+      "$value": 80,
+      "$description": "도착 효과의 유지 시간"
+    },
+    "effect-decay": {
+      "$type": "duration",
+      "$value": 240,
+      "$description": "도착 효과의 감쇠 시간"
     }
   },
   "illustration": {
@@ -4300,21 +5446,9 @@
       "$value": "{primitive.simple2.shadow}",
       "$type": "string"
     },
-    "play-fill": {
-      "$type": "color",
-      "$value": "{color.blue.dark-stroke}"
-    },
-    "play-ink": {
-      "$type": "color",
-      "$value": "{color.gray.933}"
-    },
     "node-shadow": {
       "$type": "string",
       "$value": "{primitive.simple2.node-shadow}"
-    },
-    "play-face": {
-      "$type": "dimension",
-      "$value": 36
     },
     "corner": {
       "$type": "dimension",
@@ -4336,10 +5470,6 @@
       "$type": "fontWeight",
       "$value": 700
     },
-    "progress-stroke": {
-      "$type": "dimension",
-      "$value": 1
-    },
     "node-corner": {
       "$type": "dimension",
       "$value": 8
@@ -4351,7 +5481,7 @@
     },
     "canvas-corner": {
       "$type": "dimension",
-      "$value": 12
+      "$value": 18
     },
     "canvas-fill": {
       "$type": "color",
@@ -4389,10 +5519,6 @@
       "$type": "color",
       "$value": "{primitive.simple2.dark-edge}"
     },
-    "progress-width": {
-      "$type": "dimension",
-      "$value": 160
-    },
     "hover-fill": {
       "$type": "color",
       "$value": "{primitive.simple2.dark-hover}"
@@ -4404,6 +5530,18 @@
     "data-line": {
       "$type": "color",
       "$value": "{primitive.simple2.dark-data-line}"
+    },
+    "figure-leading": {
+      "$value": 1.5,
+      "$type": "number"
+    },
+    "card-row-gap": {
+      "$value": 6,
+      "$type": "number"
+    },
+    "chart-hole": {
+      "$type": "number",
+      "$value": "{primitive.simple2.chart-hole}"
     }
   }
 }

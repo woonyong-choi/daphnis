@@ -1,4 +1,4 @@
-data right
+daphnis 2
 title "계층 사슬"
 
 table app "응용 계층" {
@@ -23,7 +23,7 @@ table eth "링크 계층" {
   fcs "프레임 검사 합 4바이트"
 }
 
-step "내려감" "헤더가 앞에 붙는다"
+scene "내려감" mode=once
   app -> tcp
   tcp -> ip
   ip -> eth

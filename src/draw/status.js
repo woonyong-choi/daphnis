@@ -3,6 +3,7 @@ import { BADGE_STYLE, bodyOf } from '../measure/decor.js';
 import { measure } from '../measure/fonts.js';
 import { centerBaseline, escapeXml, roundCoord as r } from '../text.js';
 import { tokens, values } from '../tokens.js';
+import { hiddenAttr } from './visible.js';
 
 const SPACE = values.space;
 const HEIGHT = values.size.pill.height;
@@ -83,42 +84,49 @@ export function statusPills(timeline) {
   return [...pills.values()];
 }
 
-// cost: time O(p), heap O(p), stack O(1)
-// vars: p = 알약 수
+// cost: time O(i), heap O(k), stack O(1)
+// vars: i = 도형 수, k = 같은 논리 카드를 그린 도형 수
+// basis: estimate
+// 논리 카드 id가 그려진 도형 번호들. 카드가 여러 보기에 있으면 보기마다 하나이고 모두 같은 논리 상태를 보인다.
+const instancesOf = (scene, node) => scene.items.flatMap((it, index) => (it.id === node ? [index] : []));
+
+// cost: time O(p·i), heap O(p·k), stack O(1)
+// vars: p = 알약 수, i = 도형 수, k = 같은 논리 카드를 그린 도형 수
 // basis: estimate
 /**
- * 상태 알약의 사각형 목록(그림 검사와 글 상자 자리 계산이 피할 대상). 시간표에 쓰인 알약마다 하나다.
- * @returns { x, y, w, h, name, node, kind }[]. name은 알약 글자
+ * 상태 알약의 사각형 목록(그림 검사와 글 상자 자리 계산이 피할 대상). 시간표에 쓰인 알약마다, 그 논리 카드가 그려진 모든 도형(보기마다 하나)에 하나씩이다.
+ * @returns { x, y, w, h, name, node, kind, item }[]. name은 알약 글자, item은 도형 번호(scene.items 안)
  */
 export function statusBoxes(scene, timeline) {
-  const items = new Map(scene.items.map((it) => [it.id, it]));
-  return statusPills(timeline).map(({ node, kind }) => ({ ...statusBox(items.get(node), kind), name: KINDS[kind].text, node, kind }));
+  return statusPills(timeline).flatMap(({ node, kind }) => instancesOf(scene, node).map((item) => ({ ...statusBox(scene.items[item], kind), name: KINDS[kind].text, node, kind, item })));
 }
 
-// cost: time O(p), heap O(out), stack O(1)
-// vars: p = 알약 수, out = 만든 SVG 글자 수
+// cost: time O(p·i), heap O(out), stack O(1)
+// vars: p = 알약 수, i = 도형 수, out = 만든 SVG 글자 수
 // basis: estimate
 /**
- * 상태 알약 층. 알약마다 묶음 하나가 있고 `data-st`(도형 번호와 종류)로 재생기가 찾는다. 처음에는 보이지 않는다.
+ * 상태 알약 층. 알약마다, 그 논리 카드를 그린 모든 도형에 묶음 하나씩 있고 `data-st`(이름과 종류)로 재생기가 찾는다. 처음에는 보이지 않는다.
+ * 논리 상태는 하나라 같은 알약은 모든 도형에서 같은 시각 구간에 보인다.
  * @param windows (spans) => 보임 SMIL 요소. 움직이는 SVG가 시각 구간으로 이산 불투명도를 만들고, 재생기는 빈 글을 돌려주고 직접 켠다
- * @param index 도형 id → 도형 번호. 재생기 데이터의 번호와 같다
+ * @param name (논리 id, 도형 번호) => `data-st`의 앞부분. 움직이는 SVG는 도형마다 다르게(도형 번호) 쓰고, 재생기는 논리 id를 써서 한 이름의 알약을 한꺼번에 켠다
  * @returns 알약 층 글. 알약이 없으면 빈 글이다
  */
-export function drawStatusPills(scene, timeline, { glyphs, windows, index }) {
-  const items = new Map(scene.items.map((it) => [it.id, it]));
-  const drawn = statusPills(timeline).map(({ node, kind, spans }) => {
-    const { color, text } = KINDS[kind];
-    const { x, y, w, h } = statusBox(items.get(node), kind);
-    glyphs.add(text, BADGE_STYLE.face);
-    const markX = x + SPACE['3'] + ICON / 2;
-    const textX = x + SPACE['3'] + ICON + SPACE['2'];
-    return (
-      `<g class="fl-status" data-st="${escapeXml(`${index.get(node)}-${kind}`)}" opacity="0">` +
-      `<rect x="${r(x)}" y="${r(y)}" width="${r(w)}" height="${r(h)}" rx="${r(h / 2)}" fill="${tokens.color.node}" stroke="${color}" stroke-width="${values.border.edge}"/>` +
-      MARKS[kind](markX, y + h / 2, color) +
-      `<text x="${r(textX)}" y="${r(centerBaseline(y + h / 2, BADGE_STYLE.size))}" class="status-text">${text}</text>` +
-      `${windows(spans)}</g>`
-    );
-  });
+export function drawStatusPills(scene, timeline, { glyphs, windows, name, isStatic = false }) {
+  const drawn = statusPills(timeline).flatMap(({ node, kind, spans }) =>
+    instancesOf(scene, node).map((item) => {
+      const { color, text } = KINDS[kind];
+      const { x, y, w, h } = statusBox(scene.items[item], kind);
+      glyphs.add(text, BADGE_STYLE.face);
+      const markX = x + SPACE['3'] + ICON / 2;
+      const textX = x + SPACE['3'] + ICON + SPACE['2'];
+      return (
+        `<g class="fl-status" data-st="${escapeXml(`${name(node, item)}-${kind}`)}" opacity="${isStatic ? 1 : 0}"${hiddenAttr(isStatic)}>` +
+        `<rect x="${r(x)}" y="${r(y)}" width="${r(w)}" height="${r(h)}" rx="${r(h / 2)}" fill="${tokens.color.node}" stroke="${color}" stroke-width="${values.border.edge}"/>` +
+        MARKS[kind](markX, y + h / 2, color) +
+        `<text x="${r(textX)}" y="${r(centerBaseline(y + h / 2, BADGE_STYLE.size))}" class="status-text">${text}</text>` +
+        `${windows(spans)}</g>`
+      );
+    }),
+  );
   return drawn.length ? `<g class="fl-status-pills">${drawn.join('')}</g>` : '';
 }

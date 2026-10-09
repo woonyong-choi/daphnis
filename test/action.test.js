@@ -22,8 +22,8 @@ function actionScript() {
 }
 
 const GOOD_MD = '# 문서\n\n그림 없는 본문\n';
-const BAD_MD = '# 문서\n\n```dap\nchart\n```\n';
-const GOOD_DAP = 'flow right\nbox a "A"\n';
+const BAD_MD = '# 문서\n\n```dap\ndaphnis 2\nbox a "A"\nscene "s"\n  a -> zz\n```\n';
+const GOOD_DAP = 'daphnis 2\nbox a "A"\n';
 
 // cost: time O(f), heap O(f), stack O(1), io 3
 // vars: f = 파일 수
@@ -53,14 +53,19 @@ test('action_check_fails_for_a_bad_block_in_a_file_whose_name_is_hangul_spaced_o
   }
 });
 
-// 근거: 이슈 #78 댓글: 명시한 옛 확장자(.muto) 원본도 같은 경로 수집과 검사를 거친다
-test('action_check_reads_an_explicitly_selected_old_extension_source_instead_of_dropping_it', () => {
+// 근거: 설계 markdown.md 입력 `paths` "다른 확장자 파일은 모으지 않는다. 글롭이 .dap나 .md와 맞는 파일이 하나도 없으면 no tracked .dap or .md file matches 오류로 실패한다". `.muto`는 읽지 않는 확장자라 수집하지 않고 CLI에 넘기지도 않는다(옛 판은 CLI가 "읽지 않는다"로 실패시켰다)
+test('action_check_never_collects_a_muto_file_and_fails_when_a_glob_matches_nothing_else', () => {
   withFolder((folder) => {
-    const result = runAction(folder, { 'ok.md': GOOD_MD, 'legacy.muto': 'chart\n', '한글.muto': 'chart\n' }, { paths: 'legacy.muto 한글.muto **/*.md' });
+    const mixed = runAction(folder, { 'ok.md': GOOD_MD, 'legacy.muto': GOOD_DAP, '한글.muto': GOOD_DAP }, { paths: 'legacy.muto 한글.muto **/*.md' });
 
-    assert.equal(result.status, 1, result.stdout + result.stderr);
-    assert.match(result.stderr + result.stdout, /legacy\.muto/);
-    assert.match(result.stderr + result.stdout, /한글\.muto/);
+    assert.equal(mixed.status, 0, mixed.stdout + mixed.stderr);
+    assert.doesNotMatch(mixed.stderr + mixed.stdout, /muto/, '.muto 파일은 CLI에 넘기지 않아 어떤 진단도 없다');
+  });
+  withFolder((folder) => {
+    const only = runAction(folder, { 'ok.md': GOOD_MD, 'legacy.muto': GOOD_DAP }, { paths: 'legacy.muto' });
+
+    assert.equal(only.status, 1, only.stdout + only.stderr);
+    assert.match(only.stderr + only.stdout, /no tracked \.dap or \.md file matches/);
   });
 });
 
@@ -91,7 +96,7 @@ test('action_check_with_no_matching_tracked_file_fails_with_an_error_annotation'
   });
 });
 
-const FIGURE_MD = '# 문서\n\n```dap name=flow\nflow right\nbox a "A"\n```\n';
+const FIGURE_MD = '# 문서\n\n```dap name=flow\ndaphnis 2\nbox a "A"\n```\n';
 
 // 근거: 이슈 #39 결정 "CLI와 Action에서 같은 선택을 쓸 수 있고 Action 기본값은 기존 접힘 상태 유지". fold 입력이 --fold, --unfold로 넘어가고 check와 render 모드 모두에 적용된다
 test('action_fold_input_selects_fold_unfold_or_keeps_the_folded_state_by_default', () => {
@@ -133,13 +138,13 @@ test('action_fold_input_rejects_other_values_and_a_title_without_fold', () => {
 
 // 근거: 이슈 #28 구현 기준 "CLI와 Action에서 같은 예산을 명시적으로 높일 수 있고 조정값을 검증한다", action.yml 입력 budget
 test('action_budget_input_raises_the_limit_with_spaces_or_commas_and_rejects_bad_items', () => {
-  const grid = 'flow right\ngrid g "격자" rows=10 cols=10 {\n' + Array.from({ length: 100 }, (_, k) => `  item c${k} "${k % 10}" row=${Math.floor(k / 10)} col=${k % 10}`).join('\n') + '\n}\n';
+  const grid = 'daphnis 2\ngrid g "격자" rows=10 cols=10 {\n' + Array.from({ length: 100 }, (_, k) => `  item c${k} "${k % 10}" row=${Math.floor(k / 10)} col=${k % 10}`).join('\n') + '\n}\n';
   const outcome = (budget) => withFolder((folder) => runAction(folder, { 'g.dap': grid, 'doc.md': `# 문서\n\n\`\`\`dap\n${grid}\`\`\`\n` }, { budget, mode: 'check' }));
 
-  assert.match(outcome('grid-elements=100').stderr, /g\.dap:2: this figure needs 502 SVG elements.*--budget grid-elements=502/);
-  assert.match(outcome('grid-elements=100').stderr, /doc\.md:5: this figure needs 502/);
-  assert.doesNotMatch(outcome('grid-elements=502,grid-path-commands=5').stderr, /budget/);
-  assert.doesNotMatch(outcome('  grid-elements=502 ,  grid-path-commands=5 ').stderr, /budget/);
+  assert.match(outcome('grid-elements=100').stderr, /g\.dap:2: this figure needs 302 SVG elements.*--budget grid-elements=302/);
+  assert.match(outcome('grid-elements=100').stderr, /doc\.md:5: this figure needs 302/);
+  assert.doesNotMatch(outcome('grid-elements=302,grid-path-commands=5').stderr, /budget/);
+  assert.doesNotMatch(outcome('  grid-elements=302 ,  grid-path-commands=5 ').stderr, /budget/);
   assert.match(outcome('grid-elements=abc').stderr, /budget grid-elements is a positive whole number/);
   assert.match(outcome('nope=1').stderr, /unknown budget "nope"/);
 });

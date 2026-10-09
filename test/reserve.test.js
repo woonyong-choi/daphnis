@@ -7,8 +7,8 @@ import { engineStats } from '../src/flow-events.js';
 import { FigureError } from '../src/source/problems.js';
 import { runAtomicUpdate } from '../src/timeline-values.js';
 
-// 값 넷: 낱말 holder, 숫자 free(가용량 1)와 spare(5), 큐 q(4칸 가운데 3칸 참). 선: a->lock, b->lock, c->lock, a->q, b->q, c->q, q->a. 단계는 BASE 다음 줄부터 붙인다.
-const BASE = 'flow right\nbox a "A"\nbox b "B"\nbox c "C"\nbox lock "잠금"\nqueue q "큐" slots=4 from=3\nvalue holder "쥔 쪽" on=lock from=none\nvalue free "남은" on=lock from=1\nvalue spare "여유" on=lock from=5\na -> lock\nb -> lock\nc -> lock\na -> q\nb -> q\nc -> q\nq -> a\n';
+// 값 넷: 낱말 holder, 숫자 free(가용량 1)와 spare(5), 큐 q(4칸 가운데 3칸 참). 선: a->lock, b->lock, c->lock, a->q, b->q, c->q, q->a. 장면은 BASE 다음 줄부터 붙인다.
+const BASE = 'daphnis 2\nbox a "A"\nbox b "B"\nbox c "C"\nbox lock "잠금"\nqueue q "큐" slots=4 from=3\nvalue holder "쥔 쪽" on=lock from=none\nvalue free "남은" on=lock from=1\nvalue spare "여유" on=lock from=5\na -> lock\nb -> lock\nc -> lock\na -> q\nb -> q\nc -> q\nq -> a\n';
 const LINES = BASE.split('\n').length - 1;
 
 // cost: time O(n), heap O(n), stack O(1)
@@ -25,13 +25,13 @@ async function errorsOf(source, options) {
   }
 }
 
-// 값 줄 가운데 id와 단계가 맞는 것의 변화 [시각, 글] 목록
+// 값 줄 가운데 id와 장면이 맞는 것의 변화 [시각, 글] 목록
 const changesOf = (timeline, id, si = 0) => timeline.values.find((row) => row.id === id && row.si === si).changes;
-// 흐름 단계의 점마다 출발 시각(구간 시작 기준 ms)과 도착 도형
+// 흐름 장면의 점마다 출발 시각(구간 시작 기준 ms)과 도착 도형
 const dotsOf = (timeline, si = 0) => timeline.segs.filter((seg) => seg.si === si).flatMap((seg) => seg.hops.map((hop) => [hop.at ?? 0, hop.to, hop.line]));
 const mutexTracks = (extra = '') => `  track a -> lock "요청" at=0s time=1s wait="holder='none'" reserve="holder=A"${extra}\n  track b -> lock "요청" at=0s time=1s wait="holder='none'" reserve="holder=B"\n  track c -> lock "요청" at=0s time=1s wait="holder='none'" reserve="holder=C"\n`;
 const RELEASES = '  track a -> lock "풀기" at=3s time=1s when="holder=\'A\'" set="holder=none"\n  track b -> lock "풀기" at=6s time=1s when="holder=\'B\'" set="holder=none"\n';
-const LOCK = `${BASE}step "s" for=12s\n${mutexTracks()}${RELEASES}`;
+const LOCK = `${BASE}scene "s" for=12s\n${mutexTracks()}${RELEASES}`;
 
 // ---- 같은 시각의 요청: 하나만 획득 ----
 
@@ -49,8 +49,8 @@ test('buildFigure_three_requests_at_the_same_time_reserve_a_lock_of_one_for_the_
 
 // 근거: 계약 "같은 논리 시각의 요청은 선언 순서", 설계 playback.md 시간 정밀도 "시각은 눈금의 정수 번호"
 test('buildFigure_the_request_at_the_earlier_tick_wins_over_the_one_declared_first_and_the_same_tick_follows_declaration_order', async () => {
-  const late = `${BASE}step "s" for=4s\n  track a -> lock at=0.00001ms time=1s wait="holder='none'" reserve="holder=A" timeout=1s\n  track b -> lock at=0s time=1s wait="holder='none'" reserve="holder=B" timeout=1s\n`;
-  const same = `${BASE}step "s" for=4s\n  track a -> lock at=1s time=1s wait="holder='none'" reserve="holder=A" timeout=1s\n  track b -> lock at=1s time=1s wait="holder='none'" reserve="holder=B" timeout=1s\n`;
+  const late = `${BASE}scene "s" for=4s\n  track a -> lock at=0.00001ms time=1s wait="holder='none'" reserve="holder=A" timeout=1s\n  track b -> lock at=0s time=1s wait="holder='none'" reserve="holder=B" timeout=1s\n`;
+  const same = `${BASE}scene "s" for=4s\n  track a -> lock at=1s time=1s wait="holder='none'" reserve="holder=A" timeout=1s\n  track b -> lock at=1s time=1s wait="holder='none'" reserve="holder=B" timeout=1s\n`;
 
   assert.deepEqual(changesOf((await buildFigure(late)).timeline, 'holder'), [[0, 'B']], '눈금 하나 앞선 b가 쥔다');
   assert.deepEqual(changesOf((await buildFigure(same)).timeline, 'holder'), [[1000, 'A']], '같은 눈금이면 먼저 선언한 a가 쥔다');
@@ -58,7 +58,7 @@ test('buildFigure_the_request_at_the_earlier_tick_wins_over_the_one_declared_fir
 
 // 근거: 이슈 #138 완료 조건 "가용량 1 동시 요청에서 하나만 획득", 이슈의 현재 동작 원본(`wait`와 `set`은 둘 다 n=0을 읽고 출발한다)
 test('buildFigure_the_same_two_requests_with_reserve_start_one_dot_while_wait_and_set_still_start_both', async () => {
-  const head = 'flow right\nbox a "A"\nbox b "B"\nvalue n "N" on=a\na -> b\nstep "Both"\n';
+  const head = 'daphnis 2\nbox a "A"\nbox b "B"\nvalue n "N" on=a\na -> b\nscene "Both"\n';
   const old = await buildFigure(`${head} a -> b time=1s wait="n=0" set="n+1@a" & a -> b time=1s wait="n=0" set="n+1@a"\n`);
   const next = await buildFigure(`${head} a -> b time=1s wait="n=0" reserve="n+1" & a -> b time=1s wait="n=0" reserve="n+1" timeout=2s\n`);
 
@@ -71,7 +71,7 @@ test('buildFigure_the_same_two_requests_with_reserve_start_one_dot_while_wait_an
 
 // 근거: 이슈 #138 완료 조건 "남은 큐 용량 1에서 초과 획득이 없다"
 test('buildFigure_a_queue_with_one_free_slot_takes_one_of_three_producers_and_never_counts_over_its_slots', async () => {
-  const source = `${BASE}step "s" for=12s\n  track a, b, c -> q "작업" at=0s time=1s wait="q<4" reserve="q+1"\n  track q -> a "꺼냄" at=3s time=1s set="q-1@q"\n  track q -> a "꺼냄" at=8s time=1s set="q-1@q"\n`;
+  const source = `${BASE}scene "s" for=12s\n  track a, b, c -> q "작업" at=0s time=1s wait="q<4" reserve="q+1"\n  track q -> a "꺼냄" at=3s time=1s set="q-1@q"\n  track q -> a "꺼냄" at=8s time=1s set="q-1@q"\n`;
   const { timeline } = await buildFigure(source);
   const counts = [3, ...changesOf(timeline, 'q').map(([, text]) => Number(text))];
 
@@ -84,7 +84,7 @@ test('buildFigure_a_queue_with_one_free_slot_takes_one_of_three_producers_and_ne
 
 // 근거: 이슈 #138 완료 조건 "여러 대기자", 가용량이 둘인 숫자 자원
 test('buildFigure_a_counter_of_two_lets_exactly_two_of_three_requests_in_and_the_third_waits_for_a_release', async () => {
-  const source = `${BASE.replace('from=1', 'from=2')}step "s" for=8s\n  track a, b, c -> lock at=0s time=1s wait="free>0" reserve="free-1"\n  track a -> lock "풀기" at=4s time=1s set="free+1"\n`;
+  const source = `${BASE.replace('from=1', 'from=2')}scene "s" for=8s\n  track a, b, c -> lock at=0s time=1s wait="free>0" reserve="free-1"\n  track a -> lock "풀기" at=4s time=1s set="free+1"\n`;
   const { timeline } = await buildFigure(source);
 
   assert.deepEqual(changesOf(timeline, 'free'), [[0, '0']], '둘이 들어가 0이 되고 같은 시각의 풀림과 쥐기는 합쳐져 값 줄에는 변화가 없다');
@@ -96,7 +96,7 @@ test('buildFigure_a_counter_of_two_lets_exactly_two_of_three_requests_in_and_the
 
 // 근거: 계약 "여러 값의 예약은 모두 성공하거나 모두 적용하지 않는다", 설계 "읽기 식의 원천은 갱신을 시작하는 시점의 값"
 test('buildFigure_one_reserve_updates_several_values_together_and_reads_the_values_from_before_the_update', async () => {
-  const source = `${BASE}step "s"\n  a -> lock time=1s wait="holder='none' && free>0" reserve="holder=A, free-1"\nstep "t" keep="free, spare"\n  b -> lock time=1s reserve="free:=spare, spare:=free"\n`;
+  const source = `${BASE}scene "s"\n  a -> lock time=1s wait="holder='none' && free>0" reserve="holder=A, free-1"\nscene "t" keep="free, spare"\n  b -> lock time=1s reserve="free:=spare, spare:=free"\n`;
   const { timeline } = await buildFigure(source);
 
   assert.deepEqual([changesOf(timeline, 'holder'), changesOf(timeline, 'free')], [[[0, 'A']], [[0, '0']]]);
@@ -108,7 +108,7 @@ test('buildFigure_one_reserve_updates_several_values_together_and_reads_the_valu
 
 // 근거: 이슈 #138 완료 조건 "여러 값 예약의 실패·타입 오류가 부분 갱신을 남기지 않는다(오류 주입과 상태 비교)"
 test('runAtomicUpdate_leaves_every_value_untouched_when_one_expression_fails_and_applies_all_when_none_fails', async () => {
-  const { figure } = await buildFigure(`${BASE}step "s"\n  a -> lock time=1s\n`);
+  const { figure } = await buildFigure(`${BASE}scene "s"\n  a -> lock time=1s\n`);
   const byId = new Map(figure.values.map((v) => [v.id, v]));
   const expr = (id, op, operand) => ({ id, op, operand, line: 99 });
   const fresh = () => new Map([['holder', 'none'], ['free', '1'], ['q', '3']]);
@@ -130,21 +130,22 @@ test('runAtomicUpdate_leaves_every_value_untouched_when_one_expression_fails_and
 
 // 근거: 이슈 #138 완료 조건 "실패·타입 오류가 부분 갱신을 남기지 않는다", 설계 "오류가 있으면 결과 파일을 쓰지 않음"
 test('buildFigure_a_reserve_that_fails_at_run_time_ends_the_build_with_a_value_type_error_at_its_line_and_builds_no_timeline', async () => {
-  const source = `${BASE}step "s"\n  a -> lock time=1s reserve="free-1, q:=holder"\n`;
+  const source = `${BASE}scene "s"\n  a -> lock time=1s reserve="free-1, q:=holder"\n`;
   const found = await errorsOf(source);
 
   assert.deepEqual(found.map(({ code, line }) => [code, line]), [['value-type', LINES + 2]]);
   assert.match(found[0].message, /"q" is a queue and counts filled slots in whole numbers, but "holder" holds "none"/);
   const before = engineStats.steps;
-  assert.deepEqual(await errorsOf(`${BASE}step "s"\n  a -> lock time=1s reserve="free-1, q:=free"\n`), [], '같은 모양의 식이 정수를 읽으면 통과한다');
-  assert.equal(engineStats.steps, before + 1);
+  assert.deepEqual(await errorsOf(`${BASE}scene "s"\n  a -> lock time=1s reserve="free-1, q:=free"\n`), [], '같은 모양의 식이 정수를 읽으면 통과한다');
+  // 값 자리 글자가 정해질 때까지 같은 장면을 다시 돌리므로(값 폭 고정점) 한 번 만들 때 엔진이 한 번 이상 돈다.
+  assert.ok(engineStats.steps > before, '통과한 만들기는 엔진을 돌린다');
 });
 
 // ---- 조건이 거짓이거나 시간이 지났을 때 ----
 
 // 근거: 계약 "timeout, when=false는 예약 부작용이 없다", 설계 playback.md 원자 예약 "시간 초과 분기와 건너뛴 이동은 예약하지 않는다"
 test('buildFigure_a_timed_out_wait_and_a_false_when_reserve_nothing_and_the_else_branch_carries_no_reservation', async () => {
-  const source = `${BASE}step "s" for=8s\n  track a -> lock at=0s time=1s set="holder=A"\n  track b -> lock at=2s time=1s wait="holder='none'" reserve="free-1" timeout=1s else=q\n  track c -> lock at=5s time=1s when="free=0" reserve="free-1"\n`;
+  const source = `${BASE}scene "s" for=8s\n  track a -> lock at=0s time=1s set="holder=A"\n  track b -> lock at=2s time=1s wait="holder='none'" reserve="free-1" timeout=1s else=q\n  track c -> lock at=5s time=1s when="free=0" reserve="free-1"\n`;
   const { timeline } = await buildFigure(source);
 
   assert.deepEqual(timeline.reserves, [], '시간 초과도 건너뜀도 예약하지 않는다');
@@ -156,7 +157,7 @@ test('buildFigure_a_timed_out_wait_and_a_false_when_reserve_nothing_and_the_else
 
 // 근거: 계약 "조건이 거짓이면 예약 부작용 없이 기존 대기·시간 초과 규칙", 대기가 풀려도 when이 거짓이면 예약하지 않는다
 test('buildFigure_a_wait_released_into_a_false_when_ends_released_but_reserves_nothing', async () => {
-  const source = `${BASE}step "s" for=6s\n  track a -> lock at=0s time=1s set="free=5"\n  track b -> lock at=0s time=1s wait="free=5" when="free=0" reserve="holder=B"\n`;
+  const source = `${BASE}scene "s" for=6s\n  track a -> lock at=0s time=1s set="free=5"\n  track b -> lock at=0s time=1s wait="free=5" when="free=0" reserve="holder=B"\n`;
   const { timeline } = await buildFigure(source);
 
   assert.deepEqual(timeline.waits.map(({ end, t1 }) => [end, t1]), [['released', 1000]]);
@@ -167,7 +168,7 @@ test('buildFigure_a_wait_released_into_a_false_when_ends_released_but_reserves_n
 
 // 근거: 계약 "lost와 예약 해제의 관계를 명시한다, 렌더러가 임의로 반환하지 않는다", 설계 playback.md 원자 예약 "예약은 출발 때 잡고, 사라져도 자동으로 돌려주지 않는다"
 test('buildFigure_a_lost_dot_keeps_the_reservation_it_took_at_departure_until_a_model_event_releases_it', async () => {
-  const source = `${BASE}step "s" for=12s\n  track a -> lock at=0s time=1s lost=50% wait="holder='none'" reserve="holder=A"\n  track b -> lock at=1s time=1s wait="holder='none'" reserve="holder=B" timeout=2s\n  track a -> lock "풀기" at=8s time=1s set="holder=none"\n  track c -> lock at=2s time=1s wait="holder='none'" reserve="holder=C"\n`;
+  const source = `${BASE}scene "s" for=12s\n  track a -> lock at=0s time=1s lost=50% wait="holder='none'" reserve="holder=A"\n  track b -> lock at=1s time=1s wait="holder='none'" reserve="holder=B" timeout=2s\n  track a -> lock "풀기" at=8s time=1s set="holder=none"\n  track c -> lock at=2s time=1s wait="holder='none'" reserve="holder=C"\n`;
   const { timeline } = await buildFigure(source);
 
   assert.deepEqual(changesOf(timeline, 'holder'), [[0, 'A'], [9000, 'C']], '사라진 요청의 예약은 풀기 전까지 남고, 풀리면 다음 대기자가 쥔다');
@@ -178,7 +179,7 @@ test('buildFigure_a_lost_dot_keeps_the_reservation_it_took_at_departure_until_a_
 
 // 근거: 계약 "예약 해제는 명시적인 모델 사건", 출발 때 풀리는 해제(reserve)와 닿을 때 풀리는 해제(set)의 시각이 다르다
 test('buildFigure_a_release_by_reserve_frees_at_the_departure_and_a_release_by_set_frees_at_the_arrival_and_both_wake_the_waiter_at_that_time', async () => {
-  const wake = async (release) => (await buildFigure(`${BASE}step "s" for=8s\n  track a -> lock at=0s time=1s wait="holder='none'" reserve="holder=A"\n  track b -> lock at=0s time=1s wait="holder='none'" reserve="holder=B"\n  track a -> lock "풀기" at=3s time=1s ${release}\n`)).timeline;
+  const wake = async (release) => (await buildFigure(`${BASE}scene "s" for=8s\n  track a -> lock at=0s time=1s wait="holder='none'" reserve="holder=A"\n  track b -> lock at=0s time=1s wait="holder='none'" reserve="holder=B"\n  track a -> lock "풀기" at=3s time=1s ${release}\n`)).timeline;
   const byReserve = await wake('when="holder=\'A\'" reserve="holder=none"');
   const bySet = await wake('when="holder=\'A\'" set="holder=none"');
 
@@ -191,23 +192,23 @@ test('buildFigure_a_release_by_reserve_frees_at_the_departure_and_a_release_by_s
 
 // 근거: 계약 "앞 요청의 예약 갱신은 다음 요청의 조건 평가 전에 보인다", 예약이 바꾼 값을 읽는 이른 대기도 같은 시각에 다시 평가된다
 test('buildFigure_a_reserve_that_changes_a_value_wakes_an_earlier_wait_on_it_at_the_same_time', async () => {
-  const source = `${BASE}step "s" for=4s\n  track a -> lock at=0s time=1s wait="holder='go'" timeout=3s\n  track b -> lock at=1s time=1s reserve="holder=go"\n`;
+  const source = `${BASE}scene "s" for=4s\n  track a -> lock at=0s time=1s wait="holder='go'" timeout=3s\n  track b -> lock at=1s time=1s reserve="holder=go"\n`;
   const { timeline } = await buildFigure(source);
 
   assert.deepEqual(timeline.waits.map(({ end, t1 }) => [end, t1]), [['released', 1000]]);
   assert.deepEqual(dotsOf(timeline).map(([at]) => at).sort((x, y) => x - y), [1000, 1000]);
 });
 
-// ---- 단계, 이동 줄, keep ----
+// ---- 장면, 이동 줄, keep ----
 
-// 근거: 이슈 #138 완료 조건 "일반 잠금 원본", 박자 단계의 이동(a -> b)도 같은 규칙
+// 근거: 이슈 #138 완료 조건 "일반 잠금 원본", 박자 장면의 이동(a -> b)도 같은 규칙
 test('buildFigure_moves_of_a_beat_reserve_in_declaration_order_and_the_reserved_value_is_kept_into_the_next_step', async () => {
-  const source = `${BASE}step "s"\n  a -> lock time=1s wait="holder='none'" reserve="holder=A" timeout=1s & b -> lock time=1s wait="holder='none'" reserve="holder=B" timeout=1s\nstep "t" keep="holder"\n  c -> lock time=1s when="holder='A'" reserve="free-1"\n`;
+  const source = `${BASE}scene "s"\n  a -> lock time=1s wait="holder='none'" reserve="holder=A" timeout=1s & b -> lock time=1s wait="holder='none'" reserve="holder=B" timeout=1s\nscene "t" keep="holder"\n  c -> lock time=1s when="holder='A'" reserve="free-1"\n`;
   const { timeline } = await buildFigure(source);
 
   assert.deepEqual(changesOf(timeline, 'holder'), [[0, 'A']]);
   assert.deepEqual(timeline.waits.map(({ end }) => end), ['timeout']);
-  assert.equal(timeline.values.find((row) => row.id === 'holder' && row.si === 1).initial, 'A', 'keep한 예약 값이 다음 단계로 이어진다');
+  assert.equal(timeline.values.find((row) => row.id === 'holder' && row.si === 1).initial, 'A', 'keep한 예약 값이 다음 장면으로 이어진다');
   assert.deepEqual(changesOf(timeline, 'free', 1).map(([, text]) => text), ['0']);
 });
 
@@ -220,9 +221,9 @@ test('buildFigure_builds_the_same_timeline_twice_from_the_same_reserve_source', 
 
 // ---- 진단 ----
 
-// 근거: 설계 figure-syntax.md 예약 "reserve는 구조 그림의 이동과 흐름에서만, @도형 없이, 선언한 값만"
-test('buildFigure_reports_reserve_written_outside_a_flow_with_an_at_node_with_unknown_values_or_with_a_bad_expression', async () => {
-  const flow = (line) => `${BASE}step "s"\n  ${line}\n`;
+// 근거: 설계 figure-syntax.md 예약 "reserve는 @도형 없이, 선언한 값만, 정수와 낱말 종류를 지켜서"
+test('buildFigure_reports_reserve_written_with_an_at_node_with_unknown_values_or_with_a_bad_expression', async () => {
+  const flow = (line) => `${BASE}scene "s"\n  ${line}\n`;
   const found = async (line) => (await errorsOf(flow(line))).map(({ code, line: at, message }) => [code, at, message]);
 
   assert.match((await found('a -> lock time=1s reserve="free-1@lock"'))[0][2], /a reserve applies when the dot departs, so it takes no @node/);
@@ -231,16 +232,24 @@ test('buildFigure_reports_reserve_written_outside_a_flow_with_an_at_node_with_un
   assert.match((await found('a -> lock time=1s reserve="q+0.5"'))[0][2], /"q" is a queue, so it counts filled slots in whole numbers/);
   assert.match((await found('a -> lock time=1s reserve="free:=nope"'))[0][2], /unknown value "nope"/i);
   assert.equal((await found('track a -> lock reserve=""'))[0][0], 'syntax');
-  const sequence = await errorsOf('sequence\nbox a "A"\nbox b "B"\nstep "s"\n  a -> b reserve="n+1"\n');
-  assert.match(sequence[0].message, /reserve belongs to flow figures only/);
-  assert.equal(sequence[0].line, 5);
+});
+
+// 근거: 설계 figure-syntax.md 예약. 문서 종류 제한은 없어졌으므로 순서 보기만 있는 문서의 이동도 값 이름을 선언 값에서 찾는다(옛 "흐름 그림에서만" 오류는 없다)
+test('buildFigure_reserve_in_a_sequence_only_document_is_checked_against_the_declared_values_like_anywhere_else', async () => {
+  const head = 'daphnis 2\nbox a "A"\nbox b "B"\nview calls sequence {\n  a b\n}\n';
+  const undeclared = await errorsOf(`${head}scene "s"\n  a -> b "go" reserve="n+1"\n`);
+  const declared = await errorsOf(`${head.replace('view calls', 'value n "N" on=a\nview calls')}scene "s"\n  a -> b "go" reserve="n+1"\n`);
+
+  assert.match(undeclared[0].message, /unknown value "n"/i);
+  assert.equal(undeclared[0].line, 8);
+  assert.deepEqual(declared, []);
 });
 
 // ---- 예산 ----
 
 // 근거: 이슈 #138 완료 조건 "이벤트 예산과 시간 눈금 계약 적용", 설계 playback.md 이벤트 예산
 test('buildFigure_counts_the_reserve_in_the_event_budget_and_refuses_a_huge_reserve_flow_before_building', async () => {
-  const source = `${BASE}step "s" for=6s\n  track a -> lock every=1s time=100ms wait="free>0" reserve="free-1" timeout=100ms\n`;
+  const source = `${BASE}scene "s" for=6s\n  track a -> lock every=1s time=100ms wait="free>0" reserve="free-1" timeout=100ms\n`;
   const needed = 6 * 4;
 
   assert.deepEqual(await errorsOf(source), []);
@@ -250,7 +259,7 @@ test('buildFigure_counts_the_reserve_in_the_event_budget_and_refuses_a_huge_rese
   assert.equal(found[0].code, 'budget-exceeded');
   assert.match(found[0].message, new RegExp(`needs ${needed} events`));
   const started = Date.now();
-  const huge = await errorsOf(`${BASE}step "s" for=3600s\n  track a -> lock every=0.001ms time=100ms wait="free>0" reserve="free-1"\n`);
+  const huge = await errorsOf(`${BASE}scene "s" for=3600s\n  track a -> lock every=0.001ms time=100ms wait="free>0" reserve="free-1"\n`);
 
   assert.equal(huge[0].code, 'budget-exceeded');
   assert.ok(Date.now() - started < 5000, '제한 시간 안에 끝난다');
@@ -259,7 +268,7 @@ test('buildFigure_counts_the_reserve_in_the_event_budget_and_refuses_a_huge_rese
 // 근거: 설계 playback.md 이벤트 예산 "같은 시각의 연쇄도 chain에 센다", 예약이 대기를 깨우는 연쇄도 예산이 끊는다
 test('buildFigure_ends_a_same_time_reserve_chain_with_budget_exceeded_when_the_chain_budget_is_small', async () => {
   const waiters = Array.from({ length: 40 }, () => '  track a -> lock at=0s time=1s wait="holder=\'go\'" timeout=5s\n').join('');
-  const source = `${BASE}step "s" for=4s\n${waiters}  track b -> lock at=1s time=1s reserve="holder=go"\n`;
+  const source = `${BASE}scene "s" for=4s\n${waiters}  track b -> lock at=1s time=1s reserve="holder=go"\n`;
   const found = await errorsOf(source, { budget: { chain: 20 } });
 
   assert.equal(found[0].code, 'budget-exceeded');

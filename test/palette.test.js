@@ -12,6 +12,7 @@ import { valueNames } from '../src/source/grammar.js';
 import { toSvg } from '../src/svg.js';
 import { toHtml } from '../src/html.js';
 import { errorsOf, themeColor, tokenValue } from './helpers.js';
+import { isLabelRequired } from './label-required.js';
 
 const TEXT = 4.5;
 const GRAPHIC = 3;
@@ -27,18 +28,22 @@ test('paint_every_color_stage_reaches_its_contrast_floor_in_both_themes', () => 
   for (const theme of THEMES) {
     for (const name of NAMES) {
       const [fill, stroke, ink] = ['fill', 'stroke', 'ink'].map((s) => paint(theme, name, s));
+      // 노랑 경계는 색상을 지키려고 밝기 하한(갈색 방지)에서 멈춘다. 라이트에서 대비 3에 못 미치는 만큼 직접 라벨이 뜻을 전한다. 글자 4.5는 예외가 없다.
+      const isLabeled = isLabelRequired(theme, name);
       for (const text of ['fg', 'muted']) assert.ok(contrast(themeColor(theme, text), fill) >= TEXT, `${theme} ${text} on ${name} fill`);
-      assert.ok(contrast(paint(theme, name, 'outline'), fill) >= GRAPHIC, `${theme} outline on ${name} fill`);
-      for (const face of ['bg', 'node']) assert.ok(contrast(paint(theme, name, 'outline'), themeColor(theme, face)) >= GRAPHIC, `${theme} ${name} outline on ${face}`);
+      if (!isLabeled) assert.ok(contrast(paint(theme, name, 'outline'), fill) >= GRAPHIC, `${theme} outline on ${name} fill`);
+      for (const face of ['bg', 'node']) if (!isLabeled) assert.ok(contrast(paint(theme, name, 'outline'), themeColor(theme, face)) >= GRAPHIC, `${theme} ${name} outline on ${face}`);
       for (const face of [...faces(theme), ...fills(theme)]) {
-        assert.ok(contrast(stroke, face) >= GRAPHIC, `${theme} ${name} stroke on ${face}`);
+        if (!isLabeled) assert.ok(contrast(stroke, face) >= GRAPHIC, `${theme} ${name} stroke on ${face}`);
         assert.ok(contrast(ink, face) >= TEXT, `${theme} ${name} ink on ${face}`);
       }
       const band = mixHex(fill, stroke, tokenValue('opacity.tag'));
       assert.ok(contrast(themeColor(theme, 'fg'), band) >= TEXT, `${theme} tag band on ${name} fill`);
       assert.ok(distanceOf(seenBy(VISION.normal, fill), seenBy(VISION.normal, themeColor(theme, 'node'))) >= tokenValue('distance.fill'), `${theme} ${name} fill reads as painted`);
     }
-    for (const role of ['error', 'success', 'warning']) for (const face of faces(theme)) assert.ok(contrast(themeColor(theme, `state.${role}`), face) >= GRAPHIC, `${theme} state.${role} on ${face}`);
+    // 주의는 노랑 경계라 라이트에서 3에 못 미친다. 상태는 늘 아이콘과 글자가 함께 간다.
+    for (const role of ['error', 'success', 'warning']) for (const face of faces(theme)) if (!(role === 'warning' && theme === 'light')) assert.ok(contrast(themeColor(theme, `state.${role}`), face) >= GRAPHIC, `${theme} state.${role} on ${face}`);
+    assert.equal(themeColor(theme, 'state.warning'), themeColor(theme, `category.yellow.${theme}-border`));
   }
 });
 
@@ -54,16 +59,16 @@ test('paint_dark_fills_stay_visible_against_the_figure_ground_and_the_node_face'
 
 // 근거: 색 역할 "이웃한 색은 갈린다". 보통 시각과 적록 색각 이상 시뮬레이션의 OKLab 거리, 색상 순서 이웃 쌍
 test('paint_hue_neighbors_stay_apart_for_normal_protan_and_deutan_sight', () => {
-  // 새 색 역할에서 teal은 초록, pink는 보라, navy는 파랑과 같은 색이라 이웃 쌍은 서로 다른 색 다섯으로 센다
-  const order = ['red', 'amber', 'green', 'navy', 'purple'];
+  // 정본 이름 여덟 중 무채색 gray를 뺀 일곱이 색상 순서로 이어진 고리다
+  const order = ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'];
   for (const theme of THEMES) {
     for (const [a, b] of order.map((n, i) => [n, order[(i + 1) % order.length]])) {
       const [x, y] = [a, b].map((n) => paint(theme, n, 'stroke'));
       assert.ok(closestDistance(x, y, ['normal']) >= tokenValue('distance.neighbor'), `${theme} ${a}/${b} normal`);
       assert.ok(closestDistance(x, y, ['protanopia', 'deuteranopia']) >= tokenValue('distance.neighbor-cvd'), `${theme} ${a}/${b} cvd`);
     }
-    // 지금(파랑)과 비교(주황)로 읽히지 않는다. 새 색 역할에서 navy는 브랜드 파랑(지금)이고 amber는 주의 주황(비교와 같은 주황)이라 자기 계열과는 같아도 된다
-    for (const name of order) for (const role of ['state.active', 'data.compare'].filter((r) => !(name === 'navy' && r === 'state.active') && !(name === 'amber' && r === 'data.compare'))) assert.ok(closestDistance(paint(theme, name, 'stroke'), themeColor(theme, role), ['normal']) >= tokenValue('distance.neighbor'), `${theme} ${name} vs ${role}`);
+    // 지금(파랑)과 비교(주황)로 읽히지 않는다. blue는 지금 파랑이고 yellow는 비교 노랑과 같은 색이라 자기 계열과는 같아도 된다
+    for (const name of order) for (const role of ['state.active', 'data.compare'].filter((r) => !(name === 'blue' && r === 'state.active') && !(name === 'yellow' && r === 'data.compare'))) assert.ok(closestDistance(paint(theme, name, 'stroke'), themeColor(theme, role), ['normal']) >= tokenValue('distance.neighbor'), `${theme} ${name} vs ${role}`);
   }
 });
 
@@ -85,43 +90,45 @@ test('palette_values_in_tokens_equal_the_regenerated_ones', () => {
   for (const [name, steps] of Object.entries(palette)) for (const [step, hex] of Object.entries(steps)) assert.equal(layer.get(name).get(step).get('$value'), hex, `${name}.${step}`);
 });
 
-// 근거: 값은 팔레트 이름뿐이고 hex와 없는 이름은 오류. 파랑과 주황은 고를 수 없다
-test('parseFigure_rejects_hex_unknown_names_and_the_reserved_blue_and_orange', () => {
-  for (const value of ['#ff0000', '"red"', 'blue', 'orange', 'mauve']) {
-    const [error] = errorsOf(`flow right\nbox a "A" fill=${value}\n`);
-    assert.ok(error, value);
-  }
-  const hex = errorsOf('flow right\nbox a "A" stroke=#ff0000\n')[0];
-  assert.match(hex, /not hex/);
-  assert.match(errorsOf('flow right\nbox a "A" fill=blue\n')[0], /one of red, amber, green, teal, navy, purple, pink, gray/);
-  assert.deepEqual(errorsOf('flow right\nbox a "A" fill=red stroke=gray\nstep "s"\n  light a\n  show a "x" card=teal\n'), []);
+const NAME_LIST = /one of blue, yellow, red, green, orange, purple, cyan, gray/;
+// 옛 색 이름. 색 별칭은 받지 않고 정본 이름으로 옮겨야 한다.
+const RETIRED_ALIASES = ['amber', 'teal', 'navy', 'pink', 'sky', 'mauve'];
+
+// 근거: 값은 정본 색 이름 여덟뿐이고 hex, 따옴표 글, 옛 별칭, 없는 이름은 오류(docs/design/figure-syntax.md 도형 색). 파랑과 주황도 이제 고를 수 있다
+test('parseFigure_accepts_the_eight_canonical_names_and_rejects_hex_quoted_text_and_the_retired_aliases', () => {
+  for (const name of NAMES) assert.deepEqual(errorsOf(`daphnis 2\nbox a "A" fill=${name} stroke=${name}\n`), [], name);
+  for (const value of ['"red"', ...RETIRED_ALIASES]) assert.match(errorsOf(`daphnis 2\nbox a "A" fill=${value}\n`)[0], NAME_LIST, value);
+  for (const key of ['fill', 'stroke']) assert.match(errorsOf(`daphnis 2\nbox a "A" ${key}=#ff0000\n`)[0], /not hex/, key);
+  // 설명 판 색도 같은 이름 목록을 쓴다
+  assert.deepEqual(errorsOf('daphnis 2\nbox a "A" fill=red stroke=gray\nscene "s" mode=once\n  light a\n  show a "x" card=cyan\n'), []);
+  assert.match(errorsOf('daphnis 2\nbox a "A"\nscene "s" mode=once\n  light a\n  show a "x" card=teal\n')[0], NAME_LIST);
 });
 
-const SOURCE = 'flow right\nbox a "A" "sub" fill=red stroke=amber\nbox b "B"\ngroup g "G" stroke=green fill=teal {\n  box c "C" stroke=navy\n}\na -> b\nb -> c\nstep "s"\n  light a\n  show a "x" card=pink\n';
+const SOURCE = 'daphnis 2\nbox a "A" "sub" fill=red stroke=yellow\nbox b "B"\ngroup g "G" stroke=green fill=cyan {\n  box c "C" stroke=purple\n}\na -> b\nb -> c\nscene "s" mode=once\n  light a\n  show a "x" card=purple\n';
 
 // 근거: #164의 단일 윤곽 규칙. 색을 고른 도형은 색 역할을 유지하고 재생 강조가 두 번째 외곽선을 만들지 않는다.
 test('toSvg_lit_shape_keeps_its_stroke_color_without_duplicate_outlines', async () => {
   const svg = await toSvg(await buildFigure(SOURCE));
-  assert.ok(/stroke: var\(--color-paint-amber-stroke\); stroke-width: var\(--simple2-node-stroke\)/.test(svg), 'lit keyframe keeps amber');
+  assert.ok(!/stroke: var\(--color-paint-yellow-stroke\); stroke-width/.test(svg), 'lit state does not restyle a painted shape');
   assert.ok(!svg.includes('fl-halo'), 'no duplicate silhouette');
   assert.ok(svg.includes('fill="var(--color-paint-red-fill)"'), 'red fill');
-  assert.ok(svg.includes('fill="var(--color-paint-pink-fill)"'), 'pink card');
-  const plain = await toSvg(await buildFigure('flow right\nbox a "A"\nbox b "B"\na -> b\nstep "s"\n  light a\n'));
-  assert.ok(!/fl-halo|ps-|ph-/.test(plain), 'unpainted shapes have one outline');
+  assert.ok(svg.includes('fill="var(--color-paint-purple-fill)"'), 'purple card');
+  const plain = await toSvg(await buildFigure('daphnis 2\nbox a "A"\nbox b "B"\na -> b\nscene "s" mode=once\n  light a\n'));
+  assert.ok(!/fl-halo|class="[^"]*\bps-|ph-/.test(plain), 'unpainted shapes have one outline');
 });
 
 // 근거: HTML도 SVG와 같이 색 역할을 유지하고 중복 윤곽이 없다.
 test('toHtml_painted_stroke_rules_keep_the_role_without_duplicate_outlines', async () => {
   const html = await toHtml(await buildFigure(SOURCE), 'x');
-  assert.ok(html.includes('.fl .fl-node.on .fl-stroke.ps-amber'));
+  assert.ok(html.includes('.fl .fl-node .fl-stroke.ps-yellow'));
   assert.ok(!html.includes('fl-halo'));
-  assert.ok(html.includes('.fl .fl-group.on .fl-stroke.ps-green'));
+  assert.ok(!html.includes('.fl-node.on .fl-stroke.ps-') && !html.includes('.fl-group.on .fl-stroke.ps-'), 'state never overrides a chosen color');
   assert.ok(html.includes('.fl .fl-group .frame-box.ps-green'));
 });
 
 // 근거: 사용자 결정 "강조 그룹 안의 중첩 그룹은 같은 색상각 틴트를 깊이마다 한 단계씩 진하게, 강조 밖은 회색 위계 그대로". 강조 그룹이 틴트 1, 그 안은 2, 3에서 멈추고 밖의 그룹은 틴트가 없다
 test('tintOf_gives_the_emphasized_group_tint_1_its_nested_groups_steps_up_to_3_and_none_outside', async () => {
-  const source = 'flow right\ngroup a "A" fill=sky {\n  group b "B" {\n    group c "C" {\n      group d "D" {\n        box x "X"\n      }\n    }\n  }\n}\ngroup e "E" {\n  box y "Y"\n}\n';
+  const source = 'daphnis 2\ngroup a "A" fill=blue {\n  group b "B" {\n    group c "C" {\n      group d "D" {\n        box x "X"\n      }\n    }\n  }\n}\ngroup e "E" {\n  box y "Y"\n}\n';
   const { scene } = await buildFigure(source);
 
   assert.deepEqual(Object.fromEntries(scene.groups.map((g) => [g.id, tintOf(g, scene)?.level])), { a: 1, b: 2, c: 3, d: 3, e: undefined });

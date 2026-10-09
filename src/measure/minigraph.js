@@ -26,7 +26,8 @@ export function layoutMiniGraph(graph, width) {
   const bodyH = tallest * NODE_H + (tallest - 1) * ROW_GAP;
   const nodes = graph.nodes.map((name, i) => {
     const d = depth[i];
-    const w = Math.min(columnW - SPACE['2'], measure(name, NODE_TEXT) + SPACE['11']);
+    // 열 사이에는 이어 주는 선이 읽히도록 `space.4`를 비운다.
+    const w = Math.min(columnW - SPACE['4'], measure(name, NODE_TEXT) + SPACE['11']);
     const columnH = counts[i] * NODE_H + (counts[i] - 1) * ROW_GAP;
     const order = depth.slice(0, i).filter((x) => x === d).length;
     return { name, x: columnW * d + (columnW - w) / 2, y: arc + (bodyH - columnH) / 2 + order * (NODE_H + ROW_GAP), w, h: NODE_H, isLit: graph.lit.includes(name) };

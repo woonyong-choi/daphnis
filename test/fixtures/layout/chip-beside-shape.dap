@@ -1,4 +1,4 @@
-flow down
+daphnis 2
 title "이동 글이 도형 옆 좁은 틈을 지나는 그림"
 
 box tlb "TLB" "64개, 4-way, 16세트"
@@ -9,5 +9,7 @@ tlb -> walk "TLB 실패"
 tlb -> cache "적중" dashed
 walk -> cache "PPN"
 
-step "적중"
+view main graph down
+
+scene "적중" mode=once
   tlb -> cache "PPN 0xA1B2"

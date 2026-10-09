@@ -1,9 +1,7 @@
 // 사라짐(lost), 단계별 도형 상태(status), 구간별 이동 시간(legs): 문법과 진단, 시간표, 움직이는 SVG와 재생기의 일치(docs/design/playback.md 사라짐, 단계별 도형 상태, 구간별 이동 시간).
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { after, before, describe, test } from 'node:test';
-import { chromium } from 'playwright-core';
+import { hopLegs } from '../src/animate/legs.js';
 import { buildFigure } from '../src/build.js';
 import { checkLabels } from '../src/check/overlap.js';
 import { contrast } from '../src/contrast.js';
@@ -14,19 +12,22 @@ import { toSvg } from '../src/svg.js';
 import { parseFigure } from '../src/source/parse.js';
 import { litIds } from '../src/timeline.js';
 import { values } from '../src/tokens.js';
+import { launchChrome, readState, withPage } from './chrome.js';
+import { themeColor } from './helpers.js';
+import { playerHtml } from './player-compiled.js';
 import { discreteAt, packetsOf, pathFractionAt } from './smil.js';
-import { themeColor, withFolder } from './helpers.js';
+import { sceneModel } from './value-display.js';
+import { setHidden, tab } from './value-player.js';
 
-const CHROME = [process.env.CHROME_PATH, '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser'].find((path) => path && existsSync(path));
 const PROBE_MS = 25;
 // 움직이는 SVG는 이동 곡선과 구간 꺾은선을 잰 지점으로 선형으로 잇는다. 길이 비율이 이 값 안이면 같은 자리다.
 const POSITION_TOLERANCE = 0.003;
 const EDGE_GUARD_MS = 1.5;
 
-const BASE = 'flow right\nbox a "A"\nbox b "B"\nbox c "C"\nvalue nb "nb" on=b from=0\nvalue nc "nc" on=c from=0\na -> b\nb -> c\n';
-const TRACK = (options) => `${BASE}step "s" for=12s\n  track a -> b -> c "요청" ${options}\n`;
+const BASE = 'daphnis 2\nbox a "A"\nbox b "B"\nbox c "C"\nvalue nb "nb" on=b from=0\nvalue nc "nc" on=c from=0\na -> b\nb -> c\n';
+const TRACK = (options) => `${BASE}scene "s" mode=once for=12s\n  track a -> b -> c "요청" ${options}\n`;
 const SET = 'set="nb+1@b, nc+1@c"';
-const FOUR = 'flow right\nbox a "A"\nbox b "B"\nbox c "C"\nbox d "D"\na -> b\nb -> c\nc -> d\n';
+const FOUR = 'daphnis 2\nbox a "A"\nbox b "B"\nbox c "C"\nbox d "D"\na -> b\nb -> c\nc -> d\n';
 
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 원본 글자 수
@@ -73,21 +74,20 @@ describe('lost, status, legs: diagnostics', () => {
     }
   });
 
-  // 근거: 설계 figure-syntax.md "구조 그림에서만 쓴다"
-  test('parseFigure_lost_and_status_belong_to_flow_figures_only', () => {
-    const sequence = 'sequence\nperson u "U"\nbox s "S"\nstep "s"\n  u -> s "x" lost=50%';
-    const state = 'state right\nstate a "A"\nstate b "B"\na -> b "go"\nstep "s" status="a=ok"\n  a -> b';
+  // 근거: 설계 figure-syntax.md 사라짐과 구간 시간, 장면별 도형 상태 "박자 장면과 흐름 장면 모두에 쓴다". 그림 종류(flow/sequence/state) 제한은 없어졌고 장면 낱말은 `scene` 하나다
+  test('parseFigure_lost_and_status_work_in_every_scene_mode_and_the_old_step_word_is_rejected', () => {
+    for (const mode of ['static', 'once', 'loop']) assert.deepEqual(problemsOf(`${BASE}scene "s" mode=${mode} status="a=ok, b=warn"\n  a -> b time=1s lost=50%\n`), [], mode);
+    const [problem] = problemsOf(`${BASE}step "s" status="a=ok"\n  a -> b time=1s lost=50%\n`);
 
-    assert.match(problemsOf(sequence)[0].message, /lost belongs to flow figures only/);
-    assert.match(problemsOf(state)[0].message, /status belongs to flow figures only/);
+    assert.deepEqual([problem.code, problem.line, problem.message], ['syntax', 9, 'unknown statement "step"']);
   });
 
   // 근거: 설계 figure-syntax.md 구간 시간 "항목 수는 경로의 선 수와 같고 둘 이상", 박자 이동은 `legs`를 쓸 수 없다
   test('parseFigure_legs_needs_one_entry_per_line_and_at_least_two_lines', () => {
     assert.equal(problemsOf(TRACK('legs="1s"'))[0].code, 'syntax');
     assert.equal(problemsOf(TRACK('legs="1s, 2s, 3s"'))[0].code, 'syntax');
-    assert.match(problemsOf(`${BASE}step "s"\n  track a -> b "x" legs="1s, 1s"`)[0].message, /two or more lines/);
-    assert.equal(problemsOf(`${BASE}step "s"\n  a -> b time=1s legs="1s"`)[0].code, 'syntax');
+    assert.match(problemsOf(`${BASE}scene "s" mode=once\n  track a -> b "x" legs="1s, 1s"`)[0].message, /two or more lines/);
+    assert.equal(problemsOf(`${BASE}scene "s" mode=once\n  a -> b time=1s legs="1s"`)[0].code, 'syntax');
     for (const entry of ['0s', '-1s', '1x', '', '2']) assert.equal(problemsOf(TRACK(`legs="1s, ${entry}"`))[0].code, 'syntax', entry);
   });
 
@@ -120,20 +120,20 @@ describe('lost, status, legs: diagnostics', () => {
 
   // 근거: 이슈 #120 완료 조건 "`-` 구간 거리 기반 합이 1시간을 넘으면 `time-limit`", 설계 playback.md 시간 상한
   test('buildFigure_legs_distance_times_over_one_hour_end_with_time_limit_on_the_track_line', async () => {
-    const slow = `${FOUR.replace('flow right', 'flow right\nspeed 3000s')}step "s" for=20s\n  track a -> b -> c -> d legs="-, -, -"\n`;
+    const slow = `${FOUR.replace('daphnis 2', 'daphnis 2\npace 3000s')}scene "s" mode=once for=20s\n  track a -> b -> c -> d legs="-, -, -"\n`;
 
     assert.deepEqual(await buildProblems(slow), [{ code: 'time-limit', line: 11 }]);
   });
 
   // 근거: 이슈 #120 계약 "그 단계에서만 적용", 설계 figure-syntax.md 단계별 도형 상태의 오류 목록
   test('parseFigure_status_rejects_unknown_kinds_duplicates_unknown_names_and_non_shape_targets', () => {
-    const grid = 'flow right\nbox a "A"\ngrid g "G" cols=1 {\n  item x "X"\n}\ngroup grp "G2" {\n  box c "C"\n}\na -> c\nstep "s" status=';
-    const messages = (status) => problemsOf(`${BASE}step "s" status=${status}\n  a -> b`).map((p) => p.message);
+    const grid = 'daphnis 2\nbox a "A"\ngrid g "G" rows=2 {\n  item x "X" row=1 col=1\n}\ngroup grp "G2" {\n  box c "C"\n}\na -> c\nscene "s" mode=once status=';
+    const messages = (status) => problemsOf(`${BASE}scene "s" mode=once status=${status}\n  a -> b`).map((p) => p.message);
 
     assert.deepEqual(messages('"a=ok, b=warn, c=fail"'), []);
     assert.match(messages('"a=bad"')[0], /status kind is one of ok, warn, fail, wait/);
     assert.match(messages('"a=ok, a=fail"')[0], /twice/);
-    assert.match(messages('"zz=ok"')[0], /unknown node "zz"/);
+    assert.match(messages('"zz=ok"')[0], /unknown card "zz"/);
     assert.match(messages('"a"')[0], /write status as/);
     assert.match(messages('"nb=ok"')[0], /takes no status/);
     assert.match(problemsOf(`${grid}"grp=ok, g=ok"\n  a -> c`).map((p) => p.message).join('\n'), /a group takes no status/);
@@ -143,13 +143,13 @@ describe('lost, status, legs: diagnostics', () => {
 describe('lost: boundaries in the timetable', () => {
   // cost: time O(1), heap O(1), stack O(1)
   // basis: estimate
-  // 흐름의 lost 값마다 { cut, pulses, nb, nc, edgesAt, ms }
+  // 흐름의 lost 값마다 { cut, pulses, nb, nc, edges, ms }. edges는 점이 올라선 선 번호다(`hopLegs`, 사라지는 점은 사라지기 전에 들어선 선까지).
   async function lostRun(percent) {
     const result = await buildFigure(TRACK(`time=4s ${SET} ${percent === undefined ? '' : `lost=${percent}%`}`));
     const [seg] = result.timeline.segs;
     const rows = Object.fromEntries(result.timeline.values.map((row) => [row.id, row.changes.length]));
 
-    return { result, cut: seg.hops[0].cut, ms: seg.hops[0].ms, pulses: seg.pulses.map((p) => p.id), edges: Object.keys(seg.edgesAt).map(Number), ...rows };
+    return { result, cut: seg.hops[0].cut, ms: seg.hops[0].ms, pulses: seg.pulses.map((p) => p.id), edges: hopLegs(seg.hops[0]).map(({ edge }) => edge), ...rows };
   }
 
   // 근거: 이슈 #120 완료 조건 "`0%`, `100%`, 도형에 닿는 비율과 같은 값, 그 바로 앞뒤 값에서 통과한 도형의 효과만 적용되고 같은 시각의 도착 효과는 적용되지 않는다" (`cut`, `values`, `pulses`)
@@ -186,8 +186,8 @@ describe('lost: boundaries in the timetable', () => {
 
   // 근거: 설계 playback.md 사라짐 "단계 끝에서 잘린 점과 같은 규칙", 단계 끝 잘림과 사라짐 중 먼저인 쪽
   test('buildTimeline_lost_cut_is_the_earlier_of_the_step_end_and_the_lost_position', async () => {
-    const short = await buildFigure(`${BASE}step "s" for=1000ms\n  track a -> b -> c time=4s lost=100%\n`);
-    const early = await buildFigure(`${BASE}step "s" for=9000ms\n  track a -> b -> c time=4s lost=10%\n`);
+    const short = await buildFigure(`${BASE}scene "s" mode=once for=1000ms\n  track a -> b -> c time=4s lost=100%\n`);
+    const early = await buildFigure(`${BASE}scene "s" mode=once for=9000ms\n  track a -> b -> c time=4s lost=10%\n`);
     const [shortHop] = short.timeline.segs[0].hops;
     const [earlyHop] = early.timeline.segs[0].hops;
 
@@ -195,9 +195,9 @@ describe('lost: boundaries in the timetable', () => {
     assert.ok(earlyHop.cut < 1000);
   });
 
-  const BEAT = 'flow right\nbox a "A"\nbox b "B"\nvalue n "n" on=b from=0\na -> b\nstep "s"\n  a -> b time=1s set="n+1"';
+  const BEAT = 'daphnis 2\nbox a "A"\nbox b "B"\nvalue n "n" on=b from=0\na -> b\nscene "s" mode=once\n  a -> b time=1s set="n+1"';
   // 값 카드가 도형을 켜지 않게 값이 없는 같은 그림
-  const PLAIN = 'flow right\nbox a "A"\nbox b "B"\na -> b\nstep "s"\n  a -> b time=1s';
+  const PLAIN = 'daphnis 2\nbox a "A"\nbox b "B"\na -> b\nscene "s" mode=once\n  a -> b time=1s';
 
   // 근거: 이슈 #120 완료 조건 "사라진 점의 도착 효과 취소가 값 변화, 후광, 선 켜짐, 박자의 카드 도착 규칙에 반영된다" (박자: 값 줄과 카드 변경 시각)
   test('buildTimeline_lost_beat_move_cancels_the_value_change_and_the_card_arrival_and_keeps_the_end_shape_unlit', async () => {
@@ -207,28 +207,33 @@ describe('lost: boundaries in the timetable', () => {
     const half = await buildFigure(`${PLAIN} lost=50%`);
     const full = await buildFigure(`${PLAIN} lost=100%`);
     const fullValue = await buildFigure(`${BEAT} lost=100%`);
-    const unlitOf = (r) => [...litIds(r.timeline.segs[0], r.scene.edges)].sort();
+    const [seg] = half.timeline.segs;
+    const legsOf = (r) => hopLegs(r.timeline.segs[0].hops[0]);
 
     assert.deepEqual([kept.timeline.values[0].changes.length, kept.timeline.segs[0].cardsAt.b], [1, 1000]);
     assert.deepEqual([lost.timeline.values[0].changes.length, lost.timeline.segs[0].cardsAt.b], [0, 0], '사라진 이동은 도착 규칙에서 빠져 카드가 박자 시작에 바뀐다');
-    assert.deepEqual([unlitOf(zero), zero.timeline.segs[0].edgesOn], [[], []], '0%는 아무것도 켜지 않는다');
-    assert.deepEqual([unlitOf(half), half.timeline.segs[0].edgesOn, half.timeline.segs[0].edgesLost], [['a'], [0], [0]], '선과 출발 도형은 켜지고 끝 도형은 켜지지 않는다');
-    assert.deepEqual([unlitOf(full), fullValue.timeline.values[0].changes.length, full.timeline.segs[0].hops[0].cut], [['a'], 0, 1000]);
-    assert.equal(half.timeline.segs[0].move, half.timeline.segs[0].hops[0].cut);
+    assert.deepEqual(legsOf(zero), [], '0%인 점은 어느 선에도 올라서지 못한다');
+    assert.deepEqual(legsOf(half), [{ edge: 0, from: 0, to: seg.hops[0].cut }], '점은 선 위에서 사라지는 시각까지만 선에 올라 있다');
+    assert.deepEqual([legsOf(full), fullValue.timeline.values[0].changes.length, full.timeline.segs[0].hops[0].cut], [[{ edge: 0, from: 0, to: 1000 }], 0, 1000]);
+    assert.equal(seg.move, seg.hops[0].cut);
+    for (const result of [zero, half, full]) assert.deepEqual([...litIds(result.timeline.segs[0])], [], '켜 둔 도형은 `light`가 정하므로 사라지는 이동은 출발 도형도 끝 도형도 켜 두지 않는다');
+    assert.deepEqual(half.timeline.segs[0].pulses ?? [], [], '사라진 점은 도착 펄스가 없다');
   });
 
-  // 근거: 설계 playback.md 사라짐 "같은 단계에서 사라지지 않는 이동이 같은 선을 지나면 선 전체가 켜진다"
-  test('buildTimeline_a_later_full_move_on_the_same_edge_lights_both_ends_after_a_lost_one', async () => {
+  // 근거: 설계 playback.md 선과 고정 알약 "점이 지나간 선을 켜 둔 채 남기는 목록은 없다". 사라진 이동 뒤의 이동도 자기 구간에만 선에 올라 있다
+  test('buildTimeline_a_later_full_move_on_the_same_edge_rides_the_whole_edge_and_nothing_stays_lit_after_a_lost_one', async () => {
     const result = await buildFigure(`${PLAIN} lost=50%\n  a -> b time=1s`);
     const [first, second] = result.timeline.segs;
 
-    assert.deepEqual([first.edgesLost, [...litIds(first, result.scene.edges)]], [[0], ['a']]);
-    assert.deepEqual([second.edgesLost, [...litIds(second, result.scene.edges)].sort()], [undefined, ['a', 'b']]);
+    assert.deepEqual(hopLegs(first.hops[0]), [{ edge: 0, from: 0, to: first.hops[0].cut }]);
+    assert.deepEqual(hopLegs(second.hops[0]), [{ edge: 0, from: 0, to: 1000 }], '사라지지 않는 이동은 선 전체를 지난다');
+    assert.equal(second.hops[0].cut, undefined);
+    assert.deepEqual([[...litIds(first)], [...litIds(second)]], [[], []]);
   });
 
   // 근거: 이슈 #120 완료 조건 "`lost`가 있는 흐름에서 점이 하나도 그려지지 않아도 그림 검사 14번 오류가 나지 않고, 없는 흐름은 지금처럼 오류다"
   test('buildFigure_check_14_does_not_report_a_lost_flow_without_dots_and_still_reports_one_without_lost', async () => {
-    const late = (extra) => `${BASE}step "s" for=1s\n  track a -> b -> c time=4s at=5s ${extra}\n`;
+    const late = (extra) => `${BASE}scene "s" mode=once for=1s\n  track a -> b -> c time=4s at=5s ${extra}\n`;
 
     assert.deepEqual(await buildProblems(late('')), [{ code: 'check-14', line: 10 }]);
     assert.equal(await buildProblems(late('lost=50%')), undefined);
@@ -240,7 +245,7 @@ describe('legs: leg times in the timetable', () => {
   // basis: estimate
   // 세 선 흐름에서 구간 길이 비율과 구간 시간. pace의 꼭짓점에서 읽는다.
   async function legRun(options) {
-    const result = await buildFigure(`${FOUR}step "s" for=20s\n  track a -> b -> c -> d ${options}\n`);
+    const result = await buildFigure(`${FOUR}scene "s" mode=once for=20s\n  track a -> b -> c -> d ${options}\n`);
     const [hop] = result.timeline.segs[0].hops;
     const lengths = [hop.pace[1][1], hop.pace[2][1] - hop.pace[1][1], 1 - hop.pace[2][1]];
     const times = [hop.pace[1][0], hop.pace[2][0] - hop.pace[1][0], 1 - hop.pace[2][0]].map((share) => share * hop.ms);
@@ -274,7 +279,7 @@ describe('legs: leg times in the timetable', () => {
 
   // 근거: 설계 playback.md "점이 도형에 닿는 시각은 이동 곡선과 `pace`를 거꾸로 풀어 구하고, 값 변화 순서도 이 시각을 쓴다"
   test('buildTimeline_legs_arrival_times_and_value_changes_follow_the_pace_inverse', async () => {
-    const source = `${FOUR}value nb "nb" on=b from=0\nvalue nc "nc" on=c from=0\nstep "s" for=20s\n  track a -> b -> c -> d time=8s legs="500ms, -, -" set="nb+1@b, nc+1@c"\n`;
+    const source = `${FOUR}value nb "nb" on=b from=0\nvalue nc "nc" on=c from=0\nscene "s" mode=once for=20s\n  track a -> b -> c -> d time=8s legs="500ms, -, -" set="nb+1@b, nc+1@c"\n`;
     const result = await buildFigure(source);
     const [seg] = result.timeline.segs;
     const [hop] = seg.hops;
@@ -290,7 +295,7 @@ describe('legs: leg times in the timetable', () => {
 
   // 근거: 이슈 #120 완료 조건 "`legs`가 있어도 글 상자 계획 메모리가 이동 시간 20초(`PLAN_MAX_MS`) 상한에서 멈추고 기존 예제의 글 상자 위치가 바뀌지 않는다" (긴 이동 메모리 시험)
   test('buildTimeline_legs_chip_plan_stops_at_the_plan_limit_however_long_the_move_is', async () => {
-    const plan = async (seconds) => (await buildFigure(`${FOUR}step "s" for=3600s\n  track a -> b -> c -> d "요청" legs="${seconds}s, ${seconds}s, ${seconds}s"\n`)).timeline.segs[0].hops[0].chipPath;
+    const plan = async (seconds) => (await buildFigure(`${FOUR}scene "s" mode=once for=3600s\n  track a -> b -> c -> d "요청" legs="${seconds}s, ${seconds}s, ${seconds}s"\n`)).timeline.segs[0].hops[0].chipPath;
     const longPath = await plan(1100);
     const shortPath = await plan(1);
     const limit = Math.ceil(PLAN_MAX_MS / 33) + 2;
@@ -302,7 +307,7 @@ describe('legs: leg times in the timetable', () => {
 
   // 근거: 이슈 #120 "재생기 배속은 재생 시계에만 걸린다", 같은 입력은 같은 결과
   test('buildTimeline_legs_and_lost_make_the_same_timeline_for_the_same_source', async () => {
-    const source = `${FOUR}value nb "nb" on=b from=0\nstep "s" for=9s status="b=ok"\n  track a -> b -> c -> d "x" legs="1s, -, 2s" time=5s lost=80% set="nb+1@b"\n`;
+    const source = `${FOUR}value nb "nb" on=b from=0\nscene "s" mode=once for=9s status="b=ok"\n  track a -> b -> c -> d "x" legs="1s, -, 2s" time=5s lost=80% set="nb+1@b"\n`;
     const [one, two] = [await buildFigure(source), await buildFigure(source)];
 
     assert.deepEqual(one.timeline, two.timeline);
@@ -310,7 +315,7 @@ describe('legs: leg times in the timetable', () => {
 });
 
 describe('status: pills by step', () => {
-  const SOURCE = `${BASE}step "하나" status="a=ok, b=warn"\n  a -> b time=1s\n  say "둘째 박자"\nstep "둘" for=3s\n  track a -> b -> c time=2s\nstep "셋" for=3s status="c=fail"\n  track a -> b -> c time=2s\nstep "넷"\n  a -> b time=1s\n`;
+  const SOURCE = `${BASE}scene "하나" mode=once status="a=ok, b=warn"\n  a -> b time=1s\n  b -> c time=1s\nscene "둘" mode=once for=3s\n  track a -> b -> c time=2s\nscene "셋" mode=once for=3s status="c=fail"\n  track a -> b -> c time=2s\nscene "넷" mode=once\n  a -> b time=1s\n`;
 
   // 근거: 이슈 #120 완료 조건 "단계 상태가 그 단계에서만 보이고 다음 단계는 선언 상태로 돌아간다" (`segs[].status`)
   test('buildTimeline_status_is_on_every_segment_of_its_step_only', async () => {
@@ -325,23 +330,27 @@ describe('status: pills by step', () => {
 
   // 근거: 설계 playback.md 호환 "새 기능을 쓰지 않는 원본은 시간표와 출력이 같다": 새 필드는 쓴 구간에만 있다
   test('buildTimeline_a_figure_without_the_new_words_has_no_status_pace_cut_or_lost_fields', async () => {
-    const { timeline } = await buildFigure(`${BASE}step "s"\n  a -> b time=1s\nstep "t" for=3s\n  track a -> b -> c time=2s\n`);
+    const { timeline } = await buildFigure(`${BASE}scene "s" mode=once\n  a -> b time=1s\nscene "t" mode=once for=3s\n  track a -> b -> c time=2s\n`);
     const text = JSON.stringify(timeline);
 
     for (const word of ['status', 'pace', 'edgesLost']) assert.ok(!text.includes(`"${word}"`), word);
     assert.ok(!/"cut"/.test(text));
   });
 
-  // 근거: 설계 playback.md 호환 "결과 파일의 재생기 스크립트와 스타일도 같다": 쓰지 않는 그림의 HTML과 SVG에는 상태, pace 재생기 코드와 스타일이 없다
-  test('toHtml_and_toSvg_add_status_and_pace_code_only_to_figures_that_use_them', async () => {
-    const plain = await buildFigure(`${BASE}step "s"\n  a -> b time=1s\n`);
-    const used = await buildFigure(`${BASE}step "s" status="a=ok"\n  track a -> b -> c legs="1s, 1s"\n`);
+  // 근거: 설계 playback.md 호환 "결과 파일의 재생기 스크립트와 스타일도 같다": 상태 알약과 pace는 재생기 본체가 읽는다(덧붙임 파일이 없다). 쓰지 않는 그림의 HTML과 SVG에는 상태 알약 스타일이 없다
+  test('toHtml_always_carries_the_player_status_and_pace_code_and_toHtml_and_toSvg_add_status_styles_only_to_figures_that_use_them', async () => {
+    const plain = await buildFigure(`${BASE}scene "s" mode=once\n  a -> b time=1s\n`);
+    const used = await buildFigure(`${BASE}scene "s" mode=once status="a=ok"\n  track a -> b -> c legs="1s, 1s"\n`);
 
-    for (const marker of ['paceLength', '.fl-status', 'status-text']) assert.ok(!(await toHtml(plain, 'p')).includes(marker), marker);
+    for (const marker of ['paceLength', '.fl-status']) for (const result of [plain, used]) assert.ok((await toHtml(result, 'p')).includes(marker), marker);
+    assert.ok(!(await toHtml(plain, 'p')).includes('status-text'));
     assert.ok(!(await toSvg(plain)).includes('status-text'));
-    for (const marker of ['paceLength', '.fl-status', 'status-text']) assert.ok((await toHtml(used, 'u')).includes(marker), marker);
+    assert.ok((await toHtml(used, 'u')).includes('status-text'));
     assert.ok((await toSvg(used)).includes('status-text'));
-    assert.ok(!(await toSvg(used, { isStatic: true })).includes('fl-status'));
+    // 멈춘 SVG는 장면의 마지막 상태라 알약은 켜진 채 그려지고 움직임(animate)은 없다
+    const stopped = await toSvg(used, { isStatic: true });
+    assert.match(stopped, /<g class="fl-status" data-st="\d+-ok" opacity="1">/);
+    assert.ok(!stopped.includes('<animate'));
   });
 
   // cost: time O(k), heap O(k), stack O(1)
@@ -349,26 +358,35 @@ describe('status: pills by step', () => {
   // basis: estimate
   // 상태 알약마다 { key: 도형 번호-종류, times, values }. 움직이는 SVG의 이산 불투명도 SMIL이다.
   function statusPillsOf(svg) {
-    return [...svg.matchAll(/<g class="fl-status" data-st="([^"]+)" opacity="0">[\s\S]*?<animate attributeName="opacity" [^>]*keyTimes="([^"]*)" values="([^"]*)"\/><\/g>/g)].map(([, key, times, values]) => ({ key, times: times.split(';').map(Number), values: values.split(';').map(Number) }));
+    return [...svg.matchAll(/<g class="fl-status" data-st="([^"]+)" opacity="0"[^>]*>[\s\S]*?<animate attributeName="opacity" [^>]*keyTimes="([^"]*)" values="([^"]*)"\/><\/g>/g)].map(([, key, times, values]) => ({ key, times: times.split(';').map(Number), values: values.split(';').map(Number) }));
   }
 
-  // 근거: 이슈 #120 완료 조건 "알약 표시를 25ms 간격으로 비교한다" (SMIL 값을 풀어 시간표 status와 비교)
+  // 근거: 이슈 #120 완료 조건 "알약 표시를 25ms 간격으로 비교한다" (SMIL 값을 풀어 시간표 status와 비교). 움직이는 SVG는 장면마다 한 장이고 한 바퀴 길이가 표시 길이다
   test('toSvg_status_pills_are_on_exactly_while_the_timeline_status_has_them_at_every_25ms', async () => {
     const result = await buildFigure(SOURCE);
-    const { segs, total } = result.timeline;
-    const pills = statusPillsOf(await toSvg(result));
     const index = new Map(result.scene.items.map((it, i) => [it.id, i]));
+    const seen = new Set();
 
-    assert.deepEqual(pills.map((p) => p.key).sort(), [`${index.get('a')}-ok`, `${index.get('b')}-warn`, `${index.get('c')}-fail`].sort());
-    for (let t = 0; t < total; t += PROBE_MS) {
-      const seg = segs.find((s) => t >= s.t0 && t < s.t1);
-      if (segs.some((s) => Math.abs(t - s.t0) < EDGE_GUARD_MS)) continue;
-      for (const pill of pills) {
-        const expected = seg.status?.some(({ node, kind }) => `${index.get(node)}-${kind}` === pill.key) ? 1 : 0;
+    for (const si of result.timeline.steps.keys()) {
+      const { sliced, display, speed } = sceneModel(result, si);
+      const pills = statusPillsOf(await toSvg(result, { scene: si }));
+      const wanted = new Set(sliced.segs.flatMap((seg) => (seg.status ?? []).map(({ node, kind }) => `${index.get(node)}-${kind}`)));
 
-        assert.equal(discreteAt(pill, t / total), expected, `${pill.key} t=${t}ms`);
+      for (const key of wanted) assert.ok(pills.some((pill) => pill.key === key), `장면 ${si}: 알약 ${key}이 있다`);
+      for (let td = 0; td < display; td += PROBE_MS) {
+        const logical = td * speed;
+        // 박자가 바뀌는 시각의 keyTimes 오차 안은 재지 않는다. 마지막 박자의 상태는 효과 꼬리 동안도 이어진다.
+        if (sliced.segs.some((s) => Math.abs(logical - s.t0) < EDGE_GUARD_MS)) continue;
+        const seg = sliced.segs.findLast((s) => s.t0 <= logical);
+        for (const pill of pills) {
+          const expected = seg.status?.some(({ node, kind }) => `${index.get(node)}-${kind}` === pill.key) ? 1 : 0;
+
+          assert.equal(discreteAt(pill, td / display), expected, `장면 ${si}: ${pill.key} t=${td}ms`);
+          if (expected) seen.add(pill.key);
+        }
       }
     }
+    assert.deepEqual([...seen].sort(), [`${index.get('a')}-ok`, `${index.get('b')}-warn`, `${index.get('c')}-fail`].sort());
   });
 
   // 근거: 이슈 #120 완료 조건 "알약에 글자와 기호가 있어 색 없이도 구분된다" (알약 구조)
@@ -376,7 +394,7 @@ describe('status: pills by step', () => {
     const kinds = { ok: 'OK', warn: 'WARN', fail: 'FAIL', wait: 'WAIT' };
     const symbols = {};
     for (const [kind, text] of Object.entries(kinds)) {
-      const svg = await toSvg(await buildFigure(`${BASE}step "s" status="a=${kind}"\n  a -> b time=1s\n`));
+      const svg = await toSvg(await buildFigure(`${BASE}scene "s" mode=once status="a=${kind}"\n  a -> b time=1s\n`));
       const pill = svg.match(/<g class="fl-status"[\s\S]*?<\/g>/)[0];
 
       assert.match(pill, new RegExp(`class="status-text">${text}</text>`));
@@ -387,19 +405,26 @@ describe('status: pills by step', () => {
     assert.equal(new Set(Object.values(symbols).map((s) => s.replace(/(stroke|fill)="[^"]*"/g, ''))).size, 4, '기호 모양이 종류마다 다르다');
   });
 
-  // 근거: 이슈 #120 "라이트·다크 대비 3 이상", 설계 figure-syntax.md 단계별 도형 상태(기호와 테두리 그래픽 대비 3, 글자 fg 4.5)
-  test('contrast_status_pill_borders_and_symbols_reach_3_on_the_shape_face_the_figure_ground_and_group_faces_and_text_reaches_4_5', () => {
-    const roles = ['state.success', 'state.warning', 'state.error', 'outline'];
+  // 근거: 이슈 #120 "라이트·다크 대비", 설계 docs-integration.md 대비 계산(그래픽은 실제 그려지는 면과 역할마다 그 면 위에서 잰다. 3에 못 미치는 노랑을 맞추려고 색을 바꾸지 않고 라벨, 모양이 구분을 보완한다), figure-syntax.md 단계별 도형 상태(글자 fg 4.5)
+  // 알약의 테두리와 기호는 알약 면(node) 위에 있고, 알약이 모서리에 걸쳐서 테두리는 그림 바탕과 그룹 면에도 닿는다.
+  test('contrast_status_pill_borders_and_symbols_reach_3_except_the_documented_light_yellow_limit_and_text_reaches_4_5', () => {
+    const GROUNDS = ['node', 'bg', 'group-1', 'group-2', 'group-3'];
+    // 승인된 예외 하나: 라이트의 주의(state.warning)는 노랑 계열 경계라 면 위 대비가 3에 못 미친다. 색을 바꾸지 않고 글자 WARN과 삼각형 기호가 보완한다(아래 구조 시험). 하한은 지금 값이라 더 나빠지면 실패한다.
+    const YELLOW_LIGHT_FLOOR = 1.5;
+
     for (const theme of ['light', 'dark']) {
-      for (const role of roles) {
-        for (const ground of ['node', 'bg', 'group-1', 'group-2', 'group-3']) {
+      for (const role of ['state.success', 'state.warning', 'state.error', 'outline']) {
+        for (const ground of GROUNDS) {
           const ratio = contrast(themeColor(theme, role), themeColor(theme, ground));
 
-          assert.ok(ratio >= 3, `${theme} ${role} on ${ground}: ${ratio.toFixed(2)}`);
+          const floor = theme === 'light' && role === 'state.warning' ? YELLOW_LIGHT_FLOOR : 3;
+
+          assert.ok(ratio >= floor, `${theme} ${role} on ${ground}: ${ratio.toFixed(2)} < ${floor}`);
         }
       }
       assert.ok(contrast(themeColor(theme, 'fg'), themeColor(theme, 'node')) >= 4.5, theme);
     }
+    assert.equal(themeColor('light', 'state.warning'), themeColor('light', 'category.yellow.light-border'), '예외는 같은 노랑 계열 경계이고 갈색 같은 다른 색으로 바꾸지 않는다');
   });
 
   // 근거: 이슈 #120 완료 조건 "알약이 도형 이름과 선 라벨을 가리지 않는다" (구조 시험, 그림 검사 2번). 겹치는 장면을 직접 짜서 판정 함수에 넘긴다.
@@ -424,8 +449,8 @@ describe('status: pills by step', () => {
 
   // 근거: 설계 figure-syntax.md "알약은 도형 오른쪽 위 모서리에 걸쳐 그려서 도형 크기와 배치를 바꾸지 않는다"
   test('buildFigure_status_does_not_change_the_scene_layout', async () => {
-    const without = await buildFigure(`${BASE}step "s"\n  a -> b time=1s\n`);
-    const withStatus = await buildFigure(`${BASE}step "s" status="a=ok, b=wait, c=fail"\n  a -> b time=1s\n`);
+    const without = await buildFigure(`${BASE}scene "s" mode=once\n  a -> b time=1s\n`);
+    const withStatus = await buildFigure(`${BASE}scene "s" mode=once status="a=ok, b=wait, c=fail"\n  a -> b time=1s\n`);
 
     assert.deepEqual(withStatus.scene.items.map(({ x, y, w, h }) => [x, y, w, h]), without.scene.items.map(({ x, y, w, h }) => [x, y, w, h]));
     assert.deepEqual([withStatus.scene.width, withStatus.scene.height], [without.scene.width, without.scene.height]);
@@ -433,167 +458,190 @@ describe('status: pills by step', () => {
 });
 
 describe('SVG motion: lost and legs', () => {
-  const SOURCE = `${FOUR}value nb "nb" on=b from=0\nstep "s" for=9s\n  track a -> b -> c -> d "요청" time=6s legs="500ms, -, 3s" lost=85% set="nb+1@b"\n  track a -> b -> c -> d "응답" at=1s time=4s legs="-, 2s, -"\nstep "t"\n  a -> b "한 번" lost=60% time=1s\n  a -> b "끝" lost=0%\n`;
+  const SOURCE = `${FOUR}value nb "nb" on=b from=0\nscene "s" mode=once for=9s\n  track a -> b -> c -> d "요청" time=6s legs="500ms, -, 3s" lost=85% set="nb+1@b"\n  track a -> b -> c -> d "응답" at=1s time=4s legs="-, 2s, -"\nscene "t" mode=once\n  a -> b "한 번" lost=60% time=1s\n  a -> b "끝" lost=0%\n`;
+
+  // 근거: 이슈 #120 완료 조건 "점 위치와 사라지는 시각, 도착 시각을 25ms 간격으로 비교한다" (SMIL 값을 풀어 시간표와 비교)
+  // cost: time O(h), heap O(h), stack O(1)
+  // vars: h = 장면의 이동 수
+  // basis: estimate
+  // 장면 si의 { model, hops, packets }. 움직이는 SVG는 장면마다 한 장이고 이동과 점은 같은 차례다. 시각은 장면 안 논리 시각(ms)이다.
+  async function sceneOf(result, si) {
+    const model = sceneModel(result, si);
+
+    return { model, hops: model.sliced.segs.flatMap((seg) => seg.hops.map((hop) => ({ seg, hop }))), packets: packetsOf(await toSvg(result, { scene: si })) };
+  }
 
   // 근거: 이슈 #120 완료 조건 "점 위치와 사라지는 시각, 도착 시각을 25ms 간격으로 비교한다" (SMIL 값을 풀어 시간표와 비교)
   test('toSvg_dots_follow_the_pace_and_vanish_at_the_cut_time_at_every_25ms', async () => {
     const result = await buildFigure(SOURCE);
-    const svg = await toSvg(result);
-    const { segs, total } = result.timeline;
-    const hops = segs.flatMap((seg) => seg.hops.map((hop) => ({ seg, hop })));
-    const packets = packetsOf(svg);
+    let dots = 0;
 
-    assert.equal(packets.length, hops.length);
-    packets.forEach(({ opacity, motion }, k) => {
-      const { seg, hop } = hops[k];
-      const start = seg.t0 + (hop.at ?? 0);
-      const shownEnd = start + (hop.cut ?? hop.ms);
-      assert.equal(motion.splines, undefined, `점 ${k}: pace나 cut이 있는 이동은 선형 키다`);
-      for (let t = 0; t < total; t += PROBE_MS) {
-        const u = Math.min(1, Math.max(0, (Math.min(t, shownEnd) - start) / hop.ms));
-        const actual = pathFractionAt(motion, t / total);
+    for (const si of result.timeline.steps.keys()) {
+      const { model, hops, packets } = await sceneOf(result, si);
+      const { display, speed } = model;
 
-        assert.ok(Math.abs(actual - positionAt(u, hop.pace)) < POSITION_TOLERANCE, `점 ${k} t=${t}ms: 길이 비율 ${actual.toFixed(4)}, 기대 ${positionAt(u, hop.pace).toFixed(4)}`);
-        const position = positionAt(Math.min(1, Math.max(0, (t - start) / hop.ms)), hop.pace);
-        const isInside = (hop.gaps ?? []).some(([from, to]) => position > from && position < to);
-        const isNearEdge = [start, shownEnd, ...(hop.gaps ?? []).flatMap(([from, to]) => [start + timeAtPosition(from, hop.pace) * hop.ms, start + timeAtPosition(to, hop.pace) * hop.ms])].some((edge) => Math.abs(t - edge) < EDGE_GUARD_MS);
-        if (!isNearEdge) assert.equal(discreteAt(opacity, t / total), t >= start && t < shownEnd && !isInside ? 1 : 0, `점 ${k} t=${t}ms: 보임`);
-      }
-    });
+      assert.equal(packets.length, hops.length, `장면 ${si}: 점 수`);
+      packets.forEach(({ opacity, motion }, k) => {
+        const { seg, hop } = hops[k];
+        const start = seg.t0 + (hop.at ?? 0);
+        const shownEnd = start + (hop.cut ?? hop.ms);
+        assert.equal(motion.splines, undefined, `점 ${k}: pace나 cut이 있는 이동은 선형 키다`);
+        for (let td = 0; td < display; td += PROBE_MS) {
+          const t = td * speed;
+          const u = Math.min(1, Math.max(0, (Math.min(t, shownEnd) - start) / hop.ms));
+          const actual = pathFractionAt(motion, td / display);
+
+          assert.ok(Math.abs(actual - positionAt(u, hop.pace)) < POSITION_TOLERANCE, `장면 ${si} 점 ${k} t=${td}ms: 길이 비율 ${actual.toFixed(4)}, 기대 ${positionAt(u, hop.pace).toFixed(4)}`);
+          const position = positionAt(Math.min(1, Math.max(0, (t - start) / hop.ms)), hop.pace);
+          const isInside = (hop.gaps ?? []).some(([from, to]) => position > from && position < to);
+          const isNearEdge = [start, shownEnd, ...(hop.gaps ?? []).flatMap(([from, to]) => [start + timeAtPosition(from, hop.pace) * hop.ms, start + timeAtPosition(to, hop.pace) * hop.ms])].some((edge) => Math.abs(t - edge) < EDGE_GUARD_MS);
+          if (!isNearEdge) assert.equal(discreteAt(opacity, td / display), t >= start && t < shownEnd && !isInside ? 1 : 0, `장면 ${si} 점 ${k} t=${td}ms: 보임`);
+        }
+        dots++;
+      });
+    }
+    assert.ok(dots >= 4, `점을 여럿 쟀다(${dots})`);
   });
 
   // 근거: 설계 playback.md 사라짐 "`lost=0%`는 점이 출발 지점에서 사라져 아무것도 통과하지 않는다": 0%인 점은 한 바퀴 내내 보이지 않는다
   test('toSvg_a_dot_lost_at_0_percent_is_never_shown', async () => {
     const result = await buildFigure(SOURCE);
-    const svg = await toSvg(result);
-    const hops = result.timeline.segs.flatMap((seg) => seg.hops);
-    const k = hops.findIndex((hop) => hop.cut === 0);
-    const { opacity } = packetsOf(svg)[k];
+    const { hops, packets } = await sceneOf(result, 1);
+    const k = hops.findIndex(({ hop }) => hop.cut === 0);
 
     assert.ok(k >= 0);
-    assert.ok(opacity.values.every((value) => value === 0));
+    assert.ok(packets[k].opacity.values.every((value) => value === 0));
   });
 
   // 근거: 설계 playback.md 구간별 이동 시간 "글 상자 계획은 진행 비율로 담기므로 pace가 있어도 같은 계획", 움직이는 SVG와 재생기가 같은 글 상자 키를 읽는다
   test('toSvg_chip_slide_keys_of_a_paced_dot_end_inside_its_visible_window', async () => {
     const result = await buildFigure(SOURCE);
-    const svg = await toSvg(result);
-    const hops = result.timeline.segs.flatMap((seg) => seg.hops);
-    const packets = packetsOf(svg);
+    let paced = 0;
 
-    hops.forEach((hop, k) => {
-      if (!hop.pace || hop.cut === 0 || !packets[k].slide.times) return;
-      const keys = packets[k].slide.times;
+    for (const si of result.timeline.steps.keys()) {
+      const { hops, packets } = await sceneOf(result, si);
+      hops.forEach(({ hop }, k) => {
+        if (!hop.pace || hop.cut === 0 || !packets[k].slide.times) return;
+        const keys = packets[k].slide.times;
 
-      assert.ok(keys.every((time, i) => i === 0 || time >= keys[i - 1]));
-    });
+        assert.ok(keys.every((time, i) => i === 0 || time >= keys[i - 1]));
+        paced++;
+      });
+    }
+    assert.ok(paced >= 1, 'pace가 있는 점의 글 상자 키를 쟀다');
   });
 });
 
-describe('player: lost, legs and status in Chrome', { skip: CHROME ? false : 'Chrome이 없다' }, () => {
-  const SOURCE = `${FOUR}value nb "nb" on=b from=0\nstep "s" for=9s status="a=ok, b=warn"\n  track a -> b -> c -> d "요청" time=6s legs="500ms, -, 3s" lost=85% set="nb+1@b"\nstep "t" status="c=fail"\n  a -> b "한 번" lost=60% time=1s\n  a -> b "끝" time=1s\nstep "u"\n  a -> b time=1s\n`;
+
+describe('player: lost, legs and status in Chrome', () => {
+  const SOURCE = `${FOUR}value nb "nb" on=b from=0\nscene "s" mode=once for=9s status="a=ok, b=warn"\n  track a -> b -> c -> d "요청" time=6s legs="500ms, -, 3s" lost=85% set="nb+1@b"\nscene "t" mode=once status="c=fail"\n  a -> b "한 번" lost=60% time=1s\n  a -> b "끝" time=1s\nscene "u" mode=once\n  a -> b time=1s\n`;
   let browser;
   before(async () => {
-    browser = await chromium.launch({ executablePath: CHROME });
+    browser = await launchChrome();
   });
   after(async () => {
     await browser.close();
   });
 
-  // cost: time O(page), heap O(page), stack O(1), io page
-  // vars: page = 페이지 하나를 여는 비용
+  // cost: time O(1), heap O(1), stack O(1), io 1
   // basis: estimate
-  // 재생기를 열고 body(page, { result, html })를 돌린다. 시계는 가짜 시계다.
-  function withPlayer(source, body) {
-    return withFolder(async (folder) => {
-      const result = await buildFigure(source);
-      const html = await toHtml(result, 'lost');
-      writeFileSync(join(folder, 'page.html'), html);
-      const page = await browser.newPage({ viewport: { width: 1400, height: 900 } });
-      const errors = [];
-      page.on('pageerror', (e) => errors.push(e.message));
-      await page.clock.install({ time: 0 });
-      await page.goto(`file://${join(folder, 'page.html')}`);
-      await page.click('.fl-pause');
+  // 재생기를 가짜 시계로 열고 body(page, result)를 돌린다. 전환은 가짜 시계를 따라가지 못하므로 꺼서 켜진 뒤의 값을 잰다.
+  async function withPlayer(source, body) {
+    const { html, result } = await playerHtml(source, { baseDir: 'test' });
+    await withPage(browser, html, {}, async (page) => {
       await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' });
-      await body(page, { result, html });
-      assert.deepEqual(errors, []);
-      await page.close();
+      await body(page, result);
     });
   }
 
-  // 재생기 데이터(figurePlay의 둘째 인자)를 HTML에서 읽는다.
-  const dataOf = (html) => JSON.parse(html.match(/figurePlay\(document\.querySelector\('\.fl-figure'\), (\{[\s\S]*\})\);\n<\/script>/)[1].replace(/\\u003c/g, '<'));
-
   // 근거: 이슈 #120 완료 조건 "사라짐 위치, 단계 상태 복원, 구간 시간 합계가 움직이는 SVG와 HTML 재생기에서 일치한다. 점 위치와 사라지는 시각을 25ms 간격으로 비교한다"
   test('player_dot_position_and_vanish_time_match_the_timeline_at_every_25ms', async () => {
-    await withPlayer(SOURCE, async (page, { result, html }) => {
-      const data = dataOf(html);
-      const [seg] = result.timeline.segs;
-      const [hop] = seg.hops;
-      const probes = Array.from({ length: Math.ceil(seg.t1 / PROBE_MS) }, (_, i) => i * PROBE_MS);
-      const expected = probes.map((t) => ({ t, fraction: positionAt(Math.min(1, Math.max(0, t / hop.ms)), hop.pace), isShown: t < hop.cut }));
-      const measured = await page.evaluate(
-        ({ data: playerData, probes: list, hopData }) => {
-          const root = document.querySelector('.fl-figure');
-          const stage = createStage(root, playerData);
-          const packet = createPacket(hopData, stage);
-          const dot = [...stage.packetLayer.querySelectorAll('.fl-packet')].at(-1);
-          const path = document.querySelector('#tp-0');
-          const length = path.getTotalLength();
-          return list.map(({ t, fraction }) => {
-            packet.move(t);
-            const point = path.getPointAtLength(length * fraction);
-            const [, x, y] = /translate\(([-\d.e]+) ([-\d.e]+)\)/.exec(dot.getAttribute('transform'));
-            return { dx: Number(x) - point.x, dy: Number(y) - point.y, opacity: Number(dot.style.opacity) };
-          });
-        },
-        { data, probes: expected, hopData: data.segs[0].hops[0] },
-      );
+    await withPlayer(SOURCE, async (page, result) => {
+      const { display } = sceneModel(result, 0);
+      const [hop] = result.timeline.segs[0].hops;
+      let measured = 0;
+      let shown = 0;
 
       assert.ok(hop.pace && hop.cut > 0);
-      measured.forEach((m, i) => {
-        const { t, isShown } = expected[i];
-        const inside = hop.gaps.some(([from, to]) => expected[i].fraction > from && expected[i].fraction < to);
-        assert.ok(Math.hypot(m.dx, m.dy) < 0.01, `t=${t}ms: 점이 시간표 위치에서 ${Math.hypot(m.dx, m.dy).toFixed(3)}px 떨어졌다`);
-        // 사라지기 직전 cut-fade 동안은 서서히 흐려져 보임 여부를 가르지 않는다.
-        if (Math.abs(t - hop.cut) > values.duration['cut-fade'] && !inside) assert.equal(m.opacity > 0.5, isShown, `t=${t}ms: 보임`);
-      });
+      for (let t = PROBE_MS; t <= display; t += PROBE_MS) {
+        await page.clock.runFor(PROBE_MS);
+        const { d, scene } = await readState(page);
+        const fraction = positionAt(Math.min(1, Math.max(0, d / hop.ms)), hop.pace);
+        const dot = await page.evaluate((at) => {
+          const el = document.querySelector('.fl-packet');
+          const path = document.querySelector('#tp-0');
+          const point = path.getPointAtLength(path.getTotalLength() * at);
+          const [, x, y] = /translate\(([-\d.e]+) ([-\d.e]+)\)/.exec(el.getAttribute('transform'));
+
+          return { dx: Number(x) - point.x, dy: Number(y) - point.y, opacity: Number(el.style.opacity) };
+        }, fraction);
+        const isInside = hop.gaps.some(([from, to]) => fraction > from && fraction < to);
+        const isShown = d < hop.cut;
+        if (scene !== 0) continue;
+
+        // 사라지기 직전 cut-fade 동안은 서서히 흐려져 보임 여부를 가르지 않고, 도형 안을 지나는 동안은 보이지 않는다.
+        if (Math.abs(d - hop.cut) > values.duration['cut-fade'] && !isInside) {
+          assert.equal(dot.opacity > 0.5, isShown, `t=${d}ms: 보임`);
+          assert.ok(Math.hypot(dot.dx, dot.dy) < 0.01 || !isShown, `t=${d}ms: 점이 시간표 위치에서 ${Math.hypot(dot.dx, dot.dy).toFixed(3)}px 떨어졌다`);
+          measured++;
+          shown += isShown ? 1 : 0;
+        }
+      }
+      assert.ok(measured > display / PROBE_MS / 2 && shown > 10, `잰 프레임 ${measured}, 점이 보인 프레임 ${shown}`);
     });
   });
 
-  // 근거: 이슈 #120 완료 조건 "pause, rate, restart와 단계 직접 선택이 ... 단계 상태를 바꾸지 않는다" (재생기를 가짜 시계로 돌려 조작 뒤 상태 비교)
-  test('player_status_pills_follow_the_step_through_pause_rate_restart_and_direct_selection', async () => {
-    await withPlayer(SOURCE, async (page, { result }) => {
-      const { segs, total } = result.timeline;
-      const index = new Map(result.scene.items.map((it, i) => [it.id, i]));
-      const keysAt = (si) => (segs.find((s) => s.si === si).status ?? []).map(({ node, kind }) => `${index.get(node)}-${kind}`).sort();
+  // 근거: 이슈 #120 완료 조건 "pause, rate, restart와 단계 직접 선택이 ... 단계 상태를 바꾸지 않는다". 일시정지는 문서 가림, 단계 선택은 장면 탭, 반복은 `mode=loop`다. 재생 단추와 배속 메뉴는 없다
+  test('player_status_pills_follow_the_scene_through_hidden_document_restart_and_direct_selection', async () => {
+    await withPlayer(SOURCE, async (page, result) => {
+      const index = (si) => [...new Set(result.timeline.segs.filter((s) => s.si === si).flatMap((s) => (s.status ?? []).map(({ node, kind }) => `${node}-${kind}`)))].sort();
       const shown = () => page.evaluate(() => [...document.querySelectorAll('.fl-status')].filter((el) => el.getAttribute('opacity') === '1').map((el) => el.dataset.st).sort());
-      const tabs = page.locator('.fl-tabs button');
 
       await page.clock.runFor(100);
-      assert.deepEqual(await shown(), keysAt(0));
-      await tabs.nth(1).click();
+      assert.deepEqual(await shown(), index(0));
+      assert.deepEqual(index(0), ['a-ok', 'b-warn']);
+      await tab(page, 1);
       await page.clock.runFor(100);
-      assert.deepEqual(await shown(), keysAt(1), '단계를 직접 고르면 그 단계의 상태다');
-      await tabs.nth(2).click();
+      assert.deepEqual(await shown(), index(1), '장면을 직접 고르면 그 장면의 상태다');
+      await tab(page, 2);
       await page.clock.runFor(100);
-      assert.deepEqual(await shown(), [], '상태를 적지 않은 단계는 선언 상태다');
-      await tabs.nth(0).click();
-      await page.locator('.fl-pause').click();
+      assert.deepEqual(await shown(), [], '상태를 적지 않은 장면은 선언 상태다');
+      await tab(page, 0);
+      await setHidden(page, true);
       await page.clock.runFor(5000);
-      assert.deepEqual(await shown(), keysAt(0), '일시정지 동안 상태가 그대로다');
-      await page.locator('.fl-rate').click();
-      await page.locator('.fl-pause').click();
+      assert.deepEqual(await shown(), index(0), '문서를 가린 동안 상태가 그대로다');
+      await setHidden(page, false);
+      await page.clock.runFor(sceneModel(result, 0).display + 500);
+      assert.equal((await readState(page)).phase, 'final');
+      assert.deepEqual(await shown(), index(0), '마지막 모습에도 장면의 상태 알약이 있다');
+      await tab(page, 1);
+      await page.clock.runFor(sceneModel(result, 1).display + 500);
+      assert.deepEqual(await shown(), index(1), '다른 장면을 끝까지 보고 나서도 그 장면의 상태다');
+      await tab(page, 0);
       await page.clock.runFor(100);
-      assert.deepEqual(await shown(), keysAt(0));
-      await page.locator('.fl-pause').click();
-      await tabs.nth(1).click();
-      await page.locator('.fl-pause').click();
-      await page.clock.runFor(total + 500);
-      await tabs.nth(0).click();
-      await page.clock.runFor(100);
-      assert.deepEqual(await shown(), keysAt(0), '다시 시작해도 첫 단계 상태다');
+      assert.deepEqual(await shown(), index(0), '다시 고르면 첫 장면 상태다');
+    });
+  });
+
+  // 근거: 계약 "반복은 장면의 처음에서 시작한다". `mode=loop` 장면은 한 바퀴를 마쳐도 같은 장면의 상태 알약을 유지하고 다른 장면 알약은 켜지 않는다
+  test('player_loop_restart_keeps_the_status_pills_of_its_own_scene', async () => {
+    await withPlayer(SOURCE.replace('scene "t" mode=once', 'scene "t" mode=loop'), async (page, result) => {
+      const shown = () => page.evaluate(() => [...document.querySelectorAll('.fl-status')].filter((el) => el.getAttribute('opacity') === '1').map((el) => el.dataset.st));
+      const length = sceneModel(result, 1).display;
+      await tab(page, 1);
+      let wrapped = 0;
+      let last = Infinity;
+
+      for (let t = PROBE_MS; t <= length * 2.4; t += PROBE_MS) {
+        await page.clock.runFor(PROBE_MS);
+        const { d, scene } = await readState(page);
+        wrapped += d < last ? 1 : 0;
+        last = d;
+
+        assert.equal(scene, 1);
+        assert.deepEqual(await shown(), ['c-fail'], `t=${t}ms`);
+      }
+      assert.ok(wrapped >= 2, `한 바퀴를 넘겨 되풀이한다(${wrapped})`);
     });
   });
 });

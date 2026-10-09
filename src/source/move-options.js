@@ -20,9 +20,7 @@ const LOST_MAX = 100;
  */
 export function readMoveOptions(options, { scope, line, ctx, isStuck = false }) {
   const found = readOptions(options, { scopes: [scope], what: WHAT[scope], line, ctx });
-  const isSetKnown = 'set' in optionsOf(scope) && ctx.figure.kind === 'flow';
-  if (found.set !== undefined && !isSetKnown) ctx.problems.error(line, 'set belongs to flow figures only, where value lines declare what changes');
-  return { found, timeMs: readTime(found.time, { key: 'time', line, ctx }), tone: found.tone, sets: found.set === undefined || !isSetKnown ? [] : readSets(found.set, { line, ctx }), lost: readLost(found.lost, { line, ctx }), condition: readCondition(found, { isStuck, line, ctx }) };
+  return { found, timeMs: readTime(found.time, { key: 'time', line, ctx }), tone: found.tone, sets: found.set === undefined ? [] : readSets(found.set, { line, ctx }), lost: readLost(found.lost, { line, ctx }), condition: readCondition(found, { isStuck, line, ctx }) };
 }
 
 // cost: time O(c), heap O(c), stack O(d)
@@ -34,10 +32,6 @@ function readCondition(found, { isStuck, line, ctx }) {
   const has = ['when', 'wait', 'timeout', 'else', 'reserve'].filter((key) => found[key] !== undefined);
   if (!has.length && !isStuck) return undefined;
   const { problems } = ctx;
-  if (ctx.figure.kind !== 'flow') {
-    problems.error(line, `${[...has, ...(isStuck ? ['stuck'] : [])].join(', ')} belongs to flow figures only, where values decide what a dot does`);
-    return undefined;
-  }
   const ids = ctx.figure.values.map((v) => v.id);
   const condition = { isStuck };
   for (const key of ['when', 'wait']) {
@@ -77,10 +71,6 @@ function readReserve(text, { line, ctx }) {
 // `lost=60%`를 경로 전체 길이의 비율(0에서 1)로. `%`가 없거나 0 이상 100 이하가 아니면 오류다. 구조 그림(flow)에서만 쓴다.
 function readLost(text, { line, ctx }) {
   if (text === undefined) return undefined;
-  if (ctx.figure.kind !== 'flow') {
-    ctx.problems.error(line, 'lost belongs to flow figures only, where a dot has a path to be lost on');
-    return undefined;
-  }
   const percent = PERCENT_PATTERN.exec(text);
   if (!percent || Number(percent[1]) > LOST_MAX) {
     ctx.problems.error(line, `lost is a percent from 0% to ${LOST_MAX}% of the path, such as lost=60%. Found "${text}"`);

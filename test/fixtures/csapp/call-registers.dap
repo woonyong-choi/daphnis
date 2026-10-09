@@ -1,4 +1,4 @@
-flow right
+daphnis 2
 title "호출 중 레지스터 값의 변화"
 subtitle "명령어가 실행될 때마다 rsp, rbp, 인자 레지스터, rax가 바뀐다"
 aspect 1.6
@@ -16,7 +16,7 @@ code -> rbp "mov, leave"
 code -> args "lea"
 code -> rax "mov, imul"
 
-step "프레임 만들기" "call은 rsp를 8 내리고, push와 sub이 프레임을 만든다"
+scene "프레임 만들기" mode=once
   code -> rip "call caller"
   show rip "0x401136, caller 시작" tag="call"
   code -> rsp "call이 ret 주소 push"
@@ -27,7 +27,7 @@ step "프레임 만들기" "call은 rsp를 8 내리고, push와 sub이 프레임
   show rbp "0x7FFFE020 → 0x7FFFE000" tag="mov"
   code -> rsp "sub $16,%rsp"
   show rsp "0x7FFFDFF0" tag="sub"
-step "인자 전달" "인자는 rdi, rsi, rdx, rcx, r8, r9 순서로 넘기고 나머지는 스택에 둔다"
+scene "인자 전달" mode=once
   code -> args "lea -16(%rbp),%rdi"
   show args "rdi = 0x7FFFDFF0" tag="arg1"
   code -> args "lea -8(%rbp),%rsi"
@@ -36,7 +36,7 @@ step "인자 전달" "인자는 rdi, rsi, rdx, rcx, r8, r9 순서로 넘기고 �
   show rip "0x401172를 스택에 push" tag="call"
   code -> rax "swap_add가 값을 돌려줌"
   show rax "rax = 1591" tag="ret"
-step "복귀" "leave는 rsp를 rbp로 되돌리고 rbp를 pop한다. ret은 반환 주소를 rip에 넣는다"
+scene "복귀" mode=once
   code -> rax "imul로 sum * diff"
   show rax "rax = -849594" tag="ret"
   code -> rsp "leave: rsp = rbp"

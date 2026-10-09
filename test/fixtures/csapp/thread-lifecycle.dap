@@ -1,4 +1,4 @@
-state down
+daphnis 2
 title "스레드 생애주기"
 subtitle "생성, 실행, 대기, 종료와 회수. 합류 가능 스레드는 join으로, 분리된 스레드는 스스로 회수된다"
 
@@ -18,13 +18,15 @@ joinable -> reaped "pthread_join 이 자원 회수"
 running -> detached "pthread_detach"
 detached -> reaped "종료할 때 자원 자동 반납"
 
-step "합류 가능 스레드" "기본 스레드는 종료해도 다른 스레드가 join할 때까지 자원이 남는다"
+view main graph down
+
+scene "합류 가능 스레드" mode=once
   created -> running
   running -> blocked
   blocked -> running
   running -> joinable
   joinable -> reaped
-step "분리된 스레드" "분리하면 아무도 join하지 않아도 종료 즉시 자원이 반납된다"
+scene "분리된 스레드" mode=once
   created -> running
   running -> detached
   detached -> reaped

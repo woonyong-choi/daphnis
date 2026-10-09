@@ -228,7 +228,7 @@ function buildJs(source, tokens, table) {
   for (const { path } of tokens) {
     const { value, type } = resolveToken(path, table);
     setPath(refs, path, `var(${toCssName(path)})`);
-    setPath(values, path, NUMERIC_TYPES.has(type) ? toNumber(value) : toCssValue(value, type));
+    setPath(values, path, NUMERIC_TYPES.has(type) ? toNumber(value, type) : toCssValue(value, type));
   }
   return (
     `// ${source}: ${HEADER}\n` +
@@ -243,11 +243,16 @@ function buildJs(source, tokens, table) {
   );
 }
 
-/** 크기와 시간을 단위 없는 숫자로 바꾼다. `{ value, unit }` 객체는 value만 남긴다. */
-function toNumber(value) {
-  if (value instanceof Map && value.has('value')) return value.get('value');
-  if (typeof value === 'number') return value;
-  throw new TokenError(`unsupported numeric token value: ${JSON.stringify(value)}`);
+/** 객체형은 기존처럼 명시한 단위의 수치를 보존한다. 문자열은 px와 ms만 배치·시간 숫자로 읽는다. */
+function toNumber(value, type) {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  const unit = UNITS[type];
+  if (value instanceof Map && value.has('value')) return toNumber(value.get('value'), 'number');
+  if (typeof value === 'string' && unit) {
+    const match = /^(-?(?:\d+(?:\.\d+)?|\.\d+))(px|ms)$/.exec(value);
+    if (match && match[2] === unit && Number.isFinite(Number(match[1]))) return Number(match[1]);
+  }
+  throw new TokenError(`unsupported numeric token value for ${type}: ${JSON.stringify(value instanceof Map ? Object.fromEntries(value) : value)}`);
 }
 
 // cost: time O(g), heap O(g), stack O(1), alloc g

@@ -6,8 +6,8 @@ import { test } from 'node:test';
 import { runMd } from '../src/md-run.js';
 import { runCli as run, withFolder } from './helpers.js';
 
-const FLOW = 'flow right\ntitle "Request path"\nbox a "Client"\nbox b "Server"\na -> b "GET"\nstep "s"\n  a -> b\n';
-const BAR = 'chart bar\ntitle "Latency"\nseries s "S"\nrow "r" s=1\n';
+const FLOW = 'daphnis 2\ntitle "Request path"\nbox a "Client"\nbox b "Server"\na -> b "GET"\nscene "s" mode=once\n  a -> b\n';
+const BAR = 'daphnis 2\ntitle "Latency"\nchart c "Latency" bar {\n  series s "S"\n  row "r" s=1\n}\n';
 const block = (info, source) => `\`\`\`dap ${info}\n${source}\`\`\`\n`;
 const DOC = `# Doc\n\n${block('name=flow', FLOW)}${block('name=bar', BAR)}end\n`;
 const names = (folder) => readdirSync(folder).sort();

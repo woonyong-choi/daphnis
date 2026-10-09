@@ -1,7 +1,7 @@
 // design-tokens 연결(이슈 #90): 공통 토큰은 패키지에서 받고, daphnis 정본은 그림 전용 토큰만 갖는다. 근거: docs/architecture.md 토큰 출처.
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, cpSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { createRequire } from 'node:module';
 import { test } from 'node:test';
@@ -62,9 +62,43 @@ test('build_tokens_check_passes_for_the_committed_generated_files_and_fails_for_
 
 // 근거: 규칙 "하드코딩 금지 유지". design-tokens의 기본 색 단계도 코드에서 직접 쓰면 check-tokens가 잡는다
 test('check_tokens_reports_a_design_tokens_primitive_color_used_in_code', () => withFolder((folder) => {
-  writeFileSync(join(folder, 'sample.css'), 'a { color: var(--color-blue-light-fill); }\n');
+  writeFileSync(join(folder, 'sample.css'), 'a { color: var(--color-category-blue-anchor); }\n');
   const result = run(CHECK, ['--tokens', join(SRC, 'tokens.json'), folder]);
 
   assert.equal(result.status, 1);
-  assert.match(result.stdout, /primitive token reference: --color-blue-light-fill/);
+  assert.match(result.stdout, /primitive token reference: --color-category-blue-anchor/);
+}));
+
+// 근거: docs/architecture.md 토큰 출처. 파일 해시가 맞아도 선택한 테마와 사본이 다르면 검사에 실패한다.
+test('theme_check_rejects_a_snapshot_from_a_different_configured_theme', () => withFolder((folder) => {
+  mkdirSync(join(folder, 'scripts'));
+  cpSync(join(SRC, 'design-theme'), join(folder, 'src/design-theme'), { recursive: true });
+  for (const name of ['tokens.json', 'tokens.dark.json']) copyFileSync(join(SRC, name), join(folder, 'src', name));
+  for (const name of ['sync-theme.mjs', 'theme-snapshot.mjs']) copyFileSync(join(ROOT, 'scripts', name), join(folder, 'scripts', name));
+  const config = JSON.parse(readFileSync(join(ROOT, 'theme.config.json'), 'utf8'));
+  writeFileSync(join(folder, 'theme.config.json'), JSON.stringify(config));
+  assert.equal(run(join(folder, 'scripts/sync-theme.mjs'), ['--check']).status, 0);
+
+  writeFileSync(join(folder, 'theme.config.json'), JSON.stringify({ ...config, theme: 'different' }));
+  const result = run(join(folder, 'scripts/sync-theme.mjs'), ['--check']);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /theme mismatch/);
+}));
+
+// 배치 계산에 문자열 단위가 섞이거나 rem을 px로 오인하면 전환 폭과 좌표가 잘못된다.
+test('numeric_tokens_normalize_px_and_ms_and_reject_incompatible_units', () => withFolder((folder) => {
+  const source = join(folder, 'tokens.json');
+  const write = (type, value) => writeFileSync(source, JSON.stringify({ probe: { $type: type, $value: value } }));
+  for (const [type, value, expected] of [['dimension', '800px', 800], ['duration', '12.5ms', 12.5], ['dimension', { value: 320, unit: 'px' }, 320], ['dimension', { value: 0.03, unit: 'em' }, 0.03]]) {
+    write(type, value);
+    const result = run(BUILD, [source]);
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(readFileSync(join(folder, 'tokens.js'), 'utf8'), new RegExp(`"probe": ${expected}\\b`));
+  }
+  for (const [type, value] of [['dimension', '1rem'], ['dimension', '800ms'], ['duration', '2s'], ['number', '12px']]) {
+    write(type, value);
+    const result = run(BUILD, [source]);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /unsupported numeric token value/);
+  }
 }));

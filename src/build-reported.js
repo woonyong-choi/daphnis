@@ -5,12 +5,12 @@ import { toJson } from './diagnostics.js';
 import { FigureError, makeDiagnostic } from './source/problems.js';
 
 // 진단 종류마다 글 출력의 머리말. 오류는 머리말이 없다.
-const SEVERITY_LABEL = { error: '', warning: 'warning: ', deprecated: 'deprecated: ' };
+const SEVERITY_LABEL = { error: '', warning: 'warning: ' };
 
 // cost: time O(m), heap O(m), stack O(1), io m
 // vars: m = 메시지 수
 // basis: estimate
-/** 진단(오류, 경고, 폐기)을 알린다. 기본은 stderr에 `파일:줄: 메시지`, json이면 진단마다 `toJson`이 정한 한 줄을 stdout에 쓴다. */
+/** 진단(오류, 경고)을 알린다. 기본은 stderr에 `파일:줄: 메시지`, json이면 진단마다 `toJson`이 정한 한 줄을 stdout에 쓴다. */
 export function report(file, diagnostics, json) {
   for (const d of diagnostics) {
     if (json) process.stdout.write(`${JSON.stringify(toJson(file, d))}\n`);
@@ -25,7 +25,7 @@ export function report(file, diagnostics, json) {
 // 글 한 조각의 진단 줄을 파일 안 줄로 옮긴다. 줄 없는 진단(0)은 조각이 시작한 줄이다.
 function shifted(diagnostics, lineOffset) {
   if (!lineOffset) return diagnostics;
-  return diagnostics.map((d) => ({ ...d, line: d.line + lineOffset, ...(d.fix ? { fix: { ...d.fix, line: d.fix.line + lineOffset } } : {}) }));
+  return diagnostics.map((d) => ({ ...d, line: d.line + lineOffset }));
 }
 
 // cost: time O(build), heap O(out), stack O(1), io m
@@ -33,14 +33,14 @@ function shifted(diagnostics, lineOffset) {
 // basis: estimate
 /**
  * 원본 글을 만들고 진단을 알린다. 파일은 쓰지 않는다. 오류가 있으면 undefined다.
- * @param options { flags, baseDir, lineOffset?, budget? }. budget은 올린 예산 { 이름: 값 }(src/budget.js)이고, flags는 명령 옵션 집합(`strict`, `no-deprecated`, `require-data`, `require-ci`, `json`),
+ * @param options { flags, baseDir, lineOffset?, budget? }. budget은 올린 예산 { 이름: 값 }(src/budget.js)이고, flags는 명령 옵션 집합(`strict`, `require-data`, `require-ci`, `json`),
  *   lineOffset은 이 글이 파일 안에서 시작하기 전 줄 수다(md 코드 블록)
  */
 export async function buildReported(source, file, { flags, baseDir, lineOffset = 0, budget }) {
   const json = flags.has('json');
   try {
-    const result = await buildFigure(source, { baseDir, strict: flags.has('strict'), noDeprecated: flags.has('no-deprecated'), requireData: flags.has('require-data'), requireCi: flags.has('require-ci'), budget });
-    report(file, shifted([...result.warnings, ...result.deprecations].sort((a, b) => a.line - b.line), lineOffset), json);
+    const result = await buildFigure(source, { baseDir, strict: flags.has('strict'), requireData: flags.has('require-data'), requireCi: flags.has('require-ci'), budget });
+    report(file, shifted([...result.warnings].sort((a, b) => a.line - b.line), lineOffset), json);
     return result;
   } catch (error) {
     // 원본 오류가 아닌 실패는 이 도구의 버그다. 스택 대신 한 줄로 알리고 다음 파일로 넘어간다.

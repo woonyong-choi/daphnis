@@ -1,0 +1,26 @@
+/* 예제 갤러리. 그림의 스타일과 레이아웃은 렌더러가 소유하고, 여기는 목록 쪽 배치만 정한다. */
+:root { color-scheme: light dark; }
+body { margin: 0; padding: var(--simple2-page-gutter); font-family: var(--font-sans); font-size: var(--size-text-15); line-height: var(--simple2-leading); color: var(--color-fg); background: var(--color-page); }
+h1 { margin: 0; font-size: var(--simple2-heading); font-weight: var(--simple2-heading-weight); line-height: var(--simple2-title-leading); overflow-wrap: anywhere; }
+h2 { margin: var(--space-12) 0 var(--space-3); font-size: var(--size-text-22); }
+h3 { margin: 0; font-size: var(--size-text-15); overflow-wrap: anywhere; }
+p { overflow-wrap: anywhere; }
+a { color: var(--color-ui-link); }
+code { font-family: var(--font-mono); }
+pre { overflow: auto; padding: var(--space-6); font-size: var(--size-text-13); background: var(--color-surface); border-radius: var(--simple2-control-radius); }
+details { margin-block: var(--space-4); }
+summary { padding-block: var(--space-4); cursor: pointer; }
+a:focus-visible, summary:focus-visible { outline: var(--simple2-focus-width) solid var(--color-ui-focus); outline-offset: var(--space-1); }
+.catalog-header { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; justify-content: space-between; max-width: var(--simple2-page-width); margin: auto auto var(--space-14); }
+.catalog-main { max-width: var(--simple2-page-width); margin: auto; }
+.catalog-lead { font-size: var(--size-text-22); color: var(--color-muted); }
+.catalog-index { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-6); padding: 0; list-style: none; }
+.catalog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--size-gallery-column)), 1fr)); gap: var(--space-6); }
+.catalog-card { min-width: 0; padding: var(--space-8); background: var(--color-surface); border-radius: var(--simple2-control-radius); }
+.catalog-card code { font-size: var(--size-text-13); color: var(--color-muted); }
+.catalog-preview { display: block; overflow: hidden; margin-block: var(--space-4); }
+.catalog-preview img { display: block; width: 100%; height: auto; max-height: var(--size-gallery-frame); object-fit: contain; object-position: top; }
+.catalog-scenes { margin: 0; padding-left: var(--space-8); font-size: var(--size-text-13); }
+.catalog-scenes span { color: var(--color-muted); }
+.catalog-support { margin: 0; font-size: var(--size-text-13); color: var(--color-muted); }
+.catalog-downloads { display: flex; flex-wrap: wrap; gap: var(--space-5); padding-block: var(--space-4); }

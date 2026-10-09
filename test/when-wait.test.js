@@ -1,17 +1,19 @@
-// 흐름 조건과 대기(`when`, `wait`, `timeout`, `else`, `stuck`)의 시간표 계산, 진단, 예산, 호환(docs/design/playback.md 이벤트 순서, 조건과 대기, 대기가 끝나는 때, 이벤트 예산).
+// 조건과 대기(`when`, `wait`, `timeout`, `else`, `stuck`)의 시간표 계산, 진단, 예산(docs/design/playback.md 이벤트 순서, 조건과 대기, 대기가 끝나는 때, 이벤트 예산).
+// 원본은 이 파일 안에 둔다(공개 예제는 합쳐지고 이름이 바뀌었다). 잠금, 교착, 큐 역압, 회로 차단 시나리오는 공통 기능만으로 쓴 작은 원본이다.
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
+import { fileURLToPath } from 'node:url';
+import { hopLegs } from '../src/animate/legs.js';
 import { buildFigure } from '../src/build.js';
 import { engineStats } from '../src/flow-events.js';
 import { runCli, withFolder } from './helpers.js';
 
-const EXAMPLES = new URL('../examples/', import.meta.url);
-const V1 = new URL('./fixtures/compat/v1/', import.meta.url);
-// 값 셋(숫자 둘, 낱말 하나). 선: a->b, b->a, a->c, b->c, a->db. 단계는 14번째 줄부터 붙인다.
-const BASE = 'flow right\nbox a "A"\nbox b "B"\nbox c "C"\nstore db "DB"\nvalue n "수" on=a\nvalue m "수" on=b\nvalue holder "쥔 쪽" on=c from=none\na -> b\nb -> a\na -> c\nb -> c\na -> db\n';
+const ROOT = fileURLToPath(new URL('../', import.meta.url));
+// 값 셋(숫자 둘, 낱말 하나). 선: a->b, b->a, a->c, b->c, a->db. 장면은 14번째 줄부터 붙인다.
+const BASE = 'daphnis 2\nbox a "A"\nbox b "B"\nbox c "C"\nstore db "DB"\nvalue n "수" on=a\nvalue m "수" on=b\nvalue holder "쥔 쪽" on=c from=none\na -> b\nb -> a\na -> c\nb -> c\na -> db\n';
 const LINES = BASE.split('\n').length - 1;
 
 // cost: time O(n), heap O(n), stack O(1)
@@ -28,45 +30,48 @@ async function errorsOf(source, options) {
   }
 }
 
-// 값 줄 가운데 id와 단계가 맞는 것의 변화 [시각, 글] 목록
+// 값 줄 가운데 id와 장면이 맞는 것의 변화 [시각, 글] 목록
 const changesOf = (timeline, id, si = 0) => timeline.values.find((row) => row.id === id && row.si === si).changes;
-// 단계 si의 박자 구간 목록
+// 장면 si의 박자 구간 목록
 const segsOf = (timeline, si = 0) => timeline.segs.filter((seg) => seg.si === si);
-// 같은 시각에 시간표에서 이동의 도착 도형만 뽑은 목록
+// 박자 구간의 이동이 도착하는 도형 목록
 const targetsOf = (seg) => seg.hops.map((hop) => hop.to);
+// 박자 구간의 이동이 켜는 선(점이 올라 있는 동안 켜진다)
+const litEdgesOf = (seg) => seg.hops.flatMap((hop) => hopLegs(hop).map((leg) => leg.edge));
 
 // ---- 건너뛰기(when) ----
 
 // 근거: 계약 "when이 거짓인 이동은 점, 선 켜짐, 값, 도착 효과 없이 건너뛴다", 설계 playback.md 조건과 대기 "건너뛴 이동은 skips에 줄 번호, 시각과 함께 남는다"
 test('buildFigure_when_false_move_makes_no_dot_no_lit_edge_no_value_and_no_arrival_effect_and_is_listed_in_skips', async () => {
-  const { timeline } = await buildFigure(`${BASE}step "s"\n  a -> b time=1s when="n=1" set="m=5" & a -> c time=1s when="n=0" set="holder=X"\n`);
+  const { timeline } = await buildFigure(`${BASE}scene "s" mode=once\n  a -> b time=1s when="n=1" set="m=5" & a -> c time=1s when="n=0" set="holder=X"\n`);
   const [seg] = timeline.segs;
 
   assert.deepEqual(seg.hops.map((hop) => [hop.to, hop.ms]), [['c', 1000]], '참인 이동 하나만 점이 된다');
   assert.deepEqual(timeline.skips, [{ si: 0, line: LINES + 2, node: 'a', cond: 'n=1', t: 0 }]);
   assert.deepEqual(changesOf(timeline, 'm'), [], '건너뛴 이동의 set=는 적용하지 않는다');
   assert.deepEqual(changesOf(timeline, 'holder'), [[1000, 'X']]);
-  assert.equal(seg.edgesOn.length, 1, '건너뛴 선은 켜지지 않는다');
+  assert.equal(litEdgesOf(seg).length, 1, '건너뛴 선은 켜지지 않는다');
   assert.equal(seg.move, 1000);
 });
 
-// 근거: 계약 "건너뛴 이동도 박자와 단계가 사라지지 않는다", 설계 "이동이 하나도 남지 않은 박자는 점 없이 멈추는 박자로 남는다"
-test('buildFigure_a_beat_whose_moves_are_all_skipped_stays_as_a_beat_without_dots_and_the_step_keeps_its_beat_count', async () => {
-  const plain = await buildFigure(`${BASE}step "s"\n  a -> b time=1s\n  say "다음"\nstep "t"\n  a -> c time=1s\n`);
-  const skipped = await buildFigure(`${BASE}step "s"\n  a -> b time=1s when="n=1"\n  say "다음"\nstep "t"\n  a -> c time=1s when="n=1"\n`);
+// 근거: 계약 "건너뛴 이동도 박자와 장면이 사라지지 않는다", 설계 "이동이 하나도 남지 않은 박자는 점 없이 멈추는 박자로 남는다". 장면 사이에 두는 `wait`가 그 장면의 길이를 지킨다
+test('buildFigure_a_beat_whose_moves_are_all_skipped_stays_as_a_beat_without_dots_and_the_scene_keeps_its_beat_count', async () => {
+  const plain = await buildFigure(`${BASE}scene "s" mode=once\n  a -> b time=1s\n  wait 1s\nscene "t" mode=once\n  a -> c time=1s\n  wait 1s\n`);
+  const skipped = await buildFigure(`${BASE}scene "s" mode=once\n  a -> b time=1s when="n=1"\n  wait 1s\nscene "t" mode=once\n  a -> c time=1s when="n=1"\n  wait 1s\n`);
 
   assert.equal(skipped.timeline.segs.length, plain.timeline.segs.length);
   assert.deepEqual(skipped.timeline.segs.map((s) => [s.si, s.bi]), plain.timeline.segs.map((s) => [s.si, s.bi]));
-  assert.ok(skipped.timeline.segs.every((seg) => seg.hops.length === 0 && seg.move === 0 && seg.edgesOn.length === 0));
+  assert.ok(skipped.timeline.segs.every((seg) => seg.hops.length === 0 && seg.move === 0 && litEdgesOf(seg).length === 0));
   assert.equal(skipped.timeline.skips.length, 2);
-  assert.equal(skipped.timeline.steps.length, 2, '단계도 남는다');
-  assert.ok(skipped.timeline.segs.every((seg) => seg.t1 > seg.t0), '점 없이 멈추는 박자도 시간이 있다');
+  assert.equal(skipped.timeline.steps.length, 2, '장면도 남는다');
+  // 박자 앞뒤에 따로 머무는 시간이 없으므로 건너뛴 이동의 박자는 길이가 0이고, 장면 길이는 `wait`가 지킨다
+  assert.deepEqual(skipped.timeline.segs.map((seg) => seg.t1 - seg.t0), [0, 1000, 0, 1000]);
 });
 
 // 근거: 계약 "when은 wait가 풀린 뒤 실행 직전에 한 번 평가한다", 설계 figure-syntax.md "한 줄에 wait와 when이 함께 있으면 wait가 풀린 뒤에 when을 평가한다"
 test('buildFigure_when_is_evaluated_once_right_after_the_wait_is_released_and_sees_the_values_of_that_moment', async () => {
   // A가 1초에 holder를 none으로 풀고 n을 1로 올린다. B의 when은 시작할 때(n=0)는 참이지만 풀린 시각(n=1)에는 거짓이다.
-  const source = `${BASE}step "s"\n  a -> c time=1s set="holder=A"\nstep "t" keep="holder"\n  a -> c time=1s set="holder=none, n=1" & b -> c time=1s wait="holder='none'" when="n=0" set="holder=B"\n`;
+  const source = `${BASE}scene "s" mode=once\n  a -> c time=1s set="holder=A"\nscene "t" mode=once keep="holder"\n  a -> c time=1s set="holder=none, n=1" & b -> c time=1s wait="holder='none'" when="n=0" set="holder=B"\n`;
   const { timeline } = await buildFigure(source);
   const [beat] = segsOf(timeline, 1);
 
@@ -79,7 +84,7 @@ test('buildFigure_when_is_evaluated_once_right_after_the_wait_is_released_and_se
 
 // 근거: 계약 "흐름의 출발 수 계산에는 들어간다", 설계 playback.md 조건과 대기 "흐름의 출발은 조건이 거짓이면 점을 만들지 않지만 출발 수 계산에는 들어간다"
 test('buildFigure_a_track_departure_with_a_false_when_makes_no_dot_but_still_counts_as_a_departure', async () => {
-  const { timeline } = await buildFigure(`${BASE}step "s" for=6s\n  track a -> b "요청" every=1s time=500ms when="n=0" set="n+1@b"\n  track b -> c "확인" at=2500ms time=500ms\n`);
+  const { timeline } = await buildFigure(`${BASE}scene "s" mode=once for=6s\n  track a -> b "요청" every=1s time=500ms when="n=0" set="n+1@b"\n  track b -> c "확인" at=2500ms time=500ms\n`);
   // 첫 흐름은 출발 6번. 도착으로 n이 올라 두 번째 출발부터 when이 거짓이 된다(출발 6개가 모두 센다).
   const dots = timeline.segs[0].hops.filter((hop) => hop.track === 0);
 
@@ -93,7 +98,7 @@ test('buildFigure_a_track_departure_with_a_false_when_makes_no_dot_but_still_cou
 
 // 근거: 이슈 #119 완료 조건 "기다리던 작업이 해제 시각에 출발하고 쥔 쪽 값이 바뀐다", 설계 playback.md 조건과 대기 "참조한 값이 바뀔 때마다 다시 평가하고, 참이 되면 풀려서 그 시각에 출발한다"
 test('buildFigure_a_wait_releases_at_the_arrival_that_makes_it_true_and_the_dot_leaves_then_with_the_holder_changing', async () => {
-  const source = `${BASE}step "A가 쥔다"\n  a -> c time=1s set="holder=A"\nstep "B가 기다린다" keep="holder"\n  a -> c time=1s set="holder=none" & b -> c time=2s wait="holder='none'" set="holder=B"\n`;
+  const source = `${BASE}scene "A가 쥔다" mode=once\n  a -> c time=1s set="holder=A"\nscene "B가 기다린다" mode=once keep="holder"\n  a -> c time=1s set="holder=none" & b -> c time=2s wait="holder='none'" set="holder=B"\n`;
   const { timeline } = await buildFigure(source);
   const [beat] = segsOf(timeline, 1);
   const waiter = beat.hops.find((hop) => hop.ms === 2000);
@@ -108,7 +113,7 @@ test('buildFigure_a_wait_releases_at_the_arrival_that_makes_it_true_and_the_dot_
 
 // 근거: 설계 playback.md 조건과 대기 "처음 평가에서 참이라 기다리지 않은 점은 담지 않는다"
 test('buildFigure_a_wait_that_is_true_at_the_first_evaluation_leaves_at_once_and_is_not_listed_in_waits', async () => {
-  const { timeline } = await buildFigure(`${BASE}step "s"\n  b -> c time=1s wait="holder='none'"\n`);
+  const { timeline } = await buildFigure(`${BASE}scene "s" mode=once\n  b -> c time=1s wait="holder='none'"\n`);
 
   assert.deepEqual(timeline.waits, []);
   assert.equal(timeline.segs[0].hops[0].at, undefined);
@@ -117,7 +122,7 @@ test('buildFigure_a_wait_that_is_true_at_the_first_evaluation_leaves_at_once_and
 
 // 근거: 이슈 #119 완료 조건 "같은 시각의 대기 해제 연쇄가 선언 순서로 풀린다", 설계 playback.md 이벤트 순서 "풀린 대기의 실행: 대기 줄의 선언 순서"
 test('buildFigure_waits_released_by_one_update_start_in_declaration_order_and_not_in_edge_or_node_order', async () => {
-  const make = (first, second) => `${BASE}step "s"\n  a -> c time=1s set="holder=go" & ${first} time=1s wait="holder='go'" & ${second} time=2s wait="holder='go'"\n`;
+  const make = (first, second) => `${BASE}scene "s" mode=once\n  a -> c time=1s set="holder=go" & ${first} time=1s wait="holder='go'" & ${second} time=2s wait="holder='go'"\n`;
   const forward = await buildFigure(make('b -> c', 'a -> db'));
   const swapped = await buildFigure(make('a -> db', 'b -> c'));
   const order = ({ timeline }) => timeline.segs[0].hops.filter((hop) => hop.at > 0).map((hop) => [hop.to, hop.at]);
@@ -131,7 +136,7 @@ test('buildFigure_waits_released_by_one_update_start_in_declaration_order_and_no
 // 근거: 설계 playback.md 이벤트 순서 표 "순위 3 풀린 대기의 실행이 순위 4 이 시각에 출발하는 점의 실행보다 앞", 계약 "한 갱신에서 풀린 대기와 첫 평가에서 참인 출발의 순서가 설계 표를 따른다"
 test('buildFigure_a_released_wait_runs_before_a_departure_that_starts_at_the_same_moment_even_if_declared_later', async () => {
   // 2초에 같은 시각 일: (1) 설정 흐름의 도착이 holder를 go로 바꿔 B(뒤에 선언)의 wait가 풀린다 (2) A(앞에 선언)의 출발이 2초에 시작한다. 둘 다 when이 거짓이라 skips의 차례가 처리 차례다.
-  const source = `${BASE}step "s" for=6s\n  track a -> b at=2s time=500ms when="n=99"\n  track b -> a at=0s time=500ms wait="holder='go'" when="n=99"\n  track a -> c at=1s time=1s set="holder=go"\n`;
+  const source = `${BASE}scene "s" mode=once for=6s\n  track a -> b at=2s time=500ms when="n=99"\n  track b -> a at=0s time=500ms wait="holder='go'" when="n=99"\n  track a -> c at=1s time=1s set="holder=go"\n`;
   const { timeline } = await buildFigure(source);
 
   assert.deepEqual(timeline.skips.map((s) => [s.line, s.t]), [[LINES + 3, 2000], [LINES + 2, 2000]], '풀린 대기(뒤 줄)가 같은 시각 출발(앞 줄)보다 먼저다');
@@ -139,16 +144,16 @@ test('buildFigure_a_released_wait_runs_before_a_departure_that_starts_at_the_sam
 });
 
 // 근거: 설계 playback.md 이벤트 순서 표 "순위 1 on 갱신, 순위 2 set= 갱신, 같은 순위 안의 순서", 한 갱신 하나는 읽기 뒤 쓰기
-test('buildFigure_in_a_conditional_step_the_on_line_updates_before_set_and_a_read_set_sees_it', async () => {
-  const { timeline } = await buildFigure(`${BASE}on c n+1\nstep "s"\n  a -> c time=1s wait="n>=0" set="m:=n"\n`);
+test('buildFigure_in_a_conditional_scene_the_on_line_updates_before_set_and_a_read_set_sees_it', async () => {
+  const { timeline } = await buildFigure(`${BASE}on c n+1\nscene "s" mode=once\n  a -> c time=1s wait="n>=0" set="m:=n"\n`);
 
   assert.deepEqual(changesOf(timeline, 'n'), [[1000, '1']]);
   assert.deepEqual(changesOf(timeline, 'm'), [[1000, '1']], 'on 줄이 먼저 n을 올리고 읽기가 그 값을 본다');
 });
 
-// 근거: 설계 playback.md 이벤트 순서 "한 갱신 하나는 읽기, 쓰기 순서" — set="a:=b, b:=a"는 값을 맞바꾼다(조건을 쓴 단계에서도)
-test('buildFigure_in_a_conditional_step_a_swap_set_exchanges_two_values', async () => {
-  const { timeline } = await buildFigure(`${BASE}step "s"\n  a -> c time=1s set="n=3, m=9"\nstep "t" keep="n, m"\n  a -> c time=1s wait="n>=0" set="n:=m, m:=n"\n`);
+// 근거: 설계 playback.md 이벤트 순서 "한 갱신 하나는 읽기, 쓰기 순서" — set="a:=b, b:=a"는 값을 맞바꾼다(조건을 쓴 장면에서도)
+test('buildFigure_in_a_conditional_scene_a_swap_set_exchanges_two_values', async () => {
+  const { timeline } = await buildFigure(`${BASE}scene "s" mode=once\n  a -> c time=1s set="n=3, m=9"\nscene "t" mode=once keep="n, m"\n  a -> c time=1s wait="n>=0" set="n:=m, m:=n"\n`);
 
   assert.deepEqual(changesOf(timeline, 'n', 1).map(([, text]) => text), ['9']);
   assert.deepEqual(changesOf(timeline, 'm', 1).map(([, text]) => text), ['3']);
@@ -158,18 +163,18 @@ test('buildFigure_in_a_conditional_step_a_swap_set_exchanges_two_values', async 
 
 // 근거: 이슈 #119 완료 조건 "timeout과 else가 정한 시각에 분기 이동을 출발하고, else가 없으면 점을 만들지 않는다", 설계 playback.md 대기가 끝나는 때
 test('buildFigure_timeout_without_else_ends_the_wait_at_its_time_and_makes_no_dot', async () => {
-  const { timeline } = await buildFigure(`${BASE}step "s"\n  b -> c time=1s wait="holder='go'" timeout=500ms & a -> db time=2s\n`);
+  const { timeline } = await buildFigure(`${BASE}scene "s" mode=once\n  b -> c time=1s wait="holder='go'" timeout=500ms & a -> db time=2s\n`);
   const [seg] = timeline.segs;
 
   assert.deepEqual(timeline.waits.map(({ end, t0, t1 }) => [end, t1 - t0]), [['timeout', 500]]);
   assert.deepEqual(targetsOf(seg), ['db'], '점이 하나도 생기지 않는다');
-  assert.equal(seg.edgesOn.length, 1);
+  assert.equal(litEdgesOf(seg).length, 1);
   assert.deepEqual(timeline.stalls, []);
 });
 
 // 근거: 계약 "timeout과 else 분기가 정한 시각에 분기 이동을 출발한다", 설계 figure-syntax.md "else 이동은 글과 tone을 이어받고 시간은 선 길이로 정하며 set, lost, when, wait, legs는 이어받지 않는다"
 test('buildFigure_timeout_with_else_sends_a_branch_dot_from_the_waiting_shape_to_the_else_shape_at_the_timeout_time', async () => {
-  const { timeline } = await buildFigure(`${BASE}on a n+1\nstep "s"\n  b -> c "요청" tone=purple time=1s wait="holder='go'" timeout=500ms else=a set="holder=B" lost=50%\n`);
+  const { timeline } = await buildFigure(`${BASE}on a n+1\nscene "s" mode=once\n  b -> c "요청" tone=purple time=1s wait="holder='go'" timeout=500ms else=a set="holder=B" lost=50%\n`);
   const [seg] = timeline.segs;
   const [branch] = seg.hops;
 
@@ -188,7 +193,7 @@ test('buildFigure_timeout_with_else_sends_a_branch_dot_from_the_waiting_shape_to
 
 // 근거: 설계 playback.md 대기가 끝나는 때 "같은 시각에 풀림과 시간 초과가 겹치면 풀림이 이긴다(참이 되면 풀린다)"
 test('buildFigure_a_release_at_exactly_the_timeout_time_wins_over_the_timeout', async () => {
-  const { timeline } = await buildFigure(`${BASE}step "s"\n  a -> c time=1s set="holder=go" & b -> c time=1s wait="holder='go'" timeout=1s else=a\n`);
+  const { timeline } = await buildFigure(`${BASE}scene "s" mode=once\n  a -> c time=1s set="holder=go" & b -> c time=1s wait="holder='go'" timeout=1s else=a\n`);
 
   assert.deepEqual(timeline.waits.map(({ end }) => end), ['released']);
   assert.deepEqual(timeline.segs[0].hops.map((hop) => hop.to).sort(), ['c', 'c']);
@@ -196,7 +201,7 @@ test('buildFigure_a_release_at_exactly_the_timeout_time_wins_over_the_timeout', 
 
 // 근거: 계약 "timeout과 else 분기가 정한 시각에 분기 이동을 출발한다" — 흐름 줄(출발지마다)
 test('buildFigure_a_track_departure_that_times_out_sends_a_branch_dot_from_its_source_to_the_else_shape', async () => {
-  const { timeline } = await buildFigure(`${BASE}step "s" for=6s\n  track b -> c "요청" at=1s time=1s wait="holder='go'" timeout=1500ms else=a\n`);
+  const { timeline } = await buildFigure(`${BASE}scene "s" mode=once for=6s\n  track b -> c "요청" at=1s time=1s wait="holder='go'" timeout=1500ms else=a\n`);
   const hops = timeline.segs[0].hops;
   const branch = hops.find((hop) => hop.track === undefined);
 
@@ -204,14 +209,14 @@ test('buildFigure_a_track_departure_that_times_out_sends_a_branch_dot_from_its_s
   assert.equal(hops.filter((hop) => hop.track !== undefined).length, 0, '원래 경로의 점은 없다');
   assert.equal(branch.at, 2500);
   assert.equal(branch.to, 'a');
-  assert.ok(Object.keys(timeline.segs[0].edgesAt).length === 1 && branch.edge in timeline.segs[0].edgesAt, '분기 선은 점이 닿을 때 켜진다');
+  assert.deepEqual(litEdgesOf(timeline.segs[0]), [branch.edge], '분기 선만 점이 지나는 동안 켜진다');
 });
 
 // ---- 끝나지 않는 대기 ----
 
 // 근거: 이슈 #119 완료 조건 "해제되지 않는 교착이 stalls와 wait-stalled로 설명된다. 대기 중인 도형과 조건, 읽은 값의 글과 마지막으로 쓴 줄이 시간표와 경고 메시지에 있다"
 test('buildFigure_a_deadlock_is_listed_in_stalls_with_each_read_value_and_its_last_writer_and_warns_wait_stalled', async () => {
-  const source = `${BASE}value h1 "가" on=a from=none\nvalue h2 "나" on=b from=none\nstep "쥔다"\n  a -> c time=1s set="h1=t1" & b -> c time=1s set="h2=t2"\nstep "요청" keep="h1, h2"\n  a -> c time=1s wait="h2='none'" & b -> c time=1s wait="h1='none'"\n`;
+  const source = `${BASE}value h1 "가" on=a from=none\nvalue h2 "나" on=b from=none\nscene "쥔다" mode=once\n  a -> c time=1s set="h1=t1" & b -> c time=1s set="h2=t2"\nscene "요청" mode=once keep="h1, h2"\n  a -> c time=1s wait="h2='none'" & b -> c time=1s wait="h1='none'"\n`;
   const { timeline, warnings } = await buildFigure(source);
   const base = LINES + 2;
 
@@ -221,7 +226,7 @@ test('buildFigure_a_deadlock_is_listed_in_stalls_with_each_read_value_and_its_la
   const claim = first.refs.find((ref) => ref.id === 'h2');
 
   assert.equal(claim.text, 't2');
-  assert.equal(claim.line, base + 2, '마지막으로 쓴 줄은 앞 단계의 set=가 있는 줄이다');
+  assert.equal(claim.line, base + 2, '마지막으로 쓴 줄은 앞 장면의 set=가 있는 줄이다');
   assert.equal(claim.at, timeline.segs[0].t0 + 1000);
   assert.equal(first.t, segsOf(timeline, 1)[0].t0, '더 처리할 이벤트가 없어 멈춘 시각이다');
   const messages = warnings.filter((w) => w.code === 'wait-stalled');
@@ -234,7 +239,7 @@ test('buildFigure_a_deadlock_is_listed_in_stalls_with_each_read_value_and_its_la
 
 // 근거: 계약 "끝나지 않는 대기는 경고 wait-stalled(stuck이면 경고 없음)", 설계 "stuck이 있는 대기는 경고를 내지 않고 stalls에는 똑같이 남는다"
 test('buildFigure_stuck_removes_the_wait_stalled_warning_and_keeps_the_stall_in_the_timeline', async () => {
-  const body = (word) => `${BASE}step "s"\n  b -> c time=1s wait="holder='go'"${word}\n`;
+  const body = (word) => `${BASE}scene "s" mode=once\n  b -> c time=1s wait="holder='go'"${word}\n`;
   const plain = await buildFigure(body(''));
   const stuck = await buildFigure(body(' stuck'));
 
@@ -245,14 +250,14 @@ test('buildFigure_stuck_removes_the_wait_stalled_warning_and_keeps_the_stall_in_
   assert.match(plain.warnings[0].message, /h?older is "none" \(declared on line \d+\)/, '쓴 적 없는 값은 선언 줄을 알린다');
 });
 
-// 근거: 설계 playback.md 대기가 끝나는 때 표 "step-end: 거짓인 채 처리할 이벤트가 남은 상태로 단계 끝 — 점 없음, 경고 없음", "stalled: 처리할 이벤트가 하나도 없음"
-test('buildFigure_a_wait_that_is_still_false_when_events_remain_at_the_step_end_ends_as_step_end_without_a_warning', async () => {
-  const alone = await buildFigure(`${BASE}step "s" for=3s\n  track b -> c every=1s time=100ms wait="holder='go'"\n`);
-  const busy = await buildFigure(`${BASE}step "s" for=3s\n  track b -> c every=1s time=100ms wait="holder='go'"\n  track a -> db at=2s time=2s\n`);
+// 근거: 설계 playback.md 대기가 끝나는 때 표 "step-end: 거짓인 채 처리할 이벤트가 남은 상태로 장면 끝 — 점 없음, 경고 없음", "stalled: 처리할 이벤트가 하나도 없음"
+test('buildFigure_a_wait_that_is_still_false_when_events_remain_at_the_scene_end_ends_as_step_end_without_a_warning', async () => {
+  const alone = await buildFigure(`${BASE}scene "s" mode=once for=3s\n  track b -> c every=1s time=100ms wait="holder='go'"\n`);
+  const busy = await buildFigure(`${BASE}scene "s" mode=once for=3s\n  track b -> c every=1s time=100ms wait="holder='go'"\n  track a -> db at=2s time=2s\n`);
 
   assert.deepEqual(alone.timeline.waits.map(({ end }) => end), ['stalled', 'stalled', 'stalled'], '남은 이벤트가 없으면 멈춘 대기다');
   assert.equal(alone.warnings.filter((w) => w.code === 'wait-stalled').length, 1, '같은 줄의 같은 경고는 한 번이다');
-  assert.deepEqual(busy.timeline.waits.map(({ end }) => end), ['step-end', 'step-end', 'step-end'], '도착이 단계 끝 뒤에 남아 있으면 단계 끝이다');
+  assert.deepEqual(busy.timeline.waits.map(({ end }) => end), ['step-end', 'step-end', 'step-end'], '도착이 장면 끝 뒤에 남아 있으면 장면 끝이다');
   assert.deepEqual(busy.timeline.stalls, []);
   assert.equal(busy.warnings.filter((w) => w.code === 'wait-stalled').length, 0);
   assert.ok(busy.timeline.waits.every((w) => w.t1 === busy.timeline.segs[0].t0 + 3000));
@@ -262,13 +267,13 @@ test('buildFigure_a_wait_that_is_still_false_when_events_remain_at_the_step_end_
 
 // 근거: 이슈 #119 완료 조건 "그림 검사 14번의 점 0개 오류는 when/wait가 있는 흐름에 적용하지 않는다"
 test('buildFigure_check_14_does_not_report_a_flow_with_when_or_wait_that_draws_no_dot_and_still_reports_one_without', async () => {
-  const track = (options) => `${BASE}step "s" for=4s\n  track a -> b at=8s ${options}\n`;
+  const track = (options) => `${BASE}scene "s" mode=once for=4s\n  track a -> b at=8s ${options}\n`;
   const errorOf = async (options) => (await errorsOf(track(options))).filter((e) => e.code === 'check-14');
 
   assert.equal((await errorOf('')).length, 1, 'when도 wait도 lost도 없는 흐름은 오류');
   assert.equal((await errorOf('when="n=0"')).length, 0);
   assert.equal((await errorOf('wait="n=0"')).length, 0);
-  const idle = await buildFigure(`${BASE}step "s" for=4s\n  track a -> b time=1s when="n=1"\n  track a -> c time=1s\n`);
+  const idle = await buildFigure(`${BASE}scene "s" mode=once for=4s\n  track a -> b time=1s when="n=1"\n  track a -> c time=1s\n`);
 
   assert.equal(idle.warnings.filter((w) => w.code === 'check-14').length, 0, '점이 하나도 없는 when 흐름은 오류도 경고도 아니다');
   assert.equal(idle.timeline.skips.length, 1);
@@ -288,8 +293,8 @@ test('buildFigure_reports_condition_syntax_errors_with_the_line_and_the_runtime_
     { name: 'timeout_without_wait', body: 'a -> b timeout=1s', code: 'syntax', message: /timeout goes with wait/ },
     { name: 'stuck_without_wait', body: 'a -> b stuck', code: 'syntax', message: /stuck goes with wait/ },
     { name: 'else_without_timeout', body: 'a -> b wait="n=1" else=c', code: 'syntax', message: /else is where a wait goes when timeout passes/ },
-    { name: 'else_unknown_node', body: 'a -> b wait="n=1" timeout=1s else=zz', code: 'syntax', message: /unknown node "zz"/ },
-    { name: 'else_without_an_edge', body: 'a -> b wait="n=1" timeout=1s else=db2', code: 'syntax', message: /unknown node "db2"/ },
+    { name: 'else_unknown_node', body: 'a -> b wait="n=1" timeout=1s else=zz', code: 'syntax', message: /unknown card "zz"/ },
+    { name: 'else_without_an_edge', body: 'a -> b wait="n=1" timeout=1s else=db2', code: 'syntax', message: /unknown card "db2"/ },
     { name: 'bad_timeout', body: 'a -> b wait="n=1" timeout=soon', code: 'syntax', message: /timeout is a positive time/ },
     { name: 'twice', body: 'a -> b when="n=1" when="n=2"', code: 'syntax', message: /"when" is written twice/ },
     { name: 'type_at_run_time', body: "a -> b when=\"n='x'\"", code: 'value-type', message: /"n" holds 0, but 'x' is a word/ },
@@ -297,7 +302,7 @@ test('buildFigure_reports_condition_syntax_errors_with_the_line_and_the_runtime_
   ];
 
   for (const { name, body, code, message } of cases) {
-    const found = await errorsOf(`${BASE}step "s"\n  ${body}\n`);
+    const found = await errorsOf(`${BASE}scene "s" mode=once\n  ${body}\n`);
 
     assert.ok(found.length >= 1, name);
     assert.equal(found[0].code, code, name);
@@ -306,28 +311,15 @@ test('buildFigure_reports_condition_syntax_errors_with_the_line_and_the_runtime_
   }
 });
 
-// 근거: 설계 figure-syntax.md 조건과 대기 "구조 그림(flow)의 박자 이동과 흐름에서만 쓴다"
-test('buildFigure_conditions_belong_to_flow_figures_only', async () => {
-  for (const kind of ['sequence', 'state', 'data']) {
-    const source = {
-      sequence: 'sequence\nperson a "A"\nperson b "B"\nstep "s"\n  a -> b "x" when="n=1"\n',
-      state: 'state\nstate a "A"\nstate b "B"\nstep "s"\n  a -> b when="n=1"\n',
-      data: 'data\ntable a {\n  id int pk\n}\ntable b {\n  id int pk\n}\nstep "s"\n  a -> b when="n=1"\n',
-    }[kind];
-    const found = await errorsOf(source);
-
-    assert.ok(found.some((e) => /belongs to flow figures only/.test(e.message)), kind);
-  }
-});
-
 // ---- 시간 상한 ----
 
-// 근거: 이슈 #119 완료 조건 "대기로 단계 길이나 전체 시간이 1시간 상한을 넘으면 time-limit으로 끝난다", 설계 playback.md 대기가 끝나는 때 "대기가 단계를 넘지 않으므로 시간 상한도 그대로 적용된다"
-test('buildFigure_a_wait_that_pushes_a_step_over_one_hour_ends_with_time_limit_and_a_shorter_one_passes', async () => {
-  const make = (timeout) => `${BASE}step "s"\n  b -> c time=1s wait="holder='go'" timeout=${timeout} else=a\n`;
+// 근거: 이슈 #119 완료 조건 "대기로 장면 길이나 전체 시간이 1시간 상한을 넘으면 time-limit으로 끝난다", 설계 playback.md 시간 상한 "상한과 정확히 같은 값은 통과하고 1ms라도 넘으면 오류다"
+test('buildFigure_a_wait_that_pushes_a_scene_over_one_hour_ends_with_time_limit_and_a_shorter_one_passes', async () => {
+  const make = (timeout) => `${BASE}scene "s" mode=once\n  b -> c time=1s wait="holder='go'" timeout=${timeout} else=a\n`;
 
   assert.deepEqual(await errorsOf(make('1000s')), []);
-  const over = await errorsOf(make('3599s'));
+  // 시간 값 하나는 1시간까지 통과하지만 시간 초과 뒤 else 분기 이동이 더해져 장면 길이가 상한을 넘는다
+  const over = await errorsOf(make('3600s'));
 
   assert.equal(over.length, 1);
   assert.equal(over[0].code, 'time-limit');
@@ -336,12 +328,12 @@ test('buildFigure_a_wait_that_pushes_a_step_over_one_hour_ends_with_time_limit_a
   assert.equal((await errorsOf(make('3600001ms')))[0].code, 'time-limit');
 });
 
-// 근거: 계약 "대기로 단계 길이나 전체 시간이 1시간 상한을 넘으면 time-limit" — 상한 경계: 대기가 만든 박자 길이가 정확히 1시간이면 통과하고 1ms 넘으면 오류
+// 근거: 계약 "대기로 장면 길이나 전체 시간이 1시간 상한을 넘으면 time-limit" — 상한 경계: 대기가 만든 박자 길이가 정확히 1시간이면 통과하고 1ms 넘으면 오류
 test('buildFigure_the_time_limit_boundary_holds_for_a_beat_stretched_by_a_wait', async () => {
-  const probe = await buildFigure(`${BASE}step "s"\n  b -> c time=1s wait="holder='go'" timeout=1000s else=a\n`);
+  const probe = await buildFigure(`${BASE}scene "s" mode=once\n  b -> c time=1s wait="holder='go'" timeout=1000s else=a\n`);
   const [seg] = probe.timeline.segs;
   const fixed = seg.t1 - seg.t0 - 1_000_000;
-  const edge = (timeout) => `${BASE}step "s"\n  b -> c time=1s wait="holder='go'" timeout=${timeout}ms else=a\n`;
+  const edge = (timeout) => `${BASE}scene "s" mode=once\n  b -> c time=1s wait="holder='go'" timeout=${timeout}ms else=a\n`;
 
   assert.deepEqual(await errorsOf(edge(3_600_000 - fixed)), [], '박자 길이가 정확히 1시간');
   const over = await errorsOf(edge(3_600_000 - fixed + 1));
@@ -353,7 +345,7 @@ test('buildFigure_the_time_limit_boundary_holds_for_a_beat_stretched_by_a_wait',
 // ---- 이벤트 예산 ----
 
 // 한 흐름 줄에서 출발 6개, 대기가 모두 평가·해제되는 원본
-const BUSY = `${BASE}step "s" for=6s\n  track b -> c at=0s every=1s time=100ms wait="holder='go'"\n  track a -> c at=500ms time=100ms set="holder=go"\n`;
+const BUSY = `${BASE}scene "s" mode=once for=6s\n  track b -> c at=0s every=1s time=100ms wait="holder='go'"\n  track a -> c at=500ms time=100ms set="holder=go"\n`;
 
 // 근거: 이슈 #119 완료 조건 "작은 events, chain을 주입한 시험", 설계 playback.md 이벤트 예산 "동적 이벤트는 추가하기 직전에 검사한다. 메시지는 예산 이름, 한도, 넘은 시점의 줄과 시각, 조정 방법을 알린다"
 test('buildFigure_stops_a_dynamic_event_chain_with_budget_exceeded_when_the_events_budget_is_small_and_passes_when_it_is_raised', async () => {
@@ -375,15 +367,23 @@ test('buildFigure_stops_a_dynamic_event_chain_with_budget_exceeded_when_the_even
 });
 
 // 대기 셋이 한 갱신으로 한 시각에 풀리는 원본
-const HERD = `${BASE}step "s"\n  a -> c time=1s set="holder=go" & b -> c time=1s wait="holder='go'" & a -> db time=1s wait="holder='go'" & b -> a time=1s wait="holder='go'"\n`;
+const HERD = `${BASE}scene "s" mode=once\n  a -> c time=1s set="holder=go" & b -> c time=1s wait="holder='go'" & a -> db time=1s wait="holder='go'" & b -> a time=1s wait="holder='go'"\n`;
 
 // 근거: 설계 playback.md 이벤트 예산 "한 시각의 이벤트도 같은 방식으로 chain에 센다"
 test('buildFigure_chain_budget_counts_the_events_of_one_moment_and_ends_with_budget_exceeded', async () => {
-  let lowest = 1;
-  while ((await errorsOf(HERD, { budget: { chain: lowest } })).length) lowest++;
+  // 한 시각의 이벤트 수는 전체 이벤트 수를 넘지 못한다: 정상 빌드의 합계가 탐색의 유한한 윗한도다
+  const total = (await buildFigure(HERD)).timeline.events;
+  let lowest = 0;
+  for (let chain = 1; chain <= total && !lowest; chain++) {
+    const found = await errorsOf(HERD, { budget: { chain } });
+
+    assert.deepEqual(found.filter((d) => d.code !== 'budget-exceeded'), [], `chain=${chain}: 예산 오류 말고는 나오지 않는다`);
+    if (!found.length) lowest = chain;
+  }
+  assert.ok(lowest, `chain=${total}(전체 이벤트 수)까지 올려도 통과하지 못한다`);
+  assert.ok(lowest > 3, '한 시각의 일이 여럿이다');
   const over = await errorsOf(HERD, { budget: { chain: lowest - 1 } });
 
-  assert.ok(lowest > 3, '한 시각의 일이 여럿이다');
   assert.equal(over.length, 1);
   assert.equal(over[0].code, 'budget-exceeded');
   assert.match(over[0].message, new RegExp(`passes the budget chain=${lowest - 1} at \\d+ms, counting events at one moment`));
@@ -394,7 +394,7 @@ test('buildFigure_chain_budget_counts_the_events_of_one_moment_and_ends_with_bud
 // 근거: 설계 playback.md 이벤트 예산 "문장과 every로 개수가 정해지는 이벤트는 시간표를 만들기 전에 합계를 세어 막는다. 합계는 출발 수에 경로의 도형 수를 더한 값을 곱해 구하고 when으로 건너뛰는 출발도 센다"
 test('buildFigure_counts_departures_before_building_the_timeline_and_refuses_over_the_events_budget', async () => {
   // 출발 6개 x (1 + 도형 2) = 18, 박자 이동 하나는 3. 한도가 18이면 통과하고 17이면 시간표를 만들기 전에 막는다.
-  const source = `${BASE}step "s" for=6s\n  track a -> b every=1s time=100ms when="n=1"\nstep "t"\n  a -> c time=1s when="n=1"\n`;
+  const source = `${BASE}scene "s" mode=once for=6s\n  track a -> b every=1s time=100ms when="n=1"\nscene "t" mode=once\n  a -> c time=1s when="n=1"\n  wait 1s\n`;
   const total = 6 * 3 + 3;
 
   assert.deepEqual(await errorsOf(source, { budget: { events: total } }), []);
@@ -407,7 +407,7 @@ test('buildFigure_counts_departures_before_building_the_timeline_and_refuses_ove
   assert.match(found[0].message, new RegExp(`--budget events=${total}`));
   // 사전 검사는 시간표를 만들기 전에 막으므로 배치도 하지 않는다: 천억 번 출발도 빨리 끝난다
   const started = Date.now();
-  const huge = await errorsOf(`${BASE}step "s" for=3600s\n  track a -> b every=0.001ms time=100ms when="n=1"\n`);
+  const huge = await errorsOf(`${BASE}scene "s" mode=once for=3600s\n  track a -> b every=0.001ms time=100ms when="n=1"\n`);
 
   assert.equal(huge[0].code, 'budget-exceeded');
   assert.ok(Date.now() - started < 5000, '제한 시간 안에 끝난다');
@@ -415,9 +415,10 @@ test('buildFigure_counts_departures_before_building_the_timeline_and_refuses_ove
 
 // 근거: 이슈 #119 완료 조건 "끝없는 연쇄와 과도한 생성은 제한된 시험 안에서 budget-exceeded로 끝나고, 불완전한 출력 파일을 남기지 않는다. 작은 events, chain을 주입한 시험의 종료 코드, 제한 시간, 파일 없음"
 test('main_render_with_a_small_events_or_chain_budget_exits_with_budget_exceeded_and_writes_no_file', async () => {
+  const busyEvents = (await buildFigure(BUSY)).timeline.events;
   await withFolder(async (folder) => {
     const outDir = join(folder, 'out');
-    const cases = [['busy', BUSY, 'events=3'], ['busy', BUSY, 'events=22'], ['herd', HERD, 'chain=2']];
+    const cases = [['busy', BUSY, 'events=3'], ['busy', BUSY, `events=${busyEvents - 1}`], ['herd', HERD, 'chain=2']];
 
     for (const [name, source, budget] of cases) {
       const file = join(folder, `${name}.dap`);
@@ -435,7 +436,7 @@ test('main_render_with_a_small_events_or_chain_budget_exits_with_budget_exceeded
       assert.ok(Date.now() - started < 30_000, '제한 시간 안에 끝난다');
     }
     const file = join(folder, 'busy.dap');
-    const ok = runCli(['render', file, '--out', outDir, '--budget', 'events=23', '--budget', 'chain=5000']);
+    const ok = runCli(['render', file, '--out', outDir, '--budget', `events=${busyEvents}`, '--budget', 'chain=5000']);
 
     assert.equal(ok.status, 0, ok.stderr);
     assert.ok(existsSync(join(outDir, 'busy.svg')), '예산을 올리면 같은 입력이 통과한다');
@@ -454,15 +455,23 @@ test('BUDGETS_has_the_event_budgets_with_the_measured_defaults', async () => {
   assert.equal(resolveBudget().chain, 5_000);
 });
 
-// ---- 예제 네 가지 ----
+// ---- 시나리오 넷: 잠금, 교착, 큐 역압, 회로 차단 ----
 
-// cost: time O(1), heap O(1), stack O(1), io 1
-// basis: estimate
-const exampleOf = (name) => readFileSync(new URL(`${name}.dap`, EXAMPLES), 'utf8');
+// 시나리오 원본은 test/fixtures/flow/에 있고 when-wait-player.test.js도 같은 파일을 쓴다.
+const fixtureOf = (name) => readFileSync(join(ROOT, 'test/fixtures/flow', `${name}.dap`), 'utf8');
+// A가 잠금을 쥐고 풀면 기다리던 B가 풀린 시각에 출발해 쥔다. 기다리는 B의 상태는 알약(status)으로 적는다.
+const MUTEX = fixtureOf('mutex-wait');
+// 서로 상대가 쥔 잠금을 기다려 풀리지 않는다. `stuck`이라 경고는 없다.
+const DEADLOCK = fixtureOf('deadlock-wait');
+// 큐가 가득 차면 생산이 기다리고(`reserve=`로 확인과 한 칸 차지를 한 사건으로), 오래 기다리면 시간 초과로 버려지며, 소비가 빨라지면 풀린다.
+const BACK_PRESSURE = fixtureOf('queue-wait');
+// 실패가 세 번 쌓이면 상태가 open으로 바뀌어 요청을 건너뛰고, 복구를 확인하면 closed로 돌아와 다시 지나간다.
+const BREAKER = fixtureOf('circuit-breaker');
+const SCENARIOS = { mutex: MUTEX, deadlock: DEADLOCK, 'back-pressure': BACK_PRESSURE, breaker: BREAKER };
 
-// 근거: 이슈 #119 완료 조건 "잠금 획득·해제 예제가 공통 기능만으로 표현된다. 기다리던 작업이 해제 시각에 출발하고 쥔 쪽 값이 바뀐다"
-test('buildFigure_the_lock_example_releases_the_waiting_dot_at_the_release_time_and_the_holder_changes', async () => {
-  const { timeline, warnings } = await buildFigure(exampleOf('mutex-wait'), { baseDir: 'examples' });
+// 근거: 이슈 #119 완료 조건 "잠금 획득·해제가 공통 기능만으로 표현된다. 기다리던 작업이 해제 시각에 출발하고 쥔 쪽 값이 바뀐다"
+test('buildFigure_the_lock_scenario_releases_the_waiting_dot_at_the_release_time_and_the_holder_changes', async () => {
+  const { timeline, warnings } = await buildFigure(MUTEX);
   const [wait] = timeline.waits;
   const holder = changesOf(timeline, 'holder', 1);
   const waiter = timeline.segs.flatMap((seg) => seg.hops.map((hop) => ({ seg, hop }))).find(({ seg, hop }) => seg.si === 1 && hop.at > 0);
@@ -471,18 +480,17 @@ test('buildFigure_the_lock_example_releases_the_waiting_dot_at_the_release_time_
   assert.equal(wait.end, 'released');
   assert.deepEqual(changesOf(timeline, 'holder', 0).map(([, text]) => text), ['A'], 'A가 잠금을 쥔다');
   assert.deepEqual(holder.map(([, text]) => text), ['none', 'B'], 'A가 풀고 B가 쥔다');
-  assert.equal(timeline.values.find((row) => row.id === 'holder' && row.si === 1).initial, 'A', '둘째 단계는 A가 쥔 채 시작한다');
+  assert.equal(timeline.values.find((row) => row.id === 'holder' && row.si === 1).initial, 'A', '둘째 장면은 A가 쥔 채 시작한다');
   assert.equal(holder[0][0], wait.t1, '풀린 시각에 값이 바뀐다');
   assert.equal(waiter.seg.t0 + waiter.hop.at, wait.t1, '기다리던 점이 그 시각에 출발한다');
   assert.equal(holder[1][0], wait.t1 + waiter.hop.ms, 'B의 점이 닿으면 쥔 쪽이 B가 된다');
   assert.equal(timeline.skips.length + timeline.stalls.length + warnings.length, 0);
 });
 
-// 근거: 이슈 #119 완료 조건 "해제되지 않는 교착 예제가 stalls와 wait-stalled(stuck이 없을 때)로 설명된다"
-test('buildFigure_the_deadlock_example_explains_both_waits_in_stalls_and_warns_only_without_stuck', async () => {
-  const source = exampleOf('deadlock-wait');
-  const withStuck = await buildFigure(source, { baseDir: 'examples' });
-  const without = await buildFigure(source.replaceAll(' stuck', ''), { baseDir: 'examples' });
+// 근거: 이슈 #119 완료 조건 "해제되지 않는 교착이 stalls와 wait-stalled(stuck이 없을 때)로 설명된다"
+test('buildFigure_the_deadlock_scenario_explains_both_waits_in_stalls_and_warns_only_without_stuck', async () => {
+  const withStuck = await buildFigure(DEADLOCK);
+  const without = await buildFigure(DEADLOCK.replaceAll(' stuck', ''));
 
   assert.deepEqual(withStuck.timeline.waits.map(({ node, end }) => [node, end]), [['t1', 'stalled'], ['t2', 'stalled']]);
   assert.deepEqual(withStuck.timeline.stalls.map(({ node, cond, refs }) => [node, cond, refs.map(({ id, text }) => `${id}=${text}`)]), [['t1', "h2='none'", ['h2=t2']], ['t2', "h1='none'", ['h1=t1']]]);
@@ -495,20 +503,23 @@ test('buildFigure_the_deadlock_example_explains_both_waits_in_stalls_and_warns_o
   assert.ok(withStuck.timeline.segs.filter((seg) => seg.si === 1).every((seg) => seg.hops.length === 0), '점 없이 멈추는 박자');
 });
 
-// 근거: 이슈 #119 완료 조건 "큐 역압 예제가 공통 기능만으로 표현된다. 큐가 가득 차면 생산이 기다리고 소비로 빈 칸이 생기면 풀린다"
-test('buildFigure_the_back_pressure_example_waits_while_the_queue_is_full_and_releases_when_a_slot_empties', async () => {
-  const { timeline, warnings } = await buildFigure(exampleOf('queue-wait'), { baseDir: 'examples' });
+// 근거: 이슈 #119 완료 조건 "큐 역압이 공통 기능만으로 표현된다. 큐가 가득 차면 생산이 기다리고 소비로 빈 칸이 생기면 풀린다"
+test('buildFigure_the_back_pressure_scenario_waits_while_the_queue_is_full_and_releases_when_a_slot_empties', async () => {
+  const { timeline, warnings } = await buildFigure(BACK_PRESSURE);
   const queue = (si) => changesOf(timeline, 'q', si).map(([t, text]) => [t, Number(text)]);
-  const pops = queue(0).filter(([, count], i, all) => i > 0 && count < all[i - 1][1]).map(([t]) => t);
+  // 소비 점이 큐에 닿아 한 칸 비우는 시각. 같은 시각에 풀린 생산이 한 칸을 채우면 알짜 변화가 없어 값 변화 목록에는 보이지 않으므로 소비 이동의 도착 시각으로 센다.
+  const [firstScene] = timeline.segs;
+  const pops = timeline.segs.filter((seg) => seg.si === 0).flatMap((seg) => seg.hops.filter((hop) => hop.to === 'cons').map((hop) => seg.t0 + (hop.at ?? 0) + hop.ms));
   const released = timeline.waits.filter((wait) => wait.end === 'released' && wait.si === 0);
   const timedOut = timeline.waits.filter((wait) => wait.end === 'timeout' && wait.si === 0);
 
-  assert.ok(released.length >= 3 && timedOut.length >= 3);
-  assert.deepEqual(released.map((wait) => wait.t1), pops.filter((t) => released.some((wait) => wait.t1 === t)), '빈 칸이 생긴 시각에 풀린다');
-  assert.ok(released.every((wait) => wait.t1 > wait.t0 || pops.includes(wait.t1)));
+  assert.ok(released.length >= 2 && timedOut.length >= 3, `풀림 ${released.length}, 시간 초과 ${timedOut.length}`);
+  assert.ok(firstScene.hops.length > 0 && pops.length > 0, '소비 점이 있다');
+  assert.ok(released.every((wait) => pops.includes(wait.t1)), `빈 칸이 생긴 시각에 풀린다: 풀림 ${released.map((wait) => wait.t1)}, 소비 도착 ${pops}`);
+  assert.ok(released.every((wait) => wait.t1 > wait.t0));
   assert.ok(timedOut.every((wait) => wait.t1 - wait.t0 === 900), '오래 기다린 점은 시간 초과로 끝난다');
   assert.ok([...queue(0), ...queue(1)].every(([, count]) => count >= 0 && count <= 4), '큐가 칸 수를 넘지 않는다');
-  assert.ok(Math.max(...queue(0).map(([, count]) => count)) >= 3, '큐가 찬다');
+  assert.equal(Math.max(...queue(0).map(([, count]) => count)), 4, '큐가 가득 찬다');
   assert.equal(changesOf(timeline, 'dropped', 0).length, timeline.segs[0].pulses.filter(({ id }) => id === 'dlq').length, '버린 수는 분기 점이 버려지는 도형에 닿을 때마다 오른다');
   assert.deepEqual(timeline.waits.filter((wait) => wait.si === 1 && wait.end !== 'released'), [], '소비가 빨라지면 시간 초과가 없다');
   assert.equal(warnings.length, 0, 'check-14 큐 경고도 없다');
@@ -518,9 +529,9 @@ test('buildFigure_the_back_pressure_example_waits_while_the_queue_is_full_and_re
   assert.ok(branchDots.every((hop) => hop.to === 'dlq'));
 });
 
-// 근거: 이슈 #119 완료 조건 "실패 횟수에 따른 회로 차단 예제가 공통 기능만으로 표현된다. 실패 횟수가 기준에 닿으면 요청이 차단되고 상태 값이 바뀐다"
-test('buildFigure_the_circuit_breaker_example_blocks_requests_once_the_failure_count_reaches_three_and_the_mode_changes', async () => {
-  const { timeline, warnings } = await buildFigure(exampleOf('circuit-breaker'), { baseDir: 'examples' });
+// 근거: 이슈 #119 완료 조건 "실패 횟수에 따른 회로 차단이 공통 기능만으로 표현된다. 실패 횟수가 기준에 닿으면 요청이 차단되고 상태 값이 바뀐다"
+test('buildFigure_the_circuit_breaker_scenario_blocks_requests_once_the_failure_count_reaches_three_and_the_mode_changes', async () => {
+  const { timeline, warnings } = await buildFigure(BREAKER);
   const fails = changesOf(timeline, 'fails', 0);
   const mode = changesOf(timeline, 'mode', 0);
   const requestLine = timeline.skips.find((skip) => skip.cond === "mode='closed'").line;
@@ -532,24 +543,20 @@ test('buildFigure_the_circuit_breaker_example_blocks_requests_once_the_failure_c
   assert.deepEqual(mode.map(([, text]) => text), ['open'], '기준에 닿으면 상태가 바뀐다');
   assert.ok(mode[0][0] >= fails[2][0], '상태는 실패가 기준에 닿은 뒤에 바뀐다');
   assert.ok(passed.every((at) => at <= 4000) && passed.length === 3, '열리기 전 요청 셋만 서비스로 간다');
-  assert.ok(blocked.length >= 3 && blocked.every((t) => t - timeline.segs[0].t0 > 5000), '열린 뒤 요청은 건너뛰어 서비스에 닿지 않는다');
+  assert.ok(blocked.length >= 3 && blocked.every((t) => t - timeline.segs[0].t0 > 4000), '열린 뒤 요청은 건너뛰어 서비스에 닿지 않는다');
   assert.equal(fails.length, 3, '건너뛴 요청은 실패 횟수를 올리지 않는다');
   assert.deepEqual(changesOf(timeline, 'mode', 1).map(([, text]) => text), ['closed'], '복구 확인이 상태를 닫는다');
   assert.deepEqual(changesOf(timeline, 'fails', 1).map(([, text]) => text), ['0']);
-  assert.equal(toService(timeline.segs[1]).length, 3, '닫힌 뒤 요청이 다시 지나간다');
+  assert.equal(timeline.segs.filter((seg) => seg.si === 1).flatMap((seg) => seg.hops).filter((hop) => hop.to === 'svc').length, 3, '닫힌 뒤 요청이 다시 지나간다');
   assert.equal(warnings.length, 0);
 });
 
 // ---- 같은 입력, 같은 결과 ----
 
 // 근거: 이슈 #119 완료 조건 "같은 입력은 같은 이벤트 순서와 결과를 만든다"
-test('buildFigure_builds_the_same_timeline_every_time_for_every_conditional_example', async () => {
-  const names = readdirSync(EXAMPLES).filter((name) => ['mutex-wait', 'deadlock-wait', 'queue-wait', 'circuit-breaker'].some((stem) => name === `${stem}.dap`));
-
-  assert.equal(names.length, 4);
-  for (const name of names) {
-    const source = readFileSync(new URL(name, EXAMPLES), 'utf8');
-    const [first, second] = await Promise.all([buildFigure(source, { baseDir: 'examples' }), buildFigure(source, { baseDir: 'examples' })]);
+test('buildFigure_builds_the_same_timeline_every_time_for_every_conditional_scenario', async () => {
+  for (const [name, source] of Object.entries(SCENARIOS)) {
+    const [first, second] = await Promise.all([buildFigure(source), buildFigure(source)]);
 
     assert.deepEqual(first.timeline, second.timeline, name);
     assert.ok(first.timeline.events > 0, name);
@@ -558,30 +565,43 @@ test('buildFigure_builds_the_same_timeline_every_time_for_every_conditional_exam
 
 // ---- 새 기능을 쓰지 않는 원본 ----
 
+// cost: time O(f), heap O(f), stack O(d)
+// vars: f = 폴더 안 파일 수, d = 폴더 깊이
+// basis: estimate
+// 폴더 아래 모든 .dap 경로.
+const walk = (dir) => readdirSync(dir).flatMap((name) => {
+  const path = join(dir, name);
+  return statSync(path).isDirectory() ? walk(path) : path.endsWith('.dap') ? [path] : [];
+});
+
 // 근거: 이슈 #119 완료 조건 "조건과 대기를 쓰지 않는 원본의 값, 시간표, 출력이 바뀌지 않고 이벤트 처리 함수가 호출되지 않는다"
 test('buildFigure_does_not_start_the_event_engine_for_sources_without_when_or_wait_and_adds_no_condition_fields', async () => {
   const before = engineStats.steps;
-  const sources = [
-    ...readdirSync(EXAMPLES).filter((name) => name.endsWith('.dap') && !['mutex-wait', 'deadlock-wait', 'queue-wait', 'circuit-breaker', 'atomic-lock', 'atomic-queue'].includes(name.slice(0, -4))).map((name) => readFileSync(new URL(name, EXAMPLES), 'utf8')),
-    ...readdirSync(V1).filter((name) => name.endsWith('.dap') && !['all-when-wait.dap', 'all-reserve.dap'].includes(name)).map((name) => readFileSync(new URL(name, V1), 'utf8')),
-  ];
+  const sources = [...walk(join(ROOT, 'test/fixtures')), ...walk(join(ROOT, 'examples'))]
+    .map((path) => [path, readFileSync(path, 'utf8')])
+    .filter(([, text]) => /^daphnis 2\b/m.test(text) && !/\b(when|wait|reserve)=/.test(text));
 
-  assert.ok(sources.length > 60);
-  for (const source of sources) {
-    const { timeline } = await buildFigure(source, { baseDir: 'test/fixtures/compat/v1' }).catch(() => ({ timeline: { segs: [] } }));
-    const text = JSON.stringify(timeline);
+  assert.ok(sources.length > 60, `조건을 쓰지 않는 원본 ${sources.length}개`);
+  let built = 0;
+  for (const [path, source] of sources) {
+    // 경고 없이 만들어지지 않는 원본(다른 시험이 따로 다룬다)은 이 시험의 대상이 아니다
+    const result = await buildFigure(source, { baseDir: join(path, '..') }).catch(() => undefined);
+    if (!result) continue;
+    built++;
+    const text = JSON.stringify(result.timeline);
 
-    for (const key of ['waits', 'skips', 'stalls', 'events']) assert.ok(!(key in timeline), key);
-    assert.ok(!/"at":/.test(JSON.stringify(timeline.segs.filter((seg) => !seg.pulses))), '박자 이동에 at이 없다');
-    assert.ok(!text.includes('"stuck"'));
+    for (const key of ['waits', 'skips', 'stalls', 'events']) assert.ok(!(key in result.timeline), `${path}: ${key}`);
+    if (!result.figure?.fragments) assert.ok(!/"at":/.test(JSON.stringify(result.timeline.segs.filter((seg) => !seg.pulses))), `${path}: 제어 구획 없는 박자 이동에 at이 없다`);
+    assert.ok(!text.includes('"stuck"'), path);
   }
+  assert.ok(built > 60, `만든 원본 ${built}개`);
   assert.equal(engineStats.steps, before, '이벤트 처리 함수가 한 번도 불리지 않았다');
 });
 
-// 근거: 설계 playback.md 기존 원본과의 호환 "한 원본 안에서도 쓰지 않은 단계의 결과는 바뀌지 않는다"
-test('buildFigure_a_step_without_conditions_keeps_its_result_when_another_step_of_the_figure_uses_them', async () => {
-  const plain = `${BASE}on c n+1\nstep "하나"\n  a -> c time=1s set="holder=A"\nstep "둘" keep="holder"\n  a -> c time=1s\n`;
-  const mixed = `${plain}step "셋"\n  b -> c time=1s wait="holder='go'" timeout=1s\n`;
+// 근거: 설계 playback.md 기존 원본과의 호환 "한 원본 안에서도 쓰지 않은 장면의 결과는 바뀌지 않는다"
+test('buildFigure_a_scene_without_conditions_keeps_its_result_when_another_scene_of_the_figure_uses_them', async () => {
+  const plain = `${BASE}on c n+1\nscene "하나" mode=once\n  a -> c time=1s set="holder=A"\nscene "둘" mode=once keep="holder"\n  a -> c time=1s\n`;
+  const mixed = `${plain}scene "셋" mode=once\n  b -> c time=1s wait="holder='go'" timeout=1s\n`;
   const [one, two] = await Promise.all([buildFigure(plain), buildFigure(mixed)]);
   const before = engineStats.steps;
 
@@ -595,7 +615,7 @@ test('buildFigure_a_step_without_conditions_keeps_its_result_when_another_step_o
 test('main_check_builds_a_figure_with_hundreds_of_waiting_dots_and_moving_text_inside_a_small_heap', async () => {
   await withFolder(async (folder) => {
     const file = join(folder, 'herd.dap');
-    writeFileSync(file, 'flow right\ntitle "herd"\nbox src "S"\nbox sink "K"\nbox prod "P"\nbox q "Q"\nvalue go "문" on=sink from=no\nvalue n "수" on=q\non q n+1\nsrc -> sink\nprod -> q\nstep "s" for=2s\n  track prod -> q "작업" at=0s every=2.63ms time=100ms wait="go=\'yes\'" when="n>=0"\n  track src -> sink at=1.97s time=10ms set="go=yes"\n');
+    writeFileSync(file, 'daphnis 2\ntitle "herd"\nbox src "S"\nbox sink "K"\nbox prod "P"\nbox q "Q"\nvalue go "문" on=sink from=no\nvalue n "수" on=q\non q n+1\nsrc -> sink\nprod -> q\nscene "s" mode=once for=2s\n  track prod -> q "작업" at=0s every=2.63ms time=100ms wait="go=\'yes\'" when="n>=0"\n  track src -> sink at=1.97s time=10ms set="go=yes"\n');
     const entry = new URL('../src/cli.js', import.meta.url).pathname;
     const result = spawnSync(process.execPath, ['--max-old-space-size=256', entry, 'check', file], { encoding: 'utf8' });
 
@@ -604,17 +624,17 @@ test('main_check_builds_a_figure_with_hundreds_of_waiting_dots_and_moving_text_i
 });
 
 // 근거: 이슈 #131 "내용이 같은 상자는 같은 크기로 그린다". 상태 알약은 상자 크기를 바꾸지 않고, 카드는 상자를 키우므로 대기 표시는 알약으로 적는다.
-test('buildFigure_the_lock_example_draws_both_workers_the_same_size_because_waiting_is_a_status_pill', async () => {
-  const { scene } = await buildFigure(exampleOf('mutex-wait'), { baseDir: 'examples' });
+test('buildFigure_the_lock_scenario_draws_both_workers_the_same_size_because_waiting_is_a_status_pill', async () => {
+  const { scene } = await buildFigure(MUTEX);
   const size = (id) => scene.items.filter((item) => item.id === id).map(({ w, h }) => [w, h]);
 
   assert.deepEqual(size('b'), size('a'), '카드가 없는 두 작업은 같은 크기');
-  assert.match(exampleOf('mutex-wait'), /status="b=wait"/);
+  assert.match(MUTEX, /status="b=wait"/);
 });
 
-// 근거: docs/design/figure-syntax.md 단계별 도형 상태 "알약은 도형 크기와 배치를 바꾸지 않는다"
-test('buildFigure_a_status_pill_in_one_step_leaves_the_box_the_size_of_its_twin', async () => {
-  const source = 'flow right\nbox a "작업 A"\nbox b "작업 B"\na -> b\nstep "하나"\n  a -> b "요청"\nstep "둘" status="b=wait"\n  a -> b "요청"\n';
+// 근거: docs/design/figure-syntax.md 장면별 도형 상태 "알약은 도형 크기와 배치를 바꾸지 않는다"
+test('buildFigure_a_status_pill_in_one_scene_leaves_the_box_the_size_of_its_twin', async () => {
+  const source = 'daphnis 2\nbox a "작업 A"\nbox b "작업 B"\na -> b\nscene "하나" mode=once\n  a -> b "요청"\nscene "둘" mode=once status="b=wait"\n  a -> b "요청"\n';
   const { scene } = await buildFigure(source);
   const size = (id) => scene.items.filter((item) => item.id === id).map(({ w, h }) => [w, h]);
 

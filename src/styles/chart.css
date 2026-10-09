@@ -23,13 +23,15 @@
   fill: var(--color-fg);
 }
 
-/* 값 글자와 점 이름은 뒤의 격자와 기준선이 글자 둘레에서 끊기게 바탕색 테두리를 두른다. */
-.fl .chart-value,
-.fl .chart-name {
-  paint-order: stroke;
-  stroke: var(--color-bg);
-  stroke-width: var(--border-halo);
-  stroke-linejoin: round;
+/* 값은 별도 바탕 면 위에 그려 작은 크기에서도 획이 글자 안을 덮지 않는다. */
+.fl .chart-text-bg {
+  fill: var(--color-bg);
+}
+
+/* 합이 0이라 비율이 정해지지 않는 원·도넛의 빈 고리는 격자와 같은 중립 선이다. */
+.fl .chart-empty {
+  stroke: var(--color-data-grid);
+  stroke-width: var(--border-thin);
 }
 
 .fl .chart-tick {
@@ -89,9 +91,37 @@
   text-anchor: start;
 }
 
-/* 칸 색은 변수로 계산해 다크 모드 heat-low를 따라간다. --s는 칸 강도(0~1)다. */
+/* 칸 색은 변수로 계산해 다크 모드 heat-low를 따라간다. --s는 칸 강도(0~1)다. 보간은 OKLab이고 fill 속성의 대체 색(chart/oklab.js)과 같다. */
 .fl .chart-heat {
-  fill: color-mix(in srgb, var(--color-data-heat-high) calc(var(--s) * 100%), var(--color-data-heat-low));
+  fill: color-mix(in oklab, var(--color-data-heat-high) calc(var(--s) * 100%), var(--color-data-heat-low));
+}
+
+/* 누적 조각 안의 계열 번호 키. 글자색과 가장자리 색은 조각의 범주 값을 속성으로 받는다. */
+.fl .chart-seg-key {
+  font-variant-numeric: tabular-nums;
+  font-size: var(--size-text-11);
+  font-weight: var(--weight-semibold);
+}
+
+/* 끝 이름은 계열의 글자용 색(속성)으로 쓰고 굵기로만 값 글자와 가른다. */
+.fl .chart-end-label {
+  font-size: var(--size-text-11);
+  font-weight: var(--weight-medium);
+}
+
+/* 끝 이름 안내선은 계열 테두리 색(속성)의 가는 선이다. */
+.fl .chart-leader {
+  fill: none;
+  stroke-linejoin: round;
+}
+
+/* 기대값 계열의 선과 범례 선분은 점선이다. 실제값 선에는 쓰지 않는다. */
+.fl .chart-dashed {
+  stroke-dasharray: var(--dash-line) var(--dash-gap);
+}
+
+.fl .chart-pattern {
+  stroke: none;
 }
 
 .fl .chart-cell {
@@ -104,11 +134,6 @@
 
 .fl .chart-cell.on {
   --ink: var(--color-data-heat-ink-on);
-}
-
-/* 흐린 칸은 면이 바탕 쪽으로 옅어져 진한 칸의 밝은 글자가 묻힌다. 흐린 동안은 모든 칸이 어두운 글자(다크는 같은 밝은 글자)다. */
-.fl .chart-cell.dim {
-  fill: var(--color-data-heat-ink);
 }
 
 .fl .chart-axis,
@@ -177,30 +202,19 @@
   stroke-width: var(--border-tag);
 }
 
-.fl .chart-before {
-  fill: var(--color-bg);
-  stroke: var(--color-data-compare);
-  stroke-width: var(--border-tag);
-}
-
+/* 방향선(덤벨 화살표, 산점도 link)은 몸통과 화살촉이 한 덩어리로 같은 자리에서 나타난다(pop). 둥근 끝은 화살촉 꼭지의 둥근 접합과 이어진다. */
 .fl .chart-arrow,
 .fl .chart-link {
   stroke: var(--color-data-main);
   stroke-width: var(--border-strong);
+  stroke-linecap: round;
 }
 
 .fl .chart-link {
   stroke: var(--color-muted);
-  stroke-width: var(--border-strong);
-  stroke-linecap: round;
 }
 
-.fl .chart-label.shift {
-  transform: translateY(var(--label-shift));
-  transition: transform var(--duration-fast);
-}
-
-/* pathLength 1인 선이 stroke-dashoffset으로 그려진다. 선 차트의 선, 덤벨 화살표, 산점도 link가 함께 쓴다. */
+/* pathLength 1인 선이 stroke-dashoffset으로 그려진다. 선 차트의 선이 쓴다. */
 .fl .draw {
   stroke-dasharray: 1;
 }
@@ -218,24 +232,42 @@
   opacity: var(--opacity-dim);
 }
 
-/* 면이 흐려지면 바탕과 대비가 3에 못 미치므로(막대 라이트 1.5) 같은 모양의 테두리가 이때만 보인다. 테두리는 흐림 투명도를 받지 않는다. */
-.fl .rim.dim {
-  opacity: 1;
-}
-
 /* 글자는 면보다 덜 흐려, 흐린 행에서도 글자가 바탕과 대비 4.5 이상이다(opacity.dim-ink). */
 .fl .ink.dim {
   opacity: var(--opacity-dim-ink);
 }
 
-.fl .cs-0,
-.fl .cs-1,
-.fl [class*="cr-"] {
-  transition: opacity var(--duration-fast);
+/* 계열 보임과 행 흐림은 재생기가 시각마다 정한 상태라 불투명도에 전환을 걸지 않는다(같은 시각의 모습이 실제 시간이나 앞 기록에 따르지 않는다). */
+
+/* 히트맵은 값과 색 강도의 대응을 강조 상태와 무관하게 보존한다. 밝힌 칸은 글자를 굵게 해 구분하고 면 색과 글자 색은 그대로다. */
+.fl .chart-heat-cell.dim,
+.fl .chart-cell.ink.dim {
+  opacity: 1;
 }
 
-/* 면이 바탕 쪽으로 옅어지는 중간에는 밝은 글자와 어두운 글자 모두 대비 4.5에 못 미친다. 칸 면과 글자는 서서히 가지 않고 한꺼번에 바뀐다. */
-.fl .chart-heat-cell,
-.fl .chart-cell.ink {
-  transition: none;
+/* 굵게 하는 범위는 밝히지 않은 칸이 있는 그 차트 카드뿐이다(한 판의 다른 차트 카드는 받지 않는다). */
+.fl [data-chart]:has(.chart-cell.dim) .chart-cell.ink:not(.dim) {
+  font-weight: var(--weight-semibold);
+}
+
+/* 차트의 정적 화살촉도 몸통과 같은 의미색을 쓴다. */
+.fl .chart-marker-dumbbell {
+  color: var(--color-data-main);
+}
+
+.fl .chart-marker-scatter {
+  color: var(--color-muted);
+}
+
+/* 세로 막대는 원시 건수의 최종 높이를 유지하며 움직임 감소 설정을 따른다. */
+@media (prefers-reduced-motion: reduce) {
+  .fl .rise,
+  .fl .chart-waterfall-growth {
+    /* stylelint-disable-next-line declaration-no-important -- SVG의 단계별 keyframes보다 사용자 움직임 설정을 우선한다. */
+    animation: none !important;
+  }
+}
+
+.fl .chart-waterfall-total {
+  font-weight: var(--weight-semibold);
 }

@@ -1,8 +1,8 @@
 // 도형 윗줄과 그룹 제목 줄의 장식(아이콘, 글자 배지, 복제 개수 알약)을 그린다. 크기와 자리는 measure/decor.js가 정한 그대로다.
 import { ratio } from '../format.js';
-import { SYMBOLS } from '../icons/symbols.js';
 import { BADGE_STYLE } from '../measure/decor.js';
 import { centerBaseline, escapeXml, roundCoord as r } from '../text.js';
+import { TITLE_INSET } from '../layout/titles.js';
 import { values } from '../tokens.js';
 
 // cost: time O(k), heap O(out), stack O(1)
@@ -26,15 +26,13 @@ function drawIcon(item, { x, y, iconData }) {
   return drawSymbol(iconData, { x: x + item.x, y: y + item.y, size: item.w });
 }
 
-// 의미 아이콘은 자신의 실루엣에 면과 윤곽을 갖는다. 브랜드와 사용자 SVG에는 임의 배경을 붙이지 않는다.
-function drawSymbol(iconData, { x, y, size }) {
-  const body = SYMBOLS[iconData.name];
-  if (!body) return `<g class="fl-symbol fl-symbol-${iconData.role}">${iconAt(iconData, { x, y, size })}</g>`;
-  return `<g class="fl-symbol fl-symbol-${iconData.role}">${iconAt({ viewBox: [0, 0, 24, 24], body }, { x, y, size, className: 'fl-symbol-glyph' })}</g>`;
+// 의미 아이콘(등록부 도형)은 자신의 실루엣에 면과 윤곽을 갖는다. 브랜드와 사용자 SVG에는 임의 배경을 붙이지 않는다. 두 가지 모두 같은 틀 맞춤(iconAt)을 쓴다.
+export function drawSymbol(iconData, { x, y, size }) {
+  return `<g class="fl-symbol fl-symbol-${iconData.role}">${iconAt(iconData, { x, y, size, className: iconData.symbol ? 'fl-symbol-glyph' : 'fl-icon' })}</g>`;
 }
 
-// 정사각 칸(왼쪽 위 x, y, 한 변 size) 안에 아이콘을 가운데 맞춰 그린다.
-function iconAt(iconData, { x, y, size, className = 'fl-icon' }) {
+// 정사각 칸(왼쪽 위 x, y, 한 변 size) 안에 아이콘의 viewBox를 가운데 맞춰 그린다. 의미 아이콘의 viewBox는 등록부의 24 격자(ICON_GRID)라 여백이 모두 같다.
+function iconAt(iconData, { x, y, size, className }) {
   const [vx, vy, vw, vh] = iconData.viewBox;
   const scale = size / Math.max(vw, vh);
   const tx = x + (size - vw * scale) / 2 - vx * scale;
@@ -51,7 +49,9 @@ function iconAt(iconData, { x, y, size, className = 'fl-icon' }) {
  */
 export function drawGroupTab(g) {
   const size = values.size.group.title - values.space['4'];
-  return drawSymbol(g.iconData, { x: g.x + values.space['4'], y: g.y + values.space['2'], size });
+  // 선이 탭을 지나면 탭과 제목이 한 덩어리로 선 오른쪽으로 비킨다(layout/titles.js).
+  const shift = g.titleDx - TITLE_INSET - values.size.group.title;
+  return drawSymbol(g.iconData, { x: g.x + values.space['4'] + shift, y: g.y + values.space['2'], size });
 }
 
 // 글자 알약. 배지와 복제 개수가 같은 모양이다.

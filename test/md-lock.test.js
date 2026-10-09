@@ -10,7 +10,7 @@ import { acquireLocks, LOCK_NAME, readLock, releaseHeld } from '../src/md-lock.j
 
 const LOCK_MODULE = new URL('../src/md-lock.js', import.meta.url).href;
 const HOLDER = `import { acquireLocks } from '${LOCK_MODULE}'; const l = acquireLocks([process.argv[1]]); process.stdout.write(l.busy ? 'busy\\n' : 'held\\n'); process.stdin.resume(); process.stdin.on('end', () => { l.release?.(); });`;
-const FLOW = 'flow right\nbox a "A"\nbox b "B"\na -> b\n';
+const FLOW = 'daphnis 2\nbox a "A"\nbox b "B"\na -> b\n';
 const DOC = `# Doc\n\n\`\`\`dap name=one\n${FLOW}\`\`\`\nend\n`;
 
 // 별도 프로세스가 출력 폴더 잠금을 잡는다. 입력이 닫히면 풀고 끝난다

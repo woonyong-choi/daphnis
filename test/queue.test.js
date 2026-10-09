@@ -6,16 +6,33 @@ import { contrast } from '../src/contrast.js';
 import { filledSlots } from '../src/measure/queue.js';
 import { QUEUE_SLOTS_MAX } from '../src/source/grammar.js';
 import { toSvg } from '../src/svg.js';
+import { values } from '../src/tokens.js';
 import { themeColor } from './helpers.js';
 
 const THEMES = ['light', 'dark'];
 const MIN_GRAPHIC = 3;
 
+test('buildFigure_large_queue_wraps_slots_without_shrinking_or_removing_capacity', async () => {
+  for (const slots of [8, 9, 12, 32]) {
+    const result = await buildFigure(sourceOf(`queue q "큐" slots=${slots} from=${slots}`));
+    const node = result.scene.items.find((item) => item.id === 'q');
+    assert.ok(node.w <= values.size.node['max-width'], `slots=${slots}, width=${node.w}`);
+    const svg = await toSvg(result, { isStatic: true });
+    const fill = staticFill(svg);
+    const rects = [...fill.matchAll(/<rect ([^>]*)\/>/g)].map(([, attrs]) => Object.fromEntries([...attrs.matchAll(/(?:^|\s)(x|y|width|height)="([\d.-]+)"/g)].map(([, key, value]) => [key, Number(value)])));
+    assert.equal(rects.length, slots);
+    assert.deepEqual(rects, [...rects].sort((a, b) => a.y - b.y || a.x - b.x));
+    assert.ok(rects.every((rect) => rect.width === values.size.queue['slot-width'] && rect.height === values.size.queue['slot-height']));
+    assert.ok(rects.every((rect) => rect.x >= node.x && rect.y >= node.y && rect.x + rect.width <= node.x + node.w && rect.y + rect.height <= node.y + node.h));
+    if (slots > 8) assert.ok(new Set(rects.map((rect) => rect.y)).size > 1);
+  }
+});
+
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 원본 글자 수
 // basis: estimate
 // 큐 하나와 그 앞뒤 상자를 가진 원본. queueLine은 큐 선언 줄, steps는 시간 흐름이다.
-const sourceOf = (queueLine, steps = '') => `flow right\nbox a "A"\n${queueLine}\nbox b "B"\na -> q\nq -> b\n${steps}`;
+const sourceOf = (queueLine, steps = '') => `daphnis 2\nbox a "A"\n${queueLine}\nbox b "B"\na -> q\nq -> b\n${steps}`;
 
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 원본 글자 수
@@ -28,6 +45,17 @@ async function errorsOf(source) {
   } catch (error) {
     return error.problems;
   }
+}
+
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = SVG 글자 수
+// basis: estimate
+// 정지 SVG의 찬 칸 묶음(`<g class="queue-fill">`) 안 rect 글. 묶음이 없으면 정지 SVG가 처음 찬 칸을 그리지 않은 것이라 시험을 실패시킨다.
+function staticFill(svg) {
+  const found = svg.match(/<g class="queue-fill"[^>]*>((?:<rect [^>]*\/>)*)<\/g>/);
+
+  assert.ok(found, '정지 SVG가 처음 찬 칸(from)의 queue-fill 묶음을 그린다');
+  return found[1];
 }
 
 // cost: time O(n), heap O(n), stack O(1)
@@ -70,7 +98,7 @@ test('toSvg_static_draws_an_empty_a_partly_filled_and_a_full_queue_with_differen
   const counts = [];
   for (const from of [0, 2, 4]) {
     const svg = await toSvg(await buildFigure(sourceOf(`queue q "큐" slots=4 from=${from}`)), { isStatic: true });
-    counts.push(svg.match(/<g class="queue-fill">((?:<rect [^>]*\/>)*)<\/g>/)[1].split('<rect ').length - 1);
+    counts.push(staticFill(svg).split('<rect ').length - 1);
   }
 
   assert.deepEqual(counts, [0, 2, 4]);
@@ -78,7 +106,7 @@ test('toSvg_static_draws_an_empty_a_partly_filled_and_a_full_queue_with_differen
 
 // 근거: 설계 figure-check.md 14번: 큐 값이 0 미만이거나 칸 수를 넘으면 경고하고, 0과 slots는 경고하지 않는다
 test('buildFigure_warns_check_14_when_a_queue_goes_below_zero_or_over_its_slots_and_stays_quiet_at_the_bounds', async () => {
-  const run = async (from, set) => buildFigure(sourceOf(`queue q "큐" slots=3 from=${from}`, `step "s"\n  a -> q "x" set="${set}"\n`));
+  const run = async (from, set) => buildFigure(sourceOf(`queue q "큐" slots=3 from=${from}`, `scene "s" mode=once\n  a -> q "x" set="${set}"\n`));
   const atBounds = await run(3, 'q-3');
   const below = await run(0, 'q-1');
   const over = await run(3, 'q+1');
@@ -91,7 +119,7 @@ test('buildFigure_warns_check_14_when_a_queue_goes_below_zero_or_over_its_slots_
 
 // 근거: 설계 figure-syntax.md 큐: 찬 칸 수는 정수. 소수와 낱말 값, 카드 줄(value on=큐)은 오류
 test('buildFigure_rejects_a_fractional_or_word_set_on_a_queue_and_a_value_card_on_it', async () => {
-  const steps = (set) => `step "s"\n  a -> q set="${set}"\n`;
+  const steps = (set) => `scene "s" mode=once\n  a -> q set="${set}"\n`;
   for (const set of ['q+0.5', 'q=1.5', 'q=full']) assert.match((await errorsOf(sourceOf('queue q "큐" slots=3', steps(set))))[0].message, /counts filled slots in whole numbers/, set);
 
   const card = await errorsOf(`${sourceOf('queue q "큐" slots=3')}value n "길이" on=q\n`);
@@ -101,7 +129,7 @@ test('buildFigure_rejects_a_fractional_or_word_set_on_a_queue_and_a_value_card_o
 
 // 근거: 이슈 #60 "값 변경에 따라 칸 수가 변하고 값이 바뀌면 value-flash 동안 밝아진다". 시간표의 변화 목록과 SVG 찬 칸 묶음이 같은 값을 쓴다
 test('toSvg_animated_queue_swaps_the_filled_slot_group_with_each_value_and_flashes_the_outline_for_the_value_flash', async () => {
-  const result = await buildFigure(sourceOf('queue q "큐" slots=3', 'on q q+1\nstep "s" for=3s\n  track a -> q "x" time=1s every=1s\n'));
+  const result = await buildFigure(sourceOf('queue q "큐" slots=3', 'on q q+1\nscene "s" mode=once for=3s\n  track a -> q "x" time=1s every=1s\n'));
   const [row] = result.timeline.values;
   const svg = await toSvg(result);
 

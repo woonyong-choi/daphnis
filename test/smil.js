@@ -9,11 +9,12 @@ export function packetsOf(svg) {
     .split('<g class="p')
     .slice(1)
     .map((chunk) => {
-      // 점 보임 창은 calcMode="discrete", 글 상자 흐려짐은 linear다. 둘 다 animate 요소라 모양으로 가른다.
+      // 점 보임 창은 calcMode="discrete"인 불투명도(같은 시각에 visibility도 이산으로 바뀌므로 속성 이름으로 가른다), 글 상자 흐려짐은 linear다. 모두 animate 요소라 모양으로 가른다.
       const attr = (tag, name, mode = '') => chunk.match(new RegExp(`<${tag}(?=[^>]*${mode})[^>]*?\\b${name}="([^"]*)"`))?.[1];
       const list = (tag, name, mode = '', sep = ';') => attr(tag, name, mode)?.split(sep).map((v) => (name === 'keySplines' ? v.split(' ').map(Number) : Number(v)));
+      const shown = 'attributeName="opacity"[^>]*discrete';
       return {
-        opacity: { dur: attr('animate', 'dur', 'discrete'), times: list('animate', 'keyTimes', 'discrete'), values: list('animate', 'values', 'discrete') },
+        opacity: { dur: attr('animate', 'dur', shown), times: list('animate', 'keyTimes', shown), values: list('animate', 'values', shown) },
         motion: { dur: attr('animateMotion', 'dur'), times: list('animateMotion', 'keyTimes'), splines: list('animateMotion', 'keySplines'), points: list('animateMotion', 'keyPoints') },
         slide: { dur: attr('animateTransform', 'dur'), times: list('animateTransform', 'keyTimes'), values: attr('animateTransform', 'values')?.split(';') },
         href: attr('mpath', 'href'),
@@ -59,4 +60,52 @@ export function slideAt({ times, values: levels }, x) {
 // SMIL calcMode=discrete 값을 한 바퀴 비율 x에서 푼다.
 export function discreteAt({ times, values }, x) {
   return values[times.findLastIndex((time) => time <= x)];
+}
+
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = SVG 글자 수
+// basis: estimate
+/**
+ * 움직이는 SVG의 값 요소마다 { kind: 'text' | 'flash', vi, text, dur(ms), times, values, linear }. 값 줄 번호 vi(그 장면의 값 줄 안 순서)는 요소의 속성이고,
+ * 값 글자 요소(`data-v`)는 글(data-t)과 이산 불투명도를, 갱신 펄스 요소(`data-vf`)는 꺾은선 불투명도를 가진다.
+ */
+export function valueElementsOf(whole) {
+  // 움직이는 SVG는 움직임 층(.fl-motion)과 스크립트 없는 마지막 모습 층(.fl-still)을 함께 싣는다. 마지막 모습 층은 움직임 줄이기에서만 보이므로 움직임 층만 푼다.
+  const motionAt = whole.indexOf('<g class="fl-motion"');
+  const svg = motionAt < 0 ? whole : whole.slice(motionAt, whole.indexOf('<g class="fl-still"', motionAt) < 0 ? undefined : whole.indexOf('<g class="fl-still"', motionAt));
+  const pattern =/<(text|g|rect|path)\b([^>]*?\bdata-(v|vf)="(\d+)"[^>]*?)>((?:(?!<\/(?:g|text|rect|path)>)[\s\S])*?)<\/\1>/g;
+  return [...svg.matchAll(pattern)].map(([, , opening, kind, vi, inner]) => {
+    // 글자 요소는 visibility와 opacity 두 움직임을 갖는다. 보임은 opacity 움직임으로 읽는다. 움직임이 없으면 시작 불투명도가 그대로다.
+    const animate = [...inner.matchAll(/<animate ([^>]*?)\/>/g)].map((m) => m[1]).find((tag) => /attributeName="opacity"/.test(tag));
+    const text = opening.match(/\bdata-t="([^"]*)"/)?.[1];
+    if (!animate) return { kind: kind === 'v' ? 'text' : 'flash', vi: Number(vi), text, dur: Infinity, times: [0], values: [Number(opening.match(/\bopacity="([^"]*)"/)?.[1] ?? 1)], linear: false };
+    const attr = (name) => animate.match(new RegExp(`\\b${name}="([^"]*)"`))[1];
+    return { kind: kind === 'v' ? 'text' : 'flash', vi: Number(vi), text, dur: Number.parseFloat(attr('dur')) * 1000, times: attr('keyTimes').split(';').map(Number), values: attr('values').split(';').map(Number), linear: attr('calcMode') === 'linear' };
+  });
+}
+
+// cost: time O(k), heap O(1), stack O(1)
+// vars: k = 꼭짓점 수
+// basis: estimate
+/** SMIL 값을 한 바퀴 비율 x에서 푼다. discrete는 구간의 값 그대로, linear는 꼭짓점 사이를 직선으로 잇는다. */
+export function animatedAt({ times, values: stops, linear }, x) {
+  const at = times.findLastIndex((time) => time <= x);
+  if (!linear || at === times.length - 1) return stops[at];
+  return stops[at] + ((stops[at + 1] - stops[at]) * (x - times[at])) / (times[at + 1] - times[at]);
+}
+
+// cost: time O(r·e), heap O(r), stack O(1)
+// vars: r = 값 줄 수, e = 줄마다 요소 수
+// basis: estimate
+/**
+ * 시각 t(ms, 장면 처음부터)에 SMIL이 보이는 값 요소를 풀어 값 줄마다 { text, texts, flash(펄스 세기) }로. 글자가 안 보이는 줄은 text가 없다(undefined).
+ * texts는 그 시각에 보이는 글자 요소의 글 목록이다. keyTimes가 소수 5자리라 값 구간의 경계에서는 두 요소가 잠깐 함께 보일 수 있으므로 하나뿐이어야 하는 검사는 경계 밖에서 부르는 쪽이 한다.
+ */
+export function smilStateAt(elements, rows, t) {
+  return rows.map((row, vi) => {
+    const mine = elements.filter((el) => el.vi === vi);
+    const shown = mine.filter((el) => el.kind === 'text' && animatedAt(el, t / el.dur) === 1);
+    const flash = Math.max(0, ...mine.filter((el) => el.kind === 'flash').map((el) => animatedAt(el, t / el.dur)));
+    return { text: shown[0]?.text, texts: shown.map((el) => el.text), flash };
+  });
 }

@@ -2,7 +2,7 @@
 import { flattenRoute, routeLength } from './route.js';
 import { values } from './tokens.js';
 
-const DWELL = values.duration;
+const DURATION = values.duration;
 const HOP_REF = values.size.packet['hop-ref'];
 
 // cost: time O(p), heap O(1), stack O(1)
@@ -18,7 +18,7 @@ export function hopMs(points, speed) {
 // basis: estimate
 /** 길이(px)로 정한 이동 시간. hopMs가 선 하나의 길이로, 구간별 이동 시간(`legs=`)이 구간 길이로 같은 규칙을 쓴다. */
 export function lengthMs(length, speed) {
-  const scale = speed / DWELL.hop;
+  const scale = speed / DURATION.hop;
   const ms = (length / HOP_REF) * speed;
-  return Math.round(Math.max(DWELL['hop-min'] * scale, ms));
+  return Math.round(Math.max(DURATION['hop-min'] * scale, ms));
 }

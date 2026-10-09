@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { runCli as run, withFolder } from './helpers.js';
 
-const SOURCE = 'flow right\nbox a "A"\n';
+const SOURCE = 'daphnis 2\nbox a "A"\n';
 const read = (folder, name = 'doc.md') => readFileSync(join(folder, name), 'utf8');
 const put = (folder, text, name = 'doc.md') => writeFileSync(join(folder, name), text);
 const block = (name, prefix = '') => `${prefix}\`\`\`dap name=${name}\n${SOURCE.trimEnd().split('\n').map((line) => `${prefix}${line}`).join('\n')}\n${prefix}\`\`\`\n`;

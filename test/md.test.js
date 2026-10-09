@@ -7,8 +7,8 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { runCli as run, withFolder } from './helpers.js';
 
-const FLOW = 'flow right\ntitle "Request path"\nbox a "Client"\nbox b "Server"\na -> b "GET"\nstep "s"\n  a -> b\n';
-const BAR = 'chart bar\ntitle "Latency"\nseries s "S"\nrow "r" s=1\n';
+const FLOW = 'daphnis 2\ntitle "Request path"\nbox a "Client"\nbox b "Server"\na -> b "GET"\nscene "s" mode=once\n  a -> b\n';
+const BAR = 'daphnis 2\ntitle "Latency"\nchart c "Latency" bar {\n  series s "S"\n  row "r" s=1\n}\n';
 const doc = (...blocks) => `# Doc\n\n${blocks.join('\n')}\nend\n`;
 const block = (info, source) => `\`\`\`dap${info ? ` ${info}` : ''}\n${source}\`\`\`\n`;
 const read = (folder, name) => readFileSync(join(folder, name), 'utf8');
@@ -90,12 +90,12 @@ test('md_removed_block_removes_its_image_line_and_svg_but_a_marked_line_inside_a
 // 근거: 계약 AGENTS "오류가 있으면 결과 파일을 쓰지 않음", gallery와 같은 계약. 반대 사례: 좋은 블록 옆의 나쁜 블록, strict 경고, 틀린 설명 글자, 같은 이름
 test('md_fails_without_writing_any_file_when_the_input_must_not_pass', () => {
   const cases = [
-    { name: 'error_next_to_a_good_block', text: doc(block('name=ok', FLOW), block('', 'flow right\nbox a "A"\na -> zz\n')), args: [], stderr: /^doc\.md:16: unknown node "zz"/m },
-    { name: 'strict_warning', text: doc(block('', BAR)), args: ['--strict'], stderr: /^doc\.md:4: .*unit/m },
+    { name: 'error_next_to_a_good_block', text: doc(block('name=ok', FLOW), block('', 'daphnis 2\nbox a "A"\na -> zz\n')), args: [], stderr: /^doc\.md:16: unknown card "zz"/m },
+    { name: 'strict_warning', text: doc(block('', BAR)), args: ['--strict'], stderr: /^doc\.md:6: .*unit/m },
     { name: 'unknown_fence_option', text: doc(block('title=x', FLOW)), args: [], stderr: /^doc\.md:3: unknown option "title=x"/m },
     { name: 'uppercase_name', text: doc(block('name=Flow', FLOW)), args: [], stderr: /^doc\.md:3: block name "Flow"/m },
     { name: 'duplicate_name', text: doc(block('name=a', FLOW), block('name=a', BAR)), args: [], stderr: /^doc\.md:13: .*is also written for doc\.md:3/m },
-    { name: 'unclosed_fence', text: '```dap\nflow right\n', args: [], stderr: /^doc\.md:1: the dap fence is never closed/m },
+    { name: 'unclosed_fence', text: '```dap\ndaphnis 2\n', args: [], stderr: /^doc\.md:1: the dap fence is never closed/m },
   ];
   for (const { name, text, args, stderr } of cases) {
     withFolder((folder) => {
@@ -126,8 +126,11 @@ test('md_check_exits_1_when_an_update_is_needed_and_writes_nothing', () => {
     run(['md', 'doc.md'], folder);
     put(folder, 'doc.md', read(folder, 'doc.md').replace('name=flow', 'name=path'));
     run(['md', 'doc.md'], folder);
-    put(folder, 'doc-flow.svg', '<!-- daphnis md doc.md -->');
+    put(folder, 'doc-flow.svg', '<!-- daphnis md v2 doc.md -->');
     const stale = run(['md', 'doc.md', '--check'], folder);
+    // 판 번호 없는 표시는 사용자 파일이라 낡은 그림으로 알리지 않는다
+    put(folder, 'doc-flow.svg', '<!-- daphnis md doc.md -->');
+    const userFile = run(['md', 'doc.md', '--check'], folder);
 
     assert.equal(unrendered.status, 1);
     assert.match(unrendered.stderr, /doc-flow\.svg: is out of date/);
@@ -136,6 +139,7 @@ test('md_check_exits_1_when_an_update_is_needed_and_writes_nothing', () => {
     assert.equal(edited.status, 1, '블록을 고치면 SVG가 낡았다');
     assert.equal(stale.status, 1);
     assert.match(stale.stderr, /doc-flow\.svg: is a stale figure/);
+    assert.equal(userFile.status, 0, userFile.stderr);
   });
 });
 
@@ -156,8 +160,8 @@ test('md_out_dir_writes_svgs_there_and_links_them_relative_to_the_document', () 
 // 근거: 요구사항 "dap 블록만 대상이다". 다른 울타리 안의 dap 줄과 목록 안 들여쓴 블록
 test('md_ignores_dap_inside_other_fences_and_renders_an_indented_block_in_a_list', () => {
   withFolder((folder) => {
-    const nested = '````text\n```dap\nflow right\nbox a "A"\n```\n````\n';
-    const listed = '- item\n\n  ```dap\n  flow right\n  box a "A"\n  ```\n';
+    const nested = '````text\n```dap\ndaphnis 2\nbox a "A"\n```\n````\n';
+    const listed = '- item\n\n  ```dap\n  daphnis 2\n  box a "A"\n  ```\n';
     put(folder, 'doc.md', doc(nested, listed));
 
     const result = run(['md', 'doc.md'], folder);
@@ -196,19 +200,19 @@ test('md_keeps_crlf_line_endings_and_stays_idempotent', () => {
   });
 });
 
-// 근거: 설계 markdown.md 호환 "옛 이름". 옛 울타리(muto)와 옛 이미지 표시를 같은 블록으로 읽어 새 표시로 고쳐 쓰고 폐기 안내를 낸다
-test('md_reads_the_old_fence_and_old_image_mark_and_rewrites_the_mark_with_a_deprecation_notice', () => {
+// 근거: 설계 markdown.md 호환 폐기. 옛 울타리(`muto`)와 옛 이미지 표시(`<!-- muto -->`)는 이 도구의 블록과 줄이 아니다. 읽지도, 고쳐 쓰지도, 폐기 안내를 내지도 않고 문서를 그대로 둔다
+test('md_does_not_read_the_retired_muto_fence_or_its_image_mark_and_leaves_the_document_untouched', () => {
   withFolder((folder) => {
     put(folder, 'doc.md', `${doc(block('name=flow', FLOW)).replace('```dap', '```muto')}`.replace('\nend', '\n![x](doc-flow.svg)<!-- muto -->\nend'));
-
-    const result = run(['md', 'doc.md'], folder);
     const markdown = read(folder, 'doc.md');
 
+    const result = run(['md', 'doc.md'], folder);
+
     assert.equal(result.status, 0, result.stderr);
-    assert.match(result.stderr, /^doc\.md:3: deprecated: the code block language "muto" is now "dap"/m);
-    assert.match(markdown, /!\[Request path\]\(doc-flow\.svg\)<!-- dap -->/);
-    assert.doesNotMatch(markdown, /<!-- muto -->/);
-    assert.equal(markdown.match(/doc-flow\.svg/g).length, 1);
+    assert.equal(result.stderr, '', '폐기 안내도 내지 않는다');
+    assert.equal(read(folder, 'doc.md'), markdown);
+    assert.ok(!existsSync(join(folder, 'doc-flow.svg')), '옛 울타리 블록은 그리지 않는다');
+    assert.equal(run(['md', 'doc.md', '--check'], folder).status, 0);
   });
 });
 
@@ -344,7 +348,7 @@ test('md_refuses_to_overwrite_an_existing_svg_without_a_mark_and_writes_no_file_
     const result = run(['md', 'doc.md'], folder);
 
     assert.equal(result.status, 1);
-    assert.match(result.stderr, /doc\.md:3: .*doc-one\.svg already exists and has no daphnis md mark/);
+    assert.match(result.stderr, /doc\.md:3: .*doc-one\.svg already exists and has no daphnis md v2 mark/);
     assert.match(read(folder, 'doc-one.svg'), /hand made/);
     assert.ok(!existsSync(join(folder, 'doc-two.svg')), '같은 실행의 다른 SVG도 쓰지 않는다');
     assert.equal(read(folder, 'doc.md'), markdown);
@@ -397,71 +401,82 @@ test('md_marks_of_paths_mixing_percent_double_dash_hangul_and_relative_segments_
   });
 });
 
-// 근거: 이슈 #102 "옛 표식이 든 SVG는 소유가 분명할 때만 지운다". 옛 인코딩은 `%`를 그대로 두어 `%`가 든 경로에서 모호하다
-test('md_removes_a_stale_svg_with_an_old_mark_only_when_the_owner_is_unambiguous', () => {
+// 폴더 안에 놓는 판 번호 없는 표시(`daphnis md {경로}`)나 옛 이름(`mutoscope md {경로}`) 표시가 붙은 SVG. 승인된 규칙에서 이런 파일은 표시 없는 사용자 파일이다.
+const oldMarked = (owner, tool = 'mutoscope') => `<svg xmlns="http://www.w3.org/2000/svg">\n<!-- ${tool} md ${owner} -->\n</svg>\n`;
+
+// 근거: 설계 markdown.md 소유 표시 "소유 표시는 `daphnis md v2 {경로}` 하나다. 판 번호가 없는 표시나 다른 이름의 표시가 붙은 파일은 사용자 파일이다. 가져가지도 덮어쓰지도 지우지도 않는다". 예전에는 소유가 분명하면 지웠지만 이제는 어느 것도 지우지 않는다
+test('md_never_removes_a_stale_svg_whose_mark_is_not_daphnis_md_v2_and_still_removes_a_v2_one', () => {
   withFolder((folder) => {
     mkdirSync(join(folder, 'x--y'));
     mkdirSync(join(folder, 'plain'));
     put(folder, 'x--y/readme.md', doc(block('name=keep', FLOW)));
     put(folder, 'plain/readme.md', doc(block('name=stay', FLOW)));
     mkdirSync(join(folder, 'out'));
-    const old = (owner, tool = 'mutoscope') => `<svg xmlns="http://www.w3.org/2000/svg">\n<!-- ${tool} md ${owner} -->\n</svg>\n`;
-    put(folder, 'out/readme-gone.svg', old('../plain/readme.md'));
-    put(folder, 'out/readme-gonedap.svg', old('../plain/readme.md', 'daphnis'));
-    put(folder, 'out/readme-ambiguous.svg', old('../x%2D-y/readme.md'));
-    put(folder, 'out/readme-ambiguousdap.svg', old('../x%2D-y/readme.md', 'daphnis'));
-    put(folder, 'out/readme-percent.svg', old('../x%252D-y/readme.md'));
-    put(folder, 'out/readme-foreign.svg', old('../other/readme.md'));
+    const kept = {
+      'readme-gone.svg': oldMarked('../plain/readme.md'),
+      'readme-gonedap.svg': oldMarked('../plain/readme.md', 'daphnis'),
+      'readme-ambiguous.svg': oldMarked('../x%2D-y/readme.md'),
+      'readme-ambiguousdap.svg': oldMarked('../x%2D-y/readme.md', 'daphnis'),
+      'readme-percent.svg': oldMarked('../x%252D-y/readme.md'),
+      'readme-foreign.svg': oldMarked('../other/readme.md'),
+    };
+    for (const [name, text] of Object.entries(kept)) put(folder, `out/${name}`, text);
+    // v2 표시가 붙은 이 문서들의 옛 그림만 이 도구 것이라 지운다
+    const stale = '<svg xmlns="http://www.w3.org/2000/svg">\n<!-- daphnis md v2 ../plain/readme.md -->\n</svg>\n';
+    put(folder, 'out/readme-old.svg', stale);
 
     const result = run(['md', 'plain/readme.md', 'x--y/readme.md', '--out-dir', 'out'], folder);
 
     assert.equal(result.status, 0, result.stderr);
-    for (const name of ['gone', 'gonedap']) assert.ok(!existsSync(join(folder, `out/readme-${name}.svg`)), `${name}: 소유가 분명한 판 번호 없는 표식은 지운다`);
-    for (const name of ['ambiguous', 'ambiguousdap', 'percent', 'foreign']) assert.ok(existsSync(join(folder, `out/readme-${name}.svg`)), `${name}: 모호하거나 남의 것이면 둔다`);
+    for (const [name, text] of Object.entries(kept)) assert.equal(read(folder, `out/${name}`), text, `${name}: 판 번호 없는 표시는 어느 것도 지우거나 고치지 않는다`);
+    assert.ok(!existsSync(join(folder, 'out/readme-old.svg')), 'v2 표시가 붙은 이 문서의 옛 그림은 지운다');
     assert.equal(run(['md', 'plain/readme.md', 'x--y/readme.md', '--out-dir', 'out', '--check'], folder).status, 0);
   });
 });
 
-// 근거: 이슈 #102 "옛 표식 SVG는 소유가 분명할 때만" 쓰기에도 같은 판정. 모호한 옛 표식 파일에는 쓰지 않는다
-test('md_does_not_write_over_an_svg_with_an_ambiguous_old_mark_but_rewrites_one_with_a_clear_old_mark', () => {
+// 근거: 설계 markdown.md "쓸 SVG가 이미 있으면 ... `daphnis md v2` 표시가 없는 파일(판 번호 없는 표시나 다른 이름의 표시가 붙은 파일 포함)이면 오류를 내고 이번 실행의 어떤 SVG와 문서도 쓰지 않는다". 같은 글자의 판 번호 없는 표시도, 다른 이름의 표시도 소유로 읽지 않는다
+test('md_does_not_write_over_an_svg_with_an_unversioned_or_renamed_mark_and_names_the_missing_v2_mark', () => {
   withFolder((folder) => {
     mkdirSync(join(folder, 'x--y'));
     mkdirSync(join(folder, 'plain'));
     put(folder, 'x--y/readme.md', doc(block('name=one', FLOW)));
     put(folder, 'plain/readme.md', doc(block('name=two', FLOW)));
     mkdirSync(join(folder, 'out'));
-    const old = (owner, tool = 'mutoscope') => `<svg xmlns="http://www.w3.org/2000/svg">\n<!-- ${tool} md ${owner} -->\n</svg>\n`;
-    put(folder, 'out/readme-one.svg', old('../x%2D-y/readme.md', 'daphnis'));
-    put(folder, 'out/readme-two.svg', old('../plain/readme.md'));
+    // 옛 구현이 `x%2D-y/readme.md`로 만든 SVG(표시는 `daphnis md ../x%2D-y/readme.md`)다. 판 번호가 없으니 글자가 같아도 소유로 보지 않는다
+    put(folder, 'out/readme-one.svg', oldMarked('../x%2D-y/readme.md', 'daphnis'));
+    put(folder, 'out/readme-two.svg', oldMarked('../plain/readme.md'));
 
-    // 옛 구현이 `x%2D-y/readme.md`로 만든 SVG(표시는 `daphnis md ../x%2D-y/readme.md`)다. `x--y/readme.md`의 새 표식과 글자가 같아도 판 번호가 없으니 소유로 보지 않는다
-    const ambiguous = run(['md', 'x--y/readme.md', '--out-dir', 'out'], folder);
-    const clear = run(['md', 'plain/readme.md', '--out-dir', 'out'], folder);
+    const unversioned = run(['md', 'x--y/readme.md', '--out-dir', 'out'], folder);
+    const renamed = run(['md', 'plain/readme.md', '--out-dir', 'out'], folder);
 
-    assert.equal(ambiguous.status, 1);
-    assert.match(ambiguous.stderr, /readme-one\.svg already exists and was made for another document/);
-    assert.equal(read(folder, 'out/readme-one.svg'), old('../x%2D-y/readme.md', 'daphnis'));
-    assert.equal(clear.status, 0, clear.stderr);
-    assert.match(read(folder, 'out/readme-two.svg'), /<!-- daphnis md v2 \.\.\/plain\/readme\.md -->/);
+    for (const result of [unversioned, renamed]) assert.equal(result.status, 1);
+    assert.match(unversioned.stderr, /readme-one\.svg already exists and has no daphnis md v2 mark/);
+    assert.match(renamed.stderr, /readme-two\.svg already exists and has no daphnis md v2 mark/);
+    assert.equal(read(folder, 'out/readme-one.svg'), oldMarked('../x%2D-y/readme.md', 'daphnis'));
+    assert.equal(read(folder, 'out/readme-two.svg'), oldMarked('../plain/readme.md'));
   });
 });
 
-// 근거: 이슈 #102 "같은 문서를 거듭 반영하면 두 번째부터 파일 내용이 바뀌지 않는다". 판 번호 없는 자기 SVG는 새 표식으로 한 번 다시 쓰고 그 뒤는 그대로다
-test('md_rewrites_its_own_svg_with_an_unversioned_mark_once_and_then_stays_unchanged', () => {
+// 근거: 같은 규칙. 자기 SVG라도 판 번호를 지운 표시는 사용자 파일이라 새 표식으로 다시 쓰지 않는다(옛 판 자동 승급 없음). 표시를 되살려 두면 다시 자기 것이 된다
+test('md_does_not_adopt_its_own_svg_after_the_version_is_stripped_from_the_mark', () => {
   withFolder((folder) => {
     put(folder, 'doc.md', doc(block('name=flow', FLOW)));
     run(['md', 'doc.md'], folder);
-    put(folder, 'doc-flow.svg', read(folder, 'doc-flow.svg').replace('<!-- daphnis md v2 doc.md -->', '<!-- daphnis md doc.md -->'));
+    const v2 = read(folder, 'doc-flow.svg');
+    const stripped = v2.replace('<!-- daphnis md v2 doc.md -->', '<!-- daphnis md doc.md -->');
+    put(folder, 'doc-flow.svg', stripped);
+    const markdown = read(folder, 'doc.md');
 
-    const upgrade = run(['md', 'doc.md'], folder);
-    const text = read(folder, 'doc-flow.svg');
-    const again = run(['md', 'doc.md'], folder);
+    const refused = run(['md', 'doc.md'], folder);
 
-    assert.equal(upgrade.status, 0, upgrade.stderr);
-    assert.match(text, /<!-- daphnis md v2 doc\.md -->/);
-    assert.doesNotMatch(text, /<!-- daphnis md doc\.md -->/);
-    assert.equal(again.stdout, '');
-    assert.equal(read(folder, 'doc-flow.svg'), text);
+    assert.equal(refused.status, 1);
+    assert.match(refused.stderr, /doc-flow\.svg already exists and has no daphnis md v2 mark/);
+    assert.equal(read(folder, 'doc-flow.svg'), stripped, '자동으로 새 표식으로 올리지 않는다');
+    assert.equal(read(folder, 'doc.md'), markdown);
+
+    put(folder, 'doc-flow.svg', v2);
+    assert.equal(run(['md', 'doc.md'], folder).status, 0, '표시를 되살리면 다시 이 문서 것이다');
+    assert.equal(run(['md', 'doc.md', '--check'], folder).status, 0);
   });
 });
 

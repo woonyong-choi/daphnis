@@ -1,4 +1,4 @@
-flow down
+daphnis 2
 title "선이 그룹 제목 자리를 지나는 그림"
 
 store src "입력" "X"
@@ -15,3 +15,5 @@ src -> v
 q -> out
 k -> out
 v -> out
+
+view main graph down

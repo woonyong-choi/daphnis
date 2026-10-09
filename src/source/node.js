@@ -4,8 +4,8 @@ import { checkId, parentFor, rejectName } from './names.js';
 import { readOptions } from './options.js';
 import { ID_PATTERN } from './words.js';
 
-// 흐름 그림에서만 쓰는 꾸밈 선택 사항. 다른 그림 종류에서는 쓰지 못한다.
-const FLOW_ONLY = ['badge', 'icon', 'count'];
+// 사람 카드가 따로 고르지 않을 때 쓰는 의미 아이콘. 모든 카드가 같은 틀과 머리를 쓰고, 사람은 이 아이콘으로 가른다.
+const PERSON_ICON = 'user';
 
 // cost: time O(t), heap O(1), stack O(1)
 // vars: t = 문장 낱말 수
@@ -30,7 +30,8 @@ export function readNode({ tokens, line }, ctx) {
   const isTile = found.shape === 'tile';
   const form = found.shape === 'rect' || isTile ? undefined : found.shape;
   checkNodeOptions({ found, form, sub, line }, ctx);
-  const { badge, icon, count, fill, stroke } = found;
+  const { badge, count, fill, stroke } = found;
+  const icon = found.icon ?? (shape === 'person' ? PERSON_ICON : undefined);
   const queue = shape === 'queue' ? readQueue({ found, id: id.value, label: label.value, line }, ctx) : undefined;
   ctx.figure.nodes.push({ id: id.value, shape: form ?? shape, label: label.value, sub: sub?.type === 'text' ? sub.value : undefined, badge, icon, count, fill, stroke, tile: isTile || undefined, ...queue, parent: parentFor(id, ctx), line });
 }
@@ -49,12 +50,10 @@ function readQueue({ found, id, label, line }, ctx) {
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-// 선택 사항끼리 맞는지 본다. 원은 이름만 받고, 타일은 아이콘이 있어야 하고, 꾸밈 선택 사항은 흐름 그림에서만 쓴다.
+// 선택 사항끼리 맞는지 본다. 원은 이름만 받고, 타일은 아이콘이 있어야 한다.
 function checkNodeOptions({ found, form, sub, line }, ctx) {
-  const { problems, figure } = ctx;
+  const { problems } = ctx;
   if (form === 'circle' && sub) problems.error(line, 'a circle takes a name only. Remove the subtitle or shape=circle');
   if (form === 'circle' && (found.badge !== undefined || found.icon !== undefined)) problems.error(line, 'a circle takes a name only. Remove the badge or icon, or use a rectangle');
   if (found.shape === 'tile' && found.icon === undefined) problems.error(line, 'a tile is an icon card. Add icon=name or use a rectangle');
-  const outside = FLOW_ONLY.filter((key) => found[key] !== undefined);
-  if (figure.kind !== 'flow' && outside.length) problems.error(line, `${outside.join(', ')} belongs to flow figures only`);
 }

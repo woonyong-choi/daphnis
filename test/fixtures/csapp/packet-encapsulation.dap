@@ -1,4 +1,4 @@
-data right
+daphnis 2
 title "패킷 캡슐화 계층"
 subtitle "HTTP 요청이 TCP 세그먼트, IP 패킷, 이더넷 프레임에 차례로 담긴다"
 
@@ -28,7 +28,7 @@ table eth_frame "링크 계층: 이더넷 프레임" {
   fcs "프레임 검사 합 4바이트"
 }
 
-step "송신: 캡슐화" "아래 계층으로 내려갈 때마다 헤더가 앞에 붙는다"
+scene "송신: 캡슐화" mode=once
   light http_msg.request_line http_msg.carried_in
   http_msg -> tcp_seg
   show tcp_seg "TCP 헤더 + HTTP 요청" tag="L4"
@@ -36,7 +36,7 @@ step "송신: 캡슐화" "아래 계층으로 내려갈 때마다 헤더가 앞�
   show ip_pkt "IP 헤더 + TCP 세그먼트" tag="L3"
   ip_pkt -> eth_frame
   show eth_frame "이더넷 헤더 + IP 패킷 + FCS" tag="L2"
-step "수신: 역캡슐화" "받는 쪽은 위 계층으로 올라가며 헤더를 하나씩 벗긴다"
+scene "수신: 역캡슐화" mode=once
   eth_frame -> ip_pkt
   show ip_pkt "이더넷 헤더와 FCS를 벗김" tag="L3"
   ip_pkt -> tcp_seg

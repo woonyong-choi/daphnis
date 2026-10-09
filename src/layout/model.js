@@ -31,7 +31,8 @@ export function buildModel(figure, sizes) {
   const edges = [...marks.filter((e) => e.isStart), ...figure.edges.map((e, i) => ({ ...e, index: i })), ...marks.filter((e) => !e.isStart)];
   const pieces = new Map();
   for (const edge of edges) pieces.set(edge.index, splitEdge(edge, nodes, containers));
-  const model = { containers, nodes, edges, pieces, isSafe: figure.safeLayout === true };
+  // sweep은 박자 이동 글 상자가 선 옆을 쓸고 지나는 폭 Map<선 번호, { x, y }>이다(chip-room.js). 배치 뒤 선 옆에 놓는 그룹 제목과 끝 라벨이 비킨다.
+  const model = { containers, nodes, edges, pieces, isSafe: figure.safeLayout === true, sweep: figure.chipSweep ?? new Map() };
   orderByFlow(model);
   return model;
 }
@@ -67,7 +68,7 @@ function directionOf(parent, containers, figure) {
 // basis: estimate
 // 상태 그림의 처음 점과 끝 겹원을 도형과 선으로 더한다. 이 선은 이동 대상이 아니다.
 function addStateMarks(figure, nodes, containers) {
-  if (figure.kind !== 'state') return;
+  if (!figure.start && !figure.finals.length) return;
   figure.markEdges = [];
   // start가 없으면 처음 점과 그 선을 그리지 않는다.
   const marks = [...(figure.start ? [{ id: '__start', shape: 'start', from: '__start', to: figure.start.id }] : []), ...figure.finals.map((f, i) => ({ id: `__final${i}`, shape: 'final', from: f.id, to: `__final${i}` }))];

@@ -32,22 +32,23 @@
     "NOTICE"
   ],
   "bin": {
-    "daphnis": "src/cli.js",
-    "mutoscope": "src/cli.js"
+    "daphnis": "src/cli.js"
   },
   "scripts": {
-    "test": "node --test test/*.test.js",
+    "test": "node --test --test-concurrency=2 test/*.test.js",
     "grammar": "node scripts/build-grammar-doc.mjs",
     "fuzz": "node scripts/fuzz-layout.mjs",
     "perf": "node scripts/perf-chips.mjs",
     "checkdoc": "node scripts/build-check-doc.mjs",
     "palette": "node scripts/build-palette.mjs",
     "tokens": "node scripts/build-tokens.mjs src/tokens.json --out src",
-    "check": "node scripts/sync-theme.mjs --check && node scripts/build-tokens.mjs src/tokens.json --check && node scripts/check-tokens.mjs src && node scripts/check-cost-comments.mjs src test && node scripts/check-size.mjs src scripts",
-    "examples": "node src/cli.js gallery examples --out examples/out --title \"\uc608\uc81c\"",
+    "check": "node scripts/sync-theme.mjs --check && node scripts/build-tokens.mjs src/tokens.json --check && node scripts/check-tokens.mjs src",
+    "check:advisory": "node scripts/check-cost-comments.mjs --advisory src test && node scripts/check-size.mjs --advisory src scripts",
+    "examples": "node scripts/build-catalog.mjs",
     "showcase": "node scripts/build-showcase.mjs",
-    "figures": "npm run examples && node src/cli.js render docs/assets/how-it-works.dap && npm run showcase && node src/cli.js md $(git grep -l '^```dap' -- '*.md')",
-    "theme:sync": "node scripts/sync-theme.mjs"
+    "figures": "npm run catalog && node src/cli.js render docs/assets/how-it-works.dap && npm run showcase && node src/cli.js md $(git grep -l '^```dap' -- '*.md')",
+    "theme:sync": "node scripts/sync-theme.mjs",
+    "catalog": "npm run examples"
   },
   "engines": {
     "node": ">=20"
@@ -62,7 +63,6 @@
     "subset-font": "^2.9.0"
   },
   "devDependencies": {
-    "@carbon/colors": "^11.59.0",
     "@woonyong-choi/design-tokens": "github:woonyong-choi/design-tokens#v0.1.1",
     "playwright-core": "^1.63.0"
   }

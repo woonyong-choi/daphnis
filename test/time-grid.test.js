@@ -12,14 +12,14 @@ import { packetsOf } from './smil.js';
 
 const EXAMPLES = new URL('../examples/', import.meta.url);
 // 이슈 #137의 선언부. 선: a->b. 값 n은 a에 붙고 0에서 시작한다. 단계는 6번째 줄부터 붙인다.
-const HEAD = 'flow right\nbox a "A"\nbox b "B"\nvalue n "N" on=a\na -> b\n';
+const HEAD = 'daphnis 2\nbox a "A"\nbox b "B"\nvalue n "N" on=a\na -> b\n';
 // 값 셋과 선 다섯. 대기와 시간 초과 시험이 쓴다. 단계는 14번째 줄부터 붙인다.
-const BASE = 'flow right\nbox a "A"\nbox b "B"\nbox c "C"\nstore db "DB"\nvalue n "수" on=a\nvalue m "수" on=b\nvalue holder "쥔 쪽" on=c from=none\na -> b\nb -> a\na -> c\nb -> c\na -> db\n';
+const BASE = 'daphnis 2\nbox a "A"\nbox b "B"\nbox c "C"\nstore db "DB"\nvalue n "수" on=a\nvalue m "수" on=b\nvalue holder "쥔 쪽" on=c from=none\na -> b\nb -> a\na -> c\nb -> c\na -> db\n';
 // 이슈의 첫 반례와 별도 반례
-const FIRST = `${HEAD}step "Tiny" for=10ms\n track a -> b time=0.000001ms when="n=0" set="n=1"\n track a -> b at=0.000002ms time=1ms when="n=1" set="n=2"\n`;
-const SECOND = `${HEAD}step "Tiny" for=1ms\n track a -> b time=0.000001ms at=0.000001ms when="n=0" set="n+1"\n`;
+const FIRST = `${HEAD}scene "Tiny" mode=once for=10ms\n track a -> b time=0.000001ms when="n=0" set="n=1"\n track a -> b at=0.000002ms time=1ms when="n=1" set="n=2"\n`;
+const SECOND = `${HEAD}scene "Tiny" mode=once for=1ms\n track a -> b time=0.000001ms at=0.000001ms when="n=0" set="n+1"\n`;
 // 눈금 하나(0.00001ms) 간격으로 이웃한 두 이동. 눈금을 지키므로 순서가 보존된다.
-const ADJACENT = `${HEAD}step "Tiny" for=10ms\n track a -> b time=0.00001ms when="n=0" set="n=1"\n track a -> b at=0.00002ms time=1ms when="n=1" set="n=2"\n`;
+const ADJACENT = `${HEAD}scene "Tiny" mode=once for=10ms\n track a -> b time=0.00001ms when="n=0" set="n=1"\n track a -> b at=0.00002ms time=1ms when="n=1" set="n=2"\n`;
 
 // cost: time O(n), heap O(n), stack O(1)
 // vars: n = 원본 글자 수
@@ -121,35 +121,53 @@ test('buildFigure_every_value_change_comes_after_its_departure_and_at_the_arriva
   assert.deepEqual(seg.pulses.map(({ at }) => at), changes.map(([time]) => time), '도형의 후광도 값 변화와 같은 시각에 닿는다');
 });
 
-// 근거: 이슈 #137 완료 조건 "이벤트·점·값 변화·timeout이 같은 시간 표현을 사용"(예제 전체)
-test('buildFigure_every_conditional_example_records_its_changes_waits_skips_and_hops_on_the_grid_and_each_arrival_follows_its_departure', async () => {
+const FLOW_FIXTURES = new URL('./fixtures/flow/', import.meta.url);
+
+// cost: time O(l), heap O(s), stack O(1)
+// vars: l = 원본 줄 수, s = 장면 수
+// basis: estimate
+// 장면마다 그 장면 줄에 조건(`when=`, `wait=`)이 있는지. 눈금 규칙은 조건이나 대기를 쓰는 장면에만 걸린다(playback.md 시간 정밀도).
+function conditionalScenes(source) {
+  const lines = source.split('\n');
+  const starts = lines.flatMap((line, i) => (/^scene\b/.test(line) ? [i] : []));
+  return starts.map((start, si) => lines.slice(start, starts[si + 1] ?? lines.length).some((line) => /\b(when|wait)=/.test(line)));
+}
+
+// 근거: 이슈 #137 완료 조건 "이벤트·점·값 변화·timeout이 같은 시간 표현을 사용". 설계 playback.md 시간 정밀도 "조건이나 대기를 쓰는 장면의 시각은 모두 눈금의 정수 번호다. 장면의 시작 시각은 앞 장면 길이의 합이라 눈금 위가 아닐 수 있다"(예제와 시험 원본 전체)
+test('buildFigure_every_conditional_scene_of_the_examples_records_its_changes_waits_skips_and_hops_on_the_grid_from_its_start', async () => {
   let hops = 0;
-  for (const file of readdirSync(EXAMPLES).filter((name) => name.endsWith('.dap'))) {
-    const source = readFileSync(new URL(file, EXAMPLES), 'utf8');
+  let scenesChecked = 0;
+  const sources = [EXAMPLES, FLOW_FIXTURES].flatMap((dir) => readdirSync(dir).filter((name) => name.endsWith('.dap')).map((name) => ({ name, dir })));
+  for (const { name, dir } of sources) {
+    const source = readFileSync(new URL(name, dir), 'utf8');
     if (!/\b(when|wait)=/.test(source)) continue;
-    const { timeline } = await buildFigure(source, { baseDir: 'examples' });
+    const conditional = conditionalScenes(source);
+    const { timeline } = await buildFigure(source, { baseDir: dir.pathname });
+    const sceneAt = (t) => timeline.segs.find((seg) => t >= seg.t0 && t <= seg.t1)?.si ?? 0;
     const times = [
-      ...timeline.values.flatMap((row) => row.changes.map(([t]) => t)),
-      ...timeline.waits.flatMap((w) => [w.t0, w.t1]),
-      ...timeline.skips.map((s) => s.t),
-      ...timeline.segs.flatMap((seg) => seg.hops.flatMap((hop) => [hop.at ?? 0, hop.ms])),
+      ...timeline.values.filter((row) => conditional[row.si]).flatMap((row) => row.changes.map(([t]) => t)),
+      ...timeline.waits.filter((w) => conditional[w.si]).flatMap((w) => [w.t0, w.t1]),
+      ...timeline.skips.filter((s) => conditional[sceneAt(s.t)]).map((s) => s.t),
+      ...timeline.segs.filter((seg) => conditional[seg.si]).flatMap((seg) => seg.hops.flatMap((hop) => [hop.at ?? 0, hop.ms])),
     ];
 
-    assert.ok(times.every(isOnGrid), `${file}: 모든 시각이 눈금의 정수배다`);
-    assert.ok(timeline.waits.every((w) => w.t1 >= w.t0), `${file}: 대기는 거꾸로 끝나지 않는다`);
-    hops += timeline.segs.reduce((sum, seg) => sum + seg.hops.length, 0);
+    assert.ok(times.every(isOnGrid), `${name}: 조건을 쓰는 장면의 모든 시각이 눈금의 정수배다 ${times.filter((t) => !isOnGrid(t)).slice(0, 3)}`);
+    assert.ok(timeline.waits.every((w) => w.t1 >= w.t0), `${name}: 대기는 거꾸로 끝나지 않는다`);
+    hops += timeline.segs.filter((seg) => conditional[seg.si]).reduce((sum, seg) => sum + seg.hops.length, 0);
+    scenesChecked += conditional.filter(Boolean).length;
   }
-  assert.ok(hops > 20, '조건을 쓰는 예제의 점을 여럿 보았다');
+  assert.ok(scenesChecked >= 3, `조건을 쓰는 장면 ${scenesChecked}개`);
+  assert.ok(hops > 10, '조건을 쓰는 장면의 점을 여럿 보았다');
 });
 
 // 근거: 이슈 #137 완료 조건 "누적 단계 시각". 앞 단계 길이의 합이 이진 오차를 가져도(0.1 + 0.2) 이벤트 순서가 변하지 않는다.
 test('buildFigure_a_conditional_step_after_steps_whose_lengths_add_with_binary_error_keeps_its_event_order_and_grid_times', async () => {
-  const source = `${HEAD}step "one" for=0.1ms\n track a -> b time=0.05ms\nstep "two" for=0.2ms\n track a -> b time=0.05ms\nstep "three" for=10ms\n track a -> b time=0.00001ms when="n=0" set="n=1"\n track a -> b at=0.00002ms time=1ms when="n=1" set="n=2"\n`;
+  const source = `${HEAD}scene "one" mode=once for=1.1ms\n track a -> b time=0.05ms\nscene "two" mode=once for=2.2ms\n track a -> b time=0.05ms\nscene "three" mode=once for=10ms\n track a -> b time=0.00001ms when="n=0" set="n=1"\n track a -> b at=0.00002ms time=1ms when="n=1" set="n=2"\n`;
   const { timeline } = await buildFigure(source);
   const seg = timeline.segs.find((s) => s.si === 2);
 
-  assert.notEqual(seg.t0, 0.3, '앞 단계 길이의 합이 0.3이 아닌 이진 값이다');
-  assert.deepEqual(changesOf(timeline, 'n', 2), [[0.30001, '1'], [1.30002, '2']]);
+  assert.notEqual(seg.t0, 3.3, '앞 단계 길이의 합이 3.3이 아닌 이진 값이다(1.1 + 2.2)');
+  assert.deepEqual(changesOf(timeline, 'n', 2), [[3.30001, '1'], [4.30002, '2']]);
   assert.deepEqual(timeline.skips, []);
 });
 
@@ -157,19 +175,22 @@ test('buildFigure_a_conditional_step_after_steps_whose_lengths_add_with_binary_e
 
 // 근거: 이슈 #137 완료 조건 "반올림 경계 양쪽". 눈금의 정수배는 받고, 그 사이 값은 반올림하지 않고 거부한다.
 test('buildFigure_accepts_time_and_at_on_the_grid_and_rejects_values_just_off_it_on_the_track_line', async () => {
-  const track = (options) => `${HEAD}step "s" for=10ms\n track a -> b ${options} when="n=0" set="n=1"\n`;
+  const track = (options) => `${HEAD}scene "s" mode=once for=10ms\n track a -> b ${options} when="n=0" set="n=1"\n`;
   const accepted = ['time=0.00001ms', 'time=0.00003ms at=0.00002ms', 'time=1ms at=0.00001ms every=0.5ms', 'time=1.00001ms'];
   const rejected = ['time=0.000009ms', 'time=0.0000149ms', 'time=1ms at=0.000015ms', 'time=1.000001ms'];
 
   for (const options of accepted) assert.deepEqual(await problemsOf(track(options)), [], options);
   for (const options of rejected) assert.deepEqual((await problemsOf(track(options))).map(({ code, line }) => [code, line]), [['time-precision', 7]], options);
-  assert.deepEqual(await problemsOf(`${HEAD}step "s" for=0.0001ms\n track a -> b time=0.00001ms every=0.00002ms when="n=0" set="n=1"\n`), [], 'every도 눈금 위면 받는다');
-  assert.deepEqual((await problemsOf(`${HEAD}step "s" for=0.0001ms\n track a -> b time=0.00001ms every=0.000025ms when="n=0" set="n=1"\n`)).map(({ code, line }) => [code, line]), [['time-precision', 7]]);
+  // 장면은 1ms 이상이어야 하므로(invalid-speed) 끝 가까이(at=0.99995ms)에서 시작해 every가 두세 번만 되풀이되게 한다
+  const every = (text) => `${HEAD}scene "s" mode=once for=1ms\n track a -> b time=0.00001ms at=0.99995ms every=${text} when="n=0" set="n=1"\n`;
+
+  assert.deepEqual(await problemsOf(every('0.00002ms')), [], 'every도 눈금 위면 받는다');
+  assert.deepEqual((await problemsOf(every('0.000025ms'))).map(({ code, line }) => [code, line]), [['time-precision', 7]]);
 });
 
 // 근거: 이슈 #137 "받은 정밀도로 순서 보존 또는 진단". 눈금으로 구별할 수 없는 단계 길이도 단계 줄의 오류다.
 test('buildFigure_rejects_a_conditional_step_length_off_the_grid_on_the_step_line_and_accepts_one_on_it', async () => {
-  const step = (length) => `${HEAD}step "s" for=${length}\n track a -> b time=1ms when="n=0" set="n=1"\n`;
+  const step = (length) => `${HEAD}scene "s" mode=once for=${length}\n track a -> b time=1ms when="n=0" set="n=1"\n`;
 
   assert.deepEqual(await problemsOf(step('10.00001ms')), []);
   assert.deepEqual((await problemsOf(step('10.000001ms'))).map(({ code, line }) => [code, line]), [['time-precision', 6]]);
@@ -177,21 +198,22 @@ test('buildFigure_rejects_a_conditional_step_length_off_the_grid_on_the_step_lin
 
 // 근거: 이슈 #137 박자 단계. 조건을 쓴 박자의 이동 시간과 시간 초과도 같은 눈금이다.
 test('buildFigure_rejects_a_conditional_beat_move_time_and_timeout_off_the_grid_on_the_move_line', async () => {
-  const beat = (options) => `${BASE}step "s"\n  b -> c ${options} wait="holder='go'" timeout=1ms else=a\n`;
-  const timeout = (text) => `${BASE}step "s"\n  b -> c time=1ms wait="holder='go'" timeout=${text} else=a\n`;
+  const beat = (options) => `${BASE}scene "s" mode=once\n  b -> c ${options} wait="holder='go'" timeout=1ms else=a\n`;
+  const timeout = (text) => `${BASE}scene "s" mode=once\n  b -> c time=1ms wait="holder='go'" timeout=${text} else=a\n`;
   const at = (source) => problemsOf(source).then((list) => list.map(({ code, line }) => [code, line]));
 
   assert.deepEqual(await at(beat('time=0.000001ms')), [['time-precision', 15]]);
   assert.deepEqual(await at(timeout('0.000001ms')), [['time-precision', 15]]);
   assert.deepEqual(await at(beat('time=0.00001ms')), []);
   assert.deepEqual(await at(timeout('0.00001ms')), []);
-  assert.deepEqual(await at(`${HEAD}step "s"\n  a -> b time=0.000001ms when="n=0" set="n=1"\n`), [['time-precision', 7]]);
+  assert.deepEqual(await at(`${HEAD}scene "s" mode=once\n  a -> b time=0.000001ms when="n=0" set="n=1"\n`), [['time-precision', 7]]);
 });
 
 // 근거: 이슈 #137 완료 조건 "조건을 쓰지 않는 원본은 그대로"
 test('buildFigure_keeps_building_sub_grid_times_in_sources_without_conditions_as_before', async () => {
-  const flow = await buildFigure(`${HEAD}step "s" for=1ms\n track a -> b time=0.000001ms at=0.0000013ms\n`);
-  const beat = await buildFigure(`${HEAD}step "s"\n  a -> b time=0.000001ms\n`);
+  const flow = await buildFigure(`${HEAD}scene "s" mode=once for=1ms\n track a -> b time=0.000001ms at=0.0000013ms\n`);
+  // 장면은 1ms 이상이어야 하고(invalid-speed) 박자 뒤에 따로 머무는 시간이 없으므로 `wait 1ms`로 길이를 채운다
+  const beat = await buildFigure(`${HEAD}scene "s" mode=once\n  a -> b time=0.000001ms\n  wait 1ms\n`);
 
   assert.equal(flow.timeline.segs[0].hops[0].ms, 0.000001);
   assert.equal(beat.timeline.segs[0].hops[0].ms, 0.000001);
@@ -241,7 +263,7 @@ test('buildFigure_wait_release_wins_at_the_same_grid_step_as_the_timeout_and_los
   // basis: estimate
   // 시간 초과를 정한 원본의 대기 끝 { end, t1 }과 이동 { 도착 도형, 출발 뒤 ms } 목록
   const run = async (timeout) => {
-    const { timeline } = await buildFigure(`${BASE}step "s"\n  a -> c time=0.00002ms set="holder=go" & b -> c time=1ms wait="holder='go'" timeout=${timeout} else=a\n`);
+    const { timeline } = await buildFigure(`${BASE}scene "s" mode=once\n  a -> c time=0.00002ms set="holder=go" & b -> c time=1ms wait="holder='go'" timeout=${timeout} else=a\n`);
     const [wait] = timeline.waits;
     const hops = timeline.segs[0].hops;
     return { end: wait.end, t1: wait.t1, hops: hops.map((hop) => [hop.to, hop.at ?? 0]) };
@@ -254,7 +276,7 @@ test('buildFigure_wait_release_wins_at_the_same_grid_step_as_the_timeout_and_los
 
 // 근거: 계약 "흐름 단계에서도 풀림과 시간 초과가 이웃하면 같은 규칙", 대기가 흐름의 출발 시각에서 시작한다
 test('buildFigure_flow_wait_released_one_grid_step_before_the_timeout_departs_at_the_release_and_makes_no_else_dot', async () => {
-  const source = `${BASE}step "s" for=10ms\n track a -> c time=0.00002ms set="holder=go"\n track b -> c at=0.00001ms time=1ms wait="holder='go'" timeout=0.00002ms else=a\n`;
+  const source = `${BASE}scene "s" mode=once for=10ms\n track a -> c time=0.00002ms set="holder=go"\n track b -> c at=0.00001ms time=1ms wait="holder='go'" timeout=0.00002ms else=a\n`;
   const { timeline } = await buildFigure(source);
   const [wait] = timeline.waits;
 
@@ -266,7 +288,7 @@ test('buildFigure_flow_wait_released_one_grid_step_before_the_timeout_departs_at
 
 // 근거: 이슈 #137 완료 조건 "SVG·HTML 시각 일치". 시간표가 정한 눈금 시각을 움직이는 SVG(SMIL)와 HTML 재생기 데이터가 그대로 읽는다.
 test('toSvg_and_toHtml_read_the_grid_times_of_the_timeline_for_an_event_chain_that_starts_one_grid_step_after_an_arrival', async () => {
-  const source = `${HEAD}step "chain" for=2s\n track a -> b time=1s when="n=0" set="n=1"\n track a -> b at=1.00001s time=500ms when="n=1" set="n=2"\n`;
+  const source = `${HEAD}scene "chain" mode=once for=2s\n track a -> b time=1s when="n=0" set="n=1"\n track a -> b at=1.00001s time=500ms when="n=1" set="n=2"\n`;
   const result = await buildFigure(source, { strict: true });
   const { timeline } = result;
   const html = await toHtml(result, 'chain');

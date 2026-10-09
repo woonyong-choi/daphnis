@@ -1,31 +1,28 @@
-// 페이지: 목록 쪽(gallery)과 문서 미리보기가 브라우저에서 보이는 모양(docs/design/playback.md 문서 미리보기, layout.md 카드 머리).
-// Chrome이 없으면 건너뛴다. 경로는 CHROME_PATH로 바꿀 수 있다.
+// 페이지: 목록 쪽(gallery)과 문서 미리보기, 재생기 화면이 브라우저에서 보이는 모양(docs/design/playback.md 문서 미리보기와 장면 탭, layout.md 카드 머리와 글꼴).
+// 실제 Chrome으로 연다. Chrome이 없으면 시험이 실패한다(경로는 CHROME_PATH로 바꾼다). 재생 단추, 반복 단추, 배속 메뉴, 설명 글, 진행 고리는 없다. 장면 선택은 탭, 반복은 `mode=loop`가 맡는다.
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { after, before, describe, test } from 'node:test';
-import { chromium } from 'playwright-core';
 import { buildFigure } from '../src/build.js';
 import { toDocument, toGallery, toHtml } from '../src/html.js';
 import { values } from '../src/tokens.js';
-import { runCli, withFolder } from './helpers.js';
+import { launchChrome } from './chrome.js';
+import { chartSource, runCli, withFolder } from './helpers.js';
 
-const CHROME = [process.env.CHROME_PATH, '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser'].find((path) => path && existsSync(path));
-const SKIP = CHROME ? false : 'Chrome이 없다';
 const FIGURES = [{ name: 'call-registers', title: '호출 중 레지스터 값의 변화', kind: 'flow', isChart: false, href: 'call-registers' }];
 const WIDTH = 1400;
 const AUDIT_WAIT_MS = 500;
-const FIGURE = 'flow right\nbox a "A"\n';
+const FIGURE = 'daphnis 2\nbox a "A"\n';
 const GAP_TOLERANCE = 0.5;
-const AXIS_TOLERANCE = 1;
-const RING_WAIT_MS = 600;
-// 밝힌 격자 칸 테두리 안쪽 0.3만큼 들어간 점을 찍는다(테두리 굵기 절반 안, 이웃 칸 선과도 겹치는 자리)
-const GRID_RING_PROBE = 0.3;
 const SEMIBOLD = 600;
-const CAPTION = '단계 설명 글. 막대와 같은 가운데 축에 놓인다.';
-const CODE_FIGURE = 'flow right\nbox a "일반 `code` 글"\nbox b "B"\na -> b "보냄"\nstep "s"\n  a -> b';
-const BAR_FIGURE = 'chart bar\nx "정확도(%)"\nseries a "A"\nrow "항목" a=3\nrow "둘째" a=5';
+const CODE_FIGURE = 'daphnis 2\nbox a "일반 `code` 글"\nbox b "B"\na -> b "보냄"\nscene "first" mode=once\n  a -> b\nscene "second" mode=once\n  a -> b\nscene "third" mode=once\n  a -> b\n';
+const BAR_FIGURE = `daphnis 2\n${chartSource('bar', ['x "정확도(%)"', 'series a "A"', 'row "항목" a=3', 'row "둘째" a=5'])}`;
+// 닿는 영역의 최소 크기(px)
+const TARGET = 44;
+// 키보드 초점 외곽의 굵기(px). 도형 윤곽은 평소와 호버에서 1px이고 초점에서만 굵어진다.
+const FOCUS_WIDTH = '3px';
 
 // cost: time O(page), heap O(page), stack O(1), io page
 // vars: page = 페이지 하나를 여는 비용
@@ -41,133 +38,88 @@ function withPage(browser, html, body) {
   });
 }
 
-describe('pages', { skip: SKIP }, () => {
+describe('pages', () => {
   let browser;
   before(async () => {
-    browser = await chromium.launch({ executablePath: CHROME });
+    browser = await launchChrome();
   });
   after(async () => {
     await browser.close();
   });
 
-  // 근거: #159. 먼저 읽고 재생하며, 키보드로 고른 장면도 멈춘 상태로 확인한다.
-  test('player_opens_paused_and_keyboard_scene_selection_stays_paused', async () => {
-    const source = `${CODE_FIGURE}\nstep "second"\n  a -> b`;
-    await withPage(browser, await toHtml(await buildFigure(source), 'reading'), async (page) => {
-      const progress = () => page.locator('.fl-ring-fill').evaluate((el) => el.style.strokeDashoffset);
-      assert.equal(await page.getAttribute('.fl-pause', 'aria-label'), '재생');
-      const start = await progress();
-      await page.waitForTimeout(AUDIT_WAIT_MS);
-      assert.equal(await progress(), start);
-      assert.equal(await page.locator('.fl-position').textContent(), '1 / 2');
-      await page.locator('.fl-tabs button').first().focus();
-      await page.keyboard.press('ArrowRight');
-      assert.equal(await page.locator('.fl-position').textContent(), '2 / 2');
-      assert.equal(await page.locator('.fl-tabs button:focus').textContent(), 'second');
-      assert.equal(await page.getAttribute('.fl-pause', 'aria-label'), '재생');
-      await page.keyboard.press('Home');
-      assert.equal(await page.locator('.fl-position').textContent(), '1 / 2');
-      assert.equal(await page.locator('.fl-tabs button[tabindex="0"]').count(), 1);
-      await page.click('.fl-pause');
-      await page.waitForTimeout(AUDIT_WAIT_MS);
-      assert.notEqual(await progress(), start);
-      await page.locator('.fl-tabs button').last().click();
-      assert.equal(await page.getAttribute('.fl-pause', 'aria-label'), '재생');
-      const stopped = await progress();
-      await page.click('.fl-rate');
-      await page.waitForTimeout(AUDIT_WAIT_MS);
-      assert.equal(await progress(), stopped);
-    });
-  });
-
-  // 근거: #159. 진행 고리는 확대하지 않고, 활성 도형의 굵기는 표면 규칙에 가려지지 않는다.
-  test('player_ring_size_strokes_and_typeface_match_the_figure', async () => {
-    await withPage(browser, await toHtml(await buildFigure(CODE_FIGURE), 'detail'), async (page) => {
-      await page.waitForTimeout(AUDIT_WAIT_MS);
-      const details = await page.evaluate(() => {
-        const style = (selector) => getComputedStyle(document.querySelector(selector));
-        const ring = document.querySelector('.fl-ring');
-        return { width: ring.getBoundingClientRect().width, view: ring.viewBox.baseVal.width,
-          cap: style('.fl-ring-fill').strokeLinecap, stroke: style('.fl-ring-fill').strokeWidth,
-          active: style('.fl-node.on .fl-stroke').strokeWidth,
-          font: style('.fl-tabs button').fontFamily.split(',')[0], label: style('.label').fontFamily.split(',')[0] };
+  // 근거: 사용자 지정 Refero의 시스템 글꼴과 display 36/700/1.2. 목록과 문서에서 같은 역할을 유지한다.
+  test('listing_titles_keep_the_reference_type_hierarchy_on_mobile_and_desktop', async () => {
+    for (const render of [toGallery, toDocument]) {
+      const html = render(FIGURES, '작업의 흐름과 데이터 표현');
+      assert.doesNotMatch(html, /@font-face|data:font\//);
+      await withPage(browser, html, async (page) => {
+        for (const width of [320, 390, 430, 1280]) {
+          await page.setViewportSize({ width, height: 900 });
+          for (const colorScheme of ['light', 'dark']) {
+            await page.emulateMedia({ colorScheme });
+            const result = await page.locator('h1').evaluate((el) => {
+              const style = getComputedStyle(el);
+              return { size: style.fontSize, weight: style.fontWeight, leading: parseFloat(style.lineHeight), family: style.fontFamily, overflow: document.documentElement.scrollWidth > innerWidth };
+            });
+            assert.equal(result.size, '36px');
+            assert.equal(result.weight, '700');
+            assert.ok(Math.abs(result.leading - 43.2) < 0.01);
+            assert.doesNotMatch(result.family, /FigSans|Pretendard/);
+            assert.equal(result.overflow, false, `${render.name}, ${width}, ${colorScheme}`);
+          }
+        }
       });
-      assert.equal(details.width, details.view);
-      assert.equal(details.cap, 'round');
-      assert.equal(details.stroke, '1px');
-      assert.equal(details.active, '1px');
-      assert.equal(details.font, details.label);
+    }
+  });
+
+  // 근거: 설계 playback.md 장면 탭 "방향키와 Home, End로 장면을 고르고 초점도 선택을 따르며, 선택한 탭만 Tab 키 순서에 들어간다". 탭은 장면 선택만 맡아 진행 요소나 번호가 없다
+  test('player_scene_tabs_follow_the_arrow_home_and_end_keys_with_focus_and_one_tab_stop', async () => {
+    await withPage(browser, await toHtml(await buildFigure(CODE_FIGURE), 'reading'), async (page) => {
+      const tabs = page.getByRole('tab');
+      const state = () => page.evaluate(() => ({ focused: document.activeElement.textContent, selected: [...document.querySelectorAll('[role="tab"]')].map((tab) => tab.getAttribute('aria-selected') === 'true'), stops: [...document.querySelectorAll('[role="tab"]')].filter((tab) => tab.tabIndex === 0).length }));
+
+      assert.deepEqual(await tabs.allTextContents(), ['first', 'second', 'third'], '탭 글은 장면 이름뿐이다(번호나 진행 표시가 없다)');
+      assert.deepEqual((await state()).selected, [true, false, false]);
+      await tabs.first().focus();
+      await page.keyboard.press('ArrowRight');
+      assert.deepEqual(await state(), { focused: 'second', selected: [false, true, false], stops: 1 });
+      await page.keyboard.press('End');
+      assert.deepEqual(await state(), { focused: 'third', selected: [false, false, true], stops: 1 });
+      await page.keyboard.press('ArrowLeft');
+      assert.deepEqual(await state(), { focused: 'second', selected: [false, true, false], stops: 1 });
+      await page.keyboard.press('Home');
+      assert.deepEqual(await state(), { focused: 'first', selected: [true, false, false], stops: 1 });
+      await tabs.last().click();
+      assert.deepEqual((await state()).selected, [false, false, true], '눌러서 고른 장면도 선택이 따라온다');
+      assert.equal((await state()).stops, 1);
     });
   });
 
-  // 근거: #161. 문서와 설명 판을 구분하고 내부 도형에만 깊이를 둔다. 글자·선에는 그림자가 없다.
-  test('simple2_surface_depth_and_filled_play_icon_are_rendered_in_both_modes', async () => {
-    const html = await toHtml(await buildFigure(CODE_FIGURE), 'depth');
-    await withPage(browser, html, async (page) => {
-      for (const colorScheme of ['light', 'dark']) {
-        await page.emulateMedia({ colorScheme });
-        const style = await page.evaluate(() => {
-          const read = (s, pseudo) => getComputedStyle(document.querySelector(s), pseudo);
-          return {
-            card: read('.fl-figure').boxShadow,
-            node: read('.fl-node > .fl-stroke').filter,
-            text: read('.label').filter, edge: read('.fl-path').filter,
-            face: read('.fl-play-symbol', '::before').width,
-            fill: read('.fl-pause-icon svg').fill, stroke: read('.fl-pause-icon svg').stroke,
-            selected: read('.fl-tabs button.on').boxShadow,
-            border: read('.fl-rate').borderWidth,
-          };
-        });
-        assert.equal(style.card, 'none');
-        assert.match(style.node, /drop-shadow/);
-        assert.equal(style.text, 'none');
-        assert.equal(style.edge, 'none');
-        assert.equal(style.face, '36px');
-        assert.notEqual(style.fill, 'none');
-        assert.equal(style.stroke, 'none');
-        assert.equal(style.selected, 'none');
-        assert.equal(style.border, '0px');
-        assert.equal(await page.locator('html').evaluate((el) => getComputedStyle(el).colorScheme), 'light dark');
-      }
-    });
-    await withPage(browser, toGallery(FIGURES, '예제'), async (page) => {
-      assert.equal(await page.locator('section').evaluate((el) => getComputedStyle(el).boxShadow), 'none');
-      assert.equal(await page.locator('section').evaluate((el) => getComputedStyle(el).borderRadius), '0px');
-    });
-  });
-
-  // 근거: #164. 아이콘만으로 조작하고 큰 원은 유지하며 도형 호버와 초점이 같은 외곽에 반응한다.
-  test('player_icon_controls_and_shape_feedback_share_the_contract_in_both_modes', async () => {
+  // 근거: 설계 layout.md "윤곽은 1px 하나이며 기본, 호버, 지금 단계에서 굵기와 색이 같다", playback.md "초점 고리". 호버는 윤곽을 바꾸지 않고 키보드 초점만 굵은 파란 외곽을 건다
+  test('player_shape_outline_is_one_pixel_at_rest_and_hover_and_only_keyboard_focus_thickens_it_in_both_modes', async () => {
     await withPage(browser, await toHtml(await buildFigure(CODE_FIGURE), 'controls'), async (page) => {
       for (const colorScheme of ['light', 'dark']) {
         await page.emulateMedia({ colorScheme });
-        assert.equal(await page.locator('.fl-transport').innerText(), '');
-        assert.equal(await page.locator('.fl-halo').count(), 0);
-        assert.equal(await page.locator('.fl-pause .fl-ring').count(), 0);
-        const repeat = page.locator('.fl-repeat');
-        await repeat.click();
-        assert.equal(await repeat.getAttribute('aria-pressed'), 'true');
-        await repeat.click();
-        assert.equal(await repeat.getAttribute('aria-pressed'), 'false');
-        const beforeRate = await page.locator('.fl-rate').getAttribute('data-rate');
-        await page.locator('.fl-rate').click();
-        assert.notEqual(await page.locator('.fl-rate').getAttribute('data-rate'), beforeRate);
         const shape = page.locator('.fl-node').first();
         const face = shape.locator(':scope > .fl-stroke').first();
+        const read = () => face.evaluate((el) => ({ fill: getComputedStyle(el).fill, stroke: getComputedStyle(el).stroke, width: getComputedStyle(el).strokeWidth }));
+        await page.mouse.move(0, 0);
         await page.waitForFunction(() => getComputedStyle(document.querySelector('.fl-node > .fl-stroke')).strokeWidth === '1px');
-        const before = await face.evaluate((el) => ({ fill: getComputedStyle(el).fill, width: getComputedStyle(el).strokeWidth }));
+        // 테마를 바꾼 직후에는 색이 전환 중이라 전환이 끝난 값을 잰다
+        await page.waitForTimeout(AUDIT_WAIT_MS);
+        const rest = await read();
         await shape.hover();
-        await page.waitForFunction((fill) => getComputedStyle(document.querySelector('.fl-node > .fl-stroke')).fill !== fill, before.fill);
-        assert.notEqual(await face.evaluate((el) => getComputedStyle(el).fill), before.fill);
-        assert.equal(await face.evaluate((el) => getComputedStyle(el).strokeWidth), before.width);
+        await page.waitForTimeout(AUDIT_WAIT_MS);
+
+        assert.equal(rest.width, '1px', colorScheme);
+        assert.deepEqual(await read(), rest, `${colorScheme}: 호버는 윤곽 굵기와 색을 바꾸지 않는다`);
         await page.mouse.move(0, 0);
         await page.keyboard.press('Tab');
         await shape.focus();
-        await page.waitForFunction(() => getComputedStyle(document.querySelector('.fl-node > .fl-stroke')).strokeWidth === '3px');
-        assert.equal(await face.evaluate((el) => getComputedStyle(el).strokeWidth), '3px');
-        assert.equal(await shape.evaluate((el) => el.classList.contains('is-hovered')), true);
-        await page.locator('.fl-rate').focus();
-        assert.equal(await shape.evaluate((el) => el.classList.contains('is-hovered')), false);
+        await page.waitForFunction((width) => getComputedStyle(document.querySelector('.fl-node > .fl-stroke')).strokeWidth === width, FOCUS_WIDTH);
+        assert.notEqual((await read()).stroke, rest.stroke, `${colorScheme}: 초점의 윤곽은 평소와 다른 색이다`);
+        await page.locator('.fl-download').focus();
+        await page.waitForFunction(() => getComputedStyle(document.querySelector('.fl-node > .fl-stroke')).strokeWidth === '1px');
       }
     });
   });
@@ -186,73 +138,25 @@ describe('pages', { skip: SKIP }, () => {
     }
   });
 
-  // 근거: 설계 playback.md 값 변화: 재생기는 시간표의 값 구간을 읽어 글자를 고른다. 일시정지에서 멈추고, 탭 이동은 그 단계 처음 값으로 돌아가며, 배속을 바꿔도 줄마다 값이 하나만 보인다
-  test('player_value_rows_follow_the_timeline_after_pause_tab_jump_and_rate_change', async () => {
-    const source = 'flow right\nbox a "A"\nbox b "B"\nvalue n "개수" on=b\non b n+1\na -> b\nstep "하나"\n  a -> b "x"\nstep "흐름" for=4s\n  track a -> b every=600ms time=300ms\n';
-    const result = await buildFigure(source);
-    const rowsOf = (si) => result.timeline.values.filter((row) => row.si === si);
-    // 화면에서 보이는 값 글자: 지금 단계의 값 줄마다 불투명도 1인 글자 요소의 글(다른 단계의 값 줄은 모두 숨어 있어 뺀다)
-    const shown = (page) => page.evaluate(() => [...new Set([...document.querySelectorAll('[data-v]')].map((el) => el.dataset.v))].map((v) => [...document.querySelectorAll(`[data-v="${v}"]`)].filter((el) => el.getAttribute('opacity') === '1').map((el) => el.dataset.t)).filter((texts) => texts.length));
-    await withPage(browser, await toHtml(result, 'values'), async (page) => {
-      await page.click('.fl-tabs button:nth-child(2)');
-      await page.click('.fl-pause');
-      await page.waitForTimeout(1500);
-      const changed = await shown(page);
-      await page.click('.fl-pause');
-      const paused = await shown(page);
-      await page.waitForTimeout(500);
-      const still = await shown(page);
-      await page.click('.fl-rate');
-      const fast = await shown(page);
-      await page.click('.fl-tabs button:nth-child(1)');
-      const first = await shown(page);
-      await page.click('.fl-tabs button:nth-child(2)');
-      const second = await shown(page);
-
-      assert.notDeepEqual(changed, rowsOf(1).map((row) => [row.initial]), '흐름이 값을 바꾸기 전이면 이 시험이 아무것도 보이지 않는다');
-      assert.deepEqual(still, paused);
-      assert.deepEqual(fast.map((texts) => texts.length), [1]);
-      assert.deepEqual(first, rowsOf(0).map((row) => [row.initial]));
-      assert.deepEqual(second, rowsOf(1).map((row) => [row.initial]));
-    });
-  });
-
-  // 근거: 설계 playback.md 요구사항 "조작 막대와 설명이 한 가운데 축", "탭 묶음과 둥근 단추의 높이가 같다", "탭은 segmented 방식", "진행 표시는 일시정지 단추 고리"(사용자 결정)
-  test('player_controls_share_one_axis_and_height_and_the_ring_and_active_tab_show_state', async () => {
-    const html = await toHtml(await buildFigure(readFileSync(new URL('../examples/memory.dap', import.meta.url), 'utf8'), { baseDir: 'examples' }), 'memory');
-    await withPage(browser, html, async (page) => {
-      await page.evaluate((text) => { document.querySelector('.fl-caption').textContent = text;
-      }, CAPTION);
-      const box = (selector) => page.locator(selector).first().boundingBox();
-      const center = (b) => b.x + b.width / 2;
-      const [tabs, caption, bar, pause, ring, round] = await Promise.all(['.fl-tabs', '.fl-caption', '.fl-bar', '.fl-play-symbol', '.fl-ring', '.fl-pause'].map(box));
-      const offsetAt = () => page.evaluate(() => Number.parseFloat(getComputedStyle(document.querySelector('.fl-ring-fill')).strokeDashoffset));
-      await page.click('.fl-pause');
-      const first = await offsetAt();
-      await page.waitForTimeout(RING_WAIT_MS);
+  // 근거: 설계 playback.md 장면 탭 "선택은 중성 면과 굵은 글자로 구분하고 선택 탭에 파란 면과 그림자를 넣지 않는다", 도구 막대 "각 단추에 접근성 이름". 조작은 닿는 영역이 44px 이상이다
+  test('player_tabs_mark_the_selected_scene_by_weight_and_a_neutral_face_and_controls_are_named_and_large_enough', async () => {
+    await withPage(browser, await toHtml(await buildFigure(CODE_FIGURE), 'tabs'), async (page) => {
       const style = await page.evaluate(() => {
-        const read = (el) => { const c = getComputedStyle(el); return { weight: Number(c.fontWeight), background: c.backgroundColor, color: c.color }; };
-        const on = document.querySelector('.fl-tabs button.on');
-        const off = [...document.querySelectorAll('.fl-tabs button:not(.on)')].find(Boolean);
-        return { on: read(on), off: read(off), group: getComputedStyle(document.querySelector('.fl-tabs')).backgroundColor };
+        const read = (el) => {
+          const c = getComputedStyle(el);
+          return { weight: Number(c.fontWeight), background: c.backgroundColor, color: c.color, shadow: c.boxShadow, height: el.getBoundingClientRect().height };
+        };
+        return { on: read(document.querySelector('[role="tab"][aria-selected="true"]')), off: read(document.querySelector('[role="tab"][aria-selected="false"]')) };
       });
+      const targets = await page.locator('.fl-view-tools button').evaluateAll((buttons) => buttons.filter((button) => button.getBoundingClientRect().width > 0).map((button) => ({ name: button.getAttribute('aria-label'), width: button.getBoundingClientRect().width, height: button.getBoundingClientRect().height })));
 
-      assert.ok(Math.abs(center(tabs) - center(caption)) <= AXIS_TOLERANCE, `탭과 설명의 축 차이 ${center(tabs) - center(caption)}`);
-      assert.ok(Math.abs(center(tabs) - center(bar)) <= AXIS_TOLERANCE, '탭 묶음이 조작 막대 가운데에 있다');
-      assert.ok(Math.abs(tabs.height - round.height) <= AXIS_TOLERANCE, `탭 묶음 높이 ${tabs.height}, 둥근 단추 높이 ${round.height}`);
-      assert.ok(Math.abs(center(ring) - center(bar)) <= AXIS_TOLERANCE && ring.height < pause.height && ring.y < pause.y, '진행 선이 재생 아이콘 밖의 별도 줄에 있다');
-      assert.ok(first > (await offsetAt()) || first === 0, '고리 채움이 시간에 따라 늘어난다');
-      assert.ok(style.on.weight >= SEMIBOLD && style.off.weight < SEMIBOLD, '켜진 탭만 굵은 글');
-      assert.notEqual(style.on.background, style.group, '켜진 탭은 묶음 바탕과 다른 알약 면');
+      assert.ok(style.on.weight >= SEMIBOLD && style.off.weight < SEMIBOLD, '선택한 탭만 굵은 글');
+      assert.notEqual(style.on.background, style.off.background, '선택한 탭은 다른 면이다');
       assert.notEqual(style.on.color, style.off.color);
-      const targets = await page.locator('.fl-bar button').evaluateAll((buttons) => buttons.map((button) => {
-        const { width, height } = button.getBoundingClientRect();
-        return { width, height };
-      }));
-      assert.ok(targets.every(({ width, height }) => width >= 44 && height >= 44), '모든 재생 조작은 44px 이상의 영역이다');
-      await page.locator('.fl-pause').focus();
-      assert.equal(await page.locator('.fl-pause').evaluate((button) => getComputedStyle(button).outlineWidth), '3px');
-
+      assert.equal(style.on.shadow, 'none', '선택 탭에 그림자를 넣지 않는다');
+      assert.ok(style.on.height >= TARGET && style.off.height >= TARGET, '탭의 닿는 영역은 44px 이상이다');
+      assert.ok(targets.length >= 2 && targets.every(({ name, width, height }) => name && width >= TARGET && height >= TARGET), `조작 단추: ${JSON.stringify(targets)}`);
+      assert.equal(await page.locator('.fl-pause, .fl-repeat, .fl-rate, .fl-caption, .fl-ring').count(), 0, '재생 단추, 반복, 배속, 설명, 진행 고리는 없다');
     });
   });
 
@@ -268,11 +172,12 @@ describe('pages', { skip: SKIP }, () => {
     await withPage(browser, flow, async (page) => {
       const families = await page.evaluate(() => {
         const mono = (el) => /Mono/.test(getComputedStyle(el).fontFamily);
-        const plain = [...document.querySelectorAll('svg .label, svg .edgelabel, .fl-tabs button, .fl-rate, .fl-caption')];
-        return { plainMono: plain.filter(mono).length, codeMono: [...document.querySelectorAll('svg .code')].every(mono), codeCount: document.querySelectorAll('svg .code').length };
+        const plain = [...document.querySelectorAll('svg .label, svg .edgelabel, [role="tab"]')];
+        return { plainMono: plain.filter(mono).length, plainCount: plain.length, codeMono: [...document.querySelectorAll('svg .code')].every(mono), codeCount: document.querySelectorAll('svg .code').length };
       });
 
       assert.equal(families.plainMono, 0);
+      assert.ok(families.plainCount > 0);
       assert.ok(families.codeCount > 0 && families.codeMono);
     });
   });
@@ -281,6 +186,12 @@ describe('pages', { skip: SKIP }, () => {
   test('gallery_theme_buttons_set_the_root_color_scheme_and_remember_the_choice', async () => {
     const child = await toHtml(await buildFigure(CODE_FIGURE), 'call-registers');
     await withPage(browser, { 'page.html': toGallery(FIGURES, '예제'), 'call-registers.html': child }, async (page) => {
+      await page.evaluate(() => {
+        localStorage.removeItem('daphnis-theme');
+        localStorage.setItem('mutoscope-theme', 'light');
+      });
+      await page.reload();
+      assert.equal(await page.locator('html').getAttribute('data-theme'), null, '폐기한 테마 키는 현재 설정으로 읽지 않는다');
       await page.waitForFunction(() => document.querySelector('iframe').style.height !== '');
       const frame = page.frames().find((f) => f !== page.mainFrame());
       const labels = await page.locator('.theme button').allTextContents();
@@ -295,41 +206,6 @@ describe('pages', { skip: SKIP }, () => {
     });
   });
 
-  // 근거: 격자의 선택 선은 기본 선을 덮고 모서리 좌표가 같다. 이웃도 선택됐으면 공유 변의 같은 선택 선이 맨 위여도 된다.
-  test('grid_lit_cell_border_is_topmost_on_all_four_sides_over_neighbor_cell_lines', async () => {
-    const source = readFileSync(new URL('../examples/pte-fields.dap', import.meta.url), 'utf8');
-    const html = await toHtml(await buildFigure(source, { baseDir: 'examples' }), 'pte-fields');
-    await withPage(browser, html, async (page) => {
-      for (const tab of [0, 1]) {
-        await page.locator('.fl-tabs button').nth(tab).click();
-        await page.waitForTimeout(RING_WAIT_MS);
-        const wrong = await page.evaluate((inset) => {
-          const lit = [...document.querySelectorAll('.fl-part.on')].map((g) => g.dataset.part);
-          const out = [];
-          for (const key of new Set(lit)) {
-            const cellEl = document.querySelector(`.fl-part[data-part="${key}"] .grid-cell`);
-            const ringEl = document.querySelector(`.fl-part[data-part="${key}"] .grid-ring`);
-            for (const attr of ['x', 'y', 'width', 'height', 'rx']) {
-              if (cellEl.getAttribute(attr) !== ringEl.getAttribute(attr)) out.push(`${key}: ${attr} differs`);
-            }
-            const cell = cellEl.getBoundingClientRect();
-            const scale = cell.width / Number(document.querySelector(`.fl-part[data-part="${key}"] .grid-cell`).getAttribute('width'));
-            const pad = inset * scale;
-            const sides = { top: [cell.x + cell.width / 2, cell.y + pad], bottom: [cell.x + cell.width / 2, cell.bottom - pad], left: [cell.x + pad, cell.y + cell.height / 2], right: [cell.right - pad, cell.y + cell.height / 2] };
-            for (const [side, [x, y]] of Object.entries(sides)) {
-              const element = document.elementFromPoint(x, y);
-              const hit = element?.closest('.fl-part')?.dataset.part;
-              const sharedSelection = element?.matches('.grid-ring') && lit.includes(hit);
-              if (hit !== key && !sharedSelection) out.push(`${key} ${side} -> ${hit}`);
-            }
-          }
-          return out;
-        }, GRID_RING_PROBE);
-
-        assert.deepEqual(wrong, [], `tab ${tab}`);
-      }
-    });
-  });
   // 근거: 이슈 #69 "목록을 열기만 해도 파일명의 스크립트가 실행된다"와 "`#`, `?`, 공백, 한글 이름도 해당 출력 파일을 연다". 실제 Chrome에서 목록과 문서 미리보기를 열어 본다
   test('gallery_opened_in_chrome_runs_no_script_from_a_file_name_and_opens_the_file_of_every_odd_name', async () => {
     const names = ['javascript:parent.__daphnisAudit=1;void(0)', 'data:text;<img src=x onerror=parent.__daphnisAudit=1>', 'x" onload="parent.__daphnisAudit=1', 'a#b', 'q?x', 'sp ace', '한글 그림', "q'uote", 'p(a)r'];

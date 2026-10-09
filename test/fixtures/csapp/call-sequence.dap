@@ -1,4 +1,4 @@
-sequence
+daphnis 2
 title "함수 호출과 복귀 순서"
 subtitle "main이 caller를, caller가 swap_add를 부른다. call이 반환 주소를 push하고 ret이 pop한다"
 
@@ -8,7 +8,11 @@ box swap "swap_add" "리프 함수"
 store regs "레지스터" "rsp, rbp, rdi, rsi, rax"
 store stack "런타임 스택" "높은 주소에서 낮은 주소로 자람"
 
-step "caller 호출" "call이 반환 주소를 push하고, 피호출자가 이전 rbp를 저장한 뒤 프레임을 만든다"
+view calls sequence "호출 순서" {
+  main caller swap regs stack
+}
+
+scene "caller 호출" mode=once
   main -> caller "call, 0x401156 push"
   note caller "rsp = 0x7FFFE008"
   caller -> stack "push %rbp (0x7FFFE020)"
@@ -17,7 +21,7 @@ step "caller 호출" "call이 반환 주소를 push하고, 피호출자가 이�
   note regs "rbp = 0x7FFFE000"
   caller -> stack "sub $16,%rsp; arg1 534, arg2 1057"
   note stack "rsp = 0x7FFFDFF0"
-step "swap_add 호출" "포인터 두 개를 인자 레지스터로 넘기고 call로 제어를 옮긴다"
+scene "swap_add 호출" mode=once
   caller -> regs "rdi = &arg1, rsi = &arg2"
   note regs "rdi 0x7FFFDFF0, rsi 0x7FFFDFF8"
   caller -> swap "call, 0x401172 push"
@@ -26,7 +30,7 @@ step "swap_add 호출" "포인터 두 개를 인자 레지스터로 넘기고 ca
   swap -> stack "x = 534, y = 1057"
   swap -> stack "*rdi = y, *rsi = x + y"
   swap -> regs "rax = 1591"
-step "복귀" "leave와 ret이 rsp와 rbp를 호출 전 값으로 되돌린다"
+scene "복귀" mode=once
   swap -> caller "pop %rbp; ret 0x401172" dashed
   note swap "rsp = 0x7FFFDFF0"
   caller -> regs "rax = -849594"

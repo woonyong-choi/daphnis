@@ -1,4 +1,5 @@
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
+/* 글 위계는 셋이다: 제목(simple2.label-size, semibold), 핵심 필드(detail-size), 메타(micro-size). 크기는 measure/sizes.js의 STYLE이 같은 토큰으로 잰다. */
 .fl text {
   font-family: var(--font-figure-sans);
   letter-spacing: var(--tracking-text);
@@ -6,39 +7,45 @@
 
 .fl .label {
   font-size: var(--simple2-label-size);
-  font-weight: var(--weight-medium);
+  font-weight: var(--weight-semibold);
   text-anchor: middle;
   fill: var(--color-fg);
 }
 
 .fl .sub {
-  font-size: var(--size-text-11);
+  font-size: var(--simple2-micro-size);
   text-anchor: middle;
   fill: var(--color-muted);
 }
 
 .fl .frame {
-  font-size: var(--size-text-11);
+  font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-frame);
   fill: var(--color-group-title);
 }
 
 .fl .edgelabel {
-  font-size: var(--size-text-11);
+  font-size: var(--simple2-micro-size);
   text-anchor: middle;
   fill: var(--color-muted);
 }
 
 .fl .row {
-  font-size: var(--size-text-11);
+  font-size: var(--simple2-detail-size);
   fill: var(--color-fg);
 }
 
 .fl .row.mono {
   font-family: var(--font-figure-mono);
   letter-spacing: normal;
-  font-size: var(--size-text-11);
+  font-size: var(--simple2-detail-size);
+}
+
+/* 메모와 구획 제목 같은 덧붙임 글은 메타 크기다. */
+.fl .meta {
+  font-size: var(--simple2-micro-size);
+  fill: var(--color-fg);
 }
 
 /* 백틱으로 감싼 글. 코드 글꼴로 그린다. */
@@ -52,7 +59,7 @@
 }
 
 .fl .tag {
-  font-size: var(--size-text-9);
+  font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-tag);
   text-anchor: middle;
@@ -60,43 +67,38 @@
 }
 
 .fl .mark {
-  font-size: var(--size-text-11);
+  font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
   text-anchor: end;
   fill: var(--color-state-active-text);
 }
 
-/* 값 카드 줄의 값 글자. 줄의 이름(row)은 카드 층이 그리고 값은 오른쪽 끝에 얹힌다. */
+/* 값 카드 줄의 값 글자. 줄의 이름(row)은 카드 층이 그리고 값은 오른쪽 끝에 얹힌다. 핵심 필드라 필드 크기다. */
 .fl .value {
-  font-size: var(--size-text-11);
+  font-size: var(--simple2-detail-size);
   font-weight: var(--weight-semibold);
   text-anchor: end;
   fill: var(--color-fg);
 }
 
 .fl .mini {
-  font-size: var(--size-text-11);
+  font-size: var(--simple2-micro-size);
   text-anchor: middle;
   fill: var(--color-fg);
 }
 
-.fl .mini.on {
-  fill: var(--color-state-on-active);
-}
-
 .fl .chip {
-  font-size: var(--size-text-11);
+  font-size: var(--simple2-micro-size);
   text-anchor: middle;
-  fill: var(--color-state-on-active);
 }
 
 .fl .cell {
-  font-size: var(--size-text-13);
+  font-size: var(--simple2-detail-size);
   fill: var(--color-fg);
 }
 
 .fl .item {
-  font-size: var(--size-text-13);
+  font-size: var(--simple2-detail-size);
   text-anchor: middle;
   fill: var(--color-fg);
 }
@@ -105,12 +107,16 @@
   fill: var(--color-muted);
 }
 
-.fl .cell.type {
+.fl .cell.type,
+.fl .cell.rule {
   font-family: var(--font-figure-mono);
   letter-spacing: normal;
-  font-size: var(--size-text-11);
-  text-anchor: end;
+  font-size: var(--simple2-micro-size);
   fill: var(--color-muted);
+}
+
+.fl .cell.type {
+  text-anchor: end;
 }
 
 .fl .fl-stroke {
@@ -118,16 +124,30 @@
   stroke-width: var(--border-thin);
 }
 
+/* 순서 보기의 메시지, 메모, 구획, 활성 막대는 자기 장면이 보일 때만 보인다. 자리는 늘 같아 판 크기가 변하지 않는다. */
+.fl .fl-off {
+  display: none;
+}
+
+.fl .fl-edge {
+  color: var(--color-line);
+}
+
 .fl .fl-path {
   fill: none;
-  stroke: var(--color-line);
+  stroke: currentColor;
   stroke-width: var(--border-edge);
 }
 
+/* 머리 면은 중립 면이다. 파랑은 선택되거나 켜진 칸(part-bg)만 쓰고 정적 머리는 선택처럼 보이지 않는다. */
+.fl .schema-heading {
+  fill: var(--color-surface);
+}
+
 .fl .cell .key {
-  font-size: var(--size-text-9);
+  font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
-  fill: var(--color-muted);
+  fill: var(--color-state-active-text);
 }
 
 .fl .frame-box {
@@ -179,9 +199,10 @@
   stroke-width: var(--border-thin);
 }
 
-.fl .grid-ring {
-  fill: none;
-  stroke: none;
+.fl .grid-tray {
+  fill: var(--color-surface);
+  stroke: var(--simple2-separator);
+  stroke-width: var(--border-thin);
 }
 
 .fl .grid-cell.gap {
@@ -195,13 +216,13 @@
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
 
-.fl .fl-edge.mark .fl-path {
-  stroke: var(--color-fg);
+.fl .fl-edge.mark {
+  color: var(--color-fg);
 }
 
 /* 도형 윗줄과 그룹 제목 줄의 장식: 글자 배지, 아이콘 */
 .fl .badge {
-  font-size: var(--size-text-11);
+  font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
   text-anchor: middle;
   fill: var(--color-fg);
@@ -223,40 +244,43 @@
 
 /* 선 번호 원. 라벨 알약과 달리 켜져도 색이 바뀌지 않아 정지 그림과 같은 순서로 읽힌다. */
 .fl .number-pill {
-  fill: var(--color-muted);
+  fill: var(--color-figure-number-fill);
 }
 
 .fl .number {
-  font-size: var(--size-text-11);
+  font-size: var(--simple2-micro-size);
   font-weight: var(--weight-semibold);
   text-anchor: middle;
-  fill: var(--color-bg);
+  fill: var(--color-figure-number-ink);
 }
 
-/* 표면에만 그림자를 두어 글자·아이콘·선의 가장자리는 선명하게 유지한다. */
+/* 도형은 그림자 없는 평면이다. 그림자는 떠 있는 메뉴 같은 조작에만 둔다. */
 .fl :where(.fl-node) > .fl-stroke {
   stroke: var(--simple2-surface-edge);
   stroke-width: var(--simple2-node-stroke);
 }
 
-.fl :where(.fl-shape-rect, .fl-shape-box, .fl-shape-tile, .fl-shape-external, .fl-shape-store, .fl-shape-table, .fl-shape-grid, .fl-shape-queue) > .fl-stroke:not([fill="none"]) {
-  stroke-width: var(--simple2-node-stroke);
-  stroke: var(--simple2-surface-edge);
-  filter: var(--simple2-node-shadow);
-}
-
+/* 구획은 border.hair, 보조 경계는 border.thin, 관계는 border.edge, 생명선은 border.lifeline, 도형 경계는 simple2.node-stroke다. 모든 선은 그림과 함께 확대·축소된다. */
 .fl .fl-path,
 .fl .fl-node > .fl-stroke,
 .fl .grid-cell,
+.fl .grid-tray,
 .fl .col-line,
 .fl .pill,
 .fl .badge-pill {
-  vector-effect: non-scaling-stroke;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-/* 조작 아이콘과 달리 의미 아이콘은 실루엣 안에 면과 세부 윤곽을 함께 가진다. */
+/* 화살촉과 몸통은 같은 관계선 묶음의 색을 상속한다. 마커 정의는 각 묶음 안에 있어 모든 브라우저에서 상태색이 같다. */
+.fl .fl-arrowhead {
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 조작 아이콘과 달리 의미 아이콘은 역할색으로 채운 실루엣과 그 안의 밝은 세부를 함께 가진다. */
 .fl .fl-symbol-glyph {
   fill: none;
   stroke: currentColor;
@@ -272,60 +296,69 @@
 
 .fl .symbol-cut {
   fill: none;
+  stroke: var(--symbol-detail);
+}
+
+/* 실루엣 밖으로 나오는 획(자물쇠 고리, 모니터 받침)은 면과 같은 색이다. */
+.fl .symbol-line {
+  fill: none;
   stroke: currentColor;
+  stroke-width: calc(var(--simple2-symbol-stroke) * 2);
 }
 
 .fl .fl-symbol-service {
   color: var(--color-figure-icon-service-ink);
+  --symbol-detail: var(--color-figure-icon-service-surface);
 }
 
 .fl .fl-symbol-service .symbol-face {
-  fill: var(--color-figure-icon-service-surface);
+  fill: currentColor;
 }
 
 .fl .fl-symbol-data {
   color: var(--color-figure-icon-data-ink);
+  --symbol-detail: var(--color-figure-icon-data-surface);
 }
 
 .fl .fl-symbol-data .symbol-face {
-  fill: var(--color-figure-icon-data-surface);
+  fill: currentColor;
 }
 
 .fl .fl-symbol-access {
   color: var(--color-figure-icon-access-ink);
+  --symbol-detail: var(--color-figure-icon-access-surface);
 }
 
 .fl .fl-symbol-access .symbol-face {
-  fill: var(--color-figure-icon-access-surface);
+  fill: currentColor;
 }
 
 .fl .fl-symbol-person {
   color: var(--color-figure-icon-person-ink);
+  --symbol-detail: var(--color-figure-icon-person-surface);
 }
 
 .fl .fl-symbol-person .symbol-face {
-  fill: var(--color-figure-icon-person-surface);
+  fill: currentColor;
 }
 
 .fl .fl-symbol-brand {
   color: var(--color-figure-icon-brand-ink);
+  --symbol-detail: var(--color-figure-icon-brand-surface);
 }
 
 .fl .fl-symbol-brand .symbol-face {
-  fill: var(--color-figure-icon-brand-surface);
+  fill: currentColor;
 }
 
-.fl .fl-node.on > .fl-stroke {
-  stroke: var(--color-state-active);
-  stroke-width: var(--simple2-node-stroke);
+/* `light`가 명시한 도형만 윤곽을 그대로 두고 옅은 면을 바꾼다(명시한 상태의 고유 역할). 점이 닿은 도형은 면이 아니라 테두리 후광(.fl-pulse)만 쓴다. 색을 직접 고른 도형(ps-)의 면과 윤곽은 덮지 않는다. */
+.fl .fl-node.on > .fl-stroke:not([fill="none"], [class*="ps-"]) {
+  fill: color-mix(in srgb, var(--simple2-hover-fill) 70%, var(--color-node));
 }
 
-/* 호버와 키보드 초점은 같은 도형 면을 가리키며 윤곽을 두 겹으로 만들지 않는다. */
-.fl .fl-node.is-hovered > .fl-stroke:not([fill="none"]),
-.fl .fl-node:hover > .fl-stroke:not([fill="none"]) {
-  fill: var(--simple2-hover-fill);
-}
-
+/* 도형에 마우스를 올려도 면이나 선이 켜지지 않는다(장식용 호버 활성 없음). 키보드 초점은 같은 외부 형상 위의 초점 표시이고 윤곽을 두 겹으로 만들지 않는다. */
+/* 브라우저 기본 초점 링은 g 요소의 사각 상자를 두르므로 둥근 도형과 어긋난다. 어떤 방식으로 초점이 가도 기본 링을 끄고, 키보드 초점(:focus-visible)은 도형 윤곽 자체로 표시한다. */
+.fl .fl-node:focus,
 .fl .fl-node:focus-visible {
   outline: none;
 }
@@ -333,4 +366,56 @@
 .fl .fl-node:focus-visible > .fl-stroke {
   stroke: var(--color-ui-focus);
   stroke-width: var(--simple2-focus-width);
+}
+
+.fl .symbol-detail {
+  fill: var(--symbol-detail);
+  stroke: none;
+}
+
+/* 값이 바뀔 때 켜지는 배경 면. 도형과 같은 윤곽을 쓰고 테두리를 더하지 않는다. */
+.fl .fl-flash-face {
+  fill-opacity: var(--opacity-range);
+}
+
+.fl .fl-flash {
+  fill: var(--simple2-row-selection);
+  stroke: none;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fl .fl-flash {
+    display: none;
+  }
+}
+
+/* 점이 도형에 닿을 때의 테두리 후광: 도형 윤곽과 같은 모양의 겹침 선이다. 면을 칠하지 않고 선 굵기가 윤곽과 같아 도형이 커지지 않는다. 불투명도(80/80/240ms)는 SMIL이나 재생기가 정한다. */
+.fl .fl-pulse {
+  fill: none;
+  stroke: var(--color-state-active);
+  stroke-width: var(--simple2-node-stroke);
+  pointer-events: none;
+}
+
+/* 제어 구획의 경계는 관계선보다 약하며 제목 밑면은 생명선을 가린다. */
+.fl .fl-fragment-border {
+  fill: none;
+  stroke: var(--simple2-separator);
+  stroke-width: var(--border-thin);
+}
+
+.fl .fl-fragment-divider {
+  fill: none;
+  stroke: var(--simple2-separator);
+  stroke-width: var(--border-hair);
+  stroke-dasharray: var(--dash-card) var(--dash-card);
+}
+
+.fl .fl-fragment-heading {
+  fill: var(--color-card);
+}
+
+.fl .fl-fragment-label {
+  font-weight: var(--weight-semibold);
 }

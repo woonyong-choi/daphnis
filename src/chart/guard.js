@@ -23,8 +23,7 @@ function axisLine(figure, { min, max }) {
 /** 장면과 좌표가 모두 유한한지. 입력 진단이 아니라 마지막 방어선이라 걸리면 이 도구의 버그다. */
 export function assertFinite(chart) {
   const isDrawn = chart.dotAts.every(Number.isFinite) && chart.fits.every(({ width, room }) => Number.isFinite(width) && Number.isFinite(room));
-  if (!isDrawn || NUMERIC_ATTRIBUTE.test(chart.body) || NUMERIC_TEXT.test(chart.body) || ![chart.width, chart.height].every(Number.isFinite)) {
-    throw new Error('a chart coordinate is not a finite number (NaN or Infinity)');
+  if (!isDrawn || NUMERIC_ATTRIBUTE.test(chart.body) || NUMERIC_TEXT.test(chart.body) || ![chart.width, chart.height].every(Number.isFinite)) {    throw new Error('a chart coordinate is not a finite number (NaN or Infinity)');
   }
 }
 

@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 import { commonTokenPaths } from '../scripts/lib/design-tokens.mjs';
 import { parseFigure } from '../src/source/parse.js';
+import { tokens } from '../src/tokens.js';
 
 const DOCS = new URL('../docs/design/', import.meta.url);
 
@@ -17,9 +18,34 @@ const DOCS = new URL('../docs/design/', import.meta.url);
 export function docExamples() {
   return readdirSync(DOCS)
     .filter((f) => f.endsWith('.md'))
-    .flatMap((file) => [...readFileSync(new URL(file, DOCS), 'utf8').matchAll(/```text\n([\s\S]*?)```/g)].map((m) => ({ file, source: m[1] })))
-    .filter(({ source }) => /^(flow|sequence|state|data|chart)\b/.test(source));
+    .flatMap((file) => [...readFileSync(new URL(file, DOCS), 'utf8').matchAll(/```(?:text|dap)\n([\s\S]*?)```/g)].map((m) => ({ file, source: m[1] })))
+    .filter(({ source }) => /^daphnis 2\b/.test(source));
 }
+
+// cost: time O(l), heap O(l), stack O(1)
+// vars: l = 블록 안 줄 수
+// basis: estimate
+/**
+ * 차트 카드 하나를 `chart id "제목" 종류 { 줄... }` 원본 조각으로 쓴다. lines는 블록 안 줄 목록(`x "..."`, `series ...`, `row ...`)이다.
+ * 차트 카드 하나만 있고 보기 줄이 없으면 암묵 plot 보기로 그려진다.
+ */
+export const chartSource = (type, lines, { id = 'c', title = '차트', subtitle = '' } = {}) => `chart ${id} "${title}" ${type}${subtitle ? ` "${subtitle}"` : ''} {\n${lines.map((line) => `  ${line}`).join('\n')}\n}\n`;
+
+// cost: time O(p + i), heap O(1), stack O(1)
+// vars: p = plot 수, i = 도형 수
+// basis: estimate
+/** 만들기 결과에서 차트 카드(id를 생략하면 첫 차트)의 그려진 모형. plot 보기의 차트와 그래프 안 차트 카드를 모두 찾는다. */
+export function chartOf(result, id) {
+  const plot = result.scene.plots.find((p) => id === undefined || p.id === id);
+  if (plot) return plot.chart;
+  return result.scene.items.find((item) => item.shape === 'chart' && (id === undefined || item.id === id))?.chart;
+}
+
+// cost: time O(n), heap O(1), stack O(1)
+// vars: n = 도형 수
+// basis: estimate
+/** 만들기 결과에서 차트 카드(id를 생략하면 첫 차트)의 읽은 모형(계열, 행, 구간). 그려진 모형은 `chartOf`다. */
+export const chartModelOf = (result, id) => result.figure.nodes.find((node) => node.shape === 'chart' && (id === undefined || node.id === id))?.plot.chart;
 
 /** 진단 하나를 `줄: 메시지`로. 그림 검사 진단은 `[check-N]` 머리말을 붙여 어느 검사인지 보인다. */
 export const formatProblem = (p) => `${p.line}: ${p.code.startsWith('check-') ? `[${p.code}] ` : ''}${p.message}`;
@@ -70,6 +96,24 @@ export function themeColor(theme, name) {
   return value;
 }
 
+// 토큰 참조 `var(--color-data-category-outline-2)` → 경로 `data.category-outline.2`
+const ROLE_NAMES = (function collect(node, path, out) {
+  for (const [key, value] of Object.entries(node)) {
+    if (typeof value === 'string' && value.startsWith('var(--color-')) out.set(value, [...path, key].join('.'));
+    else if (value && typeof value === 'object') collect(value, [...path, key], out);
+  }
+  return out;
+})(tokens.color, [], new Map());
+
+// cost: time O(1), heap O(1), stack O(1)
+// basis: estimate
+/** 색 역할 참조(`var(--color-data-category-2)`)를 `themeColor`가 받는 토큰 경로(`data.category.2`)로. 색 참조가 아니면 던진다. */
+export function colorRoleOf(reference) {
+  const role = ROLE_NAMES.get(reference);
+  if (role === undefined) throw new RangeError(`not a color role reference: ${reference}`);
+  return role;
+}
+
 const toLinear = (v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
 export const linearChannelsOf = (hex) => [1, 3, 5].map((i) => toLinear(Number.parseInt(hex.slice(i, i + 2), 16) / 255));
 
@@ -89,16 +133,6 @@ export function linearToOklab([r, g, b]) {
 export function oklchOf(hex) {
   const [L, a, b] = linearToOklab(linearChannelsOf(hex));
   return [L, Math.hypot(a, b), ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360];
-}
-
-const PLAYER_DIR = new URL('../src/player/', import.meta.url);
-
-// cost: time O(f·n), heap O(f·n), stack O(1), io f
-// vars: f = 브라우저 스크립트 수, n = 파일 글자 수
-// basis: estimate
-/** 브라우저 재생기 스크립트(src/player/ 모든 파일)를 이어 붙인 글. */
-export function playerSource() {
-  return readdirSync(PLAYER_DIR).filter((f) => f.endsWith('.js')).sort().map((f) => readFileSync(new URL(f, PLAYER_DIR), 'utf8')).join('\n');
 }
 
 const CLI = fileURLToPath(new URL('../src/cli.js', import.meta.url));

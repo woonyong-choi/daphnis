@@ -1,4 +1,4 @@
-flow right
+daphnis 2
 title "값 유지와 읽기"
 box web "웹"
 box api "API"
@@ -12,14 +12,14 @@ api -> db
 on api sent+1
 on db saved+1
 
-step "첫 요청" "모든 값이 from에서 시작한다"
+scene "첫 요청" mode=once
   web -> api "요청" set="mirror:=sent"
   api -> db "저장" set="jobs+1"
 
-step "이어서" "keep한 값은 앞 단계가 끝난 값에서 시작한다" keep="sent, jobs" set="saved=10"
+scene "이어서" mode=once keep="sent, jobs" set="saved=10"
   web -> api "요청" set="mirror:=saved"
   api -> db "저장" set="jobs+1"
 
-step "맞바꿈" "읽기는 갱신을 시작할 때 값을 읽는다" keep="saved, mirror" set="sent=20"
+scene "맞바꿈" mode=once keep="saved, mirror" set="sent=20"
   web -> api "요청"
   api -> db "바꿈" set="sent:=saved, saved:=sent"

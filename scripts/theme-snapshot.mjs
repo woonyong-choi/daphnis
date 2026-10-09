@@ -10,6 +10,8 @@ const hash = (value) => createHash('sha256').update(value).digest('hex');
 // basis: estimate
 export function verifyTheme() {
   const meta = JSON.parse(readFileSync(new URL('theme.json', ROOT), 'utf8'));
+  const config = JSON.parse(readFileSync(new URL('../../theme.config.json', ROOT), 'utf8'));
+  if (meta.id !== config.theme) throw new Error(`theme mismatch: configured ${config.theme}, imported ${meta.id}`);
   if (hash(JSON.stringify(meta.files, null, 2) + '\n') !== meta.contentHash) throw new Error('invalid theme manifest hash');
   for (const [name, expected] of Object.entries(meta.files)) {
     if (name.startsWith('/') || name.split('/').includes('..')) throw new Error(`invalid theme path: ${name}`);

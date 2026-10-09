@@ -1,6 +1,7 @@
 // 1번: 글이 자기 칸 안쪽에 들어간다. 크기는 잰 글로 정하므로 구조 그림의 실패는 이 도구의 버그다.
 import { FIT_SLACK, measure } from '../measure/fonts.js';
 import { CARD, GRID, STYLE, groupTitleWidth } from '../measure/sizes.js';
+import { columnKey, columnRules } from '../table.js';
 import { values } from '../tokens.js';
 import { fits } from './geometry.js';
 
@@ -32,10 +33,16 @@ function checkChipFits(timeline, fail) {
 // vars: k = 카드 내용 수, r = 카드 줄 수, n = 줄 글자 수
 // basis: estimate
 function checkItemFits(it, fail) {
+  if (it.headerOnly) {
+    if (!fits(it.head.w, it.w - INNER_X * 2)) fail(it.line, `label "${it.label}"`, `${it.shape} "${it.id}"`);
+    if (it.stereotype && !fits(measure(it.stereotype, STYLE.meta.size, STYLE.meta.face), it.w - INNER_X * 2)) fail(it.line, `label "${it.stereotype}"`, `${it.shape} "${it.id}"`);
+    return;
+  }
   const room = labelRoom(it);
   for (const l of it.labelLines ?? []) if (!fits(measure(l, STYLE.label.size, STYLE.label.face), room)) fail(it.line, `label "${l}"`, `node "${it.id}"`);
   for (const l of it.subLines ?? []) if (!fits(measure(l, STYLE.sub.size, STYLE.sub.face), room)) fail(it.line, `subtitle "${l}"`, `node "${it.id}"`);
-  if (it.shape === 'table') for (const c of it.columns) if (!fits(columnWidth(c), it.w - INNER_X * 2)) fail(it.line, `column "${c.name}"`, `table "${it.id}"`);
+  if (it.shape === 'table' || it.shape === 'api') for (const c of it.columns) if (!fits(columnWidth(c), it.w - INNER_X * 2)) fail(it.line, `${it.shape === 'api' ? 'field' : 'column'} "${c.name}"`, `${it.shape} "${it.id}"`);
+  for (const row of it.classifierRows ?? []) if (!fits(measure(row.text, row.style.size, row.style.face), it.w - INNER_X * 2)) fail(it.line, `member "${row.text}"`, `class "${it.id}"`);
   if (it.shape === 'grid') checkGridFits(it, fail);
   if (it.card) checkCardFits(it, fail);
 }
@@ -49,17 +56,20 @@ function checkGridFits(it, fail) {
   for (const { cell, text } of lines) if (!fits(measure(text, STYLE.item.size, STYLE.item.face), cell.w - GRID.cellPadX * 2)) fail(it.line, `cell "${cell.id}" text "${text}"`, `grid "${it.id}"`);
 }
 
-// 이름과 부제가 쓸 수 있는 폭. 사람은 몸통 아래 바깥 여백까지, 마름모는 내접 사각형 비율로 넓힌 만큼, 원은 지름에서 안쪽 간격 하나를 뺀 폭이다.
+// 이름과 부제가 쓸 수 있는 폭. 마름모는 내접 사각형 비율로 넓힌 만큼, 원은 지름에서 안쪽 간격 하나를 뺀 폭이다.
 function labelRoom(it) {
-  if (it.shape === 'person') return it.w + (it.marginSide ?? 0) * 2;
   if (it.shape === 'decision') return it.w / 2 - INNER_X;
   if (it.shape === 'circle') return it.w - INNER_X;
   return it.w - (it.tile ? values.size.node['tile-pad'] : INNER_X) * 2;
 }
 
+// cost: time O(n), heap O(n), stack O(1)
+// vars: n = 제약 글자 수
+// basis: estimate
 function columnWidth(c) {
-  const tagW = c.pk || c.fk || c.unique ? measure('UNQ', STYLE.tag.size, STYLE.tag.face) + SPACE['3'] : 0;
-  return measure(c.name, STYLE.cell.size, STYLE.cell.face) + tagW + measure(c.type, STYLE.type.size, STYLE.type.face) + SPACE['8'];
+  const tagW = columnKey(c) ? measure(columnKey(c), STYLE.key.size, STYLE.key.face) + SPACE['3'] : 0;
+  const primary = measure(c.name, STYLE.cell.size, STYLE.cell.face) + tagW + measure(c.type, STYLE.type.size, STYLE.type.face) + SPACE['8'];
+  return Math.max(primary, ...columnRules(c).map((text) => measure(text, STYLE.type.size, STYLE.type.face)));
 }
 
 // cost: time O(k·r·n), heap O(1), stack O(1)

@@ -1,0 +1,19 @@
+daphnis 2
+title "회로 차단"
+subtitle "실패가 세 번 쌓이면 상태가 open이 되어 요청을 건너뛰고, 복구를 확인하면 closed로 돌아온다"
+box client "클라이언트"
+box svc "서비스"
+store gate "차단기"
+value fails "실패" on=svc
+value mode "상태" on=gate from=closed
+client -> svc
+client -> gate
+svc -> gate
+
+scene "실패가 쌓이면 차단한다" mode=once for=12s
+  track client -> svc at=0s every=1500ms time=500ms when="mode='closed'" set="fails+1"
+  track svc -> gate at=0s every=500ms time=100ms when="fails>=3" set="mode=open"
+
+scene "복구를 확인한다" mode=once for=6s keep="fails, mode"
+  track svc -> gate at=0s time=500ms set="mode=closed, fails=0"
+  track client -> svc at=1500ms every=1500ms time=500ms when="mode='closed'"

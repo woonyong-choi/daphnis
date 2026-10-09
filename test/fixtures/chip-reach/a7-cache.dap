@@ -1,4 +1,4 @@
-flow right
+daphnis 2
 title "낡은 캐시 읽기"
 subtitle "DB는 바뀌었는데 캐시가 옛 값을 돌려주다가 무효화하면 맞춰진다"
 
@@ -12,10 +12,8 @@ app -> cache
 cache -> db
 app -> db
 
-step "쓰고 읽기" "캐시를 건너뛴 쓰기 뒤에도 캐시는 5를 돌려준다"
+scene "쓰고 읽기" mode=once
   app -> db "7 쓰기" set="dbv=7"
   cache -> app "읽기" set="seen=5"
-  say "DB는 7인데 앱은 옛 값 5를 읽었다"
   app -> cache "무효화" set="cv=7"
   cache -> app "다시 읽기" set="seen=7"
-  say "무효화한 뒤에야 7이 보인다"

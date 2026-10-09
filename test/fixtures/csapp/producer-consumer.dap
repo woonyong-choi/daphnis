@@ -1,4 +1,4 @@
-flow right
+daphnis 2
 title "생산자와 소비자: 유한 버퍼"
 subtitle "버퍼 4칸. slots는 빈 칸 수, items는 찬 칸 수, mutex는 버퍼 접근 잠금"
 aspect 1.6
@@ -19,7 +19,7 @@ consumer -> mutex "P, V"
 consumer -> buf "remove"
 consumer -> slots "V"
 
-step "삽입 두 번" "생산자가 slots를 줄이고 칸에 넣은 뒤 items를 올린다"
+scene "삽입 두 번" mode=once
   producer -> slots "P(slots) 4에서 3"
   show slots "4 → 3" tag="P"
   producer -> mutex "P(mutex) 잠금"
@@ -34,12 +34,12 @@ step "삽입 두 번" "생산자가 slots를 줄이고 칸에 넣은 뒤 items�
   show buf "[ 7, 9, _, _ ] rear = 2" tag="insert"
   producer -> items "V(items) 1에서 2"
   show items "1 → 2" tag="V"
-step "가득 차서 대기" "slots가 0이면 생산자의 P가 소비자의 V를 기다린다"
+scene "가득 차서 대기" mode=once
   producer -> buf "insert 3, 5"
   show buf "[ 7, 9, 3, 5 ] rear = 0" tag="가득 참" tone=gray
   show slots "0, 생산자 P 대기" tag="대기" tone=gray
   show items "4" tag="V"
-step "소비" "소비자가 칸을 비우면 V(slots)가 대기 중인 생산자를 깨운다"
+scene "소비" mode=once
   consumer -> items "P(items) 4에서 3"
   show items "4 → 3" tag="P"
   consumer -> mutex "P(mutex) 잠금"

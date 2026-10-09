@@ -34,7 +34,7 @@ test('readme_english_and_korean_show_the_same_md_image_line', () => {
 // 근거: 이슈 #63 "--out-dir 설명". --out-dir은 SVG를 옮기지 않고 새 폴더에 쓴다. 문서 옆의 옛 SVG는 남는다
 test('md_out_dir_writes_into_the_folder_and_leaves_the_svg_next_to_the_document', () => {
   withFolder((folder) => {
-    writeFileSync(join(folder, 'guide.md'), '```dap name=request\nflow right\nbox a "A"\nbox b "B"\na -> b\n```\n');
+    writeFileSync(join(folder, 'guide.md'), '```dap name=request\ndaphnis 2\nbox a "A"\nbox b "B"\na -> b\n```\n');
     assert.equal(runCli(['md', 'guide.md'], folder).status, 0);
     assert.equal(runCli(['md', 'guide.md', '--out-dir', 'images'], folder).status, 0);
 

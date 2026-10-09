@@ -1,4 +1,4 @@
-flow down
+daphnis 2
 title "숨은 선 라벨 자리"
 
 box a "A"
@@ -10,8 +10,10 @@ a -> b "VA"
 b -> c "VPN"
 c -> d "L1 실패" quiet
 
-step "앞" "보이는 선만 지난다"
+view main graph down
+
+scene "앞" mode=once
   a -> b
   b -> c
-step "뒤" "숨은 선이 이때 나타난다"
+scene "뒤" mode=once
   c -> d

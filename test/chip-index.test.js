@@ -12,9 +12,9 @@ import { FigureError } from '../src/source/problems.js';
 import { runCli as run, withFolder } from './helpers.js';
 
 // 칸 하나만 선언하고 rows와 cols만 키운 희소 격자에 이동 글을 붙인 그림(이슈 #134의 재현)
-const sparseMove = (n) => `flow right\ngrid g "G" rows=${n} cols=${n} {\n item one "X"\n}\nbox b "B"\ng -> b\nstep "S"\n g -> b "move" time=1ms\n`;
+const sparseMove = (n) => `daphnis 2\ngrid g "G" rows=${n} cols=${n} {\n item one "X"\n}\nbox b "B"\ng -> b\nscene "S"\n g -> b "move" time=1ms\n`;
 // 이동 글, 큰 합친 칸, 빈 영역, 격자 여러 개를 함께 쓴 그림. 둘째 격자의 합친 칸 하나가 1200×1200 칸이다.
-const MIXED = `flow right
+const MIXED = `daphnis 2
 grid g "G" rows=12 cols=12 {
  item a "A"
  item b "B" row=2 col=2 rows=4 cols=6
@@ -29,7 +29,7 @@ box c "C"
 g.a -> k
 h.x -> c
 k -> c
-step "S"
+scene "S"
  g.a -> k "move" time=1s
  h.x -> c "move2" time=2s
  k -> c "third" time=1s

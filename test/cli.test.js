@@ -1,4 +1,4 @@
-// CLI: 명령 결과 파일, 종료 코드, 오류 출력, --json 필드, gallery(docs/design/figure-check.md, playback.md). 호환 필드와 종료 코드는 compat.test.js.
+// CLI: 명령 결과 파일, 종료 코드, 오류 출력, --json 필드, gallery(docs/design/figure-check.md, playback.md). 옛 입력을 읽지 않는 것(.muto, migrate, --no-deprecated)은 v2-version.test.js다.
 import assert from 'node:assert/strict';
 import { existsSync, mkdirSync, readdirSync, readFileSync, symlinkSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -8,11 +8,11 @@ import { spawnSync } from 'node:child_process';
 import { runCli as run, withFolder } from './helpers.js';
 
 const CLI = fileURLToPath(new URL('../src/cli.js', import.meta.url));
-const FLOW = 'flow right\nbox a "A"\nbox b "B"\na -> b\nstep "s"\n  a -> b "x"\n';
-const BAR = 'chart bar\nseries s "S"\nrow "r" s=1\n';
+const FLOW = 'daphnis 2\nbox a "A"\nbox b "B"\na -> b\nscene "s" mode=once\n  a -> b "x"\n';
+const BAR = 'daphnis 2\nchart c "차트" bar {\n  series s "S"\n  row "r" s=1\n}\n';
 // 한 번도 지나지 않는 quiet 선(경고 11번)이 있는 원본
-const QUIET = 'flow right\nbox a "A"\nbox b "B"\na -> b "보냄" quiet\nb -> a\nstep "s"\n  b -> a\n';
-const BAD = 'flow right\nbox a "A"\na -> zz\n';
+const QUIET = 'daphnis 2\nbox a "A"\nbox b "B"\na -> b "보냄" quiet\nb -> a\nscene "s" mode=once\n  b -> a\n';
+const BAD = 'daphnis 2\nbox a "A"\na -> zz\n';
 
 // 근거: 계약 package.json bin "daphnis": 명령은 심볼릭 링크로 실행되어도 사용법을 낸다
 test('main_run_through_symlink_prints_usage', () => {
@@ -42,12 +42,12 @@ test('main_render_writes_svg_and_html', () => {
 // 근거: 설계 figure-check.md 요구사항 "오류가 있으면 그림 파일을 쓰지 않는다", figure-syntax.md "오류를 모두 모아 알리고 파일을 쓰지 않는다"
 test('main_render_with_an_error_writes_no_file_and_reports_the_line', () => {
   withFolder((folder) => {
-    writeFileSync(join(folder, 'bad.dap'), 'flow right\nbox a "A"\na -> zz\n');
+    writeFileSync(join(folder, 'bad.dap'), BAD);
 
     const result = run(['render', 'bad.dap'], folder);
 
     assert.equal(result.status, 1);
-    assert.match(result.stderr, /^bad\.dap:3: unknown node "zz"/m);
+    assert.match(result.stderr, /^bad\.dap:3: unknown card "zz"/m);
     assert.ok(!existsSync(join(folder, 'bad.svg')));
   });
 });
@@ -56,7 +56,7 @@ test('main_render_with_an_error_writes_no_file_and_reports_the_line', () => {
 test('main_gallery_fails_without_writing_any_file_when_the_input_must_not_pass', () => {
   const cases = [
     { name: 'strict_warning', files: { 'q.dap': QUIET }, args: ['--strict'], status: 1, stderr: /q\.dap:4: .*quiet edge/ },
-    { name: 'error_next_to_a_good_file', files: { 'good.dap': FLOW, 'bad.dap': BAD }, args: [], status: 1, stderr: /bad\.dap:3: unknown node "zz"/ },
+    { name: 'error_next_to_a_good_file', files: { 'good.dap': FLOW, 'bad.dap': BAD }, args: [], status: 1, stderr: /bad\.dap:3: unknown card "zz"/ },
     { name: 'no_dap_files', files: { 'note.txt': 'x' }, args: [], status: 1, stderr: /no \.dap files/ },
     { name: 'static_is_not_a_gallery_option', files: { 'good.dap': FLOW }, args: ['--static'], status: 2, stderr: /--static is not for gallery/ },
     { name: 'json_is_not_a_gallery_option', files: { 'good.dap': FLOW }, args: ['--json'], status: 2, stderr: /--json is not for gallery/ },
@@ -74,13 +74,13 @@ test('main_gallery_fails_without_writing_any_file_when_the_input_must_not_pass',
   }
 });
 
-// 근거: 감사 C1 반대 사례 "경고만 있는 원본은 --strict 없이는 통과하고, --strict 뒤에 다른 옵션이 붙어도 gallery가 받는 옵션은 그대로 받는다"
+// 근거: 감사 C1 반대 사례 "경고만 있는 원본은 --strict 없이는 통과하고, gallery가 받는 옵션(--html)은 그대로 받는다"
 test('main_gallery_still_writes_the_files_for_a_warning_without_strict_and_accepts_its_options', () => {
   withFolder((folder) => {
     writeFileSync(join(folder, 'q.dap'), QUIET);
 
     const plain = run(['gallery', '.', '--out', 'plain'], folder);
-    const flagged = run(['gallery', '.', '--out', 'flagged', '--html', '--no-deprecated'], folder);
+    const flagged = run(['gallery', '.', '--out', 'flagged', '--html'], folder);
 
     for (const [result, out] of [[plain, 'plain'], [flagged, 'flagged']]) {
       assert.equal(result.status, 0, result.stderr);
@@ -89,35 +89,38 @@ test('main_gallery_still_writes_the_files_for_a_warning_without_strict_and_accep
   });
 });
 
-// 근거: 설계 figure-check.md 요구사항 "--json 출력이 한 줄에 메시지 하나다"와 진단 필드 { file, line, ..., severity, code, column }
+// 근거: 설계 figure-check.md 요구사항 "--json 출력이 한 줄에 메시지 하나다"와 진단 필드 { file, line, message, severity, code, column }. 이 밖의 필드(옛 lines, check, level)는 없다.
+// 이름 오류(4번 줄의 없는 카드 `zz`)는 그 선이 그려지지 않는다는 파생 오류를 더하지 않으므로(figure-syntax.md) 원인 둘만 알린다.
 test('main_json_prints_one_message_per_line_with_the_documented_fields', () => {
   withFolder((folder) => {
-    writeFileSync(join(folder, 'bad.dap'), 'flow right\nbox Step "S"\nbox a "A"\na -> zz\n');
+    writeFileSync(join(folder, 'bad.dap'), 'daphnis 2\nbox Step "S"\nbox a "A"\na -> zz\n');
 
     const lines = run(['check', 'bad.dap', '--json'], folder).stdout.trim().split('\n');
 
     assert.equal(lines.length, 2);
-    for (const line of lines) assert.deepEqual(Object.keys(JSON.parse(line)), ['file', 'line', 'lines', 'check', 'level', 'message', 'severity', 'code', 'column']);
+    for (const line of lines) assert.deepEqual(Object.keys(JSON.parse(line)), ['file', 'line', 'message', 'severity', 'code', 'column']);
     assert.deepEqual(lines.map((line) => JSON.parse(line).code), ['syntax', 'syntax']);
+    assert.deepEqual(lines.map((line) => JSON.parse(line).line), [2, 4]);
+    assert.ok(lines.every((line) => !/is not drawn/.test(JSON.parse(line).message)), '파생 오류가 없다');
   });
 });
 
 // 근거: 버그 68ec356 "덧붙는 오류를 줄이면서도 문법 오류와 글꼴 없는 글자 오류를 함께 알린다", 설계 figure-syntax.md "오류를 모두 모아 알린다"
 test('main_check_reports_syntax_and_glyph_errors_together', () => {
   withFolder((folder) => {
-    writeFileSync(join(folder, 'bad.dap'), 'flow right\nbox a "A 😀"\nbox b "B"\na -> cdex\n');
+    writeFileSync(join(folder, 'bad.dap'), 'daphnis 2\nbox a "A 😀"\nbox b "B"\na -> cdex\n');
 
     const { stderr } = run(['check', 'bad.dap'], folder);
 
     assert.match(stderr, /bad\.dap:2: the font has no glyph/);
-    assert.match(stderr, /bad\.dap:4: unknown node "cdex"/);
+    assert.match(stderr, /bad\.dap:4: unknown card "cdex"/);
   });
 });
 
 // 근거: 버그 68ec356 "읽을 수 없는 파일은 한 줄 메시지로 알리고 나머지 파일은 계속 검사한다"
 test('main_missing_file_reports_one_line_and_checks_the_rest', () => {
   withFolder((folder) => {
-    writeFileSync(join(folder, 'ok.dap'), 'flow right\naspect 1.6\nbox a "A"\nbox b "B"\na -> b\n');
+    writeFileSync(join(folder, 'ok.dap'), 'daphnis 2\naspect 1.6\nbox a "A"\nbox b "B"\na -> b\n');
 
     const { stderr, status } = run(['check', 'nope.dap', 'ok.dap'], folder);
 
@@ -142,11 +145,11 @@ test('main_render_svg_keeps_the_rounded_plate_and_the_html_player_has_none', () 
   });
 });
 
-// 근거: 설계 playback.md 요구사항 "gallery가 문서 미리보기를 쓴다"와 layout.md 카드 머리 "파일 이름과 꼬리표, 그림이 제목을 그리지 않을 때만 제목"
+// 근거: 설계 playback.md 요구사항 "gallery가 문서 미리보기를 쓴다"와 layout.md 카드 머리 "파일 이름과 꼬리표, 그림이 제목을 그리지 않을 때만 제목". 꼬리표는 문서가 가진 보기의 종류(graph, plot)다
 test('main_gallery_writes_the_index_and_the_document_preview_with_each_figure_and_a_card_head', () => {
   withFolder((folder) => {
-    writeFileSync(join(folder, 'a.dap'), 'flow right\ntitle "흐름 제목"\nbox a "A"\n');
-    writeFileSync(join(folder, 'b.dap'), 'chart bar\ntitle "차트 제목"\nseries s "S"\nrow "r" s=1\n');
+    writeFileSync(join(folder, 'a.dap'), '  # 설명\ndaphnis 2\ntitle "흐름 제목"\nbox a "A"\n');
+    writeFileSync(join(folder, 'b.dap'), 'daphnis 2\ntitle "차트 제목"\nchart c "차트" bar {\n  x "값(ms)"\n  series s "S"\n  row "r" s=1\n}\n');
 
     const result = run(['gallery', '.', '--out', 'out'], folder);
     const page = (name) => readFileSync(join(folder, 'out', `${name}.html`), 'utf8');
@@ -158,14 +161,15 @@ test('main_gallery_writes_the_index_and_the_document_preview_with_each_figure_an
     assert.match(page('document'), /<img src="\.\/a\.svg"/);
     assert.match(page('document'), /<img src="\.\/b\.svg"/);
     for (const name of ['index', 'document']) {
-      assert.match(page(name), /<h2><span class="title">흐름 제목<\/span><code class="name">a\.dap<\/code><span class="kind">flow<\/span><\/h2>/);
-      assert.match(page(name), /<h2><code class="name">b\.dap<\/code><span class="kind">bar<\/span><\/h2>/);
+      assert.match(page(name), /<h2><span class="title">흐름 제목<\/span><code class="name">a\.dap<\/code><span class="kind">graph<\/span><\/h2>/);
+      // 차트는 제목을 스스로 그리므로 머리에는 이름과 꼬리표만 있다.
+      assert.match(page(name), /<h2><code class="name">b\.dap<\/code><span class="kind">plot<\/span><\/h2>/);
       for (const mode of ['system', 'light', 'dark']) assert.match(page(name), new RegExp(`data-mode="${mode}"`));
     }
   });
 });
 
-const NAMED_BOX = (id) => `flow right\ntitle "${id} figure"\nbox a "A"\n`;
+const NAMED_BOX = (id) => `daphnis 2\ntitle "${id} figure"\nbox a "A"\n`;
 const iframeSrcs = (page) => [...page.matchAll(/<iframe src="([^"]+)"/g)].map((m) => m[1].replace(/^\.\//, ''));
 
 // 근거: 이슈 #73 "갤러리 예약 이름(index, document) 원본이 목록 파일을 덮어쓴다". 모든 원본의 재생 화면과 목록 파일은 서로 다른 출력 파일이다
@@ -224,8 +228,8 @@ test('main_gallery_treats_reserved_names_case_insensitively', () => {
   });
 });
 
-// 근거: 이슈 완료 조건 "옛 명령 mutoscope가 같은 그림을 낸다", D08 별칭. 옛 이름으로 실행하면 stderr에만 폐기 안내를 쓴다
-test('main_old_command_name_renders_the_same_svg_and_only_stderr_gets_the_deprecation_notice', () => {
+// 근거: 결정 "mutoscope 명령 별칭은 없다". 옛 이름의 링크로 실행해도 폐기 안내를 쓰지 않고 daphnis와 같은 그림을 낸다(이름으로 동작이 갈리는 길이 없다)
+test('main_a_link_named_mutoscope_behaves_like_daphnis_with_no_deprecation_notice', () => {
   withFolder((folder) => {
     const link = join(folder, 'mutoscope');
     symlinkSync(CLI, link);
@@ -233,37 +237,16 @@ test('main_old_command_name_renders_the_same_svg_and_only_stderr_gets_the_deprec
 
     const current = spawnSync(process.execPath, [CLI, 'render', 'a.dap', '--out', 'new'], { cwd: folder, encoding: 'utf8' });
     const old = spawnSync(process.execPath, [link, 'render', 'a.dap', '--out', 'old'], { cwd: folder, encoding: 'utf8' });
-    const json = spawnSync(process.execPath, [link, 'check', 'a.dap', '--json'], { cwd: folder, encoding: 'utf8' });
 
     assert.equal(current.stderr, '');
     assert.equal(old.status, 0, old.stderr);
-    assert.match(old.stderr, /deprecated: the "mutoscope" command is now "daphnis"/);
+    assert.equal(old.stderr, '');
     assert.equal(readFileSync(join(folder, 'old/a.svg'), 'utf8'), readFileSync(join(folder, 'new/a.svg'), 'utf8'));
-    assert.equal(json.stdout, '');
-    assert.match(json.stderr, /deprecated/);
-  });
-});
-
-// 근거: 이슈 결정 "`.muto`는 계속 읽고 폐기 안내만 낸다". 같은 그림이고 종료 코드는 그대로, 안내는 새 확장자를 알린다
-test('cli_old_extension_is_read_with_only_a_deprecation_notice', () => {
-  withFolder((folder) => {
-    writeFileSync(join(folder, 'a.dap'), FLOW);
-    writeFileSync(join(folder, 'b.muto'), FLOW);
-
-    const result = run(['render', 'b.muto'], folder);
-    run(['render', 'a.dap'], folder);
-    const gallery = run(['gallery', '.', '--out', 'out'], folder);
-
-    assert.equal(result.status, 0, result.stderr);
-    assert.match(result.stderr, /^b\.muto: deprecated: the \.muto extension is now \.dap\. Rename the file to b\.dap$/m);
-    assert.ok(readFileSync(join(folder, 'b.svg'), 'utf8').replace('<title>b</title>', '<title>a</title>') === readFileSync(join(folder, 'a.svg'), 'utf8'), '같은 원본이면 이름 말고는 같은 SVG');
-    assert.equal(gallery.status, 0, gallery.stderr);
-    assert.match(readFileSync(join(folder, 'out/index.html'), 'utf8'), /<code class="name">b\.muto<\/code>/);
   });
 });
 
 const CHECK_TIMEOUT_MS = 5000;
-const nestedGroups = (inner, outer = 'g') => `flow right\ngroup ${outer} "G" {\ngroup ${inner} "H" {\nbox a "A"\n}\n}\nbox b "B"\na -> b\n`;
+const nestedGroups = (inner, outer = 'g') => `daphnis 2\ngroup ${outer} "G" {\ngroup ${inner} "H" {\nbox a "A"\n}\n}\nbox b "B"\na -> b\n`;
 
 // 근거: 이슈 #71 "중첩 그룹에 같은 이름을 쓰면 파서가 멈춘다". 제한 시간 안에 syntax 오류와 중복 선언 줄을 돌려주고, 이름만 바꾼 대조군은 통과한다
 test('check_nested_group_with_the_same_name_returns_a_syntax_error_with_the_declaration_line_in_time', () => {
@@ -288,9 +271,9 @@ test('check_nested_group_with_the_same_name_returns_a_syntax_error_with_the_decl
 // 근거: 이슈 #71 "부모 관계에 순환이 생기는 경로". 바깥 그룹 이름을 더 깊은 곳에서 다시 선언해도, 같은 이름의 형제나 도형을 써도 유한 시간에 중복 오류가 된다
 test('check_duplicate_names_end_in_a_duplicate_error_for_every_nesting_shape', () => {
   const cases = [
-    { name: 'two_levels_down', source: 'flow right\ngroup g "G" {\ngroup h "H" {\ngroup g "I" {\nbox a "A"\n}\n}\n}\nbox b "B"\na -> b\n', line: 4, first: 2 },
-    { name: 'siblings', source: 'flow right\ngroup g "G" {\nbox a "A"\n}\ngroup g "H" {\nbox c "C"\n}\na -> c\n', line: 5, first: 2 },
-    { name: 'node_inside_group_of_same_name', source: 'flow right\ngroup g "G" {\nbox g "A"\n}\nbox b "B"\ng -> b\n', line: 2, first: 3 },
+    { name: 'two_levels_down', source: 'daphnis 2\ngroup g "G" {\ngroup h "H" {\ngroup g "I" {\nbox a "A"\n}\n}\n}\nbox b "B"\na -> b\n', line: 4, first: 2 },
+    { name: 'siblings', source: 'daphnis 2\ngroup g "G" {\nbox a "A"\n}\ngroup g "H" {\nbox c "C"\n}\na -> c\n', line: 5, first: 2 },
+    { name: 'node_inside_group_of_same_name', source: 'daphnis 2\ngroup g "G" {\nbox g "A"\n}\nbox b "B"\ng -> b\n', line: 2, first: 3 },
   ];
   withFolder((folder) => {
     for (const { name, source, line, first } of cases) {
@@ -312,7 +295,7 @@ test('validateFigure_stops_with_a_cycle_error_instead_of_looping_on_a_parent_cyc
   const script = `
     import { validateFigure } from ${JSON.stringify(new URL('../src/source/validate.js', import.meta.url).href)};
     import { createProblems } from ${JSON.stringify(new URL('../src/source/problems.js', import.meta.url).href)};
-    const figure = { kind: 'flow', nodes: [{ id: 'a', parent: 'g', line: 4 }, { id: 'b', line: 7 }], groups: [{ id: 'g', parent: 'g', line: 2 }], edges: [{ from: 'a', to: 'b', line: 8 }], values: [], steps: [], rejectedNames: new Set(), chart: { series: [] } };
+    const figure = { version: 2, nodes: [{ id: 'a', shape: 'box', parent: 'g', line: 4 }, { id: 'b', shape: 'box', line: 7 }], groups: [{ id: 'g', parent: 'g', line: 2 }], edges: [{ from: 'a', to: 'b', line: 8 }], views: [], values: [], steps: [], rejectedNames: new Set() };
     try { validateFigure(figure, createProblems()); console.log('returned'); } catch (error) { console.log(error.message); }
   `;
 
@@ -326,7 +309,7 @@ test('validateFigure_stops_with_a_cycle_error_instead_of_looping_on_a_parent_cyc
 test('gallery_links_a_scheme_like_file_name_only_as_an_encoded_explicit_relative_path', () => {
   withFolder((folder) => {
     writeFileSync(join(folder, 'javascript:parent.__daphnisAudit=1;void(0).dap'), FLOW);
-    writeFileSync(join(folder, 'javascript:parent.__daphnisAudit=2;void(0).muto'), FLOW);
+    writeFileSync(join(folder, 'javascript:parent.__daphnisAudit=2;void(0).dap'), FLOW);
 
     const result = run(['gallery', '.', '--out', 'out'], folder);
 
@@ -342,47 +325,33 @@ test('gallery_links_a_scheme_like_file_name_only_as_an_encoded_explicit_relative
   });
 });
 
-// 근거: 설계 charts.md "머리와 선언 줄": 잘못된 차트 헤더는 지원하는 종류를 알려 주는 1번 줄 구문 오류다
-test('check_chart_header_without_or_with_a_wrong_type_is_a_line_1_syntax_error_not_an_internal_one', () => {
+// 근거: 설계 charts.md "머리와 선언 줄": 잘못된 차트 헤더는 지원하는 종류를 알려 주는 구문 오류다(차트 줄이 오류 줄이고 내부 오류가 아니다)
+test('check_chart_header_without_or_with_a_wrong_type_is_a_line_2_syntax_error_not_an_internal_one', () => {
   withFolder((folder) => {
-    for (const [source, found] of [['chart\n', ''], ['chart bogus\n', 'bogus'], ['chart bogus\nrow "A" s=1\n', 'bogus']]) {
+    for (const [source, found, message] of [
+      ['daphnis 2\nchart c "t"\n', '', /write chart as: chart id "title" type \["subtitle"\] \{/],
+      ['daphnis 2\nchart c "t" bogus {\n}\n', 'bogus', /bar, .*heatmap/],
+      ['daphnis 2\nchart c "t" bogus {\n  row "A" s=1\n}\n', 'bogus', /bar, .*heatmap/],
+    ]) {
       writeFileSync(join(folder, 'h.dap'), source);
 
       const result = run(['check', 'h.dap', '--json'], folder);
       const diagnostics = result.stdout.trim().split('\n').map((line) => JSON.parse(line));
 
       assert.equal(result.status, 1, source);
-      assert.deepEqual(diagnostics.map((d) => [d.code, d.line]), [['syntax', 1]], `${source}: ${result.stdout}`);
-      assert.match(diagnostics[0].message, /bar, .*heatmap/, source);
+      assert.deepEqual(diagnostics.map((d) => [d.code, d.line]), [['syntax', 2]], `${source}: ${result.stdout}`);
+      assert.match(diagnostics[0].message, message, source);
       if (found) assert.ok(diagnostics[0].message.includes(`"${found}"`), diagnostics[0].message);
     }
   });
 });
 
-// 근거: 계약 figure-syntax.md 호환 규칙: 확장자 폐기 안내는 옛 확장자 입력 파일마다 한 번이다
-test('cli_migrate_reports_the_old_extension_once_per_input_file_and_none_for_the_new_extension', () => {
-  withFolder((folder) => {
-    for (const name of ['legacy.muto', 'other.muto', 'current.dap']) writeFileSync(join(folder, name), FLOW);
-    const countOf = (stream, name) => stream.split('\n').filter((line) => line.includes('deprecated-extension') && line.includes(name)).length;
-
-    const one = run(['migrate', 'legacy.muto', '--json'], folder);
-    const many = run(['migrate', 'legacy.muto', 'other.muto', 'current.dap', '--json'], folder);
-    const text = run(['migrate', 'legacy.muto'], folder);
-
-    assert.equal(one.status, 0, one.stderr);
-    assert.equal(countOf(one.stderr + one.stdout, 'legacy.muto'), 1, one.stderr);
-    assert.deepEqual([countOf(many.stderr + many.stdout, 'legacy.muto'), countOf(many.stderr + many.stdout, 'other.muto'), countOf(many.stderr + many.stdout, 'current.dap')], [1, 1, 0]);
-    assert.equal(text.stderr.split('\n').filter((line) => line.includes('the .muto extension')).length, 1, text.stderr);
-    assert.equal(text.stdout, '');
-  });
-});
-
 // 근거: 이슈 #103 완료 조건 "유한한 시간 둘의 합이 상한을 넘으면 진단을 내고 결과 파일을 쓰지 않는다". 각각은 상한 안이고 합만 1ms 넘는다
 test('main_render_with_a_total_time_over_the_limit_exits_1_and_writes_no_file', () => {
-  const head = 'flow right\nbox a "A"\nbox b "B"\na -> b\n';
+  const head = 'daphnis 2\nbox a "A"\nbox b "B"\na -> b\n';
   withFolder((folder) => {
-    writeFileSync(join(folder, 'long.dap'), `${head}step "one" for=1800000ms\n  track a -> b time=1ms\nstep "two" for=1800001ms\n  track a -> b time=1ms\n`);
-    writeFileSync(join(folder, 'edge.dap'), `${head}step "one" for=1800000ms\n  track a -> b time=1ms\nstep "two" for=1800000ms\n  track a -> b time=1ms\n`);
+    writeFileSync(join(folder, 'long.dap'), `${head}scene "one" mode=once for=1800000ms\n  track a -> b time=1ms\nscene "two" mode=once for=1800001ms\n  track a -> b time=1ms\n`);
+    writeFileSync(join(folder, 'edge.dap'), `${head}scene "one" mode=once for=1800000ms\n  track a -> b time=1ms\nscene "two" mode=once for=1800000ms\n  track a -> b time=1ms\n`);
 
     const over = run(['render', 'long.dap', '--html'], folder);
     const exact = run(['render', 'edge.dap', '--html'], folder);
@@ -397,7 +366,7 @@ test('main_render_with_a_total_time_over_the_limit_exits_1_and_writes_no_file', 
 
 // 근거: 이슈 #103 완료 조건 "끝없이 생성 원본이 출발 배열을 만들기 전에 진단으로 끝난다". 수정 전에는 힙 200MB 안에서 메모리 부족으로 죽던 원본이다. 자식 프로세스에 힙 제한과 제한 시간을 둬서 되돌아와도 시험이 멈추거나 메모리를 다 쓰지 않는다
 test('main_render_of_the_endless_departure_source_ends_with_a_time_limit_diagnostic_and_no_file', () => {
-  const source = 'flow right\nbox a "A"\nbox b "B"\na -> b\nstep "Load" for=100000000000000020000ms\n  track a -> b time=1ms at=100000000000000000000ms every=100ms\n';
+  const source = 'daphnis 2\nbox a "A"\nbox b "B"\na -> b\nscene "Load" mode=once for=100000000000000020000ms\n  track a -> b time=1ms at=100000000000000000000ms every=100ms\n';
   withFolder((folder) => {
     writeFileSync(join(folder, 'endless.dap'), source);
 
@@ -414,7 +383,7 @@ test('main_render_of_the_endless_departure_source_ends_with_a_time_limit_diagnos
 // 수정 전에는 600초에서 힙이 모자라 죽었다. 자식 프로세스에 힙 제한과 제한 시간을 둬서 되돌아와도 시험이 멈추거나 메모리를 다 쓰지 않는다
 for (const seconds of [60, 600, 3595]) {
   test(`main_check_and_render_of_a_${seconds}s_chip_move_finish_inside_a_300MB_heap`, () => {
-    const source = `flow right\nbox a "A"\nbox b "B"\na -> b\nstep "Long"\n  a -> b "요청" time=${seconds}s\n`;
+    const source = `daphnis 2\nbox a "A"\nbox b "B"\na -> b\nscene "Long" mode=once\n  a -> b "요청" time=${seconds}s\n`;
     withFolder((folder) => {
       writeFileSync(join(folder, 'long.dap'), source);
 
@@ -431,7 +400,7 @@ for (const seconds of [60, 600, 3595]) {
 
 // 근거: 이슈 #103 완료 조건 "정밀도 원본은 내부 오류가 아니라 6번 줄의 시간 정밀도 입력 진단". 원본 그대로 힙 200MB와 제한 시간에서 실행한다
 test('main_render_of_the_precision_source_reports_a_time_precision_diagnostic_on_line_6_and_no_file', () => {
-  const source = 'flow right\nbox a "A"\nbox b "B"\na -> b\nstep "T" for=3599999.0000000005ms\n  track a -> b time=1ms at=3599999ms every=0.000000000001ms\n';
+  const source = 'daphnis 2\nbox a "A"\nbox b "B"\na -> b\nscene "T" mode=once for=3599999.0000000005ms\n  track a -> b time=1ms at=3599999ms every=0.000000000001ms\n';
   withFolder((folder) => {
     writeFileSync(join(folder, 'precision.dap'), source);
 

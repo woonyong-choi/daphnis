@@ -1,4 +1,4 @@
-flow down
+daphnis 2
 group g0 "그룹0" direction=down {
   box n0 "n0"
   box n1 "n1"
@@ -16,3 +16,5 @@ n5 -> n2 "l5"
 n6 -> n3
 n1 -> n3
 n6 -> n1 "l11"
+
+view main graph down
