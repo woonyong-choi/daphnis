@@ -1,10 +1,10 @@
 // 시간 흐름 문장(scene과 박자 줄)을 읽는다. 이름이 선언됐는지는 validate.js가 확인한다.
 import { readStepOptions, readTrack, checkMixedStep } from './flow.js';
 import { readActivation } from './sequence-life.js';
-import { parseMiniGraph } from './minigraph.js';
+import { readContent } from './content.js';
 import { readMoveOptions } from './move-options.js';
 import { isOverTimeLimit, overLimitMessage, parseNumber, parseTime } from './values.js';
-import { flagNames, optionsOf, valueNames, VALUES } from './grammar.js';
+import { valueNames } from './grammar.js';
 import { ID_PATTERN } from './words.js';
 
 // cost: time O(t), heap O(t), stack O(1)
@@ -102,83 +102,16 @@ function readHopWord(t, hop, { line, ctx }) {
   else ctx.problems.error(line, `a move takes a quoted text, time=, tone=, set=, lost=, when=, wait=, timeout=, else=, and stuck. Found "${t.value}"`);
 }
 
-// cost: time O(t + g), heap O(g), stack O(1)
-// vars: t = 문장 낱말 수, g = 관계 그래프 글자 수
-// basis: estimate
-// `show id "글" [tag=".."] [tone=..] [meta=".."] [mark=".."] [mono]` 또는 `show id graph "가 -> 나" [lit=".."]`
+// `show id "글"` 또는 `show id graph "가 -> 나"`.
 function readShow({ tokens, line }, ctx) {
-  const [, id, first, ...rest] = tokens;
+  const [, id, ...body] = tokens;
   if (id?.type !== 'word') {
     ctx.problems.error(line, 'write show as: show id "text"');
     return;
   }
   const beat = attachBeat(ctx, line);
-  if (first?.type === 'word' && first.value === 'graph') {
-    const [text, ...more] = rest;
-    if (text?.type !== 'text') {
-      ctx.problems.error(line, 'write a graph row as: show id graph "a -> b; a -> c" [lit="a"]');
-      return;
-    }
-    const lit = more.find((t) => t.type === 'option' && t.key === 'lit' && t.valueType === 'text');
-    if (more.length !== (lit ? 1 : 0)) ctx.problems.error(line, 'a graph row takes only lit="names"');
-    const graph = parseMiniGraph(text.value, lit?.value ?? '');
-    if (graph.error) ctx.problems.error(line, graph.error);
-    else beat.ops.push({ type: 'show', node: id.value, row: { graph }, line });
-    return;
-  }
-  if (first?.type !== 'text') {
-    ctx.problems.error(line, 'write show as: show id "text"');
-    return;
-  }
-  const row = { text: first.value };
-  for (const t of rest) readRowOption(t, row, { line, ctx });
-  checkRowLengths(row, line, ctx);
-  checkRowTone(row, line, ctx);
-  row.appearance ??= VALUES.appearance.default;
-  beat.ops.push({ type: 'show', node: id.value, row, line });
-}
-
-// cost: time O(1), heap O(1), stack O(1)
-// basis: estimate
-// 색 선택 사항 둘의 짝. tone은 태그 알약을 칠하거나(plain), appearance=filled|outline일 때 카드 줄 내용의 면과 경계를 칠한다. filled와 outline은 칠할 색(tone)이 있어야 한다.
-function checkRowTone(row, line, ctx) {
-  const isPlain = (row.appearance ?? VALUES.appearance.default) === 'plain';
-  if (!isPlain && row.tone === undefined) ctx.problems.error(line, `appearance=${row.appearance} needs tone. Add tone=name or use appearance=plain`);
-  else if (row.tone !== undefined && row.tag === undefined && isPlain) ctx.problems.error(line, 'tone colors a tag or, with appearance=filled|outline, the card. Add tag="..." or appearance, or remove tone');
-}
-
-// cost: time O(k), heap O(1), stack O(1)
-// vars: k = 선택 사항 수
-// basis: estimate
-// 글자 수 상한이 있는 선택 사항(mark)을 넘으면 오류다. 카드 오른쪽 끝에 들어갈 자리가 정해져 있기 때문이다.
-function checkRowLengths(row, line, ctx) {
-  for (const [key, spec] of Object.entries(optionsOf('show'))) {
-    const isTooLong = spec.maxLength && row[key] !== undefined && [...row[key]].length > spec.maxLength;
-    if (isTooLong) ctx.problems.error(line, `${key} is at most ${spec.maxLength} characters`);
-  }
-}
-
-// cost: time O(1), heap O(1), stack O(1)
-// basis: estimate
-// 카드 줄 선택 사항 하나. 키와 값 목록은 grammar.js의 show 범위다.
-function readRowOption(t, row, { line, ctx }) {
-  const spec = t.type === 'option' ? optionsOf('show')[t.key] : undefined;
-  if (t.type === 'word' && flagNames('show').includes(t.value) && !row.isMono) row.isMono = true;
-  else if (spec && spec.type !== 'flag' && row[t.key] === undefined) readRowValue(t, { spec, row }, { line, ctx });
-  else {
-    const keys = Object.entries(optionsOf('show')).filter(([, o]) => o.type !== 'flag').map(([key]) => `${key}=`);
-    ctx.problems.error(line, `a card row takes ${keys.join(', ')}, and ${flagNames('show').join(', ')} once each. Found "${t.key ?? t.value}"`);
-  }
-}
-
-// cost: time O(v), heap O(v), stack O(1)
-// vars: v = 값 목록의 값 수
-// basis: estimate
-// 카드 줄 선택 사항의 값. 값 목록이 있으면 그 안의 값만 받는다.
-function readRowValue(t, { spec, row }, { line, ctx }) {
-  if (spec.values && (t.valueType !== 'word' || !valueNames(spec.values).includes(t.value))) ctx.problems.error(line, `${t.key} is one of ${valueNames(spec.values).join(', ')}`);
-  else if (!spec.values && t.valueType !== 'text') ctx.problems.error(line, `write ${t.key} as quoted text: ${t.key}="..."`);
-  else row[t.key] = t.value;
+  const row = readContent({ tokens: body, line }, ctx);
+  if (row) beat.ops.push({ type: 'show', node: id.value, row, line });
 }
 
 // `clear id`
