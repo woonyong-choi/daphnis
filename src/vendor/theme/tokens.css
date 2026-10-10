@@ -463,9 +463,6 @@
   --spacing-article-title-gap: var(--primitive-article-title-gap);
   --spacing-width-narrow: var(--primitive-width-narrow);
   --spacing-syntax-example-gap: var(--primitive-syntax-example-gap);
-  --spacing-contact-input-height: var(--primitive-contact-input-height);
-  --spacing-contact-message-height: var(--primitive-contact-message-height);
-  --spacing-form-choice-size: var(--primitive-form-choice-size);
   --spacing-office-top: var(--primitive-office-top);
   --spacing-office-panel-gap: var(--primitive-office-panel-gap);
   --spacing-status-bottom: var(--primitive-status-bottom);
@@ -650,7 +647,6 @@
   --text-post-title-size: var(--primitive-post-title-size);
   --text-post-lead-size: var(--primitive-post-lead-size);
   --text-article-search-font: var(--primitive-article-search-font);
-  --text-contact-input-font: var(--primitive-contact-input-font);
   --text-status-caption-size: var(--primitive-status-caption-size);
   --text-status-weather-font: var(--primitive-status-weather-font);
   --text-status-weather-action: var(--text-tiny-text);
@@ -927,13 +923,8 @@
   --primitive-syntax-example-padding: 9px 13.5px;
   --primitive-syntax-example-background: rgba(2,21,48,.02);
   --primitive-syntax-example-border: rgba(0,7,17,.09);
-  --primitive-contact-input-font: 16.56px;
-  --primitive-contact-input-height: 34.9062px;
-  --primitive-contact-message-height: 264.953px;
-  --primitive-contact-input-padding: 6.9552px 8.28px;
   --primitive-contact-input-radius: 6.624px;
   --primitive-contact-input-background: #eceef0;
-  --primitive-form-choice-size: 21.1406px;
   --primitive-office-top: 80px;
   --primitive-status-weather-width: 400px;
   --primitive-status-board: #333333;
@@ -1362,7 +1353,6 @@
   --component-article-search-padding: var(--primitive-article-search-padding);
   --component-width-wide: max(100%, min(var(--primitive-reference-width), calc(100vw - 2 * var(--primitive-gutter))));
   --component-syntax-example-padding: var(--primitive-syntax-example-padding);
-  --component-contact-input-padding: var(--primitive-contact-input-padding);
   --component-status-row-padding: var(--primitive-status-row-padding);
   --component-status-header-padding: var(--primitive-status-header-padding);
   --component-status-flip-background: var(--primitive-status-flip-background);

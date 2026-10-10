@@ -454,9 +454,6 @@
   --spacing-article-title-gap: var(--primitive-article-title-gap);
   --spacing-width-narrow: var(--primitive-width-narrow);
   --spacing-syntax-example-gap: var(--primitive-syntax-example-gap);
-  --spacing-contact-input-height: var(--primitive-contact-input-height);
-  --spacing-contact-message-height: var(--primitive-contact-message-height);
-  --spacing-form-choice-size: var(--primitive-form-choice-size);
   --spacing-office-top: var(--primitive-office-top);
   --spacing-office-panel-gap: var(--primitive-office-panel-gap);
   --spacing-status-bottom: var(--primitive-status-bottom);
@@ -632,7 +629,6 @@
   --text-post-title-size: var(--primitive-post-title-size);
   --text-post-lead-size: var(--primitive-post-lead-size);
   --text-article-search-font: var(--primitive-article-search-font);
-  --text-contact-input-font: var(--primitive-contact-input-font);
   --text-status-caption-size: var(--primitive-status-caption-size);
   --text-status-weather-font: var(--primitive-status-weather-font);
   --text-status-weather-action: var(--text-tiny-text);

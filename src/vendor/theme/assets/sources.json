@@ -12,34 +12,10 @@
     "sha256": "230c4df926eb94861c8c25c8cfd5bb670f1ba0e3c9e7ece1083c5ed0100ed5f1"
   },
   {
-    "url": "https://culturedcode.com/global/shared/2024-02-20/images/checkbox-blank.svg",
-    "file": "checkbox-blank.svg",
-    "bytes": 3809,
-    "sha256": "8602899ec75c0828c9ea5b07873c4495d215843e5f5900c3f43b2ea1605a874a"
-  },
-  {
-    "url": "https://culturedcode.com/global/shared/2024-02-20/images/checkbox-checked.svg",
-    "file": "checkbox-checked.svg",
-    "bytes": 3860,
-    "sha256": "72406368da6d97bbbe1989ff6b31c40a66505668be75e9cfda0483a20442f5ce"
-  },
-  {
     "url": "https://culturedcode.com/global/shared/2024-02-20/images/navigation-icons-3x-io50.png",
     "file": "navigation-icons-3x-io50.png",
     "bytes": 3743,
     "sha256": "9fcefaa845cd1e56603f382e61d5849afea62748844cb62382b8c29c2e63de18"
-  },
-  {
-    "url": "https://culturedcode.com/global/shared/2024-02-20/images/radio-blank.svg",
-    "file": "radio-blank.svg",
-    "bytes": 868,
-    "sha256": "134c7dc56a6f1d280e315bad6f7ae143e4070f726256c4a97ac5748edd54b58a"
-  },
-  {
-    "url": "https://culturedcode.com/global/shared/2024-02-20/images/radio-checked.svg",
-    "file": "radio-checked.svg",
-    "bytes": 964,
-    "sha256": "310ec40af6255bbdc0f875d7617cbdaffa996e0923e2de3773ce24e49d8c87ba"
   },
   {
     "url": "https://culturedcode.com/things/2024-01-20/images/fancysection-chevron.svg",

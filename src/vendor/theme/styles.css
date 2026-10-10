@@ -222,11 +222,7 @@ button.app-tooltip { padding: 0; background: none; color: var(--color-control-li
 .app-remote:active { color: var(--color-control-active-ink); }
 .app-inline-button { border: var(--border-width-thin) solid var(--color-ui-line); border-radius: var(--radius-button-radius); padding: var(--spacing-gap-xs) var(--spacing-gap-sm); color: var(--color-action-link); background: var(--color-soft); font: inherit; cursor: pointer; }
 .app-inline-button:hover { background: var(--color-help-hover); }
-/* 입력 양식: 기본 폼, 구독 양식, 문의 양식과 선택지. */
-.app-form { max-width: var(--container-form); margin: var(--spacing-gap) auto; text-align: left; }
-.app-form label { display: block; margin-bottom: var(--spacing-gap-xs); }
-.app-form input, .app-form textarea, .app-form select { display: block; width: 100%; padding: var(--spacing-gap-sm); margin-bottom: var(--spacing-gap); background: var(--color-ui-card); color: var(--color-ink); }
-.app-form button { color: var(--color-ui-card); background: var(--color-action-link); }
+/* 구독 입력과 제출 버튼. */
 .app-newsletter { width: var(--container-form); max-width: 100%; margin: 0 auto var(--spacing-landing-nav-gap); font-size: var(--text-landing-review-font); line-height: var(--leading-feature-line); }
 .app-newsletter-email { width: 100%; padding: var(--spacing-platform-button-y); background: var(--color-ui-card); margin-bottom: var(--spacing-landing-panel-gap); }
 .app-newsletter-note { margin: 0 0 var(--spacing-landing-panel-gap); color: var(--color-control-muted); font-size: var(--text-landing-newsletter-note); }
@@ -239,26 +235,8 @@ button.app-tooltip { padding: 0; background: none; color: var(--color-control-li
 .app-newsletter button:hover, .app-primary-action:hover { background: var(--color-primary-hover); box-shadow: var(--shadow-action-shadow); text-decoration: none; }
 .app-newsletter button:active, .app-primary-action:active { background: var(--color-feature-tab-selected); }
 .app-newsletter button:focus, .app-primary-action:focus { outline: 0; box-shadow: var(--component-action-focus); }
-.app-contact-field { margin: 0 0 var(--spacing-post-header-margin); padding: 0; border: 0; }
-.app-contact-field > label:first-child, .app-contact-field > legend { display: block; font-weight: var(--font-weight-bold); margin-bottom: var(--spacing-tab-inset); padding: 0; }
-.app-contact-field > input, .app-contact-field > textarea { display: block; width: 100%; padding: var(--component-contact-input-padding); border-radius: var(--radius-contact-input-radius); font-size: var(--text-contact-input-font); background: var(--color-contact-input-background); }
-.app-contact-field > input { height: var(--spacing-contact-input-height); }
-.app-contact-field > textarea { height: var(--spacing-contact-message-height); resize: vertical; margin-bottom: var(--spacing-gap-sm); }
-.app-contact-choices { border: 0; padding: 0; }
-.app-contact-choices label { display: block; margin-bottom: var(--spacing-tab-inset); font-weight: var(--font-weight-normal); }
-.app-contact-choices input, .app-demo-verification input { width: auto; padding: 0; accent-color: var(--color-control-link); }
-.app-contact-form .app-contact-field h2 { font-size: var(--text-body-text); margin: 0 0 var(--spacing-gap-xs); }
-.app-contact-form .app-contact-field p { margin: 0; }
-.app-demo-verification { display: block; padding: var(--spacing-gap); border: var(--border-width-thin) solid var(--color-ui-line); background: var(--color-canvas); margin-top: var(--spacing-gap-xs); }
-.app-contact-form { line-height: var(--leading-feature-body-line); }
-.app-contact-field > label:first-child, .app-contact-field > legend { margin: 0; padding: var(--spacing-landing-quote-glyph-gap) 0; }
-.app-contact-field > input { margin-bottom: var(--spacing-outline); }
-.app-contact-choices input { appearance: none; display: inline-block; width: var(--spacing-form-choice-size); height: var(--spacing-form-choice-size); border: 0; border-radius: 0; margin: 0; vertical-align: middle; background: url('./assets/checkbox-blank.svg') center / contain no-repeat; }
-.app-contact-choices input:checked { background-image: url('./assets/checkbox-checked.svg'); }
-.app-contact-choices input[type=radio] { background-image: url('./assets/radio-blank.svg'); }
-.app-contact-choices input[type=radio]:checked { background-image: url('./assets/radio-checked.svg'); }
 .app-newsletter [data-form-status]:empty { display: none; }
-.app-newsletter-email, .app-contact-field > input { margin-bottom: var(--spacing-underline); }
+.app-newsletter-email { margin-bottom: var(--spacing-underline); }
 .app-newsletter button { border: var(--border-width-thin) solid transparent; }
 .app-newsletter { margin-bottom: calc(var(--text-landing-review-font) * var(--leading-feature-body-line)); }
 .app-newsletter :disabled { opacity: var(--opacity-landing-logo-opacity); cursor: default; }
