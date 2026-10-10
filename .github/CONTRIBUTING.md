@@ -12,7 +12,7 @@ Requirements: Node.js 20 or later.
 
 ```sh
 git clone https://github.com/woonyong-choi/ThinkFlow.git
-cd thinkflow
+cd ThinkFlow
 npm install
 ```
 
