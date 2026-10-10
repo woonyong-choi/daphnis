@@ -2085,7 +2085,7 @@ export const values = freeze({
     },
     "figure": {
       "icon": "#1e6bd6",
-      "queue-empty": "#d6d6d6",
+      "queue-empty": "#f0f0f0",
       "number-fill": "#303336",
       "number-ink": "#ffffff"
     },

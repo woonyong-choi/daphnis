@@ -7,7 +7,6 @@
 :root {
   --color-gray-0: #ffffff;
   --color-gray-59: #f0f0f0;
-  --color-gray-161: #d6d6d6;
   --color-gray-282: #b7b7b7;
   --color-gray-529: #787878;
   --color-gray-910: #171717;
@@ -24,7 +23,7 @@
   --color-ui-focus: var(--color-action-link);
   --color-data-category-1: var(--color-category-blue-fill);
   --color-figure-icon: var(--color-category-blue-light-border);
-  --color-figure-queue-empty: var(--color-gray-161);
+  --color-figure-queue-empty: var(--color-gray-59);
   --color-figure-number-fill: var(--primitive-figure-number-fill);
   --color-figure-number-ink: var(--primitive-figure-number-ink);
   --color-ui-card: var(--color-gray-0);
@@ -131,7 +130,7 @@
   --color-state-active: var(--color-category-blue-light-border);
   --color-state-active-text: var(--color-category-blue-light-ink);
   --color-figure-icon: var(--color-category-blue-light-border);
-  --color-figure-queue-empty: var(--color-gray-161);
+  --color-figure-queue-empty: var(--color-gray-59);
   --color-figure-number-fill: var(--primitive-figure-number-fill);
   --color-figure-number-ink: var(--primitive-figure-number-ink);
   --color-ui-card: var(--color-gray-0);

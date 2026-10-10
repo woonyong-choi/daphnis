@@ -163,7 +163,7 @@
   --color-palette-slate-light-outline: #848484;
   --color-palette-slate-dark-outline: #888888;
   --color-figure-icon: var(--color-category-blue-light-border);
-  --color-figure-queue-empty: var(--color-gray-161);
+  --color-figure-queue-empty: var(--color-gray-59);
   --color-figure-number-fill: var(--primitive-figure-number-fill);
   --color-figure-number-ink: var(--primitive-figure-number-ink);
   --color-paint-red-fill: var(--color-category-red-light-tint-1);
@@ -2016,7 +2016,7 @@
   --color-data-category-tint-6: var(--color-category-purple-light-tint-1);
   --color-data-category-tint-7: var(--color-category-cyan-light-tint-1);
   --color-figure-icon: var(--color-category-blue-light-border);
-  --color-figure-queue-empty: var(--color-gray-161);
+  --color-figure-queue-empty: var(--color-gray-59);
   --color-figure-number-fill: var(--primitive-figure-number-fill);
   --color-figure-number-ink: var(--primitive-figure-number-ink);
   --color-paint-red-fill: var(--color-category-red-light-tint-1);
