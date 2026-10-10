@@ -331,7 +331,7 @@
   --color-canvas: var(--primitive-canvas);
   --color-ui-card: var(--color-gray-0);
   --color-ink: var(--primitive-ink);
-  --color-body: var(--primitive-ink);
+  --color-body: var(--color-ink);
   --color-ui-muted: var(--primitive-muted);
   --color-ui-line: var(--primitive-line);
   --color-soft: var(--primitive-soft);
@@ -1760,6 +1760,11 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']):not([data-theme='dark']) {
   --color-accent: var(--color-blue-dark-stroke);
+  --color-syntax-string: var(--color-blue-dark-stroke);
+  --color-syntax-function: var(--color-purple-dark-ink);
+  --color-syntax-number: var(--color-category-orange-dark-border);
+  --color-syntax-keyword: var(--color-red-dark-stroke);
+  --color-syntax-type: var(--color-green-dark-ink);
   --color-outline: var(--primitive-figure-dark-outline);
   --color-line: var(--primitive-figure-dark-line);
   --color-state-active: var(--primitive-figure-ui-accent);
@@ -1874,6 +1879,14 @@
   --color-paint-cyan-group-2: var(--color-category-cyan-dark-tint-2);
   --color-paint-cyan-group-3: var(--color-category-cyan-dark-tint-3);
   --color-paint-cyan-effect: var(--color-category-cyan-dark-effect);
+  --color-syntax-property: var(--color-purple-dark-ink);
+  --color-syntax-parameter: var(--color-category-orange-dark-border);
+  --color-syntax-constant: var(--color-category-orange-dark-border);
+  --color-syntax-annotation: var(--color-green-dark-ink);
+  --color-syntax-variable: var(--color-ink);
+  --color-syntax-comment: var(--color-ui-muted);
+  --color-syntax-operator: var(--color-ink);
+  --color-syntax-punctuation: var(--color-ink);
   --color-ui-card: var(--primitive-figure-dark-node);
   --color-ink: var(--color-gray-59);
   --color-ui-muted: var(--primitive-figure-dark-muted);
@@ -1889,6 +1902,7 @@
   --color-gallery-hover: var(--color-control-hover);
   --color-gallery-active: var(--color-feature-tab-background);
   --color-gallery-selected: var(--color-feature-tab-selected);
+  --color-prose-code-color: var(--color-ink);
   --color-prose-pre-background: var(--primitive-figure-dark-bg);
   --color-platform-color: var(--color-fg);
   --color-platform-hover: var(--color-control-hover);
@@ -1899,6 +1913,11 @@
 }
 [data-theme='dark'] {
   --color-accent: var(--color-blue-dark-stroke);
+  --color-syntax-string: var(--color-blue-dark-stroke);
+  --color-syntax-function: var(--color-purple-dark-ink);
+  --color-syntax-number: var(--color-category-orange-dark-border);
+  --color-syntax-keyword: var(--color-red-dark-stroke);
+  --color-syntax-type: var(--color-green-dark-ink);
   --color-outline: var(--primitive-figure-dark-outline);
   --color-line: var(--primitive-figure-dark-line);
   --color-state-active: var(--primitive-figure-ui-accent);
@@ -2013,6 +2032,14 @@
   --color-paint-cyan-group-2: var(--color-category-cyan-dark-tint-2);
   --color-paint-cyan-group-3: var(--color-category-cyan-dark-tint-3);
   --color-paint-cyan-effect: var(--color-category-cyan-dark-effect);
+  --color-syntax-property: var(--color-purple-dark-ink);
+  --color-syntax-parameter: var(--color-category-orange-dark-border);
+  --color-syntax-constant: var(--color-category-orange-dark-border);
+  --color-syntax-annotation: var(--color-green-dark-ink);
+  --color-syntax-variable: var(--color-ink);
+  --color-syntax-comment: var(--color-ui-muted);
+  --color-syntax-operator: var(--color-ink);
+  --color-syntax-punctuation: var(--color-ink);
   --color-ui-card: var(--primitive-figure-dark-node);
   --color-ink: var(--color-gray-59);
   --color-ui-muted: var(--primitive-figure-dark-muted);
@@ -2028,6 +2055,7 @@
   --color-gallery-hover: var(--color-control-hover);
   --color-gallery-active: var(--color-feature-tab-background);
   --color-gallery-selected: var(--color-feature-tab-selected);
+  --color-prose-code-color: var(--color-ink);
   --color-prose-pre-background: var(--primitive-figure-dark-bg);
   --color-platform-color: var(--color-fg);
   --color-platform-hover: var(--color-control-hover);
@@ -2037,6 +2065,11 @@
 }
 [data-theme='light'] {
   --color-accent: var(--color-blue-light-stroke);
+  --color-syntax-string: var(--color-blue-light-ink);
+  --color-syntax-function: var(--color-purple-light-ink);
+  --color-syntax-number: var(--color-orange-light-ink);
+  --color-syntax-keyword: var(--color-red-light-ink);
+  --color-syntax-type: var(--color-green-light-ink);
   --color-outline: var(--color-gray-529);
   --color-line: var(--color-gray-282);
   --color-state-active: var(--color-blue-light-stroke);
@@ -2151,6 +2184,14 @@
   --color-paint-cyan-group-2: var(--color-category-cyan-light-tint-2);
   --color-paint-cyan-group-3: var(--color-category-cyan-light-tint-3);
   --color-paint-cyan-effect: var(--color-category-cyan-light-effect);
+  --color-syntax-property: var(--color-purple-light-ink);
+  --color-syntax-parameter: var(--color-orange-light-ink);
+  --color-syntax-constant: var(--color-orange-light-ink);
+  --color-syntax-annotation: var(--color-green-light-ink);
+  --color-syntax-variable: var(--color-gray-878);
+  --color-syntax-comment: var(--color-gray-635);
+  --color-syntax-operator: var(--color-gray-878);
+  --color-syntax-punctuation: var(--color-gray-878);
   --color-ui-card: var(--color-gray-0);
   --color-ink: var(--primitive-ink);
   --color-ui-muted: var(--primitive-muted);
@@ -2166,6 +2207,7 @@
   --color-gallery-hover: var(--primitive-gallery-hover);
   --color-gallery-active: var(--primitive-gallery-active);
   --color-gallery-selected: var(--primitive-gallery-selected);
+  --color-prose-code-color: var(--primitive-prose-code-color);
   --color-prose-pre-background: var(--primitive-help-bg);
   --color-platform-color: var(--primitive-platform-color);
   --color-platform-hover: var(--primitive-platform-hover);

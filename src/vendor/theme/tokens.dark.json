@@ -577,6 +577,62 @@
     "gallery-selected": {
       "$type": "color",
       "$value": "{color.feature-tab-selected}"
+    },
+    "prose-code-color": {
+      "$value": "{color.ink}",
+      "$type": "color"
+    },
+    "syntax-variable": {
+      "$value": "{color.ink}",
+      "$type": "color"
+    },
+    "syntax-operator": {
+      "$value": "{color.ink}",
+      "$type": "color"
+    },
+    "syntax-punctuation": {
+      "$value": "{color.ink}",
+      "$type": "color"
+    },
+    "syntax-comment": {
+      "$value": "{color.ui-muted}",
+      "$type": "color"
+    },
+    "syntax-keyword": {
+      "$value": "{color.red.dark-stroke}",
+      "$type": "color"
+    },
+    "syntax-string": {
+      "$value": "{color.blue.dark-stroke}",
+      "$type": "color"
+    },
+    "syntax-function": {
+      "$value": "{color.purple.dark-ink}",
+      "$type": "color"
+    },
+    "syntax-property": {
+      "$value": "{color.purple.dark-ink}",
+      "$type": "color"
+    },
+    "syntax-type": {
+      "$value": "{color.green.dark-ink}",
+      "$type": "color"
+    },
+    "syntax-annotation": {
+      "$value": "{color.green.dark-ink}",
+      "$type": "color"
+    },
+    "syntax-number": {
+      "$value": "{color.category.orange.dark-border}",
+      "$type": "color"
+    },
+    "syntax-parameter": {
+      "$value": "{color.category.orange.dark-border}",
+      "$type": "color"
+    },
+    "syntax-constant": {
+      "$value": "{color.category.orange.dark-border}",
+      "$type": "color"
     }
   }
 }

@@ -313,11 +313,11 @@
     "styles/diagram/player.css": "e6bfbdf8f7a2ea8939a2bafa4c70be6ecc3d4f27ad6605d7667f38a8c73412e2",
     "styles/diagram/status.css": "da8057abd40d3afbdcd27414f7ae5f9cf972c1e29453d580b9ea5a6988dfeb34",
     "styles/tabs.css": "8246fac7cb58cb994439438beeba5f4631618bd908da729dbbd3490284f0033e",
-    "tailwind.css": "87b6cfbc5035ac0bb15b1de0ffbe55887d44fcd77ec05ef275e943045d4a155c",
-    "tokens.css": "1d6a1de83fd800f377956fe0baf490f6b7bd9f3406dc610fabb24ce13525e178",
-    "tokens.dark.json": "7926f76f1cb32974e47370dca4bd962aa803c0081da43480433e99951843eb1d",
+    "tailwind.css": "201b02bdbb35a3e452847abaa335871e313c37f48627748e18c38117cb22d579",
+    "tokens.css": "ced78a53f1949a20c9f8f228fdacfa5dba21e08819f71c2b6d297e8440a281a2",
+    "tokens.dark.json": "1e7ef4e6b7a055c30043a13ccf678b09dbc44d9d0f398c48afd0ffb8080a41d1",
     "tokens.js": "b4d3f16eadd1db5b23f76e4cfdb6dcbedb81997e630f5f1f28525da08a342a6f",
-    "tokens.json": "715429727eff1c2bb09118f29757fd6a4e0d00aac1597f6ee0eb4e5df70a068f",
+    "tokens.json": "7c363475c592b6d845fd8a1c19649e68b6a5bd1f3a0e9773ffb530c3f45c2718",
     "ui/build/check-tokens.mjs": "4f458b35e00114d4189ee63345232c05fd123abbb2ac7703560f1915741ca04d",
     "ui/build/export.mjs": "5b458dcc848b99ea9de31100b34f434454f0c911223d5aaa29f8f451ab7e5cfa",
     "ui/build/lib/find-hardcoded.mjs": "d0579ae478cfc72ef9631872ffaa2300965892aab71d3718e7f1d72762b39d41",
@@ -345,5 +345,5 @@
     "ui/runtime/tabs.js": "9f2696e1d779b11c42b0b753fb80272a57586b08e3e4b7bff13e2a66a12da21e",
     "ui/runtime/video.js": "b809b0af488b73b2442fbf4852d8f6d35449741e5d91f4d33097211503fb4096"
   },
-  "contentHash": "caba4e8541ca4f30cf02bdf1957ddab4e56994634268d87cae7c0d55e8ac4fe2"
+  "contentHash": "6b2b9603edef43702036f17233aadbb0a8919de07ae43ca921e79002ec1b856e"
 }

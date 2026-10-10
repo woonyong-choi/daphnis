@@ -332,7 +332,7 @@
   --color-canvas: var(--primitive-canvas);
   --color-ui-card: var(--color-gray-0);
   --color-ink: var(--primitive-ink);
-  --color-body: var(--primitive-ink);
+  --color-body: var(--color-ink);
   --color-ui-muted: var(--primitive-muted);
   --color-ui-line: var(--primitive-line);
   --color-soft: var(--primitive-soft);
