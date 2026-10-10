@@ -282,7 +282,7 @@ button.app-tooltip { padding: 0; background: none; color: var(--color-control-li
 .app-search-result-link:hover, .app-search-result-link:focus-visible, .app-search-result-link[aria-selected=true], .app-search-choice:hover, .app-search-choice[aria-selected=true] { background: var(--color-search-hover); text-decoration: none; }
 .app-search-result-link:active, .app-search-choice:active { background: var(--color-search-active); }
 .app-search-result-link + .app-search-result-link, .app-search-entry + .app-search-entry { border-top: var(--border-width-thin) solid var(--color-search-result-line); }
-.app-search-result-note { margin-left: var(--spacing-gap-xs); font-size: var(--text-small-text); color: var(--color-search-result-muted); }
+.app-search-result-note { white-space: nowrap; margin-left: var(--spacing-gap-xs); font-size: var(--text-small-text); color: var(--color-search-result-muted); }
 .app-search-result-tags { display: flex; flex-wrap: wrap; gap: var(--spacing-gap-xs); padding: var(--component-search-result-padding); padding-top: 0; }
 .app-search-entry { position: relative; border-radius: var(--radius-search-result-radius); isolation: isolate; }
 .app-search-entry:hover, .app-search-entry:focus-within { background: var(--color-search-hover); }
