@@ -110,12 +110,6 @@ html.embedded .fl-figure.full {
   min-width: 0;
 }
 
-/* 백틱으로 감싼 글. 코드 글꼴로 그린다. */
-.fl-code {
-  font-family: var(--font-figure-mono);
-  letter-spacing: normal;
-}
-
 /* 전체 화면은 같은 틀을 창 전체로 키우는 것뿐이다. 문서 안에서는 자연 높이이고 전체 화면에서만 창 높이를 채운다. */
 .fl-figure.full {
   position: fixed;
