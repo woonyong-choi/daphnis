@@ -107,6 +107,9 @@ export function DocumentNavigation({ label, nodes }) {
 
 export function DocumentOutline({ sections }) {
   if (!sections.length) return out('');
+  for (const section of sections) {
+    if (!Number.isInteger(section.level) || section.level < 1 || section.level > 6) throw new TypeError('invalid outline heading level');
+  }
   return out(`<nav class="app-document-nav" aria-label="본문 목차"><ol>${sections.map(section => `<li${section.level === 3 ? ' class="is-subsection"' : ''}><a href="#${escape(section.id)}" data-heading-level="${section.level}">${escape(section.title)}</a></li>`).join('')}</ol></nav>`);
 }
 

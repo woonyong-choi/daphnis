@@ -102,7 +102,10 @@ Tabs.open = (props) => {
   const variant = tabVariant(props);
   return `<section class="app-tabs${platform ? ' is-platform' : ''}${variant.classes}${widthClass(props)}" data-tabs${platform ? ' data-platform' : ''}>${variant.position === 'bottom' ? '' : TabList({ id: group, label, labels, selector: variant.selector, selected: props.selected })}`;
 };
-Tabs.panelOpen = ({ id: group, index, selected = 0 }) => `<div class="app-tabpanel" id="${id(group)}-panel-${index}" role="tabpanel" aria-labelledby="${group}-tab-${index}" tabindex="0"${index === selected ? '' : ' hidden'}>`;
+Tabs.panelOpen = ({ id: group, index, selected = 0 }) => {
+  if (!Number.isSafeInteger(index) || index < 0) throw new TypeError('invalid tab panel index');
+  return `<div class="app-tabpanel" id="${id(group)}-panel-${index}" role="tabpanel" aria-labelledby="${group}-tab-${index}" tabindex="0"${index === selected ? '' : ' hidden'}>`;
+};
 Tabs.panelClose = () => '</div>';
 // 위치가 bottom이면 탭 목록은 닫을 때 낸다. 열 때와 같은 속성을 넘긴다.
 Tabs.close = (props) => {
