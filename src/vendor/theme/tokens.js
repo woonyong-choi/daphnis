@@ -16,11 +16,13 @@ export const tokens = freeze({
       "0": "var(--color-gray-0)",
       "43": "var(--color-gray-43)",
       "59": "var(--color-gray-59)",
-      "161": "var(--color-gray-161)",
+      "94": "var(--color-gray-94)",
       "212": "var(--color-gray-212)",
       "220": "var(--color-gray-220)",
       "282": "var(--color-gray-282)",
       "333": "var(--color-gray-333)",
+      "467": "var(--color-gray-467)",
+      "482": "var(--color-gray-482)",
       "529": "var(--color-gray-529)",
       "545": "var(--color-gray-545)",
       "635": "var(--color-gray-635)",
@@ -30,12 +32,7 @@ export const tokens = freeze({
       "933": "var(--color-gray-933)",
       "1000": "var(--color-gray-1000)"
     },
-    "fg": "var(--color-fg)",
-    "muted": "var(--color-muted)",
     "group-title": "var(--color-group-title)",
-    "node": "var(--color-node)",
-    "card": "var(--color-card)",
-    "page": "var(--color-page)",
     "outline": "var(--color-outline)",
     "line": "var(--color-line)",
     "state": {
@@ -157,61 +154,6 @@ export const tokens = freeze({
         "7": "var(--color-data-category-label-7)"
       }
     },
-    "palette": {
-      "amber": {
-        "light-fill": "var(--color-palette-amber-light-fill)",
-        "light-stroke": "var(--color-palette-amber-light-stroke)",
-        "light-ink": "var(--color-palette-amber-light-ink)",
-        "light-outline": "var(--color-palette-amber-light-outline)"
-      },
-      "teal": {
-        "light-fill": "var(--color-palette-teal-light-fill)",
-        "light-stroke": "var(--color-palette-teal-light-stroke)",
-        "light-ink": "var(--color-palette-teal-light-ink)",
-        "light-dot": "var(--color-palette-teal-light-dot)",
-        "light-outline": "var(--color-palette-teal-light-outline)"
-      },
-      "navy": {
-        "light-fill": "var(--color-palette-navy-light-fill)",
-        "light-stroke": "var(--color-palette-navy-light-stroke)",
-        "light-ink": "var(--color-palette-navy-light-ink)",
-        "light-outline": "var(--color-palette-navy-light-outline)"
-      },
-      "pink": {
-        "light-fill": "var(--color-palette-pink-light-fill)",
-        "light-stroke": "var(--color-palette-pink-light-stroke)",
-        "light-ink": "var(--color-palette-pink-light-ink)",
-        "light-outline": "var(--color-palette-pink-light-outline)"
-      },
-      "sky": {
-        "light-fill": "var(--color-palette-sky-light-fill)",
-        "light-stroke": "var(--color-palette-sky-light-stroke)",
-        "light-ink": "var(--color-palette-sky-light-ink)",
-        "light-tint-1": "var(--color-palette-sky-light-tint-1)",
-        "light-tint-2": "var(--color-palette-sky-light-tint-2)",
-        "light-tint-3": "var(--color-palette-sky-light-tint-3)",
-        "light-outline": "var(--color-palette-sky-light-outline)",
-        "dark-fill": "var(--color-palette-sky-dark-fill)",
-        "dark-stroke": "var(--color-palette-sky-dark-stroke)",
-        "dark-ink": "var(--color-palette-sky-dark-ink)",
-        "dark-tint-1": "var(--color-palette-sky-dark-tint-1)",
-        "dark-tint-2": "var(--color-palette-sky-dark-tint-2)",
-        "dark-tint-3": "var(--color-palette-sky-dark-tint-3)",
-        "dark-outline": "var(--color-palette-sky-dark-outline)"
-      },
-      "slate": {
-        "light-fill": "var(--color-palette-slate-light-fill)",
-        "light-stroke": "var(--color-palette-slate-light-stroke)",
-        "light-ink": "var(--color-palette-slate-light-ink)",
-        "light-dot": "var(--color-palette-slate-light-dot)",
-        "dark-fill": "var(--color-palette-slate-dark-fill)",
-        "dark-stroke": "var(--color-palette-slate-dark-stroke)",
-        "dark-ink": "var(--color-palette-slate-dark-ink)",
-        "dark-dot": "var(--color-palette-slate-dark-dot)",
-        "light-outline": "var(--color-palette-slate-light-outline)",
-        "dark-outline": "var(--color-palette-slate-dark-outline)"
-      }
-    },
     "figure": {
       "icon": "var(--color-figure-icon)",
       "queue-empty": "var(--color-figure-queue-empty)",
@@ -221,109 +163,43 @@ export const tokens = freeze({
     "paint": {
       "red": {
         "fill": "var(--color-paint-red-fill)",
-        "stroke": "var(--color-paint-red-stroke)",
         "outline": "var(--color-paint-red-outline)",
-        "ink": "var(--color-paint-red-ink)",
-        "dot": "var(--color-paint-red-dot)"
-      },
-      "amber": {
-        "fill": "var(--color-paint-amber-fill)",
-        "stroke": "var(--color-paint-amber-stroke)",
-        "outline": "var(--color-paint-amber-outline)",
-        "ink": "var(--color-paint-amber-ink)"
+        "ink": "var(--color-paint-red-ink)"
       },
       "green": {
         "fill": "var(--color-paint-green-fill)",
-        "stroke": "var(--color-paint-green-stroke)",
         "outline": "var(--color-paint-green-outline)",
-        "ink": "var(--color-paint-green-ink)",
-        "dot": "var(--color-paint-green-dot)"
-      },
-      "teal": {
-        "fill": "var(--color-paint-teal-fill)",
-        "stroke": "var(--color-paint-teal-stroke)",
-        "outline": "var(--color-paint-teal-outline)",
-        "ink": "var(--color-paint-teal-ink)",
-        "dot": "var(--color-paint-teal-dot)"
-      },
-      "navy": {
-        "fill": "var(--color-paint-navy-fill)",
-        "stroke": "var(--color-paint-navy-stroke)",
-        "outline": "var(--color-paint-navy-outline)",
-        "ink": "var(--color-paint-navy-ink)"
+        "ink": "var(--color-paint-green-ink)"
       },
       "purple": {
         "fill": "var(--color-paint-purple-fill)",
-        "stroke": "var(--color-paint-purple-stroke)",
         "outline": "var(--color-paint-purple-outline)",
-        "ink": "var(--color-paint-purple-ink)",
-        "dot": "var(--color-paint-purple-dot)"
-      },
-      "pink": {
-        "fill": "var(--color-paint-pink-fill)",
-        "stroke": "var(--color-paint-pink-stroke)",
-        "outline": "var(--color-paint-pink-outline)",
-        "ink": "var(--color-paint-pink-ink)"
-      },
-      "sky": {
-        "fill": "var(--color-paint-sky-fill)",
-        "stroke": "var(--color-paint-sky-stroke)",
-        "outline": "var(--color-paint-sky-outline)",
-        "ink": "var(--color-paint-sky-ink)",
-        "group-1": "var(--color-paint-sky-group-1)",
-        "group-2": "var(--color-paint-sky-group-2)",
-        "group-3": "var(--color-paint-sky-group-3)"
+        "ink": "var(--color-paint-purple-ink)"
       },
       "gray": {
         "fill": "var(--color-paint-gray-fill)",
-        "stroke": "var(--color-paint-gray-stroke)",
         "outline": "var(--color-paint-gray-outline)",
-        "ink": "var(--color-paint-gray-ink)",
-        "dot": "var(--color-paint-gray-dot)"
+        "ink": "var(--color-paint-gray-ink)"
       },
       "blue": {
         "fill": "var(--color-paint-blue-fill)",
-        "stroke": "var(--color-paint-blue-stroke)",
         "outline": "var(--color-paint-blue-outline)",
-        "ink": "var(--color-paint-blue-ink)",
-        "dot": "var(--color-paint-blue-dot)",
-        "group-1": "var(--color-paint-blue-group-1)",
-        "group-2": "var(--color-paint-blue-group-2)",
-        "group-3": "var(--color-paint-blue-group-3)",
-        "effect": "var(--color-paint-blue-effect)"
+        "ink": "var(--color-paint-blue-ink)"
       },
       "yellow": {
         "fill": "var(--color-paint-yellow-fill)",
-        "stroke": "var(--color-paint-yellow-stroke)",
         "outline": "var(--color-paint-yellow-outline)",
-        "ink": "var(--color-paint-yellow-ink)",
-        "dot": "var(--color-paint-yellow-dot)",
-        "group-1": "var(--color-paint-yellow-group-1)",
-        "group-2": "var(--color-paint-yellow-group-2)",
-        "group-3": "var(--color-paint-yellow-group-3)",
-        "effect": "var(--color-paint-yellow-effect)"
+        "ink": "var(--color-paint-yellow-ink)"
       },
       "orange": {
         "fill": "var(--color-paint-orange-fill)",
-        "stroke": "var(--color-paint-orange-stroke)",
         "outline": "var(--color-paint-orange-outline)",
-        "ink": "var(--color-paint-orange-ink)",
-        "dot": "var(--color-paint-orange-dot)",
-        "group-1": "var(--color-paint-orange-group-1)",
-        "group-2": "var(--color-paint-orange-group-2)",
-        "group-3": "var(--color-paint-orange-group-3)",
-        "effect": "var(--color-paint-orange-effect)"
+        "ink": "var(--color-paint-orange-ink)"
       },
       "cyan": {
         "fill": "var(--color-paint-cyan-fill)",
-        "stroke": "var(--color-paint-cyan-stroke)",
         "outline": "var(--color-paint-cyan-outline)",
-        "ink": "var(--color-paint-cyan-ink)",
-        "dot": "var(--color-paint-cyan-dot)",
-        "group-1": "var(--color-paint-cyan-group-1)",
-        "group-2": "var(--color-paint-cyan-group-2)",
-        "group-3": "var(--color-paint-cyan-group-3)",
-        "effect": "var(--color-paint-cyan-effect)"
+        "ink": "var(--color-paint-cyan-ink)"
       }
     },
     "on-action": "var(--color-on-action)",
@@ -347,11 +223,6 @@ export const tokens = freeze({
     "search-bg": "var(--color-search-bg)",
     "help-bg": "var(--color-help-bg)",
     "help-border": "var(--color-help-border)",
-    "ui-syntax-keyword": "var(--color-ui-syntax-keyword)",
-    "ui-syntax-string": "var(--color-ui-syntax-string)",
-    "ui-syntax-number": "var(--color-ui-syntax-number)",
-    "ui-syntax-function": "var(--color-ui-syntax-function)",
-    "ui-syntax-type": "var(--color-ui-syntax-type)",
     "nav-color": "var(--color-nav-color)",
     "control-link": "var(--color-control-link)",
     "control-hover": "var(--color-control-hover)",
@@ -446,14 +317,6 @@ export const tokens = freeze({
     "prose-link-active": "var(--color-prose-link-active)",
     "prose-mark-background": "var(--color-prose-mark-background)",
     "prose-marker": "var(--color-prose-marker)",
-    "ui-syntax-property": "var(--color-ui-syntax-property)",
-    "ui-syntax-parameter": "var(--color-ui-syntax-parameter)",
-    "ui-syntax-constant": "var(--color-ui-syntax-constant)",
-    "ui-syntax-annotation": "var(--color-ui-syntax-annotation)",
-    "ui-syntax-variable": "var(--color-ui-syntax-variable)",
-    "ui-syntax-comment": "var(--color-ui-syntax-comment)",
-    "ui-syntax-operator": "var(--color-ui-syntax-operator)",
-    "ui-syntax-punctuation": "var(--color-ui-syntax-punctuation)",
     "code-copy-hover": "var(--color-code-copy-hover)",
     "action-link": "var(--color-action-link)",
     "category": {
@@ -464,12 +327,10 @@ export const tokens = freeze({
         "light-border": "var(--color-category-blue-light-border)",
         "light-ink": "var(--color-category-blue-light-ink)",
         "light-tint-1": "var(--color-category-blue-light-tint-1)",
-        "light-tint-2": "var(--color-category-blue-light-tint-2)",
         "light-tint-3": "var(--color-category-blue-light-tint-3)",
         "dark-border": "var(--color-category-blue-dark-border)",
         "dark-ink": "var(--color-category-blue-dark-ink)",
         "dark-tint-1": "var(--color-category-blue-dark-tint-1)",
-        "dark-tint-2": "var(--color-category-blue-dark-tint-2)",
         "dark-tint-3": "var(--color-category-blue-dark-tint-3)",
         "light-effect": "var(--color-category-blue-light-effect)",
         "dark-effect": "var(--color-category-blue-dark-effect)"
@@ -481,13 +342,9 @@ export const tokens = freeze({
         "light-border": "var(--color-category-yellow-light-border)",
         "light-ink": "var(--color-category-yellow-light-ink)",
         "light-tint-1": "var(--color-category-yellow-light-tint-1)",
-        "light-tint-2": "var(--color-category-yellow-light-tint-2)",
-        "light-tint-3": "var(--color-category-yellow-light-tint-3)",
         "dark-border": "var(--color-category-yellow-dark-border)",
         "dark-ink": "var(--color-category-yellow-dark-ink)",
         "dark-tint-1": "var(--color-category-yellow-dark-tint-1)",
-        "dark-tint-2": "var(--color-category-yellow-dark-tint-2)",
-        "dark-tint-3": "var(--color-category-yellow-dark-tint-3)",
         "light-effect": "var(--color-category-yellow-light-effect)",
         "dark-effect": "var(--color-category-yellow-dark-effect)"
       },
@@ -524,13 +381,9 @@ export const tokens = freeze({
         "light-border": "var(--color-category-orange-light-border)",
         "light-ink": "var(--color-category-orange-light-ink)",
         "light-tint-1": "var(--color-category-orange-light-tint-1)",
-        "light-tint-2": "var(--color-category-orange-light-tint-2)",
-        "light-tint-3": "var(--color-category-orange-light-tint-3)",
         "dark-border": "var(--color-category-orange-dark-border)",
         "dark-ink": "var(--color-category-orange-dark-ink)",
         "dark-tint-1": "var(--color-category-orange-dark-tint-1)",
-        "dark-tint-2": "var(--color-category-orange-dark-tint-2)",
-        "dark-tint-3": "var(--color-category-orange-dark-tint-3)",
         "light-effect": "var(--color-category-orange-light-effect)",
         "dark-effect": "var(--color-category-orange-dark-effect)"
       },
@@ -554,13 +407,9 @@ export const tokens = freeze({
         "light-border": "var(--color-category-cyan-light-border)",
         "light-ink": "var(--color-category-cyan-light-ink)",
         "light-tint-1": "var(--color-category-cyan-light-tint-1)",
-        "light-tint-2": "var(--color-category-cyan-light-tint-2)",
-        "light-tint-3": "var(--color-category-cyan-light-tint-3)",
         "dark-border": "var(--color-category-cyan-dark-border)",
         "dark-ink": "var(--color-category-cyan-dark-ink)",
         "dark-tint-1": "var(--color-category-cyan-dark-tint-1)",
-        "dark-tint-2": "var(--color-category-cyan-dark-tint-2)",
-        "dark-tint-3": "var(--color-category-cyan-dark-tint-3)",
         "light-effect": "var(--color-category-cyan-light-effect)",
         "dark-effect": "var(--color-category-cyan-dark-effect)"
       }
@@ -575,10 +424,7 @@ export const tokens = freeze({
     "mono": "var(--font-mono)",
     "figure-sans": "var(--font-figure-sans)",
     "figure-mono": "var(--font-figure-mono)",
-    "font": "var(--font-font)",
-    "font-code": "var(--font-font-code)",
     "status-font": "var(--font-status-font)",
-    "prose-code-font": "var(--font-prose-code-font)",
     "key-font": "var(--font-key-font)"
   },
   "spacing": {
@@ -590,23 +436,8 @@ export const tokens = freeze({
     "7": "var(--spacing-7)",
     "8": "var(--spacing-8)",
     "10": "var(--spacing-10)",
-    "11": "var(--spacing-11)",
     "12": "var(--spacing-12)",
     "15": "var(--spacing-15)",
-    "16": "var(--spacing-16)",
-    "20": "var(--spacing-20)",
-    "24": "var(--spacing-24)",
-    "28": "var(--spacing-28)",
-    "32": "var(--spacing-32)",
-    "40": "var(--spacing-40)",
-    "48": "var(--spacing-48)",
-    "56": "var(--spacing-56)",
-    "64": "var(--spacing-64)",
-    "80": "var(--spacing-80)",
-    "96": "var(--spacing-96)",
-    "112": "var(--spacing-112)",
-    "128": "var(--spacing-128)",
-    "224": "var(--spacing-224)",
     "unit": "var(--spacing-unit)",
     "header": "var(--spacing-header)",
     "section": "var(--spacing-section)",
@@ -766,62 +597,11 @@ export const tokens = freeze({
     "3-5": "var(--spacing-3-5)",
     "4-5": "var(--spacing-4-5)",
     "5-5": "var(--spacing-5-5)",
-    "7-5": "var(--spacing-7-5)",
     "0-25": "var(--spacing-0-25)",
     "0-75": "var(--spacing-0-75)",
     "1-25": "var(--spacing-1-25)",
     "figure": {
       "scrollbar": "var(--spacing-figure-scrollbar)",
-      "skip-hidden-offset": "var(--spacing-figure-skip-hidden-offset)",
-      "chevron": "var(--spacing-figure-chevron)",
-      "chevron-rotation": "var(--spacing-figure-chevron-rotation)",
-      "popover": "var(--spacing-figure-popover)",
-      "search-icon": "var(--spacing-figure-search-icon)",
-      "search-stroke": "var(--spacing-figure-search-stroke)",
-      "mobile-menu": "var(--spacing-figure-mobile-menu)",
-      "hero-command": "var(--spacing-figure-hero-command)",
-      "hero-height": "var(--spacing-figure-hero-height)",
-      "hero-mark": "var(--spacing-figure-hero-mark)",
-      "hero-description": "var(--spacing-figure-hero-description)",
-      "command-min-height": "var(--spacing-figure-command-min-height)",
-      "card-canvas-mix": "var(--spacing-figure-card-canvas-mix)",
-      "command-header": "var(--spacing-figure-command-header)",
-      "command-collapsed": "var(--spacing-figure-command-collapsed)",
-      "section-description": "var(--spacing-figure-section-description)",
-      "section-summary": "var(--spacing-figure-section-summary)",
-      "link-columns": "var(--spacing-figure-link-columns)",
-      "product-icon": "var(--spacing-figure-product-icon)",
-      "pair-columns": "var(--spacing-figure-pair-columns)",
-      "product-min-height": "var(--spacing-figure-product-min-height)",
-      "grid-end": "var(--spacing-figure-grid-end)",
-      "resource-min-height": "var(--spacing-figure-resource-min-height)",
-      "privacy-dialog": "var(--spacing-figure-privacy-dialog)",
-      "privacy-backdrop-mix": "var(--spacing-figure-privacy-backdrop-mix)",
-      "sidebar": "var(--spacing-figure-sidebar)",
-      "header": "var(--spacing-figure-header)",
-      "document-columns": "var(--spacing-figure-document-columns)",
-      "document-max": "var(--spacing-figure-document-max)",
-      "viewport": "var(--spacing-figure-viewport)",
-      "chevron-open-rotation": "var(--spacing-figure-chevron-open-rotation)",
-      "article-columns": "var(--spacing-figure-article-columns)",
-      "code-canvas-mix": "var(--spacing-figure-code-canvas-mix)",
-      "code-line": "var(--spacing-figure-code-line)",
-      "feedback-control": "var(--spacing-figure-feedback-control)",
-      "prompt-collapsed": "var(--spacing-figure-prompt-collapsed)",
-      "center-offset": "var(--spacing-figure-center-offset)",
-      "note-icon": "var(--spacing-figure-note-icon)",
-      "search-dialog": "var(--spacing-figure-search-dialog)",
-      "search-max-height": "var(--spacing-figure-search-max-height)",
-      "sidebar-compact": "var(--spacing-figure-sidebar-compact)",
-      "document-compact": "var(--spacing-figure-document-compact)",
-      "hero-command-ratio": "var(--spacing-figure-hero-command-ratio)",
-      "section-description-ratio": "var(--spacing-figure-section-description-ratio)",
-      "sidebar-mobile": "var(--spacing-figure-sidebar-mobile)",
-      "hero-title-mobile": "var(--spacing-figure-hero-title-mobile)",
-      "reference-chevron-rotation": "var(--spacing-figure-reference-chevron-rotation)",
-      "toc-threshold": "var(--spacing-figure-toc-threshold)",
-      "scroll-epsilon": "var(--spacing-figure-scroll-epsilon)",
-      "code-icon": "var(--spacing-figure-code-icon)",
       "control": {
         "outer": "var(--spacing-figure-control-outer)",
         "inner": "var(--spacing-figure-control-inner)",
@@ -833,10 +613,8 @@ export const tokens = freeze({
       },
       "icon": {
         "node": "var(--spacing-figure-icon-node)",
-        "group": "var(--spacing-figure-icon-group)",
         "tile": "var(--spacing-figure-icon-tile)",
-        "tile-gap": "var(--spacing-figure-icon-tile-gap)",
-        "grid": "var(--spacing-figure-icon-grid)"
+        "tile-gap": "var(--spacing-figure-icon-tile-gap)"
       },
       "tag": {
         "height": "var(--spacing-figure-tag-height)"
@@ -848,8 +626,7 @@ export const tokens = freeze({
         "chip-reach": "var(--spacing-figure-packet-chip-reach)"
       },
       "arrow": {
-        "head": "var(--spacing-figure-arrow-head)",
-        "head-lit": "var(--spacing-figure-arrow-head-lit)"
+        "head": "var(--spacing-figure-arrow-head)"
       },
       "node": {
         "card-width": "var(--spacing-figure-node-card-width)",
@@ -870,10 +647,6 @@ export const tokens = freeze({
       "figure-canvas-wide": "var(--spacing-figure-figure-canvas-wide)",
       "chip": {
         "max-width": "var(--spacing-figure-chip-max-width)"
-      },
-      "player": {
-        "caption-max": "var(--spacing-figure-player-caption-max)",
-        "embedded-chrome": "var(--spacing-figure-player-embedded-chrome)"
       },
       "gallery": {
         "column": "var(--spacing-figure-gallery-column)",
@@ -903,12 +676,6 @@ export const tokens = freeze({
         "slot-height": "var(--spacing-figure-queue-slot-height)",
         "slot-gap": "var(--spacing-figure-queue-slot-gap)"
       },
-      "person": {
-        "width": "var(--spacing-figure-person-width)",
-        "head": "var(--spacing-figure-person-head)",
-        "shoulder": "var(--spacing-figure-person-shoulder)",
-        "body": "var(--spacing-figure-person-body)"
-      },
       "sequence": {
         "row": "var(--spacing-figure-sequence-row)"
       },
@@ -918,52 +685,14 @@ export const tokens = freeze({
       "figure-compact-width": "var(--spacing-figure-figure-compact-width)"
     },
     "focus-offset": "var(--spacing-focus-offset)",
-    "chevron-offset": "var(--spacing-chevron-offset)",
-    "negative-direction": "var(--spacing-negative-direction)",
-    "search-handle-x": "var(--spacing-search-handle-x)",
-    "search-handle-y": "var(--spacing-search-handle-y)",
-    "search-stroke": "var(--spacing-search-stroke)",
-    "active-tab-offset": "var(--spacing-active-tab-offset)",
-    "compact": "var(--spacing-compact)",
-    "small": "var(--spacing-small)",
-    "medium": "var(--spacing-medium)",
-    "paragraph": "var(--spacing-paragraph)",
-    "section-heading": "var(--spacing-section-heading)",
-    "list-indent": "var(--spacing-list-indent)",
-    "reference-top": "var(--spacing-reference-top)",
-    "reference-title-bottom": "var(--spacing-reference-title-bottom)",
-    "heading-bottom": "var(--spacing-heading-bottom)",
-    "action-gap": "var(--spacing-action-gap)",
-    "reference-heading": "var(--spacing-reference-heading)",
-    "motion": {
-      "card": {
-        "min": "var(--spacing-motion-card-min)",
-        "max": "var(--spacing-motion-card-max)"
-      },
-      "flow": "var(--spacing-motion-flow)",
-      "neighbor": "var(--spacing-motion-neighbor)",
-      "neighbor-cvd": "var(--spacing-motion-neighbor-cvd)",
-      "fill": "var(--spacing-motion-fill)",
-      "fill-dark": {
-        "bg": "var(--spacing-motion-fill-dark-bg)",
-        "node": "var(--spacing-motion-fill-dark-node)"
-      }
-    }
+    "icon": "var(--spacing-icon)",
+    "control": "var(--spacing-control)"
   },
   "radius": {
     "lg": "var(--radius-lg)",
-    "lg-2": "var(--radius-lg-2)",
-    "2xl": "var(--radius-2xl)",
     "full": "var(--radius-full)",
-    "inputs": "var(--radius-inputs)",
-    "buttons": "var(--radius-buttons)",
-    "cards": "var(--radius-cards)",
-    "tags": "var(--radius-tags)",
-    "control": "var(--radius-control)",
-    "icon": "var(--radius-icon)",
     "sm": "var(--radius-sm)",
     "md": "var(--radius-md)",
-    "xl": "var(--radius-xl)",
     "route": "var(--radius-route)",
     "card-radius": "var(--radius-card-radius)",
     "media-radius": "var(--radius-media-radius)",
@@ -1064,9 +793,6 @@ export const tokens = freeze({
     "heading": "var(--leading-heading)",
     "normal": "var(--leading-normal)",
     "snug": "var(--leading-snug)",
-    "border": "var(--leading-border)",
-    "icon": "var(--leading-icon)",
-    "control": "var(--leading-control)",
     "line-body": "var(--leading-line-body)",
     "line-title": "var(--leading-line-title)",
     "line-intro": "var(--leading-line-intro)",
@@ -1094,15 +820,12 @@ export const tokens = freeze({
     "text": "var(--tracking-text)"
   },
   "font-weight": {
-    "weight-title": "var(--font-weight-weight-title)",
-    "weight-medium": "var(--font-weight-weight-medium)",
-    "weight-body": "var(--font-weight-weight-body)",
-    "status-heading-weight": "var(--font-weight-status-heading-weight)",
-    "status-caption-weight": "var(--font-weight-status-caption-weight)",
-    "gallery-weight": "var(--font-weight-gallery-weight)",
-    "key-weight": "var(--font-weight-key-weight)",
     "prose-script-weight": "var(--font-weight-prose-script-weight)",
-    "semibold": "var(--font-weight-semibold)"
+    "semibold": "var(--font-weight-semibold)",
+    "normal": "var(--font-weight-normal)",
+    "medium": "var(--font-weight-medium)",
+    "bold": "var(--font-weight-bold)",
+    "extrabold": "var(--font-weight-extrabold)"
   },
   "primitive": {
     "canvas": "var(--primitive-canvas)",
@@ -1118,7 +841,6 @@ export const tokens = freeze({
     "intro": "var(--primitive-intro)",
     "form": "var(--primitive-form)",
     "header": "var(--primitive-header)",
-    "hero-title-mobile": "var(--primitive-hero-title-mobile)",
     "section-title": "var(--primitive-section-title)",
     "article-title": "var(--primitive-article-title)",
     "intro-text": "var(--primitive-intro-text)",
@@ -1131,13 +853,10 @@ export const tokens = freeze({
     "gap": "var(--primitive-gap)",
     "gap-sm": "var(--primitive-gap-sm)",
     "gap-xs": "var(--primitive-gap-xs)",
-    "card-padding": "var(--primitive-card-padding)",
     "media-radius": "var(--primitive-media-radius)",
     "button-radius": "var(--primitive-button-radius)",
     "pill": "var(--primitive-pill)",
-    "border": "var(--primitive-border)",
     "icon": "var(--primitive-icon)",
-    "avatar": "var(--primitive-avatar)",
     "control": "var(--primitive-control)",
     "outline": "var(--primitive-outline)",
     "underline": "var(--primitive-underline)",
@@ -1145,9 +864,6 @@ export const tokens = freeze({
     "line-body": "var(--primitive-line-body)",
     "line-title": "var(--primitive-line-title)",
     "line-intro": "var(--primitive-line-intro)",
-    "weight-title": "var(--primitive-weight-title)",
-    "weight-medium": "var(--primitive-weight-medium)",
-    "weight-body": "var(--primitive-weight-body)",
     "motion-rail": "var(--primitive-motion-rail)",
     "ratio-video": "var(--primitive-ratio-video)",
     "nav-width": "var(--primitive-nav-width)",
@@ -1264,7 +980,6 @@ export const tokens = freeze({
     "landing-icon-bottom": "var(--primitive-landing-icon-bottom)",
     "landing-icon-right": "var(--primitive-landing-icon-right)",
     "landing-title-line": "var(--primitive-landing-title-line)",
-    "landing-product-tail": "var(--primitive-landing-product-tail)",
     "landing-product-copy": "var(--primitive-landing-product-copy)",
     "landing-logo-opacity": "var(--primitive-landing-logo-opacity)",
     "landing-nav-offset": "var(--primitive-landing-nav-offset)",
@@ -1278,11 +993,6 @@ export const tokens = freeze({
     "landing-review-avatar-radius": "var(--primitive-landing-review-avatar-radius)",
     "landing-review-copy-bottom": "var(--primitive-landing-review-copy-bottom)",
     "landing-review-shadow": "var(--primitive-landing-review-shadow)",
-    "landing-quote-meta-height": "var(--primitive-landing-quote-meta-height)",
-    "landing-quote-meta": "var(--primitive-landing-quote-meta)",
-    "landing-logo-wired": "var(--primitive-landing-logo-wired)",
-    "landing-logo-macstories": "var(--primitive-landing-logo-macstories)",
-    "landing-quote-award-text": "var(--primitive-landing-quote-award-text)",
     "landing-social-size": "var(--primitive-landing-social-size)",
     "landing-social-y": "var(--primitive-landing-social-y)",
     "landing-social-x": "var(--primitive-landing-social-x)",
@@ -1340,7 +1050,6 @@ export const tokens = freeze({
     "article-search-font": "var(--primitive-article-search-font)",
     "article-search-radius": "var(--primitive-article-search-radius)",
     "article-search-padding": "var(--primitive-article-search-padding)",
-    "article-media-compact": "var(--primitive-article-media-compact)",
     "syntax-example-padding": "var(--primitive-syntax-example-padding)",
     "syntax-example-background": "var(--primitive-syntax-example-background)",
     "syntax-example-border": "var(--primitive-syntax-example-border)",
@@ -1400,8 +1109,6 @@ export const tokens = freeze({
     "status-board-divider": "var(--primitive-status-board-divider)",
     "status-text-shadow": "var(--primitive-status-text-shadow)",
     "status-action-width": "var(--primitive-status-action-width)",
-    "status-heading-weight": "var(--primitive-status-heading-weight)",
-    "status-caption-weight": "var(--primitive-status-caption-weight)",
     "status-nav-color": "var(--primitive-status-nav-color)",
     "status-nav-line": "var(--primitive-status-nav-line)",
     "status-nav-hover": "var(--primitive-status-nav-hover)",
@@ -1434,7 +1141,6 @@ export const tokens = freeze({
     "gallery-active": "var(--primitive-gallery-active)",
     "gallery-selected": "var(--primitive-gallery-selected)",
     "gallery-row-gap": "var(--primitive-gallery-row-gap)",
-    "prose-code-font": "var(--primitive-prose-code-font)",
     "prose-code-size": "var(--primitive-prose-code-size)",
     "prose-code-padding": "var(--primitive-prose-code-padding)",
     "prose-code-radius": "var(--primitive-prose-code-radius)",
@@ -1578,15 +1284,57 @@ export const tokens = freeze({
     "figure-number-fill": "var(--primitive-figure-number-fill)",
     "figure-number-ink": "var(--primitive-figure-number-ink)",
     "figure-chart-hole": "var(--primitive-figure-chart-hole)",
-    "table-padding": "var(--primitive-table-padding)"
+    "table-padding": "var(--primitive-table-padding)",
+    "landing-review-radius": "var(--primitive-landing-review-radius)",
+    "feature-box-radius": "var(--primitive-feature-box-radius)",
+    "syntax-example-radius": "var(--primitive-syntax-example-radius)",
+    "search-results-radius": "var(--primitive-search-results-radius)",
+    "search-result-radius": "var(--primitive-search-result-radius)",
+    "landing-newsletter-note": "var(--primitive-landing-newsletter-note)",
+    "nav-text": "var(--primitive-nav-text)",
+    "status-caption-size": "var(--primitive-status-caption-size)",
+    "status-weather-font": "var(--primitive-status-weather-font)",
+    "search-result-size": "var(--primitive-search-result-size)",
+    "key-size": "var(--primitive-key-size)",
+    "newsletter-button-line": "var(--primitive-newsletter-button-line)",
+    "status-weather-line": "var(--primitive-status-weather-line)",
+    "landing-heading-space": "var(--primitive-landing-heading-space)",
+    "landing-description-margin": "var(--primitive-landing-description-margin)",
+    "landing-heading-width": "var(--primitive-landing-heading-width)",
+    "landing-panel-gap": "var(--primitive-landing-panel-gap)",
+    "landing-nav-gap": "var(--primitive-landing-nav-gap)",
+    "landing-review-avatar": "var(--primitive-landing-review-avatar)",
+    "landing-review-fade": "var(--primitive-landing-review-fade)",
+    "landing-footer-top": "var(--primitive-landing-footer-top)",
+    "search-icon-size": "var(--primitive-search-icon-size)",
+    "post-divider-width": "var(--primitive-post-divider-width)",
+    "comments-preview-height": "var(--primitive-comments-preview-height)",
+    "post-header-margin": "var(--primitive-post-header-margin)",
+    "article-search-bottom": "var(--primitive-article-search-bottom)",
+    "article-title-padding": "var(--primitive-article-title-padding)",
+    "article-title-gap": "var(--primitive-article-title-gap)",
+    "width-narrow": "var(--primitive-width-narrow)",
+    "syntax-example-gap": "var(--primitive-syntax-example-gap)",
+    "office-panel-gap": "var(--primitive-office-panel-gap)",
+    "status-bottom": "var(--primitive-status-bottom)",
+    "status-icon-inset": "var(--primitive-status-icon-inset)",
+    "status-flip-inset": "var(--primitive-status-flip-inset)",
+    "status-title-icon": "var(--primitive-status-title-icon)",
+    "keyboard-icon": "var(--primitive-keyboard-icon)",
+    "control-icon-size": "var(--primitive-control-icon-size)",
+    "help-inline-icon": "var(--primitive-help-inline-icon)",
+    "help-inline-icon-inset": "var(--primitive-help-inline-icon-inset)",
+    "help-inline-chevron-inset": "var(--primitive-help-inline-chevron-inset)",
+    "help-inline-no-icon": "var(--primitive-help-inline-no-icon)",
+    "flow-control-size": "var(--primitive-flow-control-size)",
+    "card-radius": "var(--primitive-card-radius)",
+    "body-text": "var(--primitive-body-text)",
+    "blur": "var(--primitive-blur)"
   },
   "breakpoint": {
-    "desktop": "var(--breakpoint-desktop)",
-    "tablet": "var(--breakpoint-tablet)",
     "mobile": "var(--breakpoint-mobile)",
     "support-pair": "var(--breakpoint-support-pair)",
     "product-pair": "var(--breakpoint-product-pair)",
-    "footer-pair": "var(--breakpoint-footer-pair)",
     "feature-split": "var(--breakpoint-feature-split)",
     "nav-compact": "var(--breakpoint-nav-compact)",
     "product-wide": "var(--breakpoint-product-wide)",
@@ -1629,22 +1377,12 @@ export const tokens = freeze({
     "help-inline-opacity": "var(--opacity-help-inline-opacity)"
   },
   "duration": {
-    "disclosure": "var(--duration-disclosure)",
-    "feedback": "var(--duration-feedback)",
     "fast": "var(--duration-fast)",
     "hop": "var(--duration-hop)",
-    "caption-fade": "var(--duration-caption-fade)",
     "hop-min": "var(--duration-hop-min)",
     "chip-slide": "var(--duration-chip-slide)",
     "chip-fade": "var(--duration-chip-fade)",
-    "dwell": "var(--duration-dwell)",
-    "dwell-per-char": "var(--duration-dwell-per-char)",
-    "dwell-max": "var(--duration-dwell-max)",
-    "step-end": "var(--duration-step-end)",
-    "chart-cycle": "var(--duration-chart-cycle)",
     "reveal": "var(--duration-reveal)",
-    "value-flash": "var(--duration-value-flash)",
-    "pulse": "var(--duration-pulse)",
     "chip-frame": "var(--duration-chip-frame)",
     "flow-step": "var(--duration-flow-step)",
     "cut-fade": "var(--duration-cut-fade)",
@@ -1853,22 +1591,6 @@ export const tokens = freeze({
   },
   "stroke-width": {
     "control": "var(--stroke-width-control)"
-  },
-  "typography": {
-    "sm-4": {
-      "fontFamily": "var(--typography-sm-4-fontFamily)",
-      "fontSize": "var(--typography-sm-4-fontSize)",
-      "fontWeight": "var(--typography-sm-4-fontWeight)",
-      "lineHeight": "var(--typography-sm-4-lineHeight)",
-      "letterSpacing": "var(--typography-sm-4-letterSpacing)"
-    },
-    "4xl-2": {
-      "fontFamily": "var(--typography-4xl-2-fontFamily)",
-      "fontSize": "var(--typography-4xl-2-fontSize)",
-      "fontWeight": "var(--typography-4xl-2-fontWeight)",
-      "lineHeight": "var(--typography-4xl-2-lineHeight)",
-      "letterSpacing": "var(--typography-4xl-2-letterSpacing)"
-    }
   }
 });
 export const values = freeze({
@@ -1887,11 +1609,13 @@ export const values = freeze({
       "0": "#ffffff",
       "43": "#f4f4f4",
       "59": "#f0f0f0",
-      "161": "#d6d6d6",
+      "94": "#e7e7e7",
       "212": "#c9c9c9",
       "220": "#c7c7c7",
       "282": "#b7b7b7",
       "333": "#aaaaaa",
+      "467": "#888888",
+      "482": "#848484",
       "529": "#787878",
       "545": "#747474",
       "635": "#5d5d5d",
@@ -1901,12 +1625,7 @@ export const values = freeze({
       "933": "#111111",
       "1000": "#000000"
     },
-    "fg": "#303336",
-    "muted": "#55606e",
     "group-title": "#3d4856",
-    "node": "#ffffff",
-    "card": "#ffffff",
-    "page": "#ffffff",
     "outline": "#787878",
     "line": "#b7b7b7",
     "state": {
@@ -2028,61 +1747,6 @@ export const values = freeze({
         "7": "optional"
       }
     },
-    "palette": {
-      "amber": {
-        "light-fill": "#fff9f5",
-        "light-stroke": "#c46800",
-        "light-ink": "#9d5100",
-        "light-outline": "#c46800"
-      },
-      "teal": {
-        "light-fill": "#f7fbf9",
-        "light-stroke": "#149265",
-        "light-ink": "#00744e",
-        "light-dot": "#149265",
-        "light-outline": "#149265"
-      },
-      "navy": {
-        "light-fill": "#f7fafe",
-        "light-stroke": "#1e6bd6",
-        "light-ink": "#1161cb",
-        "light-outline": "#1e6bd6"
-      },
-      "pink": {
-        "light-fill": "#fbf9fe",
-        "light-stroke": "#7d40c8",
-        "light-ink": "#7d40c8",
-        "light-outline": "#7d40c8"
-      },
-      "sky": {
-        "light-fill": "#e9f1fe",
-        "light-stroke": "#1e6bd6",
-        "light-ink": "#1161cb",
-        "light-tint-1": "#f7fafe",
-        "light-tint-2": "#e5eefc",
-        "light-tint-3": "#d5e4fa",
-        "light-outline": "#628ad3",
-        "dark-fill": "#1c2a43",
-        "dark-stroke": "#3a85f2",
-        "dark-ink": "#6da8ff",
-        "dark-tint-1": "#303948",
-        "dark-tint-2": "#303b4e",
-        "dark-tint-3": "#303d54",
-        "dark-outline": "#6789c4"
-      },
-      "slate": {
-        "light-fill": "#e7e7e7",
-        "light-stroke": "#5d5d5d",
-        "light-ink": "#5d5d5d",
-        "light-dot": "#747474",
-        "dark-fill": "#363636",
-        "dark-stroke": "#aaaaaa",
-        "dark-ink": "#aaaaaa",
-        "dark-dot": "#c7c7c7",
-        "light-outline": "#848484",
-        "dark-outline": "#888888"
-      }
-    },
     "figure": {
       "icon": "#1e6bd6",
       "queue-empty": "#f0f0f0",
@@ -2092,109 +1756,43 @@ export const values = freeze({
     "paint": {
       "red": {
         "fill": "#fff8f8",
-        "stroke": "#fa1955",
         "outline": "#fa1955",
-        "ink": "#cc0041",
-        "dot": "#fa1955"
-      },
-      "amber": {
-        "fill": "#fff9f5",
-        "stroke": "#c46800",
-        "outline": "#c46800",
-        "ink": "#9d5100"
+        "ink": "#cc0041"
       },
       "green": {
         "fill": "#f7fbf9",
-        "stroke": "#149265",
         "outline": "#149265",
-        "ink": "#00744e",
-        "dot": "#149265"
-      },
-      "teal": {
-        "fill": "#f7fbf9",
-        "stroke": "#149265",
-        "outline": "#149265",
-        "ink": "#00744e",
-        "dot": "#149265"
-      },
-      "navy": {
-        "fill": "#f7fafe",
-        "stroke": "#1e6bd6",
-        "outline": "#1e6bd6",
-        "ink": "#1161cb"
+        "ink": "#00744e"
       },
       "purple": {
         "fill": "#fbf9fe",
-        "stroke": "#7d40c8",
-        "outline": "#7d40c8",
-        "ink": "#7d40c8",
-        "dot": "#7d40c8"
-      },
-      "pink": {
-        "fill": "#fbf9fe",
-        "stroke": "#7d40c8",
         "outline": "#7d40c8",
         "ink": "#7d40c8"
       },
-      "sky": {
-        "fill": "#e9f1fe",
-        "stroke": "#1e6bd6",
-        "outline": "#628ad3",
-        "ink": "#1161cb",
-        "group-1": "#f7fafe",
-        "group-2": "#e5eefc",
-        "group-3": "#d5e4fa"
-      },
       "gray": {
         "fill": "#e7e7e7",
-        "stroke": "#5d5d5d",
         "outline": "#848484",
-        "ink": "#5d5d5d",
-        "dot": "#747474"
+        "ink": "#5d5d5d"
       },
       "blue": {
         "fill": "#f7fafe",
-        "stroke": "#1e6bd6",
         "outline": "#1e6bd6",
-        "ink": "#1161cb",
-        "dot": "#1e6bd6",
-        "group-1": "#f7fafe",
-        "group-2": "#e5eefc",
-        "group-3": "#d5e4fa",
-        "effect": "#3984f2"
+        "ink": "#1161cb"
       },
       "yellow": {
         "fill": "#fefcf3",
-        "stroke": "#d6b600",
         "outline": "#d6b600",
-        "ink": "#303336",
-        "dot": "#d6b600",
-        "group-1": "#fefcf3",
-        "group-2": "#fdf9e9",
-        "group-3": "#fcf7df",
-        "effect": "#f0d03b"
+        "ink": "#303336"
       },
       "orange": {
         "fill": "#fff9f5",
-        "stroke": "#c46800",
         "outline": "#c46800",
-        "ink": "#9d5100",
-        "dot": "#c46800",
-        "group-1": "#fff9f5",
-        "group-2": "#fff2e9",
-        "group-3": "#ffebdd",
-        "effect": "#df812e"
+        "ink": "#9d5100"
       },
       "cyan": {
         "fill": "#f5fbfc",
-        "stroke": "#008e9a",
         "outline": "#008e9a",
-        "ink": "#00717b",
-        "dot": "#008e9a",
-        "group-1": "#f5fbfc",
-        "group-2": "#e9f7f9",
-        "group-3": "#def3f6",
-        "effect": "#33a7b3"
+        "ink": "#00717b"
       }
     },
     "on-action": "#ffffff",
@@ -2218,11 +1816,6 @@ export const values = freeze({
     "search-bg": "#edeef1",
     "help-bg": "#f6f7fa",
     "help-border": "#ebecef",
-    "ui-syntax-keyword": "#cc0041",
-    "ui-syntax-string": "#1161cb",
-    "ui-syntax-number": "#9d5100",
-    "ui-syntax-function": "#7d40c8",
-    "ui-syntax-type": "#00744e",
     "nav-color": "rgba(38,52,74,.5)",
     "control-link": "#5c9cf5",
     "control-hover": "rgba(92,156,245,.2)",
@@ -2317,14 +1910,6 @@ export const values = freeze({
     "prose-link-active": "#114691",
     "prose-mark-background": "#fcf9cf",
     "prose-marker": "rgba(0,15,36,.46)",
-    "ui-syntax-property": "#7d40c8",
-    "ui-syntax-parameter": "#9d5100",
-    "ui-syntax-constant": "#9d5100",
-    "ui-syntax-annotation": "#00744e",
-    "ui-syntax-variable": "#1f1f1f",
-    "ui-syntax-comment": "#5d5d5d",
-    "ui-syntax-operator": "#1f1f1f",
-    "ui-syntax-punctuation": "#1f1f1f",
     "code-copy-hover": "#5b9aff",
     "action-link": "#2576eb",
     "category": {
@@ -2335,12 +1920,10 @@ export const values = freeze({
         "light-border": "#1e6bd6",
         "light-ink": "#1161cb",
         "light-tint-1": "#f7fafe",
-        "light-tint-2": "#e5eefc",
         "light-tint-3": "#d5e4fa",
         "dark-border": "#3a85f2",
         "dark-ink": "#6da8ff",
         "dark-tint-1": "#303948",
-        "dark-tint-2": "#303b4e",
         "dark-tint-3": "#303d54",
         "light-effect": "#3984f2",
         "dark-effect": "#60a0ff"
@@ -2352,13 +1935,9 @@ export const values = freeze({
         "light-border": "#d6b600",
         "light-ink": "#303336",
         "light-tint-1": "#fefcf3",
-        "light-tint-2": "#fdf9e9",
-        "light-tint-3": "#fcf7df",
         "dark-border": "#f2d024",
         "dark-ink": "#f2d024",
         "dark-tint-1": "#393938",
-        "dark-tint-2": "#3b3a39",
-        "dark-tint-3": "#3c3c39",
         "light-effect": "#f0d03b",
         "dark-effect": "#ffec9a"
       },
@@ -2395,13 +1974,9 @@ export const values = freeze({
         "light-border": "#c46800",
         "light-ink": "#9d5100",
         "light-tint-1": "#fff9f5",
-        "light-tint-2": "#fff2e9",
-        "light-tint-3": "#ffebdd",
         "dark-border": "#ff8906",
         "dark-ink": "#ff8906",
         "dark-tint-1": "#3d3738",
-        "dark-tint-2": "#403938",
-        "dark-tint-3": "#433a38",
         "light-effect": "#df812e",
         "dark-effect": "#ffb27a"
       },
@@ -2425,13 +2000,9 @@ export const values = freeze({
         "light-border": "#008e9a",
         "light-ink": "#00717b",
         "light-tint-1": "#f5fbfc",
-        "light-tint-2": "#e9f7f9",
-        "light-tint-3": "#def3f6",
         "dark-border": "#25c0cf",
         "dark-ink": "#25c0cf",
         "dark-tint-1": "#333a3f",
-        "dark-tint-2": "#333c42",
-        "dark-tint-3": "#343e44",
         "light-effect": "#33a7b3",
         "dark-effect": "#4ddae9"
       }
@@ -2446,10 +2017,7 @@ export const values = freeze({
     "mono": "\"JetBrains Mono\", ui-monospace, SFMono-Regular, Menlo, monospace",
     "figure-sans": "FigSans, FigSansSym, FigSansMath, ui-sans-serif, -apple-system, BlinkMacSystemFont, Roboto, sans-serif",
     "figure-mono": "FigMono, FigSans, FigSansSym, FigSansMath, ui-monospace, SFMono-Regular, Menlo, monospace",
-    "font": "Pretendard, \"Pretendard Variable\", -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", sans-serif",
-    "font-code": "\"JetBrains Mono\", ui-monospace, SFMono-Regular, Menlo, monospace",
     "status-font": "ui-rounded, -apple-system, BlinkMacSystemFont, Roboto, sans-serif",
-    "prose-code-font": "ui-monospace, SFMono-Regular, Menlo, \"Andale Mono\", Consolas, Monaco, monospace",
     "key-font": "ui-sans-serif, -apple-system, BlinkMacSystemFont, \"Apple Symbols\", Roboto, sans-serif"
   },
   "spacing": {
@@ -2461,23 +2029,8 @@ export const values = freeze({
     "7": 28,
     "8": 32,
     "10": 40,
-    "11": 44,
     "12": 48,
     "15": 60,
-    "16": 64,
-    "20": 80,
-    "24": 96,
-    "28": 112,
-    "32": 128,
-    "40": 160,
-    "48": 192,
-    "56": 224,
-    "64": 256,
-    "80": 320,
-    "96": 384,
-    "112": 448,
-    "128": 512,
-    "224": 896,
     "unit": 4,
     "header": 88,
     "section": 100,
@@ -2637,62 +2190,11 @@ export const values = freeze({
     "3-5": 14,
     "4-5": 18,
     "5-5": 22,
-    "7-5": 30,
     "0-25": 1,
     "0-75": 3,
     "1-25": 5,
     "figure": {
       "scrollbar": "calc(4px * 0.75)",
-      "skip-hidden-offset": "-160%",
-      "chevron": 5,
-      "chevron-rotation": "45deg",
-      "popover": 190,
-      "search-icon": "calc(4px * 1.5)",
-      "search-stroke": 1.5,
-      "mobile-menu": 232,
-      "hero-command": 476,
-      "hero-height": 312,
-      "hero-mark": 384,
-      "hero-description": 530,
-      "command-min-height": 184,
-      "card-canvas-mix": "60%",
-      "command-header": "calc(4px * 5.5)",
-      "command-collapsed": 140,
-      "section-description": 392,
-      "section-summary": 365,
-      "link-columns": 3,
-      "product-icon": 18,
-      "pair-columns": 2,
-      "product-min-height": 136,
-      "grid-end": -1,
-      "resource-min-height": 118,
-      "privacy-dialog": 440,
-      "privacy-backdrop-mix": "70%",
-      "sidebar": 340,
-      "header": 50,
-      "document-columns": 12,
-      "document-max": 1152,
-      "viewport": "100dvh",
-      "chevron-open-rotation": "225deg",
-      "article-columns": 8,
-      "code-canvas-mix": "80%",
-      "code-line": "1.5em",
-      "feedback-control": "calc(4px * 3.5)",
-      "prompt-collapsed": "calc(512px + 192px)",
-      "center-offset": "-50%",
-      "note-icon": "calc(4px * 2.5)",
-      "search-dialog": 620,
-      "search-max-height": "70vh",
-      "sidebar-compact": 240,
-      "document-compact": 760,
-      "hero-command-ratio": "42%",
-      "section-description-ratio": "32%",
-      "sidebar-mobile": 320,
-      "hero-title-mobile": 230,
-      "reference-chevron-rotation": "90deg",
-      "toc-threshold": 240,
-      "scroll-epsilon": 2,
-      "code-icon": 14,
       "control": {
         "outer": 52,
         "inner": 44,
@@ -2704,10 +2206,8 @@ export const values = freeze({
       },
       "icon": {
         "node": 20,
-        "group": 18,
         "tile": 32,
-        "tile-gap": 6,
-        "grid": 24
+        "tile-gap": 6
       },
       "tag": {
         "height": 14
@@ -2719,8 +2219,7 @@ export const values = freeze({
         "chip-reach": 16
       },
       "arrow": {
-        "head": 5,
-        "head-lit": 4
+        "head": 5
       },
       "node": {
         "card-width": 176,
@@ -2741,10 +2240,6 @@ export const values = freeze({
       "figure-canvas-wide": 1440,
       "chip": {
         "max-width": 210
-      },
-      "player": {
-        "caption-max": 720,
-        "embedded-chrome": 150
       },
       "gallery": {
         "column": 960,
@@ -2774,12 +2269,6 @@ export const values = freeze({
         "slot-height": 14,
         "slot-gap": 4
       },
-      "person": {
-        "width": 56,
-        "head": 20,
-        "shoulder": 14,
-        "body": 22
-      },
       "sequence": {
         "row": 44
       },
@@ -2789,52 +2278,14 @@ export const values = freeze({
       "figure-compact-width": 320
     },
     "focus-offset": "calc(4px * 0.375)",
-    "chevron-offset": "calc(4px * -0.375)",
-    "negative-direction": -1,
-    "search-handle-x": "calc(4px * -0.5)",
-    "search-handle-y": "calc(4px * -0.25)",
-    "search-stroke": "calc(4px * 0.1875)",
-    "active-tab-offset": "calc(4px * -0.125)",
-    "compact": "calc(4px * 0.25)",
-    "small": "calc(4px * 0.5)",
-    "medium": "calc(4px * 1.5)",
-    "paragraph": 96,
-    "section-heading": "calc(4px * 5.5)",
-    "list-indent": "calc(4px * 2.5)",
-    "reference-top": "calc(4px * 7.5)",
-    "reference-title-bottom": "calc(4px * 7)",
-    "heading-bottom": "calc(4px * 2.75)",
-    "action-gap": "calc(4px * 0.75)",
-    "reference-heading": "calc(4px * 2.25)",
-    "motion": {
-      "card": {
-        "min": 0.015,
-        "max": 0.04
-      },
-      "flow": 0.1,
-      "neighbor": 0.06,
-      "neighbor-cvd": 0.025,
-      "fill": 0.015,
-      "fill-dark": {
-        "bg": 0.07,
-        "node": 0.03
-      }
-    }
+    "icon": 24,
+    "control": 36
   },
   "radius": {
     "lg": 8,
-    "lg-2": 11,
-    "2xl": 14,
     "full": 999,
-    "inputs": 8,
-    "buttons": 999,
-    "cards": 14,
-    "tags": 999,
-    "control": "calc(8px / 2)",
-    "icon": "calc(8px / 4)",
     "sm": 4,
     "md": 6,
-    "xl": 10,
     "route": 22,
     "card-radius": 18,
     "media-radius": 30,
@@ -2935,9 +2386,6 @@ export const values = freeze({
     "heading": 1.2,
     "normal": 1.5,
     "snug": 1.35,
-    "border": 1,
-    "icon": 24,
-    "control": 36,
     "line-body": 1.4,
     "line-title": 1.12,
     "line-intro": 1.25,
@@ -2965,15 +2413,12 @@ export const values = freeze({
     "text": -0.3
   },
   "font-weight": {
-    "weight-title": 700,
-    "weight-medium": 600,
-    "weight-body": 400,
-    "status-heading-weight": 800,
-    "status-caption-weight": 500,
-    "gallery-weight": 500,
-    "key-weight": 500,
     "prose-script-weight": 440,
-    "semibold": 600
+    "semibold": 600,
+    "normal": 400,
+    "medium": 500,
+    "bold": 700,
+    "extrabold": 800
   },
   "primitive": {
     "canvas": "#f2f5f7",
@@ -2989,7 +2434,6 @@ export const values = freeze({
     "intro": 440,
     "form": 500,
     "header": 88,
-    "hero-title-mobile": 44,
     "section-title": 36,
     "article-title": 38,
     "intro-text": 23.994,
@@ -3002,13 +2446,10 @@ export const values = freeze({
     "gap": 24,
     "gap-sm": 12,
     "gap-xs": 8,
-    "card-padding": 28,
     "media-radius": 30,
     "button-radius": 8,
     "pill": 9999,
-    "border": 1,
     "icon": 24,
-    "avatar": 40,
     "control": 36,
     "outline": 3,
     "underline": 2,
@@ -3016,9 +2457,6 @@ export const values = freeze({
     "line-body": 1.4,
     "line-title": 1.12,
     "line-intro": 1.25,
-    "weight-title": 700,
-    "weight-medium": 600,
-    "weight-body": 400,
     "motion-rail": "42s",
     "ratio-video": "16 / 9",
     "nav-width": 100,
@@ -3135,7 +2573,6 @@ export const values = freeze({
     "landing-icon-bottom": -20,
     "landing-icon-right": -5,
     "landing-title-line": 1,
-    "landing-product-tail": 240,
     "landing-product-copy": 15.3,
     "landing-logo-opacity": 0.5,
     "landing-nav-offset": -6,
@@ -3149,11 +2586,6 @@ export const values = freeze({
     "landing-review-avatar-radius": 3,
     "landing-review-copy-bottom": "1.5em",
     "landing-review-shadow": "0 2px 8px rgba(0,0,0,.1),0 0 2px rgba(0,0,0,.1)",
-    "landing-quote-meta-height": 54,
-    "landing-quote-meta": 13.5,
-    "landing-logo-wired": 90,
-    "landing-logo-macstories": 110,
-    "landing-quote-award-text": 14.4,
     "landing-social-size": 30.53125,
     "landing-social-y": 4.05,
     "landing-social-x": 10.125,
@@ -3211,7 +2643,6 @@ export const values = freeze({
     "article-search-font": 21.25,
     "article-search-radius": 8.5,
     "article-search-padding": "10.625px 40px 10.625px 36px",
-    "article-media-compact": 600,
     "syntax-example-padding": "9px 13.5px",
     "syntax-example-background": "rgba(2,21,48,.02)",
     "syntax-example-border": "rgba(0,7,17,.09)",
@@ -3271,8 +2702,6 @@ export const values = freeze({
     "status-board-divider": "rgba(255,255,255,.04)",
     "status-text-shadow": "0 -1px 0 #000",
     "status-action-width": "8em",
-    "status-heading-weight": 800,
-    "status-caption-weight": 500,
     "status-nav-color": "rgba(255,255,255,.66)",
     "status-nav-line": "rgba(220,224,229,.25)",
     "status-nav-hover": "rgba(255,255,255,.15)",
@@ -3305,7 +2734,6 @@ export const values = freeze({
     "gallery-active": "rgba(0,10,24,.34)",
     "gallery-selected": "rgba(0,3,7,.9)",
     "gallery-row-gap": 4.5,
-    "prose-code-font": "ui-monospace, SFMono-Regular, Menlo, \"Andale Mono\", Consolas, Monaco, monospace",
     "prose-code-size": "0.85em",
     "prose-code-padding": "0 .25em",
     "prose-code-radius": ".25em",
@@ -3449,15 +2877,57 @@ export const values = freeze({
     "figure-number-fill": "#303336",
     "figure-number-ink": "#ffffff",
     "figure-chart-hole": 0.55,
-    "table-padding": ".3em .5em"
+    "table-padding": ".3em .5em",
+    "landing-review-radius": 12.8,
+    "feature-box-radius": 16.2,
+    "syntax-example-radius": 9,
+    "search-results-radius": 12,
+    "search-result-radius": "0.5em",
+    "landing-newsletter-note": 15.2,
+    "nav-text": 14,
+    "status-caption-size": 14.4,
+    "status-weather-font": 20,
+    "search-result-size": 17,
+    "key-size": 14,
+    "newsletter-button-line": 20,
+    "status-weather-line": 23.994,
+    "landing-heading-space": 40,
+    "landing-description-margin": "0.5em",
+    "landing-heading-width": 440,
+    "landing-panel-gap": 18,
+    "landing-nav-gap": 20,
+    "landing-review-avatar": 36,
+    "landing-review-fade": 20,
+    "landing-footer-top": 54,
+    "search-icon-size": 32,
+    "post-divider-width": 4,
+    "comments-preview-height": 240,
+    "post-header-margin": 36,
+    "article-search-bottom": 53,
+    "article-title-padding": 14.4,
+    "article-title-gap": 27,
+    "width-narrow": 600,
+    "syntax-example-gap": 13.5,
+    "office-panel-gap": 100,
+    "status-bottom": 90,
+    "status-icon-inset": 110,
+    "status-flip-inset": 10.125,
+    "status-title-icon": 25,
+    "keyboard-icon": 28,
+    "control-icon-size": "1.5em",
+    "help-inline-icon": 16,
+    "help-inline-icon-inset": 4,
+    "help-inline-chevron-inset": 3,
+    "help-inline-no-icon": 6,
+    "flow-control-size": 44,
+    "card-radius": 18,
+    "body-text": 18,
+    "blur": 5
   },
   "breakpoint": {
-    "desktop": 1100,
-    "tablet": 800,
     "mobile": 560,
     "support-pair": 400,
     "product-pair": 480,
-    "footer-pair": 520,
     "feature-split": 600,
     "nav-compact": 620,
     "product-wide": 720,
@@ -3500,22 +2970,12 @@ export const values = freeze({
     "help-inline-opacity": 0.3
   },
   "duration": {
-    "disclosure": ".15s",
-    "feedback": 1600,
     "fast": 200,
     "hop": 3750,
-    "caption-fade": 200,
     "hop-min": 500,
     "chip-slide": 300,
     "chip-fade": 150,
-    "dwell": 700,
-    "dwell-per-char": 45,
-    "dwell-max": 3200,
-    "step-end": 1600,
-    "chart-cycle": 7000,
     "reveal": 900,
-    "value-flash": 700,
-    "pulse": 450,
     "chip-frame": 16.666666666666668,
     "flow-step": 12000,
     "cut-fade": 600,
@@ -3724,21 +3184,5 @@ export const values = freeze({
   },
   "stroke-width": {
     "control": 2
-  },
-  "typography": {
-    "sm-4": {
-      "fontFamily": "Pretendard, \"Pretendard Variable\", -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", sans-serif",
-      "fontSize": "14px",
-      "fontWeight": "400",
-      "lineHeight": "1.43",
-      "letterSpacing": "0em"
-    },
-    "4xl-2": {
-      "fontFamily": "Pretendard, \"Pretendard Variable\", -apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", sans-serif",
-      "fontSize": "36px",
-      "fontWeight": "400",
-      "lineHeight": "1.2",
-      "letterSpacing": "0em"
-    }
   }
 });

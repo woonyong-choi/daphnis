@@ -8,11 +8,7 @@
   --color-gray-59: #f0f0f0;
   --color-gray-282: #b7b7b7;
   --color-gray-933: #111111;
-  --color-fg: var(--color-ink);
-  --color-muted: var(--color-ui-muted);
   --color-group-title: var(--color-help-title-color);
-  --color-node: var(--color-ui-card);
-  --color-card: var(--color-ui-card);
   --color-line: var(--color-gray-282);
   --color-state-active: var(--color-category-blue-light-border);
   --color-state-active-text: var(--color-category-blue-light-ink);
@@ -120,12 +116,12 @@
 
 .fl .label {
   font-size: var(--text-small-text);
-  fill: var(--color-fg);
+  fill: var(--color-ink);
 }
 
 .fl .sub {
   font-size: var(--text-tiny-text);
-  fill: var(--color-muted);
+  fill: var(--color-ui-muted);
 }
 
 .fl .frame {
@@ -147,7 +143,7 @@
 .fl .cell,
 .fl .item {
   font-size: var(--text-tiny-text);
-  fill: var(--color-fg);
+  fill: var(--color-ink);
 }
 
 .fl .row.mono {
@@ -162,13 +158,13 @@
 }
 
 .fl .muted {
-  fill: var(--color-muted);
+  fill: var(--color-ui-muted);
 }
 
 .fl .tag {
   font-size: var(--text-figure-meta);
   font-weight: var(--font-weight-semibold);
-  fill: var(--color-fg);
+  fill: var(--color-ink);
 }
 
 .fl .mark {
@@ -181,7 +177,7 @@
 .fl .value {
   font-size: var(--text-tiny-text);
   font-weight: var(--font-weight-semibold);
-  fill: var(--color-fg);
+  fill: var(--color-ink);
 }
 
 .fl .chip {
@@ -190,18 +186,18 @@
 }
 
 .fl .item.gap {
-  fill: var(--color-muted);
+  fill: var(--color-ui-muted);
 }
 
 /* 열 형식(타입)은 코드 글이라 코드 글꼴의 오른쪽 열이다. 제약 줄(NOT NULL, ON DELETE 등)은 문장이라 일반 글꼴이다. 둘 다 이름보다 옅다. */
 .fl .cell.type {
   font-family: var(--font-figure-mono);
   letter-spacing: normal;
-  fill: var(--color-muted);
+  fill: var(--color-ui-muted);
 }
 
 .fl .cell.rule {
-  fill: var(--color-muted);
+  fill: var(--color-ui-muted);
 }
 
 /* 순서 보기의 메시지, 메모, 구획, 활성 막대는 자기 장면이 보일 때만 보인다. 자리는 늘 같아 판 크기가 변하지 않는다. */
@@ -223,7 +219,7 @@
 .fl .cell .key {
   font-size: var(--text-figure-meta);
   font-weight: var(--font-weight-semibold);
-  fill: var(--color-fg);
+  fill: var(--color-ink);
 }
 
 /* 그룹은 면이 없다(투명). 경계와 제목만 있고, 깊이에 따라 회색 면을 겹치지 않는다. 고른 색의 면과 경계는 draw/paint.js가 쓴 색에만 더한다. */
@@ -241,7 +237,7 @@
 }
 
 .fl .note-box {
-  fill: var(--color-node);
+  fill: var(--color-ui-card);
   stroke: var(--color-line);
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
@@ -249,7 +245,7 @@
 /* 알약은 모두 같은 중립 흰 면과 평소 경계다: 선 라벨, 배지와 개수. */
 .fl .pill,
 .fl .badge-pill {
-  fill: var(--color-node);
+  fill: var(--color-ui-card);
   stroke: var(--fx-edge-rest);
 }
 
@@ -265,7 +261,7 @@
 }
 
 .fl .grid-cell {
-  --fx-face: var(--color-node);
+  --fx-face: var(--color-ui-card);
   --fx-face-on: var(--fx-row);
   fill: var(--fx-face);
   stroke: var(--color-ui-line);
@@ -273,11 +269,11 @@
 }
 
 .fl .grid-tray {
-  fill: var(--color-card);
+  fill: var(--color-ui-card);
 }
 
 .fl .grid-cell.gap {
-  --fx-face: var(--color-card);
+  --fx-face: var(--color-ui-card);
   stroke: var(--color-ui-line);
 }
 
@@ -288,10 +284,10 @@
 }
 
 .fl .fl-edge.mark {
-  --fx-line-rest: var(--color-fg);
+  --fx-line-rest: var(--color-ink);
 }
 
-/* 카드 내용 면(color.card, 테두리 없음) 위에 고른 카드 모습(face)이 옅은 면이나 경계를 더한다. */
+/* 카드 내용 면(color.ui-card, 테두리 없음) 위에 고른 카드 모습(face)이 옅은 면이나 경계를 더한다. */
 .fl .face {
   fill: none;
   stroke: none;
@@ -302,7 +298,7 @@
   font-size: var(--text-figure-meta);
   font-weight: var(--font-weight-semibold);
   text-anchor: middle;
-  fill: var(--color-fg);
+  fill: var(--color-ink);
 }
 
 .fl .fl-icon {
@@ -361,13 +357,13 @@
   --fx-row: var(--color-search-hover);
   --fx-flash: var(--color-search-hover);
   --fx-edge-rest: var(--color-help-border);
-  --fx-ink-rest: var(--color-muted);
+  --fx-ink-rest: var(--color-ui-muted);
   --fx-line-rest: var(--color-line);
 }
 
 /* 도형의 평소 면과 켜진 면. 옅은 면으로 고른 도형(filled)은 켜져도 면이 같다. 면이 없는 윤곽(fill='none')과 점은 자기 면이 없거나 자기 색이다. */
 .fl .fl-node {
-  --fx-face: var(--color-node);
+  --fx-face: var(--color-ui-card);
   --fx-face-on: var(--color-help-hover);
 }
 
@@ -376,7 +372,7 @@
 }
 
 .fl .fl-shape-start {
-  --fx-face: var(--color-fg);
+  --fx-face: var(--color-ink);
 }
 
 .fl .fl-node > .fl-stroke[fill='none'] {
@@ -459,7 +455,7 @@
 }
 
 .fl .fl-fragment-heading {
-  fill: var(--color-node);
+  fill: var(--color-ui-card);
 }
 
 .fl .fl-fragment-label {
@@ -475,17 +471,17 @@
 <g id="g-1" class="fl-group tabbed" data-id="cloud"><rect x="316.1" y="376" width="436" height="694" rx="8" class="frame-box fl-stroke dashed " stroke-dasharray="5 4"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(324.1 380) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M13 39A9 9 0 0 1 12 21A12 12 0 0 1 35 20A9.5 9.5 0 0 1 35 39Z" fill="#639bfa"/></g></g></g><text x="362.1" y="395.4" class="frame">클라우드</text></g>
 <g id="g-2" class="fl-group" data-id="data"><rect x="340.1" y="859" width="388" height="187" rx="8" class="frame-box fl-stroke "/><text x="372.1" y="878.4" class="frame">데이터</text></g>
 
-<g id="n-0" class="fl-node fl-shape-person" tabindex="0" role="img" aria-label="웹 사용자" data-id="user"><rect x="28" y="28" width="118.1" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(46 41.5) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="40" height="40" rx="10" fill="#3d4856"/><circle cx="24" cy="16" r="6" fill="#ffffff"/><path d="M13 36A11 11 0 0 1 35 36Z" fill="#ffffff"/></g></g></g><text x="101.1" y="56.9" class="label" text-anchor="middle">웹 사용자</text></g>
-<g id="n-1" class="fl-node fl-shape-person" tabindex="0" role="img" aria-label="운영자" data-id="admin"><rect x="493.1" y="269" width="102" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(511.1 282.5) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="40" height="40" rx="10" fill="#3d4856"/><circle cx="24" cy="16" r="6" fill="#ffffff"/><path d="M13 36A11 11 0 0 1 35 36Z" fill="#ffffff"/><path d="M36 27L44 30V36Q44 41 36 44Q28 41 28 36V30Z" fill="#ffffff"/><path d="M36 30L41 32V36Q41 39 36 41Q31 39 31 36V32Z" fill="#ee9d45"/></g></g></g><text x="558.1" y="297.9" class="label" text-anchor="middle">운영자</text></g>
-<g id="n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="DNS" data-id="dns"><rect x="147.1" y="191" width="80" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(171.1 203) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="19" fill="#c7ddff" stroke="#90b4ee" stroke-width="3"/><ellipse cx="24" cy="24" rx="8" ry="19" fill="none" stroke="#2465c7" stroke-width="3"/><path d="M5 24H43" fill="none" stroke="#2465c7" stroke-width="3"/></g></g></g><text x="187.1" y="257.9" class="label" text-anchor="middle">DNS</text></g>
-<g id="n-3" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="CDN" data-id="cdn"><rect x="287.1" y="191" width="80" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(311.1 203) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="19" fill="#c7ddff" stroke="#90b4ee" stroke-width="3"/><ellipse cx="24" cy="24" rx="8" ry="19" fill="none" stroke="#2465c7" stroke-width="3"/><path d="M5 24H43" fill="none" stroke="#2465c7" stroke-width="3"/></g></g></g><text x="327.1" y="257.9" class="label" text-anchor="middle">CDN</text></g>
-<g id="n-4" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="로드 밸런서" data-id="lb"><rect x="386.1" y="416" width="82.8" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(411.5 428) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V23 M36 8V23" fill="none" stroke="#a4a8ae" stroke-width="3"/><rect x="5" y="24" width="38" height="16" rx="7" fill="#ffffff" stroke="#a4a8ae" stroke-width="3"/><path d="M19 12A8 8 0 0 1 29 12 M21 17A5 5 0 0 1 27 17" fill="none" stroke="#2465c7" stroke-width="3"/><circle cx="13" cy="32" r="2" fill="#28a779"/><path d="M25 32H35" fill="none" stroke="#2465c7" stroke-width="3"/></g></g></g><text x="427.5" y="482.9" class="label" text-anchor="middle">로드 밸런서</text></g>
-<g id="n-5" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹 서버" data-id="web"><rect x="391.1" y="569" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="387.1" y="565" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="383.1" y="561" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(391.1 573) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="6" width="38" height="36" rx="6" fill="#3d4856"/><rect x="10" y="13" width="28" height="8" rx="3" fill="#ffffff"/><rect x="10" y="27" width="28" height="8" rx="3" fill="#ffffff"/><circle cx="15" cy="17" r="2" fill="#28a779"/><circle cx="15" cy="31" r="2" fill="#28a779"/></g></g></g><g class="fl-badge"><rect x="427.1" y="580" width="28.3" height="18" rx="9" class="badge-pill"/><text x="441.2" y="593" class="badge">(3)</text></g><text x="423.2" y="627.9" class="label" text-anchor="middle">웹 서버</text></g>
-<g id="n-6" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="VPN" data-id="vpn"><rect x="504.1" y="416" width="80" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(528.1 428) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M24 4L39 10Q41 11 41 14V23C41 33 33 40 24 44C15 40 7 33 7 23V14Q7 11 9 10Z" fill="#28a779"/><path d="M16 24L22 30L33 18" fill="none" stroke="#ffffff" stroke-width="3"/></g></g></g><text x="544.1" y="482.9" class="label" text-anchor="middle">VPN</text></g>
-<g id="n-7" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="배스천" data-id="bastion"><rect x="504.1" y="565" width="80" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(528.1 577) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="40" height="40" rx="10" fill="#3d4856"/><circle cx="24" cy="16" r="6" fill="#ffffff"/><path d="M13 36A11 11 0 0 1 35 36Z" fill="#ffffff"/><path d="M36 27L44 30V36Q44 41 36 44Q28 41 28 36V30Z" fill="#ffffff"/><path d="M36 30L41 32V36Q41 39 36 41Q31 39 31 36V32Z" fill="#ee9d45"/></g></g></g><text x="544.1" y="631.9" class="label" text-anchor="middle">배스천</text></g>
-<g id="n-8" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="앱 서버" data-id="app"><rect x="491.1" y="714" width="80" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(515.1 726) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="6" width="38" height="36" rx="6" fill="#3d4856"/><rect x="10" y="13" width="28" height="8" rx="3" fill="#ffffff"/><rect x="10" y="27" width="28" height="8" rx="3" fill="#ffffff"/><circle cx="15" cy="17" r="2" fill="#28a779"/><circle cx="15" cy="31" r="2" fill="#28a779"/></g></g></g><text x="531.1" y="780.9" class="label" text-anchor="middle">앱 서버</text></g>
-<g id="n-9" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="DB 주 서버" data-id="db"><path d="M424.1 927 a 50 12 0 0 1 100 0 v 83 a 50 12 0 0 1 -100 0 z" fill="var(--color-node)" class="fl-stroke a0"/><path d="M424.1 927 a 50 12 0 0 0 100 0" fill="none" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(446.6 951) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12V36A17 6 0 0 0 41 36V12Z" fill="#478fa7" stroke="#39768e" stroke-width="3"/><ellipse cx="24" cy="12" rx="17" ry="6" fill="#c9eaf1" stroke="#39768e" stroke-width="3"/><path d="M9 24A17 6 0 0 0 39 24 M9 34A17 6 0 0 0 39 34" fill="none" stroke="#ffffff" stroke-width="3"/></g></g></g><g class="fl-badge"><rect x="470.6" y="952" width="30.9" height="18" rx="9" class="badge-pill"/><text x="486.1" y="965" class="badge">RW</text></g><text x="474.1" y="991.9" class="label" text-anchor="middle">DB 주 서버</text></g>
-<g id="n-10" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="캐시" data-id="cache"><path d="M604.1 927 a 50 12 0 0 1 100 0 v 83 a 50 12 0 0 1 -100 0 z" fill="var(--color-node)" class="fl-stroke a0"/><path d="M604.1 927 a 50 12 0 0 0 100 0" fill="none" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(626.6 951) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="40" height="40" rx="11" fill="#d08437"/><rect x="7" y="7" width="34" height="34" rx="8" fill="#ee9d45"/><path d="M25 10L14 26H23L21 38L35 21H26Z" fill="#ffffff"/></g></g></g><g class="fl-badge"><rect x="650.6" y="952" width="30.9" height="18" rx="9" class="badge-pill"/><text x="666.1" y="965" class="badge">RW</text></g><text x="654.1" y="991.9" class="label" text-anchor="middle">캐시</text></g>
+<g id="n-0" class="fl-node fl-shape-person" tabindex="0" role="img" aria-label="웹 사용자" data-id="user"><rect x="28" y="28" width="118.1" height="47" rx="8" fill="undefined" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(46 41.5) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="40" height="40" rx="10" fill="#3d4856"/><circle cx="24" cy="16" r="6" fill="#ffffff"/><path d="M13 36A11 11 0 0 1 35 36Z" fill="#ffffff"/></g></g></g><text x="101.1" y="56.9" class="label" text-anchor="middle">웹 사용자</text></g>
+<g id="n-1" class="fl-node fl-shape-person" tabindex="0" role="img" aria-label="운영자" data-id="admin"><rect x="493.1" y="269" width="102" height="47" rx="8" fill="undefined" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(511.1 282.5) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="40" height="40" rx="10" fill="#3d4856"/><circle cx="24" cy="16" r="6" fill="#ffffff"/><path d="M13 36A11 11 0 0 1 35 36Z" fill="#ffffff"/><path d="M36 27L44 30V36Q44 41 36 44Q28 41 28 36V30Z" fill="#ffffff"/><path d="M36 30L41 32V36Q41 39 36 41Q31 39 31 36V32Z" fill="#ee9d45"/></g></g></g><text x="558.1" y="297.9" class="label" text-anchor="middle">운영자</text></g>
+<g id="n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="DNS" data-id="dns"><rect x="147.1" y="191" width="80" height="85" rx="8" fill="undefined" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(171.1 203) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="19" fill="#c7ddff" stroke="#90b4ee" stroke-width="3"/><ellipse cx="24" cy="24" rx="8" ry="19" fill="none" stroke="#2465c7" stroke-width="3"/><path d="M5 24H43" fill="none" stroke="#2465c7" stroke-width="3"/></g></g></g><text x="187.1" y="257.9" class="label" text-anchor="middle">DNS</text></g>
+<g id="n-3" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="CDN" data-id="cdn"><rect x="287.1" y="191" width="80" height="85" rx="8" fill="undefined" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(311.1 203) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="19" fill="#c7ddff" stroke="#90b4ee" stroke-width="3"/><ellipse cx="24" cy="24" rx="8" ry="19" fill="none" stroke="#2465c7" stroke-width="3"/><path d="M5 24H43" fill="none" stroke="#2465c7" stroke-width="3"/></g></g></g><text x="327.1" y="257.9" class="label" text-anchor="middle">CDN</text></g>
+<g id="n-4" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="로드 밸런서" data-id="lb"><rect x="386.1" y="416" width="82.8" height="85" rx="8" fill="undefined" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(411.5 428) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V23 M36 8V23" fill="none" stroke="#a4a8ae" stroke-width="3"/><rect x="5" y="24" width="38" height="16" rx="7" fill="#ffffff" stroke="#a4a8ae" stroke-width="3"/><path d="M19 12A8 8 0 0 1 29 12 M21 17A5 5 0 0 1 27 17" fill="none" stroke="#2465c7" stroke-width="3"/><circle cx="13" cy="32" r="2" fill="#28a779"/><path d="M25 32H35" fill="none" stroke="#2465c7" stroke-width="3"/></g></g></g><text x="427.5" y="482.9" class="label" text-anchor="middle">로드 밸런서</text></g>
+<g id="n-5" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹 서버" data-id="web"><rect x="391.1" y="569" width="80.3" height="85" rx="8" fill="undefined" class="fl-stroke a0"/><rect x="387.1" y="565" width="80.3" height="85" rx="8" fill="undefined" class="fl-stroke a0"/><rect x="383.1" y="561" width="80.3" height="85" rx="8" fill="undefined" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(391.1 573) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="6" width="38" height="36" rx="6" fill="#3d4856"/><rect x="10" y="13" width="28" height="8" rx="3" fill="#ffffff"/><rect x="10" y="27" width="28" height="8" rx="3" fill="#ffffff"/><circle cx="15" cy="17" r="2" fill="#28a779"/><circle cx="15" cy="31" r="2" fill="#28a779"/></g></g></g><g class="fl-badge"><rect x="427.1" y="580" width="28.3" height="18" rx="9" class="badge-pill"/><text x="441.2" y="593" class="badge">(3)</text></g><text x="423.2" y="627.9" class="label" text-anchor="middle">웹 서버</text></g>
+<g id="n-6" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="VPN" data-id="vpn"><rect x="504.1" y="416" width="80" height="85" rx="8" fill="undefined" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(528.1 428) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M24 4L39 10Q41 11 41 14V23C41 33 33 40 24 44C15 40 7 33 7 23V14Q7 11 9 10Z" fill="#28a779"/><path d="M16 24L22 30L33 18" fill="none" stroke="#ffffff" stroke-width="3"/></g></g></g><text x="544.1" y="482.9" class="label" text-anchor="middle">VPN</text></g>
+<g id="n-7" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="배스천" data-id="bastion"><rect x="504.1" y="565" width="80" height="85" rx="8" fill="undefined" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(528.1 577) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="40" height="40" rx="10" fill="#3d4856"/><circle cx="24" cy="16" r="6" fill="#ffffff"/><path d="M13 36A11 11 0 0 1 35 36Z" fill="#ffffff"/><path d="M36 27L44 30V36Q44 41 36 44Q28 41 28 36V30Z" fill="#ffffff"/><path d="M36 30L41 32V36Q41 39 36 41Q31 39 31 36V32Z" fill="#ee9d45"/></g></g></g><text x="544.1" y="631.9" class="label" text-anchor="middle">배스천</text></g>
+<g id="n-8" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="앱 서버" data-id="app"><rect x="491.1" y="714" width="80" height="85" rx="8" fill="undefined" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(515.1 726) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="6" width="38" height="36" rx="6" fill="#3d4856"/><rect x="10" y="13" width="28" height="8" rx="3" fill="#ffffff"/><rect x="10" y="27" width="28" height="8" rx="3" fill="#ffffff"/><circle cx="15" cy="17" r="2" fill="#28a779"/><circle cx="15" cy="31" r="2" fill="#28a779"/></g></g></g><text x="531.1" y="780.9" class="label" text-anchor="middle">앱 서버</text></g>
+<g id="n-9" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="DB 주 서버" data-id="db"><path d="M424.1 927 a 50 12 0 0 1 100 0 v 83 a 50 12 0 0 1 -100 0 z" fill="undefined" class="fl-stroke a0"/><path d="M424.1 927 a 50 12 0 0 0 100 0" fill="none" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(446.6 951) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12V36A17 6 0 0 0 41 36V12Z" fill="#478fa7" stroke="#39768e" stroke-width="3"/><ellipse cx="24" cy="12" rx="17" ry="6" fill="#c9eaf1" stroke="#39768e" stroke-width="3"/><path d="M9 24A17 6 0 0 0 39 24 M9 34A17 6 0 0 0 39 34" fill="none" stroke="#ffffff" stroke-width="3"/></g></g></g><g class="fl-badge"><rect x="470.6" y="952" width="30.9" height="18" rx="9" class="badge-pill"/><text x="486.1" y="965" class="badge">RW</text></g><text x="474.1" y="991.9" class="label" text-anchor="middle">DB 주 서버</text></g>
+<g id="n-10" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="캐시" data-id="cache"><path d="M604.1 927 a 50 12 0 0 1 100 0 v 83 a 50 12 0 0 1 -100 0 z" fill="undefined" class="fl-stroke a0"/><path d="M604.1 927 a 50 12 0 0 0 100 0" fill="none" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(626.6 951) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="40" height="40" rx="11" fill="#d08437"/><rect x="7" y="7" width="34" height="34" rx="8" fill="#ee9d45"/><path d="M25 10L14 26H23L21 38L35 21H26Z" fill="#ffffff"/></g></g></g><g class="fl-badge"><rect x="650.6" y="952" width="30.9" height="18" rx="9" class="badge-pill"/><text x="666.1" y="965" class="badge">RW</text></g><text x="654.1" y="991.9" class="label" text-anchor="middle">캐시</text></g>
 <g id="e-0" class="fl-edge "><defs><marker id="fl-arrow-0" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-0" d="M 87.1 75 L 87.1 153 Q 87.1 175, 109.1 175 L 179.1 175 Q 187.1 175, 187.1 183 L 187.1 191" class="fl-path" marker-end="url(#fl-arrow-0)"/></g>
 <g id="e-1" class="fl-edge "><defs><marker id="fl-arrow-1" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-1" d="M 227.1 234 L 287.1 234" class="fl-path" marker-end="url(#fl-arrow-1)"/></g>
 <g id="e-2" class="fl-edge "><defs><marker id="fl-arrow-2" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-2" d="M 327.1 276 L 327.1 284 Q 327.1 292, 335.1 292 L 405.1 292 Q 427.1 292, 427.1 314 L 427.1 416" class="fl-path" marker-end="url(#fl-arrow-2)"/></g>
