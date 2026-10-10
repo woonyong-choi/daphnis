@@ -186,9 +186,7 @@
   --color-landing-action-pressed: var(--primitive-landing-action-pressed);
   --color-landing-review-meta-ink: var(--primitive-landing-review-meta-ink);
   --color-landing-review-link-ink: var(--primitive-landing-review-link-ink);
-  --color-landing-newsletter-note-ink: var(--primitive-landing-newsletter-note-ink);
   --color-landing-footer-ink: var(--primitive-landing-footer-ink);
-  --color-newsletter-button-color: var(--primitive-newsletter-button-color);
   --color-feature-box-background: var(--primitive-feature-box-background);
   --color-feature-hero-background: var(--primitive-feature-hero-background);
   --color-feature-tab-background: var(--primitive-feature-tab-background);
@@ -223,7 +221,6 @@
   --color-nav-active-color: var(--primitive-nav-active-color);
   --color-nav-active-background: var(--primitive-nav-active-background);
   --color-description-color: var(--primitive-body);
-  --color-primary-hover: var(--primitive-primary-hover);
   --color-search-suggestion-color: var(--primitive-search-suggestion-color);
   --color-search-suggestion-hover: var(--primitive-search-suggestion-hover);
   --color-nav-line: var(--primitive-nav-line);
@@ -237,7 +234,7 @@
   --color-toc-background: var(--primitive-syntax-example-background);
   --color-toc-border: var(--primitive-syntax-example-border);
   --color-toc-marker: var(--primitive-landing-footer-ink);
-  --color-toc-underline: var(--primitive-newsletter-button-color);
+  --color-toc-underline: var(--primitive-toc-underline);
   --color-control-search-ink: var(--primitive-control-search-ink);
   --color-control-chevron-ink: var(--primitive-control-chevron-ink);
   --color-control-play-ink: var(--primitive-control-play-ink);
@@ -419,7 +416,6 @@
   --spacing-landing-chevron-offset: var(--primitive-landing-chevron-offset);
   --spacing-landing-chevron-align: var(--primitive-landing-chevron-align);
   --spacing-landing-quote-glyph-gap: var(--primitive-landing-quote-glyph-gap);
-  --spacing-newsletter-button-margin: var(--primitive-newsletter-button-margin);
   --spacing-quote-credit-gap: var(--primitive-quote-credit-gap);
   --spacing-feature-box-padding: var(--primitive-feature-box-padding);
   --spacing-feature-tab-height: var(--primitive-feature-tab-height);
@@ -537,8 +533,6 @@
   --radius-control-radius: var(--primitive-control-radius);
   --radius-landing-review-radius: var(--primitive-landing-review-radius);
   --radius-landing-review-avatar-radius: var(--primitive-landing-review-avatar-radius);
-  --radius-newsletter-button-radius: var(--primitive-newsletter-button-radius);
-  --radius-newsletter-input-radius: var(--primitive-newsletter-input-radius);
   --radius-feature-box-radius: var(--primitive-feature-box-radius);
   --radius-feature-tab-radius: var(--primitive-feature-tab-radius);
   --radius-feature-tab-button-radius: var(--primitive-feature-tab-button-radius);
@@ -555,7 +549,6 @@
   --shadow-landing-review-shadow: var(--primitive-landing-review-shadow);
   --shadow-feature-tab-shadow: var(--primitive-feature-tab-shadow);
   --shadow-tooltip-shadow: var(--primitive-tooltip-shadow);
-  --shadow-action-shadow: var(--primitive-action-shadow);
   --shadow-search-results-shadow: var(--primitive-search-results-shadow);
   --shadow-key-shadow: var(--primitive-key-shadow);
   --shadow-platform-hover-shadow: var(--primitive-platform-hover-shadow);
@@ -580,8 +573,6 @@
   --text-landing-review-font: var(--primitive-landing-review-font);
   --text-landing-review-copy: var(--primitive-landing-review-copy);
   --text-landing-review-meta: var(--text-tiny-text);
-  --text-landing-newsletter-note: var(--primitive-landing-newsletter-note);
-  --text-newsletter-button-font: var(--primitive-newsletter-button-font);
   --text-nav-text: var(--primitive-nav-text);
   --text-feature-tab-font: var(--primitive-feature-tab-font);
   --text-nav-desktop-text: var(--text-small-text);
@@ -612,7 +603,6 @@
   --leading-line-compact: var(--primitive-line-compact);
   --leading-feature-line: var(--primitive-feature-line);
   --leading-landing-title-line: var(--primitive-landing-title-line);
-  --leading-newsletter-button-line: var(--primitive-newsletter-button-line);
   --leading-feature-body-line: var(--leading-line-body);
   --leading-post-title-line: var(--primitive-post-title-line);
   --leading-article-title-line: var(--leading-line-compact);

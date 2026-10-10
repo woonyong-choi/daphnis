@@ -21,7 +21,7 @@ export function Hero({ id: name, title, description, icon, action, showcase }) {
   return out(`<section id="${id(name)}" class="app-landing-hero"><div class="app-shell"><div class="app-hero-copy">${icon ? slot(icon, 'icon') : title ? `<p class="app-hero-title" aria-hidden="true">${escape(title)}</p>` : ''}<p class="app-hero-description">${escape(description)}</p>${action ? `<p class="app-hero-description">${slot(action, 'action')}</p>` : ''}</div></div></section>${showcase ? slot(showcase, 'showcase') : ''}`);
 }
 
-const SECTIONS = { content: 'app-landing-features', icons: 'app-landing-technologies', quotes: 'app-landing-interviews', form: 'app-landing-newsletter' };
+const SECTIONS = { content: 'app-landing-features', icons: 'app-landing-technologies', quotes: 'app-landing-interviews' };
 export function Section({ id: name, variant = 'content', labelledBy, heading, content }) {
   if (!Object.hasOwn(SECTIONS, variant)) throw new Error(`Unknown section: ${variant}`);
   return out(`<section${name ? ` id="${id(name)}"` : ''} class="app-landing-section ${SECTIONS[variant]}"${labelledBy ? ` aria-labelledby="${id(labelledBy)}"` : ''}><div class="app-shell">${heading ? slot(heading, 'heading') : ''}${slot(content, 'content')}</div></section>`);
@@ -29,9 +29,4 @@ export function Section({ id: name, variant = 'content', labelledBy, heading, co
 
 export function LogoItem({ href, label, src }) {
   return out(`<li class="app-technology"><a href="${safeUrl(href)}" aria-label="${escape(label)}"><img src="${safeUrl(src)}" alt="" decoding="async"><span class="app-sr">${escape(label)}</span></a></li>`);
-}
-
-export function EmailForm({ id: name, action, field, label, placeholder, button, note }) {
-  const disabled = action ? '' : ' disabled';
-  return out(`<form class="app-newsletter"${action ? ` method="post" action="${safeUrl(action)}"` : ''}><label class="app-sr" for="${id(name)}-email">${escape(label)}</label><input class="app-newsletter-email" type="email" id="${name}-email" name="${escape(field)}" placeholder="${escape(placeholder)}" autocomplete="email"${action ? ' required' : ''}${disabled}${note ? ` aria-describedby="${name}-state"` : ''}>${note ? slot(note, 'note') : ''}<button type="submit"${disabled}>${escape(button)}</button></form>`);
 }

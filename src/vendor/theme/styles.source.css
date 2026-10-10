@@ -207,9 +207,6 @@ iframe[data-diagram].is-fullscreen { position: fixed; inset: 0; z-index: var(--z
 .app-tabs:not(.is-position-top):not(.is-platform) .app-tabpanel > :first-child { margin-top: 0; }
 .app-tabs:not(.is-position-top):not(.is-platform):not(.is-frame-panel) .app-tabpanel > :last-child { margin-bottom: 0; }
 .app-tabs.is-selector-segmented.is-position-top .app-tablist { margin-block: var(--spacing-gap); }
-.app-primary-action { display: inline-block; padding: var(--component-newsletter-button-padding); background: var(--color-newsletter-button-color); color: var(--color-ui-card); border: 0; border-radius: var(--radius-newsletter-button-radius); font-weight: var(--font-weight-bold); }
-.app-primary-action:hover { text-decoration: none; opacity: var(--opacity-player-opacity); }
-.app-primary-action:disabled { opacity: var(--opacity-landing-logo-opacity); cursor: default; }
 button.app-tooltip { padding: 0; background: none; color: var(--color-control-link); border: 0; font: inherit; cursor: pointer; text-decoration: underline dotted; }
 .app-tooltip-bubble { position: fixed; inset: auto; left: clamp(var(--spacing-gap-xs),var(--anchor-x),calc(100vw - var(--spacing-tooltip-width) - var(--spacing-gap-xs))); top: var(--anchor-y); width: var(--spacing-tooltip-width); max-width: calc(100vw - var(--spacing-gap)); margin: 0; padding: var(--component-tooltip-padding); border: 0; border-radius: var(--spacing-gap); background: var(--color-ui-card); color: var(--color-ink); box-shadow: var(--shadow-tooltip-shadow); font-size: var(--text-landing-product-copy); line-height: var(--leading-feature-body-line); }
 .app-tooltip-bubble p { margin: 0; }
@@ -219,31 +216,6 @@ button.app-tooltip { padding: 0; background: none; color: var(--color-control-li
 .app-remote:active { color: var(--color-control-active-ink); }
 .app-inline-button { border: var(--border-width-thin) solid var(--color-ui-line); border-radius: var(--radius-button-radius); padding: var(--spacing-gap-xs) var(--spacing-gap-sm); color: var(--color-action-link); background: var(--color-soft); font: inherit; cursor: pointer; }
 .app-inline-button:hover { background: var(--color-help-hover); }
-/* 구독 입력과 제출 버튼. */
-.app-newsletter { width: var(--container-form); max-width: 100%; margin: 0 auto var(--spacing-landing-nav-gap); font-size: var(--text-landing-review-font); line-height: var(--leading-feature-line); }
-.app-newsletter-email { width: 100%; padding: var(--spacing-platform-button-y); background: var(--color-ui-card); }
-.app-newsletter-note { margin: 0 0 var(--spacing-landing-panel-gap); color: var(--color-control-muted); font-size: var(--text-landing-newsletter-note); }
-.app-newsletter button { color: var(--color-ui-card); border-color: transparent; }
-.app-newsletter { text-align: center; }
-.app-newsletter-email { height: var(--spacing-control); border-radius: var(--radius-newsletter-input-radius); }
-.app-newsletter-note { text-align: left; margin-top: var(--spacing-landing-panel-gap); }
-.app-newsletter-note a { color: inherit; text-decoration: underline; }
-.app-newsletter button { font-size: var(--text-newsletter-button-font); font-weight: var(--font-weight-bold); padding: var(--component-newsletter-button-padding); margin-bottom: var(--spacing-newsletter-button-margin); border-radius: var(--radius-newsletter-button-radius); background: var(--color-newsletter-button-color); }
-.app-newsletter button:hover, .app-primary-action:hover { background: var(--color-primary-hover); box-shadow: var(--shadow-action-shadow); text-decoration: none; }
-.app-newsletter button:active, .app-primary-action:active { background: var(--color-feature-tab-selected); }
-.app-newsletter button:focus, .app-primary-action:focus { outline: 0; box-shadow: var(--component-action-focus); }
-.app-newsletter [data-form-status]:empty { display: none; }
-.app-newsletter-email { margin-bottom: var(--spacing-underline); }
-.app-newsletter button { border: var(--border-width-thin) solid transparent; }
-.app-newsletter { margin-bottom: calc(var(--text-landing-review-font) * var(--leading-feature-body-line)); }
-.app-newsletter :disabled { opacity: var(--opacity-landing-logo-opacity); cursor: default; }
-.app-newsletter button:disabled:hover { background: var(--color-action-link); box-shadow: none; }
-.app-landing-newsletter .app-caption { text-align: center; }
-.app-landing-newsletter .app-newsletter { margin-bottom: var(--spacing-landing-nav-gap); }
-.app-landing-newsletter .app-newsletter-email { height: auto; line-height: normal; }
-.app-landing-newsletter .app-newsletter-note { color: var(--color-landing-newsletter-note-ink); }
-/* 구독 버튼은 한글 글리프 대체 글꼴의 normal 행간에 흔들리지 않게 글줄 높이를 고정한다. */
-.app-newsletter button { line-height: var(--leading-newsletter-button-line); }
 /* 아이콘 도형은 assets/icons에서 읽고 배치는 이 공통 조각에서 정한다. */
 .app-article-icon { display: inline-block; flex: none; width: var(--spacing-article-icon); height: var(--spacing-article-icon); }
 .app-control-icon { width: var(--icon-size-small); height: var(--icon-size-small); }
@@ -729,7 +701,7 @@ button.app-tooltip { padding: 0; background: none; color: var(--color-control-li
 .app-landing-features { padding-bottom: 0; background: var(--color-feature-canvas); }
 .app-landing-collage { width: var(--spacing-collage-crop); margin-left: var(--spacing-collage-outset); }
 .app-landing-collage img { display: block; width: 100%; }
-.app-landing-newsletter, .app-landing-interviews { background: var(--color-canvas); }
+.app-landing-interviews { background: var(--color-canvas); }
 .app-landing-social { display: flex; align-items: center; justify-content: center; gap: var(--spacing-gap-sm); margin: var(--spacing-landing-panel-gap) auto var(--spacing-landing-heading-space); }
 .app-landing-social img { width: var(--spacing-icon); height: var(--spacing-icon); opacity: var(--opacity-landing-logo-opacity); }
 .app-landing-social a:hover img { opacity: 1; }
@@ -794,14 +766,8 @@ button.app-tooltip { padding: 0; background: none; color: var(--color-control-li
   .app-technology > a, .app-interview-card { transition: none; }
   .app-technology > a:hover, .app-interview-card:hover { transform: none; }
 }
-.app-home-contact { padding: var(--spacing-landing-section) var(--spacing-gap) var(--spacing-section); text-align: center; background: var(--color-ui-card); }
-.app-home-contact h2 { font-size: var(--text-section-title); line-height: var(--leading-line-title); margin: 0 0 var(--spacing-gap); }
-.app-home-contact > p { color: var(--color-ui-muted); margin: 0 0 var(--spacing-gap); word-break: keep-all; }
-.app-home-contact .app-caption { margin: var(--spacing-gap) 0 0; overflow-wrap: anywhere; }
 @media (max-width: breakpoint(mobile)) {
-    .app-home-contact { padding-block: var(--spacing-gap-lg) var(--spacing-landing-section); }
   .app-player-button.is-compact { width: var(--spacing-flow-control-size); height: var(--spacing-flow-control-size); }
-  .app-home-contact h2 { font-size: var(--text-subtitle); }
 }
 /* 기능 소개 화면: 기능 히어로, 설명 상자, 분할 작업 영역, 데모 목록, 기능 탭. */
 .app-feature { text-align: center; }
