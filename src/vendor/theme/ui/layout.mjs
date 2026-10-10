@@ -2,8 +2,8 @@
 import { escape, id, safeUrl, slot, out } from './html.mjs';
 import { SocialIcon } from './icons.mjs';
 
-export function SiteHeader({ label, homeLabel, homeHref = '/', items, active = '' }) {
-  return out(`<div class="app-shell"><header class="app-header"><a class="app-logo" href="${safeUrl(homeHref)}" aria-label="${escape(homeLabel)}"><span class="app-sr">${escape(homeLabel)}</span></a><nav class="app-nav" aria-label="${escape(label)}">${items.map(({ label, href }) => `<span class="app-nav-item"><a href="${safeUrl(href)}"${active.startsWith(href) ? ' aria-current="page"' : ''}>${escape(label)}</a></span>`).join('')}</nav></header></div>`);
+export function SiteHeader({ label, homeLabel, title = homeLabel, icon, homeHref = '/', items, active = '' }) {
+  return out(`<div class="app-shell"><header class="app-header"><a class="app-logo" href="${safeUrl(homeHref)}" aria-label="${escape(homeLabel)}">${icon ? `<span class="app-logo-icon">${slot(icon, 'icon')}</span>` : ''}${escape(title)}</a><nav class="app-nav" aria-label="${escape(label)}">${items.map(({ label, href }) => `<span class="app-nav-item"><a href="${safeUrl(href)}"${active.startsWith(href) ? ' aria-current="page"' : ''}>${escape(label)}</a></span>`).join('')}</nav></header></div>`);
 }
 
 export function SiteFooter({ owner, year, links }) {
