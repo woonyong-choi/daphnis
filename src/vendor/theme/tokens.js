@@ -736,7 +736,8 @@ export const tokens = freeze({
     },
     "figure-meta": "var(--text-figure-meta)",
     "landing-newsletter-note": "var(--text-landing-newsletter-note)",
-    "newsletter-button-font": "var(--text-newsletter-button-font)"
+    "newsletter-button-font": "var(--text-newsletter-button-font)",
+    "5xl": "var(--text-5xl)"
   },
   "leading": {
     "body-sm": "var(--leading-body-sm)",
@@ -2090,7 +2091,8 @@ export const values = freeze({
     },
     "figure-meta": 11,
     "landing-newsletter-note": 15.2,
-    "newsletter-button-font": 16.96
+    "newsletter-button-font": 16.96,
+    "5xl": 48
   },
   "leading": {
     "body-sm": 1.43,

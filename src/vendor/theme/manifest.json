@@ -6,6 +6,8 @@
   },
   "files": {
     "assets/bezel-iphone6-shadow-io80.png": "230c4df926eb94861c8c25c8cfd5bb670f1ba0e3c9e7ece1083c5ed0100ed5f1",
+    "assets/fonts/inter-display-black.woff2": "05650cb83c70fda2a465eade0c0a1a6c25d37ec49df3cd74b7e564683f9729f1",
+    "assets/fonts/inter-license.txt": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a",
     "assets/fonts/jetbrains-mono-license.txt": "b2fe5e8987594e9ffd1d2ca52a2f5d73eb8335243893c5d6254b5ad69269591d",
     "assets/fonts/jetbrains-mono-regular.woff2": "bceff0710e3a7fe5b3622265c48b6fbc055cf071df80ef5f36ffc69550296664",
     "assets/fonts/pretendard-license.txt": "b04538c9abec39a3db75108cf0af0fd9c77032fe8aa2cf38345b4d250e98e38e",
@@ -9802,9 +9804,9 @@
     "assets/icons/transport/zeppelin-off.svg": "571cc5f7561520001f64d7e733ea3342c6c97c4bbb1b050118ae99a913438174",
     "assets/icons/transport/zeppelin.svg": "b17e60261ec9a931a59484018fe58520eaf883cbe39e5bb3d2cd7e3a55446813",
     "assets/illustrations/project-placeholder.svg": "4453cd5c92033929e11a57d6f1cc112c9f9b013e0c6f34f6815d665e18b9c336",
-    "assets/sources.json": "15bd6c3150d982d1c2ad4e1b39a6974e85b1f4f17c5579632b267aeca2505964",
-    "styles.css": "4aac8aed0f3f38add8be8f9e58483ccc78813fa0bf2c1845e388b2e21842db59",
-    "styles.source.css": "9982881a1ada14e5d88331f4bd8a5f878f98d3a89f8f627a00cfb1dadbd20d4c",
+    "assets/sources.json": "215d427284a06ce498add70867e3bb68a0e609fc77bda99a5e8903c4c22358d3",
+    "styles.css": "2632838ce61ad871b95ecbc2d45bc2910de7e0e497bc8cf1e13aaef4a5a46034",
+    "styles.source.css": "588f722d6c3428fcf4806cd6dbb244363901e1b9067a3e210c9aa85ae6665698",
     "styles/diagram-embed.css": "f8743b4bb0f2f8485338d2a2311a6bc37e8a10ef61eb8142e0b59b0a1b460ef0",
     "styles/diagram/chart.css": "e58ef28995adadc23c9a93621d66093a2bd54edf418fbc737fbac1b2158473e8",
     "styles/diagram/document.css": "70482493cbad451455d7f5753681f0b2389dffa8d6a0a0f898e13b55992923dd",
@@ -9815,11 +9817,11 @@
     "styles/table.css": "2bd69378c8ef116d819f82a37046b62876ad1c541e7194ead85c3f69b4f9ffdd",
     "styles/tabs.css": "be836037d4bf9dee73ad2c21c8f119af7e2658cdf194d77fb9e9fd24efb1e176",
     "styles/toolbar.css": "1ef2cf4262cd713a28c4f7dffabebd155b7a4ac1e143a59e097a41f1684a394d",
-    "tailwind.css": "a98cbb4b36f293fe3daf07df772ce2522f82b37ef4fb66a82d5c246f40006e66",
-    "tokens.css": "67c9d8748915e68653306a62407ab74b726421ffc2962ef21946d9a9556168cb",
+    "tailwind.css": "3af5ab9641d09d8d005c9a8aef95f02319a6785f616fe5b146411cc6c99df1c1",
+    "tokens.css": "1c785fb3165790fcc8ca66648064e94f6f043b22565d6be641512765313fda62",
     "tokens.dark.json": "df727554a9409b18220d7dc5e095ad6ca03225cbc8abed9e07e88fe8ee9de257",
-    "tokens.js": "d745693650a59512baadcc3838d1086917cf130d44ffa40a0993e727a9035707",
-    "tokens.json": "4c3d1d6a3ddae30f7cbc0be57145772fb012a4fa355f5d2f30f8e072b6a7785a",
+    "tokens.js": "19125a069b4d03291c27fb7cb618bdacd76b2e64771d905991855aa910798a6f",
+    "tokens.json": "68d245afdf6d7b3e313ca2d4d8bb8edd0a17b1caaa5682e67ecd83abb18e9572",
     "ui/build/check-tokens.mjs": "7799935a018b4f2e9c13bf545f88e066a08ef657888004140ec0d68f7a709510",
     "ui/build/export.mjs": "5b458dcc848b99ea9de31100b34f434454f0c911223d5aaa29f8f451ab7e5cfa",
     "ui/build/icons.mjs": "151587c8ae4d959154f76cd029307b4b345d2331ce91c161ef895050b4c3a34b",
@@ -9853,5 +9855,5 @@
     "ui/table.mjs": "d285303ed3e84599a512085e79dfd92db751a890ad4890b81930f1ccf2126ae0",
     "ui/toolbar.mjs": "3fab9dbcd66cbb7273e8ce39d7754e5783ea4e605418dc4faf2c91831067cdd2"
   },
-  "contentHash": "774ea8bf21141a2eecc1b45cbaa75d799f8ec47166c1a1199a4e64562776e5bb"
+  "contentHash": "124c5dc93f8140c86405711603e9cf723c284b80bd6b88f76892c75a47e58b93"
 }
