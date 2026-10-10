@@ -19,7 +19,6 @@ export const STYLES = Object.freeze({
   gallery: readStyle('./vendor/theme/styles/diagram-embed.css') + readStyle('./vendor/theme/styles/diagram/gallery.css'),
   document: readStyle('./vendor/theme/styles/diagram/document.css'),
   chart: readStyle('./vendor/theme/styles/diagram/chart.css'),
-  chartData: readStyle('./vendor/theme/styles/table.css') + readStyle('./vendor/theme/styles/diagram/chart-data.css'),
   status: readStyle('./vendor/theme/styles/diagram/status.css'),
 });
 
