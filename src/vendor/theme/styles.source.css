@@ -217,7 +217,7 @@ button.app-tooltip { padding: 0; background: none; color: var(--color-control-li
 .app-tooltip-bubble p { margin: 0; }
 .app-remote { display: inline-block; }
 .app-remote [data-control-icon], .app-feature-demo-description .app-remote [data-control-icon] { display: inline-block; width: var(--spacing-control-icon-size); height: var(--spacing-control-icon-size); margin-right: var(--spacing-control-inset-inline); vertical-align: calc(-1 * var(--spacing-control-inset-inline)); }
-.app-remote.is-playing [data-control-icon] { opacity: var(--opacity-landing-logo-opacity); }
+.app-remote.is-playing [data-control-icon] { color: var(--color-control-playing-ink); }
 .app-remote:active { color: var(--color-control-active-ink); }
 .app-inline-button { border: var(--border-width-thin) solid var(--color-ui-line); border-radius: var(--radius-button-radius); padding: var(--spacing-gap-xs) var(--spacing-gap-sm); color: var(--color-action-link); background: var(--color-soft); font: inherit; cursor: pointer; }
 .app-inline-button:hover { background: var(--color-help-hover); }
