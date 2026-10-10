@@ -373,12 +373,12 @@ button.app-tooltip { padding: 0; background: none; color: var(--color-control-li
 .app-prose h1 { font-size: var(--text-section-title); line-height: var(--leading-prose-heading-line); margin: var(--component-prose-h1-margin); }
 .app-prose h1:first-child, .app-prose h2.app-heading-1:first-child { margin-top: 0; }
 .app-prose h2 { font-size: var(--text-subtitle); line-height: var(--leading-line-intro); color: var(--color-ink); }
-.app-prose h2, :is(.app-blog-post, .app-article) .app-prose h2 { margin: var(--component-post-h2-margin); }
-.app-prose h3, :is(.app-blog-post, .app-article) .app-prose h3 { font-size: var(--text-feature-intro); margin: var(--component-post-h3-margin); }
+.app-prose h2, .app-blog-post .app-prose h2 { margin: var(--component-post-h2-margin); }
+.app-prose h3, .app-blog-post .app-prose h3 { font-size: var(--text-feature-intro); margin: var(--component-post-h3-margin); }
 .app-prose h4 { font-size: inherit; line-height: var(--leading-feature-body-line); margin: 0 0 var(--spacing-prose-paragraph-gap); }
 .app-prose h5, .app-prose h6 { font-size: inherit; margin: 0; }
 .app-prose h6 { font-weight: var(--font-weight-weight-body); }
-.app-prose p, :is(.app-blog-post, .app-article) .app-prose p { margin: 0 0 var(--spacing-post-paragraph-margin); }
+.app-prose p, .app-blog-post .app-prose p { margin: 0 0 var(--spacing-post-paragraph-margin); }
 .app-prose a:active { color: var(--color-prose-link-active); }
 :where(.app-prose) strong { font-weight: var(--font-weight-weight-title); }
 :where(.app-prose) b { font-weight: var(--font-weight-weight-medium); }
