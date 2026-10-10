@@ -303,7 +303,6 @@ export const tokens = freeze({
     "prose-link-active": "var(--color-prose-link-active)",
     "prose-mark-background": "var(--color-prose-mark-background)",
     "prose-marker": "var(--color-prose-marker)",
-    "code-copy-hover": "var(--color-code-copy-hover)",
     "action-link": "var(--color-action-link)",
     "category": {
       "blue": {
@@ -1656,7 +1655,6 @@ export const values = freeze({
     "prose-link-active": "#114691",
     "prose-mark-background": "#fcf9cf",
     "prose-marker": "rgba(0,15,36,.46)",
-    "code-copy-hover": "#5b9aff",
     "action-link": "#2576eb",
     "category": {
       "blue": {

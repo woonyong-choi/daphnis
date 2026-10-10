@@ -247,7 +247,6 @@
   --color-prose-link-active: var(--primitive-prose-link-active);
   --color-prose-mark-background: var(--primitive-callout-warning);
   --color-prose-marker: var(--primitive-landing-footer-ink);
-  --color-code-copy-hover: var(--color-control-play-ink);
   --color-action-link: var(--primitive-link);
   --color-category-blue-anchor: #1e6bd6;
   --color-category-blue-fill: var(--color-category-blue-anchor);
