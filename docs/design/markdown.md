@@ -35,7 +35,7 @@ doc -> cli
 ...
 ```
 
-![doc.md, thinkflow md](doc-flow.svg)<!-- thinkflow -->
+![flow](doc-flow.svg)<!-- thinkflow -->
 ````
 
 3. 이름을 `name=path`로 바꾸고 다시 돌리면 이미지 줄이 `doc-path.svg`를 가리키고 옛 `doc-flow.svg`는 지워진다.
@@ -51,7 +51,7 @@ doc -> cli
 
 ````text
 <!-- thinkflow fold v1 name=flow -->
-![doc.md, thinkflow md](doc-flow.svg)<!-- thinkflow -->
+![flow](doc-flow.svg)<!-- thinkflow -->
 
 <details>
 <summary>그림 원본</summary>
@@ -104,7 +104,7 @@ thinkflow md <file.md ...> [--check] [--out-dir dir] [--fold [--fold-title "text
 | `--fold-title "text"` | `--fold`가 새로 만드는 `<summary>` 글. 기본은 `그림 원본`. `--fold`와만 쓴다 |
 | `--unfold` | 이 도구가 만든 접기만 걷는다. `--fold`와 함께 쓰면 인자 오류 |
 | `--static` | 멈춘 SVG를 쓴다 |
-| `--` | 이 뒤의 인자는 모두 문서 이름이다. `-`로 시작하는 이름의 문서에 쓴다(Action이 문서 목록을 넘길 때 쓴다). 값을 받는 옵션(`--out-dir`, `--fold-title`, `--scene`, `--budget`)의 값이 비어 있거나, 같은 옵션을 두 번 쓰거나, 문서 이름이 빈 글이면 인자 오류다 |
+| `--` | 이 뒤의 인자는 모두 문서 이름이다. `-`로 시작하는 이름의 문서에 쓴다(Action이 문서 목록을 넘길 때 쓴다). 값을 받는 옵션(`--out-dir`, `--fold-title`, `--scene`, `--budget`)의 값이 비어 있거나, `--budget` 이외의 값을 받는 옵션을 두 번 쓰거나, 문서 이름이 빈 글이면 인자 오류다 |
 | `--scene n\|이름` | SVG로 만들 장면을 고른다(번호는 1부터, `render`와 같다). 생략하면 첫 장면이고 장면이 없는 블록은 정지 그림 하나다. 장면 없는 블록에 주면 그 블록 줄에 오류를 내고(종료 1) 아무것도 쓰지 않는다 |
 | `--strict`, `--budget`, `--json` | `render`와 같은 뜻. 블록마다 적용한다. 예산은 블록 하나의 그림마다 검사한다 |
 
@@ -230,7 +230,7 @@ GitHub 마크다운은 ` ```thinkflow ` 블록을 코드로 보이고 아래 이
 |---|---|---|
 | npm 설치 | `npm install --save-dev thinkflow` | 공개 npm 패키지 |
 | 설치 후 실행 | `npx thinkflow md doc.md` | 잠금 파일에 고정된 버전 |
-| GitHub Action | `uses: woonyong-choi/ThinkFlow@main` | 지금 |
+| GitHub Action | `uses: woonyong-choi/thinkflow@main` | 지금 |
 
 설치한 프로젝트의 잠금 파일을 함께 커밋하고 `npm ci`로 같은 버전을 설치한다.
 
@@ -312,7 +312,7 @@ GitHub 마크다운은 ` ```thinkflow ` 블록을 코드로 보이고 아래 이
 ## 대안
 
 - 블록을 이미지로 바꾸고 원본을 지우는 방식(mermaid-cli의 기본)은 문서에서 원본을 잃으므로 쓰지 않는다. 원본은 블록으로 남긴다.
-- 접기를 늘 켜 두는 방식은 문서 구조를 모든 사용자에게 바꾸므로 쓰지 않는다. 옵션으로 고르고, 옵션이 없으면 접힘 상태를 지킨다([#39](https://github.com/woonyong-choi/ThinkFlow/issues/39)).
+- 접기를 늘 켜 두는 방식은 문서 구조를 모든 사용자에게 바꾸므로 쓰지 않는다. 옵션으로 고르고, 옵션이 없으면 접힘 상태를 지킨다([#39](https://github.com/woonyong-choi/thinkflow/issues/39)).
 - 접은 곳을 시작과 끝 표식 없이 `<details>` 모양만으로 알아보는 방식은 사용자가 쓴 `<details>`와 구분할 수 없어 쓰지 않는다.
 - 이미지 줄을 구분하는 표시로 시작과 끝 주석 두 줄을 쓰는 방식은 문서가 길어져 한 줄 표시를 고른다.
 - 이름 없는 블록의 이름을 문서 전체 순번으로 하는 방식은 이름 있는 블록이 끼면 이름이 밀려 쓰지 않는다.
