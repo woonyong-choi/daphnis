@@ -28,8 +28,13 @@ export function FeatureDemos({ items, media, mediaFirst = false, after }) {
 }
 
 export function Details({ title, open = false, body }) {
-  return out(`<details class="app-details"${open ? ' open' : ''}><summary>${escape(title)}</summary>${slot(body, 'body')}</details>`);
+  return out(`${Details.open({ open })}${Details.summaryOpen()}${escape(title)}${Details.summaryClose()}${slot(body, 'body')}${Details.close()}`);
 }
+
+Details.open = ({ open = false } = {}) => `<details class="app-details"${open ? ' open' : ''}>`;
+Details.close = () => '</details>';
+Details.summaryOpen = () => '<summary>';
+Details.summaryClose = () => '</summary>';
 
 export const Speech = ({ text }) => out(`<p class="app-speech">${escape(text)}</p>`);
 export const Shortcut = ({ label = '', keys }) => out(`<p>${escape(label)} ${keys.map(text => Kbd({ text })).join(' + ')}</p>`);
