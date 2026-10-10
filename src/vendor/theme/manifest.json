@@ -17,8 +17,6 @@
     "assets/controls/check.svg": "be74eea323464d40b18eae4bb21ef33371de094e05ebc3e9f578b08fd0d3d36d",
     "assets/controls/chevron.svg": "8d0fc193c581d4f1e88f31efdee8629290fd4138b76f522847e2cc2e38165c32",
     "assets/controls/clear.svg": "4bebfceefe1c3a156ec9b36dcdf6f471cf1cbd4dc35f8bb851389485b63086c4",
-    "assets/controls/copy-done.svg": "1fac46f55516e5b0c642e98dbe8b3055a1f00bed90dcb791b3ed745280ecb608",
-    "assets/controls/copy-failed.svg": "1cf5177e5128e509a0bbfe0b9d684f2bacc1fecaf220c36903fd7d6412aa2447",
     "assets/controls/copy.svg": "c4bb287f4d205375e273cbff18c2c073d28651a788509e85d679307f21cb8491",
     "assets/controls/download.svg": "04a1886ea570f5037611140fae9dc48ebb7a82796aeda186ef986b8c92a2fe5b",
     "assets/controls/LICENSE": "015e22ba0b67519ad832a333087014aeed0b24f9f3b74518ecaa7f873e9aaa1b",
@@ -195,7 +193,6 @@
     "assets/icons/operating-system.svg": "a10410c531f06bfe2fb427dbf570a81add4ca4b507487622ab8f1a078561e0e0",
     "assets/icons/person.svg": "d612a0a3e9877bae850803d9c1776909088a3316947933affcaee43b06531e8b",
     "assets/icons/portfolio.svg": "c44dc28ebc7d9e8766b34a53576ae37f9d7c5f39a740f528d6587dba96dac239",
-    "assets/icons/pre-things-refinement.json": "98bfc22e7e648c0011da687eeff7f038c77779905aea58f02e1707ecfcd330c0",
     "assets/icons/processor.svg": "6e7f0a07505c3ca9d46f93ace7fdfee43baabe4092fd67cf485c55aac16096f7",
     "assets/icons/project.svg": "d8d4c8222a657c97aacc0a321709f037e6199656cd07d4d6399d9c28198a0e14",
     "assets/icons/queue.svg": "6f1e1b15b137407c54a6002442e36c74fa4f49aad12d2a889401eb725d8f19b5",
@@ -351,5 +348,5 @@
     "ui/table.mjs": "d285303ed3e84599a512085e79dfd92db751a890ad4890b81930f1ccf2126ae0",
     "ui/toolbar.mjs": "50d9ebcfc840ea983179d89bc185bde7928ea698da14e21fb8c461e260a3e725"
   },
-  "contentHash": "476741d5dc2aefdf7a8a6238635d418e28b4648535e754b01cb4608878a7659b"
+  "contentHash": "ee7e7979e0924ed95f0f59f357e517540691c1819f61f0c2964cdb283a9481a9"
 }
