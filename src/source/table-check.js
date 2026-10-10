@@ -62,7 +62,7 @@ function checkKeys(table, problems) {
     if (key.kind === 'pk') {
       if (primary) problems.error(key.line, 'a table has only one primary key');
       primary = true;
-      if (key.columns.some(name => table.columns.find(column => column.name === name)?.nullable)) problems.error(key.line, 'a primary key cannot be nullable');
+      for (const column of table.columns.filter(column => column.nullable && key.columns.includes(column.name))) problems.error(column.line, 'a primary key cannot be nullable');
     }
     const identity = JSON.stringify([key.kind, [...key.columns].sort()]);
     if (seen.has(identity)) problems.error(key.line, 'this key is already declared');

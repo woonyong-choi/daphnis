@@ -51,7 +51,9 @@ test('composite key errors identify the declaration before layout', async () => 
     assert.ok(problems.some(p => p.line === lineOf(source, needle) && message.test(p.message)), JSON.stringify(problems));
   }
   const nullable = tables().replace('id bigint\n', 'id bigint nullable\n');
-  assert.ok((await reject(nullable)).some(p => /primary key cannot be nullable/.test(p.message)));
+  assert.ok((await reject(nullable)).some(p => p.line === lineOf(nullable, 'tenant_id bigint nullable') && /primary key cannot be nullable/.test(p.message)));
+  const inline = dap('table users "users" {\n tenant_id bigint pk\n id bigint pk nullable\n}\n');
+  assert.ok((await reject(inline)).some(p => p.line === lineOf(inline, 'id bigint pk nullable') && /primary key cannot be nullable/.test(p.message)));
 });
 
 test('malformed key lists and foreign key options are located source errors', async () => {
