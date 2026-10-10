@@ -36,7 +36,6 @@ button { background: var(--color-soft); padding: var(--spacing-gap-xs) var(--spa
 a { color: var(--color-action-link); }
 a:hover { text-decoration: underline; }
 :focus-visible { outline: var(--spacing-outline) solid var(--color-action-link); outline-offset: var(--spacing-outline); }
-.app-sr { position: absolute; width: var(--border-width-thin); height: var(--border-width-thin); padding: 0; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .app-skip { position: absolute; top: 0; left: 0; transform: translateY(-100%); padding: var(--spacing-gap-sm); background: var(--color-ui-card); z-index: var(--z-index-layer-header); }
 .app-skip:focus { transform: none; }
 .app-caption { color: var(--color-ui-muted); font-size: var(--text-small-text); }
@@ -122,6 +121,7 @@ body > main { overflow-x: clip; }
 .app-tablist button:disabled { color: var(--color-ui-muted); cursor: default; background: transparent; box-shadow: none; }
 @media (prefers-reduced-motion: reduce) { .app-tablist button, .app-tablist.is-segmented button, .app-tablist.is-numbers button { transition: none; } }
 /* 코드와 그림의 블록 안 조작부. 크기·아이콘·상태·노출 규칙은 여기서만 정한다. */
+.app-sr { position: absolute; width: var(--border-width-thin); height: var(--border-width-thin); padding: 0; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .app-tool-surface { position: relative; background: var(--color-prose-pre-background); border-radius: var(--radius-card-radius); }
 .app-tool-header { position: relative; z-index: var(--z-index-raised); display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; gap: var(--spacing-3); min-width: 0; padding: var(--spacing-1-5); }
 .app-tool-label { min-width: 0; padding-inline-start: var(--spacing-1-5); overflow: hidden; color: var(--color-ui-muted); font-size: var(--text-post-date-size); text-overflow: ellipsis; white-space: nowrap; }
@@ -136,8 +136,6 @@ body > main { overflow-x: clip; }
 .app-tool-button:focus-visible { outline: var(--outline-width-focus) solid var(--color-ui-focus); outline-offset: var(--spacing-0-5); }
 .app-tool-button:disabled { color: var(--color-ui-muted); cursor: default; background: transparent; }
 .app-tool-button[hidden] { display: none; }
-.app-tool-status { min-width: 0; max-width: calc(var(--spacing-figure-control-outer) * 4); padding: 0 var(--spacing-2); overflow: hidden; color: var(--color-ink); font-size: var(--text-figure-13); text-overflow: ellipsis; white-space: nowrap; }
-.app-tool-status:empty { max-width: 0; padding: 0; }
 .app-copy-holder { position: fixed; top: 0; left: 0; opacity: 0; pointer-events: none; }
 @media (hover: none), (pointer: coarse) { .app-toolbar { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .app-toolbar { transition: none; } }
