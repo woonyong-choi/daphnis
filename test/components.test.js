@@ -4,7 +4,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { figureFrame } from '../src/html/player-script.js';
-import { CONTROL_ICONS } from '../src/icons/controls.js';
+import { CONTROL_ICONS } from '../src/vendor/theme/ui/control-icons.mjs';
 import { loadIcon } from '../src/icons/index.js';
 import { drawTexts } from '../src/draw/texts.js';
 import { edgeMarker } from '../src/draw/arrow.js';
@@ -15,7 +15,7 @@ import { PAD } from '../src/measure/card.js';
 import { STYLE, allTexts, textAt, textSpan } from '../src/measure/texts.js';
 import { STYLES } from '../src/styles.js';
 import { centerBaseline } from '../src/text.js';
-import { values } from '../src/tokens.js';
+import { values } from '../src/vendor/theme/tokens.js';
 import { build, dap, descendants, findAll, findOne, num, parseMarkup, textContent, toHtml, toSvg } from './support.js';
 
 const TICK = '`';
@@ -185,10 +185,10 @@ test('U6 a label is rich text in every slot that takes a label: backticks make c
 test('U11 a measured text role is the drawn role: the CSS of every role has the size and weight of its STYLE, and chart names are measured and drawn at the same weight', () => {
   const rulesOf = (css) => [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/([^{}]+)\{([^}]*)\}/g)].map(([, selectors, body]) => ({ selectors: selectors.split(',').map((s) => s.trim()), body }));
   const declared = (css, selector, property) => rulesOf(css).filter((rule) => rule.selectors.includes(selector)).flatMap(({ body }) => [...body.matchAll(new RegExp(`(?:^|;|\\s)${property}:\\s*([^;]+);`, 'g'))].map(([, value]) => value.trim()));
-  const sizeOf = (css, selector) => values.simple2[/--simple2-([\w-]+)\)/.exec(declared(css, selector, 'font-size').at(-1))[1]];
+  const sizeOf = (css, selector) => values.text[/--text-([\w-]+)\)/.exec(declared(css, selector, 'font-size').at(-1))[1]];
   const weightOf = (css, selector) => {
     const weight = declared(css, selector, 'font-weight').at(-1);
-    return weight === undefined ? 400 : values.weight[/--weight-(\w+)\)/.exec(weight)[1]];
+    return weight === undefined ? 400 : values["font-weight"][/--font-weight-(\w+)\)/.exec(weight)[1]];
   };
   const WEIGHTS = { regular: 400, semibold: 600, semiboldLiteral: 600 };
   const roles = [['.fl .label', STYLE.label], ['.fl .sub', STYLE.sub], ['.fl .frame', STYLE.group], ['.fl .row', STYLE.row], ['.fl .meta', STYLE.meta], ['.fl .cell', STYLE.cell], ['.fl .item', STYLE.item], ['.fl .mini', STYLE.mini], ['.fl .chip', STYLE.chip], ['.fl .edgelabel', STYLE.pill], ['.fl .tag', STYLE.tag], ['.fl .mark', STYLE.mark], ['.fl .cell .key', STYLE.key], ['.fl .value', STYLE.value], ['.fl .badge', BADGE_STYLE]];
@@ -275,12 +275,12 @@ test('U8 a concept icon is one symbol: the card header, the tile and the group t
   const symbols = findAll(dom, (n) => n.tag === 'g' && hasClass(n, 'fl-symbol'));
   assert.equal(symbols.length, 4);
   const registered = parseMarkup(`<svg xmlns="http://www.w3.org/2000/svg">${loadIcon({ set: 'builtin', name: 'server' }).body}</svg>`);
-  const [concept, brand] = [symbols.filter((n) => hasClass(n, 'fl-symbol-service') && hasClass(n.children.find((c) => c.tag), 'fl-symbol-glyph')), symbols.filter((n) => n.children.some((c) => c.tag && hasClass(c, 'fl-icon')))];
+  const [concept, brand] = [symbols.filter((n) => hasClass(n, 'fl-symbol-concept')), symbols.filter((n) => hasClass(n, 'fl-symbol-brand'))];
   assert.equal(concept.length, 3, 'group title, card header and tile');
   assert.equal(brand.length, 1);
   for (const symbol of concept) assert.deepEqual(shape({ tag: 'g', attrs: {}, children: symbol.children[0].children }), shape({ tag: 'g', attrs: {}, children: registered.children }), 'the registered shapes');
-  assert.equal(loadIcon({ set: 'builtin', name: 'server' }).symbol, true);
-  assert.equal(loadIcon({ set: 'builtin', name: 'git' }).symbol, false);
+  assert.equal(loadIcon({ set: 'builtin', name: 'server' }).role, 'concept');
+  assert.equal(loadIcon({ set: 'builtin', name: 'git' }).role, 'brand');
 });
 
 // ---- HTML 그림 틀 ----
@@ -326,7 +326,7 @@ test('U10 a chart is drawn on the surface it sits on: in a plot view and inside 
   assert.ok(hollow.length > 0, 'the reference series marker is hollow with the carried ground inside the chart group');
   assert.ok(findAll(dom, (n) => Object.values(n.attrs).some((v) => String(v).includes('--chart-ground'))).length === 0, 'no presentation attribute names the alias');
   // 바탕 면 값은 그림 바탕(배경 사각형과 설명 판)과 같은 토큰이다.
-  assert.ok(findAll(dom, (n) => n.tag === 'rect' && n.attrs.fill === 'var(--simple2-canvas-fill)').length > 0);
+  assert.ok(findAll(dom, (n) => n.tag === 'rect' && n.attrs.fill === 'var(--color-prose-pre-background)').length > 0);
 });
 
 test('U9 every page has one frame, one toolbar and one tab row: the toolbar sits in the drawing, the tab row below it, and neither depends on the figure', async () => {
@@ -339,10 +339,10 @@ test('U9 every page has one frame, one toolbar and one tab row: the toolbar sits
   assert.deepEqual(tools.children.filter((n) => n.tag === 'button').map((n) => n.attrs['aria-label']), ['문법 복사', 'HTML 다운로드', '전체화면']);
   assert.deepEqual(tools.children.filter((n) => n.tag === 'button').map((n) => classes(n).find((name) => name !== 'fl-round')), ['fl-copy', 'fl-download', 'fl-full']);
   assert.equal(descendants(surface).indexOf(tools) < descendants(surface).findIndex((n) => hasClass(n, 'fl-canvas')), true, 'toolbar before the canvas');
-  const tabs = findOne(foot, (n) => hasClass(n, 'fl-tabs'), 'tab row');
+  const tabs = findOne(foot, (n) => hasClass(n, 'app-tablist'), 'tab row');
   assert.equal(tabs.attrs.role, 'tablist');
-  assert.deepEqual(tabs.children, [], 'the player builds the tabs; the page ships none');
-  assert.deepEqual(findAll(surface, (n) => n.attrs.role === 'tab' || hasClass(n, 'fl-tabs')), [], 'the tab row is outside the drawing');
+  assert.deepEqual(tabs.children, [], 'a frame without labels has no tabs');
+  assert.deepEqual(findAll(surface, (n) => n.attrs.role === 'tab' || hasClass(n, 'app-tablist')), [], 'the tab row is outside the drawing');
   // 원본이 없으면 복사할 글이 없다.
   assert.deepEqual(findAll(parseMarkup(figureFrame({ canvas: '' }), { html: true }), (n) => hasClass(n, 'fl-source')), []);
 
@@ -358,11 +358,16 @@ test('U9 every page has one frame, one toolbar and one tab row: the toolbar sits
     const dom = parseMarkup(html, { html: true });
     const script = textContent(descendants(dom).filter((n) => n.tag === 'script').at(-1));
     pages[name] = {
-      chrome: [findOne(dom, (n) => hasClass(n, 'fl-view-tools'), 'toolbar'), findOne(dom, (n) => hasClass(n, 'fl-foot'), 'foot')].map(shape),
+      chrome: shape(findOne(dom, (n) => hasClass(n, 'fl-view-tools'), 'toolbar')),
+      tabs: findAll(dom, (n) => n.attrs.role === 'tab'),
       data: JSON.parse(/figurePlay\(document\.querySelector\('\.fl-figure'\), (.*)\);\s*$/s.exec(script)[1]),
     };
   }
   for (const page of Object.values(pages)) assert.deepEqual(page.chrome, pages.still.chrome);
+  for (const page of Object.values(pages)) {
+    assert.equal(page.tabs.length, page.data.steps.length);
+    for (const tab of page.tabs) assert.equal(tab.attrs['aria-controls'], 'scene-panel');
+  }
   assert.deepEqual([pages.still.data.segs.length, pages.one.data.steps.length, pages.three.data.steps.length], [0, 1, 3]);
   // 조작부 아이콘은 한 표에서 와서 모든 페이지에 같은 글로 실린다.
   const html = await toHtml(await build(dap('box a "A"\n')), 'doc');

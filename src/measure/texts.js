@@ -1,20 +1,20 @@
 // 글의 역할과 모양, 그리고 카드 안 글 한 줄(text)의 자리. 머리의 제목·부제·표시, 열 이름과 형식과 제약, 클래스 멤버, 격자 제목과 칸 글, 내용 줄(태그, 본문, 표시, 값)이 모두 같은 모양이다.
 // 좌표는 도형 왼쪽 위가 원점이다. x는 anchor(start, middle, end)가 가리키는 글의 한 점이고 center는 줄의 세로 가운데다.
 // 그리는 쪽(draw/texts.js)과 이동 글 상자가 피할 사각형(draw/boxes.js)과 그림 검사(check/fit.js)가 같은 text를 읽으므로 글의 자리가 세 곳에서 따로 계산되지 않는다.
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { measure, wrap } from './fonts.js';
 
-const LEADING = values.simple2['figure-leading'];
+const LEADING = values.leading.normal;
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
 /** 글자 크기에 줄 높이 비율을 곱해 반올림한 줄 높이 */
 export const lineHeight = (size, leading) => Math.round(size * leading);
 
-// 글 위계 셋: 제목(simple2.label-size 15: 카드 제목은 regular, 그룹 제목은 semibold), 문장과 이름표(detail-size 13), 작은 표시(micro-size 11). CSS(styles/figure.css, chart.css, status.css)가 같은 토큰으로 같은 크기와 굵기를 그린다. 굵기는 regular와 semibold 둘이다.
-const TITLE = values.simple2['label-size'];
-const FIELD = values.simple2['detail-size'];
-const META = values.simple2['micro-size'];
+// 글 위계 셋: 제목(text.small-text 15: 카드 제목은 regular, 그룹 제목은 semibold), 문장과 이름표(detail-size 13), 작은 표시(micro-size 11). CSS(styles/figure.css, chart.css, status.css)가 같은 토큰으로 같은 크기와 굵기를 그린다. 굵기는 regular와 semibold 둘이다.
+const TITLE = values.text["small-text"];
+const FIELD = values.text["tiny-text"];
+const META = values.text["figure-meta"];
 
 /**
  * 글 모양. 크기, 글꼴, 줄 높이. 역할 하나가 크기 하나를 쓴다. 차트 제목과 부제도 label과 sub를 쓴다(chart/labels.js).
@@ -43,7 +43,7 @@ export const STYLE = Object.freeze({
 });
 
 /** 열 이름과 그 뒤 키 표시(PK, FK) 사이 간격. 키 표시는 이름 text의 key로 붙는다. */
-export const KEY_GAP = values.space['3'];
+export const KEY_GAP = values.spacing["1-5"];
 
 /**
  * text 하나.

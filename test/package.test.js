@@ -11,9 +11,9 @@ test('P1 the package ships src, the logo SVGs, the licence and the notice, and n
   assert.deepEqual(pkg.files, ['src', 'docs/assets/daphnis-*.svg', 'LICENSE', 'NOTICE']);
 });
 
-test('P2 the only entry point is the daphnis command: a bin, no exports or main for a library', () => {
+test('P2 the command and static build API are explicit package entry points', () => {
   assert.deepEqual(pkg.bin, { daphnis: 'src/cli.js' });
-  assert.equal(pkg.exports, undefined);
+  assert.deepEqual(pkg.exports, { '.': './src/index.js', './design-manifest.json': './src/vendor/theme/manifest.json', './package.json': './package.json' });
   assert.equal(pkg.main, undefined);
   assert.equal(pkg.type, 'module');
 });

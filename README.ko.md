@@ -1,4 +1,8 @@
-<br>
+# daphnis
+
+[English](README.md) | 한국어
+
+`.dap` 텍스트 원본 하나를 문서용 움직이는 SVG 그림으로 바꿉니다. 구조, 순서, 상태, 스키마, 클래스, 추적과 차트를 그리고, 점이 닿을 때 값이 바뀌는 모습까지 보입니다.
 
 <p align="center">
   <picture>
@@ -6,10 +10,6 @@
     <img src="docs/assets/daphnis-lockup-light.svg" alt="daphnis" width="260">
   </picture>
 </p>
-
-[English](README.md) | 한국어
-
-`.dap` 텍스트 원본 하나를 문서용 움직이는 SVG 그림으로 바꿉니다. 구조, 순서, 상태, 스키마, 클래스, 추적과 차트를 그리고, 점이 닿을 때 값이 바뀌는 모습까지 보입니다.
 
 <p align="center">
   <picture>
@@ -201,7 +201,7 @@ npm run check
 
 `npm test`는 공개 진입점(빌드 결과, SVG, HTML, 명령, 마크다운)으로 계약을 확인하고 브라우저가 필요 없습니다. 실제 브라우저에서 휴대폰과 데스크톱 크기, 라이트와 다크로 그림을 눈으로 보는 일은 시험이 대신하지 못하는 별도의 수동 검수입니다.
 
-공통 화면 값(색 역할, 간격, 글자 크기)은 [design-tokens](https://github.com/woonyong-choi/design-tokens) 패키지에서 받습니다. `npm install`이 GitHub에서 태그로 받아 오므로 `git`이 있어야 합니다. `src/tokens.json`에는 그림 전용 토큰만 있고, design-tokens에 새 태그가 나오면 워크플로가 PR을 엽니다. 복제한 저장소에서는 `daphnis` 대신 `node src/cli.js`를 실행하고, `npm run catalog`로 모든 예제와 원본, 목록을 `.local/examples/`에 만듭니다.
+공통 화면 값, CSS, 아이콘, 탭과 도구 막대는 `src/vendor/theme/`의 검증된 디자인 완성본을 사용합니다. 공개된 사본으로 빌드하므로 디자인 정본 저장소의 접근 권한은 필요하지 않습니다. 사본 변경은 전체 해시 검사와 그림 재생성을 통과한 PR로 반영합니다. 복제한 저장소에서는 `daphnis` 대신 `node src/cli.js`를 실행하고, `npm run catalog`로 모든 예제와 원본, 목록을 `.local/examples/`에 만듭니다.
 
 브랜치, 커밋, PR 규칙은 [CONTRIBUTING](.github/CONTRIBUTING.md)에 있습니다.
 

@@ -3,7 +3,7 @@
 // 값이 없는 점(`-`)에서 선이 끊긴다. 끊긴 곳에는 점도 `data-at`도 없고 선이 자라는 시간도 쓰지 않는다. 계단은 값이 다음 점까지 이어지는 post 방식이다.
 // 기대값(reference) 계열은 점선과 속이 빈 꼭짓점이고 점선은 길이로 드러낼 수 없어 x 위치로 닦아 낸다(wipe).
 import { roundCoord as r } from '../text.js';
-import { tokens, values } from '../tokens.js';
+import { tokens, values } from '../vendor/theme/tokens.js';
 import { curveOf, timeAt } from '../easing.js';
 import { roundToScale } from '../format.js';
 import { drawRules } from './axis.js';
@@ -92,7 +92,7 @@ function valueBetween([a, b], key, { x, sx }) {
 // 계단은 값이 다음 점까지 수평으로 이어지므로 구간마다 앞 점의 값 하나다. 값이 없는 점 둘레에는 모으지 않는다.
 function occupiedRects(ctx) {
   const { chart, points, sx, sy, isStep } = ctx;
-  const step = SPACE['2'];
+  const step = SPACE["1"];
   const rects = [];
   for (let k = 1; k < points.length; k++) {
     const pair = [points[k - 1], points[k]];
@@ -144,7 +144,7 @@ function lineMark(ctx, layer) {
   if (!d) return '';
   const motion = `${isWipe ? 'wipe' : 'draw'}${isReference(chart, i) ? ' chart-dashed' : ''}`;
   const common = `d="${d}" fill="none"${isWipe ? '' : ' pathLength="1"'}`;
-  return `<g class="cs-${i}"><path ${common} stroke="${seriesStroke(chart, i)}" stroke-width="${values.border.strong}" class="${motion}"${markAttrs(chart, markId(chart, i, 'path'))}/></g>`;
+  return `<g class="cs-${i}"><path ${common} stroke="${seriesStroke(chart, i)}" stroke-width="${values["border-width"].strong}" class="${motion}"${markAttrs(chart, markId(chart, i, 'path'))}/></g>`;
 }
 
 // cost: time O(p·s), heap O(out), stack O(1)

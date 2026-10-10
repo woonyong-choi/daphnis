@@ -2,13 +2,13 @@
 // 채움은 중립 카드 면이고 경계와 켜짐은 부르는 쪽이 넘기는 stroke(class)가 정한다. 후광과 배경 면(draw/values.js)도 같은 윤곽을 쓴다.
 import { bodyOf } from '../measure/decor.js';
 import { roundCoord as r } from '../text.js';
-import { tokens, values } from '../tokens.js';
+import { tokens, values } from '../vendor/theme/tokens.js';
 
 /** 점선 경계의 점선(stroke-dasharray): 외부 도형 면, 점선 그룹 경계, 점선 연결선이 함께 쓴다. */
 export const LINE_DASH = `${values.dash.line} ${values.dash.gap}`;
 
 /** 모서리 반지름의 두 역할: 바깥 면(카드)과 그 안에 놓이는 면(내용, 칸 묶음, 메모). 둘 다 토큰이다. */
-export const CORNER = Object.freeze({ outer: values.simple2['node-corner'], inner: values.radius.md });
+export const CORNER = Object.freeze({ outer: values.radius.lg, inner: values.radius.md });
 
 /** 사각형 윤곽 여는 글(닫지 않음): 속성이 이어질 자리를 남긴다. */
 export function rectOpen({ x, y, w, h }, radius) {

@@ -4,15 +4,15 @@ import { placeSequenceLife } from './sequence-life.js';
 import { FIGURE_PAD } from '../canvas.js';
 import { sizePill } from '../measure/sizes.js';
 import { STYLE, textBlock } from '../measure/texts.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 
-const SPACE = values.space;
-const SIZE = values.size;
+const SPACE = values.spacing;
+const SIZE = values.spacing.figure;
 // 메모 상자 안쪽 여백과 최대 너비
-const NOTE_PAD = SPACE['5'];
+const NOTE_PAD = SPACE["2-5"];
 const NOTE_MAX = SIZE.chip['max-width'];
 // 메모 상자와 같은 행 화살표 라벨 사이의 최소 간격. 이동 글 상자 간격과 같다.
-const NOTE_CLEAR = SPACE['2'];
+const NOTE_CLEAR = SPACE["1"];
 
 // cost: time O(p·m + m·n²), heap O(p + m), stack O(1)
 // vars: p = 참여자 수, m = 메시지 수, n = 글자 수
@@ -38,9 +38,9 @@ export function layoutSequence(figure, sizes) {
     const bottom = FIGURE_PAD + headH - size.marginBottom;
     return { ...p, ...size, x: centers[i] - size.w / 2, y: bottom - size.h, w: size.w, h: size.h, ports: [] };
   });
-  const rows = layoutRows(messages, noteBoxes, { index, centers, sizes, fragments, owners, top: FIGURE_PAD + headH + SPACE['12'] });
+  const rows = layoutRows(messages, noteBoxes, { index, centers, sizes, fragments, owners, top: FIGURE_PAD + headH + SPACE["6"] });
   const { edges, notes } = rows;
-  const bottom = rows.bottom + SPACE['8'];
+  const bottom = rows.bottom + SPACE["4"];
   const lifelines = items.map((it) => ({ id: it.id, x: centers[index.get(it.id)], y1: it.y + it.h + it.marginBottom, y2: bottom }));
   const right = Math.max(...items.map((it) => it.x + it.w), ...notes.map((n) => n.x + n.w), ...edges.flatMap((e) => e.points.map((p) => p.x)), ...edges.map((e) => e.labelAt.x + sizePill(e.label).w / 2));
   const scene = { items, groups: [], edges, lifelines, notes, width: right + FIGURE_PAD, height: bottom + FIGURE_PAD };
@@ -82,21 +82,21 @@ function layoutRow(beat, rowNotes, { index, centers, sizes, m, y }) {
   const [a, b] = [index.get(hop.from), index.get(hop.to)];
   const isSelf = a === b;
   const pill = sizePill(hop.data);
-  const loop = Math.max(SPACE['20'], pill.w / 2 + SPACE['6']);
-  const placed = rowNotes.map((n) => ({ ...n, x: noteX(n, centers[index.get(n.node)], isRightNote(n, hop)), y: y + SPACE['2'] }));
+  const loop = Math.max(SPACE["10"], pill.w / 2 + SPACE["3"]);
+  const placed = rowNotes.map((n) => ({ ...n, x: noteX(n, centers[index.get(n.node)], isRightNote(n, hop)), y: y + SPACE["1"] }));
   const mid = (centers[a] + centers[b]) / 2;
   const span = isSelf ? [centers[a], centers[a] + loop + pill.w / 2] : [Math.min(centers[a], centers[b], mid - pill.w / 2), Math.max(centers[a], centers[b], mid + pill.w / 2)];
   const isStacked = placed.some((n) => n.x < span[1] && n.x + n.w > span[0]);
   const selfExtra = isSelf ? SIZE.sequence.row / 2 : 0;
   // 메모 위 여백 + 메모 + 최소 간격 + 라벨 위 간격 + 라벨 + 화살표 아래 여백
-  const stack = isStacked ? SPACE['2'] + Math.max(...placed.map((n) => n.h)) + NOTE_CLEAR + pill.h + SPACE['2'] + SPACE['8'] + selfExtra : 0;
+  const stack = isStacked ? SPACE["1"] + Math.max(...placed.map((n) => n.h)) + NOTE_CLEAR + pill.h + SPACE["1"] + SPACE["4"] + selfExtra : 0;
   const creation = hop.create ? sizes.get(hop.to).h : 0;
-  const height = Math.max(SIZE.sequence.row * (isSelf ? 2 : 1), ...placed.map((n) => n.h + SPACE['8']), stack) + creation;
-  const lineY = y + height - SPACE['8'] - selfExtra - creation / 2;
+  const height = Math.max(SIZE.sequence.row * (isSelf ? 2 : 1), ...placed.map((n) => n.h + SPACE["4"]), stack) + creation;
+  const lineY = y + height - SPACE["4"] - selfExtra - creation / 2;
   const points = isSelf
-    ? [{ x: centers[a], y: lineY }, { x: centers[a] + loop, y: lineY }, { x: centers[a] + loop, y: lineY + SPACE['14'] }, { x: centers[a], y: lineY + SPACE['14'] }]
+    ? [{ x: centers[a], y: lineY }, { x: centers[a] + loop, y: lineY }, { x: centers[a] + loop, y: lineY + SPACE["7"] }, { x: centers[a], y: lineY + SPACE["7"] }]
     : [{ x: centers[a], y: lineY }, { x: centers[b], y: lineY }];
-  const labelAt = { x: isSelf ? centers[a] + loop : mid, y: lineY - pill.h / 2 - SPACE['2'] };
+  const labelAt = { x: isSelf ? centers[a] + loop : mid, y: lineY - pill.h / 2 - SPACE["1"] };
   return { height, notes: placed, edge: { index: m, from: hop.from, to: hop.to, label: hop.data, points, labelAt, quiet: false, dashed: hop.dashed, line: hop.line } };
 }
 
@@ -107,7 +107,7 @@ function isRightNote(note, hop) {
 
 // 메모 상자의 왼쪽 x. 참여자 선 오른쪽에 두거나, 자기 고리의 메모는 왼쪽에 둔다.
 function noteX(note, center, toRight) {
-  return toRight ? center + SPACE['6'] : center - SPACE['6'] - note.w;
+  return toRight ? center + SPACE["3"] : center - SPACE["3"] - note.w;
 }
 
 // cost: time O(p + m), heap O(p), stack O(1)
@@ -120,20 +120,20 @@ function placeColumns({ participants, sizes, index }, messages, noteBoxes) {
   const leftNeed = participants.map(() => 0);
   for (const n of noteBoxes) {
     const need = isRightNote(n, messages[n.m].hops[0]) ? rightNeed : leftNeed;
-    need[index.get(n.node)] = Math.max(need[index.get(n.node)], n.w + SPACE['12']);
+    need[index.get(n.node)] = Math.max(need[index.get(n.node)], n.w + SPACE["6"]);
   }
   for (const beat of messages) {
     const hop = beat.hops[0];
-    if (hop.from === hop.to) rightNeed[index.get(hop.from)] = Math.max(rightNeed[index.get(hop.from)], sizePill(hop.data).w + SPACE['20']);
+    if (hop.from === hop.to) rightNeed[index.get(hop.from)] = Math.max(rightNeed[index.get(hop.from)], sizePill(hop.data).w + SPACE["10"]);
   }
   // 첫 참여자의 왼쪽 메모는 그림 왼쪽 여백(FIGURE_PAD) 안에서 시작한다.
-  const centers = [Math.max(FIGURE_PAD + half(0), FIGURE_PAD + leftNeed[0] - SPACE['6'])];
+  const centers = [Math.max(FIGURE_PAD + half(0), FIGURE_PAD + leftNeed[0] - SPACE["3"])];
   for (let i = 1; i < participants.length; i++) {
-    let c = centers[i - 1] + Math.max(half(i - 1) + half(i) + SPACE['16'], rightNeed[i - 1], leftNeed[i]);
+    let c = centers[i - 1] + Math.max(half(i - 1) + half(i) + SPACE["8"], rightNeed[i - 1], leftNeed[i]);
     for (const beat of messages) {
       const hop = beat.hops[0];
       const [a, b] = [index.get(hop.from), index.get(hop.to)].sort((x, y) => x - y);
-      if (b === i && a < i) c = Math.max(c, centers[a] + sizePill(hop.data).w + SPACE['12'] + (hop.create ? half(index.get(hop.to)) : 0));
+      if (b === i && a < i) c = Math.max(c, centers[a] + sizePill(hop.data).w + SPACE["6"] + (hop.create ? half(index.get(hop.to)) : 0));
     }
     centers.push(c);
   }

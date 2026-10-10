@@ -1,9 +1,9 @@
 // 점이 선 하나를 지나는 시간. 박자의 이동과 흐름(track)이 같은 규칙을 쓴다(docs/design/figure-syntax.md 이동 시간).
 import { flattenRoute, routeLength } from './route.js';
-import { values } from './tokens.js';
+import { values } from './vendor/theme/tokens.js';
 
 const DURATION = values.duration;
-const HOP_REF = values.size.packet['hop-ref'];
+const HOP_REF = values.spacing.figure.packet["hop-ref"];
 
 // cost: time O(p), heap O(1), stack O(1)
 // vars: p = 경로 점 수

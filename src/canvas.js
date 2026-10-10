@@ -1,17 +1,17 @@
 // 그림 표시 폭 규칙. 모든 그림은 같은 표준 캔버스 폭으로 보인다(docs/design/layout.md 그림 크기).
-import { values } from './tokens.js';
+import { values } from './vendor/theme/tokens.js';
 
 /** 구조, 순서, 상태, 데이터 그림과 전체 폭 차트의 표시 폭 */
-export const CANVAS = values.size['figure-canvas'];
+export const CANVAS = values.spacing.figure["figure-canvas"];
 /** 그림 머리 `width wide`를 쓴 그림의 표시 폭 */
-export const CANVAS_WIDE = values.size['figure-canvas-wide'];
+export const CANVAS_WIDE = values.spacing.figure["figure-canvas-wide"];
 /** 그림 둘레 안쪽 여백. 배치와 차트가 내용 둘레에 같은 값을 둔다. */
-export const FIGURE_PAD = values.space['14'];
+export const FIGURE_PAD = values.spacing["7"];
 /**
- * 좁은 화면(`size.figure-compact-width`)에서 그림 컨테이너가 가지는 폭. 컨테이너는 화면 폭에서 좌우 바깥 여백(`simple2.page-gutter`)을 뺀 값이고 그림 안쪽에는 여백이 없다.
+ * 좁은 화면(`size.figure-compact-width`)에서 그림 컨테이너가 가지는 폭. 컨테이너는 화면 폭에서 좌우 바깥 여백(`spacing.6`)을 뺀 값이고 그림 안쪽에는 여백이 없다.
  * 좁은 배치의 그래프와 차트는 이 폭에 들어가 표시 배율 1배로 보인다.
  */
-export const COMPACT_WIDTH = values.size['figure-compact-width'] - values.simple2['page-gutter'] * 2;
+export const COMPACT_WIDTH = values.spacing.figure["figure-compact-width"] - values.spacing["6"] * 2;
 /** 보이는 가로세로 비율의 한도. 비율이 이 값이나 그 역수를 넘으면 그림이 읽히지 않는다. */
 export const ASPECT_MAX = values.scale['aspect-max'];
 
@@ -22,7 +22,7 @@ export const ASPECT_MAX = values.scale['aspect-max'];
  * @returns { x, y, w, h } viewBox 값
  */
 export function tightView(width, height) {
-  const inset = FIGURE_PAD - values.space['2'];
+  const inset = FIGURE_PAD - values.spacing["1"];
   return { x: inset, y: inset, w: width - inset * 2, h: height - inset * 2 };
 }
 

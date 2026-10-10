@@ -2,7 +2,7 @@
 // 길이로 값을 보이는 막대와 달리 위치로 보이므로 0 시작 제약이 없고, 0 자리에 세로선을 긋는다.
 import { measure } from '../measure/fonts.js';
 import { roundCoord as r } from '../text.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { drawRules, finishRowChart, rowValueScale } from './axis.js';
 import { inkGroup, rowLabelLayout, rowName, valueText } from './labels.js';
 import { dotAttrs } from './legend.js';
@@ -42,7 +42,7 @@ function differenceScale(chart, format) {
   const [min, max] = high === low ? [-FLAT_SPAN, FLAT_SPAN] : [low === 0 ? -margin : low, high === 0 ? margin : high];
   // 값 글자는 max(점 오른쪽 끝, 구간 끝) 뒤에 놓인다(differenceRow). 그 최댓값은 점과 구간 끝 가운데 하나라, 닿는 거리를 둘로 나누어 각각 잰다: 점은 반지름만큼 더 나가고 구간 끝은 나가지 않는다.
   const reaches = () => chart.rows.flatMap((row) => {
-    const text = SPACE['3'] + measure(format(row.values[id]), TEXT['11'], 'numSemibold');
+    const text = SPACE["1-5"] + measure(format(row.values[id]), TEXT['11'], 'numSemibold');
     const high = row.values[`${id}.high`];
     return chart.layout ? [{ value: Math.max(row.values[id], high ?? row.values[id]), extra: DOT }] : [{ value: row.values[id], extra: DOT + text }, ...(high === undefined ? [] : [{ value: high, extra: text }])];
   });
@@ -61,7 +61,7 @@ function intervalMark(ctx, row) {
   const cap = (x) => `M ${r(x)} ${r(cy - CAP / 2)} V ${r(cy + CAP / 2)}`;
   const d = `M ${r(x1)} ${r(cy)} H ${r(x2)} ${cap(x1)} ${cap(x2)}`;
   const raw = `${row.values[`${id}.low`]}~${row.values[`${id}.high`]}`;
-  return `<path d="${d}" fill="none" stroke="${seriesStroke(chart, 0)}" stroke-width="${values.border.strong}" class="grow"${markAttrs(chart, markId(chart, 0, ctx.k, '.i'), { raw, paint: seriesPaint(chart, 0) })}/>`;
+  return `<path d="${d}" fill="none" stroke="${seriesStroke(chart, 0)}" stroke-width="${values["border-width"].strong}" class="grow"${markAttrs(chart, markId(chart, 0, ctx.k, '.i'), { raw, paint: seriesPaint(chart, 0) })}/>`;
 }
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -72,12 +72,12 @@ function differenceRow(ctx, row, k) {
   const id = chart.series[0].id;
   const [value, high] = [row.values[id], row.values[`${id}.high`]];
   const dotX = scale.at(value);
-  const textX = Math.max(dotX + DOT, high === undefined ? -Infinity : scale.at(high)) + SPACE['3'];
+  const textX = Math.max(dotX + DOT, high === undefined ? -Infinity : scale.at(high)) + SPACE["1-5"];
   const dot = markShape({ shape: seriesPaint(chart, 0).shape, cx: dotX, cy, radius: DOT, attrs: dotAttrs(chart, 0, ` class="chart-after pop"${markAttrs(chart, markId(chart, 0, k), { raw: value, paint: seriesPaint(chart, 0) })}`) });
   const marks = `<g class="cr-${k}"><g class="cs-0">${intervalMark({ ...ctx, k }, row)}${dot}</g></g>`;
   const name = rowName(row.label, { layout: labels, k, top, cy });
-  const at = chart.layout ? { x: scale.start, cy: cy + DOT + SPACE['6'] } : { x: textX, cy };
-  const guides = chart.layout ? drawRules(chart.rules, scale, { axis: 'x', from: cy - DOT, to: cy + DOT, labels: false }) + zeroLine(scale, cy - SPACE['6'], cy + SPACE['6']) : '';
+  const at = chart.layout ? { x: scale.start, cy: cy + DOT + SPACE["3"] } : { x: textX, cy };
+  const guides = chart.layout ? drawRules(chart.rules, scale, { axis: 'x', from: cy - DOT, to: cy + DOT, labels: false }) + zeroLine(scale, cy - SPACE["3"], cy + SPACE["3"]) : '';
   return inkGroup(k, name) + guides + marks + inkGroup(k, valueText(at, format(value), 'chart-value ours late', { chart, id: markId(chart, 0, k), raw: value, paint: seriesPaint(chart, 0) }), 0);
 }
 
@@ -89,9 +89,9 @@ export function drawDifferences(figure, top) {
   const format = signedFormat(chart);
   const { scale } = differenceScale(chart, format);
   const labels = rowLabelLayout(chart);
-  const pitch = labels.space + ROW + (chart.layout ? SPACE['6'] : 0);
+  const pitch = labels.space + ROW + (chart.layout ? SPACE["3"] : 0);
   const bottom = top + chart.rows.length * pitch;
-  const zero = chart.layout ? '' : zeroLine(scale, top - SPACE['3'], bottom + SPACE['4']);
+  const zero = chart.layout ? '' : zeroLine(scale, top - SPACE["1-5"], bottom + SPACE["2"]);
   const rows = chart.rows.map((row, k) => differenceRow({ chart, scale, labels, top: top + k * pitch, cy: top + k * pitch + (chart.layout ? labels.space + DOT : ROW / 2), format }, row, k));
   return finishRowChart(chart, { parts: [zero, ...rows], scale, top, bottom });
 }

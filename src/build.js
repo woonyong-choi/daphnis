@@ -29,11 +29,16 @@ const LABEL_KEY = { bar: 'label', stacked: 'label', percent: 'label', dumbbell: 
  * @returns { figure, scene, timeline, warnings, valueTexts }. figure.source는 받은 원본 글 그대로(CRLF 포함)이고 reflowFigure도 같은 figure를 쓴다. scene은 보기마다의 판을 합친 장면(scene.panels, scene.plots, scene.times, scene.chartFrames)이고 timeline은 문서 하나의 시간표다
  * @throws FigureError 원본 오류나 그림 검사 오류가 있을 때. 모든 문제를 담는다
  */
-export async function buildFigure(source, { baseDir = '.', strict = false, requireData = false, requireCi = false, budget, layoutWidth } = {}) {
+export async function buildFigure(source, { baseDir = '.', strict = false, requireData = false, requireCi = false, budget, layoutWidth, allowFileAccess = true } = {}) {
   const limits = resolveBudget(budget);
   const problems = createProblems(source);
   const figure = readFigure(source, problems);
   checkLayoutWidth(figure, layoutWidth, problems);
+  if (!allowFileAccess) {
+    for (const set of figure.iconSets) problems.error(set.line, 'file-based icon sets are not allowed in embedded documents');
+    for (const card of chartCards(figure)) if (card.plot.chart.data) problems.error(card.line, 'file-based chart data is not allowed in embedded documents');
+    problems.throwIfAny();
+  }
   for (const card of chartCards(figure)) {
     if (card.plot.chart.data) loadChartData(card.plot, baseDir, problems);
     checkSkillRules(card.plot, { requireData, requireCi }, problems);
@@ -57,7 +62,7 @@ export async function reflowFigure(reference, { layoutWidth, chartWidth, strict 
   const { figure } = reference;
   const problems = createProblems();
   checkLayoutWidth(figure, layoutWidth, problems);
-  problems.throwIfAny();
+
   const limits = resolveBudget(budget);
   const built = await buildScene(figure, { limits, layoutWidth, chartWidth, reference }, problems);
   return finish({ figure, ...built }, problems, { strict });

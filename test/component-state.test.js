@@ -92,7 +92,7 @@ test('S3 켜진 차트 카드의 글자 바탕과 받침 선은 정지 SVG, 움�
   assert.ok(still.includes(`.fl .${stillName} { ${GROUND_ON}; }`), 'the final state is lit, so the ground is the lit face');
   // 면을 정하는 CSS 상태는 여기 한 곳에서 본다(components.test.js U10은 그려진 형상만 본다). 별칭은 그림 바탕, 카드 면, 켜진 카드 면이고 차트 묶음이 일반 상속 속성 color로 싣는다.
   // 글자 뒤 바탕 면과 받침 선은 그 color(currentColor)만 읽고 자기 color를 정하지 않는다.
-  assert.match(still, /\.fl \{\s*--chart-ground:\s*var\(--simple2-canvas-fill\);/);
+  assert.match(still, /\.fl \{\s*--chart-ground:\s*var\(--color-prose-pre-background\);/);
   assert.match(still, /\.fl \.fl-node \{\s*--chart-ground:\s*var\(--fx-face\);/);
   assert.match(still, /\.fl \.fl-node\.on \{\s*--chart-ground:\s*var\(--fx-face-on\);/);
   assert.match(still, /\.fl \.fl-chart \{\s*color:\s*var\(--chart-ground\);/);

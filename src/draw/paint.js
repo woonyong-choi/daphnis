@@ -32,7 +32,6 @@ export function paintCss(scene) {
       // 도형은 평소 값(--fx-face, --fx-edge-rest)만 바꾼다. 켜짐은 figure.css의 효과 한 벌이 정하므로 움직이는 SVG의 keyframes도 같은 값을 읽는다.
       `.fl .fl-node.ap-filled${t} {\n  --fx-face: var(--color-paint-${name}-fill);\n}`,
       `.fl .fl-node.ap-outline${t} {\n  --fx-edge-rest: var(--color-paint-${name}-outline);\n}`,
-      `.fl .fl-node${t} .fl-symbol,\n.fl .fl-group${t} .fl-symbol {\n  color: var(--color-paint-${name}-outline);\n  --symbol-detail: var(--color-node);\n}`,
       `.fl .fl-group.ap-filled${t} > .frame-box {\n  fill: var(--color-paint-${name}-fill);\n}`,
       `.fl .fl-group.ap-outline${t} > .frame-box {\n  --fx-edge-rest: var(--color-paint-${name}-outline);\n}`,
       `.fl .fl-group${t} > .frame {\n  fill: var(--color-paint-${name}-ink);\n}`,

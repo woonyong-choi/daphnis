@@ -1,12 +1,12 @@
 // 그룹 제목 글의 가로 자리. 기본은 그룹 왼쪽 안쪽이고, 선이 그 자리를 지나면 선 오른쪽으로 비킨다(docs/design/layout.md 그룹).
 import { groupHead } from '../measure/sizes.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 
-const SIZE = values.size;
+const SIZE = values.spacing.figure;
 /** 그룹 왼쪽 끝에서 제목 글까지 기본 거리 */
-const TITLE_INSET =values.space['9'];
+const TITLE_INSET =values.spacing["4-5"];
 // 제목 덩어리(아이콘 탭과 제목 글)와 비켜 선 선 사이 간격. 선이 글자에 붙어 한 획처럼 읽히지 않을 만큼 둔다.
-const TITLE_CLEAR = values.space['4'];
+const TITLE_CLEAR = values.spacing["2"];
 
 // cost: time O(g·e·p·e), heap O(1), stack O(1)
 // vars: g = 그룹 수, e = 선 수, p = 선 하나의 경로 점 수

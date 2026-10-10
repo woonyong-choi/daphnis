@@ -2,12 +2,12 @@
 import { hasPill, placeGroupHead, sizePill } from '../measure/sizes.js';
 import { STYLE, allTexts, textSpan } from '../measure/texts.js';
 import { plainText } from '../text.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { queueSlots } from '../measure/queue.js';
 import { contentBox } from './content.js';
 import { statusBoxes } from './status.js';
 
-const SPACE = values.space;
+const SPACE = values.spacing;
 
 // cost: time O(s·l + g + e), heap O(s·l + g + e), stack O(1)
 // vars: s = 도형 수, l = 도형 글 줄 수, g = 그룹 수, e = 선 수
@@ -19,7 +19,7 @@ const SPACE = values.space;
  */
 export function textBoxes(scene) {
   const boxes = [];
-  const add = ({ x, center, width }, style, name) => boxes.push({ x, y: center - style.size / 2 - SPACE['1'], w: width, h: style.size + SPACE['1'] * 2, name: plainText(name, style.face) });
+  const add = ({ x, center, width }, style, name) => boxes.push({ x, y: center - style.size / 2 - SPACE["0-5"], w: width, h: style.size + SPACE["0-5"] * 2, name: plainText(name, style.face) });
   for (const it of scene.items) for (const t of allTexts(it)) add(textSpan(it, t), t.style, t.text);
   for (const g of scene.groups) if (g.label) add(textSpan(g, placeGroupHead(g).text), STYLE.group, g.label);
   for (const edge of scene.edges ?? []) for (const label of edge.endpointLabels ?? []) add({ x: label.x - label.w / 2, center: label.y, width: label.w }, STYLE.pill, label.text);
@@ -110,7 +110,7 @@ function pillBoxes(scene) {
  * @returns { x, y, w, h, soft: true, edge? }[]
  */
 export function chipLines(scene) {
-  const half = SPACE['1'];
+  const half = SPACE["0-5"];
   const bar = (a, b, extra) => ({ x: Math.min(a.x, b.x) - half, y: Math.min(a.y, b.y) - half, w: Math.abs(a.x - b.x) + half * 2, h: Math.abs(a.y - b.y) + half * 2, soft: true, ...extra });
   const edges = scene.edges.flatMap((e, edge) => (e.points ?? []).slice(1).map((p, i) => bar(e.points[i], p, { edge })));
   const frames = scene.groups.flatMap((g) => {

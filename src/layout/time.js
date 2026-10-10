@@ -3,7 +3,7 @@
 import { measure, wrap } from '../measure/fonts.js';
 import { areaPaint } from '../chart-palette.js';
 import { lineHeight, textAt } from '../measure/texts.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { axisEnd } from '../chart/axis.js';
 import { labelColumn, drawHeader, rowLabelLayout } from '../chart/labels.js';
 import { BAR, PAD, SPACE, TEXT, WIDTH } from '../chart/metrics.js';
@@ -49,7 +49,7 @@ export function layoutTime(card, names, width = WIDTH) {
   return { kind: 'time', id: card.id, width, height: bottom + PAD, header: header.svg, lanes: laid, labelLayout, axisY, scale, unit: card.unit, plotX, plotRight, text };
 }
 
-const SPAN_TEXT = { size: TEXT['11'], face: 'regular', line: lineHeight(TEXT['11'], values.simple2['figure-leading']) };
+const SPAN_TEXT = { size: TEXT['11'], face: 'regular', line: lineHeight(TEXT['11'], values.leading.normal) };
 
 function wideRows(source, scale, y) {
   const rows = packRows(source, scale);

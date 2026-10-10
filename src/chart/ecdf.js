@@ -3,7 +3,7 @@
 // 표식은 고유값마다 채운 점이고, 계열이 둘 이상이면 끝 이름이 붙는다. 표식 이름은 `계열:v값`이며 계열의 표본이 아닌 값 자리는 숨은 표식으로 남는다.
 import { curveOf, timeAt } from '../easing.js';
 import { roundToScale } from '../format.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { drawRules } from './axis.js';
 import { ecdfGroups, ecdfVertices, hvPath, lengthFractions, spanFractions } from './data.js';
 import { endLabelBoxes, endLabelHeight, endLabelMarks, endLabelRoom, endLabelX, hasEndLabels, placeEndLabels } from './end-labels.js';
@@ -39,7 +39,7 @@ function curveMark(chart, i, { d, isWipe }) {
   if (!d) return '';
   const motion = `${isWipe ? 'wipe' : 'draw'}${isReference(chart, i) ? ' chart-dashed' : ''}`;
   const common = `d="${d}" fill="none"${isWipe ? '' : ' pathLength="1"'}`;
-  return `<g class="cs-${i}"><path ${common} stroke="${seriesStroke(chart, i)}" stroke-width="${values.border.strong}" class="${motion}"${markAttrs(chart, markId(chart, i, 'path'))}/></g>`;
+  return `<g class="cs-${i}"><path ${common} stroke="${seriesStroke(chart, i)}" stroke-width="${values["border-width"].strong}" class="${motion}"${markAttrs(chart, markId(chart, i, 'path'))}/></g>`;
 }
 
 // cost: time O(p), heap O(p), stack O(1)

@@ -2,18 +2,18 @@
 import { BADGE_STYLE, bodyOf } from '../measure/decor.js';
 import { measure } from '../measure/fonts.js';
 import { centerBaseline, escapeXml, roundCoord as r } from '../text.js';
-import { tokens, values } from '../tokens.js';
+import { tokens, values } from '../vendor/theme/tokens.js';
 import { hiddenAttr } from './visible.js';
 
-const SPACE = values.space;
-const HEIGHT = values.size.pill.height;
+const SPACE = values.spacing;
+const HEIGHT = values.spacing.figure.pill.height;
 // 기호 칸. 알약 높이에서 위아래 안쪽 간격 `space.2`씩을 뺀 정사각이다.
-const ICON = HEIGHT - SPACE['2'] * 2;
+const ICON = HEIGHT - SPACE["1"] * 2;
 // 알약이 모서리 바깥으로 나가는 거리(오른쪽, 위쪽 반대로 모서리 아래로 들어오는 거리)
-const OVERHANG = SPACE['3'];
-const INSET = SPACE['2'];
+const OVERHANG = SPACE["1-5"];
+const INSET = SPACE["1"];
 // 기호 선 굵기
-const MARK_WIDTH = values.border.edge;
+const MARK_WIDTH = values["border-width"].edge;
 const SQRT_HALF = Math.SQRT1_2;
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -40,7 +40,7 @@ const KINDS = {
 // basis: estimate
 /** 알약 크기. 왼쪽 안쪽 간격, 기호, 간격, 글자, 오른쪽 안쪽 간격이다. */
 function sizeStatus(kind) {
-  return { w: SPACE['3'] + ICON + SPACE['2'] + measure(KINDS[kind].text, BADGE_STYLE.size, BADGE_STYLE.face) + SPACE['3'], h: HEIGHT };
+  return { w: SPACE["1-5"] + ICON + SPACE["1"] + measure(KINDS[kind].text, BADGE_STYLE.size, BADGE_STYLE.face) + SPACE["1-5"], h: HEIGHT };
 }
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -117,11 +117,11 @@ export function drawStatusPills(scene, timeline, { glyphs, windows, name, isStat
       const { color, text } = KINDS[kind];
       const { x, y, w, h } = statusBox(scene.items[item], kind);
       glyphs.add(text, BADGE_STYLE.face);
-      const markX = x + SPACE['3'] + ICON / 2;
-      const textX = x + SPACE['3'] + ICON + SPACE['2'];
+      const markX = x + SPACE["1-5"] + ICON / 2;
+      const textX = x + SPACE["1-5"] + ICON + SPACE["1"];
       return (
         `<g class="fl-status" data-st="${escapeXml(`${name(node, item)}-${kind}`)}" opacity="${isStatic ? 1 : 0}"${hiddenAttr(isStatic)}>` +
-        `<rect x="${r(x)}" y="${r(y)}" width="${r(w)}" height="${r(h)}" rx="${r(h / 2)}" fill="${tokens.color.node}" stroke="${color}" stroke-width="${values.border.edge}"/>` +
+        `<rect x="${r(x)}" y="${r(y)}" width="${r(w)}" height="${r(h)}" rx="${r(h / 2)}" fill="${tokens.color.node}" stroke="${color}" stroke-width="${values["border-width"].edge}"/>` +
         MARKS[kind](markX, y + h / 2, color) +
         `<text x="${r(textX)}" y="${r(centerBaseline(y + h / 2, BADGE_STYLE.size))}" class="status-text">${text}</text>` +
         `${windows(spans)}</g>`

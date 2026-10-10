@@ -3,29 +3,14 @@ Copyright (c) 2026 choi woo-nyong
 
 This product includes third-party material.
 
-The default concept icons (server, lb, db and the other names in src/icons/symbols.js) are drawn in this repository on a 24 grid
-and are part of the MIT-licensed code. They contain no third-party icon data.
+The shared concept and control icons are distributed in src/vendor/theme/assets.
+Concept shapes are project artwork; control notices are in assets/controls/LICENSE.
+The concept registry, small SVG exports and technology marks are shared with consumers.
 
-Player control icons (src/icons/controls.js)
-  Origin:    redrawn in this repository on a 24 grid in place of the Lucide icons (https://github.com/lucide-icons/lucide, npm package
-             lucide-static 1.52.0) that earlier versions bundled. They keep the Lucide icon names (maximize-2, minimize-2, zoom-in,
-             zoom-out, scan) and arrangements, and the repository does not claim they are independent of Lucide.
-  Copyright: 2026 Lucide Icons and Contributors (ISC License). Icons that Lucide derives from Feather (minimize-2, zoom-in, zoom-out,
-             download) are also covered by the MIT License, Copyright 2013-present Cole Bemis.
-  License:   full ISC and MIT texts in src/icons/LICENSE
-
-Simple Icons (technology brand marks)
-  Source:    https://github.com/simple-icons/simple-icons (release 16.33.0, icons/*.svg)
-  License:   CC0 1.0 Universal for the library (full text in src/icons/simple-icons/LICENSE). Simple Icons states that this does not
-             mean every icon is CC0, so the icons that carry their own license are listed below.
-  Files:     src/icons/simple-icons/*.svg (32 icons, listed by brand name in src/icons/brands.json)
-  Modified:  color only. The root svg element gets fill="currentColor" so the figure draws every mark in one text color role token,
-             never the brand color. The shapes are unchanged.
-  Per-icon licenses:
-    git    Git logo by Jason Long, CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/). Source: https://git-scm.com/community/logos
-    kafka  Apache Kafka logo, copyright The Apache Software Foundation, Apache License 2.0 (full text in src/icons/LICENSE)
-  Not included: icons whose license is share-alike (Rust, Jenkins), icons removed from Simple Icons or that never existed there
-             (Java, OpenAI, Apache HTTP Server), and cloud provider service icons (AWS, Azure, Google Cloud).
+Technology brand marks
+  Source and transformations: src/vendor/theme/assets/icons/brands/catalog.json
+  License: MIT, full notice in src/vendor/theme/assets/icons/brands/LICENSE.
+  Marks identify their technologies and retain their owners' trademarks.
 
 Pretendard (body and number font)
   Source:    https://github.com/orioncactus/pretendard (npm package pretendard 1.3.9, dist/public/static/Pretendard-{Regular,SemiBold}.otf)
@@ -48,5 +33,3 @@ JetBrains Mono (monospace font)
 Trademarks
   The names and marks of the technologies shown by these icons are trademarks of their respective owners. This repository shows them
   only to identify the technology in a diagram. It does not imply affiliation with, sponsorship by, or endorsement from the owners.
-  Brand guideline links are in the `guidelines` field of the Simple Icons data file for each mark
-  (https://github.com/simple-icons/simple-icons/blob/16.33.0/data/simple-icons.json). Marks whose owner forbids this use are not included.

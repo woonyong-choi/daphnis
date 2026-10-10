@@ -1,4 +1,5 @@
 // 결과 파일에 넣을 스타일과 SVG defs. 값은 모두 토큰(tokens.css, tokens.js)에서 온다.
+import { pruneTokens } from './vendor/theme/ui/build/prune-tokens.mjs';
 import { readFileSync } from 'node:fs';
 import { CHART_ARROW, roleArrowDefs } from './draw/arrow.js';
 
@@ -11,15 +12,15 @@ function readStyle(name) {
 
 /** 결과 파일 안 `<style>`에 넣을 CSS. tokens.css는 생성물이다. */
 export const STYLES = Object.freeze({
-  tokens: readStyle('./tokens.css'),
-  figure: readStyle('./styles/figure.css'),
-  control: readStyle('./styles/control.css'),
-  player: readStyle('./styles/player.css'),
-  gallery: readStyle('./styles/gallery.css'),
-  document: readStyle('./styles/document.css'),
-  chart: readStyle('./styles/chart.css'),
-  chartData: readStyle('./styles/chart-data.css'),
-  status: readStyle('./styles/status.css'),
+  tokens: readStyle('./vendor/theme/tokens.css'),
+  figure: readStyle('./vendor/theme/styles/diagram/figure.css'),
+  control: readStyle('./vendor/theme/styles/tabs.css') + readStyle('./vendor/theme/styles/diagram/control.css'),
+  player: readStyle('./vendor/theme/styles/diagram/player.css'),
+  gallery: readStyle('./vendor/theme/styles/diagram/gallery.css'),
+  document: readStyle('./vendor/theme/styles/diagram/document.css'),
+  chart: readStyle('./vendor/theme/styles/diagram/chart.css'),
+  chartData: readStyle('./vendor/theme/styles/diagram/chart-data.css'),
+  status: readStyle('./vendor/theme/styles/diagram/status.css'),
 });
 
 // cost: time O(c·p), heap O(p), stack O(1)
@@ -46,3 +47,5 @@ export function patternDefs(drawings) {
 export function figureDefs(figure) {
   return roleArrowDefs(figure.nodes.filter((n) => n.shape === 'chart' && !n.isRejected).map((n) => CHART_ARROW[n.plot.chartType]).filter(Boolean));
 }
+
+export const tokensFor = usage => pruneTokens(STYLES.tokens, usage);

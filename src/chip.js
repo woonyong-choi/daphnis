@@ -2,17 +2,17 @@
 import { FIGURE_PAD } from './canvas.js';
 import { FIT_SLACK, measure, wrap } from './measure/fonts.js';
 import { STYLE } from './measure/texts.js';
-import { values } from './tokens.js';
+import { values } from './vendor/theme/tokens.js';
 
-const SPACE = values.space;
+const SPACE = values.spacing;
 /** 글 상자와 점 사이 간격 */
-export const CHIP_GAP = SPACE['6'];
+export const CHIP_GAP = SPACE["3"];
 /** 글 상자가 판 위아래 끝에서 떨어져야 하는 거리. 그림 둘레 여백(FIGURE_PAD)이다. */
 const CHIP_MARGIN = FIGURE_PAD;
 // 이름 글자와 겹친 넓이가 이 값 이하면 겹침 없음으로 본다(잰 글 폭의 반올림 차이)
 export const OVERLAP_SLACK = 0.5;
 /** 글 상자가 도형, 글자, 알약, 다른 선, 그룹 틀에서 떨어져야 하는 최소 간격. 비켜 놓는 자리는 이만큼 띄운다. */
-export const CHIP_CLEAR = SPACE['2'];
+export const CHIP_CLEAR = SPACE["1"];
 // 가리는 것을 비켜 올리거나 내리는 최대 거리
 const LIFT_MAX = CHIP_GAP * 4;
 // 후보 선택 순서 가중치. 점 위 0, 올림 0.3, 점 아래 1, 옆으로 비킴 2(가까움)와 4(멂). 아래 줄의 옆 후보도 이 값에 더해 순서가 섞이지 않는다
@@ -36,13 +36,13 @@ const ROW_TOP = {
 // basis: estimate
 /** 글 상자 크기. 줄은 시간표가 이미 나눴다. */
 export function sizeChip(lines) {
-  const w = Math.max(...lines.map((line) => measure(line, STYLE.chip.size, STYLE.chip.face))) + SPACE['9'];
-  return { w, h: lines.length * STYLE.chip.line + SPACE['4'] };
+  const w = Math.max(...lines.map((line) => measure(line, STYLE.chip.size, STYLE.chip.face))) + SPACE["4-5"];
+  return { w, h: lines.length * STYLE.chip.line + SPACE["2"] };
 }
 
 /** 글 상자 글을 토큰 `size.chip.max-width` 너비의 줄로 나눈다. HTML과 SVG가 같은 줄을 쓴다. */
 export function wrapChip(text) {
-  return wrap(text, values.size.chip['max-width'], STYLE.chip);
+  return wrap(text, values.spacing.figure.chip["max-width"], STYLE.chip);
 }
 
 /** 두 사각형의 겹친 넓이 */

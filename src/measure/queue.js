@@ -1,14 +1,14 @@
 // 큐 도형: 이름 아래에 고정 크기 칸을 여러 줄로 놓는다. 빈 칸과 값 변화가 같은 배치를 쓴다(docs/design/figure-syntax.md 큐).
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { INNER_MAX, PAD } from './card.js';
 import { measure, wrap } from './fonts.js';
 import { STYLE, titleTexts } from './texts.js';
 
-const SPACE = values.space;
-const SIZE = values.size;
+const SPACE = values.spacing;
+const SIZE = values.spacing.figure;
 const SLOT = SIZE.queue;
 // 이름 줄과 칸 줄 사이
-const GAP = SPACE['3'];
+const GAP = SPACE["1-5"];
 
 // cost: time O(n²), heap O(n), stack O(1)
 // vars: n = 이름 글자 수

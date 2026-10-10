@@ -4,7 +4,7 @@
 // 움직이는 SVG(animate/frames.js)는 이 겹침에 SMIL을 걸고, HTML 재생기는 문서를 만들 때 같은 겹침을 넣어 두고 불투명도만 쓴다. 두 쪽이 같은 함수로 만들므로 모양 규칙(원, 사각형, 마름모, 삼각형 경로, 선, 글자)이 같다.
 import { tokenize } from '../chart-tokens.js';
 import { escapeXml } from '../text.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 
 /** 겹침이 표식에서 따라가는 속성. 위치와 모양만이고 칠, 움직임 class, 이름은 따라가지 않는다. 재생기가 프레임이 바뀐 표식을 따라 같은 이름들을 옮긴다. */
 export const GEOMETRY_ATTRS = Object.freeze(['x', 'y', 'width', 'height', 'rx', 'cx', 'cy', 'r', 'd', 'x1', 'x2', 'y1', 'y2', 'points', 'transform', 'visibility', 'fill-rule', 'text-anchor', 'dy', 'stroke-linecap', 'stroke-linejoin']);
@@ -33,9 +33,9 @@ export const hasPulse = (tag, attrs) => attrs['data-effect'] !== undefined && (t
  */
 function lookOf(tag, attrs) {
   const effect = attrs['data-effect'];
-  const own = attrs['stroke-width'] ?? values.border.tag;
-  if (tag === 'text') return `fill:none;stroke:${effect};stroke-opacity:${values.opacity.halo};stroke-width:${values.border.casing};stroke-linejoin:round`;
-  if (tag === 'line' || attrs.fill === 'none') return `fill:none;stroke:${effect};stroke-width:${attrs['stroke-width'] ?? values.border.edge}`;
+  const own = attrs['stroke-width'] ?? values["border-width"].tag;
+  if (tag === 'text') return `fill:none;stroke:${effect};stroke-opacity:${values.opacity.halo};stroke-width:${values["border-width"].casing};stroke-linejoin:round`;
+  if (tag === 'line' || attrs.fill === 'none') return `fill:none;stroke:${effect};stroke-width:${attrs['stroke-width'] ?? values["border-width"].edge}`;
   const hasRing = attrs.stroke !== undefined && attrs.stroke !== 'none';
   return `fill:${effect};fill-opacity:${values.opacity.halo};stroke:${hasRing ? effect : 'none'};stroke-width:${own}`;
 }

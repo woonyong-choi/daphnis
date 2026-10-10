@@ -3,1063 +3,158 @@
 <title>웹 서비스 구성</title>
 <style>@font-face{font-family:FigSans;font-weight:400;src:url(data:font/woff2;base64,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) format("woff2")}
 @font-face{font-family:FigSans;font-weight:600;src:url(data:font/woff2;base64,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) format("woff2")}
-/* tokens.json: 생성물, 손으로 고치지 않음 */
+/* tokens/tokens.json: 생성물, 손으로 고치지 않음 */
 :root {
   --color-gray-0: #ffffff;
-  --color-gray-27: #f8f8f8;
-  --color-gray-43: #f4f4f4;
   --color-gray-59: #f0f0f0;
-  --color-gray-71: #ededed;
-  --color-gray-106: #e4e4e4;
-  --color-gray-118: #e1e1e1;
-  --color-gray-145: #dadada;
-  --color-gray-161: #d6d6d6;
-  --color-gray-212: #c9c9c9;
-  --color-gray-220: #c7c7c7;
   --color-gray-282: #b7b7b7;
-  --color-gray-333: #aaaaaa;
-  --color-gray-467: #888888;
-  --color-gray-529: #787878;
-  --color-gray-545: #747474;
-  --color-gray-635: #5d5d5d;
-  --color-gray-651: #595959;
-  --color-gray-757: #3e3e3e;
-  --color-gray-776: #393939;
-  --color-gray-788: #363636;
-  --color-gray-796: #343434;
-  --color-gray-835: #2a2a2a;
-  --color-gray-875: #202020;
-  --color-gray-878: #1f1f1f;
-  --color-gray-910: #171717;
-  --color-gray-929: #121212;
   --color-gray-933: #111111;
-  --color-gray-1000: #000000;
-  --color-blue-anchor: var(--color-category-blue-anchor);
-  --color-blue-light-fill: var(--color-category-blue-light-tint-1);
-  --color-blue-light-stroke: var(--color-category-blue-light-border);
-  --color-blue-light-ink: var(--color-category-blue-light-ink);
-  --color-blue-light-heat-low: var(--color-sequential-light-low);
-  --color-blue-light-heat-high: var(--color-sequential-high);
-  --color-blue-light-outline: var(--color-category-blue-light-border);
-  --color-blue-light-tint-1: var(--color-category-blue-light-tint-1);
-  --color-blue-light-tint-2: var(--color-category-blue-light-tint-2);
-  --color-blue-light-tint-3: var(--color-category-blue-light-tint-3);
-  --color-blue-dark-fill: var(--color-category-blue-dark-tint-1);
-  --color-blue-dark-stroke: var(--color-category-blue-dark-border);
-  --color-blue-dark-ink: var(--color-category-blue-dark-ink);
-  --color-blue-dark-heat-low: var(--color-sequential-dark-low);
-  --color-blue-dark-heat-high: var(--color-sequential-high);
-  --color-blue-dark-outline: var(--color-category-blue-dark-border);
-  --color-blue-dark-tint-1: var(--color-category-blue-dark-tint-1);
-  --color-blue-dark-tint-2: var(--color-category-blue-dark-tint-2);
-  --color-blue-dark-tint-3: var(--color-category-blue-dark-tint-3);
-  --color-purple-anchor: var(--color-category-purple-anchor);
-  --color-purple-light-fill: var(--color-category-purple-light-tint-1);
-  --color-purple-light-stroke: var(--color-category-purple-light-border);
-  --color-purple-light-ink: var(--color-category-purple-light-ink);
-  --color-purple-light-dot: var(--color-category-purple-light-border);
-  --color-purple-light-outline: var(--color-category-purple-light-border);
-  --color-purple-light-tint-1: var(--color-category-purple-light-tint-1);
-  --color-purple-light-tint-2: var(--color-category-purple-light-tint-2);
-  --color-purple-light-tint-3: var(--color-category-purple-light-tint-3);
-  --color-purple-dark-fill: var(--color-category-purple-dark-tint-1);
-  --color-purple-dark-stroke: var(--color-category-purple-dark-border);
-  --color-purple-dark-ink: var(--color-category-purple-dark-ink);
-  --color-purple-dark-dot: var(--color-category-purple-dark-border);
-  --color-purple-dark-outline: var(--color-category-purple-dark-border);
-  --color-purple-dark-tint-1: var(--color-category-purple-dark-tint-1);
-  --color-purple-dark-tint-2: var(--color-category-purple-dark-tint-2);
-  --color-purple-dark-tint-3: var(--color-category-purple-dark-tint-3);
-  --color-red-anchor: var(--color-category-red-anchor);
-  --color-red-light-fill: var(--color-category-red-light-tint-1);
-  --color-red-light-stroke: var(--color-category-red-light-border);
-  --color-red-light-ink: var(--color-category-red-light-ink);
-  --color-red-light-dot: var(--color-category-red-light-border);
-  --color-red-light-outline: var(--color-category-red-light-border);
-  --color-red-dark-fill: var(--color-category-red-dark-tint-1);
-  --color-red-dark-stroke: var(--color-category-red-dark-border);
-  --color-red-dark-ink: var(--color-category-red-dark-ink);
-  --color-red-dark-dot: var(--color-category-red-dark-border);
-  --color-red-dark-outline: var(--color-category-red-dark-border);
-  --color-green-anchor: var(--color-category-green-anchor);
-  --color-green-light-fill: var(--color-category-green-light-tint-1);
-  --color-green-light-stroke: var(--color-category-green-light-border);
-  --color-green-light-ink: var(--color-category-green-light-ink);
-  --color-green-light-dot: var(--color-category-green-light-border);
-  --color-green-light-outline: var(--color-category-green-light-border);
-  --color-green-dark-fill: var(--color-category-green-dark-tint-1);
-  --color-green-dark-stroke: var(--color-category-green-dark-border);
-  --color-green-dark-ink: var(--color-category-green-dark-ink);
-  --color-green-dark-dot: var(--color-category-green-dark-border);
-  --color-green-dark-outline: var(--color-category-green-dark-border);
-  --color-orange-anchor: var(--color-category-orange-anchor);
-  --color-orange-light-fill: var(--color-category-orange-light-tint-1);
-  --color-orange-light-stroke: var(--color-category-orange-light-border);
-  --color-orange-light-ink: var(--color-category-orange-light-ink);
-  --color-orange-light-outline: var(--color-category-orange-light-border);
-  --color-orange-dark-fill: var(--color-category-orange-dark-tint-1);
-  --color-orange-dark-stroke: var(--color-category-orange-dark-border);
-  --color-orange-dark-ink: var(--color-category-orange-dark-ink);
-  --color-orange-dark-outline: var(--color-category-orange-dark-border);
-  --color-fg: var(--primitive-simple2-fg);
-  --color-muted: var(--primitive-simple2-muted);
-  --color-group-title: var(--primitive-simple2-group-title);
-  --color-bg: var(--primitive-simple2-bg);
-  --color-node: var(--primitive-simple2-node);
-  --color-surface: var(--primitive-simple2-surface);
-  --color-card: var(--primitive-simple2-node);
-  --color-card-on: var(--color-blue-light-fill);
-  --color-page: var(--primitive-simple2-page);
-  --color-outline: var(--primitive-simple2-light-outline);
-  --color-border: var(--primitive-simple2-border);
-  --color-plate-border: var(--primitive-simple2-plate-border);
-  --color-line: var(--primitive-simple2-line);
-  --color-state-active: var(--primitive-simple2-ui-accent);
-  --color-state-active-fill: var(--color-category-blue-fill);
+  --color-blue-light-stroke: #125de6;
+  --color-blue-light-ink: #0151d9;
+  --color-blue-dark-stroke: #70a3ff;
+  --color-blue-dark-ink: #78a9ff;
+  --color-fg: var(--color-ink);
+  --color-muted: var(--color-ui-muted);
+  --color-group-title: var(--color-help-title-color);
+  --color-node: var(--color-ui-card);
+  --color-card: var(--color-ui-card);
+  --color-line: var(--color-gray-282);
+  --color-state-active: var(--color-blue-light-stroke);
   --color-state-active-text: var(--color-blue-light-ink);
-  --color-state-on-active: var(--color-category-blue-on);
-  --color-state-error: var(--color-red-light-stroke);
-  --color-state-success: var(--color-green-light-stroke);
-  --color-state-warning: var(--color-category-yellow-light-border);
-  --color-state-glow: var(--color-blue-light-fill);
-  --color-flow-brand: var(--color-category-blue-fill);
-  --color-flow-purple: var(--color-category-purple-fill);
-  --color-flow-green: var(--color-category-green-fill);
-  --color-flow-gray: var(--color-gray-545);
-  --color-flow-red: var(--color-category-red-fill);
-  --color-flow-amber: var(--color-category-yellow-fill);
-  --color-ui-link: var(--color-blue-light-ink);
-  --color-ui-focus: var(--primitive-simple2-ui-accent);
-  --color-ui-progress: var(--color-blue-light-stroke);
-  --color-ui-control-on: var(--primitive-simple2-ui-accent);
-  --color-data-main: var(--color-category-blue-light-border);
-  --color-data-compare: var(--color-category-yellow-fill);
-  --color-data-heat-low: var(--color-blue-light-heat-low);
-  --color-data-heat-high: var(--color-blue-light-heat-high);
-  --color-data-heat-ink: var(--color-gray-1000);
-  --color-data-heat-ink-on: var(--color-gray-0);
-  --color-data-grid: var(--color-gray-212);
-  --color-data-compare-fill: var(--color-category-yellow-fill);
-  --color-data-compare-outline: var(--color-category-yellow-light-border);
-  --color-data-main-fill: var(--color-category-blue-fill);
-  --color-data-category-family-1: blue;
-  --color-data-category-family-2: yellow;
-  --color-data-category-family-3: red;
-  --color-data-category-family-4: green;
-  --color-data-category-family-5: orange;
-  --color-data-category-family-6: purple;
-  --color-data-category-family-7: cyan;
-  --color-data-category-1: var(--color-category-blue-fill);
-  --color-data-category-2: var(--color-category-yellow-fill);
-  --color-data-category-3: var(--color-category-red-fill);
-  --color-data-category-4: var(--color-category-green-fill);
-  --color-data-category-5: var(--color-category-orange-fill);
-  --color-data-category-6: var(--color-category-purple-fill);
-  --color-data-category-7: var(--color-category-cyan-fill);
-  --color-data-category-outline-1: var(--color-category-blue-light-border);
-  --color-data-category-outline-2: var(--color-category-yellow-light-border);
-  --color-data-category-outline-3: var(--color-category-red-light-border);
-  --color-data-category-outline-4: var(--color-category-green-light-border);
-  --color-data-category-outline-5: var(--color-category-orange-light-border);
-  --color-data-category-outline-6: var(--color-category-purple-light-border);
-  --color-data-category-outline-7: var(--color-category-cyan-light-border);
-  --color-data-category-ink-1: var(--color-category-blue-light-ink);
-  --color-data-category-ink-2: var(--color-category-yellow-light-ink);
-  --color-data-category-ink-3: var(--color-category-red-light-ink);
-  --color-data-category-ink-4: var(--color-category-green-light-ink);
-  --color-data-category-ink-5: var(--color-category-orange-light-ink);
-  --color-data-category-ink-6: var(--color-category-purple-light-ink);
-  --color-data-category-ink-7: var(--color-category-cyan-light-ink);
-  --color-data-category-effect-1: var(--color-category-blue-light-effect);
-  --color-data-category-effect-2: var(--color-category-yellow-light-effect);
-  --color-data-category-effect-3: var(--color-category-red-light-effect);
-  --color-data-category-effect-4: var(--color-category-green-light-effect);
-  --color-data-category-effect-5: var(--color-category-orange-light-effect);
-  --color-data-category-effect-6: var(--color-category-purple-light-effect);
-  --color-data-category-effect-7: var(--color-category-cyan-light-effect);
-  --color-data-category-tint-1: var(--color-category-blue-light-tint-1);
-  --color-data-category-tint-2: var(--color-category-yellow-light-tint-1);
-  --color-data-category-tint-3: var(--color-category-red-light-tint-1);
-  --color-data-category-tint-4: var(--color-category-green-light-tint-1);
-  --color-data-category-tint-5: var(--color-category-orange-light-tint-1);
-  --color-data-category-tint-6: var(--color-category-purple-light-tint-1);
-  --color-data-category-tint-7: var(--color-category-cyan-light-tint-1);
-  --color-data-category-on-1: var(--color-category-blue-on);
-  --color-data-category-on-2: var(--color-category-yellow-on);
-  --color-data-category-on-3: var(--color-category-red-on);
-  --color-data-category-on-4: var(--color-category-green-on);
-  --color-data-category-on-5: var(--color-category-orange-on);
-  --color-data-category-on-6: var(--color-category-purple-on);
-  --color-data-category-on-7: var(--color-category-cyan-on);
-  --color-data-category-pattern-1: hatch;
-  --color-data-category-pattern-2: dots;
-  --color-data-category-pattern-3: cross;
-  --color-data-category-shape-1: circle;
-  --color-data-category-shape-2: square;
-  --color-data-category-shape-3: diamond;
-  --color-data-category-shape-4: triangle;
-  --color-data-category-revision-1-family: 7;
-  --color-data-category-revision-1-pattern: 3;
-  --color-data-category-revision-1-shape: 4;
-  --color-data-category-revision-1-step: 0.5;
-  --color-data-category-label-1: optional;
-  --color-data-category-label-2: required;
-  --color-data-category-label-3: optional;
-  --color-data-category-label-4: optional;
-  --color-data-category-label-5: optional;
-  --color-data-category-label-6: optional;
-  --color-data-category-label-7: optional;
-  --color-data-category-area-1: var(--color-category-blue-area);
-  --color-data-category-area-2: var(--color-category-yellow-area);
-  --color-data-category-area-3: var(--color-category-red-area);
-  --color-data-category-area-4: var(--color-category-green-area);
-  --color-data-category-area-5: var(--color-category-orange-area);
-  --color-data-category-area-6: var(--color-category-purple-area);
-  --color-data-category-area-7: var(--color-category-cyan-area);
-  --color-data-category-on-area-1: var(--color-category-blue-on-area);
-  --color-data-category-on-area-2: var(--color-category-yellow-on-area);
-  --color-data-category-on-area-3: var(--color-category-red-on-area);
-  --color-data-category-on-area-4: var(--color-category-green-on-area);
-  --color-data-category-on-area-5: var(--color-category-orange-on-area);
-  --color-data-category-on-area-6: var(--color-category-purple-on-area);
-  --color-data-category-on-area-7: var(--color-category-cyan-on-area);
-  --color-accent: var(--color-blue-light-stroke);
-  --color-figure-icon-service-ink: var(--color-category-blue-fill);
-  --color-figure-icon-service-surface: var(--color-category-blue-on);
-  --color-figure-icon-data-ink: var(--color-category-green-fill);
-  --color-figure-icon-data-surface: var(--color-category-green-on);
-  --color-figure-icon-access-ink: var(--color-category-yellow-fill);
-  --color-figure-icon-access-surface: var(--color-category-yellow-on);
-  --color-figure-icon-person-ink: var(--color-category-blue-fill);
-  --color-figure-icon-person-surface: var(--color-category-blue-on);
-  --color-figure-icon-brand-ink: var(--color-gray-467);
-  --color-figure-icon-brand-surface: var(--color-gray-59);
-  --color-figure-number-fill: var(--primitive-simple2-number-fill);
-  --color-figure-number-ink: var(--primitive-simple2-number-ink);
-  --color-category-blue-anchor: #1e6bd6;
-  --color-category-blue-fill: var(--color-category-blue-anchor);
-  --color-category-blue-on: var(--color-gray-0);
-  --color-category-blue-light-border: #1e6bd6;
-  --color-category-blue-light-ink: #1161cb;
-  --color-category-blue-light-tint-1: #f7fafe;
-  --color-category-blue-light-tint-2: #e5eefc;
-  --color-category-blue-light-tint-3: #d5e4fa;
-  --color-category-blue-dark-border: #3a85f2;
-  --color-category-blue-dark-ink: #6da8ff;
-  --color-category-blue-dark-tint-1: #303948;
-  --color-category-blue-dark-tint-2: #303b4e;
-  --color-category-blue-dark-tint-3: #303d54;
-  --color-category-blue-light-effect: #3984f2;
-  --color-category-blue-dark-effect: #60a0ff;
-  --color-category-blue-area: #4370b3;
-  --color-category-blue-on-area: var(--color-gray-0);
-  --color-category-yellow-anchor: #f2d024;
-  --color-category-yellow-fill: var(--color-category-yellow-anchor);
-  --color-category-yellow-on: var(--color-gray-1000);
-  --color-category-yellow-light-border: #d6b600;
-  --color-category-yellow-light-ink: var(--color-fg);
-  --color-category-yellow-light-tint-1: #fefcf3;
-  --color-category-yellow-light-tint-2: #fdf9e9;
-  --color-category-yellow-light-tint-3: #fcf7df;
-  --color-category-yellow-dark-border: #f2d024;
-  --color-category-yellow-dark-ink: #f2d024;
-  --color-category-yellow-dark-tint-1: #393938;
-  --color-category-yellow-dark-tint-2: #3b3a39;
-  --color-category-yellow-dark-tint-3: #3c3c39;
-  --color-category-yellow-light-effect: #f0d03b;
-  --color-category-yellow-dark-effect: #ffec9a;
-  --color-category-yellow-area: #e6d27a;
-  --color-category-yellow-on-area: var(--color-gray-1000);
-  --color-category-red-anchor: #fa1955;
-  --color-category-red-fill: var(--color-category-red-anchor);
-  --color-category-red-on: var(--color-gray-1000);
-  --color-category-red-light-border: #fa1955;
-  --color-category-red-light-ink: #cc0041;
-  --color-category-red-light-tint-1: #fff8f8;
-  --color-category-red-light-tint-2: #ffecec;
-  --color-category-red-light-tint-3: #ffdfe0;
-  --color-category-red-dark-border: #ff315d;
-  --color-category-red-dark-ink: #ff7f8b;
-  --color-category-red-dark-tint-1: #413439;
-  --color-category-red-dark-tint-2: #48353a;
-  --color-category-red-dark-tint-3: #4e363b;
-  --color-category-red-light-effect: #ff697b;
-  --color-category-red-dark-effect: #ff7785;
-  --color-category-red-area: #d85a69;
-  --color-category-red-on-area: var(--color-gray-1000);
-  --color-category-green-anchor: #269c6e;
-  --color-category-green-fill: var(--color-category-green-anchor);
-  --color-category-green-on: var(--color-gray-1000);
-  --color-category-green-light-border: #149265;
-  --color-category-green-light-ink: #00744e;
-  --color-category-green-light-tint-1: #f7fbf9;
-  --color-category-green-light-tint-2: #e9f4ed;
-  --color-category-green-light-tint-3: #daece2;
-  --color-category-green-dark-border: #269c6e;
-  --color-category-green-dark-ink: #4cba8a;
-  --color-category-green-dark-tint-1: #323b3c;
-  --color-category-green-dark-tint-2: #333d3d;
-  --color-category-green-dark-tint-3: #333f3e;
-  --color-category-green-light-effect: #3aab7c;
-  --color-category-green-dark-effect: #46b586;
-  --color-category-green-area: #569576;
-  --color-category-green-on-area: var(--color-gray-1000);
-  --color-category-orange-anchor: #ff8906;
-  --color-category-orange-fill: var(--color-category-orange-anchor);
-  --color-category-orange-on: var(--color-gray-1000);
-  --color-category-orange-light-border: #c46800;
-  --color-category-orange-light-ink: #9d5100;
-  --color-category-orange-light-tint-1: #fff9f5;
-  --color-category-orange-light-tint-2: #fff2e9;
-  --color-category-orange-light-tint-3: #ffebdd;
-  --color-category-orange-dark-border: #ff8906;
-  --color-category-orange-dark-ink: #ff8906;
-  --color-category-orange-dark-tint-1: #3d3738;
-  --color-category-orange-dark-tint-2: #403938;
-  --color-category-orange-dark-tint-3: #433a38;
-  --color-category-orange-light-effect: #df812e;
-  --color-category-orange-dark-effect: #ffb27a;
-  --color-category-orange-area: #e59960;
-  --color-category-orange-on-area: var(--color-gray-1000);
-  --color-category-purple-anchor: #7d40c8;
-  --color-category-purple-fill: var(--color-category-purple-anchor);
-  --color-category-purple-on: var(--color-gray-0);
-  --color-category-purple-light-border: #7d40c8;
-  --color-category-purple-light-ink: #7d40c8;
-  --color-category-purple-light-tint-1: #fbf9fe;
-  --color-category-purple-light-tint-2: #f1ecfb;
-  --color-category-purple-light-tint-3: #e7dff8;
-  --color-category-purple-dark-border: #a269f3;
-  --color-category-purple-dark-ink: #bb91ff;
-  --color-category-purple-dark-tint-1: #383547;
-  --color-category-purple-dark-tint-2: #3c364e;
-  --color-category-purple-dark-tint-3: #403756;
-  --color-category-purple-light-effect: #945ae3;
-  --color-category-purple-dark-effect: #b78aff;
-  --color-category-purple-area: #7554a8;
-  --color-category-purple-on-area: var(--color-gray-0);
-  --color-category-cyan-anchor: #25c0cf;
-  --color-category-cyan-fill: var(--color-category-cyan-anchor);
-  --color-category-cyan-on: var(--color-gray-1000);
-  --color-category-cyan-light-border: #008e9a;
-  --color-category-cyan-light-ink: #00717b;
-  --color-category-cyan-light-tint-1: #f5fbfc;
-  --color-category-cyan-light-tint-2: #e9f7f9;
-  --color-category-cyan-light-tint-3: #def3f6;
-  --color-category-cyan-dark-border: #25c0cf;
-  --color-category-cyan-dark-ink: #25c0cf;
-  --color-category-cyan-dark-tint-1: #333a3f;
-  --color-category-cyan-dark-tint-2: #333c42;
-  --color-category-cyan-dark-tint-3: #343e44;
-  --color-category-cyan-light-effect: #33a7b3;
-  --color-category-cyan-dark-effect: #4ddae9;
-  --color-category-cyan-area: #6bb9c2;
-  --color-category-cyan-on-area: var(--color-gray-1000);
-  --color-sequential-light-low: #b2cbf1;
-  --color-sequential-dark-low: #32445e;
-  --color-sequential-high: var(--color-category-blue-anchor);
-  --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --size-text-9: 9px;
-  --size-text-11: 11px;
-  --size-text-13: 13px;
-  --size-text-15: 15px;
-  --size-text-22: 22px;
-  --weight-medium: 500;
-  --weight-semibold: 600;
-  --leading-normal: 1.5;
-  --leading-snug: 1.35;
-  --tracking-text: -0.3px;
-  --space-1: 2px;
-  --space-2: 4px;
-  --space-3: 6px;
-  --space-4: 8px;
-  --space-5: 10px;
-  --space-6: 12px;
-  --space-7: 14px;
-  --space-8: 16px;
-  --space-9: 18px;
-  --space-11: 22px;
-  --space-12: 24px;
-  --space-14: 28px;
-  --space-15: 30px;
-  --space-16: 32px;
-  --space-20: 40px;
-  --space-22: 44px;
-  --space-30: 60px;
-  --space-0-5: 1px;
-  --space-1-5: 3px;
-  --space-2-5: 5px;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 10px;
-  --radius-2xl: 18px;
-  --radius-full: 999px;
-  --border-hair: 0.75px;
-  --border-thin: 1px;
-  --border-strong: 2.5px;
-  --z-raised: 2;
-  --z-overlay: 10;
-  --duration-fast: 200ms;
-  --duration-effect-rise: 80ms;
-  --duration-effect-hold: 80ms;
-  --duration-effect-decay: 240ms;
-  --duration-notice: 2400ms;
-  --easing-move: cubic-bezier(0.455, 0.03, 0.515, 0.955);
-  --easing-reveal: cubic-bezier(0, 0, 0.58, 1);
-  --simple2-heading: 36px;
-  --simple2-subheading: 27px;
-  --simple2-body: 18px;
-  --simple2-control: 15px;
-  --simple2-caption: 13px;
-  --simple2-page-gutter: 24px;
-  --simple2-page-gap: 48px;
-  --simple2-page-width: 960px;
-  --simple2-reading-width: 948px;
-  --simple2-control-gap: 8px;
-  --simple2-focus-width: 3px;
-  --simple2-leading: 1.6;
-  --simple2-title-leading: 1.2;
-  --simple2-shadow: var(--primitive-simple2-shadow);
-  --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-  --simple2-corner: 18px;
-  --simple2-control-radius: 6px;
-  --simple2-card-gap: 48px;
-  --simple2-node-stroke: 1px;
-  --simple2-heading-weight: 700;
-  --simple2-node-corner: 8px;
-  --simple2-separator: var(--primitive-simple2-plate-border);
-  --simple2-canvas-corner: 18px;
-  --simple2-canvas-fill: var(--primitive-simple2-canvas);
-  --simple2-symbol-stroke: 1.5px;
-  --simple2-segment-track: rgba(0, 25, 61, 0.1);
-  --simple2-segment-ink: rgba(0, 4, 9, 0.78);
-  --simple2-segment-hover: rgba(0, 25, 61, 0.08);
-  --simple2-segment-on: var(--primitive-simple2-ui-accent);
-  --simple2-segment-on-hover: var(--primitive-simple2-ui-accent-hover);
-  --simple2-segment-on-ink: var(--primitive-simple2-on-ui-accent);
-  --simple2-segment-radius: 12px;
-  --simple2-segment-item-radius: 9px;
-  --simple2-segment-pad: 4px;
-  --simple2-label-size: 15px;
-  --simple2-detail-size: 13px;
-  --simple2-micro-size: 11px;
-  --simple2-surface-edge: var(--primitive-simple2-plate-border);
-  --simple2-hover-fill: var(--primitive-simple2-hover-fill);
-  --simple2-row-selection: var(--primitive-simple2-row-selection);
-  --simple2-card-active-fill: var(--primitive-simple2-card-active-fill);
-  --simple2-data-line: var(--primitive-simple2-data-line);
-  --simple2-chart-hole: var(--primitive-simple2-chart-hole);
-  --primitive-simple2-fg: #303336;
-  --primitive-simple2-muted: #566170;
-  --primitive-simple2-bg: #f2f5f7;
-  --primitive-simple2-page: #ffffff;
-  --primitive-simple2-node: #ffffff;
-  --primitive-simple2-surface: #eef0f3;
-  --primitive-simple2-plate-border: #d4d8de;
-  --primitive-simple2-border: #838b96;
-  --primitive-simple2-shadow: 0 2px 8px rgba(0,0,0,.10), 0 0 2px rgba(0,0,0,.10);
-  --primitive-simple2-node-shadow: drop-shadow(0px 1px 1px rgba(0,0,0,.07));
-  --primitive-simple2-group-title: #566170;
-  --primitive-simple2-canvas: #f5f5f6;
-  --primitive-simple2-ui-accent: #3c84f3;
-  --primitive-simple2-ui-accent-hover: #3779e0;
-  --primitive-simple2-on-ui-accent: #ffffff;
-  --primitive-simple2-hover-fill: #eef4fc;
-  --primitive-simple2-row-selection: #cee2fd;
-  --primitive-simple2-card-active-fill: #f3f7fd;
-  --primitive-simple2-line: #9da5b0;
-  --primitive-simple2-data-line: #737e8b;
-  --primitive-simple2-dark-bg: #26272b;
-  --primitive-simple2-dark-page: #1d1e22;
-  --primitive-simple2-dark-node: #303136;
-  --primitive-simple2-dark-card: #36373b;
-  --primitive-simple2-dark-edge: #50535b;
-  --primitive-simple2-dark-separator: #454850;
-  --primitive-simple2-dark-hover: #343e50;
-  --primitive-simple2-dark-selection: #274174;
-  --primitive-simple2-dark-card-active-fill: #333a48;
-  --primitive-simple2-dark-muted: #a9adb6;
-  --primitive-simple2-dark-line: #7f8793;
-  --primitive-simple2-dark-data-line: #acb4c0;
-  --primitive-simple2-light-outline: #818181;
-  --primitive-simple2-dark-outline: #868686;
-  --primitive-simple2-dark-paint-gray: #121318;
-  --primitive-simple2-number-fill: #303336;
-  --primitive-simple2-number-ink: #ffffff;
-  --primitive-simple2-chart-hole: 0.55;
-  --color-palette-sky-light-fill: #e8f1fe;
-  --color-palette-sky-light-stroke: var(--color-blue-light-stroke);
-  --color-palette-sky-light-ink: var(--color-blue-light-ink);
-  --color-palette-sky-light-tint-1: var(--color-blue-light-tint-1);
-  --color-palette-sky-light-tint-2: var(--color-blue-light-tint-2);
-  --color-palette-sky-light-tint-3: var(--color-blue-light-tint-3);
-  --color-palette-sky-light-outline: #648cc7;
-  --color-palette-sky-dark-fill: #07162c;
-  --color-palette-sky-dark-stroke: var(--color-blue-dark-stroke);
-  --color-palette-sky-dark-ink: var(--color-blue-dark-ink);
-  --color-palette-sky-dark-tint-1: var(--color-blue-dark-tint-1);
-  --color-palette-sky-dark-tint-2: var(--color-blue-dark-tint-2);
-  --color-palette-sky-dark-tint-3: var(--color-blue-dark-tint-3);
-  --color-palette-sky-dark-outline: #4e7bbd;
-  --color-palette-slate-light-fill: #e7e7e7;
-  --color-palette-slate-light-stroke: var(--color-gray-635);
-  --color-palette-slate-light-ink: var(--color-gray-635);
-  --color-palette-slate-light-dot: var(--color-gray-545);
-  --color-palette-slate-dark-fill: var(--primitive-simple2-dark-paint-gray);
-  --color-palette-slate-dark-stroke: var(--color-gray-333);
-  --color-palette-slate-dark-ink: var(--color-gray-333);
-  --color-palette-slate-dark-dot: var(--color-gray-220);
-  --color-palette-slate-light-outline: #848484;
-  --color-palette-slate-dark-outline: #797a7d;
+  --color-state-on-active: var(--color-gray-0);
+  --color-ui-focus: var(--color-action-link);
   --color-figure-icon: var(--color-blue-light-stroke);
-  --color-figure-icon-tile: var(--color-blue-light-fill);
-  --color-figure-queue-fill: var(--color-blue-light-ink);
-  --color-figure-queue-empty: var(--color-gray-161);
-  --color-tag-purple: var(--color-category-purple-fill);
-  --color-tag-green: var(--color-category-green-fill);
-  --color-tag-gray: var(--color-paint-gray-stroke);
-  --color-tag-red: var(--color-category-red-fill);
-  --color-tag-brand: var(--color-state-active);
-  --color-tag-amber: var(--color-category-yellow-fill);
-  --color-paint-red-fill: var(--color-red-light-fill);
-  --color-paint-red-stroke: var(--color-red-light-stroke);
-  --color-paint-red-outline: var(--color-red-light-outline);
-  --color-paint-red-ink: var(--color-red-light-ink);
-  --color-paint-red-dot: var(--color-red-light-dot);
-  --color-paint-green-fill: var(--color-green-light-fill);
-  --color-paint-green-stroke: var(--color-green-light-stroke);
-  --color-paint-green-outline: var(--color-green-light-outline);
-  --color-paint-green-ink: var(--color-green-light-ink);
-  --color-paint-green-dot: var(--color-green-light-dot);
-  --color-paint-purple-fill: var(--color-purple-light-fill);
-  --color-paint-purple-stroke: var(--color-purple-light-stroke);
-  --color-paint-purple-outline: var(--color-purple-light-outline);
-  --color-paint-purple-ink: var(--color-purple-light-ink);
-  --color-paint-purple-dot: var(--color-purple-light-dot);
-  --color-paint-purple-group-1: var(--color-purple-light-tint-1);
-  --color-paint-purple-group-2: var(--color-purple-light-tint-2);
-  --color-paint-purple-group-3: var(--color-purple-light-tint-3);
-  --color-paint-sky-fill: var(--color-palette-sky-light-fill);
-  --color-paint-sky-stroke: var(--color-palette-sky-light-stroke);
-  --color-paint-sky-outline: var(--color-palette-sky-light-outline);
-  --color-paint-sky-ink: var(--color-palette-sky-light-ink);
-  --color-paint-sky-group-1: var(--color-palette-sky-light-tint-1);
-  --color-paint-sky-group-2: var(--color-palette-sky-light-tint-2);
-  --color-paint-sky-group-3: var(--color-palette-sky-light-tint-3);
-  --color-paint-gray-fill: var(--color-palette-slate-light-fill);
-  --color-paint-gray-stroke: var(--color-palette-slate-light-stroke);
-  --color-paint-gray-outline: var(--color-palette-slate-light-outline);
-  --color-paint-gray-ink: var(--color-palette-slate-light-ink);
-  --color-paint-gray-dot: var(--color-palette-slate-light-dot);
-  --color-paint-blue-fill: var(--color-category-blue-light-tint-1);
-  --color-paint-blue-stroke: var(--color-category-blue-light-border);
-  --color-paint-blue-outline: var(--color-category-blue-light-border);
-  --color-paint-blue-ink: var(--color-category-blue-light-ink);
-  --color-paint-blue-dot: var(--color-category-blue-light-border);
-  --color-paint-blue-group-1: var(--color-category-blue-light-tint-1);
-  --color-paint-blue-group-2: var(--color-category-blue-light-tint-2);
-  --color-paint-blue-group-3: var(--color-category-blue-light-tint-3);
-  --color-paint-blue-effect: var(--color-category-blue-light-effect);
-  --color-paint-yellow-fill: var(--color-category-yellow-light-tint-1);
-  --color-paint-yellow-stroke: var(--color-category-yellow-light-border);
-  --color-paint-yellow-outline: var(--color-category-yellow-light-border);
-  --color-paint-yellow-ink: var(--color-category-yellow-light-ink);
-  --color-paint-yellow-dot: var(--color-category-yellow-light-border);
-  --color-paint-yellow-group-1: var(--color-category-yellow-light-tint-1);
-  --color-paint-yellow-group-2: var(--color-category-yellow-light-tint-2);
-  --color-paint-yellow-group-3: var(--color-category-yellow-light-tint-3);
-  --color-paint-yellow-effect: var(--color-category-yellow-light-effect);
-  --color-paint-orange-fill: var(--color-category-orange-light-tint-1);
-  --color-paint-orange-stroke: var(--color-category-orange-light-border);
-  --color-paint-orange-outline: var(--color-category-orange-light-border);
-  --color-paint-orange-ink: var(--color-category-orange-light-ink);
-  --color-paint-orange-dot: var(--color-category-orange-light-border);
-  --color-paint-orange-group-1: var(--color-category-orange-light-tint-1);
-  --color-paint-orange-group-2: var(--color-category-orange-light-tint-2);
-  --color-paint-orange-group-3: var(--color-category-orange-light-tint-3);
-  --color-paint-orange-effect: var(--color-category-orange-light-effect);
-  --color-paint-cyan-fill: var(--color-category-cyan-light-tint-1);
-  --color-paint-cyan-stroke: var(--color-category-cyan-light-border);
-  --color-paint-cyan-outline: var(--color-category-cyan-light-border);
-  --color-paint-cyan-ink: var(--color-category-cyan-light-ink);
-  --color-paint-cyan-dot: var(--color-category-cyan-light-border);
-  --color-paint-cyan-group-1: var(--color-category-cyan-light-tint-1);
-  --color-paint-cyan-group-2: var(--color-category-cyan-light-tint-2);
-  --color-paint-cyan-group-3: var(--color-category-cyan-light-tint-3);
-  --color-paint-cyan-effect: var(--color-category-cyan-light-effect);
-  --color-flow-ink-amber: var(--color-category-yellow-on);
-  --color-flow-ink-brand: var(--color-category-blue-on);
-  --color-flow-ink-purple: var(--color-category-purple-on);
-  --color-flow-ink-green: var(--color-category-green-on);
-  --color-flow-ink-red: var(--color-category-red-on);
-  --color-flow-ink-gray: var(--color-gray-0);
-  --color-flow-outline-amber: var(--color-category-yellow-light-border);
-  --color-flow-outline-brand: var(--color-category-blue-light-border);
-  --color-flow-outline-purple: var(--color-category-purple-light-border);
-  --color-flow-outline-green: var(--color-category-green-light-border);
-  --color-flow-outline-red: var(--color-category-red-light-border);
+  --color-figure-number-fill: var(--primitive-figure-number-fill);
+  --color-figure-number-ink: var(--primitive-figure-number-ink);
+  --color-ui-card: var(--color-gray-0);
+  --color-ink: var(--primitive-ink);
+  --color-ui-muted: var(--primitive-muted);
+  --color-ui-line: var(--primitive-line);
+  --color-help-border: var(--primitive-help-border);
+  --color-search-hover: var(--primitive-search-hover);
+  --color-help-hover: var(--primitive-help-hover);
+  --color-help-title-color: var(--primitive-help-title-color);
+  --color-action-link: var(--primitive-link);
+  --color-category-blue-on: var(--color-gray-0);
   --font-figure-sans: FigSans, FigSansSym, FigSansMath, ui-sans-serif, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
   --font-figure-mono: FigMono, FigSans, FigSansSym, FigSansMath, ui-monospace, SFMono-Regular, Menlo, monospace;
-  --size-control-outer: 52px;
-  --size-control-inner: 44px;
-  --size-control-icon: 20px;
-  --size-control-icon-stroke: 2.5px;
-  --size-pill-height: 18px;
-  --size-icon-node: 20px;
-  --size-icon-group: 18px;
-  --size-icon-tile: 32px;
-  --size-icon-tile-gap: 6px;
-  --size-icon-grid: 24px;
-  --size-tag-height: 14px;
-  --size-packet-radius: 4.5px;
-  --size-packet-halo: 10px;
-  --size-packet-hop-ref: 300px;
-  --size-packet-chip-reach: 16px;
-  --size-arrow-head: 5px;
-  --size-node-card-width: 176px;
-  --size-node-min-width: 100px;
-  --size-node-max-width: 210px;
-  --size-node-min-height: 46px;
-  --size-node-store-cap: 12px;
-  --size-node-state-dot: 14px;
-  --size-node-table-row: 26px;
-  --size-node-circle: 40px;
-  --size-node-tile-width: 80px;
-  --size-node-tile-pad: 8px;
-  --size-grid-cell: 32px;
-  --size-figure-compact-width: 320px;
-  --size-figure-canvas: 960px;
-  --size-figure-canvas-wide: 1440px;
-  --size-chip-max-width: 210px;
-  --size-player-caption-max: 720px;
-  --size-player-embedded-chrome: 150px;
-  --size-gallery-column: var(--size-figure-canvas);
-  --size-gallery-frame: 820px;
-  --size-document-column: var(--size-figure-canvas);
-  --size-chart-width: 720px;
-  --size-chart-compact-width: 296px;
-  --size-chart-pattern-spacing: 8px;
-  --size-chart-label: 140px;
-  --size-chart-label-max: 240px;
-  --size-chart-bar: 12px;
-  --size-chart-row: 40px;
-  --size-chart-dot: 5px;
-  --size-chart-plot-h: 260px;
-  --size-chart-axis: 48px;
-  --size-chart-cell: 40px;
-  --size-chart-cap: 8px;
-  --size-chart-range: 6px;
-  --size-chart-arrow-min: 16px;
-  --size-queue-slot-width: 16px;
-  --size-queue-slot-height: 14px;
-  --size-queue-slot-gap: 4px;
-  --size-sequence-row: 44px;
-  --size-group-title: 28px;
-  --breakpoint-tablet: 800px;
-  --tracking-tag: 0.03em;
-  --tracking-frame: 0.04em;
-  --radius-route: 22px;
-  --border-lifeline: 1.25px;
-  --border-tag: 1.5px;
-  --border-edge: 1.75px;
-  --border-casing: 4.5px;
-  --border-halo: 8px;
-  --dash-line: 5;
+  --text-small-text: var(--primitive-small-text);
+  --text-tiny-text: var(--primitive-tiny-text);
+  --text-figure-meta: 11px;
+  --tracking-text: -0.3px;
+  --font-weight-semibold: 600;
+  --primitive-ink: #303336;
+  --primitive-muted: #55606e;
+  --primitive-line: #dfe3e8;
+  --primitive-link: #2576eb;
+  --primitive-small-text: 15px;
+  --primitive-tiny-text: 13px;
+  --primitive-help-border: #ebecef;
+  --primitive-search-hover: #d9e6ff;
+  --primitive-help-hover: #ebf1ff;
+  --primitive-help-title-color: #3d4856;
+  --primitive-figure-ui-accent: #3c84f3;
+  --primitive-figure-dark-node: #303136;
+  --primitive-figure-dark-edge: #50535b;
+  --primitive-figure-dark-separator: #454850;
+  --primitive-figure-dark-hover: #343e50;
+  --primitive-figure-dark-selection: #274174;
+  --primitive-figure-dark-muted: #a9adb6;
+  --primitive-figure-dark-line: #7f8793;
+  --primitive-figure-number-fill: #303336;
+  --primitive-figure-number-ink: #ffffff;
+  --border-width-thin: 1px;
+  --border-width-hair: 0.75px;
+  --border-width-lifeline: 1.25px;
+  --border-width-edge: 1.75px;
+  --opacity-range: 0.4;
   --dash-gap: 4;
   --dash-card: 3;
-  --opacity-tag: 0.15;
-  --opacity-halo: 0.2;
-  --opacity-dim: 0.3;
-  --opacity-dim-ink: 0.9;
-  --opacity-band: 0.22;
-  --opacity-range: 0.4;
-  --opacity-chip-visible-min: 0.1;
-  --distance-card-min: 0.015;
-  --distance-card-max: 0.04;
-  --distance-flow: 0.1;
-  --distance-neighbor: 0.06;
-  --distance-neighbor-cvd: 0.025;
-  --distance-fill: 0.015;
-  --distance-fill-dark-bg: 0.07;
-  --distance-fill-dark-node: 0.03;
-  --duration-hop: 3750ms;
-  --duration-hop-min: 500ms;
-  --duration-chip-slide: 300ms;
-  --duration-chip-fade: 150ms;
-  --duration-chart-cycle: 7000ms;
-  --duration-reveal: 900ms;
-  --duration-value-flash: 700ms;
-  --duration-pulse: 450ms;
-  --duration-chip-frame: 16.666666666666668ms;
-  --duration-flow-step: 12000ms;
-  --duration-cut-fade: 600ms;
-  --scale-zoom-max: 6;
-  --scale-aspect-fit-max: 1.6;
-  --scale-fold-aspect: var(--scale-aspect-fit-max);
-  --scale-fold-step: 0.75;
-  --scale-aspect-max: 3;
-  --scale-zoom-step: 1.25;
-  --scale-flow-dots-max: 80;
-  --scale-chip-visible-share: 0.6;
-  --scale-chip-room-tries: 4;
-  --scale-chip-room-step: 16;
-  --simple2-figure-leading: 1.5;
-  --simple2-card-row-gap: 6;
+  --outline-width-focus: 3px;
+  color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --color-fg: var(--color-gray-59);
-    --color-muted: var(--primitive-simple2-dark-muted);
-    --color-group-title: var(--primitive-simple2-dark-muted);
-    --color-bg: var(--primitive-simple2-dark-bg);
-    --color-node: var(--primitive-simple2-dark-node);
-    --color-surface: var(--primitive-simple2-dark-card);
-    --color-card: var(--primitive-simple2-dark-node);
-    --color-card-on: var(--color-blue-dark-fill);
-    --color-page: var(--primitive-simple2-dark-page);
-    --color-outline: var(--primitive-simple2-dark-outline);
-    --color-border: var(--primitive-simple2-border);
-    --color-plate-border: var(--primitive-simple2-dark-edge);
-    --color-line: var(--primitive-simple2-dark-line);
-    --color-state-active: var(--primitive-simple2-ui-accent);
-    --color-state-active-fill: var(--color-category-blue-fill);
-    --color-state-active-text: var(--color-blue-dark-ink);
-    --color-state-on-active: var(--color-category-blue-on);
-    --color-state-error: var(--color-red-dark-stroke);
-    --color-state-success: var(--color-green-dark-stroke);
-    --color-state-warning: var(--color-category-yellow-dark-border);
-    --color-state-glow: var(--color-blue-dark-fill);
-    --color-ui-link: var(--color-blue-dark-ink);
-    --color-ui-focus: var(--primitive-simple2-ui-accent);
-    --color-ui-progress: var(--color-blue-dark-stroke);
-    --color-ui-control-on: var(--primitive-simple2-ui-accent);
-    --color-data-main: var(--color-category-blue-dark-border);
-    --color-data-heat-low: var(--color-blue-dark-heat-low);
-    --color-data-heat-high: var(--color-blue-dark-heat-high);
-    --color-data-heat-ink: var(--color-gray-0);
-    --color-data-grid: var(--primitive-simple2-dark-edge);
-    --color-data-compare-outline: var(--color-category-yellow-dark-border);
-    --color-data-category-outline-1: var(--color-category-blue-dark-border);
-    --color-data-category-outline-2: var(--color-category-yellow-dark-border);
-    --color-data-category-outline-3: var(--color-category-red-dark-border);
-    --color-data-category-outline-4: var(--color-category-green-dark-border);
-    --color-data-category-outline-5: var(--color-category-orange-dark-border);
-    --color-data-category-outline-6: var(--color-category-purple-dark-border);
-    --color-data-category-outline-7: var(--color-category-cyan-dark-border);
-    --color-data-category-ink-1: var(--color-category-blue-dark-ink);
-    --color-data-category-ink-2: var(--color-category-yellow-dark-ink);
-    --color-data-category-ink-3: var(--color-category-red-dark-ink);
-    --color-data-category-ink-4: var(--color-category-green-dark-ink);
-    --color-data-category-ink-5: var(--color-category-orange-dark-ink);
-    --color-data-category-ink-6: var(--color-category-purple-dark-ink);
-    --color-data-category-ink-7: var(--color-category-cyan-dark-ink);
-    --color-data-category-effect-1: var(--color-category-blue-dark-effect);
-    --color-data-category-effect-2: var(--color-category-yellow-dark-effect);
-    --color-data-category-effect-3: var(--color-category-red-dark-effect);
-    --color-data-category-effect-4: var(--color-category-green-dark-effect);
-    --color-data-category-effect-5: var(--color-category-orange-dark-effect);
-    --color-data-category-effect-6: var(--color-category-purple-dark-effect);
-    --color-data-category-effect-7: var(--color-category-cyan-dark-effect);
-    --color-data-category-tint-1: var(--color-category-blue-dark-tint-1);
-    --color-data-category-tint-2: var(--color-category-yellow-dark-tint-1);
-    --color-data-category-tint-3: var(--color-category-red-dark-tint-1);
-    --color-data-category-tint-4: var(--color-category-green-dark-tint-1);
-    --color-data-category-tint-5: var(--color-category-orange-dark-tint-1);
-    --color-data-category-tint-6: var(--color-category-purple-dark-tint-1);
-    --color-data-category-tint-7: var(--color-category-cyan-dark-tint-1);
-    --color-accent: var(--color-blue-dark-stroke);
-    --color-figure-icon-service-ink: var(--color-category-blue-dark-border);
-    --color-figure-icon-service-surface: var(--color-node);
-    --color-figure-icon-data-ink: var(--color-category-green-dark-border);
-    --color-figure-icon-data-surface: var(--color-node);
-    --color-figure-icon-access-ink: var(--color-category-yellow-dark-border);
-    --color-figure-icon-access-surface: var(--color-node);
-    --color-figure-icon-person-ink: var(--color-category-blue-dark-border);
-    --color-figure-icon-person-surface: var(--color-node);
-    --color-figure-icon-brand-ink: var(--color-gray-220);
-    --color-figure-icon-brand-surface: var(--color-gray-835);
-    --color-figure-number-fill: var(--color-gray-59);
-    --color-figure-number-ink: var(--color-gray-933);
-    --color-flow-gray: var(--color-gray-220);
-    --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-    --simple2-separator: var(--primitive-simple2-dark-separator);
-    --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
-    --simple2-segment-track: rgba(255, 255, 255, 0.12);
-    --simple2-segment-ink: rgba(255, 255, 255, 0.78);
-    --simple2-segment-hover: rgba(255, 255, 255, 0.1);
-    --simple2-surface-edge: var(--primitive-simple2-dark-edge);
-    --simple2-hover-fill: var(--primitive-simple2-dark-hover);
-    --simple2-row-selection: var(--primitive-simple2-dark-selection);
-    --simple2-card-active-fill: var(--primitive-simple2-dark-card-active-fill);
-    --simple2-data-line: var(--primitive-simple2-dark-data-line);
-    --color-figure-icon: var(--color-blue-dark-stroke);
-    --color-figure-icon-tile: var(--color-blue-dark-fill);
-    --color-figure-queue-fill: var(--color-blue-dark-stroke);
-    --color-figure-queue-empty: var(--color-gray-910);
-    --color-paint-red-fill: var(--color-red-dark-fill);
-    --color-paint-red-stroke: var(--color-red-dark-stroke);
-    --color-paint-red-outline: var(--color-red-dark-outline);
-    --color-paint-red-ink: var(--color-red-dark-ink);
-    --color-paint-red-dot: var(--color-red-dark-dot);
-    --color-paint-green-fill: var(--color-green-dark-fill);
-    --color-paint-green-stroke: var(--color-green-dark-stroke);
-    --color-paint-green-outline: var(--color-green-dark-outline);
-    --color-paint-green-ink: var(--color-green-dark-ink);
-    --color-paint-green-dot: var(--color-green-dark-dot);
-    --color-paint-purple-fill: var(--color-purple-dark-fill);
-    --color-paint-purple-stroke: var(--color-purple-dark-stroke);
-    --color-paint-purple-outline: var(--color-purple-dark-outline);
-    --color-paint-purple-ink: var(--color-purple-dark-ink);
-    --color-paint-purple-dot: var(--color-purple-dark-dot);
-    --color-paint-purple-group-1: var(--color-purple-dark-tint-1);
-    --color-paint-purple-group-2: var(--color-purple-dark-tint-2);
-    --color-paint-purple-group-3: var(--color-purple-dark-tint-3);
-    --color-paint-sky-fill: var(--color-palette-sky-dark-fill);
-    --color-paint-sky-stroke: var(--color-palette-sky-dark-stroke);
-    --color-paint-sky-outline: var(--color-palette-sky-dark-outline);
-    --color-paint-sky-ink: var(--color-palette-sky-dark-ink);
-    --color-paint-sky-group-1: var(--color-palette-sky-dark-tint-1);
-    --color-paint-sky-group-2: var(--color-palette-sky-dark-tint-2);
-    --color-paint-sky-group-3: var(--color-palette-sky-dark-tint-3);
-    --color-paint-gray-fill: var(--color-palette-slate-dark-fill);
-    --color-paint-gray-stroke: var(--color-palette-slate-dark-stroke);
-    --color-paint-gray-outline: var(--color-palette-slate-dark-outline);
-    --color-paint-gray-ink: var(--color-palette-slate-dark-ink);
-    --color-paint-gray-dot: var(--color-palette-slate-dark-dot);
-    --color-paint-blue-fill: var(--color-category-blue-dark-tint-1);
-    --color-paint-blue-stroke: var(--color-category-blue-dark-border);
-    --color-paint-blue-outline: var(--color-category-blue-dark-border);
-    --color-paint-blue-ink: var(--color-category-blue-dark-ink);
-    --color-paint-blue-dot: var(--color-category-blue-dark-border);
-    --color-paint-blue-group-1: var(--color-category-blue-dark-tint-1);
-    --color-paint-blue-group-2: var(--color-category-blue-dark-tint-2);
-    --color-paint-blue-group-3: var(--color-category-blue-dark-tint-3);
-    --color-paint-blue-effect: var(--color-category-blue-dark-effect);
-    --color-paint-yellow-fill: var(--color-category-yellow-dark-tint-1);
-    --color-paint-yellow-stroke: var(--color-category-yellow-dark-border);
-    --color-paint-yellow-outline: var(--color-category-yellow-dark-border);
-    --color-paint-yellow-ink: var(--color-category-yellow-dark-ink);
-    --color-paint-yellow-dot: var(--color-category-yellow-dark-border);
-    --color-paint-yellow-group-1: var(--color-category-yellow-dark-tint-1);
-    --color-paint-yellow-group-2: var(--color-category-yellow-dark-tint-2);
-    --color-paint-yellow-group-3: var(--color-category-yellow-dark-tint-3);
-    --color-paint-yellow-effect: var(--color-category-yellow-dark-effect);
-    --color-paint-orange-fill: var(--color-category-orange-dark-tint-1);
-    --color-paint-orange-stroke: var(--color-category-orange-dark-border);
-    --color-paint-orange-outline: var(--color-category-orange-dark-border);
-    --color-paint-orange-ink: var(--color-category-orange-dark-ink);
-    --color-paint-orange-dot: var(--color-category-orange-dark-border);
-    --color-paint-orange-group-1: var(--color-category-orange-dark-tint-1);
-    --color-paint-orange-group-2: var(--color-category-orange-dark-tint-2);
-    --color-paint-orange-group-3: var(--color-category-orange-dark-tint-3);
-    --color-paint-orange-effect: var(--color-category-orange-dark-effect);
-    --color-paint-cyan-fill: var(--color-category-cyan-dark-tint-1);
-    --color-paint-cyan-stroke: var(--color-category-cyan-dark-border);
-    --color-paint-cyan-outline: var(--color-category-cyan-dark-border);
-    --color-paint-cyan-ink: var(--color-category-cyan-dark-ink);
-    --color-paint-cyan-dot: var(--color-category-cyan-dark-border);
-    --color-paint-cyan-group-1: var(--color-category-cyan-dark-tint-1);
-    --color-paint-cyan-group-2: var(--color-category-cyan-dark-tint-2);
-    --color-paint-cyan-group-3: var(--color-category-cyan-dark-tint-3);
-    --color-paint-cyan-effect: var(--color-category-cyan-dark-effect);
-    --color-flow-outline-amber: var(--color-category-yellow-dark-border);
-    --color-flow-outline-brand: var(--color-category-blue-dark-border);
-    --color-flow-outline-purple: var(--color-category-purple-dark-border);
-    --color-flow-outline-green: var(--color-category-green-dark-border);
-    --color-flow-outline-red: var(--color-category-red-dark-border);
-    --color-flow-ink-gray: var(--color-gray-933);
+  :root:not([data-theme='light']):not([data-theme='dark']) {
+  --color-line: var(--primitive-figure-dark-line);
+  --color-state-active: var(--primitive-figure-ui-accent);
+  --color-state-active-text: var(--color-blue-dark-ink);
+  --color-state-on-active: var(--color-category-blue-on);
+  --color-figure-icon: var(--color-blue-dark-stroke);
+  --color-figure-number-fill: var(--color-gray-59);
+  --color-figure-number-ink: var(--color-gray-933);
+  --color-ui-card: var(--primitive-figure-dark-node);
+  --color-ink: var(--color-gray-59);
+  --color-ui-muted: var(--primitive-figure-dark-muted);
+  --color-ui-line: var(--primitive-figure-dark-separator);
+  --color-help-border: var(--primitive-figure-dark-edge);
+  --color-search-hover: var(--primitive-figure-dark-selection);
+  --color-help-hover: var(--primitive-figure-dark-hover);
+  --color-help-title-color: var(--primitive-figure-dark-muted);
+  color-scheme: dark;
   }
 }
 [data-theme='dark'] {
-  --color-fg: var(--color-gray-59);
-  --color-muted: var(--primitive-simple2-dark-muted);
-  --color-group-title: var(--primitive-simple2-dark-muted);
-  --color-bg: var(--primitive-simple2-dark-bg);
-  --color-node: var(--primitive-simple2-dark-node);
-  --color-surface: var(--primitive-simple2-dark-card);
-  --color-card: var(--primitive-simple2-dark-node);
-  --color-card-on: var(--color-blue-dark-fill);
-  --color-page: var(--primitive-simple2-dark-page);
-  --color-outline: var(--primitive-simple2-dark-outline);
-  --color-border: var(--primitive-simple2-border);
-  --color-plate-border: var(--primitive-simple2-dark-edge);
-  --color-line: var(--primitive-simple2-dark-line);
-  --color-state-active: var(--primitive-simple2-ui-accent);
-  --color-state-active-fill: var(--color-category-blue-fill);
+  --color-line: var(--primitive-figure-dark-line);
+  --color-state-active: var(--primitive-figure-ui-accent);
   --color-state-active-text: var(--color-blue-dark-ink);
   --color-state-on-active: var(--color-category-blue-on);
-  --color-state-error: var(--color-red-dark-stroke);
-  --color-state-success: var(--color-green-dark-stroke);
-  --color-state-warning: var(--color-category-yellow-dark-border);
-  --color-state-glow: var(--color-blue-dark-fill);
-  --color-ui-link: var(--color-blue-dark-ink);
-  --color-ui-focus: var(--primitive-simple2-ui-accent);
-  --color-ui-progress: var(--color-blue-dark-stroke);
-  --color-ui-control-on: var(--primitive-simple2-ui-accent);
-  --color-data-main: var(--color-category-blue-dark-border);
-  --color-data-heat-low: var(--color-blue-dark-heat-low);
-  --color-data-heat-high: var(--color-blue-dark-heat-high);
-  --color-data-heat-ink: var(--color-gray-0);
-  --color-data-grid: var(--primitive-simple2-dark-edge);
-  --color-data-compare-outline: var(--color-category-yellow-dark-border);
-  --color-data-category-outline-1: var(--color-category-blue-dark-border);
-  --color-data-category-outline-2: var(--color-category-yellow-dark-border);
-  --color-data-category-outline-3: var(--color-category-red-dark-border);
-  --color-data-category-outline-4: var(--color-category-green-dark-border);
-  --color-data-category-outline-5: var(--color-category-orange-dark-border);
-  --color-data-category-outline-6: var(--color-category-purple-dark-border);
-  --color-data-category-outline-7: var(--color-category-cyan-dark-border);
-  --color-data-category-ink-1: var(--color-category-blue-dark-ink);
-  --color-data-category-ink-2: var(--color-category-yellow-dark-ink);
-  --color-data-category-ink-3: var(--color-category-red-dark-ink);
-  --color-data-category-ink-4: var(--color-category-green-dark-ink);
-  --color-data-category-ink-5: var(--color-category-orange-dark-ink);
-  --color-data-category-ink-6: var(--color-category-purple-dark-ink);
-  --color-data-category-ink-7: var(--color-category-cyan-dark-ink);
-  --color-data-category-effect-1: var(--color-category-blue-dark-effect);
-  --color-data-category-effect-2: var(--color-category-yellow-dark-effect);
-  --color-data-category-effect-3: var(--color-category-red-dark-effect);
-  --color-data-category-effect-4: var(--color-category-green-dark-effect);
-  --color-data-category-effect-5: var(--color-category-orange-dark-effect);
-  --color-data-category-effect-6: var(--color-category-purple-dark-effect);
-  --color-data-category-effect-7: var(--color-category-cyan-dark-effect);
-  --color-data-category-tint-1: var(--color-category-blue-dark-tint-1);
-  --color-data-category-tint-2: var(--color-category-yellow-dark-tint-1);
-  --color-data-category-tint-3: var(--color-category-red-dark-tint-1);
-  --color-data-category-tint-4: var(--color-category-green-dark-tint-1);
-  --color-data-category-tint-5: var(--color-category-orange-dark-tint-1);
-  --color-data-category-tint-6: var(--color-category-purple-dark-tint-1);
-  --color-data-category-tint-7: var(--color-category-cyan-dark-tint-1);
-  --color-accent: var(--color-blue-dark-stroke);
-  --color-figure-icon-service-ink: var(--color-category-blue-dark-border);
-  --color-figure-icon-service-surface: var(--color-node);
-  --color-figure-icon-data-ink: var(--color-category-green-dark-border);
-  --color-figure-icon-data-surface: var(--color-node);
-  --color-figure-icon-access-ink: var(--color-category-yellow-dark-border);
-  --color-figure-icon-access-surface: var(--color-node);
-  --color-figure-icon-person-ink: var(--color-category-blue-dark-border);
-  --color-figure-icon-person-surface: var(--color-node);
-  --color-figure-icon-brand-ink: var(--color-gray-220);
-  --color-figure-icon-brand-surface: var(--color-gray-835);
+  --color-figure-icon: var(--color-blue-dark-stroke);
   --color-figure-number-fill: var(--color-gray-59);
   --color-figure-number-ink: var(--color-gray-933);
-  --color-flow-gray: var(--color-gray-220);
-  --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-  --simple2-separator: var(--primitive-simple2-dark-separator);
-  --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
-  --simple2-segment-track: rgba(255, 255, 255, 0.12);
-  --simple2-segment-ink: rgba(255, 255, 255, 0.78);
-  --simple2-segment-hover: rgba(255, 255, 255, 0.1);
-  --simple2-surface-edge: var(--primitive-simple2-dark-edge);
-  --simple2-hover-fill: var(--primitive-simple2-dark-hover);
-  --simple2-row-selection: var(--primitive-simple2-dark-selection);
-  --simple2-card-active-fill: var(--primitive-simple2-dark-card-active-fill);
-  --simple2-data-line: var(--primitive-simple2-dark-data-line);
-  --color-figure-icon: var(--color-blue-dark-stroke);
-  --color-figure-icon-tile: var(--color-blue-dark-fill);
-  --color-figure-queue-fill: var(--color-blue-dark-stroke);
-  --color-figure-queue-empty: var(--color-gray-910);
-  --color-paint-red-fill: var(--color-red-dark-fill);
-  --color-paint-red-stroke: var(--color-red-dark-stroke);
-  --color-paint-red-outline: var(--color-red-dark-outline);
-  --color-paint-red-ink: var(--color-red-dark-ink);
-  --color-paint-red-dot: var(--color-red-dark-dot);
-  --color-paint-green-fill: var(--color-green-dark-fill);
-  --color-paint-green-stroke: var(--color-green-dark-stroke);
-  --color-paint-green-outline: var(--color-green-dark-outline);
-  --color-paint-green-ink: var(--color-green-dark-ink);
-  --color-paint-green-dot: var(--color-green-dark-dot);
-  --color-paint-purple-fill: var(--color-purple-dark-fill);
-  --color-paint-purple-stroke: var(--color-purple-dark-stroke);
-  --color-paint-purple-outline: var(--color-purple-dark-outline);
-  --color-paint-purple-ink: var(--color-purple-dark-ink);
-  --color-paint-purple-dot: var(--color-purple-dark-dot);
-  --color-paint-purple-group-1: var(--color-purple-dark-tint-1);
-  --color-paint-purple-group-2: var(--color-purple-dark-tint-2);
-  --color-paint-purple-group-3: var(--color-purple-dark-tint-3);
-  --color-paint-sky-fill: var(--color-palette-sky-dark-fill);
-  --color-paint-sky-stroke: var(--color-palette-sky-dark-stroke);
-  --color-paint-sky-outline: var(--color-palette-sky-dark-outline);
-  --color-paint-sky-ink: var(--color-palette-sky-dark-ink);
-  --color-paint-sky-group-1: var(--color-palette-sky-dark-tint-1);
-  --color-paint-sky-group-2: var(--color-palette-sky-dark-tint-2);
-  --color-paint-sky-group-3: var(--color-palette-sky-dark-tint-3);
-  --color-paint-gray-fill: var(--color-palette-slate-dark-fill);
-  --color-paint-gray-stroke: var(--color-palette-slate-dark-stroke);
-  --color-paint-gray-outline: var(--color-palette-slate-dark-outline);
-  --color-paint-gray-ink: var(--color-palette-slate-dark-ink);
-  --color-paint-gray-dot: var(--color-palette-slate-dark-dot);
-  --color-paint-blue-fill: var(--color-category-blue-dark-tint-1);
-  --color-paint-blue-stroke: var(--color-category-blue-dark-border);
-  --color-paint-blue-outline: var(--color-category-blue-dark-border);
-  --color-paint-blue-ink: var(--color-category-blue-dark-ink);
-  --color-paint-blue-dot: var(--color-category-blue-dark-border);
-  --color-paint-blue-group-1: var(--color-category-blue-dark-tint-1);
-  --color-paint-blue-group-2: var(--color-category-blue-dark-tint-2);
-  --color-paint-blue-group-3: var(--color-category-blue-dark-tint-3);
-  --color-paint-blue-effect: var(--color-category-blue-dark-effect);
-  --color-paint-yellow-fill: var(--color-category-yellow-dark-tint-1);
-  --color-paint-yellow-stroke: var(--color-category-yellow-dark-border);
-  --color-paint-yellow-outline: var(--color-category-yellow-dark-border);
-  --color-paint-yellow-ink: var(--color-category-yellow-dark-ink);
-  --color-paint-yellow-dot: var(--color-category-yellow-dark-border);
-  --color-paint-yellow-group-1: var(--color-category-yellow-dark-tint-1);
-  --color-paint-yellow-group-2: var(--color-category-yellow-dark-tint-2);
-  --color-paint-yellow-group-3: var(--color-category-yellow-dark-tint-3);
-  --color-paint-yellow-effect: var(--color-category-yellow-dark-effect);
-  --color-paint-orange-fill: var(--color-category-orange-dark-tint-1);
-  --color-paint-orange-stroke: var(--color-category-orange-dark-border);
-  --color-paint-orange-outline: var(--color-category-orange-dark-border);
-  --color-paint-orange-ink: var(--color-category-orange-dark-ink);
-  --color-paint-orange-dot: var(--color-category-orange-dark-border);
-  --color-paint-orange-group-1: var(--color-category-orange-dark-tint-1);
-  --color-paint-orange-group-2: var(--color-category-orange-dark-tint-2);
-  --color-paint-orange-group-3: var(--color-category-orange-dark-tint-3);
-  --color-paint-orange-effect: var(--color-category-orange-dark-effect);
-  --color-paint-cyan-fill: var(--color-category-cyan-dark-tint-1);
-  --color-paint-cyan-stroke: var(--color-category-cyan-dark-border);
-  --color-paint-cyan-outline: var(--color-category-cyan-dark-border);
-  --color-paint-cyan-ink: var(--color-category-cyan-dark-ink);
-  --color-paint-cyan-dot: var(--color-category-cyan-dark-border);
-  --color-paint-cyan-group-1: var(--color-category-cyan-dark-tint-1);
-  --color-paint-cyan-group-2: var(--color-category-cyan-dark-tint-2);
-  --color-paint-cyan-group-3: var(--color-category-cyan-dark-tint-3);
-  --color-paint-cyan-effect: var(--color-category-cyan-dark-effect);
-  --color-flow-outline-amber: var(--color-category-yellow-dark-border);
-  --color-flow-outline-brand: var(--color-category-blue-dark-border);
-  --color-flow-outline-purple: var(--color-category-purple-dark-border);
-  --color-flow-outline-green: var(--color-category-green-dark-border);
-  --color-flow-outline-red: var(--color-category-red-dark-border);
-  --color-flow-ink-gray: var(--color-gray-933);
+  --color-ui-card: var(--primitive-figure-dark-node);
+  --color-ink: var(--color-gray-59);
+  --color-ui-muted: var(--primitive-figure-dark-muted);
+  --color-ui-line: var(--primitive-figure-dark-separator);
+  --color-help-border: var(--primitive-figure-dark-edge);
+  --color-search-hover: var(--primitive-figure-dark-selection);
+  --color-help-hover: var(--primitive-figure-dark-hover);
+  --color-help-title-color: var(--primitive-figure-dark-muted);
+  color-scheme: dark;
+}
+[data-theme='light'] {
+  --color-line: var(--color-gray-282);
+  --color-state-active: var(--color-blue-light-stroke);
+  --color-state-active-text: var(--color-blue-light-ink);
+  --color-state-on-active: var(--color-gray-0);
+  --color-figure-icon: var(--color-blue-light-stroke);
+  --color-figure-number-fill: var(--primitive-figure-number-fill);
+  --color-figure-number-ink: var(--primitive-figure-number-ink);
+  --color-ui-card: var(--color-gray-0);
+  --color-ink: var(--primitive-ink);
+  --color-ui-muted: var(--primitive-muted);
+  --color-ui-line: var(--primitive-line);
+  --color-help-border: var(--primitive-help-border);
+  --color-search-hover: var(--primitive-search-hover);
+  --color-help-hover: var(--primitive-help-hover);
+  --color-help-title-color: var(--primitive-help-title-color);
+  color-scheme: light;
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
 /* 카드 안 글(label, sub, meta, cell, item, row)의 기준 점(text-anchor)은 글이 정한다(measure/texts.js의 anchor). 여기서는 글꼴과 색만 정한다. */
-/* 글 위계는 셋이다: 제목(simple2.label-size 15: 카드 제목은 regular, 그룹 제목은 semibold), 문장과 이름표(detail-size 13: 부제, 선 라벨, 메모, 이동 글, 카드 줄, 제약, 형식), 작은 표시(micro-size 11: 번호, 태그, 표식, 키, 눈금, 단위). 크기와 굵기는 measure/texts.js의 STYLE이 같은 토큰으로 잰다. */
+/* 글 위계는 셋이다: 제목(공통 디자인.label-size 15: 카드 제목은 regular, 그룹 제목은 semibold), 문장과 이름표(detail-size 13: 부제, 선 라벨, 메모, 이동 글, 카드 줄, 제약, 형식), 작은 표시(micro-size 11: 번호, 태그, 표식, 키, 눈금, 단위). 크기와 굵기는 measure/texts.js의 STYLE이 같은 토큰으로 잰다. */
 .fl text {
   font-family: var(--font-figure-sans);
   letter-spacing: var(--tracking-text);
 }
 
 .fl .label {
-  font-size: var(--simple2-label-size);
+  font-size: var(--text-small-text);
   fill: var(--color-fg);
 }
 
 .fl .sub {
-  font-size: var(--simple2-detail-size);
+  font-size: var(--text-tiny-text);
   fill: var(--color-muted);
 }
 
 .fl .frame {
-  font-size: var(--simple2-label-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-small-text);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-group-title);
 }
 
 .fl .edgelabel {
-  font-size: var(--simple2-detail-size);
+  font-size: var(--text-tiny-text);
   text-anchor: middle;
   fill: var(--fx-ink-rest);
 }
@@ -1070,7 +165,7 @@
 .fl .mini,
 .fl .cell,
 .fl .item {
-  font-size: var(--simple2-detail-size);
+  font-size: var(--text-tiny-text);
   fill: var(--color-fg);
 }
 
@@ -1090,26 +185,26 @@
 }
 
 .fl .tag {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-fg);
 }
 
 .fl .mark {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-state-active-text);
 }
 
 /* 값 카드 줄의 값 글자. 줄의 이름(row)은 카드 층이 그리고 값은 오른쪽 끝에 얹힌다. 이름과 같은 크기이고 굵기만 다르다. */
 .fl .value {
-  font-size: var(--simple2-detail-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-tiny-text);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-fg);
 }
 
 .fl .chip {
-  font-size: var(--simple2-detail-size);
+  font-size: var(--text-tiny-text);
   text-anchor: middle;
 }
 
@@ -1140,13 +235,13 @@
 .fl .fl-path {
   fill: none;
   stroke: currentColor;
-  stroke-width: var(--border-edge);
+  stroke-width: var(--border-width-edge);
 }
 
 /* 열 키(PK, FK, UNQ)는 작은 표시이고 글자색이다. 파랑은 켜진 상태에만 쓴다. */
 .fl .cell .key {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-fg);
 }
 
@@ -1155,12 +250,12 @@
   --fx-edge-rest: var(--color-line);
   fill: none;
   stroke: var(--fx-edge-rest);
-  stroke-width: var(--border-thin);
+  stroke-width: var(--border-width-thin);
 }
 
 .fl .lifeline {
   stroke: var(--color-line);
-  stroke-width: var(--border-lifeline);
+  stroke-width: var(--border-width-lifeline);
   stroke-dasharray: var(--dash-gap) var(--dash-gap);
 }
 
@@ -1184,16 +279,16 @@
 }
 
 .fl .col-line {
-  stroke: var(--simple2-separator);
-  stroke-width: var(--border-hair);
+  stroke: var(--color-ui-line);
+  stroke-width: var(--border-width-hair);
 }
 
 .fl .grid-cell {
   --fx-face: var(--color-node);
   --fx-face-on: var(--fx-row);
   fill: var(--fx-face);
-  stroke: var(--simple2-separator);
-  stroke-width: var(--border-thin);
+  stroke: var(--color-ui-line);
+  stroke-width: var(--border-width-thin);
 }
 
 .fl .grid-tray {
@@ -1202,7 +297,7 @@
 
 .fl .grid-cell.gap {
   --fx-face: var(--color-card);
-  stroke: var(--simple2-separator);
+  stroke: var(--color-ui-line);
 }
 
 .fl .grid-cell.empty {
@@ -1223,8 +318,8 @@
 
 /* 도형 윗줄과 그룹 제목 줄의 장식: 글자 배지, 아이콘 */
 .fl .badge {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   text-anchor: middle;
   fill: var(--color-fg);
 }
@@ -1243,8 +338,8 @@
 }
 
 .fl .number {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   text-anchor: middle;
   fill: var(--color-figure-number-ink);
 }
@@ -1252,10 +347,10 @@
 /* 도형은 그림자 없는 평면이다. 그림자는 떠 있는 메뉴 같은 조작에만 둔다. */
 .fl :where(.fl-node) > .fl-stroke {
   stroke: var(--fx-edge-rest);
-  stroke-width: var(--simple2-node-stroke);
+  stroke-width: var(--border-width-thin);
 }
 
-/* 구획은 border.hair, 보조 경계는 border.thin, 관계는 border.edge, 생명선은 border.lifeline, 도형 경계는 simple2.node-stroke다. 모든 선은 그림과 함께 확대·축소된다. */
+/* 구획은 border.hair, 보조 경계는 border.thin, 관계는 border.edge, 생명선은 border.lifeline, 도형 경계는 공통 디자인.node-stroke다. 모든 선은 그림과 함께 확대·축소된다. */
 .fl .fl-path,
 .fl .fl-node > .fl-stroke,
 .fl .grid-cell,
@@ -1275,61 +370,6 @@
   stroke-linejoin: round;
 }
 
-/* 의미 아이콘은 역할색으로 채운 실루엣과 그 안의 밝은 세부를 함께 가진다. 기술 브랜드도 자기 개념의 역할(icons/symbols.js)을 따른다. */
-.fl .fl-symbol-glyph {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: var(--simple2-symbol-stroke);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.fl .symbol-solid {
-  fill: currentColor;
-  stroke: none;
-}
-
-.fl .symbol-cut {
-  fill: none;
-  stroke: var(--symbol-detail);
-}
-
-/* 실루엣 밖으로 나오는 획(자물쇠 고리, 모니터 받침)은 면과 같은 색이다. */
-.fl .symbol-line {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: calc(var(--simple2-symbol-stroke) * 2);
-}
-
-.fl .fl-symbol-service {
-  color: var(--color-figure-icon-service-ink);
-  --symbol-detail: var(--color-figure-icon-service-surface);
-}
-
-.fl .fl-symbol-data {
-  color: var(--color-figure-icon-data-ink);
-  --symbol-detail: var(--color-figure-icon-data-surface);
-}
-
-.fl .fl-symbol-access {
-  color: var(--color-figure-icon-access-ink);
-  --symbol-detail: var(--color-figure-icon-access-surface);
-}
-
-.fl .fl-symbol-person {
-  color: var(--color-figure-icon-person-ink);
-  --symbol-detail: var(--color-figure-icon-person-surface);
-}
-
-.fl .symbol-face {
-  fill: currentColor;
-}
-
-.fl .symbol-detail {
-  fill: var(--symbol-detail);
-  stroke: none;
-}
-
 /* 효과 한 벌: 켜짐과 평소의 모습을 정하는 유일한 정의다. 움직이는 SVG(animate/animator.js)의 keyframes와 HTML 재생기의 `.on` 규칙이 같은 `--fx-*`를 읽으므로 두 출력과 정지 그림이 늘 같다.
    - 켜짐(on): --fx-edge 윤곽·그룹 경계·선·알약 테두리, --fx-ink 알약 글자, --fx-row 표 줄과 격자 칸의 면, --fx-face-on 요소의 켜진 면(도형은 아래), --fx-flash 값이 바뀐 순간의 면.
    - 평소(rest): --fx-edge-rest 도형, 그룹, 알약의 경계, --fx-ink-rest 알약 글자, --fx-line-rest 선, --fx-face 요소의 평소 면.
@@ -1337,9 +377,9 @@
 .fl {
   --fx-edge: var(--color-state-active);
   --fx-ink: var(--color-state-active-text);
-  --fx-row: var(--simple2-row-selection);
-  --fx-flash: var(--simple2-row-selection);
-  --fx-edge-rest: var(--simple2-surface-edge);
+  --fx-row: var(--color-search-hover);
+  --fx-flash: var(--color-search-hover);
+  --fx-edge-rest: var(--color-help-border);
   --fx-ink-rest: var(--color-muted);
   --fx-line-rest: var(--color-line);
 }
@@ -1347,7 +387,7 @@
 /* 도형의 평소 면과 켜진 면. 옅은 면으로 고른 도형(filled)은 켜져도 면이 같다. 면이 없는 윤곽(fill='none')과 점은 자기 면이 없거나 자기 색이다. */
 .fl .fl-node {
   --fx-face: var(--color-node);
-  --fx-face-on: var(--simple2-card-active-fill);
+  --fx-face-on: var(--color-help-hover);
 }
 
 .fl .fl-node.ap-filled {
@@ -1395,7 +435,7 @@
 
 .fl .fl-node:focus-visible > .fl-stroke {
   stroke: var(--color-ui-focus);
-  stroke-width: var(--simple2-focus-width);
+  stroke-width: var(--outline-width-focus);
 }
 
 /* 값이 바뀔 때 켜지는 배경 면. 도형과 같은 윤곽을 쓰고 테두리를 더하지 않는다. */
@@ -1419,21 +459,21 @@
 .fl .fl-pulse {
   fill: none;
   stroke: var(--fx-edge);
-  stroke-width: var(--simple2-node-stroke);
+  stroke-width: var(--border-width-thin);
   pointer-events: none;
 }
 
 /* 제어 구획의 경계는 관계선보다 약하며 제목 밑면은 생명선을 가린다. */
 .fl .fl-fragment-border {
   fill: none;
-  stroke: var(--simple2-separator);
-  stroke-width: var(--border-thin);
+  stroke: var(--color-ui-line);
+  stroke-width: var(--border-width-thin);
 }
 
 .fl .fl-fragment-divider {
   fill: none;
-  stroke: var(--simple2-separator);
-  stroke-width: var(--border-hair);
+  stroke: var(--color-ui-line);
+  stroke-width: var(--border-width-hair);
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
 
@@ -1442,7 +482,7 @@
 }
 
 .fl .fl-fragment-label {
-  font-weight: var(--weight-semibold);
+  font-weight: var(--font-weight-semibold);
 }
 
 @keyframes a0 { 0%,27.996% { fill: var(--fx-face); stroke: var(--fx-edge-rest) } 28%,55.996% { fill: var(--fx-face); stroke: var(--fx-edge-rest) } 56%,100% { fill: var(--fx-face); stroke: var(--fx-edge-rest) } }
@@ -1469,16 +509,16 @@
 }
 </style>
 <defs></defs>
-<rect x="0.5" y="0.5" width="959" height="953" rx="18" fill="var(--simple2-canvas-fill)"/>
+<rect x="0.5" y="0.5" width="959" height="953" rx="18" fill="var(--color-prose-pre-background)"/>
 <g class="fl-motion" transform="translate(312 0)">
 <g id="g-0" class="fl-group" data-id="edge"><rect x="56" y="28" width="128" height="149" rx="8" class="frame-box fl-stroke dashed " stroke-dasharray="5 4"/><text x="74" y="47.4" class="frame">엣지</text></g>
-<g id="g-1" class="fl-group tabbed" data-id="app"><rect x="28" y="315" width="280" height="611" rx="8" class="frame-box fl-stroke "/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(136 319) scale(0.83333)"><path class="symbol-face" d="M7 19a5 5 0 0 1-1-10 6 6 0 0 1 11-2 6 6 0 0 1 1 12Z"/></g></g><text x="174" y="334.4" class="frame">애플리케이션</text></g>
+<g id="g-1" class="fl-group tabbed" data-id="app"><rect x="28" y="315" width="280" height="611" rx="8" class="frame-box fl-stroke "/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(136 319) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M13 39A9 9 0 0 1 12 21A12 12 0 0 1 35 20A9.5 9.5 0 0 1 35 39Z" fill="#639bfa"/></g></g></g><text x="174" y="334.4" class="frame">애플리케이션</text></g>
 <g id="g-2" class="fl-group" data-id="web"><rect x="52" y="355" width="154.5" height="302" rx="8" class="frame-box fl-stroke "/><text x="70" y="374.4" class="frame">웹 계층</text></g>
 
-<g id="n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="CDN" data-id="cdn"><rect x="80" y="68" width="80" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(104 80) scale(1.33333)"><circle class="symbol-face" cx="12" cy="12" r="9"/><ellipse class="symbol-cut" cx="12" cy="12" rx="4" ry="9"/><path class="symbol-cut" d="M3 12h18M5 6h14M5 18h14"/></g></g><text x="120" y="134.9" class="label" text-anchor="middle">CDN</text></g>
-<g id="n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="로드 밸런서" data-id="lb"><rect x="79" y="395" width="82.8" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="79" y="395" width="82.8" height="85" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="2.5s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.28;0.312;0.344;0.44;1" values="0;0;1;1;0;0"/></rect><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(104.4 407) scale(1.33333)"><rect class="symbol-face" x="8" y="2" width="8" height="6" rx="2"/><path class="symbol-line" d="M12 8v5M5 17v-4h14v4"/><rect class="symbol-solid" x="2" y="17" width="6" height="5" rx="1"/><rect class="symbol-solid" x="16" y="17" width="6" height="5" rx="1"/></g></g><text x="120.4" y="461.9" class="label" text-anchor="middle">로드 밸런서</text></g>
-<g id="n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹 서버" data-id="server"><rect x="84" y="548" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="80" y="544" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="76" y="540" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="84" y="548" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="2.5s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.56;0.592;0.624;0.72;1" values="0;0;1;1;0;0"/></rect><rect x="80" y="544" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="2.5s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.56;0.592;0.624;0.72;1" values="0;0;1;1;0;0"/></rect><rect x="76" y="540" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="2.5s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.56;0.592;0.624;0.72;1" values="0;0;1;1;0;0"/></rect><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(84 552) scale(1.33333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><g class="fl-badge"><rect x="120" y="559" width="28.3" height="18" rx="9" class="badge-pill"/><text x="134.1" y="572" class="badge">(3)</text></g><text x="116.1" y="606.9" class="label" text-anchor="middle">웹 서버</text></g>
-<g id="n-3" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="주 DB" data-id="db"><path d="M70 807 a 50 12 0 0 1 100 0 v 83 a 50 12 0 0 1 -100 0 z" fill="var(--color-node)" class="fl-stroke a0"/><path d="M70 807 a 50 12 0 0 0 100 0" fill="none" class="fl-stroke a0"/><path d="M70 807 a 50 12 0 0 1 100 0 v 83 a 50 12 0 0 1 -100 0 z" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="2.5s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.84;0.872;0.904;1" values="0;0;1;1;0"/></path><path d="M70 807 a 50 12 0 0 0 100 0" fill="none" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="2.5s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.84;0.872;0.904;1" values="0;0;1;1;0"/></path><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(92.5 831) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><g class="fl-badge"><rect x="116.5" y="832" width="30.9" height="18" rx="9" class="badge-pill"/><text x="132" y="845" class="badge">RW</text></g><text x="120" y="871.9" class="label" text-anchor="middle">주 DB</text></g>
+<g id="n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="CDN" data-id="cdn"><rect x="80" y="68" width="80" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(104 80) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="19" fill="#c7ddff" stroke="#90b4ee" stroke-width="3"/><ellipse cx="24" cy="24" rx="8" ry="19" fill="none" stroke="#2465c7" stroke-width="3"/><path d="M5 24H43" fill="none" stroke="#2465c7" stroke-width="3"/></g></g></g><text x="120" y="134.9" class="label" text-anchor="middle">CDN</text></g>
+<g id="n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="로드 밸런서" data-id="lb"><rect x="79" y="395" width="82.8" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="79" y="395" width="82.8" height="85" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="2.5s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.28;0.312;0.344;0.44;1" values="0;0;1;1;0;0"/></rect><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(104.4 407) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V23 M36 8V23" fill="none" stroke="#a4a8ae" stroke-width="3"/><rect x="5" y="24" width="38" height="16" rx="7" fill="#ffffff" stroke="#a4a8ae" stroke-width="3"/><path d="M19 12A8 8 0 0 1 29 12 M21 17A5 5 0 0 1 27 17" fill="none" stroke="#2465c7" stroke-width="3"/><circle cx="13" cy="32" r="2" fill="#28a779"/><path d="M25 32H35" fill="none" stroke="#2465c7" stroke-width="3"/></g></g></g><text x="120.4" y="461.9" class="label" text-anchor="middle">로드 밸런서</text></g>
+<g id="n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹 서버" data-id="server"><rect x="84" y="548" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="80" y="544" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="76" y="540" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="84" y="548" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="2.5s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.56;0.592;0.624;0.72;1" values="0;0;1;1;0;0"/></rect><rect x="80" y="544" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="2.5s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.56;0.592;0.624;0.72;1" values="0;0;1;1;0;0"/></rect><rect x="76" y="540" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="2.5s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.56;0.592;0.624;0.72;1" values="0;0;1;1;0;0"/></rect><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(84 552) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="6" width="38" height="36" rx="6" fill="#3d4856"/><rect x="10" y="13" width="28" height="8" rx="3" fill="#ffffff"/><rect x="10" y="27" width="28" height="8" rx="3" fill="#ffffff"/><circle cx="15" cy="17" r="2" fill="#28a779"/><circle cx="15" cy="31" r="2" fill="#28a779"/></g></g></g><g class="fl-badge"><rect x="120" y="559" width="28.3" height="18" rx="9" class="badge-pill"/><text x="134.1" y="572" class="badge">(3)</text></g><text x="116.1" y="606.9" class="label" text-anchor="middle">웹 서버</text></g>
+<g id="n-3" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="주 DB" data-id="db"><path d="M70 807 a 50 12 0 0 1 100 0 v 83 a 50 12 0 0 1 -100 0 z" fill="var(--color-node)" class="fl-stroke a0"/><path d="M70 807 a 50 12 0 0 0 100 0" fill="none" class="fl-stroke a0"/><path d="M70 807 a 50 12 0 0 1 100 0 v 83 a 50 12 0 0 1 -100 0 z" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="2.5s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.84;0.872;0.904;1" values="0;0;1;1;0"/></path><path d="M70 807 a 50 12 0 0 0 100 0" fill="none" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="2.5s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.84;0.872;0.904;1" values="0;0;1;1;0"/></path><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(92.5 831) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12V36A17 6 0 0 0 41 36V12Z" fill="#478fa7" stroke="#39768e" stroke-width="3"/><ellipse cx="24" cy="12" rx="17" ry="6" fill="#c9eaf1" stroke="#39768e" stroke-width="3"/><path d="M9 24A17 6 0 0 0 39 24 M9 34A17 6 0 0 0 39 34" fill="none" stroke="#ffffff" stroke-width="3"/></g></g></g><g class="fl-badge"><rect x="116.5" y="832" width="30.9" height="18" rx="9" class="badge-pill"/><text x="132" y="845" class="badge">RW</text></g><text x="120" y="871.9" class="label" text-anchor="middle">주 DB</text></g>
 <g id="e-0" class="fl-edge a1"><defs><marker id="fl-arrow-0" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-0" d="M 120 153 L 120 395" class="fl-path" marker-end="url(#fl-arrow-0)"/></g>
 <g id="e-1" class="fl-edge a2"><defs><marker id="fl-arrow-1" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-1" d="M 120 480 L 120 540" class="fl-path" marker-end="url(#fl-arrow-1)"/></g>
 <g id="e-2" class="fl-edge a3"><defs><marker id="fl-arrow-2" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-2" d="M 120 633 L 120 795" class="fl-path" marker-end="url(#fl-arrow-2)"/></g>
@@ -1490,13 +530,13 @@
 </g>
 <g class="fl-still" transform="translate(312 0)">
 <g id="still-g-0" class="fl-group" data-id="edge"><rect x="56" y="28" width="128" height="149" rx="8" class="frame-box fl-stroke dashed " stroke-dasharray="5 4"/><text x="74" y="47.4" class="frame">엣지</text></g>
-<g id="still-g-1" class="fl-group tabbed" data-id="app"><rect x="28" y="315" width="280" height="611" rx="8" class="frame-box fl-stroke "/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(136 319) scale(0.83333)"><path class="symbol-face" d="M7 19a5 5 0 0 1-1-10 6 6 0 0 1 11-2 6 6 0 0 1 1 12Z"/></g></g><text x="174" y="334.4" class="frame">애플리케이션</text></g>
+<g id="still-g-1" class="fl-group tabbed" data-id="app"><rect x="28" y="315" width="280" height="611" rx="8" class="frame-box fl-stroke "/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(136 319) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M13 39A9 9 0 0 1 12 21A12 12 0 0 1 35 20A9.5 9.5 0 0 1 35 39Z" fill="#639bfa"/></g></g></g><text x="174" y="334.4" class="frame">애플리케이션</text></g>
 <g id="still-g-2" class="fl-group" data-id="web"><rect x="52" y="355" width="154.5" height="302" rx="8" class="frame-box fl-stroke "/><text x="70" y="374.4" class="frame">웹 계층</text></g>
 
-<g id="still-n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="CDN" data-id="cdn"><rect x="80" y="68" width="80" height="85" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(104 80) scale(1.33333)"><circle class="symbol-face" cx="12" cy="12" r="9"/><ellipse class="symbol-cut" cx="12" cy="12" rx="4" ry="9"/><path class="symbol-cut" d="M3 12h18M5 6h14M5 18h14"/></g></g><text x="120" y="134.9" class="label" text-anchor="middle">CDN</text></g>
-<g id="still-n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="로드 밸런서" data-id="lb"><rect x="79" y="395" width="82.8" height="85" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(104.4 407) scale(1.33333)"><rect class="symbol-face" x="8" y="2" width="8" height="6" rx="2"/><path class="symbol-line" d="M12 8v5M5 17v-4h14v4"/><rect class="symbol-solid" x="2" y="17" width="6" height="5" rx="1"/><rect class="symbol-solid" x="16" y="17" width="6" height="5" rx="1"/></g></g><text x="120.4" y="461.9" class="label" text-anchor="middle">로드 밸런서</text></g>
-<g id="still-n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹 서버" data-id="server"><rect x="84" y="548" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><rect x="80" y="544" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><rect x="76" y="540" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-service"><g class="fl-symbol-glyph" transform="translate(84 552) scale(1.33333)"><rect class="symbol-face" x="4" y="3" width="16" height="18" rx="3"/><path class="symbol-cut" d="M4 9h16M4 15h16"/><path class="symbol-detail" d="M7 6h2v1H7zM7 12h2v1H7zM7 18h2v1H7z"/></g></g><g class="fl-badge"><rect x="120" y="559" width="28.3" height="18" rx="9" class="badge-pill"/><text x="134.1" y="572" class="badge">(3)</text></g><text x="116.1" y="606.9" class="label" text-anchor="middle">웹 서버</text></g>
-<g id="still-n-3" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="주 DB" data-id="db"><path d="M70 807 a 50 12 0 0 1 100 0 v 83 a 50 12 0 0 1 -100 0 z" fill="var(--color-node)" class="fl-stroke sa0"/><path d="M70 807 a 50 12 0 0 0 100 0" fill="none" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(92.5 831) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><g class="fl-badge"><rect x="116.5" y="832" width="30.9" height="18" rx="9" class="badge-pill"/><text x="132" y="845" class="badge">RW</text></g><text x="120" y="871.9" class="label" text-anchor="middle">주 DB</text></g>
+<g id="still-n-0" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="CDN" data-id="cdn"><rect x="80" y="68" width="80" height="85" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(104 80) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="19" fill="#c7ddff" stroke="#90b4ee" stroke-width="3"/><ellipse cx="24" cy="24" rx="8" ry="19" fill="none" stroke="#2465c7" stroke-width="3"/><path d="M5 24H43" fill="none" stroke="#2465c7" stroke-width="3"/></g></g></g><text x="120" y="134.9" class="label" text-anchor="middle">CDN</text></g>
+<g id="still-n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="로드 밸런서" data-id="lb"><rect x="79" y="395" width="82.8" height="85" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(104.4 407) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V23 M36 8V23" fill="none" stroke="#a4a8ae" stroke-width="3"/><rect x="5" y="24" width="38" height="16" rx="7" fill="#ffffff" stroke="#a4a8ae" stroke-width="3"/><path d="M19 12A8 8 0 0 1 29 12 M21 17A5 5 0 0 1 27 17" fill="none" stroke="#2465c7" stroke-width="3"/><circle cx="13" cy="32" r="2" fill="#28a779"/><path d="M25 32H35" fill="none" stroke="#2465c7" stroke-width="3"/></g></g></g><text x="120.4" y="461.9" class="label" text-anchor="middle">로드 밸런서</text></g>
+<g id="still-n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="웹 서버" data-id="server"><rect x="84" y="548" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><rect x="80" y="544" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><rect x="76" y="540" width="80.3" height="85" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(84 552) scale(1.33333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="6" width="38" height="36" rx="6" fill="#3d4856"/><rect x="10" y="13" width="28" height="8" rx="3" fill="#ffffff"/><rect x="10" y="27" width="28" height="8" rx="3" fill="#ffffff"/><circle cx="15" cy="17" r="2" fill="#28a779"/><circle cx="15" cy="31" r="2" fill="#28a779"/></g></g></g><g class="fl-badge"><rect x="120" y="559" width="28.3" height="18" rx="9" class="badge-pill"/><text x="134.1" y="572" class="badge">(3)</text></g><text x="116.1" y="606.9" class="label" text-anchor="middle">웹 서버</text></g>
+<g id="still-n-3" class="fl-node fl-shape-store" tabindex="0" role="img" aria-label="주 DB" data-id="db"><path d="M70 807 a 50 12 0 0 1 100 0 v 83 a 50 12 0 0 1 -100 0 z" fill="var(--color-node)" class="fl-stroke sa0"/><path d="M70 807 a 50 12 0 0 0 100 0" fill="none" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(92.5 831) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12V36A17 6 0 0 0 41 36V12Z" fill="#478fa7" stroke="#39768e" stroke-width="3"/><ellipse cx="24" cy="12" rx="17" ry="6" fill="#c9eaf1" stroke="#39768e" stroke-width="3"/><path d="M9 24A17 6 0 0 0 39 24 M9 34A17 6 0 0 0 39 34" fill="none" stroke="#ffffff" stroke-width="3"/></g></g></g><g class="fl-badge"><rect x="116.5" y="832" width="30.9" height="18" rx="9" class="badge-pill"/><text x="132" y="845" class="badge">RW</text></g><text x="120" y="871.9" class="label" text-anchor="middle">주 DB</text></g>
 <g id="still-e-0" class="fl-edge "><defs><marker id="still-fl-arrow-0" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-0" d="M 120 153 L 120 395" class="fl-path" marker-end="url(#still-fl-arrow-0)"/></g>
 <g id="still-e-1" class="fl-edge "><defs><marker id="still-fl-arrow-1" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-1" d="M 120 480 L 120 540" class="fl-path" marker-end="url(#still-fl-arrow-1)"/></g>
 <g id="still-e-2" class="fl-edge "><defs><marker id="still-fl-arrow-2" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="still-p-2" d="M 120 633 L 120 795" class="fl-path" marker-end="url(#still-fl-arrow-2)"/></g>

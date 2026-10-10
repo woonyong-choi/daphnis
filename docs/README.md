@@ -22,6 +22,7 @@ daphnis의 설계 문서다. 문서는 한국어로 쓴다. 처음이면 아키�
 | [데이터 관계 그림 레퍼런스](reference/data.md) | 테이블 카드의 최소 예제, 장면과 움직임, 흔한 오류 |
 | [칸 격자 레퍼런스](reference/grid.md) | 칸 격자의 최소 예제, 장면과 움직임, 흔한 오류 |
 | [차트 레퍼런스](reference/charts.md) | 차트 열여섯 종류의 표, 계열 규칙, 최소 예제, 흔한 오류 |
-| [예제 갤러리](../examples/) | 표현마다 하나인 예제 30개의 원본. `npm run catalog`가 미리보기, 재생 화면, SVG, 원본을 모은 목록(`.local/examples/index.html`)을 만든다 |
 | [용어](glossary.md) | 이 프로젝트에서만 쓰는 말 |
 | [결정 기록](decisions/README.md) | 설계를 정한 이유와 버린 선택지 |
+
+[예제 갤러리](../examples/)에는 표현마다 하나인 예제 원본이 있다. `npm run catalog`가 미리보기·재생 화면·SVG·원본을 모은 목록을 만든다.

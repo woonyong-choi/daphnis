@@ -1,6 +1,6 @@
 // 칸 격자의 몸통을 그린다: 칸 묶음 바탕, 빈 자리, 칸. 면과 제목은 카드(draw/card.js)가 그리고, 칸 자리와 칸 글은 measure/sizes.js의 sizeGrid가 정한 그대로다.
 import { roundCoord as r, escapeXml } from '../text.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { CORNER, rectOpen } from './surface.js';
 import { drawTexts } from './texts.js';
 
@@ -72,7 +72,7 @@ export function drawGridBody(it, { decorate, glyphs, index }) {
 function drawEmpties(it, index) {
   if (!it.empties.length) return '';
   const { unit } = it;
-  const stroke = values.border.thin;
+  const stroke = values["border-width"].thin;
   const half = stroke / 2;
   const id = `ge-${index}`;
   const lines = [`M0 ${r(half)}h${r(unit.w)}`, `M${r(half)} 0v${r(unit.h + half)}`, ...(unit.gutter ? [`M0 ${r(unit.h + half)}h${r(unit.w)}`] : [])].join('');

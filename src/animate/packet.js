@@ -8,7 +8,7 @@ import { STYLE } from '../measure/texts.js';
 import { ratio } from '../format.js';
 import { renderRich, roundCoord as r } from '../text.js';
 import { toneColors } from '../tone.js';
-import { tokens, values } from '../tokens.js';
+import { tokens, values } from '../vendor/theme/tokens.js';
 
 const MOVE_SPLINE = keySpline(MOVE);
 const LINEAR = '0 0 1 1';
@@ -33,7 +33,7 @@ export function drawPacket(clock, { seg, hop, name }, glyphs) {
   const chip = hop.data ? drawChip(hop.data, { glyphs, color: hop.tone ? color : undefined, outline }) + pushChip(clock, start, hop) : '';
   const chipMarkup = hop.chipFade ? `<g>${chipFadeAnimate(clock, start, hop.chipFade)}<g>${chip}</g></g>` : `<g>${chip}</g>`;
   const body =
-    `<g class="${name}" opacity="0" fill="${ink}"><circle r="${values.size.packet.halo}" fill="${color}" opacity="${values.opacity.halo}"/><circle r="${values.size.packet.radius}" fill="${color}"${outline ? ` stroke="${outline}" stroke-width="${values.border.edge}"` : ''}/>${chip ? chipMarkup : ''}` +
+    `<g class="${name}" opacity="0" fill="${ink}"><circle r="${values.spacing.figure.packet.halo}" fill="${color}" opacity="${values.opacity.halo}"/><circle r="${values.spacing.figure.packet.radius}" fill="${color}"${outline ? ` stroke="${outline}" stroke-width="${values["border-width"].edge}"` : ''}/>${chip ? chipMarkup : ''}` +
     (hop.gaps?.length ? discreteWindows(clock, visibleSpans(start, hop)) : showWindow(clock, from, to)) +
     moveMotion(clock, [from, to], { hop, start }) +
     `</g>`;
@@ -49,7 +49,7 @@ function drawChip(lines, { glyphs, color, outline }) {
   const { w, h } = sizeChip(lines);
   const top = -h - CHIP_GAP;
   return (
-    `<rect x="${r(-w / 2)}" y="${r(top)}" width="${r(w)}" height="${r(h)}" rx="${values.radius.lg}" fill="${color ?? tokens.color.state['active-fill']}"${color ? ` stroke="${outline ?? color}" stroke-width="${values.border.edge}"` : ''}/>` +
+    `<rect x="${r(-w / 2)}" y="${r(top)}" width="${r(w)}" height="${r(h)}" rx="${values.radius.lg}" fill="${color ?? tokens.color.state['active-fill']}"${color ? ` stroke="${outline ?? color}" stroke-width="${values["border-width"].edge}"` : ''}/>` +
     lines.map((line, li) => `<text x="0" y="${r(top + STYLE.chip.line * (li + 1))}" class="chip">${renderRich(line)}</text>`).join('')
   );
 }

@@ -3,7 +3,7 @@
 // 이름 상자의 크기(줄 수와 높이)는 계열 이름과 폭만으로 정해 모든 프레임이 같다. 그림 영역이 모든 이름 높이의 합만큼 자라므로 이름이 몇이든 겹치지 않고 글자를 줄이거나 숨기지 않는다.
 import { measure, wrap } from '../measure/fonts.js';
 import { centerBaseline, renderRich, roundCoord as r } from '../text.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { COPY } from './copy.js';
 import { markAttrs, markId } from './marks.js';
 import { DOT, SIZE, SPACE, TEXT, seriesPaint, seriesStroke } from './metrics.js';
@@ -11,9 +11,9 @@ import { DOT, SIZE, SPACE, TEXT, seriesPaint, seriesStroke } from './metrics.js'
 // 끝 이름을 다는 차트 종류
 const TYPES = new Set(['line', 'step', 'area', 'ecdf']);
 // 이름 상자 사이의 틈
-const GAP = SPACE['1'];
+const GAP = SPACE["0-5"];
 // 끝 점에서 이름 열까지 안내선이 비스듬히 꺾여 가는 가로 폭
-const LEADER_RUN = SPACE['6'];
+const LEADER_RUN = SPACE["3"];
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -22,7 +22,7 @@ export const hasEndLabels = (figure) => TYPES.has(figure.chartType) && figure.ch
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
-const lineHeightOf = () => TEXT['11'] * values.simple2['figure-leading'];
+const lineHeightOf = () => TEXT['11'] * values.leading.normal;
 
 // cost: time O(s·n), heap O(s), stack O(1)
 // vars: s = 계열 수, n = 이름 글자 수
@@ -134,7 +134,7 @@ function isotonic(values_) {
 export function endLabelMarks(chart, placed, anchors, column) {
   const lineHeight = lineHeightOf();
   return placed.map((box) => {
-    const pad = SPACE['0-5'];
+    const pad = SPACE["0-25"];
     const back = `<rect x="${r(column.x - pad)}" y="${r(box.top - pad)}" width="${r(box.width + pad * 2)}" height="${r(box.height + pad * 2)}" class="chart-text-bg"${markAttrs(chart, markId(chart, box.i, 'end', '.b'))}/>`;
     const texts = box.lines.map((line, k) => `<text x="${r(column.x)}" y="${r(centerBaseline(box.top + lineHeight / 2 + k * lineHeight, TEXT['11']))}" fill="${seriesPaint(chart, box.i).ink}" class="chart-end-label"${markAttrs(chart, markId(chart, box.i, 'end', `.t${k}`), { isText: true })}>${renderRich(line)}</text>`);
     return `<g class="cs-${box.i}">${leader(chart, box, anchors.get(box.i), column)}${back}${texts.join('')}</g>`;
@@ -145,11 +145,11 @@ export function endLabelMarks(chart, placed, anchors, column) {
 // basis: estimate
 // 끝 점에서 이름까지 가는 안내선. 같은 계열의 테두리 색, 모든 계열이 같은 가는 굵기다. 끝 점이 없거나 끝 점이 이름과 같은 높이에서 그림 영역 오른쪽 끝에 있으면(거리 0) 숨기되 표식은 남긴다.
 function leader(chart, box, anchor, { x }) {
-  const end = { x: x - SPACE['1'], y: box.cy };
+  const end = { x: x - SPACE["0-5"], y: box.cy };
   const start = anchor ? anchor.x + DOT : end.x;
   const elbow = Math.max(start, x - LEADER_RUN);
   const d = anchor ? `M ${r(start)} ${r(anchor.y)} H ${r(elbow)} L ${r(end.x)} ${r(end.y)}` : `M ${r(end.x)} ${r(end.y)}`;
   // 이름이 끝 점과 같은 높이이고 선이 꺾이는 폭 안에서 끝나면 이을 거리가 없다.
   const isHidden = !anchor || (Math.abs(box.cy - anchor.y) <= 0.5 && start >= x - LEADER_RUN - 0.5);
-  return `<path d="${d}" fill="none" stroke="${seriesStroke(chart, box.i)}" stroke-width="${values.border.thin}" class="chart-leader"${isHidden ? ' visibility="hidden"' : ''}${markAttrs(chart, markId(chart, box.i, 'end', '.l'))}/>`;
+  return `<path d="${d}" fill="none" stroke="${seriesStroke(chart, box.i)}" stroke-width="${values["border-width"].thin}" class="chart-leader"${isHidden ? ' visibility="hidden"' : ''}${markAttrs(chart, markId(chart, box.i, 'end', '.l'))}/>`;
 }

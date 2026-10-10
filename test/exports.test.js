@@ -246,7 +246,7 @@ test('X9b every panel of the wide and the narrow-screen layout shares one width 
   assert.doesNotMatch(css, /--min-w|max\(calc\(100% \* var\(--panel-w\)/);
   assert.doesNotMatch(css, /\.dp-panel \{[^}]*overflow/);
   // 묶음 폭은 자연 폭(보기 폭)도 넘지 않아, 작은 그림은 캔버스 폭 기준으로 줄지 않는다.
-  assert.match(css, /\.dp-panels \{[^}]*\bwidth: min\(100%, var\(--figure-canvas, var\(--size-figure-canvas\)\), calc\(var\(--view-w\) \* 1px\)\);/);
+  assert.match(css, /\.dp-panels \{[^}]*\bwidth: min\(100%, var\(--figure-canvas, var\(--spacing-figure-figure-canvas\)\), calc\(var\(--view-w\) \* 1px\)\);/);
 });
 
 test('X9d the narrow-screen layout is shipped only when it hides no more moving text than the wide one', async () => {

@@ -4,7 +4,7 @@ import { sizeChip } from '../chip.js';
 import { chipStateAt } from '../chip-motion.js';
 import { timeAtPosition } from '../easing.js';
 import { flattenRoute } from '../route.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 
 // cost: time O(h·(p + k)·(p + k)), heap O(p + k), stack O(1)
 // vars: h = 이동 수, p = 경로 지점 수, k = 글상자 계획 지점 수
@@ -21,7 +21,7 @@ export function figureViewBounds({ scene, timeline }) {
   };
   for (const seg of timeline.segs) for (const hop of seg.hops) {
     const route = hop.track === undefined ? flattenRoute(scene.edges[hop.edge].points) : timeline.tracks[hop.track].route;
-    const halo = values.size.packet.halo;
+    const halo = values.spacing.figure.packet.halo;
     for (const p of route) extend({ x: p.x - halo, y: p.y - halo, w: halo * 2, h: halo * 2 });
     if (hop.data) extendChip({ route, hop, chip: sizeChip(hop.data) }, extend);
   }

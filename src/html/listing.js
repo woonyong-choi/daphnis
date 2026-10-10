@@ -62,7 +62,7 @@ ${faviconLinks()}
 <div class="top">
 <h1>${escapeXml(heading)}</h1>
 <p>그림 ${figures.length}개 · <a href="document.html">문서 안 모습 보기</a></p>
-<div class="theme" role="group" aria-label="테마">${THEME_BUTTONS}</div>
+<div class="theme app-tablist is-segmented" role="group" aria-label="테마">${THEME_BUTTONS}</div>
 </div>
 <main>
 ${cards}
@@ -97,7 +97,7 @@ ${faviconLinks()}
 <body>
 <div class="bar">
 <a href="index.html">목록으로</a>
-<div class="theme" role="group" aria-label="테마">${THEME_BUTTONS}</div>
+<div class="theme app-tablist is-segmented" role="group" aria-label="테마">${THEME_BUTTONS}</div>
 </div>
 <article>
 <h1>${escapeXml(heading)}</h1>

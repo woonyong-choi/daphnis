@@ -1,16 +1,16 @@
 // elkjs 결과를 그림 좌표로 바꾼다. 그룹 경계 연결점에서 끊긴 선 조각은 이어 붙인다(docs/design/layout.md 선 그리기).
 import { hasPill, isOnLinePill, sizePill } from '../measure/sizes.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { LayoutError } from './error.js';
 import { withLeads } from './cell-ports.js';
 import { placeTitles } from './titles.js';
 import { CROWD, ROOT, TOUCH, decorOf } from './model.js';
 
-const SETTLE = values.space['4'];
+const SETTLE = values.spacing["2"];
 // 번호 알약을 얹을 구간 안 자리(구간 길이 비율). 가운데를 먼저 보고 양옆으로 간다.
 const RUN_FRACTIONS = [0.5, 0.35, 0.65, 0.2, 0.8];
 // 선 옆에 두는 라벨 알약과 선 사이 간격
-const BESIDE_GAP = values.space['3'];
+const BESIDE_GAP = values.spacing["1-5"];
 
 // cost: time O(s + e·(d + p)), heap O(s + e·p), stack O(d)
 // vars: s = 도형 수, e = 선 수, d = 그룹 깊이, p = 경로 점 수

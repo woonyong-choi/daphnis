@@ -3,7 +3,7 @@
 // 막대 종류와 산점도의 둘 이상의 계열은 `1 이름`처럼 번호 키를 달아 색 없이도 조각과 점 이름에 이어 읽게 한다(번호는 계열 목록 순서다. 원본 해석이 main을 앞에 세우고 나머지는 선언 순서를 지킨다).
 import { measure, wrap } from '../measure/fonts.js';
 import { renderRich, roundCoord as r } from '../text.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { COPY } from './copy.js';
 import { ecdfGroups } from './data.js';
 import { BAR, DOT, PAD, SPACE, TEXT, WIDTH, isReference, seriesBoundary, seriesColor, seriesPaint, seriesStroke } from './metrics.js';
@@ -37,7 +37,7 @@ const swatchWidth = (kind) => (kind === 'line' ? BAR * 2 : BAR);
 // 점 표식의 속성. 기대값 계열은 속이 비어 있고(차트 묶음(.fl-chart)의 color가 싣는 차트가 놓인 면의 색, 선 색 테두리), 실제값은 채워져 있다(밝은 계열은 같은 계열의 경계가 받친다).
 export function dotAttrs(chart, i, extra = '') {
   const color = seriesColor(chart, i);
-  if (isReference(chart, i)) return ` fill="currentColor" stroke="${color}" stroke-width="${values.border.strong}"${extra}`;
+  if (isReference(chart, i)) return ` fill="currentColor" stroke="${color}" stroke-width="${values["border-width"].strong}"${extra}`;
   return ` fill="${color}"${seriesBoundary(chart, i)}${extra}`;
 }
 
@@ -46,7 +46,7 @@ export function dotAttrs(chart, i, extra = '') {
 /** 채운 범례 칸. 칸의 왼쪽 위가 (x, y)이고 한 변이 BAR다. 계열 범례와 원·도넛 조각 목록이 같은 칸을 쓴다. */
 export function fillSwatch(paint, { x, y }) {
   const box = { x, y, w: BAR, h: BAR, radius: values.radius.sm };
-  return `<rect x="${r(x)}" y="${r(y)}" width="${BAR}" height="${BAR}" rx="${box.radius}" fill="${paint.fill}" stroke="${paint.border}" stroke-width="${values.border.tag}"/>${patternRect(paint, box)}`;
+  return `<rect x="${r(x)}" y="${r(y)}" width="${BAR}" height="${BAR}" rx="${box.radius}" fill="${paint.fill}" stroke="${paint.border}" stroke-width="${values["border-width"].tag}"/>${patternRect(paint, box)}`;
 }
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -59,14 +59,14 @@ function legendSwatch(chart, i, kind, { x, y }) {
   const paint = seriesPaint(chart, i);
   const cy = y + BAR / 2;
   if (kind === 'fill') {
-    if (isReference(chart, i)) return `<rect x="${r(x)}" y="${r(y)}" width="${BAR}" height="${BAR}" rx="${values.radius.sm}" fill="none" stroke="${paint.border}" stroke-width="${values.border.strong}"/>`;
+    if (isReference(chart, i)) return `<rect x="${r(x)}" y="${r(y)}" width="${BAR}" height="${BAR}" rx="${values.radius.sm}" fill="none" stroke="${paint.border}" stroke-width="${values["border-width"].strong}"/>`;
     return fillSwatch(paint, { x, y });
   }
   const marker = markShape({ shape: paint.shape, cx: x + swatchWidth(kind) / 2, cy, radius: DOT, attrs: dotAttrs(chart, i) });
   if (kind === 'dot') return marker;
   const span = `x1="${r(x)}" x2="${r(x + swatchWidth(kind))}" y1="${r(cy)}" y2="${r(cy)}"`;
   const dash = isReference(chart, i) ? ' class="chart-dashed"' : '';
-  return `<line ${span} stroke="${seriesStroke(chart, i)}" stroke-width="${values.border.strong}"${dash}/>${marker}`;
+  return `<line ${span} stroke="${seriesStroke(chart, i)}" stroke-width="${values["border-width"].strong}"${dash}/>${marker}`;
 }
 
 // cost: time O(s)
@@ -89,16 +89,16 @@ export function drawLegend(figure, y) {
   const { chart, chartType } = figure;
   const kind = KINDS[chartType] ?? 'fill';
   const limit = (chart.layout?.width ?? WIDTH) - PAD;
-  const lineHeight = TEXT['11'] * values.simple2['figure-leading'];
-  const room = limit - PAD - swatchWidth(kind) - SPACE['3'];
+  const lineHeight = TEXT['11'] * values.leading.normal;
+  const room = limit - PAD - swatchWidth(kind) - SPACE["1-5"];
   const entries = legendOrder(figure).map(({ i }) => {
     const lines = wrap(legendText(figure, i), room, { size: TEXT['11'] });
-    return { i, lines, width: swatchWidth(kind) + SPACE['3'] + Math.max(...lines.map((line) => measure(line, TEXT['11']))) + SPACE['9'] };
+    return { i, lines, width: swatchWidth(kind) + SPACE["1-5"] + Math.max(...lines.map((line) => measure(line, TEXT['11']))) + SPACE["4-5"] };
   });
   const rows = [];
   let x = PAD;
   for (const entry of entries) {
-    if (x > PAD && x + entry.width > limit + SPACE['9']) {
+    if (x > PAD && x + entry.width > limit + SPACE["4-5"]) {
       x = PAD;
       rows.push([]);
     }
@@ -110,11 +110,11 @@ export function drawLegend(figure, y) {
   let top = y;
   for (const row of rows) {
     for (const { i, lines, x: left } of row) {
-      svg.push(legendSwatch(chart, i, kind, { x: left, y: top + SPACE['2'] }));
-      const text = lines.map((line, k) => `<text x="${r(left + swatchWidth(kind) + SPACE['3'])}" y="${r(top + BAR + k * lineHeight)}" class="chart-legend">${renderRich(line)}</text>`);
+      svg.push(legendSwatch(chart, i, kind, { x: left, y: top + SPACE["1"] }));
+      const text = lines.map((line, k) => `<text x="${r(left + swatchWidth(kind) + SPACE["1-5"])}" y="${r(top + BAR + k * lineHeight)}" class="chart-legend">${renderRich(line)}</text>`);
       svg.push(...text);
     }
-    top += BAR + SPACE['6'] + (Math.max(...row.map((entry) => entry.lines.length)) - 1) * lineHeight;
+    top += BAR + SPACE["3"] + (Math.max(...row.map((entry) => entry.lines.length)) - 1) * lineHeight;
   }
   return { svg, bottom: top };
 }

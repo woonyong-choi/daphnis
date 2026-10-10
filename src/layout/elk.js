@@ -1,13 +1,13 @@
 // 배치 모형을 elkjs 그래프로 바꾼다. 선택 사항 값은 모두 토큰이다(docs/design/layout.md 간격과 결정성).
 import { FIGURE_PAD } from '../canvas.js';
 import { groupTitleWidth, hasPill, isOnLinePill, sizePill } from '../measure/sizes.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { isInnerEdge } from './cell-ports.js';
 import { ROOT } from './model.js';
 import { isBodyShape, outerBox, spreadBodyPorts } from './ports.js';
 
-const SPACE = values.space;
-const SIZE = values.size;
+const SPACE = values.spacing;
+const SIZE = values.spacing.figure;
 const ELK_DIRECTION = { right: 'RIGHT', down: 'DOWN' };
 // 한 층에 하나씩 놓는 층 나누기는 같은 조건의 형제 순서를 정하지 못하므로, 자식 순서(order.js)를 분할 번호로 줘 위에서 아래로 그 순서를 지키게 한다.
 const SINGLE_LAYER_OPTIONS = Object.freeze({ 'elk.layered.layering.strategy': 'COFFMAN_GRAHAM', 'elk.layered.layering.coffmanGraham.layerBound': '1', 'elk.layered.nodePlacement.strategy': 'SIMPLE', 'elk.partitioning.activate': 'true' });
@@ -61,7 +61,7 @@ function multiplicityLabels(edge, index, count) {
 // basis: estimate
 // 층 사이 간격이 room(px)이 되게 하는 보이지 않는 라벨. 층이 놓이는 방향의 크기만 갖고(right는 너비, down은 높이) 다른 쪽은 1이다.
 function roomLabel(id, room, direction) {
-  const extent = Math.max(1, room - SPACE['30'] - SPACE['2']);
+  const extent = Math.max(1, room - SPACE["15"] - SPACE["1"]);
   return { id, text: ' ', width: direction === 'down' ? 1 : extent, height: direction === 'down' ? extent : 1, layoutOptions: ROOM_OPTIONS };
 }
 
@@ -119,7 +119,7 @@ function nodeToElk(n, ctx, partition = {}) {
 // 연결점이 없는 도형의 자기 선은 elkjs가 기본 간격(10)으로 돌려 그려 화살촉만 하다. 도형에서 떨어진 거리를 `space.12`(화살촉 길이의 세 배 이상)로 넓혀 고리로 읽히게 한다.
 // elkjs는 이 간격을 도형의 layoutOptions가 아니라 도형별 간격(individualSpacings)에서만 읽는다.
 function selfLoopSpacing(n, ctx) {
-  return ctx.selfLoops.has(n.id) && !n.ports.length ? { individualSpacings: { 'elk.spacing.nodeSelfLoop': String(SPACE['12']) } } : {};
+  return ctx.selfLoops.has(n.id) && !n.ports.length ? { individualSpacings: { 'elk.spacing.nodeSelfLoop': String(SPACE["6"]) } } : {};
 }
 
 // cost: time O(p), heap O(1), stack O(1)
@@ -143,12 +143,12 @@ function containerOptions(c, ctx) {
     // 순환이 없는 그룹은 MODEL_ORDER로 바꾸면 선 높이가 달라지는 그림이 있어(memory 예제) 처음 설정을 지킨다.
     // 안전 배치(처음 배치가 실패한 뒤의 두 번째 시도)는 모델 순서를 쓰지 않는 기본 순환 처리로 한다.
     'elk.layered.cycleBreaking.strategy': cycleStrategy(c, ctx),
-    'elk.spacing.nodeNode': String(SPACE['16']),
-    'elk.layered.spacing.nodeNodeBetweenLayers': String(SPACE['30']),
-    'elk.spacing.edgeEdge': String(SPACE['5']),
-    'elk.spacing.edgeNode': String(SPACE['8']),
-    'elk.spacing.edgeLabel': String(SPACE['2']),
-    'elk.layered.spacing.edgeNodeBetweenLayers': String(SPACE['8']),
+    'elk.spacing.nodeNode': String(SPACE["8"]),
+    'elk.layered.spacing.nodeNodeBetweenLayers': String(SPACE["15"]),
+    'elk.spacing.edgeEdge': String(SPACE["2-5"]),
+    'elk.spacing.edgeNode': String(SPACE["4"]),
+    'elk.spacing.edgeLabel': String(SPACE["1"]),
+    'elk.layered.spacing.edgeNodeBetweenLayers': String(SPACE["4"]),
     'elk.edgeLabels.placement': 'CENTER',
     'elk.edgeLabels.inline': 'true',
     'elk.portConstraints': c.ports.length ? 'FIXED_SIDE' : 'FREE',
@@ -183,7 +183,7 @@ function rootOptions(figure) {
 function groupOptions(c, ctx) {
   return {
     // 제목이 선을 비킬 자리가 없던 그룹은 오른쪽 안쪽 여백을 제목 덩어리만큼 넓혀, 선 오른쪽 끝 너머에 제목이 설 자리를 만든다.
-    'elk.padding': `[top=${SIZE.group.title + SPACE['6']},left=${SPACE['12']},bottom=${SPACE['12']},right=${SPACE['12'] + (ctx.figure.wideGroups?.has(c.id) ? groupTitleWidth(c) : 0)}]`,
+    'elk.padding': `[top=${SIZE.group.title + SPACE["3"]},left=${SPACE["6"]},bottom=${SPACE["6"]},right=${SPACE["6"] + (ctx.figure.wideGroups?.has(c.id) ? groupTitleWidth(c) : 0)}]`,
     // 그룹 안은 연결선을 모으는 네트워크 심플렉스를 쓴다. 좁은 후보에서는 세로 그룹만 한 층씩 놓고, 명시한 가로 방향은 유지한다. 안전 배치는 기본 전략을 쓴다.
     ...(ctx.isSafe ? {} : ctx.figure.compactGroups && c.direction === 'down' ? SINGLE_LAYER_OPTIONS : { 'elk.layered.nodePlacement.strategy': 'NETWORK_SIMPLEX' }),
     'elk.nodeSize.constraints': 'MINIMUM_SIZE',

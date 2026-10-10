@@ -4,7 +4,7 @@
 // 조각은 계열 번호 키(`1`, `2`, ...)를 조각 안에 적고(글자 요소는 labels.js의 segmentKey), 안에 들어가지 않으면 아래 값 목록의 `1: 30`이 키를 잇는다.
 import { measure } from '../measure/fonts.js';
 import { centerBaseline, roundCoord as r } from '../text.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { drawRules, finishRowChart, rowValueScale } from './axis.js';
 import { COPY, MISSING } from './copy.js';
 import { isValue, percentRows, stackExtent, stackRows } from './data.js';
@@ -15,7 +15,7 @@ import { patternRect } from './pattern.js';
 import { SHARE_PLACES, valueFormat } from './scale.js';
 
 // 조각 사이에 바탕이 드러나는 틈. 조각마다 이만큼 줄인다(경계선 굵기를 빼고도 틈이 남는다).
-const GAP = SPACE['2'];
+const GAP = SPACE["1"];
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -51,7 +51,7 @@ function flow(pieces, { room, lineHeight }) {
     const width = measure(piece.text, TEXT['11'], piece.total ? 'numSemibold' : 'num');
     if (dx && dx + width > room) [dx, dy] = [0, dy + lineHeight];
     const at = { ...piece, dx, dy, width };
-    dx += width + SPACE['3'];
+    dx += width + SPACE["1-5"];
     return at;
   });
 }
@@ -74,7 +74,7 @@ function widestStack(ctx) {
 // 행마다 조각 글의 배치와, 모든 행 가운데 가장 많은 줄의 아래 끝(첫 줄 글자 가운데에서 잰 dy)
 function summaryLayout(ctx, stacks) {
   const { chart } = ctx;
-  const layout = { room: chart.layout ? chart.layout.width - PAD * 2 : RIGHT - ctx.scale.at(0), lineHeight: TEXT['11'] * values.simple2['figure-leading'] };
+  const layout = { room: chart.layout ? chart.layout.width - PAD * 2 : RIGHT - ctx.scale.at(0), lineHeight: TEXT['11'] * values.leading.normal };
   const rows = stacks.map((stack) => flow(pieceTexts(ctx, stack, stack.parts), layout));
   const wide = widestStack(ctx);
   const reserve = wide ? flow(pieceTexts(ctx, wide.stack, wide.parts), layout) : [];
@@ -113,7 +113,7 @@ function segmentMarks(ctx, part, at) {
   const paint = seriesPaint(chart, i);
   const id = markId(chart, i, k);
   const attrs = markAttrs(chart, id, { raw: part.value, paint });
-  const rect = `<rect x="${r(box.x)}" y="${r(box.y)}" width="${r(box.w)}" height="${BAR}" fill="${seriesFill(chart, i)}" stroke="${seriesOutline(chart, i)}" stroke-width="${values.border.tag}" class="stack-segment grow"${attrs}/>`;
+  const rect = `<rect x="${r(box.x)}" y="${r(box.y)}" width="${r(box.w)}" height="${BAR}" fill="${seriesFill(chart, i)}" stroke="${seriesOutline(chart, i)}" stroke-width="${values["border-width"].tag}" class="stack-segment grow"${attrs}/>`;
   const overlay = patternRect(paint, box, markAttrs(chart, markId(chart, i, k, '.p')), 'chart-pattern grow');
   const key = String(i + 1);
   const text = segmentKey(chart, { key, x: box.x + box.w / 2, cy: box.y + BAR / 2, paint, fits: box.w >= keyRoom(key).w, id: markId(chart, i, k, '.k') });
@@ -147,7 +147,7 @@ function stackedRow(ctx, stack, k) {
   parts.push(statusMark(ctx, stack, { k, y }));
   const pieces = summary.rows[k];
   const textX = chart.layout ? PAD : scale.at(0);
-  const labels = pieces.map((piece) => inkGroup(k, valueText({ x: textX + piece.dx, cy: y + BAR + SPACE['3'] + TEXT['11'] / 2 + piece.dy }, piece.text, `chart-value late${piece.total ? ' ours' : ''}`, { chart, id: markId(chart, piece.i, k, piece.total ? '.total' : ''), raw: piece.raw, paint: seriesPaint(chart, piece.i) }), piece.i));
+  const labels = pieces.map((piece) => inkGroup(k, valueText({ x: textX + piece.dx, cy: y + BAR + SPACE["1-5"] + TEXT['11'] / 2 + piece.dy }, piece.text, `chart-value late${piece.total ? ' ours' : ''}`, { chart, id: markId(chart, piece.i, k, piece.total ? '.total' : ''), raw: piece.raw, paint: seriesPaint(chart, piece.i) }), piece.i));
   const width = Math.max(...pieces.map((piece) => piece.dx + piece.width));
   return { parts, labels, fit: { text: chart.rows[k].label, width, room: summary.room, line: chart.rows[k].line, what: 'stack values' } };
 }
@@ -165,9 +165,9 @@ export function drawStacked(figure, top) {
   const ctx = { chart, isPercent, top, format: valueFormat([...finite.map(Math.abs), ...sums], chart.decimals), share: valueFormat([], chart.decimals ?? SHARE_PLACES), names: rowLabelLayout(chart) };
   ctx.scale = stackScale(ctx, stacks).scale;
   ctx.summary = summaryLayout(ctx, stacks);
-  ctx.pitch = ctx.names.space + BAR + ctx.summary.depth + TEXT['11'] + SPACE['11'];
+  ctx.pitch = ctx.names.space + BAR + ctx.summary.depth + TEXT['11'] + SPACE["5-5"];
   const rows = stacks.map((stack, k) => stackedRow(ctx, stack, k));
-  const bottom = top + chart.rows.length * ctx.pitch - SPACE['6'];
+  const bottom = top + chart.rows.length * ctx.pitch - SPACE["3"];
   const zero = ctx.scale.ticks[0] < 0 ? `<line x1="${r(ctx.scale.at(0))}" x2="${r(ctx.scale.at(0))}" y1="${r(top)}" y2="${r(bottom)}" class="chart-zero"/>` : '';
   const plot = finishRowChart(chart, { parts: [zero, ...rows.flatMap((row) => row.parts)], over: rows.flatMap((row) => row.labels), scale: ctx.scale, top, bottom });
   plot.fits.push(...rows.map((row) => row.fit));

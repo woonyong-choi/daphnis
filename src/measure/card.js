@@ -1,15 +1,15 @@
 // 카드(도형의 바깥 면 하나)의 공통 치수와 머리 배치. 상자, 사람, 표, API, 클래스, 순서 보기 참여자, 격자, 큐가 같은 안쪽 여백과 같은 머리 규칙을 쓴다.
 // 카드는 면(draw/surface.js) 위에 머리(아이콘, 제목, 부제, 배지), 구분선, 필드 줄이 놓인 것이고, 종류별 측정은 이 규칙에 줄의 글만 넘긴다.
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { layoutDecor } from './decor.js';
 import { measure, wrap } from './fonts.js';
 import { STYLE, stackTexts, textAt } from './texts.js';
 
-const SPACE = values.space;
-const SIZE = values.size;
+const SPACE = values.spacing;
+const SIZE = values.spacing.figure;
 
 /** 카드 안쪽 여백. x는 글 둘레 가로, y는 위아래다. */
-export const PAD = Object.freeze({ x: SPACE['9'], y: SPACE['6'] });
+export const PAD = Object.freeze({ x: SPACE["4-5"], y: SPACE["3"] });
 
 /** 카드 안쪽 글이 기본으로 쓸 수 있는 가장 긴 폭. 머리 제목은 본문이 이보다 좁을 때 이 폭에서 줄을 나눈다. */
 export const INNER_MAX = SIZE.node['max-width'] - PAD.x * 2;
@@ -18,7 +18,7 @@ export const INNER_MAX = SIZE.node['max-width'] - PAD.x * 2;
  * 머리의 공통 치수. 머리는 아이콘 틀(24 격자 한 칸)과 제목이 한 줄로 나란하다. iconGap은 아이콘과 제목 사이,
  * rowH는 구획으로 나뉜 카드(표, API, 클래스, 순서 보기 참여자)의 머리 띠 한 줄 높이다. 제목이 여러 줄이면 줄 높이만큼 늘어난다.
  */
-export const HEADER = Object.freeze({ iconGap: SPACE['4'], rowH: Math.max(SIZE.node['table-row'], SIZE.icon.node + SPACE['4']) });
+export const HEADER = Object.freeze({ iconGap: SPACE["2"], rowH: Math.max(SIZE.node['table-row'], SIZE.icon.node + SPACE["2"]) });
 
 /** 머리 한 줄의 장식: 아이콘, 제목(너비 titleW, 높이 titleH), 배지, 개수가 한 줄로 나란하다. 아이콘은 제목 첫 줄과 가운데가 같다. 장식이 없으면 undefined. */
 export const headerDecor = (node, { titleW, titleH }) => layoutDecor(node, { iconSize: SIZE.icon.node, titleW, titleH, iconGap: HEADER.iconGap });

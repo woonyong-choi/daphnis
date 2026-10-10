@@ -2,26 +2,26 @@
 // 그리는 쪽(draw/content.js, draw/values.js)과 그림 검사(check/fit.js)는 이 글 자리를 그대로 읽고 줄 나누기, 들여쓰기, 흐림 자리, 값 자리를 다시 계산하지 않는다.
 // 좌표는 내용 면 왼쪽 위가 원점이다. 내용 면의 도형 안 자리는 draw/content.js의 contentBox가 정한다.
 import { plainText } from '../text.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { widestText } from '../value-slots.js';
 import { measure, wrap } from './fonts.js';
 import { layoutMiniGraph, miniGraphWidth } from './minigraph.js';
 import { STYLE, textAt } from './texts.js';
 
-const SPACE = values.space;
+const SPACE = values.spacing;
 
 /**
  * 카드에 보이는 내용(`show`와 값 줄)의 안쪽 간격. 카드 면 안에서 내용이 놓이는 흰 면 하나의 둘레다.
  * pad는 면과 첫·끝 줄 사이, side는 면 가장자리와 글 사이, gap은 줄 사이, margin은 카드 면과 내용 면 사이다.
  */
-export const CONTENT = Object.freeze({ pad: SPACE['3'], side: SPACE['4'], gap: values.simple2['card-row-gap'], margin: SPACE['5'] });
+export const CONTENT = Object.freeze({ pad: SPACE["1-5"], side: SPACE["2"], gap: values.spacing["1-5"], margin: SPACE["2-5"] });
 
 // 카드 안쪽 폭 가운데 값 글자 자리가 가질 수 있는 몫. 나머지는 줄 이름 글이 쓴다.
 const VALUE_SHARE = 0.6;
 // 태그 알약 안쪽 좌우 합, 알약과 본문 사이, 본문과 오른쪽 표시 사이 간격
-const TAG_PAD = SPACE['4'];
-const TAG_GAP = SPACE['2-5'];
-const MARK_GAP = SPACE['3'];
+const TAG_PAD = SPACE["2"];
+const TAG_GAP = SPACE["1-25"];
+const MARK_GAP = SPACE["1-5"];
 
 /** 줄 본문: 글 뒤에 덧붙임이 있으면 ` · `로 이어 붙인 글. 크기를 재는 글과 그리는 글이 같다. */
 const rowBody = (row) => row.text + (row.meta !== undefined ? ` · ${row.meta}` : '');
@@ -37,7 +37,7 @@ export function contentMinWidth(contents) {
   if (!contents.length) return 0;
   const graphs = contents.flatMap((rows) => rows.filter((row) => row.graph).map((row) => miniGraphWidth(row.graph) + (CONTENT.side + CONTENT.margin) * 2));
   const charts = contents.flatMap((rows) => rows.filter((row) => row.chart).map((row) => row.chart.width + CONTENT.margin * 2));
-  return Math.max(values.size.node['card-width'], ...graphs, ...charts);
+  return Math.max(values.spacing.figure.node["card-width"], ...graphs, ...charts);
 }
 
 // cost: time O(k·r·n²), heap O(k·r), stack O(1)
@@ -101,7 +101,7 @@ function placeRow(row, { width, top }) {
     ...lines.map((line, k) => textAt(row.isMono ? 'row mono' : 'row', line, style, { x: CONTENT.side + (k === 0 ? tagW : 0), center: first + (k + 0.5) * style.line }, row.meta === undefined ? {} : { mutedFrom: mutedAt[k] })),
   ];
   const height = (isHeading ? STYLE.row.line : 0) + Math.max(lines.length, valueSlot?.lines ?? 0) * STYLE.row.line;
-  return { row, top, height, texts, ...(tag ? { tag: { x: CONTENT.side, center, w: pillW, h: values.size.tag.height } } : {}), ...(valueSlot ? { valueSlot } : {}) };
+  return { row, top, height, texts, ...(tag ? { tag: { x: CONTENT.side, center, w: pillW, h: values.spacing.figure.tag.height } } : {}), ...(valueSlot ? { valueSlot } : {}) };
 }
 
 // cost: time O(l·n), heap O(l), stack O(1)

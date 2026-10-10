@@ -3,7 +3,7 @@ import { plainText } from '../text.js';
 import { emptyRegions } from '../source/grid-space.js';
 import { tableDescription } from '../table.js';
 import { tableLayout } from './table.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { INNER_MAX, PAD, headerDecor, headerOf, placeHeader } from './card.js';
 import { BADGE_STYLE, DECOR, STACK_STEP, groupDecor, nodeDecor } from './decor.js';
 import { sizeClassifier } from './class.js';
@@ -13,11 +13,11 @@ import { planGridLinks } from './grid-links.js';
 import { sizeQueue } from './queue.js';
 import { STYLE, stackTexts, textAt, titleTexts } from './texts.js';
 
-const SPACE = values.space;
-const SIZE = values.size;
+const SPACE = values.spacing;
+const SIZE = values.spacing.figure;
 
 /** 칸 격자 안쪽 간격. pad는 칸 묶음과 틀 사이, cellPadX, cellPadY는 칸 안 글 둘레, titlePad는 제목 줄 위아래, textMax는 칸 글 한 줄의 가장 긴 너비다. */
-export const GRID = Object.freeze({ pad: SPACE['6'], cellPadX: SPACE['4'], cellPadY: SPACE['3'], titlePad: SPACE['3'], textMax: INNER_MAX });
+export const GRID = Object.freeze({ pad: SPACE["3"], cellPadX: SPACE["2"], cellPadY: SPACE["1-5"], titlePad: SPACE["1-5"], textMax: INNER_MAX });
 
 // cost: time O(k·r·n²), heap O(k·r), stack O(1)
 // vars: k = 카드 내용 수, r = 카드 줄 수, n = 줄 글자 수
@@ -203,14 +203,14 @@ function gridUnitWidth(cells, { cols, titleRoom, fieldStrip }) {
 export function sizePill(label, no) {
   const h = SIZE.pill.height;
   const textW = label === undefined ? 0 : measure(label, STYLE.pill.size, STYLE.pill.face);
-  if (no === undefined) return { w: textW + SPACE['7'], h };
+  if (no === undefined) return { w: textW + SPACE["3-5"], h };
   const numW = numberBadgeWidth(no);
-  return { w: label === undefined ? numW + SPACE['1'] * 2 : SPACE['1'] + numW + SPACE['2'] + textW + SPACE['7'] / 2, h, numW, textW };
+  return { w: label === undefined ? numW + SPACE["0-5"] * 2 : SPACE["0-5"] + numW + SPACE["1"] + textW + SPACE["3-5"] / 2, h, numW, textW };
 }
 
 /** 선 번호 원 너비. 한 자리는 지름과 같은 원이고 두 자리 이상은 숫자 폭에 좌우 간격을 더한다. */
 function numberBadgeWidth(no) {
-  return Math.max(SIZE.pill.height - SPACE['1'] * 2, measure(String(no), BADGE_STYLE.size, BADGE_STYLE.face) + SPACE['4']);
+  return Math.max(SIZE.pill.height - SPACE["0-5"] * 2, measure(String(no), BADGE_STYLE.size, BADGE_STYLE.face) + SPACE["2"]);
 }
 
 /**

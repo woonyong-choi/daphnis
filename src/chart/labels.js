@@ -3,7 +3,7 @@ import { textMarkup } from '../draw/texts.js';
 import { measure, wrap } from '../measure/fonts.js';
 import { STYLE, stackTexts } from '../measure/texts.js';
 import { centerBaseline, plainText, renderRich, roundCoord as r } from '../text.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { COPY } from './copy.js';
 import { ecdfGroups } from './data.js';
 import { drawLegend } from './legend.js';
@@ -13,7 +13,7 @@ import { formatNumber } from './scale.js';
 
 const LABEL_W = SIZE.chart.label;
 const LABEL_MAX = SIZE.chart['label-max'];
-const LABEL_GAP = SPACE['6'];
+const LABEL_GAP = SPACE["3"];
 // 차트 항목 이름이 칸에 들어가는 최대 폭
 const LABEL_ROOM = LABEL_MAX - LABEL_GAP;
 
@@ -63,7 +63,7 @@ export function inkGroup(k, inner, i) {
 export function valueText({ x, cy }, text, className, mark) {
   const size = TEXT['11'];
   const width = measure(plainText(text), size, /ours|second/.test(className) ? 'numSemibold' : 'num');
-  const pad = SPACE['0-5'];
+  const pad = SPACE["0-25"];
   const left = x - (className.includes('end') ? width : 0);
   const attrs = (suffix, isText) => (mark ? markAttrs(mark.chart, `${mark.id}${suffix}`, isText ? { isText } : { raw: mark.raw, paint: mark.paint }) : '');
   const back = `<rect x="${r(left - pad)}" y="${r(cy - size / 2 - pad)}" width="${r(width + pad * 2)}" height="${size + pad * 2}" class="chart-text-bg${className.includes('late') ? ' late' : ''}"${attrs('.b', false)}/>`;
@@ -75,7 +75,7 @@ export function valueText({ x, cy }, text, className, mark) {
 // basis: estimate
 /** 번호 키 글자가 차지하는 칸. 글자 폭과 글자 높이에 사방 `space.2` 여백을 더한다. */
 export function keyRoom(key) {
-  return { w: measure(key, TEXT['11'], 'numSemibold') + SPACE['2'] * 2, h: TEXT['11'] + SPACE['2'] * 2 };
+  return { w: measure(key, TEXT['11'], 'numSemibold') + SPACE["1"] * 2, h: TEXT['11'] + SPACE["1"] * 2 };
 }
 
 // cost: time O(n), heap O(n), stack O(1)
@@ -86,7 +86,7 @@ export function keyRoom(key) {
  * 누적 막대 조각과 원·도넛 조각이 함께 쓴다.
  */
 export function segmentKey(chart, { key, x, cy, paint, fits, id }) {
-  return `<text x="${r(x)}" y="${r(centerBaseline(cy, TEXT['11']))}" text-anchor="middle" fill="${paint.on}" stroke="${paint.fill}" stroke-width="${values.border.casing}" paint-order="stroke" class="chart-seg-key late"${fits ? '' : ' visibility="hidden"'}${markAttrs(chart, id, { isText: true })}>${key}</text>`;
+  return `<text x="${r(x)}" y="${r(centerBaseline(cy, TEXT['11']))}" text-anchor="middle" fill="${paint.on}" stroke="${paint.fill}" stroke-width="${values["border-width"].casing}" paint-order="stroke" class="chart-seg-key late"${fits ? '' : ' visibility="hidden"'}${markAttrs(chart, id, { isText: true })}>${key}</text>`;
 }
 
 // cost: time O(s), heap O(s), stack O(1)
@@ -124,7 +124,7 @@ export function drawHeader(figure) {
     parts.push(...legend.svg);
     y = legend.bottom;
   }
-  return { svg: parts.join('\n'), bottom: y + SPACE['6'] };
+  return { svg: parts.join('\n'), bottom: y + SPACE["3"] };
 }
 
 // cost: time O(r·n²), heap O(r·n), stack O(1)
@@ -134,8 +134,8 @@ export function drawHeader(figure) {
 export function rowLabelLayout(chart) {
   if (!chart.layout) return { space: 0 };
   const lines = chart.rows.map((row) => wrap(row.label, chart.layout.width - PAD * 2, { size: TEXT['13'], face: row.total ? 'semibold' : 'regular' }));
-  const lineHeight = TEXT['13'] * values.simple2['figure-leading'];
-  return { lines, lineHeight, space: Math.max(...lines.map((row) => row.length)) * lineHeight + SPACE['6'] };
+  const lineHeight = TEXT['13'] * values.leading.normal;
+  return { lines, lineHeight, space: Math.max(...lines.map((row) => row.length)) * lineHeight + SPACE["3"] };
 }
 
 // cost: time O(n), heap O(n), stack O(1)

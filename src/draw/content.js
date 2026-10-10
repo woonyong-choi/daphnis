@@ -4,7 +4,7 @@ import { bodyOf } from '../measure/decor.js';
 import { CONTENT } from '../measure/content.js';
 import { autoTone, toneColors } from '../tone.js';
 import { roundCoord as r } from '../text.js';
-import { tokens, values } from '../tokens.js';
+import { tokens, values } from '../vendor/theme/tokens.js';
 import { faceOf, lookClass } from './look.js';
 import { CORNER, rectOpen } from './surface.js';
 import { drawTexts } from './texts.js';
@@ -64,7 +64,7 @@ export function drawContent(content, { box, i, shown }, { toneOf, decorate, glyp
 function drawFace(layout, box) {
   const look = contentLook(layout);
   if (look.tone === undefined) return '';
-  const inset = values.border.thin / 2;
+  const inset = values["border-width"].thin / 2;
   return `${rectOpen({ x: box.x + inset, y: box.y + inset, w: box.w - inset * 2, h: box.h - inset * 2 }, CORNER.inner - inset)} class="face${lookClass(look)}"/>`;
 }
 
@@ -112,9 +112,9 @@ function drawMiniGraph(laid, box) {
   const pills = laid.nodes.map((n) => {
     // 밝힌 이름은 선택 행과 같은 옅은 면이고 윤곽은 그대로다. 칩의 식별은 실루엣이 맡고 파랑은 면적을 차지하지 않는다.
     const fill = n.isLit ? 'style="fill: var(--fx-row)"' : `fill="${tokens.color.node}"`;
-    // 칩 윤곽은 도형과 표 구획과 같은 경계선 역할(border.thin, simple2.surface-edge)이다.
-    const stroke = tokens.simple2['surface-edge'];
-    return `<rect x="${r(x + n.x)}" y="${r(y + n.y)}" width="${r(n.w)}" height="${r(n.h)}" rx="${r(n.h / 2)}" ${fill} stroke="${stroke}" stroke-width="${values.border.thin}"/>`;
+    // 칩 윤곽은 도형과 표 구획과 같은 경계선 역할(border.thin, color.help-border)이다.
+    const stroke = tokens.color["help-border"];
+    return `<rect x="${r(x + n.x)}" y="${r(y + n.y)}" width="${r(n.w)}" height="${r(n.h)}" rx="${r(n.h / 2)}" ${fill} stroke="${stroke}" stroke-width="${values["border-width"].thin}"/>`;
   });
   return lines.join('') + pills.join('');
 }

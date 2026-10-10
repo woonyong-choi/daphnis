@@ -106,7 +106,7 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 
 기준은 [Things 공식 페이지](https://culturedcode.com/things/)와 [기능 페이지](https://culturedcode.com/things/features/)의 실제 렌더링이다. 예전 Refero 화면은 정규화한 측정값과 재구성 예제라 보조 참고일 뿐 기준이 아니다. 중립 면, 흰 카드, 절제된 파랑, 글자 위계를 역할이 같은 요소끼리 비교한다. 재생 조작은 시간 흐름을 장면 탭으로 고르는 구조라 Things의 대응 요소가 없고, 도구 막대 아이콘은 Daphnis의 확장이다([재생](playback.md#도구-막대와-전체-화면)). Daphnis의 데이터 의미색과 글꼴 측정 규칙을 Things의 원본 구현이라고 부르지 않는다.
 
-화면 값은 design-tokens의 `themes/simple2`가 소유한다. Daphnis에서 가져온 JSON이나 생성 CSS·JS를 손으로 고치지 않는다. 그림 글꼴은 측정과 SVG 배포를 위해 포함한 글꼴을 쓰므로, 운영체제 글꼴을 쓰는 Things와 글꼴 파일이 같지는 않다. 다크 테마는 Daphnis의 확장이며 공식 밝은 페이지와 같은 화면이라고 판정하지 않는다. 다크의 보조 참고는 라이트·다크가 함께 있는 2018년 Things 3.7 화면 쌍이고, 현재 네이티브 버전의 다크라는 근거는 아니다. 2017년 사이트 영상 스틸도 같은 이유로 역할 비교용 보조 참고일 뿐 현재 네이티브 버전과 같다는 근거가 아니며, 두 이미지의 색을 현재 네이티브 색으로 읽지 않는다.
+화면 값은 design-tokens의 `tokens`가 소유한다. Daphnis에서 가져온 JSON이나 생성 CSS·JS를 손으로 고치지 않는다. 그림 글꼴은 측정과 SVG 배포를 위해 포함한 글꼴을 쓰므로, 운영체제 글꼴을 쓰는 Things와 글꼴 파일이 같지는 않다. 다크 테마는 Daphnis의 확장이며 공식 밝은 페이지와 같은 화면이라고 판정하지 않는다. 다크의 보조 참고는 라이트·다크가 함께 있는 2018년 Things 3.7 화면 쌍이고, 현재 네이티브 버전의 다크라는 근거는 아니다. 2017년 사이트 영상 스틸도 같은 이유로 역할 비교용 보조 참고일 뿐 현재 네이티브 버전과 같다는 근거가 아니며, 두 이미지의 색을 현재 네이티브 색으로 읽지 않는다.
 
 화면으로 확인한 범위는 [예제와 검증 범위](#예제와-검증-범위)의 표가 정하고, 그 밖의 폭과 장면, 실제 기기와 Safari, Firefox는 확인하지 않았다(검증 요구사항, 미완료). 가로 넘침 없는 결과와 실제 글자가 읽히는 결과를 구분한다. 복잡한 그래프와 순서 그림은 보통 보기에서 모든 판이 같은 비율로 줄어 가로로 잘리지 않고 들어오지만 그만큼 글자가 작아지므로 글자가 읽힌다고 적지 않고, 전체 화면은 묶음 전체를 영역에 맞춘 뒤 수동 확대로 읽는다([재생](playback.md#도구-막대와-전체-화면)). 화면 비교는 도형 경계, 텍스트 겹침, 카드 여백, 의미색, 조작의 위치를 확인하며 자동 검사 통과만으로 디자인 승인을 대신하지 않는다.
 
@@ -120,25 +120,25 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 |---|---|---|---|
 | 페이지·조작 글꼴 | 시스템 글꼴 스택 | `font.sans`, `styles/control.css` | 직접 대응. 그림 글꼴과 분리 |
 | 그림·코드 글꼴 | 대응 요소 없음 | `font.figure-sans`, `font.figure-mono` | 측정과 SVG 포함을 위한 확장 |
-| 큰 제목 | `.fancysection-heading`, 36px·700 | `simple2.heading`, `simple2.heading-weight` | 크기·굵기 대응 |
-| 조작 글자 | `.navigation-button`, 15px·600. 분절 조작(탭)은 선택과 비선택 모두 600이고 실측 15.84px다 | `simple2.control`, `weight.semibold`, `styles/control.css` | 역할 대응. Daphnis의 탭도 선택과 비선택이 모두 semibold이고 크기는 `simple2.control`(15px)이라 공식 분절 조작의 15.84px와 같다고 적지 않는다 |
-| 본문 글자 | `body`, 18px·400 | `simple2.body`, `font.sans`, `styles/document.css` | 문서 본문 크기 대응 |
-| 그림 이름·상세·메타 | 직접 대응 요소 없음. 역할 위계의 보조 참고(2017년 영상 스틸)에서 항목 제목은 보통 굵기, 구획 제목은 semibold다 | `simple2.label-size`, `simple2.detail-size`, `simple2.micro-size`, `measure/texts.js`의 `STYLE` | 그림 밀도를 위한 확장. 카드 제목은 15px regular, 그룹 제목은 같은 15px semibold, 그림 안 글의 굵기는 regular와 semibold 둘이다. 크기와 굵기를 `STYLE`이 재고 CSS가 같은 토큰으로 그린다 |
-| 캔버스 면 | 페이지 판의 면 역할. 공식 페이지는 `body`와 섹션마다 배경이 다르다 | `simple2.canvas-fill` | 페이지 판 면의 역할 대응이고 값은 같지 않다. 실제 Chrome에서 잰 공식 홈 `body`는 rgb(242, 245, 247), 기능 페이지 `body`는 rgb(213, 217, 222)이고 Daphnis 캔버스는 rgb(245, 245, 246)다. 사이트 `body` 값을 그림 캔버스에 복사하지 않는다 |
-| 캔버스 카드 | `.productcard`의 18px 모서리 | `simple2.canvas-corner` | 바깥 카드 역할. 모든 내부 도형에 적용하지 않는다. 그룹 틀과 순서 구획은 카드와 같은 바깥 모서리(`simple2.node-corner`)를 쓴다 |
-| 조작 모서리 | `.navigation-button`의 6px 모서리 | `simple2.control-radius` | 직접 대응 |
-| 도형 외곽선 | 대응 요소 없음 | `simple2.surface-edge`, `simple2.node-stroke`, `.fl-node > .fl-stroke` | 공통 경계 규칙으로 확장 |
-| 표·클래스 및 병합 격자의 내부 구분선 | 대응 요소 없음 | `simple2.separator`, `border.hair`, `.col-line` | 내부 경계를 한 규칙으로 통합 |
-| 관계선·화살촉 | 페이지 이동 표시의 방향성 | `border.edge`, `draw/arrow.js` | 관계 의미를 위한 확장. 채운 삼각형 화살촉과 UML 기호 구분 |
-| 생명선·활성 구간·소멸 | 대응 요소 없음 | `border.lifeline`, `draw/sequence-life.js` | 시퀀스 의미를 위한 확장 |
-| 시퀀스 제어 구획·대안 제목 | 대응 요소 없음 | `simple2.separator`, `color.card`, `draw/sequence-fragments.js` | 공통 중립 경계·글자 위계를 재사용한 확장 |
+| 큰 제목 | `.fancysection-heading`, 36px·700 | `text.heading`, `font-weight.weight-title` | 크기·굵기 대응 |
+| 조작 글자 | `.navigation-button`, 15px·600. 분절 조작(탭)은 선택과 비선택 모두 600이고 실측 15.84px다 | `text.small-text`, `font-weight.semibold`, `styles/control.css` | 역할 대응. Daphnis의 탭도 선택과 비선택이 모두 semibold이고 크기는 `text.small-text`(15px)이라 공식 분절 조작의 15.84px와 같다고 적지 않는다 |
+| 본문 글자 | `body`, 18px·400 | `text.body-text`, `font.sans`, `styles/document.css` | 문서 본문 크기 대응 |
+| 그림 이름·상세·메타 | 직접 대응 요소 없음. 역할 위계의 보조 참고(2017년 영상 스틸)에서 항목 제목은 보통 굵기, 구획 제목은 semibold다 | `text.small-text`, `text.tiny-text`, `text.figure-meta`, `measure/texts.js`의 `STYLE` | 그림 밀도를 위한 확장. 카드 제목은 15px regular, 그룹 제목은 같은 15px semibold, 그림 안 글의 굵기는 regular와 semibold 둘이다. 크기와 굵기를 `STYLE`이 재고 CSS가 같은 토큰으로 그린다 |
+| 캔버스 면 | 페이지 판의 면 역할. 공식 페이지는 `body`와 섹션마다 배경이 다르다 | `color.prose-pre-background` | 페이지 판 면의 역할 대응이고 값은 같지 않다. 실제 Chrome에서 잰 공식 홈 `body`는 rgb(242, 245, 247), 기능 페이지 `body`는 rgb(213, 217, 222)이고 Daphnis 캔버스는 rgb(245, 245, 246)다. 사이트 `body` 값을 그림 캔버스에 복사하지 않는다 |
+| 캔버스 카드 | `.productcard`의 18px 모서리 | `radius.card-radius` | 바깥 카드 역할. 모든 내부 도형에 적용하지 않는다. 그룹 틀과 순서 구획은 카드와 같은 바깥 모서리(`radius.lg`)를 쓴다 |
+| 조작 모서리 | `.navigation-button`의 6px 모서리 | `radius.md` | 직접 대응 |
+| 도형 외곽선 | 대응 요소 없음 | `color.help-border`, `border-width.thin`, `.fl-node > .fl-stroke` | 공통 경계 규칙으로 확장 |
+| 표·클래스 및 병합 격자의 내부 구분선 | 대응 요소 없음 | `color.ui-line`, `border-width.hair`, `.col-line` | 내부 경계를 한 규칙으로 통합 |
+| 관계선·화살촉 | 페이지 이동 표시의 방향성 | `border-width.edge`, `draw/arrow.js` | 관계 의미를 위한 확장. 채운 삼각형 화살촉과 UML 기호 구분 |
+| 생명선·활성 구간·소멸 | 대응 요소 없음 | `border-width.lifeline`, `draw/sequence-life.js` | 시퀀스 의미를 위한 확장 |
+| 시퀀스 제어 구획·대안 제목 | 대응 요소 없음 | `color.ui-line`, `color.card`, `draw/sequence-fragments.js` | 공통 중립 경계·글자 위계를 재사용한 확장 |
 | 카드 본문 | 공식 할 일 카드의 같은 종이 면 안에 놓인 본문·목록 | `color.card`, `draw/content.js` | 바깥 카드와 같은 면. 내용이 있다는 이유로 회색 상자를 추가하지 않음 |
 | 알약(선 라벨, 배지, 개수) | 대응 요소 없음 | `.pill`, `.badge-pill`(`styles/figure.css` 한 규칙) | 중립 면과 평소 경계를 한 규칙으로 쓰는 확장 |
-| 선택·호버·키보드 초점 | 페이지 링크의 조작 상태 | `simple2.row-selection`, `simple2.hover-fill`, `simple2.focus-width` | 접근성을 포함한 확장. 키보드 초점 고리 굵기는 조작부, 재생기 캔버스, 문서와 목록 링크 모두 `simple2.focus-width` 하나다 |
-| 조작 아이콘 | 영상 재생과 방향 아이콘 | `size.control.icon-stroke`, `icons/controls.js` | 굵기·크기 위계 대응. 도형은 저장소에서 다시 그렸으나 Lucide의 이름과 구성을 따르므로 Lucide와 독립이라고 적지 않고 `NOTICE`가 저작권 고지를 맡는다 |
-| 시스템·브랜드 아이콘 | 대응 요소 없음 | `icons/symbols.js`, `icons/brands.json`, 의미색 토큰 | 종류 구분을 위한 확장. 개념 아이콘은 저장소에서 24 격자에 그렸고 브랜드는 Simple Icons 파일이다 |
+| 선택·호버·키보드 초점 | 페이지 링크의 조작 상태 | `color.search-hover`, `color.help-hover`, `outline-width.focus` | 접근성을 포함한 확장. 키보드 초점 고리 굵기는 조작부, 재생기 캔버스, 문서와 목록 링크 모두 `outline-width.focus` 하나다 |
+| 조작 아이콘 | 영상 재생과 방향 아이콘 | `spacing.figure.control.icon-stroke`, `icons/controls.js` | 굵기·크기 위계 대응. 도형은 저장소에서 다시 그렸으나 Lucide의 이름과 구성을 따르므로 Lucide와 독립이라고 적지 않고 `NOTICE`가 저작권 고지를 맡는다 |
+| 시스템·브랜드 아이콘 | 대응 요소 없음 | `src/vendor/theme/assets/icons/`, 의미색 토큰 | 종류 구분을 위한 확장. 개념 아이콘과 브랜드는 웹과 같은 공통 SVG 원본을 쓴다 |
 | 데이터·상태 의미색 | 대응 요소 없음 | `color.tag`, `color.state`, 차트 역할색 | 오류·성공·계열 구분을 위한 확장 |
-| 다크 모드 | 웹 기준 페이지에는 없다. 공식 네이티브 앱 화면 이미지 가운데 라이트·다크가 함께 있는 것(2018년 Things 3.7)이 보조 참고다 | `themes/simple2/tokens.dark.json` | 보조 참고만 있는 확장. 2018년 이미지는 현재 네이티브 버전이 아니므로 현재 앱과 같다고 판정하지 않고, 역할이 같은 요소끼리만 견준다 |
+| 다크 모드 | 웹 기준 페이지에는 없다. 공식 네이티브 앱 화면 이미지 가운데 라이트·다크가 함께 있는 것(2018년 Things 3.7)이 보조 참고다 | `tokens/tokens.dark.json` | 보조 참고만 있는 확장. 2018년 이미지는 현재 네이티브 버전이 아니므로 현재 앱과 같다고 판정하지 않고, 역할이 같은 요소끼리만 견준다 |
 
 스타일 책임은 테마의 값, 배치의 크기, 렌더러의 기하, 공통 CSS의 상태로 나눈다. 도형 종류마다 같은 경계 값을 다시 쓰지 않는다. 클래스 구획도 표의 `col-line`을 사용한다. 원본에 명시한 의미색은 공통 기본값보다 우선한다. 페이지가 시스템 글꼴을 써도 그림 측정과 출력 글꼴은 바꾸지 않는다.
 
@@ -189,7 +189,7 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 | I | `test/escaping.test.js` | 글 이스케이프와 사용자 아이콘의 안전 | [재생](playback.md), [배치](layout.md) |
 | L | `test/cli.test.js` | `render`, `check`, `gallery`의 파일, 종료 코드, 이름 겹침(#176), 쓰기 실패(#177) | [재생](playback.md#결과-파일) |
 | M | `test/markdown.test.js` | `md`의 블록, 소유 표시, 정리, 접기, 잠금, 쓰기 실패(#176) | [마크다운](markdown.md) |
-| G(도구) | `test/tooling.test.js`(G1~G3) | 이 저장소의 `npm run check`가 쓰는 도구: 하드코딩 검사가 JS의 정규식·문자열 뒤 색은 찾고 주석과 정규식 속은 건너뛰며(G1), CSS 주석 뒤의 선언은 계속 검사하는지(G2), 테마 사본의 출처 버전이 `package.json`의 design-tokens 태그와 다르면 두 버전을 밝히며 실패하는지(G3). `G` 번호는 위 `authoring` 시험과 겹치지만 파일이 다르다 | [아키텍처](../architecture.md#토큰-만들기) |
+| G(도구) | `test/tooling.test.js`(G1~G3) | 이 저장소의 `npm run check`가 쓰는 도구: 하드코딩 검사가 JS의 정규식·문자열 뒤 색은 찾고 주석과 정규식 속은 건너뛰며(G1), CSS 주석 뒤의 선언은 계속 검사하는지(G2), 공통 디자인 사본이 manifest 해시와 다르면 렌더링 전에 실패하는지(G3). `G` 번호는 위 `authoring` 시험과 겹치지만 파일이 다르다 | [아키텍처](../architecture.md#공통-디자인-가져오기) |
 | P | `test/package.test.js` | 패키지에 오르는 파일과 진입점 | [마크다운](markdown.md) |
 | T | `test/text.test.js` | 글을 읽는 방식(백틱이 글자인지 코드인지), 측정이 놓은 글 자리를 그리는 쪽과 그림 검사가 읽는 것, 긴 제목의 줄바꿈(카드 머리, 차트·시간 머리), 카드 내용의 관계 그래프 이름이 모든 카드 종류에서 잘리거나 겹치지 않는 폭(T13, 폭을 정하는 `measure/content.js` 한 곳) | [배치](layout.md), [그림 문법](figure-syntax.md) |
 | Q | `test/sampler.test.js`(Q1~Q8) | 순수 표본 추출기(`player/sample.js`)가 장면과 시각만으로 모습을 정하는 규칙 | [재생](playback.md) |
@@ -217,7 +217,7 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 
 ### 예제와 검증 범위
 
-예제 30개는 `test/examples.test.js`가 현재 문법으로 strict 빌드하고, 첫 화면 그림 `docs/assets/how-it-works.dap`은 CI의 `check --strict`가 읽는다. 첫 화면 그림 쇼케이스(`docs/assets/showcase/`의 일곱 쌍)는 시험과 CI가 읽지 않지만, `npm run figures`가 예제와 첫 화면 그림과 함께 strict로 빌드한다(로컬 실행이고 CI 관문이 아니다). 실제 Chrome에서 확인한 범위는 아래와 같고, 그 밖은 검증 요구사항, 미완료다. 이전 모양의 화면 검수는 이번 개편(공통 장면 기본값, 한 낱말 색, 공통 도구 막대, Things 색 역할)의 근거가 아니다. 시험과 빌드를 돌린 결과와 날짜, 개수는 이슈가 맡고 이 표에 적지 않는다.
+예제 30개는 `test/examples.test.js`가 현재 문법으로 strict 빌드하고, 첫 화면 그림 `docs/assets/how-it-works.dap`은 CI의 `check --strict`가 읽는다. 첫 화면 그림 쇼케이스(`docs/assets/showcase/`의 일곱 쌍)도 CI의 원본 검사와 생성 그림 대조가 읽는다. `npm run figures`는 예제와 첫 화면 그림, 쇼케이스, 문서 그림을 함께 갱신한다. 실제 Chrome에서 확인한 범위는 아래와 같고, 그 밖은 검증 요구사항, 미완료다. 이전 모양의 화면 검수는 이번 개편(공통 장면 기본값, 한 낱말 색, 공통 도구 막대, Things 색 역할)의 근거가 아니다. 시험과 빌드를 돌린 결과와 날짜, 개수는 이슈가 맡고 이 표에 적지 않는다.
 
 | 검증 대상 | 실제 범위와 근거 | 증명하지 않는 것 |
 |---|---|---|
@@ -225,6 +225,7 @@ Daphnis는 `daphnis 2` 원본 하나로 구조, 순서, 상태, 스키마, API, 
 | 개발 그림 가족과 차트 종류의 경계 | `test/kinds.test.js`, `test/charts.test.js`: 독립한 최소 원본으로 의미와 거절을 본다 | 모든 입력 조합, 그림의 모양 |
 | 결과물 | `test/exports.test.js`: 같은 원본이 같은 SVG와 HTML을 내고, 정본 내려받기가 바이트까지 같다 | 브라우저에서의 동작, 재생 중 모든 순간 |
 | 순수 표본 추출기 | `test/sampler.test.js`(Q1~Q8): 실제 `player/sample.js`와 `curve.js`를 `node:vm`에서 돌리고 재생 데이터는 공개 진입점 `toHtml`이 실은 JSON을 읽는다. 이력과 무관한 같은 모습, 정지 장면의 마지막 모습, 같은 선을 쓰는 정방향·역방향 점의 선 켜짐, 잃은 점이 도착으로 보이지 않음, 같은 시각의 넘겨받기, 선 라벨 알약의 줄어듦, 마지막 값 유지, 소수 배속에서 반올림한 표시 길이 뒤에 효과가 끝난 모습을 본다 | 브라우저의 시계와 DOM에 쓰는 일 |
+| 공통 탭 교체 후 확인(Chrome) | 공통 탭을 사용하는 모든 예제 첫 장면을 실제 CSS 너비 320·390·430·1440의 라이트·다크로 다시 확인했다. 페이지와 탭에 가로 넘침이 없고 선택 글자는 두 테마에서 흰색이다. 홈페이지 삽입 예제에서는 탭 선택·방향키·원문 복사·반복 트래픽을 확인했다 | 첫 장면의 기하와 공통 조작 확인이다. 모든 움직임 프레임이나 실제 모바일 기기를 확인한 것은 아니다 |
 | 기하 확인(Chrome) | 현재 소스의 예제 30개 첫 장면을 실제 Chrome에서 폭 320·390·430·1440(CSS 픽셀), 라이트·다크로 확인했다. 문서 가로 넘침, SVG가 부모 캔버스 밖으로 나가는지, 탭의 가로 경계를 쟀고 실패가 없었다. 폭 390 라이트에서는 움직임 줄이기를 켜고 모든 장면 탭을 눌러 마지막 상태의 같은 경계를 확인했다. 공통 부품을 고치면 영향받은 경로를 다시 본다 | 모든 폭에서 모든 장면을 확인한 것은 아니다. 기하 확인은 글자의 읽힘이나 재생 중 모든 프레임, 임의 입력, 실제 기기의 검수가 아니다. 세로로 긴 그림의 탭은 그림 아래에 있고 페이지 스크롤로 닿는다 |
 | 첫 장면 화면 검수(Chrome) | 현재 소스의 모든 예제 첫 장면을 폭 430의 라이트·다크로 캡처하고 눈으로 대조했다. 카드 면, 글자 겹침, 범례, 노란 계열의 테두리, 도형과 탭 경계를 봤다. 통합 예제는 세 참여자와 추적 끝이 모두 보인다. 복잡한 구조·시퀀스는 전체 그림을 맞추면 글자가 작아져 전체화면 확대로 읽는다 | 화면의 모든 글자가 모바일 개요 크기에서 읽힌다는 판정은 아니다. 모든 폭·장면·재생 중 프레임·실제 기기와 Safari를 보지는 않았다 |
 | 수정 뒤 화면 재검수(Chrome) | 위 결함을 고친 현재 소스에서 영향받은 화면을 눈으로 다시 봤다: 폭 390 라이트의 면적, 지표, 상태, 워터폴, 산점도, 흐름, 메모리, 스택, 막대 예제와 폭 390 다크의 통합 예제 전체 페이지. 눈금이 고르게 솎이고, API 1·2·3 열이 선언한 순서이며, 워터폴 바닥 띠가 차트 바탕과 같고, 자기 전이 고리가 도형에서 떨어져 있고, 산점도 점 라벨이 자기 점에 가까운 쪽에 놓이는 것을 이 화면에서 봤다 | 받아들인 남은 한계: 스택의 고정 연결점에서 생기는 선 교차, 점이 몰린 산점도에서 점 라벨의 소유가 늘 분명하다는 보장 없음, 복잡한 개요 그림의 작은 글자는 전체화면 확대에 의존. 위 화면 밖의 폭, 테마, 장면, 재생 중 모든 프레임, 실제 휴대폰의 Safari는 확인하지 않았다(검증 요구사항, 미완료) |

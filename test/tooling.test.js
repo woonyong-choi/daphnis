@@ -8,7 +8,7 @@ import { test } from 'node:test';
 import { ROOT, workspace } from './support.js';
 
 const node = (args, cwd) => spawnSync(process.execPath, args, { cwd, encoding: 'utf8' });
-const checkTokens = (dir) => node([join(ROOT, 'scripts/check-tokens.mjs'), dir, '--tokens', join(ROOT, 'src/tokens.json')], ROOT);
+const checkTokens = (dir) => node([join(ROOT, 'src/vendor/theme/ui/build/check-tokens.mjs'), dir, '--tokens', join(ROOT, 'src/vendor/theme/tokens.json')], ROOT);
 const hits = (run) => run.stdout.trim().split('\n').filter((line) => !line.startsWith('total')).map((line) => line.replace(/^.*[\\/]/, ''));
 
 test('G1 a hard-coded color in JavaScript is found where the language puts it: after a regex or string that contains <!--, and not inside comments or regex literals', (t) => {
@@ -28,19 +28,15 @@ test('G2 a CSS /* */ comment hides its values and the declaration after it is st
   assert.deepEqual(hits(checkTokens(dir)), ['a.css:2: hex color: #00ff00']);
 });
 
-test('G3 the theme copy must come from the design-tokens tag that package.json pins: a bare version bump fails the check and names both versions', (t) => {
+test('G3 an edited design artifact fails verification before rendering', (t) => {
   const dir = workspace(t);
-  for (const name of ['scripts/sync-theme.mjs', 'scripts/theme-snapshot.mjs', 'theme.config.json', 'src/design-theme', 'src/tokens.json', 'src/tokens.dark.json']) {
+  for (const name of ['scripts/check-design.mjs', 'src/vendor/theme']) {
     mkdirSync(dirname(join(dir, name)), { recursive: true });
     cpSync(join(ROOT, name), join(dir, name), { recursive: true });
   }
-  const manifest = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'));
-  writeFileSync(join(dir, 'package.json'), JSON.stringify(manifest));
-  const synced = node(['scripts/sync-theme.mjs', '--check'], dir);
-  assert.equal(synced.status, 0, synced.stderr);
-  manifest.devDependencies['@woonyong-choi/design-tokens'] = 'github:woonyong-choi/design-tokens#v9.9.9';
-  writeFileSync(join(dir, 'package.json'), JSON.stringify(manifest));
-  const bumped = node(['scripts/sync-theme.mjs', '--check'], dir);
-  assert.notEqual(bumped.status, 0);
-  assert.match(bumped.stderr, /theme copy is from design-tokens \d+\.\d+\.\d+, but package\.json pins v9\.9\.9/);
+  assert.equal(node(['scripts/check-design.mjs'], dir).status, 0);
+  writeFileSync(join(dir, 'src/vendor/theme/tokens.css'), 'changed');
+  const changed = node(['scripts/check-design.mjs'], dir);
+  assert.notEqual(changed.status, 0);
+  assert.match(changed.stderr, /modified design artifact: tokens.css/);
 });

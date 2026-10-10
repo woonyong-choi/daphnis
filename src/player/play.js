@@ -53,7 +53,7 @@ function createPlayer(root, data) {
     request: undefined,
     tick: (now) => drawFrame(player, now),
   };
-  player.tabs = createTabs(root.querySelector('.fl-tabs'), scenes, (si) => selectScene(player, si));
+  player.tabs = bindTabs(root.querySelector('.app-tablist'), (si) => selectScene(player, si));
   return player;
 }
 
@@ -106,7 +106,8 @@ function renderScene(player) {
 function enterScene(player, si) {
   const { clock } = player;
   player.scene = si;
-  markTabs(player.tabs, si);
+  player.tabs.select(si);
+  player.tabs.buttons[si].ownerDocument.getElementById('scene-panel').setAttribute('aria-labelledby', player.tabs.buttons[si].id);
   clock.elapsed = 0;
   clock.anchor = undefined;
   clock.ended = false;

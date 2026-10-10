@@ -5,7 +5,7 @@ import { canvasOf } from './canvas.js';
 import { createGlyphSet, embedFonts } from './measure/fonts.js';
 import { paintCss } from './draw/paint.js';
 import { hasStatus } from './draw/status.js';
-import { STYLES, figureDefs, patternDefs } from './styles.js';
+import { STYLES, tokensFor, figureDefs, patternDefs } from './styles.js';
 import { escapeXml, plainText, roundCoord as r } from './text.js';
 import { figureContent } from './html/content.js';
 import { responsiveContent } from './html/responsive.js';
@@ -81,10 +81,10 @@ async function canonicalHtml(result, name) {
 ${faviconLinks()}
 ${EMBED_SCRIPT}
 <style>${fonts}
-${STYLES.tokens}${STYLES.control}${STYLES.player}${STYLES.figure}${paintCss(result.scene)}${STYLES.chart}${charts ? STYLES.chartData : ''}${charts ? chartMotionCss(timeline.growMs, dotAts) : ''}${hasStatus(timeline) ? STYLES.status : ''}</style>
+${tokensFor(Object.values(STYLES).filter(value => value !== STYLES.tokens).join('\n') + paintCss(result.scene) + panelsMarkup(content, title, defs) + JSON.stringify(content.data))}${STYLES.control}${STYLES.player}${STYLES.figure}${paintCss(result.scene)}${STYLES.chart}${charts ? STYLES.chartData : ''}${charts ? chartMotionCss(timeline.growMs, dotAts) : ''}${hasStatus(timeline) ? STYLES.status : ''}</style>
 </head>
 <body>
-${figureFrame({ canvas: panelsMarkup(content, title, defs), style: figure.width === 'wide' ? ` style="--figure-canvas: ${canvasOf(figure)}px"` : '', narrow: responsive ? `<template class="fl-narrow">${panelsMarkup(responsive.content, title)}</template>` : '', source: typeof figure.source === 'string' ? figure.source : undefined })}
+${figureFrame({ labels: content.data.steps.map(step => step.label), canvas: panelsMarkup(content, title, defs), style: figure.width === 'wide' ? ` style="--figure-canvas: ${canvasOf(figure)}px"` : '', narrow: responsive ? `<template class="fl-narrow">${panelsMarkup(responsive.content, title)}</template>` : '', source: typeof figure.source === 'string' ? figure.source : undefined })}
 ${dataRegion(figure)}
 <script>
 ${PLAYER_SCRIPT}

@@ -9,7 +9,7 @@ import { markAttrs, markId } from './marks.js';
 import { DOT, ROW, SIZE, SPACE, TEXT, WIDTH, PAD, seriesPaint, seriesStroke } from './metrics.js';
 import { markShape } from './shape.js';
 import { formatChange, seriesFormats } from './scale.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 
 const ARROW_MIN = SIZE.chart['arrow-min'];
 const ARROW = roleArrow(CHART_ARROW.dumbbell);
@@ -33,7 +33,7 @@ function dumbbellReach(chart, unit) {
     const change = formatChange(before, after);
     const isAfterRight = unit.at(after) >= unit.at(before);
     const rightText = measure((isAfterRight ? formatSecond(after) : formatFirst(before)), TEXT['11'], isAfterRight ? 'numSemibold' : 'num');
-    const tail = SPACE['3'] + rightText + (change ? SPACE['6'] + measure(change, TEXT['13'], 'numSemibold') : 0);
+    const tail = SPACE["1-5"] + rightText + (change ? SPACE["3"] + measure(change, TEXT['13'], 'numSemibold') : 0);
     const bounds = [first, second].flatMap((s) => boundsOf(row, s));
     return [...[before, after].map((value) => ({ value, extra: DOT + tail })), ...bounds.map((value) => ({ value, extra: tail }))];
   });
@@ -69,10 +69,10 @@ function rangeBar(ctx, row, i) {
 function endMark(ctx, [x1, x2], { k, raw }) {
   const { chart, cy } = ctx;
   const dir = x2 >= x1 ? 1 : -1;
-  const edge = DOT + SPACE['1'];
+  const edge = DOT + SPACE["0-5"];
   const dot = markShape({ shape: seriesPaint(chart, 1).shape, cx: x2, cy, radius: DOT, attrs: dotAttrs(chart, 1, ` class="chart-after pop"${markAttrs(chart, markId(chart, 1, k), { raw, paint: seriesPaint(chart, 1) })}`) });
   const hidden = Math.abs(x2 - x1) - 2 * edge < ARROW_MIN ? ' visibility="hidden"' : '';
-  return `<line x1="${r(x1 + dir * edge)}" y1="${r(cy)}" x2="${r(x2 - dir * (edge + headReach(values.border.strong).cap))}" y2="${r(cy)}" class="chart-arrow ${ARROW.cls} pop"${ARROW.end}${hidden}${markAttrs(chart, markId(chart, 1, k, '.a'), { raw, paint: seriesPaint(chart, 1) })}/>${dot}`;
+  return `<line x1="${r(x1 + dir * edge)}" y1="${r(cy)}" x2="${r(x2 - dir * (edge + headReach(values["border-width"].strong).cap))}" y2="${r(cy)}" class="chart-arrow ${ARROW.cls} pop"${ARROW.end}${hidden}${markAttrs(chart, markId(chart, 1, k, '.a'), { raw, paint: seriesPaint(chart, 1) })}/>${dot}`;
 }
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -84,7 +84,7 @@ function valueTextEdges(ctx, row, [x1, x2]) {
     const x = i ? x2 : x1;
     return [x - DOT, x + DOT, ...boundsOf(row, s).map(scale.at)];
   });
-  return [Math.min(...ends) - SPACE['3'], Math.max(...ends) + SPACE['3']];
+  return [Math.min(...ends) - SPACE["1-5"], Math.max(...ends) + SPACE["1-5"]];
 }
 
 // cost: time O(1), heap O(1), stack O(1)
@@ -118,7 +118,7 @@ export function drawDumbbells(figure, top) {
   const names = rowLabelLayout(chart);
   const summaries = chart.layout ? compactSummaries(chart, formats) : undefined;
   const summaryH = summaries ? Math.max(...summaries.map((lines) => lines.at(-1).dy)) + TEXT['13'] : 0;
-  const pitch = chart.layout ? names.space + DOT * 2 + SPACE['6'] + summaryH + SPACE['11'] : ROW;
+  const pitch = chart.layout ? names.space + DOT * 2 + SPACE["3"] + summaryH + SPACE["5-5"] : ROW;
   const parts = chart.rows.map((row, k) => dumbbellRow({ chart, scale, names, summaries, top: top + k * pitch, cy: top + k * pitch + (chart.layout ? names.space + DOT : ROW / 2), formats }, row, k));
   return finishRowChart(chart, { parts, scale, top, bottom: top + chart.rows.length * pitch });
 }
@@ -133,10 +133,10 @@ function compactSummaries(chart, formats) {
     const change = formatChange(...chart.series.map((s) => row.values[s.id]));
     let dy = 0;
     return chart.series.flatMap((s, i) => {
-      const reserve = i && change ? measure(change, TEXT['13'], 'numSemibold') + SPACE['6'] : 0;
+      const reserve = i && change ? measure(change, TEXT['13'], 'numSemibold') + SPACE["3"] : 0;
       return wrap(`${s.label} ${formats[i](row.values[s.id])}`, room - reserve, { size: TEXT['11'], face: i ? 'numSemibold' : 'num' }).map((text) => {
         const line = { i, text, dy };
-        dy += TEXT['11'] * values.simple2['figure-leading'];
+        dy += TEXT['11'] * values.leading.normal;
         return line;
       });
     });
@@ -149,7 +149,7 @@ function compactSummaries(chart, formats) {
 function compactTexts(ctx, row, k) {
   const { chart, cy, summaries } = ctx;
   const lines = summaries[k];
-  const top = cy + DOT + SPACE['6'];
+  const top = cy + DOT + SPACE["3"];
   const parts = lines.map((line, n) => inkGroup(k, valueText({ x: PAD, cy: top + line.dy }, line.text, `chart-value ${line.i ? 'second' : 'first'} late`, { chart, id: markId(chart, line.i, k, `.c${n}`), raw: row.values[chart.series[line.i].id], paint: seriesPaint(chart, line.i) }), line.i));
   const ratio = formatChange(...chart.series.map((s) => row.values[s.id]));
   parts.push(inkGroup(k, `<text x="${chart.layout.width - PAD}" y="${r(centerBaseline(top + lines.at(-1).dy, TEXT['13']))}" class="chart-ratio late"${markAttrs(chart, markId(chart, 1, k, '.r'), { raw: row.values[chart.series[1].id], isText: true, paint: seriesPaint(chart, 1) })}>${ratio}</text>`, 1));

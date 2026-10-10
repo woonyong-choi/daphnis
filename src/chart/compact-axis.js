@@ -8,7 +8,7 @@ import { SPACE, TEXT } from './metrics.js';
 // basis: estimate
 // 눈금 목록의 이웃 글자 사이에 한 칸이 남는지 본다.
 function fits(list) {
-  return list.every((tick, i) => i === 0 || list[i - 1].x + list[i - 1].width / 2 + SPACE['6'] <= tick.x - tick.width / 2);
+  return list.every((tick, i) => i === 0 || list[i - 1].x + list[i - 1].width / 2 + SPACE["3"] <= tick.x - tick.width / 2);
 }
 
 // cost: time O(t·d + n²), heap O(t + n), stack O(1)
@@ -16,7 +16,7 @@ function fits(list) {
 // basis: estimate
 export function compactAxis(scale, y, title) {
   const size = TEXT['11'];
-  const lineHeight = size + SPACE['6'];
+  const lineHeight = size + SPACE["3"];
   const ticks = scale.ticks.map((value, i) => ({ x: scale.at(value), label: scale.labels[i], width: measure(scale.labels[i], size, 'num') }));
   const first = ticks[0], last = ticks.at(-1);
   const start = first.x, end = last.x;
@@ -25,7 +25,7 @@ export function compactAxis(scale, y, title) {
   // 양 끝을 지키며 같은 걸음으로 건너뛴 눈금 중 가장 촘촘히 들어가는 것을 쓴다. 눈금 수가 달라도 간격이 고르다.
   const stride = Array.from({ length: ticks.length - 1 }, (_, i) => i + 1).find((k) => (ticks.length - 1) % k === 0 && fits(ticks.filter((_, i) => i % k === 0)));
   const stagger = stride === undefined;
-  const baseline = y + size + SPACE['3'];
+  const baseline = y + size + SPACE["1-5"];
   const visible = stagger ? [first, last] : ticks.filter((_, i) => i % stride === 0);
   const parts = visible.map((tick) => `<text x="${r(tick.x)}" y="${r(baseline + (stagger && tick === last ? lineHeight : 0))}" class="chart-tick">${tick.label}</text>`);
   let bottom = baseline + (stagger ? lineHeight : 0);
@@ -33,5 +33,5 @@ export function compactAxis(scale, y, title) {
     bottom += lineHeight;
     parts.push(`<text x="${r(end)}" y="${r(bottom)}" class="chart-unit">${renderRich(line)}</text>`);
   }
-  return { svg: parts.join(''), bottom: bottom + SPACE['1-5'] };
+  return { svg: parts.join(''), bottom: bottom + SPACE["0-75"] };
 }

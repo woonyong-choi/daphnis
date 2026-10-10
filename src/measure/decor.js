@@ -1,16 +1,16 @@
 // 도형 윗줄과 그룹 제목 줄에 놓는 장식(아이콘, 글자 배지, 복제 개수 `(N)`)의 크기와 자리. 여기서 정한 크기를 배치에 넘기고 그대로 그린다.
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { measure } from './fonts.js';
 
-const SPACE = values.space;
-const SIZE = values.size;
+const SPACE = values.spacing;
+const SIZE = values.spacing.figure;
 
-/** 알약 안 글. 배지는 흑백에서도 도형의 뜻을 글자로 남기는 자리라 본문 글보다 작지 않다. 크기는 작은 표시(simple2.micro-size)이고 status.css와 figure.css의 `.badge`가 같은 토큰을 그린다. */
-export const BADGE_STYLE = Object.freeze({ size: values.simple2['micro-size'], face: 'semibold' });
+/** 알약 안 글. 배지는 흑백에서도 도형의 뜻을 글자로 남기는 자리라 본문 글보다 작지 않다. 크기는 작은 표시(text.figure-meta)이고 status.css와 figure.css의 `.badge`가 같은 토큰을 그린다. */
+export const BADGE_STYLE = Object.freeze({ size: values.text["figure-meta"], face: 'semibold' });
 /** 장식 사이 간격과 알약 높이, 도형 윗줄과 이름 사이 간격 */
-export const DECOR = Object.freeze({ gap: SPACE['2'], pillH: SIZE.pill.height, rowGap: SPACE['2'], pillPad: SPACE['7'] });
+export const DECOR = Object.freeze({ gap: SPACE["1"], pillH: SIZE.pill.height, rowGap: SPACE["1"], pillPad: SPACE["3-5"] });
 /** 복제 개수(count)를 가진 상자의 뒤 윤곽 한 겹 간격 */
-export const STACK_STEP = SPACE['2'];
+export const STACK_STEP = SPACE["1"];
 
 // cost: time O(n), heap O(1), stack O(1)
 // vars: n = 글자 수

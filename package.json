@@ -40,16 +40,15 @@
     "fuzz": "node scripts/fuzz-layout.mjs",
     "perf": "node scripts/perf-chips.mjs",
     "checkdoc": "node scripts/build-check-doc.mjs",
-    "tokens": "node scripts/build-tokens.mjs src/tokens.json --out src",
-    "check": "node scripts/sync-theme.mjs --check && node scripts/build-tokens.mjs src/tokens.json --check && node scripts/check-tokens.mjs src",
+    "check": "node scripts/check-design.mjs && node src/vendor/theme/ui/build/check-tokens.mjs src --tokens src/vendor/theme/tokens.json",
     "check:sources": "node src/cli.js check examples/*.dap docs/assets/*.dap docs/assets/showcase/*.dap --strict",
     "check:figures": "node scripts/run-md.mjs --check --strict && node scripts/build-showcase.mjs --check",
     "check:advisory": "node scripts/check-cost-comments.mjs --advisory src test && node scripts/check-size.mjs --advisory src scripts",
     "examples": "node scripts/build-catalog.mjs",
     "showcase": "node scripts/build-showcase.mjs",
     "figures": "npm run catalog && node src/cli.js render docs/assets/how-it-works.dap && npm run showcase && node scripts/run-md.mjs",
-    "theme:sync": "node scripts/sync-theme.mjs",
-    "catalog": "npm run examples"
+    "catalog": "npm run examples",
+    "design:sync": "node src/vendor/theme/ui/build/sync.mjs"
   },
   "engines": {
     "node": ">=20"
@@ -60,11 +59,16 @@
     "elkjs": "^0.9.3",
     "fontkit": "^2.0.4",
     "jetbrains-mono": "^1.0.6",
+    "postcss": "8.5.29",
     "pretendard": "^1.3.9",
     "subset-font": "^2.9.0"
   },
   "devDependencies": {
-    "@woonyong-choi/design-tokens": "github:woonyong-choi/design-tokens#v0.1.1",
     "playwright-core": "^1.63.0"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./design-manifest.json": "./src/vendor/theme/manifest.json",
+    "./package.json": "./package.json"
   }
 }

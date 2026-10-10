@@ -32,14 +32,14 @@ export function tickReach(unit) {
 // basis: estimate
 // 기준선 라벨은 기준선 오른쪽에서 시작한다.
 function ruleReach(rules) {
-  return rules.map((rule) => ({ value: rule.value, extra: SPACE['2'] + measure(rule.label, TEXT['11']) }));
+  return rules.map((rule) => ({ value: rule.value, extra: SPACE["1"] + measure(rule.label, TEXT['11']) }));
 }
 
 // 눈금 글자 기준선은 축선에서 글자 높이 더하기 한 칸, 축 제목 기준선은 그 아래 글자 한 줄과 한 칸이다.
-const TICK_BASE = TEXT['11'] + SPACE['3'];
-const TITLE_BASE = TEXT['11'] * 2 + SPACE['6'];
+const TICK_BASE = TEXT['11'] + SPACE["1-5"];
+const TITLE_BASE = TEXT['11'] * 2 + SPACE["3"];
 // 마지막 글자 줄의 먹이 기준선 아래로 내려오는 몫. 위쪽은 제목 글자 줄 윗면이 PAD 아래에서 시작해 먹이 그만큼 내려와 있어, 아래도 같게 둬 위아래 여백이 같아 보이게 한다.
-const LINE_DROP = SPACE['1-5'];
+const LINE_DROP = SPACE["0-75"];
 
 // cost: time O(t), heap O(out), stack O(1)
 // vars: t = 눈금 수, out = 만든 SVG 글자 수
@@ -74,7 +74,7 @@ function drawValueAxis(chart, scale, y) {
 // 가로 기준선 라벨 자리. 오른쪽 끝이 기본이고, 데이터가 더 많이 가리면 왼쪽 끝에 둔다. 가린 수가 같으면 오른쪽이다.
 function ruleLabelSide(rule, at, { from, to, occupied }) {
   const width = measure(rule.label, TEXT['11']);
-  const [top, bottom] = [at - SPACE['2'] - TEXT['11'], at - SPACE['2']];
+  const [top, bottom] = [at - SPACE["1"] - TEXT['11'], at - SPACE["1"]];
   const hits = (x0, x1) => occupied.filter((o) => o.x1 > x0 && o.x0 < x1 && o.y1 > top && o.y0 < bottom).length;
   return hits(to - width, to) <= hits(from, from + width) ? 'end' : 'start';
 }
@@ -91,9 +91,9 @@ export function drawRules(rules, scale, { axis, from, to, occupied = [], labels 
   return rules
     .map((rule) => {
       const at = scale.at(rule.value);
-      if (axis === 'x') return `<line x1="${r(at)}" x2="${r(at)}" y1="${r(from - SPACE['3'])}" y2="${r(to)}" class="chart-rule"/>${labels ? `<text x="${r(at + SPACE['2'])}" y="${r(from - SPACE['4'])}" class="chart-rule-label">${renderRich(rule.label)}</text>` : ''}`;
+      if (axis === 'x') return `<line x1="${r(at)}" x2="${r(at)}" y1="${r(from - SPACE["1-5"])}" y2="${r(to)}" class="chart-rule"/>${labels ? `<text x="${r(at + SPACE["1"])}" y="${r(from - SPACE["2"])}" class="chart-rule-label">${renderRich(rule.label)}</text>` : ''}`;
       const isEnd = ruleLabelSide(rule, at, { from, to, occupied }) === 'end';
-      return `<line x1="${r(from)}" x2="${r(to)}" y1="${r(at)}" y2="${r(at)}" class="chart-rule"/>${labels ? `<text x="${r(isEnd ? to : from)}" y="${r(at - SPACE['2'])}" class="chart-rule-label${isEnd ? ' end' : ''}">${renderRich(rule.label)}</text>` : ''}`;
+      return `<line x1="${r(from)}" x2="${r(to)}" y1="${r(at)}" y2="${r(at)}" class="chart-rule"/>${labels ? `<text x="${r(isEnd ? to : from)}" y="${r(at - SPACE["1"])}" class="chart-rule-label${isEnd ? ' end' : ''}">${renderRich(rule.label)}</text>` : ''}`;
     })
     .join('');
 }
@@ -126,7 +126,7 @@ export function rowValueScale(chart, { kind, min: low, max: high, reaches }) {
  */
 export function finishRowChart(chart, { parts, over = [], scale, top, bottom }) {
   const rules = chart.layout ? '' : drawRules(chart.rules, scale, { axis: 'x', from: top, to: bottom });
-  const axis = drawValueAxis(chart, scale, bottom + SPACE['4']);
+  const axis = drawValueAxis(chart, scale, bottom + SPACE["2"]);
   const svg = [...parts, rules, ...over, axis.svg];
   return { svg: svg.join('\n'), bottom: axis.bottom, rowKeys: chart.rows.map((row) => row.label), fits: chart.rows.map((row) => labelFit(row.label, row.line)) };
 }

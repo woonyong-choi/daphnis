@@ -5,9 +5,9 @@ import { FIGURE_PAD } from '../canvas.js';
 import { measure } from '../measure/fonts.js';
 import { STYLE } from '../measure/texts.js';
 import { shiftScene } from './shift.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 
-const SIZE = values.size;
+const SIZE = values.spacing.figure;
 
 // cost: time O(p·(s + e·pts)), heap O(p·(s + e·pts)), stack O(1)
 // vars: p = 판 수, s = 도형·그룹 수, e = 선 수, pts = 경로 점 수

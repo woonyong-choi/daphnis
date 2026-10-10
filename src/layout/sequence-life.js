@@ -1,8 +1,8 @@
 // 생명선 구간과 활성 막대를 메시지의 실제 끝 위치에서 만든다.
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 
-const SPACE = values.space;
-const ACTIVATION_WIDTH =SPACE['6'];
+const SPACE = values.spacing;
+const ACTIVATION_WIDTH =SPACE["3"];
 
 // cost: time O(p + m + a), heap O(p + a), stack O(1)
 // vars: p = 참여자 수, m = 메시지 수, a = 활성 명령 수
@@ -36,7 +36,7 @@ export function placeSequenceLife(scene, messages, owners, sceneCount) {
       for (const bar of stacks.get(hop.to)) bar.h = end.y - bar.y;
       stacks.get(hop.to).length = 0;
       const direction = Math.sign(edge.points.at(-2).x - end.x);
-      end.x += direction * (SPACE['4'] + SPACE['2']);
+      end.x += direction * (SPACE["2"] + SPACE["1"]);
     }
     for (const action of beat.activations ?? []) placeActivation(action, { lines, stacks, activations, si }, end.y);
   });
@@ -93,6 +93,6 @@ function placeActivation(action, ctx, y) {
   } else {
     // 앞 장면에서 연 막대는 장면이 바뀌며 닫힌 것으로 본다(막대는 자기 장면 안에서만 보인다).
     const bar = stack.pop();
-    if (bar) bar.h = Math.max(SPACE['2'], y - bar.y);
+    if (bar) bar.h = Math.max(SPACE["1"], y - bar.y);
   }
 }

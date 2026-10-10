@@ -4,7 +4,7 @@
 import { CHIP_CLEAR, CHIP_GAP, sizeChip } from './chip.js';
 import { issuesOfHop } from './chip-plan.js';
 import { chipLines, chipObstacles } from './draw/boxes.js';
-import { values } from './tokens.js';
+import { values } from './vendor/theme/tokens.js';
 
 const STEP = values.scale['chip-room-step'];
 const TRIES = values.scale['chip-room-tries'];

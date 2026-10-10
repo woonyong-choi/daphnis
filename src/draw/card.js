@@ -6,7 +6,7 @@ import { drawChartBody } from './chart.js';
 import { STACK_STEP } from '../measure/decor.js';
 import { queueSlots } from '../measure/queue.js';
 import { roundCoord as r, escapeXml } from '../text.js';
-import { tokens, values } from '../tokens.js';
+import { tokens, values } from '../vendor/theme/tokens.js';
 import { drawDecor } from './decor.js';
 import { drawGridBody } from './grid.js';
 import { LINE_DASH, drawSurface, surfaceClip } from './surface.js';
@@ -64,7 +64,7 @@ function drawParts(it, { decorate, glyphs, index }) {
   const clip = `tc-${index}`;
   const rows = it.tableRows.map((row) => {
     const key = `${it.id}.${row.id}`;
-    const edge = values.border.thin;
+    const edge = values["border-width"].thin;
     const face = `<rect x="${r(it.x + edge)}" y="${r(it.y + row.y)}" width="${r(it.w - edge * 2)}" height="${r(row.h)}" class="part-bg ${decorate('part', 0, key)}"/>`;
     return `<g class="fl-part" data-part="${escapeXml(key)}">${face}${drawTexts(row.texts, it, glyphs)}</g>`;
   });
@@ -85,7 +85,7 @@ function drawChart(it, stroke, { decorate, glyphs, index }) {
 // basis: estimate
 /** 큐 칸 하나(측정이 놓은 칸 사각형). 빈 칸과 찬 칸(draw/values.js)이 같은 칸 윤곽을 쓰고 면과 선 색만 다르다. */
 export function drawSlot(s, { fill, stroke }) {
-  return `<rect x="${r(s.x)}" y="${r(s.y)}" width="${r(s.w)}" height="${r(s.h)}" rx="${values.radius.sm}" fill="${fill}" stroke="${stroke}" stroke-width="${values.border.thin}"/>`;
+  return `<rect x="${r(s.x)}" y="${r(s.y)}" width="${r(s.w)}" height="${r(s.h)}" rx="${values.radius.sm}" fill="${fill}" stroke="${stroke}" stroke-width="${values["border-width"].thin}"/>`;
 }
 
 // cost: time O(s), heap O(s), stack O(1)

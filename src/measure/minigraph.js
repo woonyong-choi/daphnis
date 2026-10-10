@@ -1,15 +1,15 @@
 // 카드 안 관계 그래프의 배치. 이름을 관계 깊이별 열에 놓고, 열을 건너뛰는 관계는 위로 휘게 자리를 비운다.
 import { depthsOf } from '../source/minigraph.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { measure } from './fonts.js';
 import { STYLE } from './texts.js';
 
-const SPACE = values.space;
-const NODE_H = values.size.pill.height;
-const ROW_GAP = SPACE['3'];
+const SPACE = values.spacing;
+const NODE_H = values.spacing.figure.pill.height;
+const ROW_GAP = SPACE["1-5"];
 
 // 이름 알약 하나의 폭: 글 폭에 좌우 안쪽을 더한다. 열 폭과 알약을 그리는 폭이 같다.
-const pillWidth = (name) => measure(name, STYLE.mini.size, STYLE.mini.face) + SPACE['11'];
+const pillWidth = (name) => measure(name, STYLE.mini.size, STYLE.mini.face) + SPACE["5-5"];
 
 // cost: time O(n·e + n²), heap O(n), stack O(1)
 // vars: n = 이름 수, e = 관계 수
@@ -19,7 +19,7 @@ function columnsOf(graph) {
   const depth = depthsOf(graph.nodes, graph.edges);
   const need = Array.from({ length: Math.max(...depth) + 1 }, () => 0);
   graph.nodes.forEach((name, i) => {
-    need[depth[i]] = Math.max(need[depth[i]], pillWidth(name) + SPACE['4']);
+    need[depth[i]] = Math.max(need[depth[i]], pillWidth(name) + SPACE["2"]);
   });
   return { depth, need };
 }

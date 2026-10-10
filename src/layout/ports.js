@@ -1,8 +1,8 @@
 // 도형과 그룹의 연결점. 선 끝이 어디에 닿는지, 몸통 도형의 연결점을 어디에 놓는지를 정한다(docs/design/layout.md 도형 크기와 연결점, 연결점 순서).
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { cellPort, circlePort } from './cell-ports.js';
 
-const SIZE = values.size;
+const SIZE = values.spacing.figure;
 const SIDE_OUT = { right: 'EAST', down: 'SOUTH' };
 const SIDE_IN = { right: 'WEST', down: 'NORTH' };
 

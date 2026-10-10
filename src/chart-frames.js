@@ -10,10 +10,10 @@ import { patternDefs } from './styles.js';
 import { checkRowValues, prepareChartRows } from './source/chart-rules.js';
 import { FigureError, createProblems, makeDiagnostic } from './source/problems.js';
 import { NUMBER_PATTERN } from './source/words.js';
-import { values } from './tokens.js';
+import { values } from './vendor/theme/tokens.js';
 import { rootOf, valueTable } from './values.js';
 
-const COMPACT_WIDTH = values.size.chart['compact-width'];
+const COMPACT_WIDTH = values.spacing.figure.chart["compact-width"];
 // 값 축이 없어 범위를 고정할 필요가 없는 차트
 const NO_AXIS = new Set(['pie', 'donut', 'heatmap']);
 

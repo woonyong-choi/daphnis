@@ -1,6 +1,6 @@
 // 차트의 움직이는 SVG keyframes. 계열마다 보임과, 드러내는 박자에서 자라는 움직임을 만들고, 밝히지 않은 행은 흐린다.
 // 자라는 규칙은 HTML 재생기(chart/motion.js)와 같다. 차트는 카드 id로 가려(`[data-chart="id"]`) 같은 문서의 차트마다, 같은 차트가 여러 곳에 그려져도 따로 움직인다.
-import { tokens, values } from '../tokens.js';
+import { tokens, values } from '../vendor/theme/tokens.js';
 
 // 점이 나타나는 시각 비율(0~1)을 keyframes 이름에 쓸 정수로 바꾸는 배율
 const AT_KEY_SCALE = 1000;
@@ -41,7 +41,7 @@ function animateSeries({ clock, segs, growMs, css, windows }, { scope, sid, s, s
   if (!reveal || clock.mode === 'static') return;
   // 막대와 선과 띠는 자라는 시간 내내, 점과 값 글자는 그 뒤 절반에 나타난다. HTML 재생기(chart/motion.js)와 같다.
   const [a, half, b] = [clock.percent(reveal.t0), clock.percent(reveal.t0 + growMs / 2), clock.percent(reveal.t0 + growMs)];
-  const ease = `animation-timing-function: ${tokens.easing.reveal}`;
+  const ease = `animation-timing-function: ${tokens.ease.reveal}`;
   const key = (prefix) => `${prefix}-${scope.replace(/\W+/g, '')}-${s}`;
   const rule = ([prefix, from, to, cls]) =>
     `@keyframes ${key(prefix)} { 0%,${a} { ${from}; ${ease} } ${b},100% { ${to} } }\n${scope} .cs-${s} ${cls}, ${scope} .cs-${s}${cls} { animation: ${key(prefix)} ${clock.duration} ${clock.css}; }`;
@@ -76,7 +76,7 @@ function animateDimming({ clock, segs, css, windows, scope, state }, drawn) {
     if (drawn.dimsInkColor) {
       // 밝힌 칸이 있고 밝히지 않은 칸도 있을 때만 밝힌 칸이 굵다. 모든 칸을 밝히면 구별할 칸이 없어 굵기가 그대로다(재생기 chart.css `:has(.chart-cell.dim)`과 같다).
       const isBold = segs.map((g) => lit(g).includes(key) && drawn.rowKeys.some((other) => !lit(g).includes(other)));
-      push([`${scope} .cr-${k}.ink`, declare(isBold, { on: 'font-weight: var(--weight-semibold)', off: 'font-weight: var(--weight-regular)' })]);
+      push([`${scope} .cr-${k}.ink`, declare(isBold, { on: 'font-weight: var(--font-weight-semibold)', off: 'font-weight: var(--weight-regular)' })]);
       return;
     }
     const isDim = segs.map((g) => lit(g).length > 0 && !lit(g).includes(key));

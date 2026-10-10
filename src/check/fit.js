@@ -7,7 +7,7 @@ import { CONTENT } from '../measure/content.js';
 import { GRID, groupTitleWidth } from '../measure/sizes.js';
 import { TYPE_GAP } from '../measure/table.js';
 import { STYLE, textSpan } from '../measure/texts.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { fits } from './geometry.js';
 
 const ORIGIN = { x: 0, y: 0 };
@@ -29,7 +29,7 @@ export function checkFits({ scene, timeline }, problems) {
 function checkChipFits(timeline, fail) {
   const hops = timeline.segs.flatMap((seg) => seg.hops);
   for (const hop of hops) {
-    for (const l of hop.data ?? []) if (!fits(measure(l, STYLE.chip.size, STYLE.chip.face), values.size.chip['max-width'])) fail(hop.line ?? 1, `moving text "${l}"`, 'the text box');
+    for (const l of hop.data ?? []) if (!fits(measure(l, STYLE.chip.size, STYLE.chip.face), values.spacing.figure.chip["max-width"])) fail(hop.line ?? 1, `moving text "${l}"`, 'the text box');
   }
 }
 
@@ -41,7 +41,7 @@ function roomOf(it) {
   const centered = (room) => ({ left: (it.w - room) / 2, right: (it.w + room) / 2 });
   if (it.shape === 'decision') return centered(it.w / 2 - PAD.x);
   if (it.shape === 'circle') return centered(it.w - PAD.x);
-  const pad = it.tile ? values.size.node['tile-pad'] : PAD.x;
+  const pad = it.tile ? values.spacing.figure.node["tile-pad"] : PAD.x;
   return { left: pad, right: it.w - pad };
 }
 

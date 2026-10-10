@@ -2,9 +2,9 @@
 import { ratio } from '../format.js';
 import { BADGE_STYLE } from '../measure/decor.js';
 import { centerBaseline, escapeXml, roundCoord as r } from '../text.js';
-import { ICON_GRID } from '../icons/symbols.js';
+import { ICON_GRID } from '../icons/index.js';
 import { headBox } from '../layout/titles.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 
 // cost: time O(k), heap O(out), stack O(1)
 // vars: k = 장식 수, out = 만든 SVG 글자 수
@@ -22,14 +22,14 @@ export function drawDecor(decor, place, glyphs) {
     .join('');
 }
 
-// 아이콘. 24 격자 아이콘을 정사각 칸에 맞춰 넣는다. 색은 class의 currentColor가 정한다.
+// 아이콘. 24 격자 아이콘을 정사각 칸에 맞춰 넣는다. 내장 아이콘은 공통 도형과 색을 유지하며 사용자 SVG는 currentColor를 쓴다.
 function drawIcon(item, { x, y, iconData }) {
   return drawSymbol(iconData, { x: x + item.x, y: y + item.y, size: item.w });
 }
 
 // 의미 아이콘(등록부 도형)은 자신의 실루엣에 면과 윤곽을 갖는다. 브랜드와 사용자 SVG에는 임의 배경을 붙이지 않는다. 두 가지 모두 같은 틀 맞춤(iconAt)을 쓴다.
 function drawSymbol(iconData, { x, y, size }) {
-  return `<g class="fl-symbol fl-symbol-${iconData.role}">${iconAt(iconData, { x, y, size, className: iconData.symbol ? 'fl-symbol-glyph' : 'fl-icon' })}</g>`;
+  return `<g class="fl-symbol fl-symbol-${iconData.role}">${iconAt(iconData, { x, y, size, className: 'fl-icon' })}</g>`;
 }
 
 // 정사각 칸(왼쪽 위 x, y, 한 변 size)에 아이콘의 24 격자(ICON_GRID)를 맞춰 그린다. 의미 아이콘은 격자 그대로이고 브랜드와 사용자 SVG는 읽을 때 격자에 맞춰 두어(icons/sanitize.js) 여백이 모두 같다.
@@ -45,9 +45,9 @@ function iconAt(iconData, { x, y, size, className }) {
  * @param g 그룹(x, y, iconData)
  */
 export function drawGroupTab(g) {
-  const size = values.size.group.title - values.space['4'];
+  const size = values.spacing.figure.group.title - values.spacing["2"];
   // 탭은 제목 덩어리 사각형(layout/titles.js headBox: 선이 탭을 지나면 탭과 제목이 한 덩어리로 비킨다) 왼쪽 위에서 안쪽으로 들인다.
-  return drawSymbol(g.iconData, { x: headBox(g, g.titleDx).x + values.space['4'], y: g.y + values.space['2'], size });
+  return drawSymbol(g.iconData, { x: headBox(g, g.titleDx).x + values.spacing["2"], y: g.y + values.spacing["1"], size });
 }
 
 // 글자 배지. 배지와 복제 개수가 같은 모양이다(선 라벨 알약과는 다른 역할이다: draw/connector.js).

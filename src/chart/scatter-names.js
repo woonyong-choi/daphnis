@@ -3,7 +3,7 @@ import { measure, wrap } from '../measure/fonts.js';
 import { DOT, NAME_OFFSET, SPACE, TEXT } from './metrics.js';
 
 // 이름을 위아래로 옮기는 한 걸음(px). 글자 높이에 간격 `space.1`을 더해 옮긴 이름이 닿지 않게 한다. 브라우저가 이름 한 줄을 이 높이의 줄 상자로 그려서 이름 상자의 높이도 줄 수 × 한 걸음이다.
-export const NAME_STEP = TEXT['11'] + SPACE['1'];
+export const NAME_STEP = TEXT['11'] + SPACE["0-5"];
 // 위아래로 옮겨 볼 최대 걸음 수
 const STEPS_MAX = 4;
 // 옮김 순서: 제자리, 위, 아래, 두 걸음 위, 두 걸음 아래, ...
@@ -53,7 +53,7 @@ export function placeNames(points, right, bounds) {
     const isFree = (box, obstacles) => inBounds(box) && obstacles.every((other) => !isOverlapping(box, other));
     // 이름이 자기 점에서 다른 어느 점보다 `space.6` 이상 가까우면 어느 점의 이름인지 읽힌다.
     const own = dots[points.indexOf(point)];
-    const isOwned = (box) => dots.every((dot) => dot === own || gapBetween(box, dot) >= gapBetween(box, own) + SPACE['6']);
+    const isOwned = (box) => dots.every((dot) => dot === own || gapBetween(box, dot) >= gapBetween(box, own) + SPACE["3"]);
     const names = placed.map(({ box }) => box);
     const tiers = [(box) => isFree(box, [...names, ...dots]) && isOwned(box), (box) => isFree(box, [...names, ...dots]), (box) => isFree(box, names)];
     const at = tiers.map((fits) => boxes.findIndex(fits)).find((i) => i >= 0) ?? 0;

@@ -1,11 +1,11 @@
 // 시퀀스 구획은 메시지 행의 앞뒤에 제목과 경계 여백을 예약한다.
 import { FIGURE_PAD } from '../canvas.js';
 import { STYLE, textBlock } from '../measure/texts.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 
-const SPACE = values.space;
-const PAD = SPACE['6'];
-const INDENT = SPACE['4'];
+const SPACE = values.spacing;
+const PAD = SPACE["3"];
+const INDENT = SPACE["2"];
 
 // cost: time O(f·n²), heap O(f·n), stack O(1)
 // vars: f = 구획과 대안 수, n = 제목 글자 수
@@ -63,7 +63,7 @@ function add(map, index, entry) {
 // 제목 또는 대안 이름 줄: 메모 상자와 같은 글 덩어리(measure/texts.js textBlock)이고, 생명선 위에 얹는 제목 면(plate)이 함께 따라온다. 면은 덩어리보다 가로 왼쪽을 반 여백, 위아래를 반 여백씩 안으로 들인 사각형이다(덩어리 왼쪽 위가 원점).
 function header(text, isTitle = false) {
   const style = { ...STYLE.meta, face: isTitle ? 'semibold' : STYLE.meta.face };
-  const { w, h, texts } = textBlock(text, { textW: values.size.chip['max-width'], pad: PAD, style, role: isTitle ? 'meta fl-fragment-label' : 'meta' });
+  const { w, h, texts } = textBlock(text, { textW: values.spacing.figure.chip["max-width"], pad: PAD, style, role: isTitle ? 'meta fl-fragment-label' : 'meta' });
   return { text, w, h, texts, plate: { x: PAD / 2, y: PAD / 2, w: w - PAD / 2, h: h - PAD } };
 }
 

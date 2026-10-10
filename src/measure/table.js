@@ -1,19 +1,19 @@
 // 표와 API의 열을 한 번 배치해 그리기, 연결점, 충돌 검사에 넘긴다. 열 줄의 글은 카드가 쓰는 text(measure/texts.js)다.
 import { columnKey, columnRules } from '../table.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { INNER_MAX, PAD, headerOf, placeHeader } from './card.js';
 import { STYLE, textAt, textWidth } from './texts.js';
 
-const SPACE = values.space;
+const SPACE = values.spacing;
 /** 열 이름(키 표시 포함)과 같은 줄 오른쪽 끝 형식 사이의 가장 작은 간격 */
-export const TYPE_GAP = SPACE['8'];
+export const TYPE_GAP = SPACE["4"];
 
 // cost: time O(c·r), heap O(c·r), stack O(1)
 // vars: c = 열 수, r = 열의 제약 줄 수
 // basis: estimate
 // 열 줄 자리. top은 첫 열 줄의 윗변이다. 줄 높이는 형식 열 높이에 제약 줄 수를 더한 값이다.
 function placeRows(columns, top) {
-  const rowH = values.size.node['table-row'];
+  const rowH = values.spacing.figure.node["table-row"];
   let y = top;
   return columns.map((column) => {
     const rules = columnRules(column).map((text, i) => ({ text, center: y + rowH + STYLE.rule.line * (i + 0.5) }));
@@ -54,7 +54,7 @@ export function tableLayout(node, { minWidth = 0 } = {}) {
   const widest = (texts, role) => Math.max(0, ...texts.filter((t) => t.role === role).map(textWidth));
   const body = Math.max(widest(drafts, 'cell') + widest(drafts, 'cell type') + TYPE_GAP, widest(drafts, 'cell rule'));
   const header = headerOf(node, { room: Math.max(body, INNER_MAX) });
-  const w = Math.max(values.size.node['min-width'], Math.max(body, header.w) + PAD.x * 2, minWidth);
+  const w = Math.max(values.spacing.figure.node["min-width"], Math.max(body, header.w) + PAD.x * 2, minWidth);
   const rows = placeRows(node.columns, header.h);
   const parts = rows.map(({ id, y, center, h }, k) => ({ id, y, center, h, texts: columnTexts(node.columns[k], rows[k], w) }));
   return { w, height: header.h + rows.reduce((sum, row) => sum + row.h, 0), rows: parts, header: placeHeader(header, w), dividers: rows.map((row) => row.y) };

@@ -5,12 +5,12 @@ import { hasPill, sizePill } from '../measure/sizes.js';
 import { STYLE } from '../measure/texts.js';
 import { routePolyline } from '../route.js';
 import { centerBaseline, escapeXml, renderRich, roundCoord as r } from '../text.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { edgeMarker } from './arrow.js';
 import { sceneTag } from './scene-tag.js';
 import { LINE_DASH } from './surface.js';
 
-const SPACE = values.space;
+const SPACE = values.spacing;
 const RADIUS = values.radius;
 
 // cost: time O(p), heap O(out), stack O(1)
@@ -48,8 +48,8 @@ export function drawEdgeLabel(e, j, { decorate, glyphs, scene }) {
   const { w, h, numW, textW } = sizePill(e.label, e.no);
   const { x, y } = e.labelAt;
   const frame = e.label === undefined ? '' : `<rect x="${r(x - w / 2)}" y="${r(y - h / 2)}" width="${r(w)}" height="${r(h)}" rx="${r(h / 2)}" class="pill ${decorate('pill', j)}"/>`;
-  const number = e.no === undefined ? '' : drawNumber(e.no, { x: x - w / 2 + SPACE['1'], y, numW }, glyphs);
-  const text = e.label === undefined ? '' : drawLabelText(e.label, { x: e.no === undefined ? x : x - w / 2 + SPACE['1'] + numW + SPACE['2'] + textW / 2, y, cls: decorate('pilltext', j) }, glyphs);
+  const number = e.no === undefined ? '' : drawNumber(e.no, { x: x - w / 2 + SPACE["0-5"], y, numW }, glyphs);
+  const text = e.label === undefined ? '' : drawLabelText(e.label, { x: e.no === undefined ? x : x - w / 2 + SPACE["0-5"] + numW + SPACE["1"] + textW / 2, y, cls: decorate('pilltext', j) }, glyphs);
   return `<g id="l-${j}" class="${edgeClass(e, j, decorate)}${tag.off}"${tag.attr}><g class="fl-pill">${frame}${number}${text}</g></g>`;
 }
 

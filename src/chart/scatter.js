@@ -2,7 +2,7 @@
 // 계열이 둘 이상이면 점 이름 앞에 그 점 계열의 번호 키(`3 검색 전`)를 붙인다. 번호는 계열 목록 순서이고 범례의 번호와 같다.
 import { centerBaseline, renderRich, roundCoord as r } from '../text.js';
 import { CHART_ARROW, headReach, roleArrow } from '../draw/arrow.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { drawRules } from './axis.js';
 import { inkGroup } from './labels.js';
 import { dotAttrs, isKeyed } from './legend.js';
@@ -26,11 +26,11 @@ const seriesOf = (chart, p) => Math.max(0, chart.series.findIndex((s) => s.id ==
 // 화살표가 끝 점에서 tip만큼 떨어져 끝날 때 화살촉(보이는 꼭지에서 시작 쪽으로 뻗은 삼각형)이 글자 상자 box와 겹치는가. end는 화살촉의 보이는 꼭지 좌표, dir은 시작 점에서 끝 점으로 향하는 단위 방향이다.
 // 화살촉은 선 굵기에 비례하는 크기다(draw/arrow.js headReach). 꼭지, 뒤쪽 양 끝, 뒤쪽 가운데, 가운데를 상자에 간격 `space.2`를 더해 본다.
 function arrowheadHits(end, dir, box) {
-  const { length, half } = headReach(values.border.strong);
+  const { length, half } = headReach(values["border-width"].strong);
   const [bx, by] = [end.x - dir.ux * length, end.y - dir.uy * length];
   const [px, py] = [-dir.uy * half, dir.ux * half];
   const points = [[end.x, end.y], [bx + px, by + py], [bx - px, by - py], [bx, by], [(end.x + bx) / 2, (end.y + by) / 2]];
-  const pad = SPACE['2'];
+  const pad = SPACE["1"];
   return points.some(([x, y]) => x >= box.x0 - pad && x <= box.x1 + pad && y >= box.y0 - pad && y <= box.y1 + pad);
 }
 
@@ -43,12 +43,12 @@ function linkArrow(ctx, link) {
   const [a, b] = [at.get(link.from), at.get(link.to)];
   const length = Math.hypot(b.x - a.x, b.y - a.y) || 1;
   const dir = { ux: (b.x - a.x) / length, uy: (b.y - a.y) / length };
-  const gap = DOT + SPACE['2'];
+  const gap = DOT + SPACE["1"];
   const endAt = (tip) => ({ x: b.x - dir.ux * tip, y: b.y - dir.uy * tip });
   let tip = gap;
   while (tip < length / 2 && names.some(({ box }) => arrowheadHits(endAt(tip), dir, box))) tip += TIP_STEP;
   // 선은 화살촉의 보이는 꼭지보다 둥근 끝 반지름만큼 앞에서 끝난다. 둥근 끝이 꼭지 밖으로 나오지 않게 하기 위해서다.
-  const { cap } = headReach(values.border.strong);
+  const { cap } = headReach(values["border-width"].strong);
   const [x1, y1, x2, y2] = [a.x + dir.ux * gap, a.y + dir.uy * gap, endAt(tip).x - dir.ux * cap, endAt(tip).y - dir.uy * cap];
   const series = seriesOf(chart, b.p);
   return `<g class="cr-${chart.rows.indexOf(a.p)}"><g class="cs-${series}"><line x1="${r(x1)}" y1="${r(y1)}" x2="${r(x2)}" y2="${r(y2)}" class="chart-link ${ARROW.cls} pop"${ARROW.end}/></g></g>`;
@@ -64,7 +64,7 @@ function pointMark(ctx, { p, text, toLeft, shift, lines, box }, k) {
   const i = seriesOf(chart, p);
   const label = chart.layout ? lines.map((line, i) => `<tspan x="${r(toLeft ? x - NAME_OFFSET : x + NAME_OFFSET)}" dy="${i ? NAME_STEP : -(lines.length - 1) * NAME_STEP / 2}">${i ? ' ' : ''}${renderRich(line)}</tspan>`).join('') : renderRich(text);
   const name = `<text x="${r(toLeft ? x - NAME_OFFSET : x + NAME_OFFSET)}" y="${r(centerBaseline(y + shift * NAME_STEP, TEXT['11']))}" class="chart-name late${toLeft ? ' end' : ''}">${label}</text>`;
-  const pad = SPACE['0-5'];
+  const pad = SPACE["0-25"];
   const back = `<rect x="${r(box.x0 - pad)}" y="${r(box.y0 - pad)}" width="${r(box.x1 - box.x0 + pad * 2)}" height="${r(box.y1 - box.y0 + pad * 2)}" class="chart-text-bg late"/>`;
   const dot = markShape({ shape: seriesPaint(chart, i).shape, cx: x, cy: y, radius: DOT, attrs: dotAttrs(chart, i, ` class="pop"${markAttrs(chart, markId(chart, i, k), { raw: `${p.values.x},${p.values.y}`, paint: seriesPaint(chart, i) })}`) });
   return `<g class="cr-${k}"><g class="cs-${i}">${dot}</g></g>${inkGroup(k, back + name, i)}`;

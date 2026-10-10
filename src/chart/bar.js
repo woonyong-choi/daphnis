@@ -3,7 +3,7 @@
 // 기대값(reference) 계열은 속이 빈 테두리 막대다. 색 수를 넘는 계열은 막대 위에 무늬가 덮인다.
 import { measure } from '../measure/fonts.js';
 import { renderRich, centerBaseline, roundCoord as r } from '../text.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { drawRules, finishRowChart, rowValueScale } from './axis.js';
 import { MISSING } from './copy.js';
 import { valueRange } from './extent.js';
@@ -17,9 +17,9 @@ import { CI_OFFSET, CI_REACH, presentSlots, slotMiddle, stepOf } from './slots.j
 import { hasRowRule } from '../source/chart-rules.js';
 
 // 행 기준 표시가 행 막대 묶음 위아래로 나오는 길이
-const RULE_OVERHANG = SPACE['3'];
+const RULE_OVERHANG = SPACE["1-5"];
 // 행 기준 숫자 글자 기준선이 행 윗면에서 올라가는 높이
-const RULE_LABEL_RISE = SPACE['4'];
+const RULE_LABEL_RISE = SPACE["2"];
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -33,7 +33,7 @@ const rowRuleOf = (chart, row) => (hasRowRule(chart, 'bar') ? row.values.rule : 
 function ruleReaches(chart) {
   return chart.rows.flatMap((row) => {
     const rule = rowRuleOf(chart, row);
-    return rule === undefined ? [] : [{ value: rule, extra: SPACE['2'] + measure(formatNumber(rule), TEXT['11']) }];
+    return rule === undefined ? [] : [{ value: rule, extra: SPACE["1"] + measure(formatNumber(rule), TEXT['11']) }];
   });
 }
 
@@ -47,7 +47,7 @@ function valueReaches(chart) {
     chart.series.flatMap((s, i) => {
       const v = row.values[s.id];
       if (typeof v !== 'number') return [];
-      return [{ value: Math.max(v, row.values[`${s.id}.high`] ?? 0), extra: SPACE['3'] + measure(formats[i](v), TEXT['11'], i === 0 ? 'numSemibold' : 'num') }];
+      return [{ value: Math.max(v, row.values[`${s.id}.high`] ?? 0), extra: SPACE["1-5"] + measure(formats[i](v), TEXT['11'], i === 0 ? 'numSemibold' : 'num') }];
     }),
   );
 }
@@ -75,7 +75,7 @@ function missingMark(chart, plotX, { k, i, cy }) {
 // 신뢰구간은 막대 아래 독립된 줄에 놓고 양끝 수염으로 범위를 표시한다.
 function confidenceLine({ x1, x2, cy }, mark) {
   const at = `x1="${r(x1)}" x2="${r(x2)}" y1="${r(cy)}" y2="${r(cy)}"`;
-  const cap = SPACE['1'];
+  const cap = SPACE["0-5"];
   return `<line ${at} class="chart-ci late"${mark.line}/><path d="M${r(x1)} ${r(cy - cap)}v${cap * 2}M${r(x2)} ${r(cy - cap)}v${cap * 2}" class="chart-ci late"${mark.caps}/>`;
 }
 
@@ -86,7 +86,7 @@ function barFace(ctx, { i, k }, face) {
   const { chart } = ctx;
   const raw = ctx.row.values[chart.series[i].id];
   const attrs = markAttrs(chart, markId(chart, i, k), { raw, paint: seriesPaint(chart, i) });
-  const look = isReference(chart, i) ? `fill="none" stroke="${seriesOutline(chart, i)}" stroke-width="${values.border.strong}"` : `fill="${seriesFill(chart, i)}" stroke="${seriesOutline(chart, i)}" stroke-width="${values.border.tag}"`;
+  const look = isReference(chart, i) ? `fill="none" stroke="${seriesOutline(chart, i)}" stroke-width="${values["border-width"].strong}"` : `fill="${seriesFill(chart, i)}" stroke="${seriesOutline(chart, i)}" stroke-width="${values["border-width"].tag}"`;
   const rect = `<rect x="${r(face.x)}" y="${r(face.y)}" width="${r(face.w)}" height="${face.h}" rx="${face.radius}" ${look} class="grow"${attrs}/>`;
   return rect + (isReference(chart, i) ? '' : patternRect(seriesPaint(chart, i), face, markAttrs(chart, markId(chart, i, k, '.p')), 'chart-pattern grow'));
 }
@@ -107,9 +107,9 @@ function barMark(ctx, row, at) {
   const raw = `${low}~${high}`;
   const mark = { line: markAttrs(chart, markId(chart, i, k, '.ci'), { raw, paint: seriesPaint(chart, i) }), caps: markAttrs(chart, markId(chart, i, k, '.cc'), { raw, paint: seriesPaint(chart, i) }) };
   const ci = high !== undefined ? confidenceLine({ x1: scale.at(low), x2: reach, cy: by + CI_OFFSET }, mark) : '';
-  const width = Math.max(SPACE['1'], end - plotX);
+  const width = Math.max(SPACE["0-5"], end - plotX);
   const face = { x: plotX, y: by, w: width, h: BAR, radius: barRadius(width) };
-  const text = valueText({ x: Math.max(end, reach) + SPACE['3'], cy }, formats[i](v), `chart-value${i === 0 ? ' ours' : ''} late`, { chart, id: markId(chart, i, k), raw: v, paint: seriesPaint(chart, i) });
+  const text = valueText({ x: Math.max(end, reach) + SPACE["1-5"], cy }, formats[i](v), `chart-value${i === 0 ? ' ours' : ''} late`, { chart, id: markId(chart, i, k), raw: v, paint: seriesPaint(chart, i) });
   return { mark: `<g class="cr-${k}"><g class="cs-${i}">${barFace({ ...ctx, row }, { i, k }, face)}${ci}</g></g>`, value: inkGroup(k, text, i) };
 }
 
@@ -125,7 +125,7 @@ function rowRuleMarks(ctx, row, at) {
   const x = scale.at(rule);
   const span = `x1="${r(x)}" x2="${r(x)}" y1="${r(y - RULE_OVERHANG)}" y2="${r(y + height + RULE_OVERHANG)}"`;
   const line = `<g class="cr-${k}"><line ${span} class="chart-rule-casing"/><line ${span} class="chart-rule"/></g>`;
-  return [line, inkGroup(k, `<text x="${r(x + SPACE['2'])}" y="${r(y - RULE_LABEL_RISE)}" class="chart-rule-label">${formatNumber(rule)}</text>`)];
+  return [line, inkGroup(k, `<text x="${r(x + SPACE["1"])}" y="${r(y - RULE_LABEL_RISE)}" class="chart-rule-label">${formatNumber(rule)}</text>`)];
 }
 
 // cost: time O(s), heap O(s), stack O(1)
@@ -156,8 +156,8 @@ export function drawBars(figure, top) {
   const step = stepOf(chart.series.length, hasInterval);
   const groupH = (chart.series.length - 1) * step + (hasInterval ? CI_REACH : BAR);
   const labels = rowLabelLayout(chart);
-  const ctx = { chart, scale, plotX, top, groupH, step, labels, pitch: labels.space + groupH + SPACE['11'], formats: seriesFormats(chart) };
+  const ctx = { chart, scale, plotX, top, groupH, step, labels, pitch: labels.space + groupH + SPACE["5-5"], formats: seriesFormats(chart) };
   const rows = chart.rows.map((row, k) => barRow(ctx, row, k));
-  const bottom = top + chart.rows.length * ctx.pitch - SPACE['11'] + (hasInterval ? SPACE['4'] : 0);
+  const bottom = top + chart.rows.length * ctx.pitch - SPACE["5-5"] + (hasInterval ? SPACE["2"] : 0);
   return finishRowChart(chart, { parts: rows.flatMap((x) => x.marks), over: rows.flatMap((x) => x.values), scale, top, bottom });
 }

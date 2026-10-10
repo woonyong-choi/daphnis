@@ -2,7 +2,7 @@
 // 무늬 정의(`<pattern>`)는 SVG마다 한 번만 있으면 된다. 정의 id는 무늬 종류, 간격, 선 색에서 만든 값이라 같은 무늬는 어느 판에서 그려도 같은 id와 같은 내용이다.
 // 그래서 판마다 따로 넣어도 id가 충돌하지 않고, 그림 조립 단계가 id로 걸러 한 번만 넣을 수 있다. drawChart가 `patternKeys`와 `defs`로 돌려준다.
 import { roundCoord as r } from '../text.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { SIZE } from './metrics.js';
 
 // 이번 그리기가 쓴 무늬 정의 { id → 글 }. drawChart가 열고 닫는다. 그리기는 동기라 겹쳐 쓰이지 않는다.
@@ -22,8 +22,8 @@ function hash(text) {
 // basis: estimate
 // 무늬 한 칸의 내용. 칸 한 변은 기본 간격(size.chart.pattern-spacing)에 층의 간격 배율을 곱한 값이고 선 굵기는 border.tag다.
 function tileBody(paint, size) {
-  const stroke = `stroke="${paint.on}" stroke-width="${values.border.tag}"`;
-  if (paint.pattern === 'dots') return `<circle cx="${r(size / 2)}" cy="${r(size / 2)}" r="${values.border.tag}" fill="${paint.on}"/>`;
+  const stroke = `stroke="${paint.on}" stroke-width="${values["border-width"].tag}"`;
+  if (paint.pattern === 'dots') return `<circle cx="${r(size / 2)}" cy="${r(size / 2)}" r="${values["border-width"].tag}" fill="${paint.on}"/>`;
   const down = `<line x1="0" y1="0" x2="0" y2="${r(size)}" ${stroke}/>`;
   return paint.pattern === 'cross' ? `${down}<line x1="0" y1="0" x2="${r(size)}" y2="0" ${stroke}/>` : down;
 }

@@ -1,4 +1,8 @@
-<br>
+# daphnis
+
+English | [한국어](README.ko.md)
+
+Turn one `.dap` text source into an animated SVG figure for documentation: structure, sequences, states, schemas, classes, traces, and charts, with values that change as dots arrive.
 
 <p align="center">
   <picture>
@@ -6,10 +10,6 @@
     <img src="docs/assets/daphnis-lockup-light.svg" alt="daphnis" width="260">
   </picture>
 </p>
-
-English | [한국어](README.ko.md)
-
-Turn one `.dap` text source into an animated SVG figure for documentation: structure, sequences, states, schemas, classes, traces, and charts, with values that change as dots arrive.
 
 <p align="center">
   <picture>
@@ -201,7 +201,7 @@ npm run check
 
 `npm test` runs the contract tests through the public entry points (build results, SVG, HTML, CLI, Markdown) and needs no browser. Looking at the figures in a real browser, at phone and desktop sizes in light and dark, is a separate manual review that the tests do not replace.
 
-Shared design values (color roles, spacing, text sizes) come from the [design-tokens](https://github.com/woonyong-choi/design-tokens) package, which `npm install` fetches from GitHub by tag, so `git` must be available. Only figure-specific tokens live in `src/tokens.json`. A workflow opens a pull request when design-tokens publishes a new tag. In a clone, run `node src/cli.js` in place of `daphnis`, and `npm run catalog` to render every example, its source, and an index into `.local/examples/`.
+Shared values, CSS, icons, tabs and toolbars come from the verified bundle in `src/vendor/theme/`. Builds use the committed public copy and do not require access to its source repository. Updates pass manifest checks and figure regeneration in a PR. In a clone, run `node src/cli.js` instead of `daphnis`, and `npm run catalog` to render every example, its source and an index into `.local/examples/`.
 
 See [CONTRIBUTING](.github/CONTRIBUTING.md) for branches, commits, and pull requests.
 

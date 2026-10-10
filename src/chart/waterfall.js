@@ -2,7 +2,7 @@
 import { areaPaint } from '../chart-palette.js';
 import { measure, wrap } from '../measure/fonts.js';
 import { escapeXml, roundCoord as r } from '../text.js';
-import { tokens, values } from '../tokens.js';
+import { tokens, values } from '../vendor/theme/tokens.js';
 import { drawRules, finishRowChart, rowValueScale } from './axis.js';
 import { COPY } from './copy.js';
 import { inkGroup, rowLabelLayout, rowName, valueText } from './labels.js';
@@ -35,7 +35,7 @@ const knownEnds = (row) => [row.from, row.to].filter((value) => value !== null);
 function waterfallScale(chart, texts) {
   const endpoints = chart.ledger.flatMap(knownEnds);
   const ruled = [...endpoints, ...chart.rules.map((rule) => rule.value)];
-  const reaches = () => chart.layout ? [] : chart.ledger.map((row, i) => ({ value: Math.max(0, ...knownEnds(row)), extra: SPACE['3'] + measure(texts[i], TEXT['11'], row.total ? 'numSemibold' : 'num') }));
+  const reaches = () => chart.layout ? [] : chart.ledger.map((row, i) => ({ value: Math.max(0, ...knownEnds(row)), extra: SPACE["1-5"] + measure(texts[i], TEXT['11'], row.total ? 'numSemibold' : 'num') }));
   return rowValueScale(chart, { kind: 'linear', min: Math.min(0, ...ruled), max: Math.max(0, ...ruled), reaches });
 }
 
@@ -48,8 +48,8 @@ export function drawWaterfall(figure, top) {
   const { scale } = waterfallScale(chart, texts);
   const names = rowLabelLayout(chart);
   const lines = chart.layout ? texts.map((text, i) => wrap(text, chart.layout.width - PAD * 2, { size: TEXT['11'], face: chart.ledger[i].total ? 'numSemibold' : 'num' })) : undefined;
-  const lineHeight = TEXT['11'] * values.simple2['figure-leading'];
-  const pitch = chart.layout ? names.space + BAR + SPACE['3'] + Math.max(...lines.map((row) => row.length)) * lineHeight + SPACE['11'] : ROW;
+  const lineHeight = TEXT['11'] * values.leading.normal;
+  const pitch = chart.layout ? names.space + BAR + SPACE["1-5"] + Math.max(...lines.map((row) => row.length)) * lineHeight + SPACE["5-5"] : ROW;
   const bottom = top + chart.rows.length * pitch;
   // 0선: 넓은 배치는 전체 높이 한 줄이다. 좁은 배치는 이름과 계산식 줄의 글 가림 면이 행 사이를 덮어 눈금처럼 끊겨 보이므로 행마다 막대 높이 안에만 긋는다(기준선과 같다).
   const zeroLine = (y1, y2) => `<line x1="${r(scale.at(0))}" x2="${r(scale.at(0))}" y1="${r(y1)}" y2="${r(y2)}" class="chart-zero"/>`;
@@ -77,15 +77,15 @@ function waterfallRow(source, row, { chart, names, top, pitch, scale, index, cy,
   const name = inkGroup(index, rowName(source.label, { layout: names, k: index, top, cy, className: `chart-label${row.total ? ' chart-waterfall-total' : ''}` }));
   // 칸마다 막대와 0 증감 표시가 둘 다 늘 있다. 변화가 없으면(길이 0) 막대는 그려지지 않고 표시만 굵기를 갖고, 있으면 반대다.
   const raw = row.total ? row.to : row.change;
-  const rect = `<rect x="${r(face.x)}" y="${r(face.y)}" width="${r(face.w)}" height="${BAR}" rx="${face.radius}" fill="${fill}" stroke="${color}" stroke-width="${values.border.tag}" class="chart-waterfall-bar"${markAttrs(chart, markId(chart, 0, index), { raw, paint })}/>`;
-  const zero = `<line x1="${r(from)}" x2="${r(from)}" y1="${r(face.y)}" y2="${r(face.y + BAR)}" stroke="${color}" stroke-width="${face.w ? 0 : values.border.tag}" class="chart-waterfall-zero"${markAttrs(chart, markId(chart, 0, index, '.z'), { raw, paint })}/>`;
+  const rect = `<rect x="${r(face.x)}" y="${r(face.y)}" width="${r(face.w)}" height="${BAR}" rx="${face.radius}" fill="${fill}" stroke="${color}" stroke-width="${values["border-width"].tag}" class="chart-waterfall-bar"${markAttrs(chart, markId(chart, 0, index), { raw, paint })}/>`;
+  const zero = `<line x1="${r(from)}" x2="${r(from)}" y1="${r(face.y)}" y2="${r(face.y + BAR)}" stroke="${color}" stroke-width="${face.w ? 0 : values["border-width"].tag}" class="chart-waterfall-zero"${markAttrs(chart, markId(chart, 0, index, '.z'), { raw, paint })}/>`;
   const ends = [['from', row.from], ['to', row.to]].filter(([, value]) => value !== null).map(([name, value]) => ` data-${name}="${value}"`).join('');
   const mark = `<g class="grow chart-waterfall-growth" style="transform-origin: ${to < from ? 'right' : 'left'} center"><g class="cr-${index}" role="img" aria-label="${escapeXml(`${source.label}: ${text}`)}"${ends}>${isKnown ? rect + zero : ''}</g></g>`;
   const connector = !next || !isKnown || next.to === null ? '' : `<line x1="${r(to)}" x2="${r(to)}" y1="${r(cy + BAR / 2)}" y2="${r(cy + pitch - BAR / 2)}" class="chart-rule chart-waterfall-connector"/>`;
   const className = `chart-value${row.total ? ' ours' : ''} late`;
   const textMark = (n) => ({ chart, id: markId(chart, 0, index, n ? `.${n}` : ''), raw, paint });
-  const summary = lines ? lines.map((line, i) => valueText({ x: PAD, cy: cy + BAR / 2 + SPACE['3'] + TEXT['11'] / 2 + i * lineHeight }, line, className, textMark(i))).join('') : valueText({ x: reach + SPACE['3'], cy }, text, className, textMark(0));
-  const masks = lines ? `<rect x="${PAD}" y="${r(top)}" width="${chart.layout.width - PAD * 2}" height="${r(names.space - SPACE['3'])}" class="chart-text-bg"/><rect x="${PAD}" y="${r(cy + BAR / 2 + SPACE['3'])}" width="${chart.layout.width - PAD * 2}" height="${r(lines.length * lineHeight)}" class="chart-text-bg"/>` : '';
+  const summary = lines ? lines.map((line, i) => valueText({ x: PAD, cy: cy + BAR / 2 + SPACE["1-5"] + TEXT['11'] / 2 + i * lineHeight }, line, className, textMark(i))).join('') : valueText({ x: reach + SPACE["1-5"], cy }, text, className, textMark(0));
+  const masks = lines ? `<rect x="${PAD}" y="${r(top)}" width="${chart.layout.width - PAD * 2}" height="${r(names.space - SPACE["1-5"])}" class="chart-text-bg"/><rect x="${PAD}" y="${r(cy + BAR / 2 + SPACE["1-5"])}" width="${chart.layout.width - PAD * 2}" height="${r(lines.length * lineHeight)}" class="chart-text-bg"/>` : '';
   const guides = chart.layout ? drawRules(chart.rules, scale, { axis: 'x', from: face.y, to: face.y + BAR, labels: false }) : '';
   return { connector, mark: masks + name + mark + guides, text: inkGroup(index, summary) };
 }

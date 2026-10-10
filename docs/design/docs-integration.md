@@ -92,7 +92,7 @@
 | 번호 배지 | 라이트는 어두운 면에 흰 숫자, 다크는 밝은 면에 어두운 숫자(`color.figure.number-fill`, `number-ink`). 범주 색을 쓰지 않는다. 글자 대비 4.5 이상 |
 | 흐림 | 흐린 행은 면의 투명도만 낮추고 복제 테두리 같은 두 번째 경계층을 두지 않는다 |
 | 사건 강조 | 지금 단계의 도형·선·이동 라벨은 한 공통 규칙으로 강조한다. 종류별 별도 강조를 두지 않는다 |
-| hover | 도형과 카드에는 hover 효과가 없다. 장면 탭과 도구 막대 단추만 호버 때 켜지지 않은 항목의 면이 한 단계 짙어진다(`simple2.segment-hover`). 키보드 초점(`ui.focus` 고리)과 눌림 상태는 접근성 때문에 유지한다 |
+| hover | 도형과 카드에는 hover 효과가 없다. 장면 탭과 도구 막대 단추만 호버 때 켜지지 않은 항목의 면이 한 단계 짙어진다(`color.control-hover`). 키보드 초점(`ui.focus` 고리)과 눌림 상태는 접근성 때문에 유지한다 |
 | 결함 수정 | 덮어쓰기 CSS와 예제별 보정을 쓰지 않고 공통 규칙을 고친다 |
 
 ### 증거 표
@@ -115,9 +115,9 @@
 
 ### 색 역할
 
-공통 색과 그림 전용 색의 정본은 [design-tokens](https://github.com/woonyong-choi/design-tokens)의 simple2다. 기본 단계와 역할 토큰을 구분하며 코드와 CSS는 역할 토큰만 사용한다. daphnis는 해시가 있는 완성본과 그림 전용 사본을 가져오고 같은 토큰을 다시 정의하지 않는다. 가져온 사본(`src/design-theme/`)과 생성 토큰은 손으로 고치지 않는다. 수치는 [라이트 사본](../../src/design-theme/tokens.light.json)과 [다크 사본](../../src/design-theme/tokens.dark.json)에서 확인하며 계산값 표를 문서에 복사하지 않는다.
+공통 색과 그림 전용 색의 정본은 공통 디자인 정본다. 기본 단계와 역할 토큰을 구분하며 코드와 CSS는 역할 토큰만 사용한다. daphnis는 해시가 있는 완성본과 그림 전용 사본을 가져오고 같은 토큰을 다시 정의하지 않는다. 가져온 사본(`src/vendor/theme/`)과 생성 토큰은 손으로 고치지 않는다. 수치는 [라이트 사본](../../src/vendor/theme/tokens.light.json)과 [다크 사본](../../src/vendor/theme/tokens.dark.json)에서 확인하며 계산값 표를 문서에 복사하지 않는다.
 
-아래 표는 역할과 검사 기준만 기록한다. 대비는 그 요소가 실제로 그려지는 합성된 면과 역할(글자, 선, 면)마다 그 면 위에서 잰다. 기준은 의미를 전달하는 글자와 상태 표시에 적용하고, 장식 경계(`simple2.surface-edge`, `simple2.separator`, `plate-border`)에는 적용하지 않는다.
+아래 표는 역할과 검사 기준만 기록한다. 대비는 그 요소가 실제로 그려지는 합성된 면과 역할(글자, 선, 면)마다 그 면 위에서 잰다. 기준은 의미를 전달하는 글자와 상태 표시에 적용하고, 장식 경계(`color.help-border`, `color.ui-line`, `plate-border`)에는 적용하지 않는다.
 
 | 역할 | 뜻 | 검사 기준 |
 |---|---|---|
@@ -131,7 +131,7 @@
 | `data.compare` | 비교 계열 | 핵심 노랑 면, 구분은 이름과 직접 라벨 |
 | `fg` | 본문과 그림 글자 | 4.5 이상 |
 | `muted` | 보조 글자 | 4.5 이상 |
-| `simple2.canvas-fill` | 설명용 그림 판 | 글자 대비 기준 적용 |
+| `color.prose-pre-background` | 설명용 그림 판 | 글자 대비 기준 적용 |
 | `node` | 도형 면 | 글자 대비 기준 적용 |
 | `page` | 문서 바탕 | 글자 대비 기준 적용 |
 | `group-title` | 그룹 제목 | 4.5 이상 |
@@ -147,11 +147,11 @@
 - `data.main`, `data.compare`는 선언 순서가 아니라 계열의 `role`이 정한다([차트](charts.md)). 같은 계열 이름은 모든 예제에서 같은 역할이다.
 - 사이트 기능 아이콘 면색과 앱 범용 색은 구분한다. 핵심 넷의 값은 앞의 값이고, 앱의 각 역할이 같은 색이라고 주장하지 않는다.
 - 구성도 의미 아이콘은 작은 면 타일과 글리프이며 역할별 면과 윤곽을 갖는다. 이 역할 색은 공개 화면을 읽어 정한 해석이며 Things의 토큰이나 소스가 아니다.
-- 표 열의 PK, FK 표시는 항상 있는 스키마 표시라 `color.muted`다. 칸 격자의 칸([칸 격자](grid.md))은 새 색 역할이 없고 `node`, `simple2.separator`, `line`, `fg`, `surface`, `muted`, `card-on`, `state.active`의 기존 짝을 쓴다.
-- 설명 판은 `simple2.canvas-fill`, 도형 면은 `color.node`, 조작 줄은 `color.page`를 쓴다. 중첩 그룹은 `group-1`부터 `group-3`까지 중립색 면의 밝기로 구분한다. 이름과 면으로 경계가 식별되는 도형에는 `simple2.surface-edge` 장식선을 쓰고, 의미를 전달하는 선에는 대비 3 이상의 역할색을 쓴다. 내부 표와 배지는 `simple2.separator` 한 규칙을 공유한다. 박스플롯의 중앙값·수염 같은 데이터 선은 `simple2.data-line`으로 구분한다.
-- 색을 고른 도형은 재생 중에도 색 역할을 유지한다. 도형 외곽선은 1px, 색을 지정한 그룹은 1.5px로 유지하고 후광용 복제 윤곽을 그리지 않는다. 색을 지정하지 않은 도형의 활성 상태는 같은 굵기의 파란 외곽선이다. 선택 칸은 `simple2.row-selection` 면과 같은 모서리의 단일 선이다.
+- 표 열의 PK, FK 표시는 항상 있는 스키마 표시라 `color.muted`다. 칸 격자의 칸([칸 격자](grid.md))은 새 색 역할이 없고 `node`, `color.ui-line`, `line`, `fg`, `surface`, `muted`, `card-on`, `state.active`의 기존 짝을 쓴다.
+- 설명 판은 `color.prose-pre-background`, 도형 면은 `color.node`, 조작 줄은 `color.page`를 쓴다. 중첩 그룹은 `group-1`부터 `group-3`까지 중립색 면의 밝기로 구분한다. 이름과 면으로 경계가 식별되는 도형에는 `color.help-border` 장식선을 쓰고, 의미를 전달하는 선에는 대비 3 이상의 역할색을 쓴다. 내부 표와 배지는 `color.ui-line` 한 규칙을 공유한다. 박스플롯의 중앙값·수염 같은 데이터 선은 `color.figure-data-line`으로 구분한다.
+- 색을 고른 도형은 재생 중에도 색 역할을 유지한다. 도형 외곽선은 1px, 색을 지정한 그룹은 1.5px로 유지하고 후광용 복제 윤곽을 그리지 않는다. 색을 지정하지 않은 도형의 활성 상태는 같은 굵기의 파란 외곽선이다. 선택 칸은 `color.search-hover` 면과 같은 모서리의 단일 선이다.
 - 태그 글자는 `color.fg`이고 범주색은 글자 뒤의 옅은 바탕 띠로만 전한다. 태그 색은 갈래를 나누는 색이고 판정을 뜻하지 않는다.
-- 범주 토큰은 design-tokens가 계열마다 원색(`color.category.<계열>.anchor`)에서 계산한다. `color.data.category-family.N`이 기록한 순서이고 `color.data.category.N`(면, 두 모드 같은 원색), `category-outline.N`(테두리), `category-on.N`(면 위 글자), `category-ink.N`(같은 계열 글자색, 못 맞추면 `fg`), `category-tint.N`(옅은 면), `category-label.N`(`required`이면 직접 라벨)이 번호로 따른다. 코드는 번호 토큰만 읽고 `src/chart-palette.js`의 `categoryPaint(index)`가 계열, 면, 테두리, 위 글자, 층(`tier`), 무늬, 간격, 모양, `needsLabel`을 한 번에 준다. 번호가 색 수를 넘으면 계열이 순환하고 층이 오르며 무늬(`category-pattern.N`)는 층 1부터, 모양(`category-shape.N`)은 층과 상관없이 범주 번호마다 고정된 순서로 바뀐다(번호를 모양 개수로 나눈 나머지). 색·무늬·모양 목록은 뒤에만 늘어나고, 늘면 순환 길이가 바뀌어 기존 범주의 칠이 달라지므로 칠은 판(`color.data.category-revision.N.{family,pattern,shape,step}`)으로 고정한다. 판 N은 세 목록의 앞쪽 개수와 무늬 간격 배율 step을 가진 숫자 토큰이고, `categoryPaint(index, { revision })`의 기본은 최신 판이 아니라 언제나 1판(일곱 계열, 무늬 3, 모양 4, step 0.5)이다. 덧붙인 색은 소스가 더 높은 판을 명시할 때만 쓰이고, 판을 고르는 소스 문법은 2판을 더하는 변경에서 함께 넣는다. 무늬 간격의 기준은 `size.chart.pattern-spacing`(8), 무늬 선 굵기는 `border.tag`이며 SVG 무늬 정의는 렌더러가 만든다.
+- 범주 토큰은 design-tokens가 계열마다 원색(`color.category.<계열>.anchor`)에서 계산한다. `color.data.category-family.N`이 기록한 순서이고 `color.data.category.N`(면, 두 모드 같은 원색), `category-outline.N`(테두리), `category-on.N`(면 위 글자), `category-ink.N`(같은 계열 글자색, 못 맞추면 `fg`), `category-tint.N`(옅은 면), `category-label.N`(`required`이면 직접 라벨)이 번호로 따른다. 코드는 번호 토큰만 읽고 `src/chart-palette.js`의 `categoryPaint(index)`가 계열, 면, 테두리, 위 글자, 층(`tier`), 무늬, 간격, 모양, `needsLabel`을 한 번에 준다. 번호가 색 수를 넘으면 계열이 순환하고 층이 오르며 무늬(`category-pattern.N`)는 층 1부터, 모양(`category-shape.N`)은 층과 상관없이 범주 번호마다 고정된 순서로 바뀐다(번호를 모양 개수로 나눈 나머지). 색·무늬·모양 목록은 뒤에만 늘어나고, 늘면 순환 길이가 바뀌어 기존 범주의 칠이 달라지므로 칠은 판(`color.data.category-revision.N.{family,pattern,shape,step}`)으로 고정한다. 판 N은 세 목록의 앞쪽 개수와 무늬 간격 배율 step을 가진 숫자 토큰이고, `categoryPaint(index, { revision })`의 기본은 최신 판이 아니라 언제나 1판(일곱 계열, 무늬 3, 모양 4, step 0.5)이다. 덧붙인 색은 소스가 더 높은 판을 명시할 때만 쓰이고, 판을 고르는 소스 문법은 2판을 더하는 변경에서 함께 넣는다. 무늬 간격의 기준은 `spacing.figure.chart.pattern-spacing`(8), 무늬 선 굵기는 `border-width.tag`이며 SVG 무늬 정의는 렌더러가 만든다.
 - 상태 색(`state.*`)은 범주 번호와 무관하게 고정된 계열의 테두리를 가리킨다. 상태가 있거나 없다고 범주의 순서가 바뀌지 않는다.
 
 #### 원본이 고르는 색 이름
@@ -160,17 +160,17 @@
 
 ### 색표와 글꼴
 
-- 모든 그림의 SVG `width`는 같은 표준 캔버스 폭(`size.figure-canvas`, 960)이다. 그림 머리 `width wide`를 쓴 그림만 넓은 폭(`size.figure-canvas-wide`)이고, 문서에서는 본문 폭에 맞춰 줄어든다. 가운데 정렬은 SVG 파일이 아니라 문서 쪽 몫이다. GitHub README는 `<p align="center"><img src="docs/assets/그림.svg" alt="설명"></p>` 형식으로 넣어야 가운데에 선다(Markdown 이미지 문법으로는 정렬할 수 없다).
+- 모든 그림의 SVG `width`는 같은 표준 캔버스 폭(`spacing.figure.figure-canvas`, 960)이다. 그림 머리 `width wide`를 쓴 그림만 넓은 폭(`spacing.figure.figure-canvas-wide`)이고, 문서에서는 본문 폭에 맞춰 줄어든다. 가운데 정렬은 SVG 파일이 아니라 문서 쪽 몫이다. GitHub README는 `<p align="center"><img src="docs/assets/그림.svg" alt="설명"></p>` 형식으로 넣어야 가운데에 선다(Markdown 이미지 문법으로는 정렬할 수 없다).
 - 글꼴은 이 도구가 Pretendard, JetBrains Mono 파일(수학 기호용 Noto Sans, Noto Sans Math 포함)을 함께 배포하고 그림에 잘라 넣는다. 본문 글자 간격은 `tracking.text`(-0.3px)다([배치](layout.md)). 스킬의 글꼴 설치 줄은 지운다.
 - HTML 페이지와 조작부는 `font.sans`의 시스템 글꼴, HTML 코드와 파일 이름은 `font.mono`를 쓴다. SVG 내부만 측정한 FigSans·FigMono 조각을 내장해 배치와 표시 폭을 일치시킨다. 글자 위계와 크기는 [배치의 글꼴 자리](layout.md#글꼴-자리)를 따른다. 페이지 큰 제목은 목록과 문서 모두 36px·700·줄 높이 1.2다.
 
 ### 조작과 선
 
-장면 탭과 테마 선택은 최소 44px의 눌리는 영역을 갖는다. 선택·pressed·focus는 조작부의 simple2 역할 토큰을 쓴다. 좁은 화면에서는 탭이 줄바꿈하며 그림은 판 구역 안에서 가로로 스크롤하지 않고 모든 판이 같은 비율로 줄어 구역 안에 들어오며, 작은 글자는 전체화면 확대로 읽고 페이지 전체에는 가로 스크롤을 만들지 않는다. 켜진 탭은 `simple2.segment-on` 면과 `segment-on-ink` 글자로만 구분하고 테두리 고리를 더하지 않는다. 켜진 탭 글자와 면의 대비는 이 문서가 보증하지 않는다(검증 요구사항, 미완료). 재생기에는 재생, 일시정지, 배속, 반복 조작이 없고 조작은 장면 탭과 도구 막대([재생](playback.md#도구-막대와-전체-화면))뿐이다. 도구 막대는 Things에 대응 요소가 없는 확장이다. 모양과 크기를 이번 개편 뒤 실제 화면에서 보는 검수와 실제 기기에서 눌러 보는 검수는 하지 않았다(검증 요구사항, 미완료).
+장면 탭과 테마 선택은 공통 TabList의 크기·여백 규칙을 사용한다. 선택·pressed·focus는 조작부의 공통 조작 역할 토큰을 쓴다. 좁은 화면에서는 탭이 줄바꿈하며 그림은 판 구역 안에서 가로로 스크롤하지 않고 모든 판이 같은 비율로 줄어 구역 안에 들어오며, 작은 글자는 전체화면 확대로 읽고 페이지 전체에는 가로 스크롤을 만들지 않는다. 켜진 탭은 `color.feature-tab-selected` 면과 `segment-on-ink` 글자로만 구분하고 테두리 고리를 더하지 않는다. 켜진 탭 글자와 면의 대비는 이 문서가 보증하지 않는다(검증 요구사항, 미완료). 재생기에는 재생, 일시정지, 배속, 반복 조작이 없고 조작은 장면 탭과 도구 막대([재생](playback.md#도구-막대와-전체-화면))뿐이다. 도구 막대는 Things에 대응 요소가 없는 확장이다. 모양과 크기를 이번 개편 뒤 실제 화면에서 보는 검수와 실제 기기에서 눌러 보는 검수는 하지 않았다(검증 요구사항, 미완료).
 
-카드는 반지름 18px의 흰 표면과 두 겹 그림자(`simple2.shadow`)를 쓴다. 도형은 그림자 없는 평면이고 그림자는 떠 있는 조작에만 쓴다. 목록 폭은 960px, 카드 사이는 48px다.
+카드는 반지름 18px의 흰 표면과 두 겹 그림자(`shadow.diagram`)를 쓴다. 도형은 그림자 없는 평면이고 그림자는 떠 있는 조작에만 쓴다. 목록 폭은 960px, 카드 사이는 48px다.
 
-선 굵기는 역할마다 토큰 하나다. 도형 윤곽은 `simple2.node-stroke`, 칩과 카드 안 틀, 격자 칸, 표 구분선과 판 안 경계는 `border.thin`과 `border.hair`, 관계(연결선과 카드 안 관계 그래프 선)는 `border.edge`, 생명선은 `border.lifeline`, 색을 지정한 그룹의 윤곽은 `border.tag`이고 차트 표식은 차트가 정한다([차트](charts.md#그리기)). 지금 단계는 선 굵기를 바꾸지 않고 색이나 면만 바꾼다. 유일한 예외는 키보드 초점(`:focus-visible`)으로, 도형 자신의 윤곽을 `simple2.focus-width`와 `--color-ui-focus`로 그린다. 모든 선은 그림과 함께 같은 비율로 커지고 줄어든다. 좁은 화면에서 줄어든 선의 눈 검수는 이번 개편 뒤 하지 않았다(증거 표, 검증 요구사항, 미완료). 끝과 이음은 둥글다.
+선 굵기는 역할마다 토큰 하나다. 도형 윤곽은 `border-width.thin`, 칩과 카드 안 틀, 격자 칸, 표 구분선과 판 안 경계는 `border-width.thin`과 `border-width.hair`, 관계(연결선과 카드 안 관계 그래프 선)는 `border-width.edge`, 생명선은 `border-width.lifeline`, 색을 지정한 그룹의 윤곽은 `border-width.tag`이고 차트 표식은 차트가 정한다([차트](charts.md#그리기)). 지금 단계는 선 굵기를 바꾸지 않고 색이나 면만 바꾼다. 유일한 예외는 키보드 초점(`:focus-visible`)으로, 도형 자신의 윤곽을 `outline-width.focus`와 `--color-ui-focus`로 그린다. 모든 선은 그림과 함께 같은 비율로 커지고 줄어든다. 좁은 화면에서 줄어든 선의 눈 검수는 이번 개편 뒤 하지 않았다(증거 표, 검증 요구사항, 미완료). 끝과 이음은 둥글다.
 
 ### 대비 기준
 
@@ -187,7 +187,7 @@
 | 카드 태그 글자(`fg`)와 어느 톤 띠 | 4.5 이상 | 같음 |
 | 밝히지 않은 행(`ink.dim`, `opacity.dim-ink`)의 `fg`, `muted` 글자와 `bg` | 4.5 이상 | 같음 |
 | 대기열 칸의 윤곽과 대기 알약의 테두리·기호(`outline`)와 도형, 카드 바탕 | 3 이상 | 상태를 전하는 그래픽. 자동 시험은 지금 없다(검증 요구사항, 미완료) |
-| 도형의 평소 경계(`simple2.surface-edge`), 표와 칩의 구분선(`simple2.separator`) | 기준 없음 | 장식 경계라 진하게 바꾸지 않는다. 도형은 이름과 면이 식별한다 |
+| 도형의 평소 경계(`color.help-border`), 표와 칩의 구분선(`color.ui-line`) | 기준 없음 | 장식 경계라 진하게 바꾸지 않는다. 도형은 이름과 면이 식별한다 |
 | 그룹 제목(`group-title`)과 회색 그룹 셋 | 4.5 이상 | 같음 |
 | 히트맵 칸 숫자와 그 칸 색 | 4.5 이상 | 칸마다 어두운 글자와 밝은 글자 중 대비가 큰 쪽을 빌드 때 고른다 |
 | 차이 차트의 0선, 행 기준 점선, 잘린 축의 지그재그(`muted`)와 그림 바탕 | 4.5 이상 | 값 차이를 전하는 그래픽이라 `muted`의 글자 기준을 쓴다 |
@@ -225,7 +225,7 @@
 | 스킬의 다섯 그림 템플릿을 새 문법으로 옮긴 원본이 검사를 통과한다. | 템플릿마다 원본을 만들어 `check` 실행 |
 | 스킬의 차트를 `data` 줄로 그린다. | 예시 `summary.json`으로 차트별 원본 변환 |
 | 같은 원본을 다시 변환해도 git 차이가 없다. | 두 번 변환 뒤 `git diff` 확인 |
-| 확장 색 후보를 실제 크기 라이트·다크 구성 요소로 비교해 고른다. | 후보 비교 화면 검수. 팔레트 개정 1의 채택 기록은 소유 저장소 `themes/simple2/tokens.json`의 `review`에 있고, 제품 화면에서 확인한 범위는 [표현 범위](expression-coverage.md#예제와-검증-범위)가 정한다. 색각 이상 실제 사용자 시험은 검증 요구사항, 미완료 |
+| 확장 색 후보를 실제 크기 라이트·다크 구성 요소로 비교해 고른다. | 후보 비교 화면 검수. 팔레트 개정 1의 채택 기록은 소유 저장소 `tokens/tokens.json`의 `review`에 있고, 제품 화면에서 확인한 범위는 [표현 범위](expression-coverage.md#예제와-검증-범위)가 정한다. 색각 이상 실제 사용자 시험은 검증 요구사항, 미완료 |
 | 공식 Things 기준과 화면 비교를 마친다. | 수용 게이트(모바일 320·390·430px, 데스크톱 실제 크기, 라이트·다크, 정지·재생). 확인한 범위는 [표현 범위](expression-coverage.md#예제와-검증-범위)가 정하고 그 밖은 검증 요구사항, 미완료. 공식 이미지와의 비교는 역할 비교이며 현재 네이티브 앱 전체와의 픽셀 대조가 아니다 |
 
 ## 단점

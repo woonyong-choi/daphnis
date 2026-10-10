@@ -2,1063 +2,165 @@
 <title>Saturn</title>
 <style>@font-face{font-family:FigSans;font-weight:400;src:url(data:font/woff2;base64,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) format("woff2")}
 @font-face{font-family:FigSans;font-weight:600;src:url(data:font/woff2;base64,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) format("woff2")}
-/* tokens.json: 생성물, 손으로 고치지 않음 */
+/* tokens/tokens.json: 생성물, 손으로 고치지 않음 */
 :root {
   --color-gray-0: #ffffff;
-  --color-gray-27: #f8f8f8;
-  --color-gray-43: #f4f4f4;
   --color-gray-59: #f0f0f0;
-  --color-gray-71: #ededed;
-  --color-gray-106: #e4e4e4;
-  --color-gray-118: #e1e1e1;
-  --color-gray-145: #dadada;
-  --color-gray-161: #d6d6d6;
-  --color-gray-212: #c9c9c9;
-  --color-gray-220: #c7c7c7;
   --color-gray-282: #b7b7b7;
-  --color-gray-333: #aaaaaa;
-  --color-gray-467: #888888;
-  --color-gray-529: #787878;
-  --color-gray-545: #747474;
-  --color-gray-635: #5d5d5d;
-  --color-gray-651: #595959;
-  --color-gray-757: #3e3e3e;
-  --color-gray-776: #393939;
-  --color-gray-788: #363636;
-  --color-gray-796: #343434;
-  --color-gray-835: #2a2a2a;
-  --color-gray-875: #202020;
-  --color-gray-878: #1f1f1f;
-  --color-gray-910: #171717;
-  --color-gray-929: #121212;
   --color-gray-933: #111111;
-  --color-gray-1000: #000000;
-  --color-blue-anchor: var(--color-category-blue-anchor);
-  --color-blue-light-fill: var(--color-category-blue-light-tint-1);
-  --color-blue-light-stroke: var(--color-category-blue-light-border);
-  --color-blue-light-ink: var(--color-category-blue-light-ink);
-  --color-blue-light-heat-low: var(--color-sequential-light-low);
-  --color-blue-light-heat-high: var(--color-sequential-high);
-  --color-blue-light-outline: var(--color-category-blue-light-border);
-  --color-blue-light-tint-1: var(--color-category-blue-light-tint-1);
-  --color-blue-light-tint-2: var(--color-category-blue-light-tint-2);
-  --color-blue-light-tint-3: var(--color-category-blue-light-tint-3);
-  --color-blue-dark-fill: var(--color-category-blue-dark-tint-1);
-  --color-blue-dark-stroke: var(--color-category-blue-dark-border);
-  --color-blue-dark-ink: var(--color-category-blue-dark-ink);
-  --color-blue-dark-heat-low: var(--color-sequential-dark-low);
-  --color-blue-dark-heat-high: var(--color-sequential-high);
-  --color-blue-dark-outline: var(--color-category-blue-dark-border);
-  --color-blue-dark-tint-1: var(--color-category-blue-dark-tint-1);
-  --color-blue-dark-tint-2: var(--color-category-blue-dark-tint-2);
-  --color-blue-dark-tint-3: var(--color-category-blue-dark-tint-3);
-  --color-purple-anchor: var(--color-category-purple-anchor);
-  --color-purple-light-fill: var(--color-category-purple-light-tint-1);
-  --color-purple-light-stroke: var(--color-category-purple-light-border);
-  --color-purple-light-ink: var(--color-category-purple-light-ink);
-  --color-purple-light-dot: var(--color-category-purple-light-border);
-  --color-purple-light-outline: var(--color-category-purple-light-border);
-  --color-purple-light-tint-1: var(--color-category-purple-light-tint-1);
-  --color-purple-light-tint-2: var(--color-category-purple-light-tint-2);
-  --color-purple-light-tint-3: var(--color-category-purple-light-tint-3);
-  --color-purple-dark-fill: var(--color-category-purple-dark-tint-1);
-  --color-purple-dark-stroke: var(--color-category-purple-dark-border);
-  --color-purple-dark-ink: var(--color-category-purple-dark-ink);
-  --color-purple-dark-dot: var(--color-category-purple-dark-border);
-  --color-purple-dark-outline: var(--color-category-purple-dark-border);
-  --color-purple-dark-tint-1: var(--color-category-purple-dark-tint-1);
-  --color-purple-dark-tint-2: var(--color-category-purple-dark-tint-2);
-  --color-purple-dark-tint-3: var(--color-category-purple-dark-tint-3);
-  --color-red-anchor: var(--color-category-red-anchor);
-  --color-red-light-fill: var(--color-category-red-light-tint-1);
-  --color-red-light-stroke: var(--color-category-red-light-border);
-  --color-red-light-ink: var(--color-category-red-light-ink);
-  --color-red-light-dot: var(--color-category-red-light-border);
-  --color-red-light-outline: var(--color-category-red-light-border);
-  --color-red-dark-fill: var(--color-category-red-dark-tint-1);
-  --color-red-dark-stroke: var(--color-category-red-dark-border);
-  --color-red-dark-ink: var(--color-category-red-dark-ink);
-  --color-red-dark-dot: var(--color-category-red-dark-border);
-  --color-red-dark-outline: var(--color-category-red-dark-border);
-  --color-green-anchor: var(--color-category-green-anchor);
-  --color-green-light-fill: var(--color-category-green-light-tint-1);
-  --color-green-light-stroke: var(--color-category-green-light-border);
-  --color-green-light-ink: var(--color-category-green-light-ink);
-  --color-green-light-dot: var(--color-category-green-light-border);
-  --color-green-light-outline: var(--color-category-green-light-border);
-  --color-green-dark-fill: var(--color-category-green-dark-tint-1);
-  --color-green-dark-stroke: var(--color-category-green-dark-border);
-  --color-green-dark-ink: var(--color-category-green-dark-ink);
-  --color-green-dark-dot: var(--color-category-green-dark-border);
-  --color-green-dark-outline: var(--color-category-green-dark-border);
-  --color-orange-anchor: var(--color-category-orange-anchor);
-  --color-orange-light-fill: var(--color-category-orange-light-tint-1);
-  --color-orange-light-stroke: var(--color-category-orange-light-border);
-  --color-orange-light-ink: var(--color-category-orange-light-ink);
-  --color-orange-light-outline: var(--color-category-orange-light-border);
-  --color-orange-dark-fill: var(--color-category-orange-dark-tint-1);
-  --color-orange-dark-stroke: var(--color-category-orange-dark-border);
-  --color-orange-dark-ink: var(--color-category-orange-dark-ink);
-  --color-orange-dark-outline: var(--color-category-orange-dark-border);
-  --color-fg: var(--primitive-simple2-fg);
-  --color-muted: var(--primitive-simple2-muted);
-  --color-group-title: var(--primitive-simple2-group-title);
-  --color-bg: var(--primitive-simple2-bg);
-  --color-node: var(--primitive-simple2-node);
-  --color-surface: var(--primitive-simple2-surface);
-  --color-card: var(--primitive-simple2-node);
-  --color-card-on: var(--color-blue-light-fill);
-  --color-page: var(--primitive-simple2-page);
-  --color-outline: var(--primitive-simple2-light-outline);
-  --color-border: var(--primitive-simple2-border);
-  --color-plate-border: var(--primitive-simple2-plate-border);
-  --color-line: var(--primitive-simple2-line);
-  --color-state-active: var(--primitive-simple2-ui-accent);
-  --color-state-active-fill: var(--color-category-blue-fill);
+  --color-blue-light-stroke: #125de6;
+  --color-blue-light-ink: #0151d9;
+  --color-blue-dark-stroke: #70a3ff;
+  --color-blue-dark-ink: #78a9ff;
+  --color-fg: var(--color-ink);
+  --color-muted: var(--color-ui-muted);
+  --color-group-title: var(--color-help-title-color);
+  --color-node: var(--color-ui-card);
+  --color-card: var(--color-ui-card);
+  --color-line: var(--color-gray-282);
+  --color-state-active: var(--color-blue-light-stroke);
+  --color-state-active-fill: var(--color-blue-light-ink);
   --color-state-active-text: var(--color-blue-light-ink);
-  --color-state-on-active: var(--color-category-blue-on);
-  --color-state-error: var(--color-red-light-stroke);
-  --color-state-success: var(--color-green-light-stroke);
-  --color-state-warning: var(--color-category-yellow-light-border);
-  --color-state-glow: var(--color-blue-light-fill);
-  --color-flow-brand: var(--color-category-blue-fill);
-  --color-flow-purple: var(--color-category-purple-fill);
-  --color-flow-green: var(--color-category-green-fill);
-  --color-flow-gray: var(--color-gray-545);
-  --color-flow-red: var(--color-category-red-fill);
-  --color-flow-amber: var(--color-category-yellow-fill);
-  --color-ui-link: var(--color-blue-light-ink);
-  --color-ui-focus: var(--primitive-simple2-ui-accent);
-  --color-ui-progress: var(--color-blue-light-stroke);
-  --color-ui-control-on: var(--primitive-simple2-ui-accent);
-  --color-data-main: var(--color-category-blue-light-border);
-  --color-data-compare: var(--color-category-yellow-fill);
-  --color-data-heat-low: var(--color-blue-light-heat-low);
-  --color-data-heat-high: var(--color-blue-light-heat-high);
-  --color-data-heat-ink: var(--color-gray-1000);
-  --color-data-heat-ink-on: var(--color-gray-0);
-  --color-data-grid: var(--color-gray-212);
-  --color-data-compare-fill: var(--color-category-yellow-fill);
-  --color-data-compare-outline: var(--color-category-yellow-light-border);
-  --color-data-main-fill: var(--color-category-blue-fill);
-  --color-data-category-family-1: blue;
-  --color-data-category-family-2: yellow;
-  --color-data-category-family-3: red;
-  --color-data-category-family-4: green;
-  --color-data-category-family-5: orange;
-  --color-data-category-family-6: purple;
-  --color-data-category-family-7: cyan;
+  --color-state-on-active: var(--color-gray-0);
+  --color-ui-focus: var(--color-action-link);
   --color-data-category-1: var(--color-category-blue-fill);
-  --color-data-category-2: var(--color-category-yellow-fill);
-  --color-data-category-3: var(--color-category-red-fill);
-  --color-data-category-4: var(--color-category-green-fill);
-  --color-data-category-5: var(--color-category-orange-fill);
-  --color-data-category-6: var(--color-category-purple-fill);
-  --color-data-category-7: var(--color-category-cyan-fill);
-  --color-data-category-outline-1: var(--color-category-blue-light-border);
-  --color-data-category-outline-2: var(--color-category-yellow-light-border);
-  --color-data-category-outline-3: var(--color-category-red-light-border);
-  --color-data-category-outline-4: var(--color-category-green-light-border);
-  --color-data-category-outline-5: var(--color-category-orange-light-border);
-  --color-data-category-outline-6: var(--color-category-purple-light-border);
-  --color-data-category-outline-7: var(--color-category-cyan-light-border);
-  --color-data-category-ink-1: var(--color-category-blue-light-ink);
-  --color-data-category-ink-2: var(--color-category-yellow-light-ink);
-  --color-data-category-ink-3: var(--color-category-red-light-ink);
-  --color-data-category-ink-4: var(--color-category-green-light-ink);
-  --color-data-category-ink-5: var(--color-category-orange-light-ink);
-  --color-data-category-ink-6: var(--color-category-purple-light-ink);
-  --color-data-category-ink-7: var(--color-category-cyan-light-ink);
-  --color-data-category-effect-1: var(--color-category-blue-light-effect);
-  --color-data-category-effect-2: var(--color-category-yellow-light-effect);
-  --color-data-category-effect-3: var(--color-category-red-light-effect);
-  --color-data-category-effect-4: var(--color-category-green-light-effect);
-  --color-data-category-effect-5: var(--color-category-orange-light-effect);
-  --color-data-category-effect-6: var(--color-category-purple-light-effect);
-  --color-data-category-effect-7: var(--color-category-cyan-light-effect);
-  --color-data-category-tint-1: var(--color-category-blue-light-tint-1);
-  --color-data-category-tint-2: var(--color-category-yellow-light-tint-1);
-  --color-data-category-tint-3: var(--color-category-red-light-tint-1);
-  --color-data-category-tint-4: var(--color-category-green-light-tint-1);
-  --color-data-category-tint-5: var(--color-category-orange-light-tint-1);
-  --color-data-category-tint-6: var(--color-category-purple-light-tint-1);
-  --color-data-category-tint-7: var(--color-category-cyan-light-tint-1);
-  --color-data-category-on-1: var(--color-category-blue-on);
-  --color-data-category-on-2: var(--color-category-yellow-on);
-  --color-data-category-on-3: var(--color-category-red-on);
-  --color-data-category-on-4: var(--color-category-green-on);
-  --color-data-category-on-5: var(--color-category-orange-on);
-  --color-data-category-on-6: var(--color-category-purple-on);
-  --color-data-category-on-7: var(--color-category-cyan-on);
-  --color-data-category-pattern-1: hatch;
-  --color-data-category-pattern-2: dots;
-  --color-data-category-pattern-3: cross;
-  --color-data-category-shape-1: circle;
-  --color-data-category-shape-2: square;
-  --color-data-category-shape-3: diamond;
-  --color-data-category-shape-4: triangle;
-  --color-data-category-revision-1-family: 7;
-  --color-data-category-revision-1-pattern: 3;
-  --color-data-category-revision-1-shape: 4;
-  --color-data-category-revision-1-step: 0.5;
-  --color-data-category-label-1: optional;
-  --color-data-category-label-2: required;
-  --color-data-category-label-3: optional;
-  --color-data-category-label-4: optional;
-  --color-data-category-label-5: optional;
-  --color-data-category-label-6: optional;
-  --color-data-category-label-7: optional;
-  --color-data-category-area-1: var(--color-category-blue-area);
-  --color-data-category-area-2: var(--color-category-yellow-area);
-  --color-data-category-area-3: var(--color-category-red-area);
-  --color-data-category-area-4: var(--color-category-green-area);
-  --color-data-category-area-5: var(--color-category-orange-area);
-  --color-data-category-area-6: var(--color-category-purple-area);
-  --color-data-category-area-7: var(--color-category-cyan-area);
-  --color-data-category-on-area-1: var(--color-category-blue-on-area);
-  --color-data-category-on-area-2: var(--color-category-yellow-on-area);
-  --color-data-category-on-area-3: var(--color-category-red-on-area);
-  --color-data-category-on-area-4: var(--color-category-green-on-area);
-  --color-data-category-on-area-5: var(--color-category-orange-on-area);
-  --color-data-category-on-area-6: var(--color-category-purple-on-area);
-  --color-data-category-on-area-7: var(--color-category-cyan-on-area);
-  --color-accent: var(--color-blue-light-stroke);
-  --color-figure-icon-service-ink: var(--color-category-blue-fill);
-  --color-figure-icon-service-surface: var(--color-category-blue-on);
-  --color-figure-icon-data-ink: var(--color-category-green-fill);
-  --color-figure-icon-data-surface: var(--color-category-green-on);
-  --color-figure-icon-access-ink: var(--color-category-yellow-fill);
-  --color-figure-icon-access-surface: var(--color-category-yellow-on);
-  --color-figure-icon-person-ink: var(--color-category-blue-fill);
-  --color-figure-icon-person-surface: var(--color-category-blue-on);
-  --color-figure-icon-brand-ink: var(--color-gray-467);
-  --color-figure-icon-brand-surface: var(--color-gray-59);
-  --color-figure-number-fill: var(--primitive-simple2-number-fill);
-  --color-figure-number-ink: var(--primitive-simple2-number-ink);
+  --color-figure-icon: var(--color-blue-light-stroke);
+  --color-figure-number-fill: var(--primitive-figure-number-fill);
+  --color-figure-number-ink: var(--primitive-figure-number-ink);
+  --color-ui-card: var(--color-gray-0);
+  --color-ink: var(--primitive-ink);
+  --color-ui-muted: var(--primitive-muted);
+  --color-ui-line: var(--primitive-line);
+  --color-help-border: var(--primitive-help-border);
+  --color-search-hover: var(--primitive-search-hover);
+  --color-help-hover: var(--primitive-help-hover);
+  --color-help-title-color: var(--primitive-help-title-color);
+  --color-action-link: var(--primitive-link);
   --color-category-blue-anchor: #1e6bd6;
   --color-category-blue-fill: var(--color-category-blue-anchor);
   --color-category-blue-on: var(--color-gray-0);
-  --color-category-blue-light-border: #1e6bd6;
-  --color-category-blue-light-ink: #1161cb;
-  --color-category-blue-light-tint-1: #f7fafe;
-  --color-category-blue-light-tint-2: #e5eefc;
-  --color-category-blue-light-tint-3: #d5e4fa;
-  --color-category-blue-dark-border: #3a85f2;
-  --color-category-blue-dark-ink: #6da8ff;
-  --color-category-blue-dark-tint-1: #303948;
-  --color-category-blue-dark-tint-2: #303b4e;
-  --color-category-blue-dark-tint-3: #303d54;
-  --color-category-blue-light-effect: #3984f2;
-  --color-category-blue-dark-effect: #60a0ff;
-  --color-category-blue-area: #4370b3;
-  --color-category-blue-on-area: var(--color-gray-0);
-  --color-category-yellow-anchor: #f2d024;
-  --color-category-yellow-fill: var(--color-category-yellow-anchor);
-  --color-category-yellow-on: var(--color-gray-1000);
-  --color-category-yellow-light-border: #d6b600;
-  --color-category-yellow-light-ink: var(--color-fg);
-  --color-category-yellow-light-tint-1: #fefcf3;
-  --color-category-yellow-light-tint-2: #fdf9e9;
-  --color-category-yellow-light-tint-3: #fcf7df;
-  --color-category-yellow-dark-border: #f2d024;
-  --color-category-yellow-dark-ink: #f2d024;
-  --color-category-yellow-dark-tint-1: #393938;
-  --color-category-yellow-dark-tint-2: #3b3a39;
-  --color-category-yellow-dark-tint-3: #3c3c39;
-  --color-category-yellow-light-effect: #f0d03b;
-  --color-category-yellow-dark-effect: #ffec9a;
-  --color-category-yellow-area: #e6d27a;
-  --color-category-yellow-on-area: var(--color-gray-1000);
-  --color-category-red-anchor: #fa1955;
-  --color-category-red-fill: var(--color-category-red-anchor);
-  --color-category-red-on: var(--color-gray-1000);
-  --color-category-red-light-border: #fa1955;
-  --color-category-red-light-ink: #cc0041;
-  --color-category-red-light-tint-1: #fff8f8;
-  --color-category-red-light-tint-2: #ffecec;
-  --color-category-red-light-tint-3: #ffdfe0;
-  --color-category-red-dark-border: #ff315d;
-  --color-category-red-dark-ink: #ff7f8b;
-  --color-category-red-dark-tint-1: #413439;
-  --color-category-red-dark-tint-2: #48353a;
-  --color-category-red-dark-tint-3: #4e363b;
-  --color-category-red-light-effect: #ff697b;
-  --color-category-red-dark-effect: #ff7785;
-  --color-category-red-area: #d85a69;
-  --color-category-red-on-area: var(--color-gray-1000);
-  --color-category-green-anchor: #269c6e;
-  --color-category-green-fill: var(--color-category-green-anchor);
-  --color-category-green-on: var(--color-gray-1000);
-  --color-category-green-light-border: #149265;
-  --color-category-green-light-ink: #00744e;
-  --color-category-green-light-tint-1: #f7fbf9;
-  --color-category-green-light-tint-2: #e9f4ed;
-  --color-category-green-light-tint-3: #daece2;
-  --color-category-green-dark-border: #269c6e;
-  --color-category-green-dark-ink: #4cba8a;
-  --color-category-green-dark-tint-1: #323b3c;
-  --color-category-green-dark-tint-2: #333d3d;
-  --color-category-green-dark-tint-3: #333f3e;
-  --color-category-green-light-effect: #3aab7c;
-  --color-category-green-dark-effect: #46b586;
-  --color-category-green-area: #569576;
-  --color-category-green-on-area: var(--color-gray-1000);
-  --color-category-orange-anchor: #ff8906;
-  --color-category-orange-fill: var(--color-category-orange-anchor);
-  --color-category-orange-on: var(--color-gray-1000);
-  --color-category-orange-light-border: #c46800;
-  --color-category-orange-light-ink: #9d5100;
-  --color-category-orange-light-tint-1: #fff9f5;
-  --color-category-orange-light-tint-2: #fff2e9;
-  --color-category-orange-light-tint-3: #ffebdd;
-  --color-category-orange-dark-border: #ff8906;
-  --color-category-orange-dark-ink: #ff8906;
-  --color-category-orange-dark-tint-1: #3d3738;
-  --color-category-orange-dark-tint-2: #403938;
-  --color-category-orange-dark-tint-3: #433a38;
-  --color-category-orange-light-effect: #df812e;
-  --color-category-orange-dark-effect: #ffb27a;
-  --color-category-orange-area: #e59960;
-  --color-category-orange-on-area: var(--color-gray-1000);
-  --color-category-purple-anchor: #7d40c8;
-  --color-category-purple-fill: var(--color-category-purple-anchor);
-  --color-category-purple-on: var(--color-gray-0);
-  --color-category-purple-light-border: #7d40c8;
-  --color-category-purple-light-ink: #7d40c8;
-  --color-category-purple-light-tint-1: #fbf9fe;
-  --color-category-purple-light-tint-2: #f1ecfb;
-  --color-category-purple-light-tint-3: #e7dff8;
-  --color-category-purple-dark-border: #a269f3;
-  --color-category-purple-dark-ink: #bb91ff;
-  --color-category-purple-dark-tint-1: #383547;
-  --color-category-purple-dark-tint-2: #3c364e;
-  --color-category-purple-dark-tint-3: #403756;
-  --color-category-purple-light-effect: #945ae3;
-  --color-category-purple-dark-effect: #b78aff;
-  --color-category-purple-area: #7554a8;
-  --color-category-purple-on-area: var(--color-gray-0);
-  --color-category-cyan-anchor: #25c0cf;
-  --color-category-cyan-fill: var(--color-category-cyan-anchor);
-  --color-category-cyan-on: var(--color-gray-1000);
-  --color-category-cyan-light-border: #008e9a;
-  --color-category-cyan-light-ink: #00717b;
-  --color-category-cyan-light-tint-1: #f5fbfc;
-  --color-category-cyan-light-tint-2: #e9f7f9;
-  --color-category-cyan-light-tint-3: #def3f6;
-  --color-category-cyan-dark-border: #25c0cf;
-  --color-category-cyan-dark-ink: #25c0cf;
-  --color-category-cyan-dark-tint-1: #333a3f;
-  --color-category-cyan-dark-tint-2: #333c42;
-  --color-category-cyan-dark-tint-3: #343e44;
-  --color-category-cyan-light-effect: #33a7b3;
-  --color-category-cyan-dark-effect: #4ddae9;
-  --color-category-cyan-area: #6bb9c2;
-  --color-category-cyan-on-area: var(--color-gray-1000);
-  --color-sequential-light-low: #b2cbf1;
-  --color-sequential-dark-low: #32445e;
-  --color-sequential-high: var(--color-category-blue-anchor);
-  --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --size-text-9: 9px;
-  --size-text-11: 11px;
-  --size-text-13: 13px;
-  --size-text-15: 15px;
-  --size-text-22: 22px;
-  --weight-medium: 500;
-  --weight-semibold: 600;
-  --leading-normal: 1.5;
-  --leading-snug: 1.35;
-  --tracking-text: -0.3px;
-  --space-1: 2px;
-  --space-2: 4px;
-  --space-3: 6px;
-  --space-4: 8px;
-  --space-5: 10px;
-  --space-6: 12px;
-  --space-7: 14px;
-  --space-8: 16px;
-  --space-9: 18px;
-  --space-11: 22px;
-  --space-12: 24px;
-  --space-14: 28px;
-  --space-15: 30px;
-  --space-16: 32px;
-  --space-20: 40px;
-  --space-22: 44px;
-  --space-30: 60px;
-  --space-0-5: 1px;
-  --space-1-5: 3px;
-  --space-2-5: 5px;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 10px;
-  --radius-2xl: 18px;
-  --radius-full: 999px;
-  --border-hair: 0.75px;
-  --border-thin: 1px;
-  --border-strong: 2.5px;
-  --z-raised: 2;
-  --z-overlay: 10;
-  --duration-fast: 200ms;
-  --duration-effect-rise: 80ms;
-  --duration-effect-hold: 80ms;
-  --duration-effect-decay: 240ms;
-  --duration-notice: 2400ms;
-  --easing-move: cubic-bezier(0.455, 0.03, 0.515, 0.955);
-  --easing-reveal: cubic-bezier(0, 0, 0.58, 1);
-  --simple2-heading: 36px;
-  --simple2-subheading: 27px;
-  --simple2-body: 18px;
-  --simple2-control: 15px;
-  --simple2-caption: 13px;
-  --simple2-page-gutter: 24px;
-  --simple2-page-gap: 48px;
-  --simple2-page-width: 960px;
-  --simple2-reading-width: 948px;
-  --simple2-control-gap: 8px;
-  --simple2-focus-width: 3px;
-  --simple2-leading: 1.6;
-  --simple2-title-leading: 1.2;
-  --simple2-shadow: var(--primitive-simple2-shadow);
-  --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-  --simple2-corner: 18px;
-  --simple2-control-radius: 6px;
-  --simple2-card-gap: 48px;
-  --simple2-node-stroke: 1px;
-  --simple2-heading-weight: 700;
-  --simple2-node-corner: 8px;
-  --simple2-separator: var(--primitive-simple2-plate-border);
-  --simple2-canvas-corner: 18px;
-  --simple2-canvas-fill: var(--primitive-simple2-canvas);
-  --simple2-symbol-stroke: 1.5px;
-  --simple2-segment-track: rgba(0, 25, 61, 0.1);
-  --simple2-segment-ink: rgba(0, 4, 9, 0.78);
-  --simple2-segment-hover: rgba(0, 25, 61, 0.08);
-  --simple2-segment-on: var(--primitive-simple2-ui-accent);
-  --simple2-segment-on-hover: var(--primitive-simple2-ui-accent-hover);
-  --simple2-segment-on-ink: var(--primitive-simple2-on-ui-accent);
-  --simple2-segment-radius: 12px;
-  --simple2-segment-item-radius: 9px;
-  --simple2-segment-pad: 4px;
-  --simple2-label-size: 15px;
-  --simple2-detail-size: 13px;
-  --simple2-micro-size: 11px;
-  --simple2-surface-edge: var(--primitive-simple2-plate-border);
-  --simple2-hover-fill: var(--primitive-simple2-hover-fill);
-  --simple2-row-selection: var(--primitive-simple2-row-selection);
-  --simple2-card-active-fill: var(--primitive-simple2-card-active-fill);
-  --simple2-data-line: var(--primitive-simple2-data-line);
-  --simple2-chart-hole: var(--primitive-simple2-chart-hole);
-  --primitive-simple2-fg: #303336;
-  --primitive-simple2-muted: #566170;
-  --primitive-simple2-bg: #f2f5f7;
-  --primitive-simple2-page: #ffffff;
-  --primitive-simple2-node: #ffffff;
-  --primitive-simple2-surface: #eef0f3;
-  --primitive-simple2-plate-border: #d4d8de;
-  --primitive-simple2-border: #838b96;
-  --primitive-simple2-shadow: 0 2px 8px rgba(0,0,0,.10), 0 0 2px rgba(0,0,0,.10);
-  --primitive-simple2-node-shadow: drop-shadow(0px 1px 1px rgba(0,0,0,.07));
-  --primitive-simple2-group-title: #566170;
-  --primitive-simple2-canvas: #f5f5f6;
-  --primitive-simple2-ui-accent: #3c84f3;
-  --primitive-simple2-ui-accent-hover: #3779e0;
-  --primitive-simple2-on-ui-accent: #ffffff;
-  --primitive-simple2-hover-fill: #eef4fc;
-  --primitive-simple2-row-selection: #cee2fd;
-  --primitive-simple2-card-active-fill: #f3f7fd;
-  --primitive-simple2-line: #9da5b0;
-  --primitive-simple2-data-line: #737e8b;
-  --primitive-simple2-dark-bg: #26272b;
-  --primitive-simple2-dark-page: #1d1e22;
-  --primitive-simple2-dark-node: #303136;
-  --primitive-simple2-dark-card: #36373b;
-  --primitive-simple2-dark-edge: #50535b;
-  --primitive-simple2-dark-separator: #454850;
-  --primitive-simple2-dark-hover: #343e50;
-  --primitive-simple2-dark-selection: #274174;
-  --primitive-simple2-dark-card-active-fill: #333a48;
-  --primitive-simple2-dark-muted: #a9adb6;
-  --primitive-simple2-dark-line: #7f8793;
-  --primitive-simple2-dark-data-line: #acb4c0;
-  --primitive-simple2-light-outline: #818181;
-  --primitive-simple2-dark-outline: #868686;
-  --primitive-simple2-dark-paint-gray: #121318;
-  --primitive-simple2-number-fill: #303336;
-  --primitive-simple2-number-ink: #ffffff;
-  --primitive-simple2-chart-hole: 0.55;
-  --color-palette-sky-light-fill: #e8f1fe;
-  --color-palette-sky-light-stroke: var(--color-blue-light-stroke);
-  --color-palette-sky-light-ink: var(--color-blue-light-ink);
-  --color-palette-sky-light-tint-1: var(--color-blue-light-tint-1);
-  --color-palette-sky-light-tint-2: var(--color-blue-light-tint-2);
-  --color-palette-sky-light-tint-3: var(--color-blue-light-tint-3);
-  --color-palette-sky-light-outline: #648cc7;
-  --color-palette-sky-dark-fill: #07162c;
-  --color-palette-sky-dark-stroke: var(--color-blue-dark-stroke);
-  --color-palette-sky-dark-ink: var(--color-blue-dark-ink);
-  --color-palette-sky-dark-tint-1: var(--color-blue-dark-tint-1);
-  --color-palette-sky-dark-tint-2: var(--color-blue-dark-tint-2);
-  --color-palette-sky-dark-tint-3: var(--color-blue-dark-tint-3);
-  --color-palette-sky-dark-outline: #4e7bbd;
-  --color-palette-slate-light-fill: #e7e7e7;
-  --color-palette-slate-light-stroke: var(--color-gray-635);
-  --color-palette-slate-light-ink: var(--color-gray-635);
-  --color-palette-slate-light-dot: var(--color-gray-545);
-  --color-palette-slate-dark-fill: var(--primitive-simple2-dark-paint-gray);
-  --color-palette-slate-dark-stroke: var(--color-gray-333);
-  --color-palette-slate-dark-ink: var(--color-gray-333);
-  --color-palette-slate-dark-dot: var(--color-gray-220);
-  --color-palette-slate-light-outline: #848484;
-  --color-palette-slate-dark-outline: #797a7d;
-  --color-figure-icon: var(--color-blue-light-stroke);
-  --color-figure-icon-tile: var(--color-blue-light-fill);
-  --color-figure-queue-fill: var(--color-blue-light-ink);
-  --color-figure-queue-empty: var(--color-gray-161);
-  --color-tag-purple: var(--color-category-purple-fill);
-  --color-tag-green: var(--color-category-green-fill);
-  --color-tag-gray: var(--color-paint-gray-stroke);
-  --color-tag-red: var(--color-category-red-fill);
-  --color-tag-brand: var(--color-state-active);
-  --color-tag-amber: var(--color-category-yellow-fill);
-  --color-paint-red-fill: var(--color-red-light-fill);
-  --color-paint-red-stroke: var(--color-red-light-stroke);
-  --color-paint-red-outline: var(--color-red-light-outline);
-  --color-paint-red-ink: var(--color-red-light-ink);
-  --color-paint-red-dot: var(--color-red-light-dot);
-  --color-paint-green-fill: var(--color-green-light-fill);
-  --color-paint-green-stroke: var(--color-green-light-stroke);
-  --color-paint-green-outline: var(--color-green-light-outline);
-  --color-paint-green-ink: var(--color-green-light-ink);
-  --color-paint-green-dot: var(--color-green-light-dot);
-  --color-paint-purple-fill: var(--color-purple-light-fill);
-  --color-paint-purple-stroke: var(--color-purple-light-stroke);
-  --color-paint-purple-outline: var(--color-purple-light-outline);
-  --color-paint-purple-ink: var(--color-purple-light-ink);
-  --color-paint-purple-dot: var(--color-purple-light-dot);
-  --color-paint-purple-group-1: var(--color-purple-light-tint-1);
-  --color-paint-purple-group-2: var(--color-purple-light-tint-2);
-  --color-paint-purple-group-3: var(--color-purple-light-tint-3);
-  --color-paint-sky-fill: var(--color-palette-sky-light-fill);
-  --color-paint-sky-stroke: var(--color-palette-sky-light-stroke);
-  --color-paint-sky-outline: var(--color-palette-sky-light-outline);
-  --color-paint-sky-ink: var(--color-palette-sky-light-ink);
-  --color-paint-sky-group-1: var(--color-palette-sky-light-tint-1);
-  --color-paint-sky-group-2: var(--color-palette-sky-light-tint-2);
-  --color-paint-sky-group-3: var(--color-palette-sky-light-tint-3);
-  --color-paint-gray-fill: var(--color-palette-slate-light-fill);
-  --color-paint-gray-stroke: var(--color-palette-slate-light-stroke);
-  --color-paint-gray-outline: var(--color-palette-slate-light-outline);
-  --color-paint-gray-ink: var(--color-palette-slate-light-ink);
-  --color-paint-gray-dot: var(--color-palette-slate-light-dot);
-  --color-paint-blue-fill: var(--color-category-blue-light-tint-1);
-  --color-paint-blue-stroke: var(--color-category-blue-light-border);
-  --color-paint-blue-outline: var(--color-category-blue-light-border);
-  --color-paint-blue-ink: var(--color-category-blue-light-ink);
-  --color-paint-blue-dot: var(--color-category-blue-light-border);
-  --color-paint-blue-group-1: var(--color-category-blue-light-tint-1);
-  --color-paint-blue-group-2: var(--color-category-blue-light-tint-2);
-  --color-paint-blue-group-3: var(--color-category-blue-light-tint-3);
-  --color-paint-blue-effect: var(--color-category-blue-light-effect);
-  --color-paint-yellow-fill: var(--color-category-yellow-light-tint-1);
-  --color-paint-yellow-stroke: var(--color-category-yellow-light-border);
-  --color-paint-yellow-outline: var(--color-category-yellow-light-border);
-  --color-paint-yellow-ink: var(--color-category-yellow-light-ink);
-  --color-paint-yellow-dot: var(--color-category-yellow-light-border);
-  --color-paint-yellow-group-1: var(--color-category-yellow-light-tint-1);
-  --color-paint-yellow-group-2: var(--color-category-yellow-light-tint-2);
-  --color-paint-yellow-group-3: var(--color-category-yellow-light-tint-3);
-  --color-paint-yellow-effect: var(--color-category-yellow-light-effect);
-  --color-paint-orange-fill: var(--color-category-orange-light-tint-1);
-  --color-paint-orange-stroke: var(--color-category-orange-light-border);
-  --color-paint-orange-outline: var(--color-category-orange-light-border);
-  --color-paint-orange-ink: var(--color-category-orange-light-ink);
-  --color-paint-orange-dot: var(--color-category-orange-light-border);
-  --color-paint-orange-group-1: var(--color-category-orange-light-tint-1);
-  --color-paint-orange-group-2: var(--color-category-orange-light-tint-2);
-  --color-paint-orange-group-3: var(--color-category-orange-light-tint-3);
-  --color-paint-orange-effect: var(--color-category-orange-light-effect);
-  --color-paint-cyan-fill: var(--color-category-cyan-light-tint-1);
-  --color-paint-cyan-stroke: var(--color-category-cyan-light-border);
-  --color-paint-cyan-outline: var(--color-category-cyan-light-border);
-  --color-paint-cyan-ink: var(--color-category-cyan-light-ink);
-  --color-paint-cyan-dot: var(--color-category-cyan-light-border);
-  --color-paint-cyan-group-1: var(--color-category-cyan-light-tint-1);
-  --color-paint-cyan-group-2: var(--color-category-cyan-light-tint-2);
-  --color-paint-cyan-group-3: var(--color-category-cyan-light-tint-3);
-  --color-paint-cyan-effect: var(--color-category-cyan-light-effect);
-  --color-flow-ink-amber: var(--color-category-yellow-on);
-  --color-flow-ink-brand: var(--color-category-blue-on);
-  --color-flow-ink-purple: var(--color-category-purple-on);
-  --color-flow-ink-green: var(--color-category-green-on);
-  --color-flow-ink-red: var(--color-category-red-on);
-  --color-flow-ink-gray: var(--color-gray-0);
-  --color-flow-outline-amber: var(--color-category-yellow-light-border);
-  --color-flow-outline-brand: var(--color-category-blue-light-border);
-  --color-flow-outline-purple: var(--color-category-purple-light-border);
-  --color-flow-outline-green: var(--color-category-green-light-border);
-  --color-flow-outline-red: var(--color-category-red-light-border);
   --font-figure-sans: FigSans, FigSansSym, FigSansMath, ui-sans-serif, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
   --font-figure-mono: FigMono, FigSans, FigSansSym, FigSansMath, ui-monospace, SFMono-Regular, Menlo, monospace;
-  --size-control-outer: 52px;
-  --size-control-inner: 44px;
-  --size-control-icon: 20px;
-  --size-control-icon-stroke: 2.5px;
-  --size-pill-height: 18px;
-  --size-icon-node: 20px;
-  --size-icon-group: 18px;
-  --size-icon-tile: 32px;
-  --size-icon-tile-gap: 6px;
-  --size-icon-grid: 24px;
-  --size-tag-height: 14px;
-  --size-packet-radius: 4.5px;
-  --size-packet-halo: 10px;
-  --size-packet-hop-ref: 300px;
-  --size-packet-chip-reach: 16px;
-  --size-arrow-head: 5px;
-  --size-node-card-width: 176px;
-  --size-node-min-width: 100px;
-  --size-node-max-width: 210px;
-  --size-node-min-height: 46px;
-  --size-node-store-cap: 12px;
-  --size-node-state-dot: 14px;
-  --size-node-table-row: 26px;
-  --size-node-circle: 40px;
-  --size-node-tile-width: 80px;
-  --size-node-tile-pad: 8px;
-  --size-grid-cell: 32px;
-  --size-figure-compact-width: 320px;
-  --size-figure-canvas: 960px;
-  --size-figure-canvas-wide: 1440px;
-  --size-chip-max-width: 210px;
-  --size-player-caption-max: 720px;
-  --size-player-embedded-chrome: 150px;
-  --size-gallery-column: var(--size-figure-canvas);
-  --size-gallery-frame: 820px;
-  --size-document-column: var(--size-figure-canvas);
-  --size-chart-width: 720px;
-  --size-chart-compact-width: 296px;
-  --size-chart-pattern-spacing: 8px;
-  --size-chart-label: 140px;
-  --size-chart-label-max: 240px;
-  --size-chart-bar: 12px;
-  --size-chart-row: 40px;
-  --size-chart-dot: 5px;
-  --size-chart-plot-h: 260px;
-  --size-chart-axis: 48px;
-  --size-chart-cell: 40px;
-  --size-chart-cap: 8px;
-  --size-chart-range: 6px;
-  --size-chart-arrow-min: 16px;
-  --size-queue-slot-width: 16px;
-  --size-queue-slot-height: 14px;
-  --size-queue-slot-gap: 4px;
-  --size-sequence-row: 44px;
-  --size-group-title: 28px;
-  --breakpoint-tablet: 800px;
-  --tracking-tag: 0.03em;
-  --tracking-frame: 0.04em;
-  --radius-route: 22px;
-  --border-lifeline: 1.25px;
-  --border-tag: 1.5px;
-  --border-edge: 1.75px;
-  --border-casing: 4.5px;
-  --border-halo: 8px;
-  --dash-line: 5;
+  --text-small-text: var(--primitive-small-text);
+  --text-tiny-text: var(--primitive-tiny-text);
+  --text-figure-meta: 11px;
+  --tracking-text: -0.3px;
+  --font-weight-semibold: 600;
+  --primitive-ink: #303336;
+  --primitive-muted: #55606e;
+  --primitive-line: #dfe3e8;
+  --primitive-link: #2576eb;
+  --primitive-small-text: 15px;
+  --primitive-tiny-text: 13px;
+  --primitive-help-border: #ebecef;
+  --primitive-search-hover: #d9e6ff;
+  --primitive-help-hover: #ebf1ff;
+  --primitive-help-title-color: #3d4856;
+  --primitive-figure-ui-accent: #3c84f3;
+  --primitive-figure-dark-node: #303136;
+  --primitive-figure-dark-edge: #50535b;
+  --primitive-figure-dark-separator: #454850;
+  --primitive-figure-dark-hover: #343e50;
+  --primitive-figure-dark-selection: #274174;
+  --primitive-figure-dark-muted: #a9adb6;
+  --primitive-figure-dark-line: #7f8793;
+  --primitive-figure-number-fill: #303336;
+  --primitive-figure-number-ink: #ffffff;
+  --border-width-thin: 1px;
+  --border-width-hair: 0.75px;
+  --border-width-lifeline: 1.25px;
+  --border-width-edge: 1.75px;
+  --opacity-range: 0.4;
   --dash-gap: 4;
   --dash-card: 3;
-  --opacity-tag: 0.15;
-  --opacity-halo: 0.2;
-  --opacity-dim: 0.3;
-  --opacity-dim-ink: 0.9;
-  --opacity-band: 0.22;
-  --opacity-range: 0.4;
-  --opacity-chip-visible-min: 0.1;
-  --distance-card-min: 0.015;
-  --distance-card-max: 0.04;
-  --distance-flow: 0.1;
-  --distance-neighbor: 0.06;
-  --distance-neighbor-cvd: 0.025;
-  --distance-fill: 0.015;
-  --distance-fill-dark-bg: 0.07;
-  --distance-fill-dark-node: 0.03;
-  --duration-hop: 3750ms;
-  --duration-hop-min: 500ms;
-  --duration-chip-slide: 300ms;
-  --duration-chip-fade: 150ms;
-  --duration-chart-cycle: 7000ms;
-  --duration-reveal: 900ms;
-  --duration-value-flash: 700ms;
-  --duration-pulse: 450ms;
-  --duration-chip-frame: 16.666666666666668ms;
-  --duration-flow-step: 12000ms;
-  --duration-cut-fade: 600ms;
-  --scale-zoom-max: 6;
-  --scale-aspect-fit-max: 1.6;
-  --scale-fold-aspect: var(--scale-aspect-fit-max);
-  --scale-fold-step: 0.75;
-  --scale-aspect-max: 3;
-  --scale-zoom-step: 1.25;
-  --scale-flow-dots-max: 80;
-  --scale-chip-visible-share: 0.6;
-  --scale-chip-room-tries: 4;
-  --scale-chip-room-step: 16;
-  --simple2-figure-leading: 1.5;
-  --simple2-card-row-gap: 6;
+  --outline-width-focus: 3px;
+  color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --color-fg: var(--color-gray-59);
-    --color-muted: var(--primitive-simple2-dark-muted);
-    --color-group-title: var(--primitive-simple2-dark-muted);
-    --color-bg: var(--primitive-simple2-dark-bg);
-    --color-node: var(--primitive-simple2-dark-node);
-    --color-surface: var(--primitive-simple2-dark-card);
-    --color-card: var(--primitive-simple2-dark-node);
-    --color-card-on: var(--color-blue-dark-fill);
-    --color-page: var(--primitive-simple2-dark-page);
-    --color-outline: var(--primitive-simple2-dark-outline);
-    --color-border: var(--primitive-simple2-border);
-    --color-plate-border: var(--primitive-simple2-dark-edge);
-    --color-line: var(--primitive-simple2-dark-line);
-    --color-state-active: var(--primitive-simple2-ui-accent);
-    --color-state-active-fill: var(--color-category-blue-fill);
-    --color-state-active-text: var(--color-blue-dark-ink);
-    --color-state-on-active: var(--color-category-blue-on);
-    --color-state-error: var(--color-red-dark-stroke);
-    --color-state-success: var(--color-green-dark-stroke);
-    --color-state-warning: var(--color-category-yellow-dark-border);
-    --color-state-glow: var(--color-blue-dark-fill);
-    --color-ui-link: var(--color-blue-dark-ink);
-    --color-ui-focus: var(--primitive-simple2-ui-accent);
-    --color-ui-progress: var(--color-blue-dark-stroke);
-    --color-ui-control-on: var(--primitive-simple2-ui-accent);
-    --color-data-main: var(--color-category-blue-dark-border);
-    --color-data-heat-low: var(--color-blue-dark-heat-low);
-    --color-data-heat-high: var(--color-blue-dark-heat-high);
-    --color-data-heat-ink: var(--color-gray-0);
-    --color-data-grid: var(--primitive-simple2-dark-edge);
-    --color-data-compare-outline: var(--color-category-yellow-dark-border);
-    --color-data-category-outline-1: var(--color-category-blue-dark-border);
-    --color-data-category-outline-2: var(--color-category-yellow-dark-border);
-    --color-data-category-outline-3: var(--color-category-red-dark-border);
-    --color-data-category-outline-4: var(--color-category-green-dark-border);
-    --color-data-category-outline-5: var(--color-category-orange-dark-border);
-    --color-data-category-outline-6: var(--color-category-purple-dark-border);
-    --color-data-category-outline-7: var(--color-category-cyan-dark-border);
-    --color-data-category-ink-1: var(--color-category-blue-dark-ink);
-    --color-data-category-ink-2: var(--color-category-yellow-dark-ink);
-    --color-data-category-ink-3: var(--color-category-red-dark-ink);
-    --color-data-category-ink-4: var(--color-category-green-dark-ink);
-    --color-data-category-ink-5: var(--color-category-orange-dark-ink);
-    --color-data-category-ink-6: var(--color-category-purple-dark-ink);
-    --color-data-category-ink-7: var(--color-category-cyan-dark-ink);
-    --color-data-category-effect-1: var(--color-category-blue-dark-effect);
-    --color-data-category-effect-2: var(--color-category-yellow-dark-effect);
-    --color-data-category-effect-3: var(--color-category-red-dark-effect);
-    --color-data-category-effect-4: var(--color-category-green-dark-effect);
-    --color-data-category-effect-5: var(--color-category-orange-dark-effect);
-    --color-data-category-effect-6: var(--color-category-purple-dark-effect);
-    --color-data-category-effect-7: var(--color-category-cyan-dark-effect);
-    --color-data-category-tint-1: var(--color-category-blue-dark-tint-1);
-    --color-data-category-tint-2: var(--color-category-yellow-dark-tint-1);
-    --color-data-category-tint-3: var(--color-category-red-dark-tint-1);
-    --color-data-category-tint-4: var(--color-category-green-dark-tint-1);
-    --color-data-category-tint-5: var(--color-category-orange-dark-tint-1);
-    --color-data-category-tint-6: var(--color-category-purple-dark-tint-1);
-    --color-data-category-tint-7: var(--color-category-cyan-dark-tint-1);
-    --color-accent: var(--color-blue-dark-stroke);
-    --color-figure-icon-service-ink: var(--color-category-blue-dark-border);
-    --color-figure-icon-service-surface: var(--color-node);
-    --color-figure-icon-data-ink: var(--color-category-green-dark-border);
-    --color-figure-icon-data-surface: var(--color-node);
-    --color-figure-icon-access-ink: var(--color-category-yellow-dark-border);
-    --color-figure-icon-access-surface: var(--color-node);
-    --color-figure-icon-person-ink: var(--color-category-blue-dark-border);
-    --color-figure-icon-person-surface: var(--color-node);
-    --color-figure-icon-brand-ink: var(--color-gray-220);
-    --color-figure-icon-brand-surface: var(--color-gray-835);
-    --color-figure-number-fill: var(--color-gray-59);
-    --color-figure-number-ink: var(--color-gray-933);
-    --color-flow-gray: var(--color-gray-220);
-    --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-    --simple2-separator: var(--primitive-simple2-dark-separator);
-    --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
-    --simple2-segment-track: rgba(255, 255, 255, 0.12);
-    --simple2-segment-ink: rgba(255, 255, 255, 0.78);
-    --simple2-segment-hover: rgba(255, 255, 255, 0.1);
-    --simple2-surface-edge: var(--primitive-simple2-dark-edge);
-    --simple2-hover-fill: var(--primitive-simple2-dark-hover);
-    --simple2-row-selection: var(--primitive-simple2-dark-selection);
-    --simple2-card-active-fill: var(--primitive-simple2-dark-card-active-fill);
-    --simple2-data-line: var(--primitive-simple2-dark-data-line);
-    --color-figure-icon: var(--color-blue-dark-stroke);
-    --color-figure-icon-tile: var(--color-blue-dark-fill);
-    --color-figure-queue-fill: var(--color-blue-dark-stroke);
-    --color-figure-queue-empty: var(--color-gray-910);
-    --color-paint-red-fill: var(--color-red-dark-fill);
-    --color-paint-red-stroke: var(--color-red-dark-stroke);
-    --color-paint-red-outline: var(--color-red-dark-outline);
-    --color-paint-red-ink: var(--color-red-dark-ink);
-    --color-paint-red-dot: var(--color-red-dark-dot);
-    --color-paint-green-fill: var(--color-green-dark-fill);
-    --color-paint-green-stroke: var(--color-green-dark-stroke);
-    --color-paint-green-outline: var(--color-green-dark-outline);
-    --color-paint-green-ink: var(--color-green-dark-ink);
-    --color-paint-green-dot: var(--color-green-dark-dot);
-    --color-paint-purple-fill: var(--color-purple-dark-fill);
-    --color-paint-purple-stroke: var(--color-purple-dark-stroke);
-    --color-paint-purple-outline: var(--color-purple-dark-outline);
-    --color-paint-purple-ink: var(--color-purple-dark-ink);
-    --color-paint-purple-dot: var(--color-purple-dark-dot);
-    --color-paint-purple-group-1: var(--color-purple-dark-tint-1);
-    --color-paint-purple-group-2: var(--color-purple-dark-tint-2);
-    --color-paint-purple-group-3: var(--color-purple-dark-tint-3);
-    --color-paint-sky-fill: var(--color-palette-sky-dark-fill);
-    --color-paint-sky-stroke: var(--color-palette-sky-dark-stroke);
-    --color-paint-sky-outline: var(--color-palette-sky-dark-outline);
-    --color-paint-sky-ink: var(--color-palette-sky-dark-ink);
-    --color-paint-sky-group-1: var(--color-palette-sky-dark-tint-1);
-    --color-paint-sky-group-2: var(--color-palette-sky-dark-tint-2);
-    --color-paint-sky-group-3: var(--color-palette-sky-dark-tint-3);
-    --color-paint-gray-fill: var(--color-palette-slate-dark-fill);
-    --color-paint-gray-stroke: var(--color-palette-slate-dark-stroke);
-    --color-paint-gray-outline: var(--color-palette-slate-dark-outline);
-    --color-paint-gray-ink: var(--color-palette-slate-dark-ink);
-    --color-paint-gray-dot: var(--color-palette-slate-dark-dot);
-    --color-paint-blue-fill: var(--color-category-blue-dark-tint-1);
-    --color-paint-blue-stroke: var(--color-category-blue-dark-border);
-    --color-paint-blue-outline: var(--color-category-blue-dark-border);
-    --color-paint-blue-ink: var(--color-category-blue-dark-ink);
-    --color-paint-blue-dot: var(--color-category-blue-dark-border);
-    --color-paint-blue-group-1: var(--color-category-blue-dark-tint-1);
-    --color-paint-blue-group-2: var(--color-category-blue-dark-tint-2);
-    --color-paint-blue-group-3: var(--color-category-blue-dark-tint-3);
-    --color-paint-blue-effect: var(--color-category-blue-dark-effect);
-    --color-paint-yellow-fill: var(--color-category-yellow-dark-tint-1);
-    --color-paint-yellow-stroke: var(--color-category-yellow-dark-border);
-    --color-paint-yellow-outline: var(--color-category-yellow-dark-border);
-    --color-paint-yellow-ink: var(--color-category-yellow-dark-ink);
-    --color-paint-yellow-dot: var(--color-category-yellow-dark-border);
-    --color-paint-yellow-group-1: var(--color-category-yellow-dark-tint-1);
-    --color-paint-yellow-group-2: var(--color-category-yellow-dark-tint-2);
-    --color-paint-yellow-group-3: var(--color-category-yellow-dark-tint-3);
-    --color-paint-yellow-effect: var(--color-category-yellow-dark-effect);
-    --color-paint-orange-fill: var(--color-category-orange-dark-tint-1);
-    --color-paint-orange-stroke: var(--color-category-orange-dark-border);
-    --color-paint-orange-outline: var(--color-category-orange-dark-border);
-    --color-paint-orange-ink: var(--color-category-orange-dark-ink);
-    --color-paint-orange-dot: var(--color-category-orange-dark-border);
-    --color-paint-orange-group-1: var(--color-category-orange-dark-tint-1);
-    --color-paint-orange-group-2: var(--color-category-orange-dark-tint-2);
-    --color-paint-orange-group-3: var(--color-category-orange-dark-tint-3);
-    --color-paint-orange-effect: var(--color-category-orange-dark-effect);
-    --color-paint-cyan-fill: var(--color-category-cyan-dark-tint-1);
-    --color-paint-cyan-stroke: var(--color-category-cyan-dark-border);
-    --color-paint-cyan-outline: var(--color-category-cyan-dark-border);
-    --color-paint-cyan-ink: var(--color-category-cyan-dark-ink);
-    --color-paint-cyan-dot: var(--color-category-cyan-dark-border);
-    --color-paint-cyan-group-1: var(--color-category-cyan-dark-tint-1);
-    --color-paint-cyan-group-2: var(--color-category-cyan-dark-tint-2);
-    --color-paint-cyan-group-3: var(--color-category-cyan-dark-tint-3);
-    --color-paint-cyan-effect: var(--color-category-cyan-dark-effect);
-    --color-flow-outline-amber: var(--color-category-yellow-dark-border);
-    --color-flow-outline-brand: var(--color-category-blue-dark-border);
-    --color-flow-outline-purple: var(--color-category-purple-dark-border);
-    --color-flow-outline-green: var(--color-category-green-dark-border);
-    --color-flow-outline-red: var(--color-category-red-dark-border);
-    --color-flow-ink-gray: var(--color-gray-933);
-  }
-}
-[data-theme='dark'] {
-  --color-fg: var(--color-gray-59);
-  --color-muted: var(--primitive-simple2-dark-muted);
-  --color-group-title: var(--primitive-simple2-dark-muted);
-  --color-bg: var(--primitive-simple2-dark-bg);
-  --color-node: var(--primitive-simple2-dark-node);
-  --color-surface: var(--primitive-simple2-dark-card);
-  --color-card: var(--primitive-simple2-dark-node);
-  --color-card-on: var(--color-blue-dark-fill);
-  --color-page: var(--primitive-simple2-dark-page);
-  --color-outline: var(--primitive-simple2-dark-outline);
-  --color-border: var(--primitive-simple2-border);
-  --color-plate-border: var(--primitive-simple2-dark-edge);
-  --color-line: var(--primitive-simple2-dark-line);
-  --color-state-active: var(--primitive-simple2-ui-accent);
+  :root:not([data-theme='light']):not([data-theme='dark']) {
+  --color-line: var(--primitive-figure-dark-line);
+  --color-state-active: var(--primitive-figure-ui-accent);
   --color-state-active-fill: var(--color-category-blue-fill);
   --color-state-active-text: var(--color-blue-dark-ink);
   --color-state-on-active: var(--color-category-blue-on);
-  --color-state-error: var(--color-red-dark-stroke);
-  --color-state-success: var(--color-green-dark-stroke);
-  --color-state-warning: var(--color-category-yellow-dark-border);
-  --color-state-glow: var(--color-blue-dark-fill);
-  --color-ui-link: var(--color-blue-dark-ink);
-  --color-ui-focus: var(--primitive-simple2-ui-accent);
-  --color-ui-progress: var(--color-blue-dark-stroke);
-  --color-ui-control-on: var(--primitive-simple2-ui-accent);
-  --color-data-main: var(--color-category-blue-dark-border);
-  --color-data-heat-low: var(--color-blue-dark-heat-low);
-  --color-data-heat-high: var(--color-blue-dark-heat-high);
-  --color-data-heat-ink: var(--color-gray-0);
-  --color-data-grid: var(--primitive-simple2-dark-edge);
-  --color-data-compare-outline: var(--color-category-yellow-dark-border);
-  --color-data-category-outline-1: var(--color-category-blue-dark-border);
-  --color-data-category-outline-2: var(--color-category-yellow-dark-border);
-  --color-data-category-outline-3: var(--color-category-red-dark-border);
-  --color-data-category-outline-4: var(--color-category-green-dark-border);
-  --color-data-category-outline-5: var(--color-category-orange-dark-border);
-  --color-data-category-outline-6: var(--color-category-purple-dark-border);
-  --color-data-category-outline-7: var(--color-category-cyan-dark-border);
-  --color-data-category-ink-1: var(--color-category-blue-dark-ink);
-  --color-data-category-ink-2: var(--color-category-yellow-dark-ink);
-  --color-data-category-ink-3: var(--color-category-red-dark-ink);
-  --color-data-category-ink-4: var(--color-category-green-dark-ink);
-  --color-data-category-ink-5: var(--color-category-orange-dark-ink);
-  --color-data-category-ink-6: var(--color-category-purple-dark-ink);
-  --color-data-category-ink-7: var(--color-category-cyan-dark-ink);
-  --color-data-category-effect-1: var(--color-category-blue-dark-effect);
-  --color-data-category-effect-2: var(--color-category-yellow-dark-effect);
-  --color-data-category-effect-3: var(--color-category-red-dark-effect);
-  --color-data-category-effect-4: var(--color-category-green-dark-effect);
-  --color-data-category-effect-5: var(--color-category-orange-dark-effect);
-  --color-data-category-effect-6: var(--color-category-purple-dark-effect);
-  --color-data-category-effect-7: var(--color-category-cyan-dark-effect);
-  --color-data-category-tint-1: var(--color-category-blue-dark-tint-1);
-  --color-data-category-tint-2: var(--color-category-yellow-dark-tint-1);
-  --color-data-category-tint-3: var(--color-category-red-dark-tint-1);
-  --color-data-category-tint-4: var(--color-category-green-dark-tint-1);
-  --color-data-category-tint-5: var(--color-category-orange-dark-tint-1);
-  --color-data-category-tint-6: var(--color-category-purple-dark-tint-1);
-  --color-data-category-tint-7: var(--color-category-cyan-dark-tint-1);
-  --color-accent: var(--color-blue-dark-stroke);
-  --color-figure-icon-service-ink: var(--color-category-blue-dark-border);
-  --color-figure-icon-service-surface: var(--color-node);
-  --color-figure-icon-data-ink: var(--color-category-green-dark-border);
-  --color-figure-icon-data-surface: var(--color-node);
-  --color-figure-icon-access-ink: var(--color-category-yellow-dark-border);
-  --color-figure-icon-access-surface: var(--color-node);
-  --color-figure-icon-person-ink: var(--color-category-blue-dark-border);
-  --color-figure-icon-person-surface: var(--color-node);
-  --color-figure-icon-brand-ink: var(--color-gray-220);
-  --color-figure-icon-brand-surface: var(--color-gray-835);
+  --color-figure-icon: var(--color-blue-dark-stroke);
   --color-figure-number-fill: var(--color-gray-59);
   --color-figure-number-ink: var(--color-gray-933);
-  --color-flow-gray: var(--color-gray-220);
-  --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-  --simple2-separator: var(--primitive-simple2-dark-separator);
-  --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
-  --simple2-segment-track: rgba(255, 255, 255, 0.12);
-  --simple2-segment-ink: rgba(255, 255, 255, 0.78);
-  --simple2-segment-hover: rgba(255, 255, 255, 0.1);
-  --simple2-surface-edge: var(--primitive-simple2-dark-edge);
-  --simple2-hover-fill: var(--primitive-simple2-dark-hover);
-  --simple2-row-selection: var(--primitive-simple2-dark-selection);
-  --simple2-card-active-fill: var(--primitive-simple2-dark-card-active-fill);
-  --simple2-data-line: var(--primitive-simple2-dark-data-line);
+  --color-ui-card: var(--primitive-figure-dark-node);
+  --color-ink: var(--color-gray-59);
+  --color-ui-muted: var(--primitive-figure-dark-muted);
+  --color-ui-line: var(--primitive-figure-dark-separator);
+  --color-help-border: var(--primitive-figure-dark-edge);
+  --color-search-hover: var(--primitive-figure-dark-selection);
+  --color-help-hover: var(--primitive-figure-dark-hover);
+  --color-help-title-color: var(--primitive-figure-dark-muted);
+  color-scheme: dark;
+  }
+}
+[data-theme='dark'] {
+  --color-line: var(--primitive-figure-dark-line);
+  --color-state-active: var(--primitive-figure-ui-accent);
+  --color-state-active-fill: var(--color-category-blue-fill);
+  --color-state-active-text: var(--color-blue-dark-ink);
+  --color-state-on-active: var(--color-category-blue-on);
   --color-figure-icon: var(--color-blue-dark-stroke);
-  --color-figure-icon-tile: var(--color-blue-dark-fill);
-  --color-figure-queue-fill: var(--color-blue-dark-stroke);
-  --color-figure-queue-empty: var(--color-gray-910);
-  --color-paint-red-fill: var(--color-red-dark-fill);
-  --color-paint-red-stroke: var(--color-red-dark-stroke);
-  --color-paint-red-outline: var(--color-red-dark-outline);
-  --color-paint-red-ink: var(--color-red-dark-ink);
-  --color-paint-red-dot: var(--color-red-dark-dot);
-  --color-paint-green-fill: var(--color-green-dark-fill);
-  --color-paint-green-stroke: var(--color-green-dark-stroke);
-  --color-paint-green-outline: var(--color-green-dark-outline);
-  --color-paint-green-ink: var(--color-green-dark-ink);
-  --color-paint-green-dot: var(--color-green-dark-dot);
-  --color-paint-purple-fill: var(--color-purple-dark-fill);
-  --color-paint-purple-stroke: var(--color-purple-dark-stroke);
-  --color-paint-purple-outline: var(--color-purple-dark-outline);
-  --color-paint-purple-ink: var(--color-purple-dark-ink);
-  --color-paint-purple-dot: var(--color-purple-dark-dot);
-  --color-paint-purple-group-1: var(--color-purple-dark-tint-1);
-  --color-paint-purple-group-2: var(--color-purple-dark-tint-2);
-  --color-paint-purple-group-3: var(--color-purple-dark-tint-3);
-  --color-paint-sky-fill: var(--color-palette-sky-dark-fill);
-  --color-paint-sky-stroke: var(--color-palette-sky-dark-stroke);
-  --color-paint-sky-outline: var(--color-palette-sky-dark-outline);
-  --color-paint-sky-ink: var(--color-palette-sky-dark-ink);
-  --color-paint-sky-group-1: var(--color-palette-sky-dark-tint-1);
-  --color-paint-sky-group-2: var(--color-palette-sky-dark-tint-2);
-  --color-paint-sky-group-3: var(--color-palette-sky-dark-tint-3);
-  --color-paint-gray-fill: var(--color-palette-slate-dark-fill);
-  --color-paint-gray-stroke: var(--color-palette-slate-dark-stroke);
-  --color-paint-gray-outline: var(--color-palette-slate-dark-outline);
-  --color-paint-gray-ink: var(--color-palette-slate-dark-ink);
-  --color-paint-gray-dot: var(--color-palette-slate-dark-dot);
-  --color-paint-blue-fill: var(--color-category-blue-dark-tint-1);
-  --color-paint-blue-stroke: var(--color-category-blue-dark-border);
-  --color-paint-blue-outline: var(--color-category-blue-dark-border);
-  --color-paint-blue-ink: var(--color-category-blue-dark-ink);
-  --color-paint-blue-dot: var(--color-category-blue-dark-border);
-  --color-paint-blue-group-1: var(--color-category-blue-dark-tint-1);
-  --color-paint-blue-group-2: var(--color-category-blue-dark-tint-2);
-  --color-paint-blue-group-3: var(--color-category-blue-dark-tint-3);
-  --color-paint-blue-effect: var(--color-category-blue-dark-effect);
-  --color-paint-yellow-fill: var(--color-category-yellow-dark-tint-1);
-  --color-paint-yellow-stroke: var(--color-category-yellow-dark-border);
-  --color-paint-yellow-outline: var(--color-category-yellow-dark-border);
-  --color-paint-yellow-ink: var(--color-category-yellow-dark-ink);
-  --color-paint-yellow-dot: var(--color-category-yellow-dark-border);
-  --color-paint-yellow-group-1: var(--color-category-yellow-dark-tint-1);
-  --color-paint-yellow-group-2: var(--color-category-yellow-dark-tint-2);
-  --color-paint-yellow-group-3: var(--color-category-yellow-dark-tint-3);
-  --color-paint-yellow-effect: var(--color-category-yellow-dark-effect);
-  --color-paint-orange-fill: var(--color-category-orange-dark-tint-1);
-  --color-paint-orange-stroke: var(--color-category-orange-dark-border);
-  --color-paint-orange-outline: var(--color-category-orange-dark-border);
-  --color-paint-orange-ink: var(--color-category-orange-dark-ink);
-  --color-paint-orange-dot: var(--color-category-orange-dark-border);
-  --color-paint-orange-group-1: var(--color-category-orange-dark-tint-1);
-  --color-paint-orange-group-2: var(--color-category-orange-dark-tint-2);
-  --color-paint-orange-group-3: var(--color-category-orange-dark-tint-3);
-  --color-paint-orange-effect: var(--color-category-orange-dark-effect);
-  --color-paint-cyan-fill: var(--color-category-cyan-dark-tint-1);
-  --color-paint-cyan-stroke: var(--color-category-cyan-dark-border);
-  --color-paint-cyan-outline: var(--color-category-cyan-dark-border);
-  --color-paint-cyan-ink: var(--color-category-cyan-dark-ink);
-  --color-paint-cyan-dot: var(--color-category-cyan-dark-border);
-  --color-paint-cyan-group-1: var(--color-category-cyan-dark-tint-1);
-  --color-paint-cyan-group-2: var(--color-category-cyan-dark-tint-2);
-  --color-paint-cyan-group-3: var(--color-category-cyan-dark-tint-3);
-  --color-paint-cyan-effect: var(--color-category-cyan-dark-effect);
-  --color-flow-outline-amber: var(--color-category-yellow-dark-border);
-  --color-flow-outline-brand: var(--color-category-blue-dark-border);
-  --color-flow-outline-purple: var(--color-category-purple-dark-border);
-  --color-flow-outline-green: var(--color-category-green-dark-border);
-  --color-flow-outline-red: var(--color-category-red-dark-border);
-  --color-flow-ink-gray: var(--color-gray-933);
+  --color-figure-number-fill: var(--color-gray-59);
+  --color-figure-number-ink: var(--color-gray-933);
+  --color-ui-card: var(--primitive-figure-dark-node);
+  --color-ink: var(--color-gray-59);
+  --color-ui-muted: var(--primitive-figure-dark-muted);
+  --color-ui-line: var(--primitive-figure-dark-separator);
+  --color-help-border: var(--primitive-figure-dark-edge);
+  --color-search-hover: var(--primitive-figure-dark-selection);
+  --color-help-hover: var(--primitive-figure-dark-hover);
+  --color-help-title-color: var(--primitive-figure-dark-muted);
+  color-scheme: dark;
+}
+[data-theme='light'] {
+  --color-line: var(--color-gray-282);
+  --color-state-active: var(--color-blue-light-stroke);
+  --color-state-active-fill: var(--color-blue-light-ink);
+  --color-state-active-text: var(--color-blue-light-ink);
+  --color-state-on-active: var(--color-gray-0);
+  --color-figure-icon: var(--color-blue-light-stroke);
+  --color-figure-number-fill: var(--primitive-figure-number-fill);
+  --color-figure-number-ink: var(--primitive-figure-number-ink);
+  --color-ui-card: var(--color-gray-0);
+  --color-ink: var(--primitive-ink);
+  --color-ui-muted: var(--primitive-muted);
+  --color-ui-line: var(--primitive-line);
+  --color-help-border: var(--primitive-help-border);
+  --color-search-hover: var(--primitive-search-hover);
+  --color-help-hover: var(--primitive-help-hover);
+  --color-help-title-color: var(--primitive-help-title-color);
+  color-scheme: light;
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
 /* 카드 안 글(label, sub, meta, cell, item, row)의 기준 점(text-anchor)은 글이 정한다(measure/texts.js의 anchor). 여기서는 글꼴과 색만 정한다. */
-/* 글 위계는 셋이다: 제목(simple2.label-size 15: 카드 제목은 regular, 그룹 제목은 semibold), 문장과 이름표(detail-size 13: 부제, 선 라벨, 메모, 이동 글, 카드 줄, 제약, 형식), 작은 표시(micro-size 11: 번호, 태그, 표식, 키, 눈금, 단위). 크기와 굵기는 measure/texts.js의 STYLE이 같은 토큰으로 잰다. */
+/* 글 위계는 셋이다: 제목(공통 디자인.label-size 15: 카드 제목은 regular, 그룹 제목은 semibold), 문장과 이름표(detail-size 13: 부제, 선 라벨, 메모, 이동 글, 카드 줄, 제약, 형식), 작은 표시(micro-size 11: 번호, 태그, 표식, 키, 눈금, 단위). 크기와 굵기는 measure/texts.js의 STYLE이 같은 토큰으로 잰다. */
 .fl text {
   font-family: var(--font-figure-sans);
   letter-spacing: var(--tracking-text);
 }
 
 .fl .label {
-  font-size: var(--simple2-label-size);
+  font-size: var(--text-small-text);
   fill: var(--color-fg);
 }
 
 .fl .sub {
-  font-size: var(--simple2-detail-size);
+  font-size: var(--text-tiny-text);
   fill: var(--color-muted);
 }
 
 .fl .frame {
-  font-size: var(--simple2-label-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-small-text);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-group-title);
 }
 
 .fl .edgelabel {
-  font-size: var(--simple2-detail-size);
+  font-size: var(--text-tiny-text);
   text-anchor: middle;
   fill: var(--fx-ink-rest);
 }
@@ -1069,7 +171,7 @@
 .fl .mini,
 .fl .cell,
 .fl .item {
-  font-size: var(--simple2-detail-size);
+  font-size: var(--text-tiny-text);
   fill: var(--color-fg);
 }
 
@@ -1089,26 +191,26 @@
 }
 
 .fl .tag {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-fg);
 }
 
 .fl .mark {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-state-active-text);
 }
 
 /* 값 카드 줄의 값 글자. 줄의 이름(row)은 카드 층이 그리고 값은 오른쪽 끝에 얹힌다. 이름과 같은 크기이고 굵기만 다르다. */
 .fl .value {
-  font-size: var(--simple2-detail-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-tiny-text);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-fg);
 }
 
 .fl .chip {
-  font-size: var(--simple2-detail-size);
+  font-size: var(--text-tiny-text);
   text-anchor: middle;
 }
 
@@ -1139,13 +241,13 @@
 .fl .fl-path {
   fill: none;
   stroke: currentColor;
-  stroke-width: var(--border-edge);
+  stroke-width: var(--border-width-edge);
 }
 
 /* 열 키(PK, FK, UNQ)는 작은 표시이고 글자색이다. 파랑은 켜진 상태에만 쓴다. */
 .fl .cell .key {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-fg);
 }
 
@@ -1154,12 +256,12 @@
   --fx-edge-rest: var(--color-line);
   fill: none;
   stroke: var(--fx-edge-rest);
-  stroke-width: var(--border-thin);
+  stroke-width: var(--border-width-thin);
 }
 
 .fl .lifeline {
   stroke: var(--color-line);
-  stroke-width: var(--border-lifeline);
+  stroke-width: var(--border-width-lifeline);
   stroke-dasharray: var(--dash-gap) var(--dash-gap);
 }
 
@@ -1183,16 +285,16 @@
 }
 
 .fl .col-line {
-  stroke: var(--simple2-separator);
-  stroke-width: var(--border-hair);
+  stroke: var(--color-ui-line);
+  stroke-width: var(--border-width-hair);
 }
 
 .fl .grid-cell {
   --fx-face: var(--color-node);
   --fx-face-on: var(--fx-row);
   fill: var(--fx-face);
-  stroke: var(--simple2-separator);
-  stroke-width: var(--border-thin);
+  stroke: var(--color-ui-line);
+  stroke-width: var(--border-width-thin);
 }
 
 .fl .grid-tray {
@@ -1201,7 +303,7 @@
 
 .fl .grid-cell.gap {
   --fx-face: var(--color-card);
-  stroke: var(--simple2-separator);
+  stroke: var(--color-ui-line);
 }
 
 .fl .grid-cell.empty {
@@ -1222,8 +324,8 @@
 
 /* 도형 윗줄과 그룹 제목 줄의 장식: 글자 배지, 아이콘 */
 .fl .badge {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   text-anchor: middle;
   fill: var(--color-fg);
 }
@@ -1242,8 +344,8 @@
 }
 
 .fl .number {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   text-anchor: middle;
   fill: var(--color-figure-number-ink);
 }
@@ -1251,10 +353,10 @@
 /* 도형은 그림자 없는 평면이다. 그림자는 떠 있는 메뉴 같은 조작에만 둔다. */
 .fl :where(.fl-node) > .fl-stroke {
   stroke: var(--fx-edge-rest);
-  stroke-width: var(--simple2-node-stroke);
+  stroke-width: var(--border-width-thin);
 }
 
-/* 구획은 border.hair, 보조 경계는 border.thin, 관계는 border.edge, 생명선은 border.lifeline, 도형 경계는 simple2.node-stroke다. 모든 선은 그림과 함께 확대·축소된다. */
+/* 구획은 border.hair, 보조 경계는 border.thin, 관계는 border.edge, 생명선은 border.lifeline, 도형 경계는 공통 디자인.node-stroke다. 모든 선은 그림과 함께 확대·축소된다. */
 .fl .fl-path,
 .fl .fl-node > .fl-stroke,
 .fl .grid-cell,
@@ -1274,61 +376,6 @@
   stroke-linejoin: round;
 }
 
-/* 의미 아이콘은 역할색으로 채운 실루엣과 그 안의 밝은 세부를 함께 가진다. 기술 브랜드도 자기 개념의 역할(icons/symbols.js)을 따른다. */
-.fl .fl-symbol-glyph {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: var(--simple2-symbol-stroke);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.fl .symbol-solid {
-  fill: currentColor;
-  stroke: none;
-}
-
-.fl .symbol-cut {
-  fill: none;
-  stroke: var(--symbol-detail);
-}
-
-/* 실루엣 밖으로 나오는 획(자물쇠 고리, 모니터 받침)은 면과 같은 색이다. */
-.fl .symbol-line {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: calc(var(--simple2-symbol-stroke) * 2);
-}
-
-.fl .fl-symbol-service {
-  color: var(--color-figure-icon-service-ink);
-  --symbol-detail: var(--color-figure-icon-service-surface);
-}
-
-.fl .fl-symbol-data {
-  color: var(--color-figure-icon-data-ink);
-  --symbol-detail: var(--color-figure-icon-data-surface);
-}
-
-.fl .fl-symbol-access {
-  color: var(--color-figure-icon-access-ink);
-  --symbol-detail: var(--color-figure-icon-access-surface);
-}
-
-.fl .fl-symbol-person {
-  color: var(--color-figure-icon-person-ink);
-  --symbol-detail: var(--color-figure-icon-person-surface);
-}
-
-.fl .symbol-face {
-  fill: currentColor;
-}
-
-.fl .symbol-detail {
-  fill: var(--symbol-detail);
-  stroke: none;
-}
-
 /* 효과 한 벌: 켜짐과 평소의 모습을 정하는 유일한 정의다. 움직이는 SVG(animate/animator.js)의 keyframes와 HTML 재생기의 `.on` 규칙이 같은 `--fx-*`를 읽으므로 두 출력과 정지 그림이 늘 같다.
    - 켜짐(on): --fx-edge 윤곽·그룹 경계·선·알약 테두리, --fx-ink 알약 글자, --fx-row 표 줄과 격자 칸의 면, --fx-face-on 요소의 켜진 면(도형은 아래), --fx-flash 값이 바뀐 순간의 면.
    - 평소(rest): --fx-edge-rest 도형, 그룹, 알약의 경계, --fx-ink-rest 알약 글자, --fx-line-rest 선, --fx-face 요소의 평소 면.
@@ -1336,9 +383,9 @@
 .fl {
   --fx-edge: var(--color-state-active);
   --fx-ink: var(--color-state-active-text);
-  --fx-row: var(--simple2-row-selection);
-  --fx-flash: var(--simple2-row-selection);
-  --fx-edge-rest: var(--simple2-surface-edge);
+  --fx-row: var(--color-search-hover);
+  --fx-flash: var(--color-search-hover);
+  --fx-edge-rest: var(--color-help-border);
   --fx-ink-rest: var(--color-muted);
   --fx-line-rest: var(--color-line);
 }
@@ -1346,7 +393,7 @@
 /* 도형의 평소 면과 켜진 면. 옅은 면으로 고른 도형(filled)은 켜져도 면이 같다. 면이 없는 윤곽(fill='none')과 점은 자기 면이 없거나 자기 색이다. */
 .fl .fl-node {
   --fx-face: var(--color-node);
-  --fx-face-on: var(--simple2-card-active-fill);
+  --fx-face-on: var(--color-help-hover);
 }
 
 .fl .fl-node.ap-filled {
@@ -1394,7 +441,7 @@
 
 .fl .fl-node:focus-visible > .fl-stroke {
   stroke: var(--color-ui-focus);
-  stroke-width: var(--simple2-focus-width);
+  stroke-width: var(--outline-width-focus);
 }
 
 /* 값이 바뀔 때 켜지는 배경 면. 도형과 같은 윤곽을 쓰고 테두리를 더하지 않는다. */
@@ -1418,21 +465,21 @@
 .fl .fl-pulse {
   fill: none;
   stroke: var(--fx-edge);
-  stroke-width: var(--simple2-node-stroke);
+  stroke-width: var(--border-width-thin);
   pointer-events: none;
 }
 
 /* 제어 구획의 경계는 관계선보다 약하며 제목 밑면은 생명선을 가린다. */
 .fl .fl-fragment-border {
   fill: none;
-  stroke: var(--simple2-separator);
-  stroke-width: var(--border-thin);
+  stroke: var(--color-ui-line);
+  stroke-width: var(--border-width-thin);
 }
 
 .fl .fl-fragment-divider {
   fill: none;
-  stroke: var(--simple2-separator);
-  stroke-width: var(--border-hair);
+  stroke: var(--color-ui-line);
+  stroke-width: var(--border-width-hair);
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
 
@@ -1441,7 +488,7 @@
 }
 
 .fl .fl-fragment-label {
-  font-weight: var(--weight-semibold);
+  font-weight: var(--font-weight-semibold);
 }
 
 @keyframes a0 { 0%,42.647% { fill: var(--fx-face); stroke: var(--fx-edge-rest) } 42.648%,61.951% { fill: var(--fx-face); stroke: var(--fx-edge-rest) } 61.952%,100% { fill: var(--fx-face); stroke: var(--fx-edge-rest) } }
@@ -1478,11 +525,11 @@
 }
 </style>
 <defs></defs>
-<rect x="0.5" y="0.5" width="959" height="533" rx="18" fill="var(--simple2-canvas-fill)"/>
+<rect x="0.5" y="0.5" width="959" height="533" rx="18" fill="var(--color-prose-pre-background)"/>
 <g class="fl-motion" transform="translate(14.8 0)">
 <g id="g-0" class="fl-group" data-id="system"><rect x="319.3" y="28" width="240" height="478" rx="8" class="frame-box fl-stroke "/><text x="337.3" y="47.4" class="frame">Saturn</text></g>
 
-<g id="n-0" class="fl-node fl-shape-person" tabindex="0" role="img" aria-label="Developer" data-id="user"><rect x="28" y="44.5" width="129.6" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-person"><g class="fl-symbol-glyph" transform="translate(46 58) scale(0.83333)"><circle class="symbol-face" cx="12" cy="7.2" r="3.4"/><path class="symbol-face" d="M4 19.4V16.2A8 4 0 0 1 20 16.2V19.4Q20 21 18.4 21H5.6Q4 21 4 19.4Z"/></g></g><text x="106.8" y="73.4" class="label" text-anchor="middle">Developer</text></g>
+<g id="n-0" class="fl-node fl-shape-person" tabindex="0" role="img" aria-label="Developer" data-id="user"><rect x="28" y="44.5" width="129.6" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(46 58) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="40" height="40" rx="10" fill="#3d4856"/><circle cx="24" cy="16" r="6" fill="#ffffff"/><path d="M13 36A11 11 0 0 1 35 36Z" fill="#ffffff"/></g></g></g><text x="106.8" y="73.4" class="label" text-anchor="middle">Developer</text></g>
 <g id="n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Screen" data-id="tui"><rect x="359.3" y="128" width="176" height="109" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="359.3" y="128" width="176" height="109" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="8.936s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.42648;0.43543;0.44438;0.47124;1" values="0;0;1;1;0;0"/></rect><text x="447.3" y="156.9" class="label" text-anchor="middle">Screen</text><rect x="369.3" y="175" width="156" height="52" rx="6" fill="var(--color-card)" opacity="0" class="fl-card a2"/><g id="n-1-c0" opacity="0" visibility="hidden" class="fl-layer a1"><path d="M375.3 175H519.3a6 6 0 0 1 6 6V221a6 6 0 0 1 -6 6H375.3a6 6 0 0 1 -6 -6V181a6 6 0 0 1 6 -6Z" class="fl-flash" opacity="0" data-rf="tui:0"><animate attributeName="opacity" dur="8.936s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.42648;0.43543;0.44438;0.47124;1" values="0;0;1;1;0;0"/></path><rect x="377.3" y="184" width="30" height="14" rx="4" fill="var(--color-data-category-1)" fill-opacity="0.15"/><text x="392.3" y="195" class="tag" text-anchor="middle">YOU</text><text x="412.3" y="195.7" class="row">why does this test</text><text x="377.3" y="215.7" class="row">fail?</text></g></g>
 <g id="n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Engine" data-id="engine"><rect x="397.3" y="375" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><rect x="397.3" y="375" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true"><animate attributeName="opacity" dur="8.936s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.61952;0.62847;0.63742;0.66428;1" values="0;0;1;1;0;0"/></rect><text x="447.3" y="403.9" class="label" text-anchor="middle">Engine</text></g>
 <g id="n-3" class="fl-node fl-shape-external" tabindex="0" role="img" aria-label="Codex CLI" data-id="codex"><rect x="799.8" y="458.5" width="102.7" height="47" rx="8" fill="var(--color-node)" class="fl-stroke ext a0" stroke-dasharray="5 4"/><rect x="799.8" y="458.5" width="102.7" height="47" rx="8" fill="var(--color-node)" class="fl-pulse" opacity="0" aria-hidden="true" stroke-dasharray="5 4"><animate attributeName="opacity" dur="8.936s" repeatCount="1" fill="freeze" calcMode="linear" keyTimes="0;0.95524;0.96419;0.97314;1" values="0;0;1;1;0"/></rect><text x="851.1" y="487.4" class="label" text-anchor="middle">Codex CLI</text></g>
@@ -1498,7 +545,7 @@
 <g class="fl-still" transform="translate(14.8 0)">
 <g id="still-g-0" class="fl-group" data-id="system"><rect x="319.3" y="28" width="240" height="478" rx="8" class="frame-box fl-stroke "/><text x="337.3" y="47.4" class="frame">Saturn</text></g>
 
-<g id="still-n-0" class="fl-node fl-shape-person" tabindex="0" role="img" aria-label="Developer" data-id="user"><rect x="28" y="44.5" width="129.6" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-person"><g class="fl-symbol-glyph" transform="translate(46 58) scale(0.83333)"><circle class="symbol-face" cx="12" cy="7.2" r="3.4"/><path class="symbol-face" d="M4 19.4V16.2A8 4 0 0 1 20 16.2V19.4Q20 21 18.4 21H5.6Q4 21 4 19.4Z"/></g></g><text x="106.8" y="73.4" class="label" text-anchor="middle">Developer</text></g>
+<g id="still-n-0" class="fl-node fl-shape-person" tabindex="0" role="img" aria-label="Developer" data-id="user"><rect x="28" y="44.5" width="129.6" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(46 58) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="40" height="40" rx="10" fill="#3d4856"/><circle cx="24" cy="16" r="6" fill="#ffffff"/><path d="M13 36A11 11 0 0 1 35 36Z" fill="#ffffff"/></g></g></g><text x="106.8" y="73.4" class="label" text-anchor="middle">Developer</text></g>
 <g id="still-n-1" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Screen" data-id="tui"><rect x="359.3" y="128" width="176" height="109" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><text x="447.3" y="156.9" class="label" text-anchor="middle">Screen</text><rect x="369.3" y="175" width="156" height="52" rx="6" fill="var(--color-card)" opacity="0" class="fl-card sa2"/><g id="still-n-1-c0" opacity="0" visibility="hidden" class="fl-layer sa1"><rect x="377.3" y="184" width="30" height="14" rx="4" fill="var(--color-data-category-1)" fill-opacity="0.15"/><text x="392.3" y="195" class="tag" text-anchor="middle">YOU</text><text x="412.3" y="195.7" class="row">why does this test</text><text x="377.3" y="215.7" class="row">fail?</text></g></g>
 <g id="still-n-2" class="fl-node fl-shape-box" tabindex="0" role="img" aria-label="Engine" data-id="engine"><rect x="397.3" y="375" width="100" height="47" rx="8" fill="var(--color-node)" class="fl-stroke sa0"/><text x="447.3" y="403.9" class="label" text-anchor="middle">Engine</text></g>
 <g id="still-n-3" class="fl-node fl-shape-external" tabindex="0" role="img" aria-label="Codex CLI" data-id="codex"><rect x="799.8" y="458.5" width="102.7" height="47" rx="8" fill="var(--color-node)" class="fl-stroke ext sa0" stroke-dasharray="5 4"/><text x="851.1" y="487.4" class="label" text-anchor="middle">Codex CLI</text></g>

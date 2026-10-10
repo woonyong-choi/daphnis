@@ -1,12 +1,12 @@
 // 차트 그리기가 함께 쓰는 크기 상수와 색. 값은 모두 토큰에서 온다.
 import { FIGURE_PAD } from '../canvas.js';
 import { SNAPSHOTS, areaPaint, categoryPaint } from '../chart-palette.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 
-export const SPACE = values.space;
-export const SIZE = values.size;
-// 차트 글자 크기. 그림 안 글 위계의 작은 표시(11)와 문장(13)이고, 카드 안 글(measure/texts.js STYLE)과 chart.css가 읽는 simple2 역할 토큰 한 벌이다.
-export const TEXT = Object.freeze({ 11: values.simple2['micro-size'], 13: values.simple2['detail-size'] });
+export const SPACE = values.spacing;
+export const SIZE = values.spacing.figure;
+// 차트 글자 크기. 그림 안 글 위계의 작은 표시(11)와 문장(13)이고, 카드 안 글(measure/texts.js STYLE)과 chart.css가 읽는 공통 역할 토큰 한 벌이다.
+export const TEXT = Object.freeze({ 11: values.text["figure-meta"], 13: values.text["tiny-text"] });
 export const WIDTH = SIZE.chart.width;
 export const BAR = SIZE.chart.bar;
 export const ROW = SIZE.chart.row;
@@ -17,7 +17,7 @@ export const CAP = SIZE.chart.cap;
 export const RIGHT = WIDTH - PAD;
 
 // 산점도 점 가운데에서 이름 글자까지 거리
-export const NAME_OFFSET = DOT + SPACE['3'];
+export const NAME_OFFSET = DOT + SPACE["1-5"];
 
 // cost: time O(1), heap O(1), stack O(1)
 // basis: estimate
@@ -92,5 +92,5 @@ export function seriesOutline(chart, i) {
 // basis: estimate
 /** 밝은 계열의 점은 밝은 바탕에서도 읽히도록 같은 계열의 경계를 가진다. */
 export function seriesBoundary(chart, i) {
-  return hasBoundary(chart, i) ? ` stroke="${seriesOutline(chart, i)}" stroke-width="${values.border.tag}" style="stroke: ${seriesOutline(chart, i)}"` : '';
+  return hasBoundary(chart, i) ? ` stroke="${seriesOutline(chart, i)}" stroke-width="${values["border-width"].tag}" style="stroke: ${seriesOutline(chart, i)}"` : '';
 }

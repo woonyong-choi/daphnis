@@ -15,7 +15,7 @@ const MODE_LABELS = { static: '정지', once: '한 번', loop: '반복' };
 // vars: n = 본문 글자 수
 // basis: estimate
 function page(title, content) {
-  return `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} · Daphnis</title><style>${STYLES.tokens}${STYLES.control}${css}</style><script>${THEME_SCRIPT}</script></head><body><header class="catalog-header"><a href="index.html">Daphnis · 예제 갤러리</a><div class="theme" role="group" aria-label="테마">${THEME_BUTTONS}</div></header><main class="catalog-main">${content}</main></body></html>`;
+  return `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} · Daphnis</title><style>${STYLES.tokens}${STYLES.control}${css}</style><script>${THEME_SCRIPT}</script></head><body><header class="catalog-header"><a href="index.html">Daphnis · 예제 갤러리</a><div class="theme app-tablist is-segmented" role="group" aria-label="테마">${THEME_BUTTONS}</div></header><main class="catalog-main">${content}</main></body></html>`;
 }
 
 // cost: time O(s), heap O(s), stack O(1)

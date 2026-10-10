@@ -2,7 +2,7 @@
 import { measure } from '../measure/fonts.js';
 import { VALUES } from '../source/grammar.js';
 import { escapeXml, roundCoord as r } from '../text.js';
-import { values } from '../tokens.js';
+import { values } from '../vendor/theme/tokens.js';
 import { drawRules, finishRowChart, rowValueScale } from './axis.js';
 import { COPY } from './copy.js';
 import { valueRange } from './extent.js';
@@ -15,7 +15,7 @@ const BOX_NAMES = { min: '최솟값', q1: '제1사분위', median: '중앙값', 
 
 // 상자 높이(막대 두께의 두 배)와 q1과 q3가 같을 때도 보이는 최소 너비
 const BOX_H = BAR * 2;
-const BOX_MIN_W = SPACE['0-5'];
+const BOX_MIN_W = SPACE["0-25"];
 // 값 글자 앞에 붙여 무엇의 값인지 알리는 글. 글자가 수염 끝 옆에 있어 최댓값으로 읽히기 때문이다.
 export const MEDIAN_LABEL = '중앙값';
 
@@ -42,7 +42,7 @@ function boxScale(chart) {
   const ruled = [...chart.rows.flatMap(presentOf), ...chart.rules.map((x) => x.value)];
   const texts = medianTexts(chart);
   const { min, max } = valueRange(ruled, chart.scale);
-  const reaches = () => chart.layout ? [] : chart.rows.map((row, k) => ({ value: tipOf(row) ?? min, extra: SPACE['3'] + measure(texts[k], TEXT['11'], 'num') }));
+  const reaches = () => chart.layout ? [] : chart.rows.map((row, k) => ({ value: tipOf(row) ?? min, extra: SPACE["1-5"] + measure(texts[k], TEXT['11'], 'num') }));
   return rowValueScale(chart, { kind: chart.scale, min, max, reaches });
 }
 
@@ -54,7 +54,7 @@ function boxRow(ctx, row, k) {
   const v = row.values;
   const name = rowName(row.label, { layout: labels, k, top, cy });
   const tip = tipOf(row);
-  const value = chart.layout ? { x: scale.start, cy: cy + BAR + SPACE['6'] } : { x: (tip === undefined ? scale.start : scale.at(tip)) + SPACE['3'], cy };
+  const value = chart.layout ? { x: scale.start, cy: cy + BAR + SPACE["3"] } : { x: (tip === undefined ? scale.start : scale.at(tip)) + SPACE["1-5"], cy };
   const texts = inkGroup(k, name + valueText(value, text, 'chart-value late'));
   const guides = chart.layout ? drawRules(chart.rules, scale, { axis: 'x', from: cy - BAR, to: cy + BAR, labels: false }) : '';
   if (!isComplete(row)) {
@@ -79,7 +79,7 @@ export function drawBoxes(figure, top) {
   const { scale } = boxScale(chart);
   const texts = medianTexts(chart);
   const labels = rowLabelLayout(chart);
-  const pitch = chart.layout ? labels.space + BOX_H + SPACE['6'] + TEXT['11'] + SPACE['11'] : ROW;
+  const pitch = chart.layout ? labels.space + BOX_H + SPACE["3"] + TEXT['11'] + SPACE["5-5"] : ROW;
   const parts = chart.rows.map((row, k) => boxRow({ chart, scale, labels, top: top + k * pitch, cy: top + k * pitch + (chart.layout ? labels.space + BAR : ROW / 2), text: texts[k] }, row, k));
   return finishRowChart(chart, { parts, scale, top, bottom: top + chart.rows.length * pitch });
 }

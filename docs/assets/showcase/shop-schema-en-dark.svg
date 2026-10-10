@@ -3,1063 +3,153 @@
 <style>@font-face{font-family:FigMono;font-weight:400;src:url(data:font/woff2;base64,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) format("woff2")}
 @font-face{font-family:FigSans;font-weight:400;src:url(data:font/woff2;base64,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) format("woff2")}
 @font-face{font-family:FigSans;font-weight:600;src:url(data:font/woff2;base64,d09GMk9UVE8AAAWsAAwAAAAAChAAAAVfAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAADYkgGhYbgVIcgWYGYABUATYCJAMqBAYFgmoHIBs1CRHFZCb7eRgbKw8/IBKJnBsJxvbaNhu5f8me/zb9OWuQ3Y35hmw9cepGxTRiNCUVFyomf09NDnARHnhu+TsujqwXR3E7Qe4LaAQbzkYyhfJ/F6BjaWtvTa21+qqhqYX+IX8rv/diHlWTIV41EdqF9JbwBAkq1aySfjpaMokBvU3m6Xw1laAoIKK00b6KBdIxxze/dFxFQ81rViBsn2kW7bRo107TZdFWkgnbJMJ2ed8dinjdlLmPqeTFYsHPI+SBQEadBzj9qivHfcbMt6d068zmeQDVJVLhTWYriLnLbDmDPCoZDqIz9x999qW3vm2F++lrG/YZhtXU24OXL/ZWldbWeO2GLbX/mxEaCPCKQ2+ylbr/DqHWnjDEnuOd7xiUPulramiCtGtiUBR0Udf9bf/umvXD0uXVI1By/ctbAwfyWgDMtstF7/skAFVSPS2gheSjJTIIAOJBRM0s2m22dp3F4NfenTv1jOmwUMCNu5ey+Fzo7XP84wMtvLRzzIw7Yer4mza4VufjRh6g/ZwWiqVbKCiREYKQbaAxpqm20CobbLPbZY941Xs+97MI6ZROBdSBPJZaYqlX08WRqG+1VqIH+0V9Kq/SDM7JYH9ggMadeGzAE5FUfl0Lvxy8H3g26FLF2/bUSJm6NFgm/JoRupl9n0I95HEYlvYmr7GCbqQl8Cd7w38GbOgi7DXa6OyPrCrWjQ56uJLviuuBJMOthx9WcmArPaFc76gbYp3oxoP5cxHojHW87imLweJzIz1wnrc5ePI3zYRblLUXkpicb0R6hXyqWGeFJrM/5DuqGXxdeHim+NIIJ4m74mq42oi62+sht/BHPQ6D/YE1fFPjr3kwT+frpXp+/+DCLfVoB83gJyQ4xFCRIrLEdPhFpXEWD3UZ6YFqcZevhpPKdEO8zGtELf/P//I6ruWXXQbiJRBKtdVJd71tst1ej/nAF0FLah8q5BJL25A+Lh3W/28qLXQey6NG28ebwYSTbakQT2sGET+x72J2gR7ID3YIrEjnqeKIuqGmaktFbpEuBk0Vud065osk7qQG/Lyhtf7DVydufORiU5SpfEAT0/mIyi059TueySdyEvi15npC8FrgZDsd3Zh+86pJv6ulpa0OUJJp7rRp9E0NhtoGqgiokM4VdG8SEMAEAICEEBMhgK61PqTWM3w8Eo5zFnmRQAEgFksCEGnR2NSItEOFL9yGPECeJllCE8eJZCjtB+Yk6UABjNSLRibsjT0I7WFqkCcqibZRGJsopHpARlBXs06VxO4NFuoUGImRDyPP5tQvgr1eWjMfOVfVlhba0zd4WRc2Z20RrQ/VhHUYwsg0ZaIB5N90MY032nCDDdBHD1104FaioMWgd5IqoiBDr5GmyYCROjIO6TyLg5J+pclQQa2U1wGc0MWkP25Ku9IcEQRWARBh3/7TCePwJI8J2aloClDnpt/tnD4AoDTqVQA2EyD1gJlGBjpT0cdizi1b4TGsfowJveBCjX4HW0StlwIBaJCTtn5iy6zEHv/lcg4Avjp5f4JPXTg5+HlkX0aH3A/AQcrhdrxb6cx4xhDEizsgwiRnDn5lFbao7UjEfZfyp87639zk4hU51knO4Edeep0KaAkwGuIBDlPJKC4APbxr80lrt/mSBGf5sh7mL1Xi+apeWv+fmtaA0XwqLFLBa745fOYrNU6FBjX6WaDefBNV8GlSYwEvW1tl2nPrqrtB6i3XqFoTW3tl2rEVaK+ddjoqTDkc/Y03wTjda0WOzVRZrD52cHrVtqm//idqtJxPjSrVFrFdg60dt3basw1To55tsOUW86pSqlYNLxkAIGa5CQEA) format("woff2")}
-/* tokens.json: 생성물, 손으로 고치지 않음 */
+/* tokens/tokens.json: 생성물, 손으로 고치지 않음 */
 :root {
   --color-gray-0: #ffffff;
-  --color-gray-27: #f8f8f8;
-  --color-gray-43: #f4f4f4;
   --color-gray-59: #f0f0f0;
-  --color-gray-71: #ededed;
-  --color-gray-106: #e4e4e4;
-  --color-gray-118: #e1e1e1;
-  --color-gray-145: #dadada;
-  --color-gray-161: #d6d6d6;
-  --color-gray-212: #c9c9c9;
-  --color-gray-220: #c7c7c7;
   --color-gray-282: #b7b7b7;
-  --color-gray-333: #aaaaaa;
-  --color-gray-467: #888888;
-  --color-gray-529: #787878;
-  --color-gray-545: #747474;
-  --color-gray-635: #5d5d5d;
-  --color-gray-651: #595959;
-  --color-gray-757: #3e3e3e;
-  --color-gray-776: #393939;
-  --color-gray-788: #363636;
-  --color-gray-796: #343434;
-  --color-gray-835: #2a2a2a;
-  --color-gray-875: #202020;
-  --color-gray-878: #1f1f1f;
-  --color-gray-910: #171717;
-  --color-gray-929: #121212;
   --color-gray-933: #111111;
-  --color-gray-1000: #000000;
-  --color-blue-anchor: var(--color-category-blue-anchor);
-  --color-blue-light-fill: var(--color-category-blue-light-tint-1);
-  --color-blue-light-stroke: var(--color-category-blue-light-border);
-  --color-blue-light-ink: var(--color-category-blue-light-ink);
-  --color-blue-light-heat-low: var(--color-sequential-light-low);
-  --color-blue-light-heat-high: var(--color-sequential-high);
-  --color-blue-light-outline: var(--color-category-blue-light-border);
-  --color-blue-light-tint-1: var(--color-category-blue-light-tint-1);
-  --color-blue-light-tint-2: var(--color-category-blue-light-tint-2);
-  --color-blue-light-tint-3: var(--color-category-blue-light-tint-3);
-  --color-blue-dark-fill: var(--color-category-blue-dark-tint-1);
-  --color-blue-dark-stroke: var(--color-category-blue-dark-border);
-  --color-blue-dark-ink: var(--color-category-blue-dark-ink);
-  --color-blue-dark-heat-low: var(--color-sequential-dark-low);
-  --color-blue-dark-heat-high: var(--color-sequential-high);
-  --color-blue-dark-outline: var(--color-category-blue-dark-border);
-  --color-blue-dark-tint-1: var(--color-category-blue-dark-tint-1);
-  --color-blue-dark-tint-2: var(--color-category-blue-dark-tint-2);
-  --color-blue-dark-tint-3: var(--color-category-blue-dark-tint-3);
-  --color-purple-anchor: var(--color-category-purple-anchor);
-  --color-purple-light-fill: var(--color-category-purple-light-tint-1);
-  --color-purple-light-stroke: var(--color-category-purple-light-border);
-  --color-purple-light-ink: var(--color-category-purple-light-ink);
-  --color-purple-light-dot: var(--color-category-purple-light-border);
-  --color-purple-light-outline: var(--color-category-purple-light-border);
-  --color-purple-light-tint-1: var(--color-category-purple-light-tint-1);
-  --color-purple-light-tint-2: var(--color-category-purple-light-tint-2);
-  --color-purple-light-tint-3: var(--color-category-purple-light-tint-3);
-  --color-purple-dark-fill: var(--color-category-purple-dark-tint-1);
-  --color-purple-dark-stroke: var(--color-category-purple-dark-border);
-  --color-purple-dark-ink: var(--color-category-purple-dark-ink);
-  --color-purple-dark-dot: var(--color-category-purple-dark-border);
-  --color-purple-dark-outline: var(--color-category-purple-dark-border);
-  --color-purple-dark-tint-1: var(--color-category-purple-dark-tint-1);
-  --color-purple-dark-tint-2: var(--color-category-purple-dark-tint-2);
-  --color-purple-dark-tint-3: var(--color-category-purple-dark-tint-3);
-  --color-red-anchor: var(--color-category-red-anchor);
-  --color-red-light-fill: var(--color-category-red-light-tint-1);
-  --color-red-light-stroke: var(--color-category-red-light-border);
-  --color-red-light-ink: var(--color-category-red-light-ink);
-  --color-red-light-dot: var(--color-category-red-light-border);
-  --color-red-light-outline: var(--color-category-red-light-border);
-  --color-red-dark-fill: var(--color-category-red-dark-tint-1);
-  --color-red-dark-stroke: var(--color-category-red-dark-border);
-  --color-red-dark-ink: var(--color-category-red-dark-ink);
-  --color-red-dark-dot: var(--color-category-red-dark-border);
-  --color-red-dark-outline: var(--color-category-red-dark-border);
-  --color-green-anchor: var(--color-category-green-anchor);
-  --color-green-light-fill: var(--color-category-green-light-tint-1);
-  --color-green-light-stroke: var(--color-category-green-light-border);
-  --color-green-light-ink: var(--color-category-green-light-ink);
-  --color-green-light-dot: var(--color-category-green-light-border);
-  --color-green-light-outline: var(--color-category-green-light-border);
-  --color-green-dark-fill: var(--color-category-green-dark-tint-1);
-  --color-green-dark-stroke: var(--color-category-green-dark-border);
-  --color-green-dark-ink: var(--color-category-green-dark-ink);
-  --color-green-dark-dot: var(--color-category-green-dark-border);
-  --color-green-dark-outline: var(--color-category-green-dark-border);
-  --color-orange-anchor: var(--color-category-orange-anchor);
-  --color-orange-light-fill: var(--color-category-orange-light-tint-1);
-  --color-orange-light-stroke: var(--color-category-orange-light-border);
-  --color-orange-light-ink: var(--color-category-orange-light-ink);
-  --color-orange-light-outline: var(--color-category-orange-light-border);
-  --color-orange-dark-fill: var(--color-category-orange-dark-tint-1);
-  --color-orange-dark-stroke: var(--color-category-orange-dark-border);
-  --color-orange-dark-ink: var(--color-category-orange-dark-ink);
-  --color-orange-dark-outline: var(--color-category-orange-dark-border);
-  --color-fg: var(--primitive-simple2-fg);
-  --color-muted: var(--primitive-simple2-muted);
-  --color-group-title: var(--primitive-simple2-group-title);
-  --color-bg: var(--primitive-simple2-bg);
-  --color-node: var(--primitive-simple2-node);
-  --color-surface: var(--primitive-simple2-surface);
-  --color-card: var(--primitive-simple2-node);
-  --color-card-on: var(--color-blue-light-fill);
-  --color-page: var(--primitive-simple2-page);
-  --color-outline: var(--primitive-simple2-light-outline);
-  --color-border: var(--primitive-simple2-border);
-  --color-plate-border: var(--primitive-simple2-plate-border);
-  --color-line: var(--primitive-simple2-line);
-  --color-state-active: var(--primitive-simple2-ui-accent);
-  --color-state-active-fill: var(--color-category-blue-fill);
+  --color-blue-light-stroke: #125de6;
+  --color-blue-light-ink: #0151d9;
+  --color-blue-dark-stroke: #70a3ff;
+  --color-blue-dark-ink: #78a9ff;
+  --color-fg: var(--color-ink);
+  --color-muted: var(--color-ui-muted);
+  --color-group-title: var(--color-help-title-color);
+  --color-node: var(--color-ui-card);
+  --color-card: var(--color-ui-card);
+  --color-line: var(--color-gray-282);
+  --color-state-active: var(--color-blue-light-stroke);
   --color-state-active-text: var(--color-blue-light-ink);
-  --color-state-on-active: var(--color-category-blue-on);
-  --color-state-error: var(--color-red-light-stroke);
-  --color-state-success: var(--color-green-light-stroke);
-  --color-state-warning: var(--color-category-yellow-light-border);
-  --color-state-glow: var(--color-blue-light-fill);
-  --color-flow-brand: var(--color-category-blue-fill);
-  --color-flow-purple: var(--color-category-purple-fill);
-  --color-flow-green: var(--color-category-green-fill);
-  --color-flow-gray: var(--color-gray-545);
-  --color-flow-red: var(--color-category-red-fill);
-  --color-flow-amber: var(--color-category-yellow-fill);
-  --color-ui-link: var(--color-blue-light-ink);
-  --color-ui-focus: var(--primitive-simple2-ui-accent);
-  --color-ui-progress: var(--color-blue-light-stroke);
-  --color-ui-control-on: var(--primitive-simple2-ui-accent);
-  --color-data-main: var(--color-category-blue-light-border);
-  --color-data-compare: var(--color-category-yellow-fill);
-  --color-data-heat-low: var(--color-blue-light-heat-low);
-  --color-data-heat-high: var(--color-blue-light-heat-high);
-  --color-data-heat-ink: var(--color-gray-1000);
-  --color-data-heat-ink-on: var(--color-gray-0);
-  --color-data-grid: var(--color-gray-212);
-  --color-data-compare-fill: var(--color-category-yellow-fill);
-  --color-data-compare-outline: var(--color-category-yellow-light-border);
-  --color-data-main-fill: var(--color-category-blue-fill);
-  --color-data-category-family-1: blue;
-  --color-data-category-family-2: yellow;
-  --color-data-category-family-3: red;
-  --color-data-category-family-4: green;
-  --color-data-category-family-5: orange;
-  --color-data-category-family-6: purple;
-  --color-data-category-family-7: cyan;
-  --color-data-category-1: var(--color-category-blue-fill);
-  --color-data-category-2: var(--color-category-yellow-fill);
-  --color-data-category-3: var(--color-category-red-fill);
-  --color-data-category-4: var(--color-category-green-fill);
-  --color-data-category-5: var(--color-category-orange-fill);
-  --color-data-category-6: var(--color-category-purple-fill);
-  --color-data-category-7: var(--color-category-cyan-fill);
-  --color-data-category-outline-1: var(--color-category-blue-light-border);
-  --color-data-category-outline-2: var(--color-category-yellow-light-border);
-  --color-data-category-outline-3: var(--color-category-red-light-border);
-  --color-data-category-outline-4: var(--color-category-green-light-border);
-  --color-data-category-outline-5: var(--color-category-orange-light-border);
-  --color-data-category-outline-6: var(--color-category-purple-light-border);
-  --color-data-category-outline-7: var(--color-category-cyan-light-border);
-  --color-data-category-ink-1: var(--color-category-blue-light-ink);
-  --color-data-category-ink-2: var(--color-category-yellow-light-ink);
-  --color-data-category-ink-3: var(--color-category-red-light-ink);
-  --color-data-category-ink-4: var(--color-category-green-light-ink);
-  --color-data-category-ink-5: var(--color-category-orange-light-ink);
-  --color-data-category-ink-6: var(--color-category-purple-light-ink);
-  --color-data-category-ink-7: var(--color-category-cyan-light-ink);
-  --color-data-category-effect-1: var(--color-category-blue-light-effect);
-  --color-data-category-effect-2: var(--color-category-yellow-light-effect);
-  --color-data-category-effect-3: var(--color-category-red-light-effect);
-  --color-data-category-effect-4: var(--color-category-green-light-effect);
-  --color-data-category-effect-5: var(--color-category-orange-light-effect);
-  --color-data-category-effect-6: var(--color-category-purple-light-effect);
-  --color-data-category-effect-7: var(--color-category-cyan-light-effect);
-  --color-data-category-tint-1: var(--color-category-blue-light-tint-1);
-  --color-data-category-tint-2: var(--color-category-yellow-light-tint-1);
-  --color-data-category-tint-3: var(--color-category-red-light-tint-1);
-  --color-data-category-tint-4: var(--color-category-green-light-tint-1);
-  --color-data-category-tint-5: var(--color-category-orange-light-tint-1);
-  --color-data-category-tint-6: var(--color-category-purple-light-tint-1);
-  --color-data-category-tint-7: var(--color-category-cyan-light-tint-1);
-  --color-data-category-on-1: var(--color-category-blue-on);
-  --color-data-category-on-2: var(--color-category-yellow-on);
-  --color-data-category-on-3: var(--color-category-red-on);
-  --color-data-category-on-4: var(--color-category-green-on);
-  --color-data-category-on-5: var(--color-category-orange-on);
-  --color-data-category-on-6: var(--color-category-purple-on);
-  --color-data-category-on-7: var(--color-category-cyan-on);
-  --color-data-category-pattern-1: hatch;
-  --color-data-category-pattern-2: dots;
-  --color-data-category-pattern-3: cross;
-  --color-data-category-shape-1: circle;
-  --color-data-category-shape-2: square;
-  --color-data-category-shape-3: diamond;
-  --color-data-category-shape-4: triangle;
-  --color-data-category-revision-1-family: 7;
-  --color-data-category-revision-1-pattern: 3;
-  --color-data-category-revision-1-shape: 4;
-  --color-data-category-revision-1-step: 0.5;
-  --color-data-category-label-1: optional;
-  --color-data-category-label-2: required;
-  --color-data-category-label-3: optional;
-  --color-data-category-label-4: optional;
-  --color-data-category-label-5: optional;
-  --color-data-category-label-6: optional;
-  --color-data-category-label-7: optional;
-  --color-data-category-area-1: var(--color-category-blue-area);
-  --color-data-category-area-2: var(--color-category-yellow-area);
-  --color-data-category-area-3: var(--color-category-red-area);
-  --color-data-category-area-4: var(--color-category-green-area);
-  --color-data-category-area-5: var(--color-category-orange-area);
-  --color-data-category-area-6: var(--color-category-purple-area);
-  --color-data-category-area-7: var(--color-category-cyan-area);
-  --color-data-category-on-area-1: var(--color-category-blue-on-area);
-  --color-data-category-on-area-2: var(--color-category-yellow-on-area);
-  --color-data-category-on-area-3: var(--color-category-red-on-area);
-  --color-data-category-on-area-4: var(--color-category-green-on-area);
-  --color-data-category-on-area-5: var(--color-category-orange-on-area);
-  --color-data-category-on-area-6: var(--color-category-purple-on-area);
-  --color-data-category-on-area-7: var(--color-category-cyan-on-area);
-  --color-accent: var(--color-blue-light-stroke);
-  --color-figure-icon-service-ink: var(--color-category-blue-fill);
-  --color-figure-icon-service-surface: var(--color-category-blue-on);
-  --color-figure-icon-data-ink: var(--color-category-green-fill);
-  --color-figure-icon-data-surface: var(--color-category-green-on);
-  --color-figure-icon-access-ink: var(--color-category-yellow-fill);
-  --color-figure-icon-access-surface: var(--color-category-yellow-on);
-  --color-figure-icon-person-ink: var(--color-category-blue-fill);
-  --color-figure-icon-person-surface: var(--color-category-blue-on);
-  --color-figure-icon-brand-ink: var(--color-gray-467);
-  --color-figure-icon-brand-surface: var(--color-gray-59);
-  --color-figure-number-fill: var(--primitive-simple2-number-fill);
-  --color-figure-number-ink: var(--primitive-simple2-number-ink);
-  --color-category-blue-anchor: #1e6bd6;
-  --color-category-blue-fill: var(--color-category-blue-anchor);
-  --color-category-blue-on: var(--color-gray-0);
-  --color-category-blue-light-border: #1e6bd6;
-  --color-category-blue-light-ink: #1161cb;
-  --color-category-blue-light-tint-1: #f7fafe;
-  --color-category-blue-light-tint-2: #e5eefc;
-  --color-category-blue-light-tint-3: #d5e4fa;
-  --color-category-blue-dark-border: #3a85f2;
-  --color-category-blue-dark-ink: #6da8ff;
-  --color-category-blue-dark-tint-1: #303948;
-  --color-category-blue-dark-tint-2: #303b4e;
-  --color-category-blue-dark-tint-3: #303d54;
-  --color-category-blue-light-effect: #3984f2;
-  --color-category-blue-dark-effect: #60a0ff;
-  --color-category-blue-area: #4370b3;
-  --color-category-blue-on-area: var(--color-gray-0);
-  --color-category-yellow-anchor: #f2d024;
-  --color-category-yellow-fill: var(--color-category-yellow-anchor);
-  --color-category-yellow-on: var(--color-gray-1000);
-  --color-category-yellow-light-border: #d6b600;
-  --color-category-yellow-light-ink: var(--color-fg);
-  --color-category-yellow-light-tint-1: #fefcf3;
-  --color-category-yellow-light-tint-2: #fdf9e9;
-  --color-category-yellow-light-tint-3: #fcf7df;
-  --color-category-yellow-dark-border: #f2d024;
-  --color-category-yellow-dark-ink: #f2d024;
-  --color-category-yellow-dark-tint-1: #393938;
-  --color-category-yellow-dark-tint-2: #3b3a39;
-  --color-category-yellow-dark-tint-3: #3c3c39;
-  --color-category-yellow-light-effect: #f0d03b;
-  --color-category-yellow-dark-effect: #ffec9a;
-  --color-category-yellow-area: #e6d27a;
-  --color-category-yellow-on-area: var(--color-gray-1000);
-  --color-category-red-anchor: #fa1955;
-  --color-category-red-fill: var(--color-category-red-anchor);
-  --color-category-red-on: var(--color-gray-1000);
-  --color-category-red-light-border: #fa1955;
-  --color-category-red-light-ink: #cc0041;
-  --color-category-red-light-tint-1: #fff8f8;
-  --color-category-red-light-tint-2: #ffecec;
-  --color-category-red-light-tint-3: #ffdfe0;
-  --color-category-red-dark-border: #ff315d;
-  --color-category-red-dark-ink: #ff7f8b;
-  --color-category-red-dark-tint-1: #413439;
-  --color-category-red-dark-tint-2: #48353a;
-  --color-category-red-dark-tint-3: #4e363b;
-  --color-category-red-light-effect: #ff697b;
-  --color-category-red-dark-effect: #ff7785;
-  --color-category-red-area: #d85a69;
-  --color-category-red-on-area: var(--color-gray-1000);
-  --color-category-green-anchor: #269c6e;
-  --color-category-green-fill: var(--color-category-green-anchor);
-  --color-category-green-on: var(--color-gray-1000);
-  --color-category-green-light-border: #149265;
-  --color-category-green-light-ink: #00744e;
-  --color-category-green-light-tint-1: #f7fbf9;
-  --color-category-green-light-tint-2: #e9f4ed;
-  --color-category-green-light-tint-3: #daece2;
-  --color-category-green-dark-border: #269c6e;
-  --color-category-green-dark-ink: #4cba8a;
-  --color-category-green-dark-tint-1: #323b3c;
-  --color-category-green-dark-tint-2: #333d3d;
-  --color-category-green-dark-tint-3: #333f3e;
-  --color-category-green-light-effect: #3aab7c;
-  --color-category-green-dark-effect: #46b586;
-  --color-category-green-area: #569576;
-  --color-category-green-on-area: var(--color-gray-1000);
-  --color-category-orange-anchor: #ff8906;
-  --color-category-orange-fill: var(--color-category-orange-anchor);
-  --color-category-orange-on: var(--color-gray-1000);
-  --color-category-orange-light-border: #c46800;
-  --color-category-orange-light-ink: #9d5100;
-  --color-category-orange-light-tint-1: #fff9f5;
-  --color-category-orange-light-tint-2: #fff2e9;
-  --color-category-orange-light-tint-3: #ffebdd;
-  --color-category-orange-dark-border: #ff8906;
-  --color-category-orange-dark-ink: #ff8906;
-  --color-category-orange-dark-tint-1: #3d3738;
-  --color-category-orange-dark-tint-2: #403938;
-  --color-category-orange-dark-tint-3: #433a38;
-  --color-category-orange-light-effect: #df812e;
-  --color-category-orange-dark-effect: #ffb27a;
-  --color-category-orange-area: #e59960;
-  --color-category-orange-on-area: var(--color-gray-1000);
-  --color-category-purple-anchor: #7d40c8;
-  --color-category-purple-fill: var(--color-category-purple-anchor);
-  --color-category-purple-on: var(--color-gray-0);
-  --color-category-purple-light-border: #7d40c8;
-  --color-category-purple-light-ink: #7d40c8;
-  --color-category-purple-light-tint-1: #fbf9fe;
-  --color-category-purple-light-tint-2: #f1ecfb;
-  --color-category-purple-light-tint-3: #e7dff8;
-  --color-category-purple-dark-border: #a269f3;
-  --color-category-purple-dark-ink: #bb91ff;
-  --color-category-purple-dark-tint-1: #383547;
-  --color-category-purple-dark-tint-2: #3c364e;
-  --color-category-purple-dark-tint-3: #403756;
-  --color-category-purple-light-effect: #945ae3;
-  --color-category-purple-dark-effect: #b78aff;
-  --color-category-purple-area: #7554a8;
-  --color-category-purple-on-area: var(--color-gray-0);
-  --color-category-cyan-anchor: #25c0cf;
-  --color-category-cyan-fill: var(--color-category-cyan-anchor);
-  --color-category-cyan-on: var(--color-gray-1000);
-  --color-category-cyan-light-border: #008e9a;
-  --color-category-cyan-light-ink: #00717b;
-  --color-category-cyan-light-tint-1: #f5fbfc;
-  --color-category-cyan-light-tint-2: #e9f7f9;
-  --color-category-cyan-light-tint-3: #def3f6;
-  --color-category-cyan-dark-border: #25c0cf;
-  --color-category-cyan-dark-ink: #25c0cf;
-  --color-category-cyan-dark-tint-1: #333a3f;
-  --color-category-cyan-dark-tint-2: #333c42;
-  --color-category-cyan-dark-tint-3: #343e44;
-  --color-category-cyan-light-effect: #33a7b3;
-  --color-category-cyan-dark-effect: #4ddae9;
-  --color-category-cyan-area: #6bb9c2;
-  --color-category-cyan-on-area: var(--color-gray-1000);
-  --color-sequential-light-low: #b2cbf1;
-  --color-sequential-dark-low: #32445e;
-  --color-sequential-high: var(--color-category-blue-anchor);
-  --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --size-text-9: 9px;
-  --size-text-11: 11px;
-  --size-text-13: 13px;
-  --size-text-15: 15px;
-  --size-text-22: 22px;
-  --weight-medium: 500;
-  --weight-semibold: 600;
-  --leading-normal: 1.5;
-  --leading-snug: 1.35;
-  --tracking-text: -0.3px;
-  --space-1: 2px;
-  --space-2: 4px;
-  --space-3: 6px;
-  --space-4: 8px;
-  --space-5: 10px;
-  --space-6: 12px;
-  --space-7: 14px;
-  --space-8: 16px;
-  --space-9: 18px;
-  --space-11: 22px;
-  --space-12: 24px;
-  --space-14: 28px;
-  --space-15: 30px;
-  --space-16: 32px;
-  --space-20: 40px;
-  --space-22: 44px;
-  --space-30: 60px;
-  --space-0-5: 1px;
-  --space-1-5: 3px;
-  --space-2-5: 5px;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 10px;
-  --radius-2xl: 18px;
-  --radius-full: 999px;
-  --border-hair: 0.75px;
-  --border-thin: 1px;
-  --border-strong: 2.5px;
-  --z-raised: 2;
-  --z-overlay: 10;
-  --duration-fast: 200ms;
-  --duration-effect-rise: 80ms;
-  --duration-effect-hold: 80ms;
-  --duration-effect-decay: 240ms;
-  --duration-notice: 2400ms;
-  --easing-move: cubic-bezier(0.455, 0.03, 0.515, 0.955);
-  --easing-reveal: cubic-bezier(0, 0, 0.58, 1);
-  --simple2-heading: 36px;
-  --simple2-subheading: 27px;
-  --simple2-body: 18px;
-  --simple2-control: 15px;
-  --simple2-caption: 13px;
-  --simple2-page-gutter: 24px;
-  --simple2-page-gap: 48px;
-  --simple2-page-width: 960px;
-  --simple2-reading-width: 948px;
-  --simple2-control-gap: 8px;
-  --simple2-focus-width: 3px;
-  --simple2-leading: 1.6;
-  --simple2-title-leading: 1.2;
-  --simple2-shadow: var(--primitive-simple2-shadow);
-  --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-  --simple2-corner: 18px;
-  --simple2-control-radius: 6px;
-  --simple2-card-gap: 48px;
-  --simple2-node-stroke: 1px;
-  --simple2-heading-weight: 700;
-  --simple2-node-corner: 8px;
-  --simple2-separator: var(--primitive-simple2-plate-border);
-  --simple2-canvas-corner: 18px;
-  --simple2-canvas-fill: var(--primitive-simple2-canvas);
-  --simple2-symbol-stroke: 1.5px;
-  --simple2-segment-track: rgba(0, 25, 61, 0.1);
-  --simple2-segment-ink: rgba(0, 4, 9, 0.78);
-  --simple2-segment-hover: rgba(0, 25, 61, 0.08);
-  --simple2-segment-on: var(--primitive-simple2-ui-accent);
-  --simple2-segment-on-hover: var(--primitive-simple2-ui-accent-hover);
-  --simple2-segment-on-ink: var(--primitive-simple2-on-ui-accent);
-  --simple2-segment-radius: 12px;
-  --simple2-segment-item-radius: 9px;
-  --simple2-segment-pad: 4px;
-  --simple2-label-size: 15px;
-  --simple2-detail-size: 13px;
-  --simple2-micro-size: 11px;
-  --simple2-surface-edge: var(--primitive-simple2-plate-border);
-  --simple2-hover-fill: var(--primitive-simple2-hover-fill);
-  --simple2-row-selection: var(--primitive-simple2-row-selection);
-  --simple2-card-active-fill: var(--primitive-simple2-card-active-fill);
-  --simple2-data-line: var(--primitive-simple2-data-line);
-  --simple2-chart-hole: var(--primitive-simple2-chart-hole);
-  --primitive-simple2-fg: #303336;
-  --primitive-simple2-muted: #566170;
-  --primitive-simple2-bg: #f2f5f7;
-  --primitive-simple2-page: #ffffff;
-  --primitive-simple2-node: #ffffff;
-  --primitive-simple2-surface: #eef0f3;
-  --primitive-simple2-plate-border: #d4d8de;
-  --primitive-simple2-border: #838b96;
-  --primitive-simple2-shadow: 0 2px 8px rgba(0,0,0,.10), 0 0 2px rgba(0,0,0,.10);
-  --primitive-simple2-node-shadow: drop-shadow(0px 1px 1px rgba(0,0,0,.07));
-  --primitive-simple2-group-title: #566170;
-  --primitive-simple2-canvas: #f5f5f6;
-  --primitive-simple2-ui-accent: #3c84f3;
-  --primitive-simple2-ui-accent-hover: #3779e0;
-  --primitive-simple2-on-ui-accent: #ffffff;
-  --primitive-simple2-hover-fill: #eef4fc;
-  --primitive-simple2-row-selection: #cee2fd;
-  --primitive-simple2-card-active-fill: #f3f7fd;
-  --primitive-simple2-line: #9da5b0;
-  --primitive-simple2-data-line: #737e8b;
-  --primitive-simple2-dark-bg: #26272b;
-  --primitive-simple2-dark-page: #1d1e22;
-  --primitive-simple2-dark-node: #303136;
-  --primitive-simple2-dark-card: #36373b;
-  --primitive-simple2-dark-edge: #50535b;
-  --primitive-simple2-dark-separator: #454850;
-  --primitive-simple2-dark-hover: #343e50;
-  --primitive-simple2-dark-selection: #274174;
-  --primitive-simple2-dark-card-active-fill: #333a48;
-  --primitive-simple2-dark-muted: #a9adb6;
-  --primitive-simple2-dark-line: #7f8793;
-  --primitive-simple2-dark-data-line: #acb4c0;
-  --primitive-simple2-light-outline: #818181;
-  --primitive-simple2-dark-outline: #868686;
-  --primitive-simple2-dark-paint-gray: #121318;
-  --primitive-simple2-number-fill: #303336;
-  --primitive-simple2-number-ink: #ffffff;
-  --primitive-simple2-chart-hole: 0.55;
-  --color-palette-sky-light-fill: #e8f1fe;
-  --color-palette-sky-light-stroke: var(--color-blue-light-stroke);
-  --color-palette-sky-light-ink: var(--color-blue-light-ink);
-  --color-palette-sky-light-tint-1: var(--color-blue-light-tint-1);
-  --color-palette-sky-light-tint-2: var(--color-blue-light-tint-2);
-  --color-palette-sky-light-tint-3: var(--color-blue-light-tint-3);
-  --color-palette-sky-light-outline: #648cc7;
-  --color-palette-sky-dark-fill: #07162c;
-  --color-palette-sky-dark-stroke: var(--color-blue-dark-stroke);
-  --color-palette-sky-dark-ink: var(--color-blue-dark-ink);
-  --color-palette-sky-dark-tint-1: var(--color-blue-dark-tint-1);
-  --color-palette-sky-dark-tint-2: var(--color-blue-dark-tint-2);
-  --color-palette-sky-dark-tint-3: var(--color-blue-dark-tint-3);
-  --color-palette-sky-dark-outline: #4e7bbd;
-  --color-palette-slate-light-fill: #e7e7e7;
-  --color-palette-slate-light-stroke: var(--color-gray-635);
-  --color-palette-slate-light-ink: var(--color-gray-635);
-  --color-palette-slate-light-dot: var(--color-gray-545);
-  --color-palette-slate-dark-fill: var(--primitive-simple2-dark-paint-gray);
-  --color-palette-slate-dark-stroke: var(--color-gray-333);
-  --color-palette-slate-dark-ink: var(--color-gray-333);
-  --color-palette-slate-dark-dot: var(--color-gray-220);
-  --color-palette-slate-light-outline: #848484;
-  --color-palette-slate-dark-outline: #797a7d;
+  --color-ui-focus: var(--color-action-link);
   --color-figure-icon: var(--color-blue-light-stroke);
-  --color-figure-icon-tile: var(--color-blue-light-fill);
-  --color-figure-queue-fill: var(--color-blue-light-ink);
-  --color-figure-queue-empty: var(--color-gray-161);
-  --color-tag-purple: var(--color-category-purple-fill);
-  --color-tag-green: var(--color-category-green-fill);
-  --color-tag-gray: var(--color-paint-gray-stroke);
-  --color-tag-red: var(--color-category-red-fill);
-  --color-tag-brand: var(--color-state-active);
-  --color-tag-amber: var(--color-category-yellow-fill);
-  --color-paint-red-fill: var(--color-red-light-fill);
-  --color-paint-red-stroke: var(--color-red-light-stroke);
-  --color-paint-red-outline: var(--color-red-light-outline);
-  --color-paint-red-ink: var(--color-red-light-ink);
-  --color-paint-red-dot: var(--color-red-light-dot);
-  --color-paint-green-fill: var(--color-green-light-fill);
-  --color-paint-green-stroke: var(--color-green-light-stroke);
-  --color-paint-green-outline: var(--color-green-light-outline);
-  --color-paint-green-ink: var(--color-green-light-ink);
-  --color-paint-green-dot: var(--color-green-light-dot);
-  --color-paint-purple-fill: var(--color-purple-light-fill);
-  --color-paint-purple-stroke: var(--color-purple-light-stroke);
-  --color-paint-purple-outline: var(--color-purple-light-outline);
-  --color-paint-purple-ink: var(--color-purple-light-ink);
-  --color-paint-purple-dot: var(--color-purple-light-dot);
-  --color-paint-purple-group-1: var(--color-purple-light-tint-1);
-  --color-paint-purple-group-2: var(--color-purple-light-tint-2);
-  --color-paint-purple-group-3: var(--color-purple-light-tint-3);
-  --color-paint-sky-fill: var(--color-palette-sky-light-fill);
-  --color-paint-sky-stroke: var(--color-palette-sky-light-stroke);
-  --color-paint-sky-outline: var(--color-palette-sky-light-outline);
-  --color-paint-sky-ink: var(--color-palette-sky-light-ink);
-  --color-paint-sky-group-1: var(--color-palette-sky-light-tint-1);
-  --color-paint-sky-group-2: var(--color-palette-sky-light-tint-2);
-  --color-paint-sky-group-3: var(--color-palette-sky-light-tint-3);
-  --color-paint-gray-fill: var(--color-palette-slate-light-fill);
-  --color-paint-gray-stroke: var(--color-palette-slate-light-stroke);
-  --color-paint-gray-outline: var(--color-palette-slate-light-outline);
-  --color-paint-gray-ink: var(--color-palette-slate-light-ink);
-  --color-paint-gray-dot: var(--color-palette-slate-light-dot);
-  --color-paint-blue-fill: var(--color-category-blue-light-tint-1);
-  --color-paint-blue-stroke: var(--color-category-blue-light-border);
-  --color-paint-blue-outline: var(--color-category-blue-light-border);
-  --color-paint-blue-ink: var(--color-category-blue-light-ink);
-  --color-paint-blue-dot: var(--color-category-blue-light-border);
-  --color-paint-blue-group-1: var(--color-category-blue-light-tint-1);
-  --color-paint-blue-group-2: var(--color-category-blue-light-tint-2);
-  --color-paint-blue-group-3: var(--color-category-blue-light-tint-3);
-  --color-paint-blue-effect: var(--color-category-blue-light-effect);
-  --color-paint-yellow-fill: var(--color-category-yellow-light-tint-1);
-  --color-paint-yellow-stroke: var(--color-category-yellow-light-border);
-  --color-paint-yellow-outline: var(--color-category-yellow-light-border);
-  --color-paint-yellow-ink: var(--color-category-yellow-light-ink);
-  --color-paint-yellow-dot: var(--color-category-yellow-light-border);
-  --color-paint-yellow-group-1: var(--color-category-yellow-light-tint-1);
-  --color-paint-yellow-group-2: var(--color-category-yellow-light-tint-2);
-  --color-paint-yellow-group-3: var(--color-category-yellow-light-tint-3);
-  --color-paint-yellow-effect: var(--color-category-yellow-light-effect);
-  --color-paint-orange-fill: var(--color-category-orange-light-tint-1);
-  --color-paint-orange-stroke: var(--color-category-orange-light-border);
-  --color-paint-orange-outline: var(--color-category-orange-light-border);
-  --color-paint-orange-ink: var(--color-category-orange-light-ink);
-  --color-paint-orange-dot: var(--color-category-orange-light-border);
-  --color-paint-orange-group-1: var(--color-category-orange-light-tint-1);
-  --color-paint-orange-group-2: var(--color-category-orange-light-tint-2);
-  --color-paint-orange-group-3: var(--color-category-orange-light-tint-3);
-  --color-paint-orange-effect: var(--color-category-orange-light-effect);
-  --color-paint-cyan-fill: var(--color-category-cyan-light-tint-1);
-  --color-paint-cyan-stroke: var(--color-category-cyan-light-border);
-  --color-paint-cyan-outline: var(--color-category-cyan-light-border);
-  --color-paint-cyan-ink: var(--color-category-cyan-light-ink);
-  --color-paint-cyan-dot: var(--color-category-cyan-light-border);
-  --color-paint-cyan-group-1: var(--color-category-cyan-light-tint-1);
-  --color-paint-cyan-group-2: var(--color-category-cyan-light-tint-2);
-  --color-paint-cyan-group-3: var(--color-category-cyan-light-tint-3);
-  --color-paint-cyan-effect: var(--color-category-cyan-light-effect);
-  --color-flow-ink-amber: var(--color-category-yellow-on);
-  --color-flow-ink-brand: var(--color-category-blue-on);
-  --color-flow-ink-purple: var(--color-category-purple-on);
-  --color-flow-ink-green: var(--color-category-green-on);
-  --color-flow-ink-red: var(--color-category-red-on);
-  --color-flow-ink-gray: var(--color-gray-0);
-  --color-flow-outline-amber: var(--color-category-yellow-light-border);
-  --color-flow-outline-brand: var(--color-category-blue-light-border);
-  --color-flow-outline-purple: var(--color-category-purple-light-border);
-  --color-flow-outline-green: var(--color-category-green-light-border);
-  --color-flow-outline-red: var(--color-category-red-light-border);
+  --color-figure-number-fill: var(--primitive-figure-number-fill);
+  --color-figure-number-ink: var(--primitive-figure-number-ink);
+  --color-ui-card: var(--color-gray-0);
+  --color-ink: var(--primitive-ink);
+  --color-ui-muted: var(--primitive-muted);
+  --color-ui-line: var(--primitive-line);
+  --color-help-border: var(--primitive-help-border);
+  --color-search-hover: var(--primitive-search-hover);
+  --color-help-hover: var(--primitive-help-hover);
+  --color-help-title-color: var(--primitive-help-title-color);
+  --color-action-link: var(--primitive-link);
   --font-figure-sans: FigSans, FigSansSym, FigSansMath, ui-sans-serif, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
   --font-figure-mono: FigMono, FigSans, FigSansSym, FigSansMath, ui-monospace, SFMono-Regular, Menlo, monospace;
-  --size-control-outer: 52px;
-  --size-control-inner: 44px;
-  --size-control-icon: 20px;
-  --size-control-icon-stroke: 2.5px;
-  --size-pill-height: 18px;
-  --size-icon-node: 20px;
-  --size-icon-group: 18px;
-  --size-icon-tile: 32px;
-  --size-icon-tile-gap: 6px;
-  --size-icon-grid: 24px;
-  --size-tag-height: 14px;
-  --size-packet-radius: 4.5px;
-  --size-packet-halo: 10px;
-  --size-packet-hop-ref: 300px;
-  --size-packet-chip-reach: 16px;
-  --size-arrow-head: 5px;
-  --size-node-card-width: 176px;
-  --size-node-min-width: 100px;
-  --size-node-max-width: 210px;
-  --size-node-min-height: 46px;
-  --size-node-store-cap: 12px;
-  --size-node-state-dot: 14px;
-  --size-node-table-row: 26px;
-  --size-node-circle: 40px;
-  --size-node-tile-width: 80px;
-  --size-node-tile-pad: 8px;
-  --size-grid-cell: 32px;
-  --size-figure-compact-width: 320px;
-  --size-figure-canvas: 960px;
-  --size-figure-canvas-wide: 1440px;
-  --size-chip-max-width: 210px;
-  --size-player-caption-max: 720px;
-  --size-player-embedded-chrome: 150px;
-  --size-gallery-column: var(--size-figure-canvas);
-  --size-gallery-frame: 820px;
-  --size-document-column: var(--size-figure-canvas);
-  --size-chart-width: 720px;
-  --size-chart-compact-width: 296px;
-  --size-chart-pattern-spacing: 8px;
-  --size-chart-label: 140px;
-  --size-chart-label-max: 240px;
-  --size-chart-bar: 12px;
-  --size-chart-row: 40px;
-  --size-chart-dot: 5px;
-  --size-chart-plot-h: 260px;
-  --size-chart-axis: 48px;
-  --size-chart-cell: 40px;
-  --size-chart-cap: 8px;
-  --size-chart-range: 6px;
-  --size-chart-arrow-min: 16px;
-  --size-queue-slot-width: 16px;
-  --size-queue-slot-height: 14px;
-  --size-queue-slot-gap: 4px;
-  --size-sequence-row: 44px;
-  --size-group-title: 28px;
-  --breakpoint-tablet: 800px;
-  --tracking-tag: 0.03em;
-  --tracking-frame: 0.04em;
-  --radius-route: 22px;
-  --border-lifeline: 1.25px;
-  --border-tag: 1.5px;
-  --border-edge: 1.75px;
-  --border-casing: 4.5px;
-  --border-halo: 8px;
-  --dash-line: 5;
+  --text-small-text: var(--primitive-small-text);
+  --text-tiny-text: var(--primitive-tiny-text);
+  --text-figure-meta: 11px;
+  --tracking-text: -0.3px;
+  --font-weight-semibold: 600;
+  --primitive-ink: #303336;
+  --primitive-muted: #55606e;
+  --primitive-line: #dfe3e8;
+  --primitive-link: #2576eb;
+  --primitive-small-text: 15px;
+  --primitive-tiny-text: 13px;
+  --primitive-help-border: #ebecef;
+  --primitive-search-hover: #d9e6ff;
+  --primitive-help-hover: #ebf1ff;
+  --primitive-help-title-color: #3d4856;
+  --primitive-figure-ui-accent: #3c84f3;
+  --primitive-figure-dark-node: #303136;
+  --primitive-figure-dark-edge: #50535b;
+  --primitive-figure-dark-separator: #454850;
+  --primitive-figure-dark-hover: #343e50;
+  --primitive-figure-dark-selection: #274174;
+  --primitive-figure-dark-muted: #a9adb6;
+  --primitive-figure-dark-line: #7f8793;
+  --primitive-figure-number-fill: #303336;
+  --primitive-figure-number-ink: #ffffff;
+  --border-width-thin: 1px;
+  --border-width-hair: 0.75px;
+  --border-width-lifeline: 1.25px;
+  --border-width-edge: 1.75px;
+  --opacity-range: 0.4;
   --dash-gap: 4;
   --dash-card: 3;
-  --opacity-tag: 0.15;
-  --opacity-halo: 0.2;
-  --opacity-dim: 0.3;
-  --opacity-dim-ink: 0.9;
-  --opacity-band: 0.22;
-  --opacity-range: 0.4;
-  --opacity-chip-visible-min: 0.1;
-  --distance-card-min: 0.015;
-  --distance-card-max: 0.04;
-  --distance-flow: 0.1;
-  --distance-neighbor: 0.06;
-  --distance-neighbor-cvd: 0.025;
-  --distance-fill: 0.015;
-  --distance-fill-dark-bg: 0.07;
-  --distance-fill-dark-node: 0.03;
-  --duration-hop: 3750ms;
-  --duration-hop-min: 500ms;
-  --duration-chip-slide: 300ms;
-  --duration-chip-fade: 150ms;
-  --duration-chart-cycle: 7000ms;
-  --duration-reveal: 900ms;
-  --duration-value-flash: 700ms;
-  --duration-pulse: 450ms;
-  --duration-chip-frame: 16.666666666666668ms;
-  --duration-flow-step: 12000ms;
-  --duration-cut-fade: 600ms;
-  --scale-zoom-max: 6;
-  --scale-aspect-fit-max: 1.6;
-  --scale-fold-aspect: var(--scale-aspect-fit-max);
-  --scale-fold-step: 0.75;
-  --scale-aspect-max: 3;
-  --scale-zoom-step: 1.25;
-  --scale-flow-dots-max: 80;
-  --scale-chip-visible-share: 0.6;
-  --scale-chip-room-tries: 4;
-  --scale-chip-room-step: 16;
-  --simple2-figure-leading: 1.5;
-  --simple2-card-row-gap: 6;
+  --outline-width-focus: 3px;
+  color-scheme: light;
 }
 
-  :root {
-    --color-fg: var(--color-gray-59);
-    --color-muted: var(--primitive-simple2-dark-muted);
-    --color-group-title: var(--primitive-simple2-dark-muted);
-    --color-bg: var(--primitive-simple2-dark-bg);
-    --color-node: var(--primitive-simple2-dark-node);
-    --color-surface: var(--primitive-simple2-dark-card);
-    --color-card: var(--primitive-simple2-dark-node);
-    --color-card-on: var(--color-blue-dark-fill);
-    --color-page: var(--primitive-simple2-dark-page);
-    --color-outline: var(--primitive-simple2-dark-outline);
-    --color-border: var(--primitive-simple2-border);
-    --color-plate-border: var(--primitive-simple2-dark-edge);
-    --color-line: var(--primitive-simple2-dark-line);
-    --color-state-active: var(--primitive-simple2-ui-accent);
-    --color-state-active-fill: var(--color-category-blue-fill);
-    --color-state-active-text: var(--color-blue-dark-ink);
-    --color-state-on-active: var(--color-category-blue-on);
-    --color-state-error: var(--color-red-dark-stroke);
-    --color-state-success: var(--color-green-dark-stroke);
-    --color-state-warning: var(--color-category-yellow-dark-border);
-    --color-state-glow: var(--color-blue-dark-fill);
-    --color-ui-link: var(--color-blue-dark-ink);
-    --color-ui-focus: var(--primitive-simple2-ui-accent);
-    --color-ui-progress: var(--color-blue-dark-stroke);
-    --color-ui-control-on: var(--primitive-simple2-ui-accent);
-    --color-data-main: var(--color-category-blue-dark-border);
-    --color-data-heat-low: var(--color-blue-dark-heat-low);
-    --color-data-heat-high: var(--color-blue-dark-heat-high);
-    --color-data-heat-ink: var(--color-gray-0);
-    --color-data-grid: var(--primitive-simple2-dark-edge);
-    --color-data-compare-outline: var(--color-category-yellow-dark-border);
-    --color-data-category-outline-1: var(--color-category-blue-dark-border);
-    --color-data-category-outline-2: var(--color-category-yellow-dark-border);
-    --color-data-category-outline-3: var(--color-category-red-dark-border);
-    --color-data-category-outline-4: var(--color-category-green-dark-border);
-    --color-data-category-outline-5: var(--color-category-orange-dark-border);
-    --color-data-category-outline-6: var(--color-category-purple-dark-border);
-    --color-data-category-outline-7: var(--color-category-cyan-dark-border);
-    --color-data-category-ink-1: var(--color-category-blue-dark-ink);
-    --color-data-category-ink-2: var(--color-category-yellow-dark-ink);
-    --color-data-category-ink-3: var(--color-category-red-dark-ink);
-    --color-data-category-ink-4: var(--color-category-green-dark-ink);
-    --color-data-category-ink-5: var(--color-category-orange-dark-ink);
-    --color-data-category-ink-6: var(--color-category-purple-dark-ink);
-    --color-data-category-ink-7: var(--color-category-cyan-dark-ink);
-    --color-data-category-effect-1: var(--color-category-blue-dark-effect);
-    --color-data-category-effect-2: var(--color-category-yellow-dark-effect);
-    --color-data-category-effect-3: var(--color-category-red-dark-effect);
-    --color-data-category-effect-4: var(--color-category-green-dark-effect);
-    --color-data-category-effect-5: var(--color-category-orange-dark-effect);
-    --color-data-category-effect-6: var(--color-category-purple-dark-effect);
-    --color-data-category-effect-7: var(--color-category-cyan-dark-effect);
-    --color-data-category-tint-1: var(--color-category-blue-dark-tint-1);
-    --color-data-category-tint-2: var(--color-category-yellow-dark-tint-1);
-    --color-data-category-tint-3: var(--color-category-red-dark-tint-1);
-    --color-data-category-tint-4: var(--color-category-green-dark-tint-1);
-    --color-data-category-tint-5: var(--color-category-orange-dark-tint-1);
-    --color-data-category-tint-6: var(--color-category-purple-dark-tint-1);
-    --color-data-category-tint-7: var(--color-category-cyan-dark-tint-1);
-    --color-accent: var(--color-blue-dark-stroke);
-    --color-figure-icon-service-ink: var(--color-category-blue-dark-border);
-    --color-figure-icon-service-surface: var(--color-node);
-    --color-figure-icon-data-ink: var(--color-category-green-dark-border);
-    --color-figure-icon-data-surface: var(--color-node);
-    --color-figure-icon-access-ink: var(--color-category-yellow-dark-border);
-    --color-figure-icon-access-surface: var(--color-node);
-    --color-figure-icon-person-ink: var(--color-category-blue-dark-border);
-    --color-figure-icon-person-surface: var(--color-node);
-    --color-figure-icon-brand-ink: var(--color-gray-220);
-    --color-figure-icon-brand-surface: var(--color-gray-835);
-    --color-figure-number-fill: var(--color-gray-59);
-    --color-figure-number-ink: var(--color-gray-933);
-    --color-flow-gray: var(--color-gray-220);
-    --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-    --simple2-separator: var(--primitive-simple2-dark-separator);
-    --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
-    --simple2-segment-track: rgba(255, 255, 255, 0.12);
-    --simple2-segment-ink: rgba(255, 255, 255, 0.78);
-    --simple2-segment-hover: rgba(255, 255, 255, 0.1);
-    --simple2-surface-edge: var(--primitive-simple2-dark-edge);
-    --simple2-hover-fill: var(--primitive-simple2-dark-hover);
-    --simple2-row-selection: var(--primitive-simple2-dark-selection);
-    --simple2-card-active-fill: var(--primitive-simple2-dark-card-active-fill);
-    --simple2-data-line: var(--primitive-simple2-dark-data-line);
-    --color-figure-icon: var(--color-blue-dark-stroke);
-    --color-figure-icon-tile: var(--color-blue-dark-fill);
-    --color-figure-queue-fill: var(--color-blue-dark-stroke);
-    --color-figure-queue-empty: var(--color-gray-910);
-    --color-paint-red-fill: var(--color-red-dark-fill);
-    --color-paint-red-stroke: var(--color-red-dark-stroke);
-    --color-paint-red-outline: var(--color-red-dark-outline);
-    --color-paint-red-ink: var(--color-red-dark-ink);
-    --color-paint-red-dot: var(--color-red-dark-dot);
-    --color-paint-green-fill: var(--color-green-dark-fill);
-    --color-paint-green-stroke: var(--color-green-dark-stroke);
-    --color-paint-green-outline: var(--color-green-dark-outline);
-    --color-paint-green-ink: var(--color-green-dark-ink);
-    --color-paint-green-dot: var(--color-green-dark-dot);
-    --color-paint-purple-fill: var(--color-purple-dark-fill);
-    --color-paint-purple-stroke: var(--color-purple-dark-stroke);
-    --color-paint-purple-outline: var(--color-purple-dark-outline);
-    --color-paint-purple-ink: var(--color-purple-dark-ink);
-    --color-paint-purple-dot: var(--color-purple-dark-dot);
-    --color-paint-purple-group-1: var(--color-purple-dark-tint-1);
-    --color-paint-purple-group-2: var(--color-purple-dark-tint-2);
-    --color-paint-purple-group-3: var(--color-purple-dark-tint-3);
-    --color-paint-sky-fill: var(--color-palette-sky-dark-fill);
-    --color-paint-sky-stroke: var(--color-palette-sky-dark-stroke);
-    --color-paint-sky-outline: var(--color-palette-sky-dark-outline);
-    --color-paint-sky-ink: var(--color-palette-sky-dark-ink);
-    --color-paint-sky-group-1: var(--color-palette-sky-dark-tint-1);
-    --color-paint-sky-group-2: var(--color-palette-sky-dark-tint-2);
-    --color-paint-sky-group-3: var(--color-palette-sky-dark-tint-3);
-    --color-paint-gray-fill: var(--color-palette-slate-dark-fill);
-    --color-paint-gray-stroke: var(--color-palette-slate-dark-stroke);
-    --color-paint-gray-outline: var(--color-palette-slate-dark-outline);
-    --color-paint-gray-ink: var(--color-palette-slate-dark-ink);
-    --color-paint-gray-dot: var(--color-palette-slate-dark-dot);
-    --color-paint-blue-fill: var(--color-category-blue-dark-tint-1);
-    --color-paint-blue-stroke: var(--color-category-blue-dark-border);
-    --color-paint-blue-outline: var(--color-category-blue-dark-border);
-    --color-paint-blue-ink: var(--color-category-blue-dark-ink);
-    --color-paint-blue-dot: var(--color-category-blue-dark-border);
-    --color-paint-blue-group-1: var(--color-category-blue-dark-tint-1);
-    --color-paint-blue-group-2: var(--color-category-blue-dark-tint-2);
-    --color-paint-blue-group-3: var(--color-category-blue-dark-tint-3);
-    --color-paint-blue-effect: var(--color-category-blue-dark-effect);
-    --color-paint-yellow-fill: var(--color-category-yellow-dark-tint-1);
-    --color-paint-yellow-stroke: var(--color-category-yellow-dark-border);
-    --color-paint-yellow-outline: var(--color-category-yellow-dark-border);
-    --color-paint-yellow-ink: var(--color-category-yellow-dark-ink);
-    --color-paint-yellow-dot: var(--color-category-yellow-dark-border);
-    --color-paint-yellow-group-1: var(--color-category-yellow-dark-tint-1);
-    --color-paint-yellow-group-2: var(--color-category-yellow-dark-tint-2);
-    --color-paint-yellow-group-3: var(--color-category-yellow-dark-tint-3);
-    --color-paint-yellow-effect: var(--color-category-yellow-dark-effect);
-    --color-paint-orange-fill: var(--color-category-orange-dark-tint-1);
-    --color-paint-orange-stroke: var(--color-category-orange-dark-border);
-    --color-paint-orange-outline: var(--color-category-orange-dark-border);
-    --color-paint-orange-ink: var(--color-category-orange-dark-ink);
-    --color-paint-orange-dot: var(--color-category-orange-dark-border);
-    --color-paint-orange-group-1: var(--color-category-orange-dark-tint-1);
-    --color-paint-orange-group-2: var(--color-category-orange-dark-tint-2);
-    --color-paint-orange-group-3: var(--color-category-orange-dark-tint-3);
-    --color-paint-orange-effect: var(--color-category-orange-dark-effect);
-    --color-paint-cyan-fill: var(--color-category-cyan-dark-tint-1);
-    --color-paint-cyan-stroke: var(--color-category-cyan-dark-border);
-    --color-paint-cyan-outline: var(--color-category-cyan-dark-border);
-    --color-paint-cyan-ink: var(--color-category-cyan-dark-ink);
-    --color-paint-cyan-dot: var(--color-category-cyan-dark-border);
-    --color-paint-cyan-group-1: var(--color-category-cyan-dark-tint-1);
-    --color-paint-cyan-group-2: var(--color-category-cyan-dark-tint-2);
-    --color-paint-cyan-group-3: var(--color-category-cyan-dark-tint-3);
-    --color-paint-cyan-effect: var(--color-category-cyan-dark-effect);
-    --color-flow-outline-amber: var(--color-category-yellow-dark-border);
-    --color-flow-outline-brand: var(--color-category-blue-dark-border);
-    --color-flow-outline-purple: var(--color-category-purple-dark-border);
-    --color-flow-outline-green: var(--color-category-green-dark-border);
-    --color-flow-outline-red: var(--color-category-red-dark-border);
-    --color-flow-ink-gray: var(--color-gray-933);
+  :root:not([data-theme='dark']) {
+  --color-line: var(--primitive-figure-dark-line);
+  --color-state-active: var(--primitive-figure-ui-accent);
+  --color-state-active-text: var(--color-blue-dark-ink);
+  --color-figure-icon: var(--color-blue-dark-stroke);
+  --color-figure-number-fill: var(--color-gray-59);
+  --color-figure-number-ink: var(--color-gray-933);
+  --color-ui-card: var(--primitive-figure-dark-node);
+  --color-ink: var(--color-gray-59);
+  --color-ui-muted: var(--primitive-figure-dark-muted);
+  --color-ui-line: var(--primitive-figure-dark-separator);
+  --color-help-border: var(--primitive-figure-dark-edge);
+  --color-search-hover: var(--primitive-figure-dark-selection);
+  --color-help-hover: var(--primitive-figure-dark-hover);
+  --color-help-title-color: var(--primitive-figure-dark-muted);
+  color-scheme: dark;
   }
 
 [data-theme='dark'] {
-  --color-fg: var(--color-gray-59);
-  --color-muted: var(--primitive-simple2-dark-muted);
-  --color-group-title: var(--primitive-simple2-dark-muted);
-  --color-bg: var(--primitive-simple2-dark-bg);
-  --color-node: var(--primitive-simple2-dark-node);
-  --color-surface: var(--primitive-simple2-dark-card);
-  --color-card: var(--primitive-simple2-dark-node);
-  --color-card-on: var(--color-blue-dark-fill);
-  --color-page: var(--primitive-simple2-dark-page);
-  --color-outline: var(--primitive-simple2-dark-outline);
-  --color-border: var(--primitive-simple2-border);
-  --color-plate-border: var(--primitive-simple2-dark-edge);
-  --color-line: var(--primitive-simple2-dark-line);
-  --color-state-active: var(--primitive-simple2-ui-accent);
-  --color-state-active-fill: var(--color-category-blue-fill);
+  --color-line: var(--primitive-figure-dark-line);
+  --color-state-active: var(--primitive-figure-ui-accent);
   --color-state-active-text: var(--color-blue-dark-ink);
-  --color-state-on-active: var(--color-category-blue-on);
-  --color-state-error: var(--color-red-dark-stroke);
-  --color-state-success: var(--color-green-dark-stroke);
-  --color-state-warning: var(--color-category-yellow-dark-border);
-  --color-state-glow: var(--color-blue-dark-fill);
-  --color-ui-link: var(--color-blue-dark-ink);
-  --color-ui-focus: var(--primitive-simple2-ui-accent);
-  --color-ui-progress: var(--color-blue-dark-stroke);
-  --color-ui-control-on: var(--primitive-simple2-ui-accent);
-  --color-data-main: var(--color-category-blue-dark-border);
-  --color-data-heat-low: var(--color-blue-dark-heat-low);
-  --color-data-heat-high: var(--color-blue-dark-heat-high);
-  --color-data-heat-ink: var(--color-gray-0);
-  --color-data-grid: var(--primitive-simple2-dark-edge);
-  --color-data-compare-outline: var(--color-category-yellow-dark-border);
-  --color-data-category-outline-1: var(--color-category-blue-dark-border);
-  --color-data-category-outline-2: var(--color-category-yellow-dark-border);
-  --color-data-category-outline-3: var(--color-category-red-dark-border);
-  --color-data-category-outline-4: var(--color-category-green-dark-border);
-  --color-data-category-outline-5: var(--color-category-orange-dark-border);
-  --color-data-category-outline-6: var(--color-category-purple-dark-border);
-  --color-data-category-outline-7: var(--color-category-cyan-dark-border);
-  --color-data-category-ink-1: var(--color-category-blue-dark-ink);
-  --color-data-category-ink-2: var(--color-category-yellow-dark-ink);
-  --color-data-category-ink-3: var(--color-category-red-dark-ink);
-  --color-data-category-ink-4: var(--color-category-green-dark-ink);
-  --color-data-category-ink-5: var(--color-category-orange-dark-ink);
-  --color-data-category-ink-6: var(--color-category-purple-dark-ink);
-  --color-data-category-ink-7: var(--color-category-cyan-dark-ink);
-  --color-data-category-effect-1: var(--color-category-blue-dark-effect);
-  --color-data-category-effect-2: var(--color-category-yellow-dark-effect);
-  --color-data-category-effect-3: var(--color-category-red-dark-effect);
-  --color-data-category-effect-4: var(--color-category-green-dark-effect);
-  --color-data-category-effect-5: var(--color-category-orange-dark-effect);
-  --color-data-category-effect-6: var(--color-category-purple-dark-effect);
-  --color-data-category-effect-7: var(--color-category-cyan-dark-effect);
-  --color-data-category-tint-1: var(--color-category-blue-dark-tint-1);
-  --color-data-category-tint-2: var(--color-category-yellow-dark-tint-1);
-  --color-data-category-tint-3: var(--color-category-red-dark-tint-1);
-  --color-data-category-tint-4: var(--color-category-green-dark-tint-1);
-  --color-data-category-tint-5: var(--color-category-orange-dark-tint-1);
-  --color-data-category-tint-6: var(--color-category-purple-dark-tint-1);
-  --color-data-category-tint-7: var(--color-category-cyan-dark-tint-1);
-  --color-accent: var(--color-blue-dark-stroke);
-  --color-figure-icon-service-ink: var(--color-category-blue-dark-border);
-  --color-figure-icon-service-surface: var(--color-node);
-  --color-figure-icon-data-ink: var(--color-category-green-dark-border);
-  --color-figure-icon-data-surface: var(--color-node);
-  --color-figure-icon-access-ink: var(--color-category-yellow-dark-border);
-  --color-figure-icon-access-surface: var(--color-node);
-  --color-figure-icon-person-ink: var(--color-category-blue-dark-border);
-  --color-figure-icon-person-surface: var(--color-node);
-  --color-figure-icon-brand-ink: var(--color-gray-220);
-  --color-figure-icon-brand-surface: var(--color-gray-835);
+  --color-figure-icon: var(--color-blue-dark-stroke);
   --color-figure-number-fill: var(--color-gray-59);
   --color-figure-number-ink: var(--color-gray-933);
-  --color-flow-gray: var(--color-gray-220);
-  --simple2-node-shadow: var(--primitive-simple2-node-shadow);
-  --simple2-separator: var(--primitive-simple2-dark-separator);
-  --simple2-canvas-fill: var(--primitive-simple2-dark-bg);
-  --simple2-segment-track: rgba(255, 255, 255, 0.12);
-  --simple2-segment-ink: rgba(255, 255, 255, 0.78);
-  --simple2-segment-hover: rgba(255, 255, 255, 0.1);
-  --simple2-surface-edge: var(--primitive-simple2-dark-edge);
-  --simple2-hover-fill: var(--primitive-simple2-dark-hover);
-  --simple2-row-selection: var(--primitive-simple2-dark-selection);
-  --simple2-card-active-fill: var(--primitive-simple2-dark-card-active-fill);
-  --simple2-data-line: var(--primitive-simple2-dark-data-line);
-  --color-figure-icon: var(--color-blue-dark-stroke);
-  --color-figure-icon-tile: var(--color-blue-dark-fill);
-  --color-figure-queue-fill: var(--color-blue-dark-stroke);
-  --color-figure-queue-empty: var(--color-gray-910);
-  --color-paint-red-fill: var(--color-red-dark-fill);
-  --color-paint-red-stroke: var(--color-red-dark-stroke);
-  --color-paint-red-outline: var(--color-red-dark-outline);
-  --color-paint-red-ink: var(--color-red-dark-ink);
-  --color-paint-red-dot: var(--color-red-dark-dot);
-  --color-paint-green-fill: var(--color-green-dark-fill);
-  --color-paint-green-stroke: var(--color-green-dark-stroke);
-  --color-paint-green-outline: var(--color-green-dark-outline);
-  --color-paint-green-ink: var(--color-green-dark-ink);
-  --color-paint-green-dot: var(--color-green-dark-dot);
-  --color-paint-purple-fill: var(--color-purple-dark-fill);
-  --color-paint-purple-stroke: var(--color-purple-dark-stroke);
-  --color-paint-purple-outline: var(--color-purple-dark-outline);
-  --color-paint-purple-ink: var(--color-purple-dark-ink);
-  --color-paint-purple-dot: var(--color-purple-dark-dot);
-  --color-paint-purple-group-1: var(--color-purple-dark-tint-1);
-  --color-paint-purple-group-2: var(--color-purple-dark-tint-2);
-  --color-paint-purple-group-3: var(--color-purple-dark-tint-3);
-  --color-paint-sky-fill: var(--color-palette-sky-dark-fill);
-  --color-paint-sky-stroke: var(--color-palette-sky-dark-stroke);
-  --color-paint-sky-outline: var(--color-palette-sky-dark-outline);
-  --color-paint-sky-ink: var(--color-palette-sky-dark-ink);
-  --color-paint-sky-group-1: var(--color-palette-sky-dark-tint-1);
-  --color-paint-sky-group-2: var(--color-palette-sky-dark-tint-2);
-  --color-paint-sky-group-3: var(--color-palette-sky-dark-tint-3);
-  --color-paint-gray-fill: var(--color-palette-slate-dark-fill);
-  --color-paint-gray-stroke: var(--color-palette-slate-dark-stroke);
-  --color-paint-gray-outline: var(--color-palette-slate-dark-outline);
-  --color-paint-gray-ink: var(--color-palette-slate-dark-ink);
-  --color-paint-gray-dot: var(--color-palette-slate-dark-dot);
-  --color-paint-blue-fill: var(--color-category-blue-dark-tint-1);
-  --color-paint-blue-stroke: var(--color-category-blue-dark-border);
-  --color-paint-blue-outline: var(--color-category-blue-dark-border);
-  --color-paint-blue-ink: var(--color-category-blue-dark-ink);
-  --color-paint-blue-dot: var(--color-category-blue-dark-border);
-  --color-paint-blue-group-1: var(--color-category-blue-dark-tint-1);
-  --color-paint-blue-group-2: var(--color-category-blue-dark-tint-2);
-  --color-paint-blue-group-3: var(--color-category-blue-dark-tint-3);
-  --color-paint-blue-effect: var(--color-category-blue-dark-effect);
-  --color-paint-yellow-fill: var(--color-category-yellow-dark-tint-1);
-  --color-paint-yellow-stroke: var(--color-category-yellow-dark-border);
-  --color-paint-yellow-outline: var(--color-category-yellow-dark-border);
-  --color-paint-yellow-ink: var(--color-category-yellow-dark-ink);
-  --color-paint-yellow-dot: var(--color-category-yellow-dark-border);
-  --color-paint-yellow-group-1: var(--color-category-yellow-dark-tint-1);
-  --color-paint-yellow-group-2: var(--color-category-yellow-dark-tint-2);
-  --color-paint-yellow-group-3: var(--color-category-yellow-dark-tint-3);
-  --color-paint-yellow-effect: var(--color-category-yellow-dark-effect);
-  --color-paint-orange-fill: var(--color-category-orange-dark-tint-1);
-  --color-paint-orange-stroke: var(--color-category-orange-dark-border);
-  --color-paint-orange-outline: var(--color-category-orange-dark-border);
-  --color-paint-orange-ink: var(--color-category-orange-dark-ink);
-  --color-paint-orange-dot: var(--color-category-orange-dark-border);
-  --color-paint-orange-group-1: var(--color-category-orange-dark-tint-1);
-  --color-paint-orange-group-2: var(--color-category-orange-dark-tint-2);
-  --color-paint-orange-group-3: var(--color-category-orange-dark-tint-3);
-  --color-paint-orange-effect: var(--color-category-orange-dark-effect);
-  --color-paint-cyan-fill: var(--color-category-cyan-dark-tint-1);
-  --color-paint-cyan-stroke: var(--color-category-cyan-dark-border);
-  --color-paint-cyan-outline: var(--color-category-cyan-dark-border);
-  --color-paint-cyan-ink: var(--color-category-cyan-dark-ink);
-  --color-paint-cyan-dot: var(--color-category-cyan-dark-border);
-  --color-paint-cyan-group-1: var(--color-category-cyan-dark-tint-1);
-  --color-paint-cyan-group-2: var(--color-category-cyan-dark-tint-2);
-  --color-paint-cyan-group-3: var(--color-category-cyan-dark-tint-3);
-  --color-paint-cyan-effect: var(--color-category-cyan-dark-effect);
-  --color-flow-outline-amber: var(--color-category-yellow-dark-border);
-  --color-flow-outline-brand: var(--color-category-blue-dark-border);
-  --color-flow-outline-purple: var(--color-category-purple-dark-border);
-  --color-flow-outline-green: var(--color-category-green-dark-border);
-  --color-flow-outline-red: var(--color-category-red-dark-border);
-  --color-flow-ink-gray: var(--color-gray-933);
+  --color-ui-card: var(--primitive-figure-dark-node);
+  --color-ink: var(--color-gray-59);
+  --color-ui-muted: var(--primitive-figure-dark-muted);
+  --color-ui-line: var(--primitive-figure-dark-separator);
+  --color-help-border: var(--primitive-figure-dark-edge);
+  --color-search-hover: var(--primitive-figure-dark-selection);
+  --color-help-hover: var(--primitive-figure-dark-hover);
+  --color-help-title-color: var(--primitive-figure-dark-muted);
+  color-scheme: dark;
+}
+[data-theme='light'] {
+  --color-line: var(--color-gray-282);
+  --color-state-active: var(--color-blue-light-stroke);
+  --color-state-active-text: var(--color-blue-light-ink);
+  --color-figure-icon: var(--color-blue-light-stroke);
+  --color-figure-number-fill: var(--primitive-figure-number-fill);
+  --color-figure-number-ink: var(--primitive-figure-number-ink);
+  --color-ui-card: var(--color-gray-0);
+  --color-ink: var(--primitive-ink);
+  --color-ui-muted: var(--primitive-muted);
+  --color-ui-line: var(--primitive-line);
+  --color-help-border: var(--primitive-help-border);
+  --color-search-hover: var(--primitive-search-hover);
+  --color-help-hover: var(--primitive-help-hover);
+  --color-help-title-color: var(--primitive-help-title-color);
+  color-scheme: light;
 }
 /* 그림 안 글자와 모양. HTML 재생기와 움직이는 SVG가 같이 쓴다. */
 /* 카드 안 글(label, sub, meta, cell, item, row)의 기준 점(text-anchor)은 글이 정한다(measure/texts.js의 anchor). 여기서는 글꼴과 색만 정한다. */
-/* 글 위계는 셋이다: 제목(simple2.label-size 15: 카드 제목은 regular, 그룹 제목은 semibold), 문장과 이름표(detail-size 13: 부제, 선 라벨, 메모, 이동 글, 카드 줄, 제약, 형식), 작은 표시(micro-size 11: 번호, 태그, 표식, 키, 눈금, 단위). 크기와 굵기는 measure/texts.js의 STYLE이 같은 토큰으로 잰다. */
+/* 글 위계는 셋이다: 제목(공통 디자인.label-size 15: 카드 제목은 regular, 그룹 제목은 semibold), 문장과 이름표(detail-size 13: 부제, 선 라벨, 메모, 이동 글, 카드 줄, 제약, 형식), 작은 표시(micro-size 11: 번호, 태그, 표식, 키, 눈금, 단위). 크기와 굵기는 measure/texts.js의 STYLE이 같은 토큰으로 잰다. */
 .fl text {
   font-family: var(--font-figure-sans);
   letter-spacing: var(--tracking-text);
 }
 
 .fl .label {
-  font-size: var(--simple2-label-size);
+  font-size: var(--text-small-text);
   fill: var(--color-fg);
 }
 
 .fl .sub {
-  font-size: var(--simple2-detail-size);
+  font-size: var(--text-tiny-text);
   fill: var(--color-muted);
 }
 
 .fl .frame {
-  font-size: var(--simple2-label-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-small-text);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-group-title);
 }
 
 .fl .edgelabel {
-  font-size: var(--simple2-detail-size);
+  font-size: var(--text-tiny-text);
   text-anchor: middle;
   fill: var(--fx-ink-rest);
 }
@@ -1070,7 +160,7 @@
 .fl .mini,
 .fl .cell,
 .fl .item {
-  font-size: var(--simple2-detail-size);
+  font-size: var(--text-tiny-text);
   fill: var(--color-fg);
 }
 
@@ -1090,26 +180,26 @@
 }
 
 .fl .tag {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-fg);
 }
 
 .fl .mark {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-state-active-text);
 }
 
 /* 값 카드 줄의 값 글자. 줄의 이름(row)은 카드 층이 그리고 값은 오른쪽 끝에 얹힌다. 이름과 같은 크기이고 굵기만 다르다. */
 .fl .value {
-  font-size: var(--simple2-detail-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-tiny-text);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-fg);
 }
 
 .fl .chip {
-  font-size: var(--simple2-detail-size);
+  font-size: var(--text-tiny-text);
   text-anchor: middle;
 }
 
@@ -1140,13 +230,13 @@
 .fl .fl-path {
   fill: none;
   stroke: currentColor;
-  stroke-width: var(--border-edge);
+  stroke-width: var(--border-width-edge);
 }
 
 /* 열 키(PK, FK, UNQ)는 작은 표시이고 글자색이다. 파랑은 켜진 상태에만 쓴다. */
 .fl .cell .key {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   fill: var(--color-fg);
 }
 
@@ -1155,12 +245,12 @@
   --fx-edge-rest: var(--color-line);
   fill: none;
   stroke: var(--fx-edge-rest);
-  stroke-width: var(--border-thin);
+  stroke-width: var(--border-width-thin);
 }
 
 .fl .lifeline {
   stroke: var(--color-line);
-  stroke-width: var(--border-lifeline);
+  stroke-width: var(--border-width-lifeline);
   stroke-dasharray: var(--dash-gap) var(--dash-gap);
 }
 
@@ -1184,16 +274,16 @@
 }
 
 .fl .col-line {
-  stroke: var(--simple2-separator);
-  stroke-width: var(--border-hair);
+  stroke: var(--color-ui-line);
+  stroke-width: var(--border-width-hair);
 }
 
 .fl .grid-cell {
   --fx-face: var(--color-node);
   --fx-face-on: var(--fx-row);
   fill: var(--fx-face);
-  stroke: var(--simple2-separator);
-  stroke-width: var(--border-thin);
+  stroke: var(--color-ui-line);
+  stroke-width: var(--border-width-thin);
 }
 
 .fl .grid-tray {
@@ -1202,7 +292,7 @@
 
 .fl .grid-cell.gap {
   --fx-face: var(--color-card);
-  stroke: var(--simple2-separator);
+  stroke: var(--color-ui-line);
 }
 
 .fl .grid-cell.empty {
@@ -1223,8 +313,8 @@
 
 /* 도형 윗줄과 그룹 제목 줄의 장식: 글자 배지, 아이콘 */
 .fl .badge {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   text-anchor: middle;
   fill: var(--color-fg);
 }
@@ -1243,8 +333,8 @@
 }
 
 .fl .number {
-  font-size: var(--simple2-micro-size);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-figure-meta);
+  font-weight: var(--font-weight-semibold);
   text-anchor: middle;
   fill: var(--color-figure-number-ink);
 }
@@ -1252,10 +342,10 @@
 /* 도형은 그림자 없는 평면이다. 그림자는 떠 있는 메뉴 같은 조작에만 둔다. */
 .fl :where(.fl-node) > .fl-stroke {
   stroke: var(--fx-edge-rest);
-  stroke-width: var(--simple2-node-stroke);
+  stroke-width: var(--border-width-thin);
 }
 
-/* 구획은 border.hair, 보조 경계는 border.thin, 관계는 border.edge, 생명선은 border.lifeline, 도형 경계는 simple2.node-stroke다. 모든 선은 그림과 함께 확대·축소된다. */
+/* 구획은 border.hair, 보조 경계는 border.thin, 관계는 border.edge, 생명선은 border.lifeline, 도형 경계는 공통 디자인.node-stroke다. 모든 선은 그림과 함께 확대·축소된다. */
 .fl .fl-path,
 .fl .fl-node > .fl-stroke,
 .fl .grid-cell,
@@ -1275,61 +365,6 @@
   stroke-linejoin: round;
 }
 
-/* 의미 아이콘은 역할색으로 채운 실루엣과 그 안의 밝은 세부를 함께 가진다. 기술 브랜드도 자기 개념의 역할(icons/symbols.js)을 따른다. */
-.fl .fl-symbol-glyph {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: var(--simple2-symbol-stroke);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.fl .symbol-solid {
-  fill: currentColor;
-  stroke: none;
-}
-
-.fl .symbol-cut {
-  fill: none;
-  stroke: var(--symbol-detail);
-}
-
-/* 실루엣 밖으로 나오는 획(자물쇠 고리, 모니터 받침)은 면과 같은 색이다. */
-.fl .symbol-line {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: calc(var(--simple2-symbol-stroke) * 2);
-}
-
-.fl .fl-symbol-service {
-  color: var(--color-figure-icon-service-ink);
-  --symbol-detail: var(--color-figure-icon-service-surface);
-}
-
-.fl .fl-symbol-data {
-  color: var(--color-figure-icon-data-ink);
-  --symbol-detail: var(--color-figure-icon-data-surface);
-}
-
-.fl .fl-symbol-access {
-  color: var(--color-figure-icon-access-ink);
-  --symbol-detail: var(--color-figure-icon-access-surface);
-}
-
-.fl .fl-symbol-person {
-  color: var(--color-figure-icon-person-ink);
-  --symbol-detail: var(--color-figure-icon-person-surface);
-}
-
-.fl .symbol-face {
-  fill: currentColor;
-}
-
-.fl .symbol-detail {
-  fill: var(--symbol-detail);
-  stroke: none;
-}
-
 /* 효과 한 벌: 켜짐과 평소의 모습을 정하는 유일한 정의다. 움직이는 SVG(animate/animator.js)의 keyframes와 HTML 재생기의 `.on` 규칙이 같은 `--fx-*`를 읽으므로 두 출력과 정지 그림이 늘 같다.
    - 켜짐(on): --fx-edge 윤곽·그룹 경계·선·알약 테두리, --fx-ink 알약 글자, --fx-row 표 줄과 격자 칸의 면, --fx-face-on 요소의 켜진 면(도형은 아래), --fx-flash 값이 바뀐 순간의 면.
    - 평소(rest): --fx-edge-rest 도형, 그룹, 알약의 경계, --fx-ink-rest 알약 글자, --fx-line-rest 선, --fx-face 요소의 평소 면.
@@ -1337,9 +372,9 @@
 .fl {
   --fx-edge: var(--color-state-active);
   --fx-ink: var(--color-state-active-text);
-  --fx-row: var(--simple2-row-selection);
-  --fx-flash: var(--simple2-row-selection);
-  --fx-edge-rest: var(--simple2-surface-edge);
+  --fx-row: var(--color-search-hover);
+  --fx-flash: var(--color-search-hover);
+  --fx-edge-rest: var(--color-help-border);
   --fx-ink-rest: var(--color-muted);
   --fx-line-rest: var(--color-line);
 }
@@ -1347,7 +382,7 @@
 /* 도형의 평소 면과 켜진 면. 옅은 면으로 고른 도형(filled)은 켜져도 면이 같다. 면이 없는 윤곽(fill='none')과 점은 자기 면이 없거나 자기 색이다. */
 .fl .fl-node {
   --fx-face: var(--color-node);
-  --fx-face-on: var(--simple2-card-active-fill);
+  --fx-face-on: var(--color-help-hover);
 }
 
 .fl .fl-node.ap-filled {
@@ -1395,7 +430,7 @@
 
 .fl .fl-node:focus-visible > .fl-stroke {
   stroke: var(--color-ui-focus);
-  stroke-width: var(--simple2-focus-width);
+  stroke-width: var(--outline-width-focus);
 }
 
 /* 값이 바뀔 때 켜지는 배경 면. 도형과 같은 윤곽을 쓰고 테두리를 더하지 않는다. */
@@ -1419,21 +454,21 @@
 .fl .fl-pulse {
   fill: none;
   stroke: var(--fx-edge);
-  stroke-width: var(--simple2-node-stroke);
+  stroke-width: var(--border-width-thin);
   pointer-events: none;
 }
 
 /* 제어 구획의 경계는 관계선보다 약하며 제목 밑면은 생명선을 가린다. */
 .fl .fl-fragment-border {
   fill: none;
-  stroke: var(--simple2-separator);
-  stroke-width: var(--border-thin);
+  stroke: var(--color-ui-line);
+  stroke-width: var(--border-width-thin);
 }
 
 .fl .fl-fragment-divider {
   fill: none;
-  stroke: var(--simple2-separator);
-  stroke-width: var(--border-hair);
+  stroke: var(--color-ui-line);
+  stroke-width: var(--border-width-hair);
   stroke-dasharray: var(--dash-card) var(--dash-card);
 }
 
@@ -1442,7 +477,7 @@
 }
 
 .fl .fl-fragment-label {
-  font-weight: var(--weight-semibold);
+  font-weight: var(--font-weight-semibold);
 }
 
 .fl .a0 { fill: var(--fx-face); stroke: var(--fx-edge-rest); }
@@ -1450,13 +485,13 @@
 .fl .a2 { fill: var(--fx-face-on); }
 </style>
 <defs></defs>
-<rect x="0.5" y="0.5" width="959" height="607" rx="18" fill="var(--simple2-canvas-fill)"/>
+<rect x="0.5" y="0.5" width="959" height="607" rx="18" fill="var(--color-prose-pre-background)"/>
 <g transform="translate(61.7 0)">
 
-<g id="n-0" class="fl-node fl-shape-table" tabindex="0" role="img" aria-label="order_items; id PK bigint; order_id FK bigint NOT NULL ON DELETE CASCADE; product_id FK bigint NOT NULL" data-id="order_items"><rect x="28" y="28" width="176.4" height="166" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><clipPath id="tc-0"><rect x="28" y="28" width="176.4" height="166" rx="8"/></clipPath><g clip-path="url(#tc-0)"><g class="fl-part" data-part="order_items.id"><rect x="29" y="56" width="174.4" height="26" class="part-bg a1"/><text x="46" y="73.7" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="186.4" y="73.7" class="cell type" text-anchor="end">bigint</text></g><g class="fl-part" data-part="order_items.order_id"><rect x="29" y="82" width="174.4" height="66" class="part-bg a2"/><text x="46" y="99.7" class="cell">order_id<tspan class="key" dx="6">FK</tspan></text><text x="186.4" y="99.7" class="cell type" text-anchor="end">bigint</text><text x="46" y="122.7" class="cell rule">NOT NULL</text><text x="46" y="142.7" class="cell rule">ON DELETE CASCADE</text></g><g class="fl-part" data-part="order_items.product_id"><rect x="29" y="148" width="174.4" height="46" class="part-bg a2"/><text x="46" y="165.7" class="cell">product_id<tspan class="key" dx="6">FK</tspan></text><text x="186.4" y="165.7" class="cell type" text-anchor="end">bigint</text><text x="46" y="188.7" class="cell rule">NOT NULL</text></g></g><line x1="28" x2="204.4" y1="56" y2="56" class="col-line"/><line x1="28" x2="204.4" y1="82" y2="82" class="col-line"/><line x1="28" x2="204.4" y1="148" y2="148" class="col-line"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(64.2 32) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="130.2" y="47.4" class="label" text-anchor="middle">order_items</text></g>
-<g id="n-1" class="fl-node fl-shape-table" tabindex="0" role="img" aria-label="products; id PK bigint; price  numeric(10, 2) NOT NULL" data-id="products"><rect x="236.4" y="287" width="190.4" height="100" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><clipPath id="tc-1"><rect x="236.4" y="287" width="190.4" height="100" rx="8"/></clipPath><g clip-path="url(#tc-1)"><g class="fl-part" data-part="products.id"><rect x="237.4" y="315" width="188.4" height="26" class="part-bg a1"/><text x="254.4" y="332.7" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="408.8" y="332.7" class="cell type" text-anchor="end">bigint</text></g><g class="fl-part" data-part="products.price"><rect x="237.4" y="341" width="188.4" height="46" class="part-bg a1"/><text x="254.4" y="358.7" class="cell">price</text><text x="408.8" y="358.7" class="cell type" text-anchor="end">numeric(10, 2)</text><text x="254.4" y="381.7" class="cell rule">NOT NULL</text></g></g><line x1="236.4" x2="426.8" y1="315" y2="315" class="col-line"/><line x1="236.4" x2="426.8" y1="341" y2="341" class="col-line"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(289 291) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="345.6" y="306.4" class="label" text-anchor="middle">products</text></g>
-<g id="n-2" class="fl-node fl-shape-table" tabindex="0" role="img" aria-label="orders; id PK bigint; user_id FK bigint NOT NULL ON DELETE RESTRICT; status  text NOT NULL" data-id="orders"><rect x="458.8" y="254" width="161" height="166" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><clipPath id="tc-2"><rect x="458.8" y="254" width="161" height="166" rx="8"/></clipPath><g clip-path="url(#tc-2)"><g class="fl-part" data-part="orders.id"><rect x="459.8" y="282" width="159" height="26" class="part-bg a1"/><text x="476.8" y="299.7" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="601.8" y="299.7" class="cell type" text-anchor="end">bigint</text></g><g class="fl-part" data-part="orders.user_id"><rect x="459.8" y="308" width="159" height="66" class="part-bg a2"/><text x="476.8" y="325.7" class="cell">user_id<tspan class="key" dx="6">FK</tspan></text><text x="601.8" y="325.7" class="cell type" text-anchor="end">bigint</text><text x="476.8" y="348.7" class="cell rule">NOT NULL</text><text x="476.8" y="368.7" class="cell rule">ON DELETE RESTRICT</text></g><g class="fl-part" data-part="orders.status"><rect x="459.8" y="374" width="159" height="46" class="part-bg a1"/><text x="476.8" y="391.7" class="cell">status</text><text x="601.8" y="391.7" class="cell type" text-anchor="end">text</text><text x="476.8" y="414.7" class="cell rule">NOT NULL</text></g></g><line x1="458.8" x2="619.8" y1="282" y2="282" class="col-line"/><line x1="458.8" x2="619.8" y1="308" y2="308" class="col-line"/><line x1="458.8" x2="619.8" y1="374" y2="374" class="col-line"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(504.5 258) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="553.3" y="273.4" class="label" text-anchor="middle">orders</text></g>
-<g id="n-3" class="fl-node fl-shape-table" tabindex="0" role="img" aria-label="users; id PK bigint; email UNQ text NOT NULL" data-id="users"><rect x="651.8" y="480" width="156.8" height="100" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><clipPath id="tc-3"><rect x="651.8" y="480" width="156.8" height="100" rx="8"/></clipPath><g clip-path="url(#tc-3)"><g class="fl-part" data-part="users.id"><rect x="652.8" y="508" width="154.8" height="26" class="part-bg a1"/><text x="669.8" y="525.7" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="790.6" y="525.7" class="cell type" text-anchor="end">bigint</text></g><g class="fl-part" data-part="users.email"><rect x="652.8" y="534" width="154.8" height="46" class="part-bg a1"/><text x="669.8" y="551.7" class="cell">email<tspan class="key" dx="6">UNQ</tspan></text><text x="790.6" y="551.7" class="cell type" text-anchor="end">text</text><text x="669.8" y="574.7" class="cell rule">NOT NULL</text></g></g><line x1="651.8" x2="808.6" y1="508" y2="508" class="col-line"/><line x1="651.8" x2="808.6" y1="534" y2="534" class="col-line"/><g class="fl-symbol fl-symbol-data"><g class="fl-symbol-glyph" transform="translate(698.6 484) scale(0.83333)"><path class="symbol-face" d="M4 6v12c0 4 16 4 16 0V6Z"/><ellipse class="symbol-face" cx="12" cy="6" rx="8" ry="3"/><path class="symbol-cut" d="M4 12c0 4 16 4 16 0M4 17c0 4 16 4 16 0"/></g></g><text x="744.2" y="499.4" class="label" text-anchor="middle">users</text></g>
+<g id="n-0" class="fl-node fl-shape-table" tabindex="0" role="img" aria-label="order_items; id PK bigint; order_id FK bigint NOT NULL ON DELETE CASCADE; product_id FK bigint NOT NULL" data-id="order_items"><rect x="28" y="28" width="176.4" height="166" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><clipPath id="tc-0"><rect x="28" y="28" width="176.4" height="166" rx="8"/></clipPath><g clip-path="url(#tc-0)"><g class="fl-part" data-part="order_items.id"><rect x="29" y="56" width="174.4" height="26" class="part-bg a1"/><text x="46" y="73.7" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="186.4" y="73.7" class="cell type" text-anchor="end">bigint</text></g><g class="fl-part" data-part="order_items.order_id"><rect x="29" y="82" width="174.4" height="66" class="part-bg a2"/><text x="46" y="99.7" class="cell">order_id<tspan class="key" dx="6">FK</tspan></text><text x="186.4" y="99.7" class="cell type" text-anchor="end">bigint</text><text x="46" y="122.7" class="cell rule">NOT NULL</text><text x="46" y="142.7" class="cell rule">ON DELETE CASCADE</text></g><g class="fl-part" data-part="order_items.product_id"><rect x="29" y="148" width="174.4" height="46" class="part-bg a2"/><text x="46" y="165.7" class="cell">product_id<tspan class="key" dx="6">FK</tspan></text><text x="186.4" y="165.7" class="cell type" text-anchor="end">bigint</text><text x="46" y="188.7" class="cell rule">NOT NULL</text></g></g><line x1="28" x2="204.4" y1="56" y2="56" class="col-line"/><line x1="28" x2="204.4" y1="82" y2="82" class="col-line"/><line x1="28" x2="204.4" y1="148" y2="148" class="col-line"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(64.2 32) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12V36A17 6 0 0 0 41 36V12Z" fill="#478fa7" stroke="#39768e" stroke-width="3"/><ellipse cx="24" cy="12" rx="17" ry="6" fill="#c9eaf1" stroke="#39768e" stroke-width="3"/><path d="M9 24A17 6 0 0 0 39 24 M9 34A17 6 0 0 0 39 34" fill="none" stroke="#ffffff" stroke-width="3"/></g></g></g><text x="130.2" y="47.4" class="label" text-anchor="middle">order_items</text></g>
+<g id="n-1" class="fl-node fl-shape-table" tabindex="0" role="img" aria-label="products; id PK bigint; price  numeric(10, 2) NOT NULL" data-id="products"><rect x="236.4" y="287" width="190.4" height="100" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><clipPath id="tc-1"><rect x="236.4" y="287" width="190.4" height="100" rx="8"/></clipPath><g clip-path="url(#tc-1)"><g class="fl-part" data-part="products.id"><rect x="237.4" y="315" width="188.4" height="26" class="part-bg a1"/><text x="254.4" y="332.7" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="408.8" y="332.7" class="cell type" text-anchor="end">bigint</text></g><g class="fl-part" data-part="products.price"><rect x="237.4" y="341" width="188.4" height="46" class="part-bg a1"/><text x="254.4" y="358.7" class="cell">price</text><text x="408.8" y="358.7" class="cell type" text-anchor="end">numeric(10, 2)</text><text x="254.4" y="381.7" class="cell rule">NOT NULL</text></g></g><line x1="236.4" x2="426.8" y1="315" y2="315" class="col-line"/><line x1="236.4" x2="426.8" y1="341" y2="341" class="col-line"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(289 291) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12V36A17 6 0 0 0 41 36V12Z" fill="#478fa7" stroke="#39768e" stroke-width="3"/><ellipse cx="24" cy="12" rx="17" ry="6" fill="#c9eaf1" stroke="#39768e" stroke-width="3"/><path d="M9 24A17 6 0 0 0 39 24 M9 34A17 6 0 0 0 39 34" fill="none" stroke="#ffffff" stroke-width="3"/></g></g></g><text x="345.6" y="306.4" class="label" text-anchor="middle">products</text></g>
+<g id="n-2" class="fl-node fl-shape-table" tabindex="0" role="img" aria-label="orders; id PK bigint; user_id FK bigint NOT NULL ON DELETE RESTRICT; status  text NOT NULL" data-id="orders"><rect x="458.8" y="254" width="161" height="166" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><clipPath id="tc-2"><rect x="458.8" y="254" width="161" height="166" rx="8"/></clipPath><g clip-path="url(#tc-2)"><g class="fl-part" data-part="orders.id"><rect x="459.8" y="282" width="159" height="26" class="part-bg a1"/><text x="476.8" y="299.7" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="601.8" y="299.7" class="cell type" text-anchor="end">bigint</text></g><g class="fl-part" data-part="orders.user_id"><rect x="459.8" y="308" width="159" height="66" class="part-bg a2"/><text x="476.8" y="325.7" class="cell">user_id<tspan class="key" dx="6">FK</tspan></text><text x="601.8" y="325.7" class="cell type" text-anchor="end">bigint</text><text x="476.8" y="348.7" class="cell rule">NOT NULL</text><text x="476.8" y="368.7" class="cell rule">ON DELETE RESTRICT</text></g><g class="fl-part" data-part="orders.status"><rect x="459.8" y="374" width="159" height="46" class="part-bg a1"/><text x="476.8" y="391.7" class="cell">status</text><text x="601.8" y="391.7" class="cell type" text-anchor="end">text</text><text x="476.8" y="414.7" class="cell rule">NOT NULL</text></g></g><line x1="458.8" x2="619.8" y1="282" y2="282" class="col-line"/><line x1="458.8" x2="619.8" y1="308" y2="308" class="col-line"/><line x1="458.8" x2="619.8" y1="374" y2="374" class="col-line"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(504.5 258) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12V36A17 6 0 0 0 41 36V12Z" fill="#478fa7" stroke="#39768e" stroke-width="3"/><ellipse cx="24" cy="12" rx="17" ry="6" fill="#c9eaf1" stroke="#39768e" stroke-width="3"/><path d="M9 24A17 6 0 0 0 39 24 M9 34A17 6 0 0 0 39 34" fill="none" stroke="#ffffff" stroke-width="3"/></g></g></g><text x="553.3" y="273.4" class="label" text-anchor="middle">orders</text></g>
+<g id="n-3" class="fl-node fl-shape-table" tabindex="0" role="img" aria-label="users; id PK bigint; email UNQ text NOT NULL" data-id="users"><rect x="651.8" y="480" width="156.8" height="100" rx="8" fill="var(--color-node)" class="fl-stroke a0"/><clipPath id="tc-3"><rect x="651.8" y="480" width="156.8" height="100" rx="8"/></clipPath><g clip-path="url(#tc-3)"><g class="fl-part" data-part="users.id"><rect x="652.8" y="508" width="154.8" height="26" class="part-bg a1"/><text x="669.8" y="525.7" class="cell">id<tspan class="key" dx="6">PK</tspan></text><text x="790.6" y="525.7" class="cell type" text-anchor="end">bigint</text></g><g class="fl-part" data-part="users.email"><rect x="652.8" y="534" width="154.8" height="46" class="part-bg a1"/><text x="669.8" y="551.7" class="cell">email<tspan class="key" dx="6">UNQ</tspan></text><text x="790.6" y="551.7" class="cell type" text-anchor="end">text</text><text x="669.8" y="574.7" class="cell rule">NOT NULL</text></g></g><line x1="651.8" x2="808.6" y1="508" y2="508" class="col-line"/><line x1="651.8" x2="808.6" y1="534" y2="534" class="col-line"/><g class="fl-symbol fl-symbol-concept"><g class="fl-icon" transform="translate(698.6 484) scale(0.83333)"><g transform="translate(0 0) scale(0.5)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12V36A17 6 0 0 0 41 36V12Z" fill="#478fa7" stroke="#39768e" stroke-width="3"/><ellipse cx="24" cy="12" rx="17" ry="6" fill="#c9eaf1" stroke="#39768e" stroke-width="3"/><path d="M9 24A17 6 0 0 0 39 24 M9 34A17 6 0 0 0 39 34" fill="none" stroke="#ffffff" stroke-width="3"/></g></g></g><text x="744.2" y="499.4" class="label" text-anchor="middle">users</text></g>
 <g id="e-0" class="fl-edge "><defs><marker id="fl-arrow-0" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-0" d="M 619.8 321 L 627.8 321 Q 635.8 321, 635.8 329 L 635.8 513 Q 635.8 521, 643.8 521 L 651.8 521" class="fl-path" marker-end="url(#fl-arrow-0)"/></g>
 <g id="e-1" class="fl-edge "><defs><marker id="fl-arrow-1" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-1" d="M 204.4 95 L 420.8 95 Q 442.8 95, 442.8 117 L 442.8 287 Q 442.8 295, 450.8 295 L 458.8 295" class="fl-path" marker-end="url(#fl-arrow-1)"/></g>
 <g id="e-2" class="fl-edge "><defs><marker id="fl-arrow-2" viewBox="0 0 5 5" refX="4" refY="2.5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" overflow="visible"><path class="fl-arrowhead" d="M 1.1 0.25 L 4 2.5 L 1.1 4.75 Z" stroke-width="1"/></marker></defs><path id="p-2" d="M 204.4 161 L 212.4 161 Q 220.4 161, 220.4 169 L 220.4 320 Q 220.4 328, 228.4 328 L 236.4 328" class="fl-path" marker-end="url(#fl-arrow-2)"/></g>

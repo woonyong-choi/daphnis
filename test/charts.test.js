@@ -5,7 +5,7 @@ import { test } from 'node:test';
 import { reflowFigure } from '../src/build.js';
 import { DOT, PAD } from '../src/chart/metrics.js';
 import { measure } from '../src/measure/fonts.js';
-import { values } from '../src/tokens.js';
+import { values } from '../src/vendor/theme/tokens.js';
 import { EXAMPLES, build, dap, descendants, finalValue, findAll, lineOf, num, parseMarkup, read, reject, stillDom, textContent, textsOf, toHtml, toSvg, visibleTexts } from './support.js';
 
 const chart = (kind, body, head = 'x "x(u)"\n  y "y(u)"') => dap(`chart c "T-${kind}" ${kind} {\n  ${head}\n${body.split('\n').map((l) => `  ${l.trim()}`).join('\n')}\n}\n`);
@@ -227,7 +227,7 @@ test('K9 narrow value-axis labels keep both ends, thin out at an even stride and
       const indices = shown.map((t) => all.indexOf(t.label));
       assert.deepEqual([indices[0], indices.at(-1)], [0, all.length - 1], `${where}: both ends stay`);
       assert.equal(new Set(indices.slice(1).map((index, i) => index - indices[i])).size, 1, `${where}: even stride`);
-      shown.slice(1).forEach((tick, i) => assert.ok(tick.center - tick.width / 2 - (shown[i].center + shown[i].width / 2) >= values.space['6'], `${where}: readable gap`));
+      shown.slice(1).forEach((tick, i) => assert.ok(tick.center - tick.width / 2 - (shown[i].center + shown[i].width / 2) >= values.spacing["3"], `${where}: readable gap`));
       const [left, , width] = dom.attrs.viewBox.split(' ').map(Number);
       assert.ok(shown.every((t) => t.center - t.width / 2 >= PAD && t.center + t.width / 2 <= left + width - PAD), `${where}: inside the figure`);
     }
@@ -245,10 +245,10 @@ test('K9 scatter names sit nearer to their own point than to any other point, an
       const circle = descendants(g).find((n) => n.tag === 'circle');
       return { x: num(circle, 'cx'), y: num(circle, 'cy') };
     });
-    const pad = values.space['0-5'];
+    const pad = values.spacing["0-25"];
     const names = findAll(dom, (n) => n.tag === 'rect' && /\bchart-text-bg\b/.test(n.attrs.class ?? '')).map((rect) => ({ x0: num(rect, 'x') + pad, y0: num(rect, 'y') + pad, x1: num(rect, 'x') + num(rect, 'width') - pad, y1: num(rect, 'y') + num(rect, 'height') - pad }));
     assert.equal(names.length, 3);
-    names.forEach((box, k) => dots.forEach((dot, j) => j === k || assert.ok(gap(box, around(dot)) >= gap(box, around(dots[k])) + values.space['6'], `${chartWidth}: name ${k} is ${(gap(box, around(dot)) - gap(box, around(dots[k]))).toFixed(1)}px nearer to point ${j} than the margin`)));
+    names.forEach((box, k) => dots.forEach((dot, j) => j === k || assert.ok(gap(box, around(dot)) >= gap(box, around(dots[k])) + values.spacing["3"], `${chartWidth}: name ${k} is ${(gap(box, around(dot)) - gap(box, around(dots[k]))).toFixed(1)}px nearer to point ${j} than the margin`)));
   }
   // 좁은 배치(HTML의 `fl-narrow` 템플릿)에서 점 이름 줄은 낱말 안에서 끊기지 않는다: 번호 키가 앞에 붙은 이름이 같은 낱말 목록을 줄로 나눠 가진다.
   const example = await build(read(EXAMPLES, 'scatter.dap'), { baseDir: EXAMPLES });

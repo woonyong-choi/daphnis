@@ -12,10 +12,10 @@ import { hasStatus } from './draw/status.js';
 import { paintCss } from './draw/paint.js';
 import { drawTrackPaths } from './draw/tracks.js';
 import { createGlyphSet, embedFonts } from './measure/fonts.js';
-import { STYLES, figureDefs, patternDefs } from './styles.js';
+import { STYLES, tokensFor, figureDefs, patternDefs } from './styles.js';
 import { WHOLE_CHART } from './timeline-charts.js';
 import { escapeXml, plainText, roundCoord as r } from './text.js';
-import { tokens, values } from './tokens.js';
+import { tokens, values } from './vendor/theme/tokens.js';
 
 // cost: time O(g·b + b·h + out), heap O(out), stack O(1), io 1
 // vars: g = 켜고 끄는 요소 수, b = 박자 수, h = 박자의 이동 수, out = 만든 SVG 글자 수
@@ -54,11 +54,11 @@ export async function toSvg(result, { scene: selector = 0, isStatic = false, nam
   return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="fl" width="${r(shownWidth)}" height="${r(shownHeight)}" viewBox="0 0 ${r(width)} ${r(height)}" role="img" data-scene="${si}" data-mode="${mode}">
 <title>${escapeXml(plainText(title))}</title>
 <style>${fonts}
-${STYLES.tokens}${STYLES.figure}${paintCss(result.scene)}${motion}${hasStatus(timeline) ? STYLES.status : ''}
+${tokensFor(STYLES.figure + paintCss(result.scene) + motion + STYLES.status + motionLayer.css.join('\n') + layers)}${STYLES.figure}${paintCss(result.scene)}${motion}${hasStatus(timeline) ? STYLES.status : ''}
 ${motionLayer.css.join('\n')}${stillLayer ? `\n${stillLayer.css.join('\n')}\n${STILL_CSS}` : ''}
 </style>
 <defs>${figureDefs(figure)}${patternDefs(charts.map(({ drawn }) => drawn))}</defs>
-<rect x="${values.border.thin / 2}" y="${values.border.thin / 2}" width="${r(width - values.border.thin)}" height="${r(height - values.border.thin)}" rx="${values.simple2['canvas-corner']}" fill="${tokens.simple2['canvas-fill']}"/>
+<rect x="${values["border-width"].thin / 2}" y="${values["border-width"].thin / 2}" width="${r(width - values["border-width"].thin)}" height="${r(height - values["border-width"].thin)}" rx="${values.radius["card-radius"]}" fill="${tokens.color["prose-pre-background"]}"/>
 ${layers}
 </svg>
 `;

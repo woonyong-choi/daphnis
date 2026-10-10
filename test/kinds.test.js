@@ -7,7 +7,7 @@ import { reflowFigure } from '../src/build.js';
 import { headReach } from '../src/draw/arrow.js';
 import { measure } from '../src/measure/fonts.js';
 import { STYLE } from '../src/measure/texts.js';
-import { values } from '../src/tokens.js';
+import { values } from '../src/vendor/theme/tokens.js';
 import { build, dap, finalValue, findAll, lineOf, num, parseMarkup, reject, stillDom, textContent, textsOf, toHtml, toSvg, visibleTexts } from './support.js';
 
 const rejectedAt = async (source, needle, pattern) => {
@@ -219,7 +219,7 @@ test('K-state a self transition loops out of the card by at least three arrowhea
   const { scene } = await build(dap('state a "A"\nstate b "B"\na -> a "retry"\na -> b "go"\n'));
   const card = scene.items.find((item) => item.id === 'a');
   const loop = scene.edges.find((e) => e.from === 'a' && e.to === 'a').points;
-  const { length, half } = headReach(values.border.edge);
+  const { length, half } = headReach(values["border-width"].edge);
   const standoff = card.y - Math.min(...loop.map((p) => p.y));
   const span = Math.max(...loop.map((p) => p.x)) - Math.min(...loop.map((p) => p.x));
   assert.ok(standoff >= 3 * length, `the loop stands ${standoff}px off the card, the arrowhead is ${length}px long`);
