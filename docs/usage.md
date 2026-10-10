@@ -33,7 +33,7 @@ ThinkFlow는 텍스트로 문서용 그림을 만드는 도구입니다. 구성 
 | JavaScript·TypeScript 연동 | [JavaScript에서 조립하기](#javascript에서-조립하기) |
 | 오류 수정과 지원 범위 확인 | [문제가 있을 때](#문제가-있을-때) |
 
-문법을 바로 찾으려면 [문서 안내](README.md)의 문법·검사 항목을 사용합니다. 이 문서는 저장소 기본 브랜치 기준입니다. npm 배포판의 포함 변경은 [릴리스](https://github.com/woonyong-choi/ThinkFlow/releases)에서 확인합니다. npm `0.2.0`에는 이후 반영한 공통 도구 막대의 배경·호버·포커스 조정이 포함되지 않았습니다. 원본의 `thinkflow` 선언에는 패키지 버전을 붙이지 않습니다.
+문법을 바로 찾으려면 [문서 안내](README.md)의 문법·검사 항목을 사용합니다. 이 문서는 저장소 기본 브랜치 기준입니다. npm 배포판의 포함 변경은 [릴리스](https://github.com/woonyong-choi/ThinkFlow/releases)에서 확인합니다. npm `0.2.0`에는 이후 반영한 공통 도구 막대의 배경·호버·포커스 조정과 추적 SVG 스타일 누락 수정이 포함되지 않았습니다. 이 배포판으로 추적 그림을 확인할 때는 `--html`로 만든 HTML을 사용합니다. 원본의 `thinkflow` 선언에는 패키지 버전을 붙이지 않습니다.
 
 ## 설치와 버전 확인
 
