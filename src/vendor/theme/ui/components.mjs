@@ -1,6 +1,7 @@
 // 테마 값으로 표현하는 기본 구성 요소다.
 import { escape, safeUrl, trusted, isTrusted, slot, id, out } from './html.mjs';
 import { ToolButton, Toolbar, ToolHeader } from './toolbar.mjs';
+import { ControlIcon } from './icons.mjs';
 const CARD_VARIANTS = ['centered', 'grouped', 'inline', 'related', 'summary'];
 
 /** 본문 블록 폭: content(본문 폭), narrow(좁은 미디어 폭), wide(넓은 미디어 폭). */
@@ -172,7 +173,7 @@ export function FigureGrid({ columns, size, figures }) {
 
 /** 영상 자리. `src`, `poster`는 소비자가 확인한 주소다. */
 export function Player({ id: target, src, poster, title = '기능 소개 영상', width, height, controls = false, overlay = false, wide = false }) {
-  return out(`<div class="app-player${wide ? ' is-wide' : ''}${controls ? ' has-controls' : ''}" data-player id="${id(target)}"><video${width ? ` width="${Number(width)}"` : ''}${height ? ` height="${Number(height)}"` : ''} playsinline${controls ? '' : ' muted'} preload="none" poster="${safeUrl(poster)}" aria-label="${escape(title)}"${controls ? ' data-native-controls' : ''}><source src="${safeUrl(src)}" type="video/mp4"></video>${overlay || controls ? '<button class="app-player-button" type="button" data-player-play aria-label="Play video"></button>' : ''}<span class="app-sr" role="status"></span></div>`);
+  return out(`<div class="app-player${wide ? ' is-wide' : ''}${controls ? ' has-controls' : ''}" data-player id="${id(target)}"><video${width ? ` width="${Number(width)}"` : ''}${height ? ` height="${Number(height)}"` : ''} playsinline${controls ? '' : ' muted'} preload="none" poster="${safeUrl(poster)}" aria-label="${escape(title)}"${controls ? ' data-native-controls' : ''}><source src="${safeUrl(src)}" type="video/mp4"></video>${overlay || controls ? `<button class="app-player-button" type="button" data-player-play aria-label="Play video">${ControlIcon('play')}</button>` : ''}<span class="app-sr" role="status"></span></div>`);
 }
 export function RemoteButton({ id: target, src, icon }) {
   return out(`<button class="app-remote" type="button" data-remote="${id(target)}"${src ? ` data-video-src="${safeUrl(src)}"` : ''} aria-label="Play video">${slot(icon, 'icon')}<span>Play</span></button>`);

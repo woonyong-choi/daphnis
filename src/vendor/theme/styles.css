@@ -512,7 +512,8 @@ button.app-tooltip { padding: 0; background: none; color: var(--color-control-li
 .app-player.is-initialized.is-hidden-until-played:not(.has-played) { visibility: hidden; overflow: hidden; height: 0; }
 .app-player video { display: block; }
 .app-video-error { display: block; padding: var(--spacing-gap-sm); color: var(--color-ui-muted); background: var(--color-ui-card); font-size: var(--text-small-text); }
-.app-player-button { position: absolute; top: 50%; left: 50%; width: var(--spacing-player-overlay); height: var(--spacing-player-overlay); min-width: var(--spacing-player-min); min-height: var(--spacing-player-min); padding: 0; border: 0; background: url('./assets/icons/media/play.svg') center / contain no-repeat; transform: translate(-50%, -50%); opacity: var(--opacity-player-opacity); cursor: pointer; }
+.app-player-button { position: absolute; top: 50%; left: 50%; width: var(--spacing-player-overlay); height: var(--spacing-player-overlay); min-width: var(--spacing-player-min); min-height: var(--spacing-player-min); padding: 0; border: 0; color: var(--color-control-link); background: transparent; transform: translate(-50%, -50%); opacity: var(--opacity-player-opacity); cursor: pointer; }
+.app-player-button > .app-control-icon { display: block; width: 100%; height: 100%; }
 .app-player-button:hover { opacity: var(--opacity-player-hover-opacity); }
 .app-player.is-playing .app-player-button, .app-player.has-controls.has-played .app-player-button { display: none; }
 .app-media-controls { margin-block: var(--spacing-gap-sm); text-align: center; }
