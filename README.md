@@ -5,7 +5,10 @@ English | [한국어](README.ko.md)
 Turn one `.thinkflow` text source into an animated SVG figure for documentation: structure, sequences, states, schemas, classes, traces, and charts, with values that change as dots arrive.
 
 <p align="center">
-  <img src="docs/assets/thinkflow-logo.png" alt="ThinkFlow logo: a transparent exclamation mark drawing a blue line above the ThinkFlow wordmark" width="320">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/thinkflow-logo-dark.png">
+    <img src="docs/assets/thinkflow-logo.png" alt="ThinkFlow logo: a transparent exclamation mark drawing a blue line above the ThinkFlow wordmark" width="320">
+  </picture>
 </p>
 
 <p align="center">
