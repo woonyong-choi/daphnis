@@ -1272,7 +1272,10 @@ export const tokens = freeze({
     "idea-edge": "var(--icon-idea-edge)",
     "cloud": "var(--icon-cloud)",
     "cloud-edge": "var(--icon-cloud-edge)",
-    "device-screen": "var(--icon-device-screen)"
+    "device-screen": "var(--icon-device-screen)",
+    "brand": {
+      "postgresql": "var(--icon-brand-postgresql)"
+    }
   },
   "container": {
     "page": "var(--container-page)",
@@ -2623,7 +2626,10 @@ export const values = freeze({
     "idea-edge": "#edb300",
     "cloud": "#639bfa",
     "cloud-edge": "#528aee",
-    "device-screen": "#e9eaeb"
+    "device-screen": "#e9eaeb",
+    "brand": {
+      "postgresql": "#336791"
+    }
   },
   "container": {
     "page": 900,
