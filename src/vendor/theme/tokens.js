@@ -1092,9 +1092,6 @@ export const tokens = freeze({
     "card-summary-lines": "var(--primitive-card-summary-lines)",
     "ratio-banner": "var(--primitive-ratio-banner)",
     "spacing-unit": "var(--primitive-spacing-unit)",
-    "illustration-technology-keycap-icon-stroke": "var(--primitive-illustration-technology-keycap-icon-stroke)",
-    "illustration-technology-layers-icon-stroke": "var(--primitive-illustration-technology-layers-icon-stroke)",
-    "illustration-project-placeholder-icon-stroke": "var(--primitive-illustration-project-placeholder-icon-stroke)",
     "illustration-project-placeholder-stroke": "var(--primitive-illustration-project-placeholder-stroke)",
     "figure-shadow": "var(--primitive-figure-shadow)",
     "figure-ui-accent": "var(--primitive-figure-ui-accent)",
@@ -1211,20 +1208,6 @@ export const tokens = freeze({
     "effect-decay": "var(--duration-effect-decay)",
     "notice": "var(--duration-notice)"
   },
-  "illustration": {
-    "paint": {
-      "neutral-11": "var(--illustration-paint-neutral-11)",
-      "neutral-04": "var(--illustration-paint-neutral-04)",
-      "neutral-01": "var(--illustration-paint-neutral-01)"
-    }
-  },
-  "asset": {
-    "paint": {
-      "keycap-base": "var(--asset-paint-keycap-base)",
-      "keycap-face": "var(--asset-paint-keycap-face)",
-      "keycap-legend": "var(--asset-paint-keycap-legend)"
-    }
-  },
   "ease": {
     "move": "var(--ease-move)",
     "reveal": "var(--ease-reveal)",
@@ -1337,9 +1320,6 @@ export const tokens = freeze({
     "post-footer-margin": "var(--component-post-footer-margin)",
     "prose-fineprint-margin": "var(--component-prose-fineprint-margin)",
     "card-summary-lines": "var(--component-card-summary-lines)",
-    "illustration-technology-keycap-icon-stroke": "var(--component-illustration-technology-keycap-icon-stroke)",
-    "illustration-technology-layers-icon-stroke": "var(--component-illustration-technology-layers-icon-stroke)",
-    "illustration-project-placeholder-icon-stroke": "var(--component-illustration-project-placeholder-icon-stroke)",
     "illustration-project-placeholder-stroke": "var(--component-illustration-project-placeholder-stroke)",
     "table-padding": "var(--component-table-padding)"
   },
@@ -2442,9 +2422,6 @@ export const values = freeze({
     "card-summary-lines": 2,
     "ratio-banner": "5 / 2",
     "spacing-unit": 4,
-    "illustration-technology-keycap-icon-stroke": 2.4,
-    "illustration-technology-layers-icon-stroke": 3,
-    "illustration-project-placeholder-icon-stroke": 2.5,
     "illustration-project-placeholder-stroke": 7,
     "figure-shadow": "0 2px 8px rgba(0,0,0,.10), 0 0 2px rgba(0,0,0,.10)",
     "figure-ui-accent": "#3c84f3",
@@ -2561,20 +2538,6 @@ export const values = freeze({
     "effect-decay": 240,
     "notice": 2400
   },
-  "illustration": {
-    "paint": {
-      "neutral-11": "#ffffff",
-      "neutral-04": "#1f1f1f",
-      "neutral-01": "#000000"
-    }
-  },
-  "asset": {
-    "paint": {
-      "keycap-base": "#000000",
-      "keycap-face": "#1f1f1f",
-      "keycap-legend": "#ffffff"
-    }
-  },
   "ease": {
     "move": "cubic-bezier(0.455, 0.03, 0.515, 0.955)",
     "reveal": "cubic-bezier(0, 0, 0.58, 1)",
@@ -2687,9 +2650,6 @@ export const values = freeze({
     "post-footer-margin": "4em 0 3em",
     "prose-fineprint-margin": ".125em 0 1.4em",
     "card-summary-lines": 2,
-    "illustration-technology-keycap-icon-stroke": 2.4,
-    "illustration-technology-layers-icon-stroke": 3,
-    "illustration-project-placeholder-icon-stroke": 2.5,
     "illustration-project-placeholder-stroke": 7,
     "table-padding": ".3em .5em"
   },
