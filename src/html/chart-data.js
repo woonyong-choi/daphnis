@@ -1,4 +1,5 @@
 // 차트의 전체 입력값을 재생 상태와 독립된 HTML 표로 읽는다.
+import { Table, trusted } from '../vendor/theme/ui/index.mjs';
 import { ecdfPoints, percentRows } from '../chart/data.js';
 import { COPY } from '../chart/copy.js';
 import { SHARE_PLACES, valueFormat } from '../chart/scale.js';
@@ -21,7 +22,8 @@ const field = (key, label, source = 'values') => ({ label, read: (row) => (sourc
  */
 export function chartData(figure) {
   const { chart } = figure;
-  const name = text(figure.title ?? '차트');
+  const title = plainText(figure.title ?? '차트');
+  const name = text(title);
   const columns = dataColumns(figure);
   const headers = columns.map((column) => `<th scope="col">${text(column.label)}</th>`).join('');
   const rows = chart.rows.map((row, index) => {
@@ -36,7 +38,7 @@ export function chartData(figure) {
   // 값에 묶인 칸이 있으면 이 표는 시작 값이다. 재생 중 현재 값을 보인다고 읽히지 않도록 표 이름, 계산 열 이름, 안내 글에 시작 값임을 적는다(현재 값은 차트와 값 카드가 보인다).
   const isBound = hasBoundCells(chart);
   const note = isBound ? ' 재생 중 바뀌는 값은 차트와 값 카드에 나타납니다.' : '';
-  return `<details class="fl-data"><summary>${name} 입력 데이터</summary><p>재생 단계와 관계없이 모든 입력값을 표시합니다.${note}${axes ? ` ${axes}` : ''}</p><div class="fl-data-scroll" tabindex="0" role="region" aria-label="${name} 입력 데이터 표"><table><caption>${name} 입력값${isBound ? ' · 묶인 값은 시작 값' : ''}</caption><thead><tr>${headers}</tr></thead><tbody>${rows.join('')}</tbody></table></div>${histogramTable(figure, name)}${ecdfTable(figure, name)}</details>`;
+  return `<details class="fl-data"><summary>${name} 입력 데이터</summary><p>재생 단계와 관계없이 모든 입력값을 표시합니다.${note}${axes ? ` ${axes}` : ''}</p>${Table({ label: `${title} 입력 데이터 표`, caption: `${title} 입력값${isBound ? ' · 묶인 값은 시작 값' : ''}`, numeric: true, body: trusted(`<thead><tr>${headers}</tr></thead><tbody>${rows.join('')}</tbody>`) })}${histogramTable(figure, title)}${ecdfTable(figure, title)}</details>`;
 }
 
 // 값에 묶인 칸이 하나라도 있는가
@@ -84,7 +86,7 @@ function histogramTable({ chartType, chart }, name) {
   const rows = chart.bins.map((bin) => `<tr><th scope="row">${text(labels.range(bin))}</th><td>${bin.count}</td>${normalized ? `<td data-value="${histogramValue(bin, chart)}">${labels.height(bin)}</td>` : ''}</tr>`).join('') || `<tr><td colspan="${normalized ? 3 : 2}">${COPY.noData}</td></tr>`;
   // 빠진 표본은 관측이 아니다. 구간별 집계와 분모에서 빠지고, 몇 개를 뺐는지 밝힌다.
   const count = chart.missingCount ? `전체 입력 ${chart.rows.length}개 가운데 ${COPY.excluded(chart.missingCount)}, 관측값 ${chart.observed}개` : `전체 관측값 ${chart.rows.length}개`;
-  return `${automaticBinsNote(chart.binning)}${normalized ? `<p>${explanation} 표시값은 반올림되며 계산에는 반올림 전 값을 사용합니다.</p>` : ''}<p>구간의 왼쪽 끝은 포함하고 오른쪽 끝은 제외합니다. 마지막 구간만 오른쪽 끝도 포함합니다. ${count}.</p><div class="fl-data-scroll" tabindex="0" role="region" aria-label="${name} 구간별 집계 표"><table><caption>${name} 구간별 관측 건수</caption><thead><tr><th scope="col">구간</th><th scope="col">관측 건수</th>${normalized ? `<th scope="col">${histogramMeasure(chart)}</th>` : ''}</tr></thead><tbody>${rows}</tbody></table></div>`;
+  return `${automaticBinsNote(chart.binning)}${normalized ? `<p>${explanation} 표시값은 반올림되며 계산에는 반올림 전 값을 사용합니다.</p>` : ''}<p>구간의 왼쪽 끝은 포함하고 오른쪽 끝은 제외합니다. 마지막 구간만 오른쪽 끝도 포함합니다. ${count}.</p>${Table({ label: `${name} 구간별 집계 표`, caption: `${name} 구간별 관측 건수`, numeric: true, body: trusted(`<thead><tr><th scope="col">구간</th><th scope="col">관측 건수</th>${normalized ? `<th scope="col">${histogramMeasure(chart)}</th>` : ''}</tr></thead><tbody>${rows}</tbody>`) })}`;
 }
 
 function automaticBinsNote(spec) {
@@ -108,5 +110,5 @@ function ecdfTable({ chartType, chart }, name) {
   const head = (label) => (label === undefined ? '' : `<th scope="row">${text(label)}</th>`);
   const body = groups.flatMap(({ label, points, n }) => (points.length ? points.map((p) => `<tr>${head(label)}<${label === undefined ? 'th scope="row"' : 'td'}>${text(p.value)}</${label === undefined ? 'th' : 'td'}><td>${p.count} / ${n}</td><td data-value="${p.p}">${format(p.p)}</td></tr>`) : [`<tr>${head(label)}<td colspan="3">표본 없음</td></tr>`]));
   const skipped = groups.map(({ label, missing }) => `${label === undefined ? '' : `${text(label)} `}${missing}개`).join(', ');
-  return `<p>누적 비율은 값이 그 값 이하인 표본 수 ÷ 쓴 표본 수입니다. 빠진 값은 세지 않았습니다: ${skipped}.</p><div class="fl-data-scroll" tabindex="0" role="region" aria-label="${name} 누적 비율 표"><table><caption>${name} 누적 비율</caption><thead><tr>${chart.series.length ? '<th scope="col">계열</th>' : ''}<th scope="col">값</th><th scope="col">이하 표본 수</th><th scope="col">누적 비율</th></tr></thead><tbody>${body.join('')}</tbody></table></div>`;
+  return `<p>누적 비율은 값이 그 값 이하인 표본 수 ÷ 쓴 표본 수입니다. 빠진 값은 세지 않았습니다: ${skipped}.</p>${Table({ label: `${name} 누적 비율 표`, caption: `${name} 누적 비율`, numeric: true, body: trusted(`<thead><tr>${chart.series.length ? '<th scope="col">계열</th>' : ''}<th scope="col">값</th><th scope="col">이하 표본 수</th><th scope="col">누적 비율</th></tr></thead><tbody>${body.join('')}</tbody>`) })}`;
 }

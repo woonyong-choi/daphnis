@@ -81,7 +81,7 @@ async function canonicalHtml(result, name) {
 ${faviconLinks()}
 ${EMBED_SCRIPT}
 <style>${fonts}
-${tokensFor(Object.values(STYLES).filter(value => value !== STYLES.tokens).join('\n') + paintCss(result.scene) + panelsMarkup(content, title, defs) + JSON.stringify(content.data))}${STYLES.control}${STYLES.player}${STYLES.figure}${paintCss(result.scene)}${STYLES.chart}${charts ? STYLES.chartData : ''}${charts ? chartMotionCss(timeline.growMs, dotAts) : ''}${hasStatus(timeline) ? STYLES.status : ''}</style>
+${tokensFor(Object.values(STYLES).filter(value => value !== STYLES.tokens).join('\n') + PLAYER_SCRIPT + paintCss(result.scene) + panelsMarkup(content, title, defs) + JSON.stringify(content.data))}${STYLES.control}${STYLES.player}${STYLES.figure}${paintCss(result.scene)}${STYLES.chart}${charts ? STYLES.chartData : ''}${charts ? chartMotionCss(timeline.growMs, dotAts) : ''}${hasStatus(timeline) ? STYLES.status : ''}</style>
 </head>
 <body>
 ${figureFrame({ labels: content.data.steps.map(step => step.label), canvas: panelsMarkup(content, title, defs), style: figure.width === 'wide' ? ` style="--figure-canvas: ${canvasOf(figure)}px"` : '', narrow: responsive ? `<template class="fl-narrow">${panelsMarkup(responsive.content, title)}</template>` : '', source: typeof figure.source === 'string' ? figure.source : undefined })}
